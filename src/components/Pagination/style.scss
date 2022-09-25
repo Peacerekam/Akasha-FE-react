@@ -1,0 +1,97 @@
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.pagination-wrapper {
+  display: flex;
+  // justify-content: end;
+  justify-content: center;
+  position: relative;
+
+  .pagination {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    // width: 500px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .pagination-details {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      font-size: 12px;
+      opacity: 0.7;
+    }
+
+    .pagination-buttons {
+      display: flex;
+      gap: 5px;
+
+      .button-wrapper {
+        &:hover {
+          button {
+            &:not(:disabled) {
+              cursor: pointer;
+              background-color: gray;
+            }
+          }
+        }
+        &.highlight-button {
+          &:hover {
+            button {
+              background-color: darken(orange, 10);
+            }
+          }
+          .button-label {
+            color: orange;
+            opacity: 1;
+          }
+          button {
+            color: #2c3333;
+            background-color: orange;
+            transform: rotate(360deg);
+            animation: 0.5s ease 1 spin;
+            animation-fill-mode: forwards;
+          }
+        }
+      }
+
+      .button-label {
+        position: absolute;
+        width: 100%;
+        bottom: -15px;
+        left: 0;
+        font-size: 12px;
+        text-align: center;
+        user-select: none; // @KM is it needed?
+        cursor: pointer;
+        opacity: 0.3;
+      }
+
+      button {
+        all: unset;
+        background-color: transparent;
+        border-radius: 20px;
+        min-width: 20px;
+        padding: 5px;
+        text-align: center;
+        user-select: none; // @KM is it needed?
+
+        &:disabled {
+          cursor: default;
+          opacity: 0.33;
+          .button-label {
+            opacity: 0.9;
+            cursor: default;
+          }
+        }
+      }
+    }
+  }
+}

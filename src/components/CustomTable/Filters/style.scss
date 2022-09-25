@@ -1,0 +1,272 @@
+@keyframes modalBgReveal {
+  0% {
+    background-color: transparent;
+  }
+  100% {
+    background-color: rgba(black, 0.6);
+  }
+}
+
+@keyframes modalRevealMenu {
+  0%, 40% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes modalReveal {
+  0% {
+    opacity: 0; // untransformed at the start for react-select portal
+    transform: translate(0, -150px) scale(1);
+  }
+  1% {
+    opacity: 1;
+    transform: translate(var(--modal-offset-x), var(--modal-offset-y)) scale(0);
+  }
+  100% {
+    transform: translate(0, -150px) scale(1);
+  }
+}
+
+@keyframes reactSelectReveal {
+  0% {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+.react-select-menu-container {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 30;
+  animation: modalRevealMenu 0.5s ease-in-out forwards;
+  pointer-events: none;
+  inset: 0;
+  > div {
+    pointer-events: all;
+    // animation: reactSelectReveal 0.2s ease-in-out forwards;
+    // background-color: black;
+    // font-size: 14px;
+  }
+}
+
+.filters-modal-wrapper {
+  position: fixed;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: 0.3s modalBgReveal ease-in-out forwards;
+  .filters-modal {
+    height: fit-content;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    position: relative;
+    width: 600px;
+    animation: 0.3s modalReveal ease-in-out forwards;
+    // transform: translateY(-100px);
+
+    .filter-select {
+      z-index: 25;
+      margin: 5px 0;
+    }
+    .add-new-filter {
+      border-radius: 5px;
+      height: 38px;
+      border: 2px dashed rgba(white, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0.6;
+      cursor: pointer;
+      margin-top: 5px;
+      &:hover {
+        opacity: 1;
+      }
+    }
+    button {
+      all: unset;
+      cursor: pointer;
+      padding: 5px 10px 8px 9px;
+      background-color: rgba(black, 0.5);
+      border-radius: 2px;
+      overflow: hidden;
+      &:hover {
+        background-color: rgba(black, 0.7);
+      }
+      &.apply-btn {
+        color: #90ee90;
+        &:hover {
+          color: #5fdf5f;
+        }
+        > svg {
+          width: 14px;
+          height: 14px;
+          margin-right: 5px;
+        }
+      }
+      &.close-btn {
+        background-color: transparent;
+        // opacity: 0.7;
+        color: white;
+        padding-right: 12px;
+        padding-left: 12px;
+        > svg {
+          width: 10px;
+          height: 10px;
+          margin-bottom: 2px;
+          margin-right: 2px;
+        }
+        &:hover {
+          // opacity: 1;
+          color: red;
+        }
+      }
+      &.remove-filter-btn {
+        background-color: transparent;
+        width: 20px;
+        height: 20px;
+        margin-left: -5px;
+        &:hover {
+          color: red;
+        }
+      }
+    }
+
+    .modal-header {
+      border-top-left-radius: 2px;
+      border-top-right-radius: 2px;
+      display: flex;
+      justify-content: space-between;
+      background-color: #40839b;
+      .modal-title {
+        font-size: 16px;
+        padding: 9px 9px 11px 11px;
+      }
+    }
+    .modal-content {
+      max-height: calc(100vh - 300px);
+      overflow: auto;
+      padding: 10px;
+      background-color: #2c3333;
+      font-size: 13px;
+      border-bottom-left-radius: 2px;
+      border-bottom-right-radius: 2px;
+      .flex {
+        align-items: center;
+      }
+      .modal-buttons {
+        margin-top: 10px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+      }
+    }
+  }
+}
+
+.react-select-custom-option {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  img {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.filters-container {
+  position: relative;
+  background-color: rgba(black, 0.4);
+  margin-bottom: 10px;
+  padding: 5px;
+  height: 22px; // 32px[th height] - (5px*2)[padding]
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  .pills-container {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    width: calc(100% - 28px);
+    pointer-events: none;
+  }
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+    .filter-icon {
+      opacity: 1;
+      // color: orange;
+    }
+    .filter-bg-text {
+      opacity: 0.65;
+    }
+  }
+  .filter-bg-text {
+    text-align: center;
+    pointer-events: none;
+    opacity: 0.45;
+    font-size: 13px;
+    margin-left: 5px;
+    margin-bottom: 2px;
+  }
+  .filter-icon {
+    opacity: 0.75;
+    pointer-events: none;
+    width: 14px;
+    position: absolute;
+    right: 10px;
+  }
+  .trash-icon {
+    width: 10px;
+    height: 10px;
+    opacity: 0.75;
+  }
+  .pill {
+    pointer-events: all;
+    font-size: 13px;
+    display: flex;
+    white-space: nowrap;
+    border-radius: 50px;
+    .pill-close,
+    .pill-label {
+      background-color: #40839b;
+    }
+    &:hover {
+      .pill-close,
+      .pill-label {
+        background-color: darken(#40839b, 7);
+      }
+    }
+    .pill-label {
+      padding: 1px 4px 2px 10px;
+      border-top-left-radius: 50px;
+      border-bottom-left-radius: 50px;
+      color: white;
+      &:hover {
+        color: orange;
+      }
+    }
+    .pill-close {
+      border-top-right-radius: 50px;
+      border-bottom-right-radius: 50px;
+      padding: 1px 8px 2px 8px;
+      padding-left: 4px;
+      &:hover {
+        color: red;
+      }
+    }
+  }
+}

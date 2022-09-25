@@ -1,0 +1,47 @@
+.navbar {
+  background-color: #395b64;
+  color: #e7f6f2;
+  display: flex;
+  padding: 0 25px;
+  flex-wrap: wrap;
+  // box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  .logo-wrapper {
+    position: relative;
+    .logo {
+      position: relative;
+      top: 4px;
+      font-family: "GenshinFont";
+    }
+  }
+  .annotation {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+      "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+      "Helvetica Neue", sans-serif;
+    opacity: 0.5;
+    position: absolute;
+    font-size: 10px;
+    top: -10px;
+  }
+  a {
+    all: unset;
+    height: 64px;
+    display: flex;
+    place-items: center;
+    transition: 0.2s !important;
+    cursor: pointer;
+    padding: 0 15px;
+    white-space: nowrap;
+    &:hover {
+      transition: 0.2s !important;
+      background-color: lighten(#395b64, 5);
+    }
+  }
+  .active-tab {
+    transition: 0.2s !important;
+    background-color: #426a74 !important;
+    box-shadow: #e7f6f2 0 -2px 0 inset !important;
+    &:hover {
+      background-color: lighten(#426a74, 2) !important;
+    }
+  }
+}

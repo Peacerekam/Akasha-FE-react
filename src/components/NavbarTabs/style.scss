@@ -1,0 +1,87 @@
+
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    left: 200px;
+  }
+  40% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+    left: 0px;
+  }
+}
+  
+.navbar-tabs {
+  background-color: transparent;
+  color: #e7f6f2;
+  display: flex;
+  padding: 0 25px;
+  flex-wrap: wrap;
+  min-height: 32px;
+
+  .navbar-tab {
+    height: 32px;
+    display: flex;
+    position: relative;
+    animation: slideIn 0.7s ease-in-out;
+    background-color: #395b64;
+  
+    &:not(:first-child) {
+      border-left: 1px solid darken(#395b64, 15);
+    }
+
+    &.active-tab {
+      a, .close-tab {
+        box-shadow: #E7F6F2 0 -2px 0 inset;
+      }
+    }
+    &:not(.active-tab) {
+      background-color: darken(#395b64, 10);
+      a, .close-tab {
+        background-color: darken(#395b64, 10);
+      }
+    }
+    &:hover {
+      transition: background-color 0.2s;
+      background-color: lighten(#395b64, 5);
+      &.active-tab {
+        &::before {
+          border-right: 10px solid lighten(#395b64, 5);
+          transition: 0.2s !important;
+        }
+        &::after {
+          border-left: 10px solid lighten(#395b64, 5);
+          transition: 0.2s !important;
+        }
+      }
+      a, .close-tab {
+        transition: background-color 0.2s;
+        background-color: lighten(#395b64, 5);
+      }
+    }
+    a, .close-tab {
+      all: unset;
+      display: flex;
+      place-items: center;
+      cursor: pointer;
+      white-space: nowrap;
+      background-color: #395b64;
+    }
+    a {
+      padding-left: 15px;
+      padding-right: 7px;
+      padding-bottom: 5px;
+    }
+    .close-tab {
+      padding-left: 7px;
+      padding-right: 15px;
+      padding-bottom: 5px;
+      color: #e7f6f2;
+      &:hover {
+        color: red;
+      }
+    }
+  }
+}

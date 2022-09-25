@@ -1,0 +1,10 @@
+.table-crits-display {
+  white-space: nowrap;
+  display: flex;
+  gap: 10px;
+  // justify-content: space-between;
+  > div:first-child {
+    width: 73px;
+    text-align: end;
+  }
+}

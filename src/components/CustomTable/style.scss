@@ -1,0 +1,344 @@
+@use "sass:map";
+
+$substats: "flathp", "hp_", "flatatk", "atk_", "flatdef", "def_", "critrate",
+  "critdmg", "critvalue", "elementalmastery", "energyrecharge";
+
+@each $substat in $substats {
+  .highlight-#{$substat} {
+    .substat {
+      opacity: 0.4;
+    }
+    .#{$substat} {
+      opacity: 1;
+    }
+    td.#{$substat} {
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+  }
+}
+
+@keyframes fadeInRow {
+  0% {
+    opacity: 0;
+    max-height: 0;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+  90% {
+    opacity: 1;
+    margin-top: 5px;
+    margin-bottom: 20px;
+  }
+  100% {
+    max-height: 800px;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1 !important;
+  }
+  99% {
+    opacity: 0 !important;
+    width: auto;
+    height: auto;
+  }
+  100% {
+    opacity: 0;
+    display: none;
+    width: 0;
+    height: 0;
+  }
+}
+
+.table-icon {
+  width: 25px;
+  // filter: drop-shadow(0px 0px 3px rgba(black, 0.5));
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.fade-out {
+  animation: fadeOut 0.3s ease-in-out;
+  animation-fill-mode: forwards;
+  // overflow: hidden;
+}
+
+// @KM: reimplement later
+.hide-on-table {
+  display: none;
+}
+
+.custom-table-wrapper {
+  // @KM: @TODO: use perfect scroll instead?
+  // overflow: auto;
+  &.disable-table {
+    table.custom-table {
+      overflow: unset;
+      min-height: 64px;
+      tbody {
+        position: relative;
+        overflow: hidden;
+        td {
+          filter: saturate(0.8);
+        }
+        .dark-overlay-table-only {
+          min-height: 32px;
+          position: absolute;
+          background-color: rgba(0, 0, 0, 0.5);
+          border-top: 1px solid rgba(81, 81, 81, 0.5);
+          width: 100%;
+          height: 100%;
+          top: -1px;
+          left: 0;
+          z-index: 2;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+    }
+  }
+
+  table.custom-table {
+    // @KM: @TODO: whats the reason for this hidden
+    // overflow: hidden;
+    width: 100%;
+    text-align: left;
+    // border: 0;
+    font-size: 13px;
+    position: relative;
+    background-color: rgba(black, 0.1);
+
+    .expanded-row {
+      animation: fadeInRow 0.6s ease-in-out;
+      margin-top: 5px;
+      margin-bottom: 20px;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 5px;
+      margin-bottom: 20px;
+      font-size: 16px;
+    }
+
+    .sort-direction-icon {
+      color: orange;
+      margin-top: 1px;
+      transform: rotate(0deg);
+      transition: transform 0.3s;
+      margin-left: auto;
+      &.rotate-180deg {
+        transform: rotate(180deg);
+      }
+    }
+    .header-wrapper {
+      display: flex;
+      justify-content: space-between;
+      gap: 5px;
+    }
+
+    tbody {
+      tr {
+        &:not(.expanded-tr):not(.dark-overlay-table-only):hover {
+          background-color: rgba(0, 0, 0, 0.333);
+        }
+        &:nth-child(2n) {
+          background-color: rgba(0, 0, 0, 0.212);
+        }
+      }
+    }
+
+    tr:not(.expanded-tr) {
+      height: 32px;
+      th {
+        font-weight: unset;
+        // background-color: #202525;
+        background-color: rgba(black, 0.3);
+        white-space: nowrap;
+        color: white;
+        border-bottom: 1px solid rgba(81, 81, 81, 1);
+        &.highlight-cell {
+          // background-color: #1b1f1f;
+          background-color: rgba(black, 0.5);
+          border-color: rgba(81, 81, 81, 0.5);
+          box-shadow: inset 0px 1px 0px 0px orange;
+        }
+        &.sortable-column {
+          cursor: pointer;
+          &:hover {
+            color: orange;
+            // background-color: #1b1f1f;
+            background-color: rgba(black, 0.5);
+          }
+        }
+      }
+      th,
+      td {
+        padding: 0 12px;
+        min-width: 17px;
+      }
+      td {
+        &.highlight-cell {
+          background-color: rgba(0, 0, 0, 0.3);
+          // font-weight: 600;
+        }
+      }
+    }
+  }
+}
+
+.table-icon-text-pair {
+  display: flex;
+  place-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: fit-content;
+  > span {
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+}
+
+.row-link-element {
+  cursor: pointer;
+  color: white;
+  text-decoration: none;
+  width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  &:before {
+    content: "";
+  }
+  &:hover {
+    color: orange;
+    .ar-badge {
+      border: 1px solid orange;
+      color: white;
+    }
+  }
+}
+
+.ar-badge {
+  display: inline-block;
+  white-space: nowrap;
+  // margin: 0 10px;
+  margin-right: 10px;
+  padding: 1px 4px;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  &.ar-0-badge,
+  &.ar-5-badge,
+  &.ar-10-badge,
+  &.ar-15-badge,
+  &.ar-20-badge,
+  &.ar-25-badge,
+  &.ar-30-badge,
+  &.ar-35-badge {
+    background-color: rgb(128, 128, 128);
+    border-color: rgb(128, 128, 128);
+  }
+  &.ar-40-badge {
+    background-color: rgb(75, 121, 71);
+    border-color: rgb(75, 121, 71);
+  }
+  &.ar-45-badge {
+    background-color: rgb(31, 131, 31);
+    border-color: rgb(31, 131, 31);
+  }
+  &.ar-50-badge {
+    background-color: rgb(0, 122, 122);
+    border-color: rgb(0, 122, 122);
+  }
+  &.ar-55-badge {
+    background-color: rgb(128, 45, 136);
+    border-color: rgb(128, 45, 136);
+  }
+  &.ar-60-badge {
+    background-color: rgb(168, 120, 31);
+    border-color: rgb(168, 120, 31);
+  }
+}
+
+.c-badge-wrapper {
+  .c-badge {
+    white-space: nowrap;
+    // margin: 0 10px;
+    padding: 2px 5px;
+    border-radius: 5px;
+    &.c-0-badge {
+      background-color: rgb(128, 128, 128);
+      width: 18px;
+    }
+    &.c-1-badge {
+      background-color: rgb(64, 131, 155);
+      width: 25px;
+    }
+    &.c-2-badge {
+      background-color: rgb(64, 131, 155);
+      width: 35px;
+    }
+    &.c-3-badge {
+      background-color: rgb(64, 131, 155);
+      width: 45px;
+    }
+    &.c-4-badge {
+      background-color: rgb(64, 131, 155);
+      width: 55px;
+    }
+    &.c-5-badge {
+      background-color: rgb(64, 131, 155);
+      width: 65px;
+    }
+    &.c-6-badge {
+      background-color: rgb(168, 120, 31);
+      width: 75px;
+    }
+  }
+}
+.sortable-column {
+  &:hover {
+    .sort-fields-picker-wrapper {
+      display: block;
+    }
+  }
+}
+
+.sort-fields-picker-wrapper {
+  position: absolute;
+  left: 0;
+  top: 31px;
+  display: none;
+  background-color: #141717;
+  z-index: 3;
+  color: white;
+  min-width: 180px;
+  box-shadow: inset 1px 0px 0px 0px #515151, inset -1px 0px 0px 0px #515151,
+    inset 0px -1px 0px 0px #515151;
+  overflow: hidden;
+  transform: translateY(-50%) scaleY(1) translateY(50%);
+  > div {
+    padding: 5px 12px;
+    &:first-child {
+      padding-top: 7px;
+    }
+    &:last-child {
+      padding-bottom: 7px;
+    }
+    &:hover {
+      color: orange;
+      img {
+        filter: drop-shadow(0px 0px 2px orange);
+      }
+    }
+    &.highlight-cell {
+      background-color: rgba(0, 0, 0, 0.4);
+      border-right: 1px solid rgb(81, 81, 81);
+      box-shadow: inset 1px 0px 0px 0px orange;
+    }
+  }
+}

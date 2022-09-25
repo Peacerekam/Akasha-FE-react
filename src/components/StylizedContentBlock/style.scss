@@ -1,0 +1,35 @@
+.stylized-content-block-wrapper {
+  position: relative;
+  padding: 0 !important;
+  opacity: 0;
+  &.gradient {
+    &::after {
+      background: linear-gradient(transparent 5%, #2c3333dd 15%, #2c3333 40%);
+    }
+    .stylized-content-block {
+      background-position-y: max(-200px, -15vw);
+    }
+  }
+  .stylized-content-block {
+    position: absolute;
+    background-image: var(--name-card-url);
+    background-size: contain;
+    background-repeat: repeat;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1000px;
+    // filter: blur(3px);
+    opacity: 1;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    background: linear-gradient(#2c3333dd 5%, #2c3333 80%);
+    background-position-y: top;
+    left: 0;
+    top: 0;
+    height: 1000px;
+    width: 100%;
+  }
+}

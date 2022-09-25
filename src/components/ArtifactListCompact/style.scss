@@ -1,0 +1,64 @@
+
+.compact-artifact {
+  // padding: 10px 20px;
+  $bg-color: #1f2323;
+  background-color: $bg-color;
+  margin-top: 10px;
+  overflow: hidden;
+
+  .compact-artifact-icon-container {
+    width: 100px;
+    height: 130px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    position: relative;
+    .compact-artifact-icon {
+      width: 180px;
+      height: 180px;
+    }
+    .compact-artifact-crit-value {
+      background-color: #000000be;
+      border-radius: 6px;
+      padding: 3px 5px;
+      position: absolute;
+      top: 2px;
+      left: 3px;
+      font-size: 12px;
+    }
+    .compact-artifact-main-stat {
+      position: absolute;
+      background-color: #000000be;
+      border-radius: 7px;
+      bottom: 5px;
+      padding: 3px 4px;
+      display: flex;
+      gap: 5px;
+      padding-right: 6px;
+      z-index: 3;
+      color: white;
+      .stat-icon {
+        width: 22px;
+        height: 22px;
+      }
+    }
+  }
+  .compact-artifact-subs {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin: 15px;
+    margin-left: 0;
+    z-index: 2;
+    background-color: $bg-color;
+    box-shadow: $bg-color -10px 0px 30px 30px;
+    color: white;
+    .stat-icon {
+      width: 22px;
+      height: 22px;
+      margin-right: 2px;
+    }
+  }
+}
+

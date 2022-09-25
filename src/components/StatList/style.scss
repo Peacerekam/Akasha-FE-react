@@ -1,0 +1,43 @@
+.table-stats-display {
+  width: 300px;
+  .table-stat-row {
+    display: flex;
+    justify-content: space-between;
+    // border-bottom: 1px dashed rgb(112, 112, 112);
+    border-bottom: 1px dashed rgb(150, 150, 150);
+    margin: 6px 0;
+    > div:first-child {
+      width: 60%;
+      align-items: center;
+      flex-wrap: nowrap;
+      span {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+    }
+  }
+}
+
+.refinement-display {
+  opacity: 0.5;
+  font-size: 13px;
+  position: absolute;
+  top: -13px;
+  left: 0;
+}
+
+.strike-through {
+  // text-decoration: line-through;
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    background-color: red;
+    width: 100%;
+    height: 2px;
+    opacity: 1;
+    top: 50%;
+    right: 0;
+  }
+}

@@ -1,0 +1,51 @@
+.hover-preview-for-artifact-table {
+  background-color: #202525;
+  border-radius: 10px;
+  padding: 0px;
+  width: 250px;
+  .table-crits-display {
+    > div:first-child {
+      width: 85px;
+    }
+  }
+  .data-listing {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+.row-hover-build-preview {
+  background-image: var(--name-card-url);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 300px;
+  min-height: 100px;
+  position: relative;
+  overflow: hidden;
+  border-width: 3px;
+  border-style: solid;
+  padding: 5px 10px !important;
+  
+  // @KM: @TODO: experiment on this border
+  // border-radius: 10px !important;
+  border-width: 1px !important;
+
+  .above-darken {
+    div {
+      z-index: 12;
+    }
+  }
+  .darken {
+    background-color: #000;
+    z-index: 10;
+    opacity: 0.5;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+  }
+}

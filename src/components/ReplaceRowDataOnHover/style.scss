@@ -1,0 +1,14 @@
+tr {
+  .show-on-hover {
+    display: none;
+  }
+  &:hover .show-on-hover {
+    display: inline-block;
+  }
+  .hide-on-hover {
+    display: inline-block;
+  }
+  &:hover .hide-on-hover {
+    display: none;
+  }
+}

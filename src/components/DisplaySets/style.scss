@@ -1,0 +1,15 @@
+.table-set-display {
+  white-space: nowrap;
+  display: flex;
+  gap: 10px;
+  // width: 120px;
+  justify-content: center;
+  color: #90ee90;
+  font-size: 12px;
+  // font-style: italic;
+  width: fit-content;
+  > div {
+    display: flex;
+    place-items: center;
+  }
+}

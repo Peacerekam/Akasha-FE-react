@@ -1,0 +1,13 @@
+.calculation-list {
+  font-size: 14px;
+  tr {
+    td:first-child {
+      text-align: right;
+    }
+    td:last-child {
+      color: orange;
+      font-weight: 600;
+      text-align: right;
+    }
+  }
+}
