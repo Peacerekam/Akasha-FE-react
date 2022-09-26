@@ -13,7 +13,7 @@ import { Footer, Navbar, NavbarTabs } from "./components";
 
 function App() {
   return (
-    <div className="App">
+    <div>
       <BrowserRouter>
         <Navbar />
         <NavbarTabs />
