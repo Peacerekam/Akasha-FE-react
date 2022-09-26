@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route, HashRouter } from "react-router-dom";
 
 import {
   ArtifactsPage,
@@ -14,7 +14,7 @@ import { Footer, Navbar, NavbarTabs } from "./components";
 function App() {
   return (
     <div>
-      <BrowserRouter basename="akasha">
+      <HashRouter>
         <Navbar />
         <NavbarTabs />
         <div className="content-wrapper">
@@ -51,7 +51,7 @@ function App() {
           </Routes>
           <Footer />
         </div>
-      </BrowserRouter>
+      </HashRouter>
     </div>
   );
 }
