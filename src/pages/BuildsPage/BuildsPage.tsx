@@ -29,7 +29,6 @@ export type BuildsColumns = {
 
 export const BuildsPage = () => {
   const navigate = useNavigate();
-  const pathname = window.location.pathname.slice(1,window.location.pathname.length-1);
 
   const BUILDS_COLUMNS: TableColumn<BuildsColumns>[] = [
     {
@@ -75,7 +74,7 @@ export const BuildsPage = () => {
               event.preventDefault();
               navigate(`/profile/${row.uid}`);
             }}
-            href={`${pathname}#/profile/${row.uid}`}
+            href={`/#/profile/${row.uid}`}
           >
             <ARBadge adventureRank={row.adventureRank} />
             {row.nickname}

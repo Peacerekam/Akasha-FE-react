@@ -89,7 +89,6 @@ export const LeaderboardsPage = () => {
 
   const navigate = useNavigate();
   const { calculationId } = useParams();
-  const pathname = window.location.pathname.slice(1,window.location.pathname.length-1);
 
   const [initialData, setInitialData] = useState({
     rows: [] as any,
@@ -193,7 +192,7 @@ export const LeaderboardsPage = () => {
                 event.preventDefault();
                 navigate(`/profile/${row.uid}`);
               }}
-              href={`${pathname}#/profile/${row.uid}`}
+              href={`/#/profile/${row.uid}`}
             >
               <ARBadge adventureRank={row.adventureRank} />
               {row.nickname}
@@ -388,7 +387,7 @@ export const LeaderboardsPage = () => {
           event.preventDefault();
           navigate(`/profile/${player.uid}`);
         }}
-        href={`${pathname}#/profile/${player.uid}`}
+        href={`/#/profile/${player.uid}`}
       >
         <img
           style={imageStyle}

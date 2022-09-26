@@ -17,7 +17,6 @@ export const NavbarTabs: React.FC = () => {
   
   // HashRouter
   const hash = window.location.hash.replace('#','');
-  const pathname = window.location.pathname.slice(1,window.location.pathname.length-1);
 
   useEffect(() => {
     if (_timeout) clearTimeout(_timeout);
@@ -73,7 +72,7 @@ export const NavbarTabs: React.FC = () => {
           >
             <a
               // @KM: @TODO: classname fade-in ofsome kind
-              href={`${pathname}#/profile/${uid}`}
+              href={`/#/profile/${uid}`}
               onClick={(event) => {
                 event.preventDefault();
                 navigate(`/profile/${uid}`);
