@@ -13,7 +13,7 @@ import {
 } from "../../components";
 import { arrayPushOrSplice, normalizeText } from "../../utils/helpers";
 import { FiltersContainer, FilterOption } from "./Filters";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./style.scss";
 
 type CustomTableProps = {
@@ -25,10 +25,7 @@ type CustomTableProps = {
   calculationColumn?: string;
   expandableRows?: boolean;
   hidePagination?: boolean;
-  initialData?: {
-    rows: any[];
-    totalRows: number;
-  };
+  projectParamsToPath?: boolean;
 };
 
 export type FetchParams = {
@@ -48,8 +45,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   calculationColumn = "",
   expandableRows = false,
   hidePagination = false,
-  initialData = null,
-  // dataFeed = null,
+  projectParamsToPath = false,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [listingType, setListingType] = useState<"table" | "custom">("table");
@@ -67,65 +63,70 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   };
   const [params, setParams] = useState<FetchParams>(defaultParams);
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const noDataFound = useMemo(
     () => rows.length === 0 && !isLoading,
     [rows.length, isLoading]
   );
 
-  // const appendParamsToURL = () => {
-  //   let tmp: string[] = [];
-  //   for (const key of Object.keys(params)) {
-  //     const value = (params as any)[key];
-  //     if ((defaultParams as any)[key] === value) continue;
+  const appendParamsToURL = () => {
+    let tmp: string[] = [];
+    for (const key of Object.keys(params)) {
+      const value = (params as any)[key];
+      if ((defaultParams as any)[key] === value) continue;
+      tmp.push(`${key}=${value}`);
+    }
+    // const toAppend = encodeURI(tmp.join("&"));
+    const toAppend = tmp.join("&");
+    const newURL = `?${toAppend}`;
+    navigate(newURL, { replace: true });
+  };
 
-  //     tmp.push(`${key}=${value}`);
-  //   }
-  //   const toAppend = tmp.join("&");
-  //   const newURL = `${window.location.pathname}?${toAppend}`;
-  //   navigate(newURL);
-  // };
+  const readParamsFromURL = () => {
+    const { hash } = window.location;
+    const searchQueryStart = hash.indexOf("?");
+    if (searchQueryStart === -1) return;
 
-  // const readParamsFromURL = () => {
-  //   const query = new URLSearchParams(window.location.search);
-  //   const tmp: any = {};
-  //   query.forEach((value, key) => {
-  //     if ((defaultParams as any)[key].toString() !== value) {
-  //       tmp[key] = value;
-  //     }
-  //   });
+    const searchQuery = hash.slice(searchQueryStart, hash.length);
+    const query = new URLSearchParams(searchQuery);
 
-  //   setParams((prev) => ({
-  //     ...prev,
-  //     ...tmp
-  //   }));
-  // };
+    const tmp: any = {};
+    query.forEach((value, key) => {
+      const actualValue = isNaN(+value) ? value : +value;
+      console.log(value, key)
+      if ((defaultParams as any)?.[key]?.toString() !== actualValue) {
+        tmp[key] = actualValue;
+      }
+    });
 
-  // useEffect(() => {
-  //   // readParamsFromURL();
-  //   // make new props to not let table project onto URL (2 tables on 1 page)
-  // }, []);
+    setParams((prev) => ({
+      ...prev,
+      ...tmp,
+    }));
+  };
 
   useEffect(() => {
-    // appendParamsToURL();
+    if (projectParamsToPath) {
+      readParamsFromURL();
+    }
+  }, [projectParamsToPath]);
+
+  useEffect(() => {
     console.log("useEffect params/fetchURL", params, fetchURL);
 
-    if (initialData && rows.length === 0) {
-      setIsLoading(true);
-      if (initialData.rows.length === 0) return;
+    if (projectParamsToPath) {
+      appendParamsToURL();
+    }
 
-      setRows(initialData.rows);
-      setTotalRowsCount(initialData.totalRows);
-      setIsLoading(false);
-    } else if (fetchURL) {
+    if (fetchURL) {
       const abortController = new AbortController();
       handleFetch(abortController);
       return () => {
         abortController.abort();
       };
     }
-  }, [JSON.stringify(params), fetchURL, initialData]);
+  }, [JSON.stringify(params), fetchURL, projectParamsToPath]);
 
   useEffect(() => {
     console.log("useEffect expandedRows", expandedRows);
@@ -428,6 +429,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
         <FiltersContainer
           fetchURL={filtersURL}
           onFiltersChange={handleChangeFilters}
+          projectParamsToPath
         />
       )}
       {/* <PerfectScrollbar options={{}}> */}

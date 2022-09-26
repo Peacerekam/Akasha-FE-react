@@ -4,10 +4,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FiltersModal } from "./FiltersModal";
 import axios from "axios";
 import "./style.scss";
+import { filtersQueryToArray } from "../../../utils/helpers";
 
 type FiltersContainerProps = {
   onFiltersChange: (filters: FilterOption[]) => void;
   fetchURL: string;
+  projectParamsToPath?: boolean;
 };
 
 export type FilterOption = {
@@ -42,6 +44,7 @@ const applyModalBodyStyle = ({ offsetX, offsetY }: any) => {
 export const FiltersContainer = ({
   onFiltersChange,
   fetchURL,
+  projectParamsToPath,
 }: FiltersContainerProps) => {
   const [showFiltersModal, setShowFiltersModal] = useState(false);
   const [filterSelectFocus, setFilterSelectFocus] = useState<number>();
@@ -49,6 +52,7 @@ export const FiltersContainer = ({
   const [filtersArray, setFiltersArray] = useState<FilterOption[]>([
     { name: "", value: "" },
   ]);
+  const [initialLoad, setInitialLoad] = useState(true);
 
   const fetchFilters = async (
     fetchURL: string,
@@ -65,6 +69,32 @@ export const FiltersContainer = ({
     } catch (err) {}
   };
 
+  const fillPillsFromURL = () => {
+    const { hash } = window.location;
+    const searchQueryStart = hash.indexOf("?");
+    if (searchQueryStart === -1) return;
+
+    const searchQuery = hash.slice(searchQueryStart, hash.length);
+    const query = new URLSearchParams(searchQuery);
+
+    const tmp: any[] = [];
+
+    query.forEach((value, key) => {
+      if (key !== "filter") return;
+      const arr = filtersQueryToArray(value);
+      tmp.push(...arr);
+    });
+
+    setFiltersArray(tmp);
+  };
+
+  useEffect(() => {
+    if (projectParamsToPath) {
+      fillPillsFromURL();
+    }
+    setInitialLoad(false);
+  }, [projectParamsToPath]);
+
   useEffect(() => {
     const abortController = new AbortController();
     if (fetchURL) fetchFilters(fetchURL, abortController);
@@ -75,8 +105,10 @@ export const FiltersContainer = ({
   }, [fetchURL]);
 
   useEffect(() => {
-    onFiltersChange(filtersArray);
-  }, [JSON.stringify(filtersArray)]);
+    if (!initialLoad) {
+      onFiltersChange(filtersArray);
+    }
+  }, [JSON.stringify(filtersArray), initialLoad]);
 
   const handleToggleModal = () => {
     setShowFiltersModal((prev) => !prev);
@@ -146,7 +178,7 @@ export const FiltersContainer = ({
         equipType: equipTypeMap[pill.value],
         stars: `${pill.value}*`,
         constellation: `C${pill.value}`,
-        'weapon.weaponInfo.refinementLevel.value': `R${+pill.value+1}`
+        "weapon.weaponInfo.refinementLevel.value": `R${+pill.value + 1}`,
       }[pill.name] ?? pill.value
     );
   };

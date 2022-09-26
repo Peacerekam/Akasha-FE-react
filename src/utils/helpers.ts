@@ -1,5 +1,11 @@
-// export const BACKEND_URL = "http://localhost:5033";
-export const BACKEND_URL = 'http://149.57.165.73:5033'
+const urls = {
+  localhost: "http://localhost:5033",
+  vps: "http://149.57.165.73:5033",
+  proxy: "http://localhost:3100/akasha",
+  prod: "https://www.mimee.ovh/akasha",
+};
+
+export const BACKEND_URL = urls["proxy"];
 
 export const FETCH_ARTIFACTS_URL = `${BACKEND_URL}/api/artifacts`;
 export const FETCH_BUILDS_URL = `${BACKEND_URL}/api/builds/`;
@@ -148,4 +154,21 @@ export const arrayPushOrSplice = (prev: any[], element: any) => {
     arr.push(element);
   }
   return arr;
+};
+
+export const filtersQueryToArray = (value: string) => {
+  const filters: any[] = [];
+  const _tmp = value.split("[").slice(1);
+  _tmp.forEach((str) => {
+    const _vals = str.split("]");
+    let key = _vals[0];
+    let value = isNaN(+_vals[1]) ? _vals[1] : +_vals[1];
+    if (key === undefined || value === undefined) return;
+
+    filters.push({
+      name: key,
+      value: value,
+    });
+  });
+  return filters;
 };

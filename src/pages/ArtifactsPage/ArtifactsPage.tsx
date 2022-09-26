@@ -190,6 +190,7 @@ export const ArtifactsPage = () => {
           filtersURL={FETCH_ARTIFACT_FILTERS_URL}
           columns={ARTIFACT_COLUMNS}
           defaultSort="critValue"
+          projectParamsToPath
         />
       </div>
     </div>

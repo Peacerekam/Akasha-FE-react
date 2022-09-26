@@ -541,7 +541,6 @@ export const LeaderboardsPage = () => {
             <CustomTable
               fetchURL={searchFetchURL}
               fetchParams={{
-                filter: displayCategory.calculation.id.slice(0, -2),
                 sort: calculationSortKey,
               }}
               columns={LEADERBOARDS_COLUMNS}
@@ -555,13 +554,13 @@ export const LeaderboardsPage = () => {
             <div style={{ marginTop: "30px" }} />
 
             <CustomTable
-              initialData={initialData}
               fetchURL={FETCH_LEADERBOARDS_URL}
               filtersURL={FETCH_CHARACTER_FILTERS_URL}
               columns={LEADERBOARDS_COLUMNS}
               defaultSort={calculationSortKey}
               calculationColumn={currentCategory}
               expandableRows
+              projectParamsToPath
             />
           </div>
         )}

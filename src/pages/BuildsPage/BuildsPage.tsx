@@ -236,6 +236,7 @@ export const BuildsPage = () => {
           columns={BUILDS_COLUMNS}
           defaultSort="critValue"
           expandableRows
+          projectParamsToPath
         />
       </div>
     </div>
