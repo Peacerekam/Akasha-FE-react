@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.3ae814df.css",
-    "main.js": "/static/js/main.79c6823e.js",
+    "main.css": "/static/css/main.e86ba242.css",
+    "main.js": "/static/js/main.c017ae00.js",
     "static/media/domain-background.jpg": "/static/media/domain-background.0a81fdf6664ed1cc2103.jpg",
     "static/media/Concept_Art_Liyue_Harbor.webp": "/static/media/Concept_Art_Liyue_Harbor.f8171af7664b92ab1f75.webp",
     "static/media/artifact-5star-bg.png": "/static/media/artifact-5star-bg.d3acf537af5dac14761d.png",
@@ -12,11 +12,11 @@
     "static/media/ROCK_ADD_HURT.png": "/static/media/ROCK_ADD_HURT.3c5a19c4deba2769e0e7.png",
     "static/media/ICE_ADD_HURT.png": "/static/media/ICE_ADD_HURT.94a0dd7a9e37418e45b2.png",
     "index.html": "/index.html",
-    "main.3ae814df.css.map": "/static/css/main.3ae814df.css.map",
-    "main.79c6823e.js.map": "/static/js/main.79c6823e.js.map"
+    "main.e86ba242.css.map": "/static/css/main.e86ba242.css.map",
+    "main.c017ae00.js.map": "/static/js/main.c017ae00.js.map"
   },
   "entrypoints": [
-    "static/css/main.3ae814df.css",
-    "static/js/main.79c6823e.js"
+    "static/css/main.e86ba242.css",
+    "static/js/main.c017ae00.js"
   ]
 }
