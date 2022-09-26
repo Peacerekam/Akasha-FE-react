@@ -16,15 +16,16 @@ export const NavbarTabs: React.FC = () => {
   // const { pathname } = window.location;
   
   // HashRouter
-  const pathname = window.location.hash.replace('#','');
+  const hash = window.location.hash.replace('#','');
+  const pathname = window.location.pathname.slice(1,window.location.pathname.length-1);
 
   useEffect(() => {
     if (_timeout) clearTimeout(_timeout);
 
     const profileURL = "/profile/";
-    if (!pathname.includes(profileURL)) return;
+    if (!hash.includes(profileURL)) return;
 
-    const uid = pathname.replace(profileURL, "")
+    const uid = hash.replace(profileURL, "")
     if (lastProfiles.includes(uid)) return;
 
     if (!nicknameMap[uid]) {
@@ -32,7 +33,7 @@ export const NavbarTabs: React.FC = () => {
     }
 
     setLastProfiles((prev) => Array.from(new Set([...prev.slice(-12), uid])));
-  }, [pathname]);
+  }, [hash]);
 
   const getNickname = async (uid: string) => {
     const getNicknameURL = `${BACKEND_URL}/api/nickname/${uid}`;
@@ -67,12 +68,12 @@ export const NavbarTabs: React.FC = () => {
           <div
             key={`tab-${uid}-${nicknameMap[uid]}`}
             className={`navbar-tab ${
-              pathname.endsWith(uid) ? "active-tab" : ""
+              hash.endsWith(uid) ? "active-tab" : ""
             }`}
           >
             <a
               // @KM: @TODO: classname fade-in ofsome kind
-              href={`/profile/${uid}`}
+              href={`${pathname}#/profile/${uid}`}
               onClick={(event) => {
                 event.preventDefault();
                 navigate(`/profile/${uid}`);

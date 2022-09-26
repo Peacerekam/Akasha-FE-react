@@ -38,12 +38,13 @@ export const Navbar: React.FC = () => {
   // const { pathname } = window.location;
   
   // HashRouter
-  const pathname = window.location.hash.replace('#','');
+  const hash = window.location.hash.replace('#','');
+  const pathname = window.location.pathname.slice(1,window.location.pathname.length-1);
 
   return (
     <div className="navbar">
       <a
-        href="/"
+        href={`${pathname}#`}
         className="logo-wrapper"
         onClick={(event) => {
           event.preventDefault();
@@ -60,11 +61,11 @@ export const Navbar: React.FC = () => {
         <a
           key={nav.name}
           className={
-            pathname !== "/" && pathname.startsWith(nav.path)
+            hash !== "/" && hash.startsWith(nav.path)
               ? "active-tab"
               : ""
           }
-          href={nav.path}
+          href={`${pathname}#${nav.path}`}
           onClick={(event) => {
             event.preventDefault();
             navigate(nav.path);

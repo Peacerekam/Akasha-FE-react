@@ -45,6 +45,7 @@ export const CategorySelectionPage = () => {
     useState<TransformedCategories[]>();
 
   const navigate = useNavigate();
+  const pathname = window.location.pathname.slice(1,window.location.pathname.length-1);
 
   useEffect(() => {
     fetchCategories();
@@ -135,7 +136,7 @@ export const CategorySelectionPage = () => {
                                       `/leaderboards/${calc.calculationId}`
                                     );
                                   }}
-                                  href={`/leaderboards/${calc.calculationId}`}
+                                  href={`${pathname}#/leaderboards/${calc.calculationId}`}
                                 >
                                   {calc.weapon && (
                                     <span>
