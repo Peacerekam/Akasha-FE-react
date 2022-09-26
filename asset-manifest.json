@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/static/css/main.3ae814df.css",
+    "main.js": "/static/js/main.79c6823e.js",
+    "static/media/domain-background.jpg": "/static/media/domain-background.0a81fdf6664ed1cc2103.jpg",
+    "static/media/Concept_Art_Liyue_Harbor.webp": "/static/media/Concept_Art_Liyue_Harbor.f8171af7664b92ab1f75.webp",
+    "static/media/artifact-5star-bg.png": "/static/media/artifact-5star-bg.d3acf537af5dac14761d.png",
+    "static/media/enka.woff2": "/static/media/enka.2707802955a3a2b327c2.woff2",
+    "static/media/no-artifact.png": "/static/media/no-artifact.4e1ccba90774582076af.png",
+    "static/media/WIND_ADD_HURT.png": "/static/media/WIND_ADD_HURT.09378f5133c1880b4818.png",
+    "static/media/FIRE_ADD_HURT.png": "/static/media/FIRE_ADD_HURT.c8a5ba1852812a71474f.png",
+    "static/media/ROCK_ADD_HURT.png": "/static/media/ROCK_ADD_HURT.3c5a19c4deba2769e0e7.png",
+    "static/media/ICE_ADD_HURT.png": "/static/media/ICE_ADD_HURT.94a0dd7a9e37418e45b2.png",
+    "index.html": "/index.html",
+    "main.3ae814df.css.map": "/static/css/main.3ae814df.css.map",
+    "main.79c6823e.js.map": "/static/js/main.79c6823e.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3ae814df.css",
+    "static/js/main.79c6823e.js"
+  ]
+}
