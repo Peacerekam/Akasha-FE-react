@@ -12,11 +12,9 @@ import {
   TableHoverElement,
 } from "../../components";
 import { arrayPushOrSplice, normalizeText } from "../../utils/helpers";
-import { FiltersContainer } from "./Filters";
-
+import { FiltersContainer, FilterOption } from "./Filters";
+// import { useNavigate } from "react-router-dom";
 import "./style.scss";
-import { FilterOption } from "./Filters/FiltersContainer";
-import { useNavigate, useParams } from "react-router-dom";
 
 type CustomTableProps = {
   columns: any[];
@@ -31,7 +29,6 @@ type CustomTableProps = {
     rows: any[];
     totalRows: number;
   };
-  // dataFeed?: (data: any[]) => void
 };
 
 export type FetchParams = {
@@ -70,45 +67,45 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   };
   const [params, setParams] = useState<FetchParams>(defaultParams);
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const noDataFound = useMemo(
     () => rows.length === 0 && !isLoading,
     [rows.length, isLoading]
   );
 
-  const appendParamsToURL = () => {
-    let tmp: string[] = [];
-    for (const key of Object.keys(params)) {
-      const value = (params as any)[key];
-      if ((defaultParams as any)[key] === value) continue;
+  // const appendParamsToURL = () => {
+  //   let tmp: string[] = [];
+  //   for (const key of Object.keys(params)) {
+  //     const value = (params as any)[key];
+  //     if ((defaultParams as any)[key] === value) continue;
 
-      tmp.push(`${key}=${value}`);
-    }
-    const toAppend = tmp.join("&");
-    const newURL = `${window.location.pathname}?${toAppend}`;
-    navigate(newURL);
-  };
+  //     tmp.push(`${key}=${value}`);
+  //   }
+  //   const toAppend = tmp.join("&");
+  //   const newURL = `${window.location.pathname}?${toAppend}`;
+  //   navigate(newURL);
+  // };
 
-  const readParamsFromURL = () => {
-    const query = new URLSearchParams(window.location.search);
-    const tmp: any = {};
-    query.forEach((value, key) => {
-      if ((defaultParams as any)[key].toString() !== value) {
-        tmp[key] = value;
-      }
-    });
+  // const readParamsFromURL = () => {
+  //   const query = new URLSearchParams(window.location.search);
+  //   const tmp: any = {};
+  //   query.forEach((value, key) => {
+  //     if ((defaultParams as any)[key].toString() !== value) {
+  //       tmp[key] = value;
+  //     }
+  //   });
 
-    setParams((prev) => ({
-      ...prev,
-      ...tmp
-    }));
-  };
+  //   setParams((prev) => ({
+  //     ...prev,
+  //     ...tmp
+  //   }));
+  // };
 
-  useEffect(() => {
-    // readParamsFromURL();
-    // make new props to not let table project onto URL (2 tables on 1 page)
-  }, []);
+  // useEffect(() => {
+  //   // readParamsFromURL();
+  //   // make new props to not let table project onto URL (2 tables on 1 page)
+  // }, []);
 
   useEffect(() => {
     // appendParamsToURL();
@@ -116,7 +113,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
     if (initialData && rows.length === 0) {
       setIsLoading(true);
-      if (initialData.rows.length == 0) return;
+      if (initialData.rows.length === 0) return;
 
       setRows(initialData.rows);
       setTotalRowsCount(initialData.totalRows);
