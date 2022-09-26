@@ -16,7 +16,7 @@ import { TableColumn } from "../../types/TableColumn";
 
 import DomainBackground from "../../assets/images/domain-background.jpg";
 import { StylizedContentBlock } from "../../components/StylizedContentBlock";
-import { FETCH_ARTIFACT_FILTERS_URL } from '../../utils/helpers';
+import { FETCH_ARTIFACT_FILTERS_URL } from "../../utils/helpers";
 
 export type ArtifactColumns = {
   _id: string;
@@ -34,6 +34,8 @@ export type ArtifactColumns = {
 export const ArtifactsPage = () => {
   const navigate = useNavigate();
 
+  const pathname = window.location.pathname;
+
   const ARTIFACT_COLUMNS: TableColumn<ArtifactColumns>[] = [
     {
       name: "#",
@@ -48,7 +50,7 @@ export const ArtifactsPage = () => {
                   event.preventDefault();
                   navigate(`/profile/${row.uid}`);
                 }}
-                href={`/#/profile/${row.uid}`}
+                href={`${pathname}#/profile/${row.uid}`}
               >
                 <Artifact artifact={row} width={180} />
               </a>
@@ -74,7 +76,7 @@ export const ArtifactsPage = () => {
               event.preventDefault();
               navigate(`/profile/${row.uid}`);
             }}
-            href={`/#/profile/${row.uid}`}
+            href={`${pathname}#/profile/${row.uid}`}
           >
             <ARBadge adventureRank={row.adventureRank} />
             {row.nickname}

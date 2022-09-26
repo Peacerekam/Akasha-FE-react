@@ -14,7 +14,10 @@ import { ARBadge } from "../LeaderboardsPage";
 
 import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
 import { StylizedContentBlock } from "../../components/StylizedContentBlock";
-import { FETCH_BUILDS_URL, FETCH_CHARACTER_FILTERS_URL } from '../../utils/helpers';
+import {
+  FETCH_BUILDS_URL,
+  FETCH_CHARACTER_FILTERS_URL,
+} from "../../utils/helpers";
 
 export type BuildsColumns = {
   _id: string;
@@ -29,6 +32,7 @@ export type BuildsColumns = {
 
 export const BuildsPage = () => {
   const navigate = useNavigate();
+  const pathname = window.location.pathname;
 
   const BUILDS_COLUMNS: TableColumn<BuildsColumns>[] = [
     {
@@ -49,9 +53,9 @@ export const BuildsPage = () => {
         return (
           <div>
             <span
-              // style={style}
-              // 
-              // className="table-rank-display"
+            // style={style}
+            //
+            // className="table-rank-display"
             >
               {row.index}
             </span>
@@ -74,7 +78,7 @@ export const BuildsPage = () => {
               event.preventDefault();
               navigate(`/profile/${row.uid}`);
             }}
-            href={`/#/profile/${row.uid}`}
+            href={`${pathname}#/profile/${row.uid}`}
           >
             <ARBadge adventureRank={row.adventureRank} />
             {row.nickname}
@@ -88,12 +92,8 @@ export const BuildsPage = () => {
       sortField: "name",
       cell: (row) => {
         return (
-          <div className="table-icon-text-pair" >
-            <img
-              
-              className="table-icon"
-              src={row.icon}
-            />
+          <div className="table-icon-text-pair">
+            <img className="table-icon" src={row.icon} />
             {row.type !== "current" ? (
               <ReplaceRowDataOnHover data={row.name} onHoverData={row.type} />
             ) : (
@@ -113,9 +113,7 @@ export const BuildsPage = () => {
           : 0;
         return (
           <div className="c-badge-wrapper">
-            <div
-              className={`c-badge c-${constellation}-badge`}
-            >
+            <div className={`c-badge c-${constellation}-badge`}>
               C{constellation}
             </div>
           </div>
@@ -159,7 +157,7 @@ export const BuildsPage = () => {
       sortField: "stats.maxHp.value",
       cell: (row) => {
         return (
-          <div className="flex gap-3 nowrap" >
+          <div className="flex gap-3 nowrap">
             <StatIcon name="HP" />
             {row.stats.maxHp.value.toFixed(0)}
           </div>
@@ -173,7 +171,7 @@ export const BuildsPage = () => {
       sortField: "stats.atk.value",
       cell: (row) => {
         return (
-          <div className="flex gap-3 nowrap" >
+          <div className="flex gap-3 nowrap">
             <StatIcon name="ATK" />
             {row.stats.atk.value.toFixed(0)}
           </div>
@@ -187,7 +185,7 @@ export const BuildsPage = () => {
       sortField: "stats.def.value",
       cell: (row) => {
         return (
-          <div className="flex gap-3 nowrap" >
+          <div className="flex gap-3 nowrap">
             <StatIcon name="DEF" />
             {row.stats.def.value.toFixed(0)}
           </div>
@@ -201,7 +199,7 @@ export const BuildsPage = () => {
       sortField: "stats.elementalMastery.value",
       cell: (row) => {
         return (
-          <div className="flex gap-3 nowrap" >
+          <div className="flex gap-3 nowrap">
             <StatIcon name="Elemental Mastery" />
             {+row.stats.elementalMastery.value.toFixed(0) || 0}
           </div>
@@ -216,7 +214,7 @@ export const BuildsPage = () => {
       sortField: "stats.energyRecharge.value",
       cell: (row) => {
         return (
-          <div className="flex gap-3 nowrap" >
+          <div className="flex gap-3 nowrap">
             <StatIcon name="Energy Recharge" />
             {(row.stats.energyRecharge.value * 100).toFixed(1)}%
             {/* {(row.stats.energyRecharge.value * 100).toFixed(1)}% */}

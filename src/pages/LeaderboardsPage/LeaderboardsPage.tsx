@@ -12,7 +12,12 @@ import {
   Spinner,
   TableHoverElement,
 } from "../../components";
-import { FETCH_CATEGORIES_URL, FETCH_LEADERBOARDS_URL, getCharacterCvColor, FETCH_CHARACTER_FILTERS_URL } from '../../utils/helpers';
+import {
+  FETCH_CATEGORIES_URL,
+  FETCH_LEADERBOARDS_URL,
+  getCharacterCvColor,
+  FETCH_CHARACTER_FILTERS_URL,
+} from "../../utils/helpers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { TableColumn } from "../../types/TableColumn";
@@ -89,6 +94,7 @@ export const LeaderboardsPage = () => {
 
   const navigate = useNavigate();
   const { calculationId } = useParams();
+  const pathname = window.location.pathname;
 
   const [initialData, setInitialData] = useState({
     rows: [] as any,
@@ -192,7 +198,7 @@ export const LeaderboardsPage = () => {
                 event.preventDefault();
                 navigate(`/profile/${row.uid}`);
               }}
-              href={`/#/profile/${row.uid}`}
+              href={`${pathname}#/profile/${row.uid}`}
             >
               <ARBadge adventureRank={row.adventureRank} />
               {row.nickname}
@@ -387,7 +393,7 @@ export const LeaderboardsPage = () => {
           event.preventDefault();
           navigate(`/profile/${player.uid}`);
         }}
-        href={`/#/profile/${player.uid}`}
+        href={`${pathname}#/profile/${player.uid}`}
       >
         <img
           style={imageStyle}

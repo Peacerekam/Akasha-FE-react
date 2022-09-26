@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
 import { StylizedContentBlock } from "../../components/StylizedContentBlock";
-import { FETCH_CATEGORIES_URL } from '../../utils/helpers';
+import { FETCH_CATEGORIES_URL } from "../../utils/helpers";
 
 type TransformedCategories = {
   characterName: string;
@@ -45,6 +45,7 @@ export const CategorySelectionPage = () => {
     useState<TransformedCategories[]>();
 
   const navigate = useNavigate();
+  const pathname = window.location.pathname;
 
   useEffect(() => {
     fetchCategories();
@@ -135,7 +136,7 @@ export const CategorySelectionPage = () => {
                                       `/leaderboards/${calc.calculationId}`
                                     );
                                   }}
-                                  href={`/#/leaderboards/${calc.calculationId}`}
+                                  href={`${pathname}#/leaderboards/${calc.calculationId}`}
                                 >
                                   {calc.weapon && (
                                     <span>
