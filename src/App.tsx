@@ -14,7 +14,7 @@ import { Footer, Navbar, NavbarTabs } from "./components";
 function App() {
   return (
     <div>
-      <BrowserRouter>
+      <BrowserRouter basename="akasha">
         <Navbar />
         <NavbarTabs />
         <div className="content-wrapper">

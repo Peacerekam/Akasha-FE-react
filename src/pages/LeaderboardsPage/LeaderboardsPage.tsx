@@ -354,7 +354,7 @@ export const LeaderboardsPage = () => {
     if (!player) return null;
 
     const wrapperClassNames = [
-      "unset-all pointer rung-wrapper",
+      "pointer rung-wrapper",
       position === 1 ? "gold" : "",
       position === 2 ? "silver" : "",
       position === 3 ? "bronze" : "",
@@ -443,7 +443,7 @@ export const LeaderboardsPage = () => {
         />
         <div className="relative">
           <button
-            className="unset-all pointer"
+            className="pointer back-btn"
             onClick={() => navigate("/leaderboards")}
           >
             <FontAwesomeIcon icon={faChevronLeft} size="1x" /> back to

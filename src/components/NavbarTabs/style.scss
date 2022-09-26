@@ -62,7 +62,8 @@
       }
     }
     a, .close-tab {
-      all: unset;
+      text-decoration: none;
+      color: white;
       display: flex;
       place-items: center;
       cursor: pointer;

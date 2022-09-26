@@ -84,7 +84,9 @@ export const Pagination = ({
         const classNames = [
           "relative button-wrapper",
           page === pageNumber ? "highlight-button" : "",
-        ].join(" ").trim();
+        ]
+          .join(" ")
+          .trim();
 
         const displayFirstLabel = (
           <span onClick={() => handleSetPage(1)} className="button-label">
@@ -130,13 +132,10 @@ export const Pagination = ({
             <span className="relative button-wrapper">
               <button disabled={disablePrevious} onClick={handlePreviousPage}>
                 <FontAwesomeIcon icon={faChevronLeft} size="1x" />
-                <span
-                  onClick={() => handleSetPage(lastPage)}
-                  className="button-label"
-                >
-                  back
-                </span>
               </button>
+              <span onClick={() => handleSetPage(1)} className="button-label">
+                back
+              </span>
             </span>
 
             {displayPageRange}
@@ -144,13 +143,13 @@ export const Pagination = ({
             <span className="relative button-wrapper">
               <button disabled={disableNext} onClick={handleNextPage}>
                 <FontAwesomeIcon icon={faChevronRight} size="1x" />
-                <span
-                  onClick={() => handleSetPage(lastPage)}
-                  className="button-label"
-                >
-                  next
-                </span>
               </button>
+              <span
+                onClick={() => handleSetPage(lastPage)}
+                className="button-label"
+              >
+                next
+              </span>
             </span>
           </div>
         )}

@@ -75,10 +75,12 @@
       }
 
       button {
-        all: unset;
+        color: white;
+        border: none;
         background-color: transparent;
         border-radius: 20px;
-        min-width: 20px;
+        min-width: 30px;
+        min-height: 30px;
         padding: 5px;
         text-align: center;
         user-select: none; // @KM is it needed?

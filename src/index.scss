@@ -51,10 +51,6 @@ body {
   border-top: 2px solid white;
 }
 
-.unset-all {
-  all: unset;
-}
-
 .ps__rail-x {
   &.ps--clicking,
   &:hover {
@@ -222,6 +218,15 @@ body {
   }
 }
 
+.back-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  opacity: 0.8;
+  &:hover{
+    opacity: 1;
+  }
+}
 
 .podium-wrapper {
   display: flex;
@@ -241,6 +246,7 @@ body {
     animation: rungReveal100-2 2.2s ease-in-out;
   }
   .rung-wrapper {
+    text-decoration: none;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;

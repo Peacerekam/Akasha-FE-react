@@ -17,9 +17,9 @@ export const NavbarTabs: React.FC = () => {
     if (_timeout) clearTimeout(_timeout);
 
     const profileURL = "/profile/";
-    if (!pathname.startsWith(profileURL)) return;
+    if (!pathname.includes(profileURL)) return;
 
-    const uid = pathname.replace(profileURL, "");
+    const uid = pathname.replace(profileURL, "").replace("/akasha","")
     if (lastProfiles.includes(uid)) return;
 
     if (!nicknameMap[uid]) {
