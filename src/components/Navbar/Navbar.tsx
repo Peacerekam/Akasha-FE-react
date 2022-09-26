@@ -33,7 +33,12 @@ const NAVIGATION = [
 
 export const Navbar: React.FC = () => {
   const navigate = useNavigate();
-  const { pathname } = window.location;
+
+  // BrowserRouter
+  // const { pathname } = window.location;
+  
+  // HashRouter
+  const pathname = window.location.hash.replace('#','');
 
   return (
     <div className="navbar">

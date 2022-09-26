@@ -11,7 +11,12 @@ export const NavbarTabs: React.FC = () => {
   // @KM: @TODO: consider LocalStorage  for keeping tabs
 
   const navigate = useNavigate();
-  const { pathname } = window.location;
+
+  // BrowserRouter
+  // const { pathname } = window.location;
+  
+  // HashRouter
+  const pathname = window.location.hash.replace('#','');
 
   useEffect(() => {
     if (_timeout) clearTimeout(_timeout);
@@ -19,7 +24,7 @@ export const NavbarTabs: React.FC = () => {
     const profileURL = "/profile/";
     if (!pathname.includes(profileURL)) return;
 
-    const uid = pathname.replace(profileURL, "").replace("/akasha","")
+    const uid = pathname.replace(profileURL, "")
     if (lastProfiles.includes(uid)) return;
 
     if (!nicknameMap[uid]) {
