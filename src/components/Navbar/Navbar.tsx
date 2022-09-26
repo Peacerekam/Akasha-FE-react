@@ -39,6 +39,7 @@ export const Navbar: React.FC = () => {
   
   // HashRouter
   const hash = window.location.hash.replace('#','');
+  const pathname = window.location.pathname
 
   return (
     <div className="navbar">
@@ -64,7 +65,7 @@ export const Navbar: React.FC = () => {
               ? "active-tab"
               : ""
           }
-          href={`/#${nav.path}`}
+          href={`${pathname}#${nav.path}`}
           onClick={(event) => {
             event.preventDefault();
             navigate(nav.path);
