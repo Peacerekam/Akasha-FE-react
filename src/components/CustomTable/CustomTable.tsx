@@ -94,7 +94,6 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     const tmp: any = {};
     query.forEach((value, key) => {
       const actualValue = isNaN(+value) ? value : +value;
-      console.log(value, key)
       if ((defaultParams as any)?.[key]?.toString() !== actualValue) {
         tmp[key] = actualValue;
       }
@@ -410,7 +409,9 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     let stringified = "";
 
     filters.forEach((f) => {
-      if (f.name && f.value) stringified += `[${f.name}]${f.value}`;
+      if (f.name !== "" && f.value !== "") {
+        stringified += `[${f.name}]${f.value}`;
+      }
     });
 
     if (params.filter === stringified) return;

@@ -3,9 +3,10 @@ const urls = {
   vps: "http://149.57.165.73:5033",
   proxy: "http://localhost:3100/akasha",
   prod: "https://www.mimee.ovh/akasha",
+  heroku: "https://akasha-backend.herokuapp.com"
 };
 
-export const BACKEND_URL = urls["proxy"];
+export const BACKEND_URL = urls["heroku"];
 
 export const FETCH_ARTIFACTS_URL = `${BACKEND_URL}/api/artifacts`;
 export const FETCH_BUILDS_URL = `${BACKEND_URL}/api/builds/`;

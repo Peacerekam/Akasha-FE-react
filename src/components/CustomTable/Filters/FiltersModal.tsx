@@ -88,12 +88,17 @@ export const FiltersModal = ({
               };
             });
 
-          const defaultGroup = fieldKeyOptions.find(
-            (f: any) => f.value === pill.name
-          );
-          const defaultOption = fieldValuesOptions?.find(
-            (p: any) => p.value === pill.value
-          );
+          const defaultGroup = fieldKeyOptions.find((f: any) => {
+            const toStringA = "" + f.value;
+            const toStringB = "" + pill.name;
+            return toStringA === toStringB;
+          });
+
+          const defaultOption = fieldValuesOptions?.find((f: any) => {
+            const toStringA = "" + f.value;
+            const toStringB = "" + pill.value;
+            return toStringA === toStringB;
+          });
 
           const isDisabled = !fieldValuesOptions?.length;
 

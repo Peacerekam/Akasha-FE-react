@@ -1,10 +1,10 @@
+import axios from "axios";
 import { useState, useEffect } from "react";
 import { faList } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FiltersModal } from "./FiltersModal";
-import axios from "axios";
-import "./style.scss";
 import { filtersQueryToArray } from "../../../utils/helpers";
+import "./style.scss";
 
 type FiltersContainerProps = {
   onFiltersChange: (filters: FilterOption[]) => void;
@@ -160,6 +160,16 @@ export const FiltersContainer = ({
           ...arr[index],
           ...filter,
         };
+
+        const isValueSelected = filter.value !== "";
+        const isLastField = index === prev.length - 1;
+
+        if (isValueSelected && isLastField) {
+          arr.push({
+            name: "",
+            value: "",
+          });
+        }
       }
       return arr;
     });
@@ -201,7 +211,7 @@ export const FiltersContainer = ({
         <div className="pills-container">
           {filtersArray.filter((f) => f.name).length > 0 ? (
             filtersArray
-              .filter((f) => f.value)
+              .filter((f) => f.value !== "")
               .map((pill, index) => (
                 <span
                   key={`${pill.name}-${pill.value}-${index}`}
