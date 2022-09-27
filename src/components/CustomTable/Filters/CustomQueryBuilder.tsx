@@ -58,7 +58,6 @@ export const CustomQueryBuilder = ({
   );
 
   const selectedOptions = useMemo(() => {
-    console.log(pills)
     const allOpts = fieldKeyOptions.reduce((acc: any, val) => {
       const arr = acc.concat(val.options);
       return arr;
@@ -66,8 +65,8 @@ export const CustomQueryBuilder = ({
 
     return pills.map((pill) => {
       const option = allOpts.find((opt: any) => {
-        const compA = opt.value === pill.value
-        const compB = opt.fieldKey === pill.name
+        const compA = opt.value === ""+pill.value;
+        const compB = opt.fieldKey === pill.name;
         return compA && compB;
       });
       return option;
