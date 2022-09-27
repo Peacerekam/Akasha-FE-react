@@ -1,9 +1,10 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { faList } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FiltersModal } from "./FiltersModal";
 import { filtersQueryToArray } from "../../../utils/helpers";
+import { CustomQueryBuilder } from "./CustomQueryBuilder";
 import "./style.scss";
 
 type FiltersContainerProps = {
@@ -16,6 +17,7 @@ export type FilterOption = {
   name: string;
   value: string | number;
   icon?: string;
+  fieldKey?: string;
 };
 
 export type OptionsResponse = {
@@ -110,8 +112,11 @@ export const FiltersContainer = ({
     }
   }, [JSON.stringify(filtersArray), initialLoad]);
 
-  const handleToggleModal = () => {
+  const handleToggleModal = (event: React.MouseEvent<HTMLElement>) => {
     setShowFiltersModal((prev) => !prev);
+
+    const offsets = getRelativeCoords(event);
+    applyModalBodyStyle(offsets);
   };
 
   const handleOpenFilters = (
@@ -175,6 +180,11 @@ export const FiltersContainer = ({
     });
   };
 
+  const handleReplaceFilter = (filters: FilterOption[]) => {
+    console.log("repalced filters", filters);
+    setFiltersArray(filters);
+  };
+
   const formatPillName = (pill: FilterOption) => {
     const equipTypeMap = {
       EQUIP_BRACER: "Flower",
@@ -189,9 +199,21 @@ export const FiltersContainer = ({
         stars: `${pill.value}*`,
         constellation: `C${pill.value}`,
         "weapon.weaponInfo.refinementLevel.value": `R${+pill.value + 1}`,
+        "artifactSets.$2": `2p ${pill.value}`,
+        "artifactSets.$4": `4p ${pill.value}`,
       }[pill.name] ?? pill.value
     );
   };
+
+  // const pills = useMemo(
+  //   () => filtersArray.filter((f) => f.value !== ""),
+  //   [filtersArray]
+  // );
+
+  const pills = useMemo(
+    () => filtersArray.filter((f) => f.value !== ""),
+    [JSON.stringify(filtersArray)]
+  );
 
   return (
     <>
@@ -199,7 +221,7 @@ export const FiltersContainer = ({
         isOpen={showFiltersModal}
         toggleModal={handleToggleModal}
         optionGroups={optionGroups}
-        pills={filtersArray}
+        filtersArray={filtersArray}
         setFilterSelectFocus={setFilterSelectFocus}
         filterSelectFocus={filterSelectFocus}
         handleRemoveFilter={handleRemoveFilter}
@@ -207,12 +229,10 @@ export const FiltersContainer = ({
         handleModifyFilter={handleModifyFilter}
       />
       {/* @KM: perfect scroll here?  */}
-      <div className="filters-container" onClick={handleOpenFilters}>
+      <div className="filters-container">
         <div className="pills-container">
-          {filtersArray.filter((f) => f.name).length > 0 ? (
-            filtersArray
-              .filter((f) => f.value !== "")
-              .map((pill, index) => (
+          {/* {pills.length > 0
+            ? pills.map((pill, index) => (
                 <span
                   key={`${pill.name}-${pill.value}-${index}`}
                   className="pill"
@@ -231,11 +251,16 @@ export const FiltersContainer = ({
                   </span>
                 </span>
               ))
-          ) : (
-            <div className="filter-bg-text flex nowrap">no filters</div>
-          )}
+            : null} */}
+          <CustomQueryBuilder
+            optionGroups={optionGroups}
+            handleReplaceFilter={handleReplaceFilter}
+            pills={pills}
+          />
         </div>
-        <FontAwesomeIcon className="filter-icon" icon={faList} size="1x" />
+        <div className="filter-icon" onClick={handleToggleModal}>
+          <FontAwesomeIcon icon={faList} size="1x" />
+        </div>
       </div>
     </>
   );

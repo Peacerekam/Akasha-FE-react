@@ -8,11 +8,11 @@ import { isIcon } from "../../StatIcon";
 import { StatIcon } from "../../StatIcon/StatIcon";
 
 type FiltersModalProps = {
-  pills: FilterOption[];
+  filtersArray: FilterOption[];
   isOpen: boolean;
   optionGroups: OptionsResponse;
   filterSelectFocus: number | undefined;
-  toggleModal: () => void;
+  toggleModal: (event: React.MouseEvent<HTMLElement>) => void; 
   setFilterSelectFocus: (value: number | undefined) => void;
   handleRemoveFilter: (value: FilterOption) => void;
   handleAddFilter: (value: FilterOption) => void;
@@ -20,7 +20,7 @@ type FiltersModalProps = {
 };
 
 export const FiltersModal = ({
-  pills,
+  filtersArray,
   isOpen,
   optionGroups,
   filterSelectFocus,
@@ -36,7 +36,7 @@ export const FiltersModal = ({
   ) => {
     if (!allowChildren && event.target !== event.currentTarget) return;
     setFilterSelectFocus(undefined);
-    toggleModal();
+    toggleModal(event);
     const _body = document.querySelector("body");
     _body?.classList.remove("overflow-hidden");
   };
@@ -63,7 +63,7 @@ export const FiltersModal = ({
     }));
     return (
       <div>
-        {pills.map((pill, index) => {
+        {filtersArray.map((pill, index) => {
           const autofocus = filterSelectFocus === index;
           const fieldValuesOptions = optionGroups
             ?.find((g) => g.fieldKey === pill.name)
@@ -175,7 +175,7 @@ export const FiltersModal = ({
   }, [
     modalContainerRef,
     filterSelectFocus,
-    JSON.stringify(pills),
+    JSON.stringify(filtersArray),
     optionGroups,
   ]);
 
