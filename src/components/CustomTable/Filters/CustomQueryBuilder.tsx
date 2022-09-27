@@ -65,7 +65,11 @@ export const CustomQueryBuilder = ({
     }, []);
 
     return pills.map((pill) => {
-      const option = allOpts.find((opt: any) => opt.value === pill.value);
+      const option = allOpts.find((opt: any) => {
+        const compA = opt.value === pill.value
+        const compB = opt.fieldKey === pill.name
+        return compA && compB;
+      });
       return option;
     });
   }, [JSON.stringify(pills), fieldKeyOptions]);
