@@ -11,8 +11,8 @@ export const customTheme = {
       ...provided,
       color: "white",
       backgroundColor: "transparent",
-      boxShadow: 'none',
-      border: 'none',
+      boxShadow: "none",
+      border: "none",
     };
   },
 
@@ -23,7 +23,7 @@ export const customTheme = {
       opacity: 0.7,
       cursor: "text",
       paddingLeft: 5,
-      fontSize: 13
+      fontSize: 13,
     };
   },
 
@@ -32,17 +32,16 @@ export const customTheme = {
       ...provided,
       paddingLeft: 7,
       fontSize: 13,
-      marginBottom: 2
+      marginBottom: 2,
     };
   },
-
 
   valueContainer: (provided: any, state: any) => {
     return {
       ...provided,
       paddingLeft: 5,
-      flexWrap: 'nowrap',
-    }
+      flexWrap: "nowrap",
+    };
   },
 
   indicatorsContainer: (provided: any) => {
@@ -52,19 +51,18 @@ export const customTheme = {
         opacity: 0.25,
       },
       // border: '2px solid red'
-      ' > div:first-of-type': {  
-        cursor: 'pointer',
-        color: 'rgba(255,255,255, 0.7)',
-        '&:hover': {
-          color: 'rgba(255,255,255, 1)',
-        }
-        
+      " > div:first-of-type": {
+        cursor: "pointer",
+        color: "rgba(255,255,255, 0.7)",
+        "&:hover": {
+          color: "rgba(255,255,255, 1)",
+        },
       },
-      ' > div:last-child': {
-        display: 'none',
-      }
-    }
-  },  
+      " > div:last-child": {
+        display: "none",
+      },
+    };
+  },
 
   // indicatorSeparator: () => {
   //   return {
@@ -75,22 +73,22 @@ export const customTheme = {
   multiValue: (provided: any, state: any) => {
     return {
       ...provided,
-      backgroundColor: '#40839b',
-      padding: '1px 4px 2px 10px',
-      color: 'white',
-      borderRadius: '50px',
-      '> div': {
+      backgroundColor: "#40839b",
+      padding: "1px 4px 2px 10px",
+      color: "white",
+      borderRadius: "50px",
+      "> div": {
         padding: 0,
       },
-      'div:last-child': {
+      "div:last-child": {
         paddingLeft: 5,
         paddingRight: 5,
-        '&:hover': {
-          backgroundColor: 'transparent',
-          cursor: "pointer"
-        }
-      }
-    }
+        "&:hover": {
+          backgroundColor: "transparent",
+          cursor: "pointer",
+        },
+      },
+    };
   },
 
   option: (provided: any, state: any) => {

@@ -199,6 +199,7 @@ export const FiltersContainer = ({
         stars: `${pill.value}*`,
         constellation: `C${pill.value}`,
         "weapon.weaponInfo.refinementLevel.value": `R${+pill.value + 1}`,
+        "artifactSets.$1": `1p ${pill.value}`,
         "artifactSets.$2": `2p ${pill.value}`,
         "artifactSets.$4": `4p ${pill.value}`,
       }[pill.name] ?? pill.value

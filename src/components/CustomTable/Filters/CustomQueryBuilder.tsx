@@ -25,6 +25,7 @@ export const CustomQueryBuilder = ({
             const isStatIcon = isIcon(opt.name);
             const prefix =
               {
+                "artifactSets.$1": "1p ",
                 "artifactSets.$2": "2p ",
                 "artifactSets.$4": "4p ",
               }[o.fieldKey] ?? "";
