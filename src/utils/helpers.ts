@@ -6,7 +6,7 @@ const urls = {
   heroku: "https://akasha-backend.herokuapp.com"
 };
 
-export const BACKEND_URL = urls["localhost"];
+export const BACKEND_URL = urls["heroku"];
 
 export const FETCH_ARTIFACTS_URL = `${BACKEND_URL}/api/artifacts`;
 export const FETCH_BUILDS_URL = `${BACKEND_URL}/api/builds/`;
