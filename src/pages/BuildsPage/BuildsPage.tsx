@@ -39,28 +39,7 @@ export const BuildsPage = () => {
       name: "#",
       width: "0px",
       cell: (row) => {
-        // const style = {
-        //   transform:
-        //     row.index < 1000
-        //       ? "unset"
-        //       : `scaleX(${1 / (row.index.toString().length * 0.3)})`,
-        //   right:
-        //     row.index < 1000
-        //       ? "0px"
-        //       : `${Math.round(row.index.toString().length * -1)}px`,
-        // } as React.CSSProperties;
-
-        return (
-          <div>
-            <span
-            // style={style}
-            //
-            // className="table-rank-display"
-            >
-              {row.index}
-            </span>
-          </div>
-        );
+        return <div>{row.index}</div>;
       },
     },
     {

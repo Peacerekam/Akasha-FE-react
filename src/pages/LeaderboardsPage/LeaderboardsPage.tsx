@@ -104,7 +104,7 @@ export const LeaderboardsPage = () => {
   const calculationSortKey = currentCategory
     ? `calculations.${currentCategory}.result`
     : "";
-
+  
   const categoriesById = useMemo(() => {
     const map: CategoriesById = {};
     if (!categories) return map;
@@ -136,7 +136,6 @@ export const LeaderboardsPage = () => {
         order: -1,
         size: 20,
         page: 1,
-        filter: displayCategory.calculation.id.slice(0, -2),
       },
     };
 
@@ -172,23 +171,13 @@ export const LeaderboardsPage = () => {
         name: "#",
         width: "0px",
         cell: (row) => {
-          return (
-            <div>
-              <span
-              // style={style}
-
-              // className="table-rank-display"
-              >
-                {row.index}
-              </span>
-            </div>
-          );
+          return <div>{row.index}</div>;
         },
       },
       {
         name: "Owner",
-        sortable: true,
-        sortField: "uid",
+        // sortable: true,
+        // sortField: "uid",
         width: "180px",
         cell: (row) => {
           return (
@@ -209,7 +198,7 @@ export const LeaderboardsPage = () => {
       {
         name: "Sets",
         sortable: true,
-        sortField: "artifactSetsFlat",
+        sortField: `calculations.${currentCategory}.stats.artifactSetsFlat`,
         width: "75px",
         cell: (row) => {
           const build = row.calculations[currentCategory]?.stats;
@@ -221,7 +210,7 @@ export const LeaderboardsPage = () => {
       {
         name: "Crit Ratio",
         sortable: true,
-        sortField: "critValue",
+        sortField: `calculations.${currentCategory}.stats.critValue`,
         cell: (row) => {
           const build = row.calculations[currentCategory]?.stats;
           return build ? <CritRatio stats={build} /> : <></>;
@@ -546,9 +535,6 @@ export const LeaderboardsPage = () => {
           <div>
             <CustomTable
               fetchURL={searchFetchURL}
-              fetchParams={{
-                sort: calculationSortKey,
-              }}
               columns={LEADERBOARDS_COLUMNS}
               defaultSort={calculationSortKey}
               calculationColumn={currentCategory}
