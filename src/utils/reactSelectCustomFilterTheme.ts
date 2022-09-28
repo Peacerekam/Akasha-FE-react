@@ -27,6 +27,18 @@ export const customTheme = {
     };
   },
 
+  menuList:  (provided: any, state: any) => ({
+    ...provided,
+    '.text-highlight-class': {
+      // backgroundColor: '#ffd900',
+      backgroundColor: 'transparent',
+      // color: '#ffd900',
+      color: 'white',
+      textDecoration: 'underline',
+      fontWeight: 600,
+    }
+  }),
+
   placeholder: (provided: any) => {
     return {
       ...provided,

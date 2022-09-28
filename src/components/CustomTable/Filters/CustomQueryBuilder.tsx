@@ -1,5 +1,6 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import ReactSelect, { MultiValue } from "react-select";
+import Highlighter from "react-highlight-words";
 import { customTheme } from "../../../utils/reactSelectCustomFilterTheme";
 import { isIcon, StatIcon } from "../../StatIcon";
 import { OptionsResponse, FilterOption } from "./FiltersContainer";
@@ -15,6 +16,7 @@ export const CustomQueryBuilder = ({
   handleReplaceFilter,
   pills,
 }: CustomQueryBuilderProps) => {
+  const [ textInput, setTextInput ] = useState('')
   const fieldKeyOptions = useMemo(
     () =>
       optionGroups.map((o, i) => {
@@ -40,8 +42,12 @@ export const CustomQueryBuilder = ({
                       ) : (
                         <img src={opt.icon} />
                       )}
-                      {prefix}
-                      {opt.name}
+                      <Highlighter
+                        highlightClassName="text-highlight-class"
+                        searchWords={[textInput]}
+                        autoEscape={true}
+                        textToHighlight={`${prefix}${opt.name}`}
+                      />
                     </>
                   ) : (
                     opt.name
@@ -55,7 +61,7 @@ export const CustomQueryBuilder = ({
           }),
         };
       }),
-    [optionGroups]
+    [optionGroups, textInput]
   );
 
   const selectedOptions = useMemo(() => {
@@ -94,6 +100,7 @@ export const CustomQueryBuilder = ({
         placeholder="no filters"
         value={selectedOptions}
         defaultValue={selectedOptions}
+        onInputChange={(value) => setTextInput(value)}
         onChange={(options) => {
           if (!options) return;
           handleChange(options);

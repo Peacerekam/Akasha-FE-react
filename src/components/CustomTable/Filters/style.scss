@@ -8,7 +8,8 @@
 }
 
 @keyframes modalRevealMenu {
-  0%, 40% {
+  0%,
+  40% {
     opacity: 0;
   }
   100% {
@@ -200,7 +201,13 @@
   user-select: none;
   display: flex;
   align-items: center;
+
   .pills-container {
+    .text-highlight-class {
+      background-color: transparent;
+      color: white;
+    }
+
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -211,7 +218,7 @@
     .custom-query-builder-wrapper {
       pointer-events: all;
       width: 100%;
-        
+
       .react-select-custom-option {
         img {
           width: 16px;
