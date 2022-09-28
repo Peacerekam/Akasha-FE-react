@@ -1,3 +1,9 @@
+/*
+  object-assign
+  (c) Sindre Sorhus
+  @license MIT
+  */
+
 /*!
  * perfect-scrollbar v1.5.3
  * Copyright 2021 Hyunje Jun, MDBootstrap and Contributors
