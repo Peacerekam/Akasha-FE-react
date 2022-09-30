@@ -189,6 +189,12 @@
     width: 20px;
     height: 20px;
   }
+  svg {
+    width: 16px;
+    height: 16px;
+    margin: 0 2px;
+    opacity: 0.9;
+  }
 }
 
 .filters-container {
@@ -224,6 +230,18 @@
           width: 16px;
           height: 16px;
         }
+        svg {
+          width: 13px;
+          height: 13px;
+        }
+        // > span {
+        //   overflow: hidden;
+        //   > span {
+        //     text-overflow: ellipsis;
+        //     overflow: hidden;
+        //     display: block;
+        //   }
+        // }
       }
     }
   }

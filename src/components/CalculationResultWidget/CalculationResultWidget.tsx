@@ -73,9 +73,12 @@ export const CalculationResultWidget = ({ uid }: { uid?: string }) => {
   const tilesList = useMemo(
     () =>
       resultsArray.map((calc: any, index: number) => {
-        const { name, ranking, outOf, details, weapon, result, stats } = calc;
+        const { name, ranking, outOf, details, weapon, result, stats, short } = calc;
         return (
           <div key={`${name}-${weapon.name}`} className="highlight-tile">
+            <div className="highlight-tile-pill">
+              {short ? short : "---"}
+            </div>
             <div className="flex">
               <img className="table-icon" src={calc.characterIcon} />
               <WeaponMiniDisplay

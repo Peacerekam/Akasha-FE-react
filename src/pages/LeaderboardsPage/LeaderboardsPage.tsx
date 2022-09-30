@@ -201,9 +201,6 @@ export const LeaderboardsPage = () => {
         sortField: `calculations.${currentCategory}.stats.artifactSetsFlat`,
         width: "75px",
         cell: (row) => {
-          const build = row.calculations[currentCategory]?.stats;
-          if (!build) return <></>;
-
           return <DisplaySets artifactSets={row.artifactSets} />;
         },
       },
@@ -288,7 +285,7 @@ export const LeaderboardsPage = () => {
           const build = row.calculations[currentCategory]?.stats;
           if (!build) return <></>;
           // const er = (100 + build.energyRecharge).toFixed(1);
-          const er = (row.stats.energyRecharge.value * 100).toFixed(1);
+          const er = (100 + build.energyRecharge).toFixed(1);
           return (
             <div className="flex gap-3 nowrap">
               <StatIcon name="Energy Recharge" />
@@ -363,7 +360,7 @@ export const LeaderboardsPage = () => {
       })`,
     };
 
-    const result = player.calculations[currentCategory].result.toFixed(0);
+    const result = player.calculations[currentCategory]?.result.toFixed(0);
 
     const cv = player?.critValue || 0;
     const borderColor = getCharacterCvColor(cv);
@@ -389,7 +386,7 @@ export const LeaderboardsPage = () => {
           src={player.profilePictureLink}
           className="podium-player-icon"
         />
-        <div className="rung-player-score">{result}</div>
+        <div className="rung-player-score">{result || '---'}</div>
         <div className="rung-player-name">
           <div style={squishNameFactor}>{player.nickname}</div>
         </div>

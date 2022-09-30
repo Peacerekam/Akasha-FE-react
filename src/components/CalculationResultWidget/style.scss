@@ -1,11 +1,12 @@
 .highlight-tile-container {
   display: flex;
   flex-wrap: nowrap;
-  gap: 10px;
-  padding: 10px;
+  gap: 5px;
+  padding: 5px;
   .highlight-tile {
+    font-size: 13px;
     width: 75px;
-    height: 80px;
+    height: 90px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -14,6 +15,12 @@
     flex-grow: 0;
     &:hover {
       background-color: rgba(black, 0.3);
+    }
+    .highlight-tile-pill {
+      padding: 2px;
+      border-radius: 50px;
+      font-weight: 800;
+      // font-family: "GenshinFont";
     }
   }
 }

@@ -1,4 +1,6 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import CritRate from "../../assets/icons/CRITICAL.png";
 import CritDMG from "../../assets/icons/CRITICAL_HURT.png";
 import EM from "../../assets/icons/ELEMENT_MASTERY.png";
@@ -18,6 +20,7 @@ import HydroDMG from "../../assets/icons/WATER_ADD_HURT.png";
 import PhysicalDMG from "../../assets/icons/PHYSICAL_ADD_HURT.png";
 import CryoDMG from "../../assets/icons/ICE_ADD_HURT.png";
 import HealingBonus from "../../assets/icons/HEAL_ADD.png";
+import { faFlower, faPlume, faSands, faGoblet, faCirclet } from './faIcons';
 
 import "./style.scss";
 
@@ -49,6 +52,26 @@ const statKeys: any = {
   "Hydro DMG Bonus": HydroDMG,
   "Physical DMG Bonus": PhysicalDMG,
   "Healing Bonus": HealingBonus,
+  Flower: {
+    type: "faIcon",
+    value: faFlower,
+  },
+  Feather: {
+    type: "faIcon",
+    value: faPlume,
+  },
+  Sands: {
+    type: "faIcon",
+    value: faSands,
+  },
+  Goblet: {
+    type: "faIcon",
+    value: faGoblet,
+  },
+  Circlet: {
+    type: "faIcon",
+    value: faCirclet,
+  },
 };
 
 export const isIcon = (name: string) => !!statKeys[name];
@@ -56,5 +79,10 @@ export const isIcon = (name: string) => !!statKeys[name];
 export const StatIcon = ({ name }: { name: string }) => {
   const asset = statKeys[name];
   if (!name) return null;
-  return <img className="stat-icon" src={asset} />;
+
+  return asset.type === "faIcon" ? (
+    <FontAwesomeIcon icon={asset.value} size="1x" />
+  ) : (
+    <img className="stat-icon" src={asset} />
+  );
 };

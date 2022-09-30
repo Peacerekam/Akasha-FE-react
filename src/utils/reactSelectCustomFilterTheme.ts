@@ -108,10 +108,20 @@ export const customTheme = {
       backgroundColor: "#202525",
       borderColor: "rgba(255,255,255, 0.3)",
       color: "white",
+      position: 'relative',
     };
 
     if (state.isFocused) {
       style.backgroundColor = "#40839b55";
+      style['> span > span > span:last-child::after'] = {
+          content: '"Press enter to apply"',
+          position: 'relative',
+          // color: '#202525',
+          color: 'white',
+          opacity: 0.2,
+          fontSize: 13,
+          left: 20,
+      }
     }
     if (state.isSelected) {
       style.backgroundColor = "#40839b";
