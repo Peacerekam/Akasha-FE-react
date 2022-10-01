@@ -1,13 +1,12 @@
-import axios from "axios";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./style.scss";
 
 const NAVIGATION = [
-  {
-    name: "Users",
-    path: "/users",
-  },
+  // {
+  //   name: "Users",
+  //   path: "/users",
+  // },
   {
     name: "Artifacts",
     path: "/artifacts",
@@ -21,14 +20,18 @@ const NAVIGATION = [
     path: "/leaderboards",
   },
   {
-    /* this should be saved from discord auth */
-    name: "My Profile",
-    path: "/profile/701464050",
+    name: "spacer",
+    path: "spacer",
   },
   {
-    name: "Discord Auth",
-    path: "/auth",
+    /* this should be saved from discord auth */
+    name: "Mimee",
+    path: "/profile/701464050",
   },
+  // {
+  //   name: "Discord Auth",
+  //   path: "/auth",
+  // },
 ];
 
 export const Navbar: React.FC = () => {
@@ -36,10 +39,10 @@ export const Navbar: React.FC = () => {
 
   // BrowserRouter
   // const { pathname } = window.location;
-  
+
   // HashRouter
-  const hash = window.location.hash.replace('#','');
-  const pathname = window.location.pathname
+  const hash = window.location.hash.replace("#", "");
+  const pathname = window.location.pathname;
 
   return (
     <div className="navbar">
@@ -57,23 +60,25 @@ export const Navbar: React.FC = () => {
         </span>
       </a>
 
-      {NAVIGATION.map((nav) => (
-        <a
-          key={nav.name}
-          className={
-            hash !== "/" && hash.startsWith(nav.path)
-              ? "active-tab"
-              : ""
-          }
-          href={`${pathname}#${nav.path}`}
-          onClick={(event) => {
-            event.preventDefault();
-            navigate(nav.path);
-          }}
-        >
-          {nav.name}
-        </a>
-      ))}
+      {NAVIGATION.map((nav) =>
+        nav.name === "spacer" ? (
+          <div className="navbar-spacer" />
+        ) : (
+          <a
+            key={nav.name}
+            className={
+              hash !== "/" && hash.startsWith(nav.path) ? "active-tab" : ""
+            }
+            href={`${pathname}#${nav.path}`}
+            onClick={(event) => {
+              event.preventDefault();
+              navigate(nav.path);
+            }}
+          >
+            {nav.name}
+          </a>
+        )
+      )}
     </div>
   );
 };
