@@ -47,11 +47,11 @@ export const Navbar: React.FC = () => {
   return (
     <div className="navbar">
       <a
-        href="/#"
+        href={`${pathname}#`}
         className="logo-wrapper"
         onClick={(event) => {
           event.preventDefault();
-          navigate(`${pathname}`);
+          navigate('/');
         }}
       >
         <span className="logo">
