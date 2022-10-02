@@ -1,8 +1,9 @@
 import axios from "axios";
 import React, { useMemo, useState, useEffect } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import { BACKEND_URL } from "../../utils/helpers";
+import { useNavigate } from "react-router-dom";
 
+import { BACKEND_URL } from "../../utils/helpers";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import "./style.scss";
 
@@ -14,6 +15,9 @@ export const CalculationResultWidget: React.FC<
   CalculationResultWidgetProps
 > = ({ uid }) => {
   const [data, setData] = useState<any[]>([]);
+  const navigate = useNavigate();
+  
+  const pathname = window.location.pathname;
 
   const fetchCalcData = async (
     uid: string,
@@ -48,9 +52,10 @@ export const CalculationResultWidget: React.FC<
 
       const calcArray = [];
       for (const build of filtered) {
-        for (const calc of Object.values(build.calculations)) {
+        for (const calcID of Object.keys(build.calculations)) {
           calcArray.push({
-            ...(calc as {}),
+            ...(build.calculations[calcID] as {}),
+            id: calcID,
             characterName: build.name,
             characterIcon: build.icon,
           });
@@ -78,25 +83,33 @@ export const CalculationResultWidget: React.FC<
   const tilesList = useMemo(
     () =>
       resultsArray.map((calc: any, index: number) => {
-        const { name, ranking, outOf, details, weapon, result, stats, short } =
-          calc;
+        const { name, ranking, outOf, weapon, short, id } = calc;
         return (
-          <div key={`${name}-${weapon.name}`} className="highlight-tile">
-            <div className="highlight-tile-pill">{short ? short : "---"}</div>
-            <div className="flex">
-              <img className="table-icon" src={calc.characterIcon} />
-              <WeaponMiniDisplay
-                icon={weapon.icon}
-                refinement={weapon?.refinement || 1}
-              />
-            </div>
-            <div>
-              {ranking ? `top ${Math.ceil((ranking / outOf) * 100)}%` : ""}
-            </div>
-            <span>
-              {ranking ?? "---"}
-              <span className="opacity-5">/{outOf}</span>
-            </span>
+          <div key={`${name}-${weapon.name}`} >
+            <a
+              className="highlight-tile"
+              onClick={(event) => {
+                event.preventDefault();
+                navigate(`/leaderboards/${id}`);
+              }}
+              href={`${pathname}#/leaderboards/${id}`}
+            >
+              <div className="highlight-tile-pill">{short ? short : "---"}</div>
+              <div className="flex">
+                <img className="table-icon" src={calc.characterIcon} />
+                <WeaponMiniDisplay
+                  icon={weapon.icon}
+                  refinement={weapon?.refinement || 1}
+                />
+              </div>
+              <div>
+                {ranking ? `top ${Math.ceil((ranking / outOf) * 100)}%` : ""}
+              </div>
+              <span>
+                {ranking ?? "---"}
+                <span className="opacity-5">/{outOf}</span>
+              </span>
+            </a>
           </div>
         );
       }),

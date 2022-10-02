@@ -82,16 +82,7 @@ export const ProfilePage: React.FC = () => {
       name: "#",
       width: "0px",
       cell: (row) => {
-        return (
-          // <div>
-          //   <div className="hide-on-table">
-          //     <Artifact artifact={row} width={180} />
-          //   </div>
-          //   <div className="hide-on-custom">
-          <span>{row.index}</span>
-          //   </div>
-          // </div>
-        );
+        return <span>{row.index}</span>;
       },
     },
     {
@@ -388,106 +379,98 @@ export const ProfilePage: React.FC = () => {
 
   return (
     <div style={cssVariables}>
-      {true ? (
-        <>
-          <div className="flex">
-            <div>
-              {false &&
-                data.account?.achievements?.map((achievement: any) => {
-                  return (
-                    <div key={achievement.id}>
-                      <div
-                        className="flex"
-                        style={{ gap: "10px", textAlign: "right" }}
-                      >
-                        <div
-                          className="count"
-                          style={{ color: "orange", width: "40px" }}
-                        >
-                          {achievement.count} x
-                        </div>
-                        <div className="title">
-                          {achievement.name}{" "}
-                          <span
-                            style={{
-                              marginLeft: "5px",
-                              color: "orange",
-                              opacity: 0.33,
-                            }}
-                          >
-                            {achievement.score ?? "---"}p
-                          </span>
-                        </div>
-                      </div>
-                      <div style={{ color: "gray", marginLeft: "50px" }}>
-                        {achievement.description}
-                      </div>
+      <div className="flex">
+        <div>
+          {false &&
+            data.account?.achievements?.map((achievement: any) => {
+              return (
+                <div key={achievement.id}>
+                  <div
+                    className="flex"
+                    style={{ gap: "10px", textAlign: "right" }}
+                  >
+                    <div
+                      className="count"
+                      style={{ color: "orange", width: "40px" }}
+                    >
+                      {achievement.count} x
                     </div>
-                  );
-                })}
-            </div>
-            {false && (
-              <div
-                style={{
-                  textAlign: "center",
-                  width: "100%",
-                  fontWeight: 600,
-                  marginTop: "20px",
-                }}
-              >
-                Achievement points: {sumOfAchievementPoints ?? "---"}
-              </div>
-            )}
-          </div>
-
-          <div className="flex">
-            <div className="content-block w-100 ">
-              <StylizedContentBlock
-                variant="gradient"
-                revealCondition={data.account}
-              />
-              <div className="flex gap-10 nowrap">
-                {renderGenshinCard}
-                <div className="profile-highlights">
-                  {data.account && <CalculationResultWidget uid={uid} />}
+                    <div className="title">
+                      {achievement.name}{" "}
+                      <span
+                        style={{
+                          marginLeft: "5px",
+                          color: "orange",
+                          opacity: 0.33,
+                        }}
+                      >
+                        {achievement.score ?? "---"}p
+                      </span>
+                    </div>
+                  </div>
+                  <div style={{ color: "gray", marginLeft: "50px" }}>
+                    {achievement.description}
+                  </div>
                 </div>
-              </div>
-              {data.account && (
-                <CustomTable
-                  fetchURL={FETCH_BUILDS_URL}
-                  columns={BUILDS_COLUMNS}
-                  filtersURL={FETCH_CHARACTER_FILTERS_URL}
-                  defaultSort="critValue"
-                  expandableRows
-                  fetchParams={{
-                    uid: uid,
-                  }}
-                />
-              )}
-            </div>
-          </div>
-          <div className="flex">
-            <div className="content-block w-100">
-              <StylizedContentBlock revealCondition={data.account} />
-              {data.account && (
-                <CustomTable
-                  fetchURL={FETCH_ARTIFACTS_URL}
-                  columns={ARTIFACT_COLUMNS}
-                  filtersURL={FETCH_ARTIFACT_FILTERS_URL}
-                  defaultSort="critValue"
-                  fetchParams={{
-                    uid: uid,
-                  }}
-                />
-              )}
-            </div>
-          </div>
-        </>
-      ) : (
-        <div className="spinner-wrapper">
-          <Spinner />
+              );
+            })}
         </div>
-      )}
+        {false && (
+          <div
+            style={{
+              textAlign: "center",
+              width: "100%",
+              fontWeight: 600,
+              marginTop: "20px",
+            }}
+          >
+            Achievement points: {sumOfAchievementPoints ?? "---"}
+          </div>
+        )}
+      </div>
+
+      <div className="flex">
+        <div className="content-block w-100 ">
+          <StylizedContentBlock
+            variant="gradient"
+            revealCondition={data.account}
+          />
+          <div className="flex gap-10 nowrap">
+            {renderGenshinCard}
+            <div className="profile-highlights">
+              {data.account && <CalculationResultWidget uid={uid} />}
+            </div>
+          </div>
+          {data.account && (
+            <CustomTable
+              fetchURL={FETCH_BUILDS_URL}
+              columns={BUILDS_COLUMNS}
+              filtersURL={FETCH_CHARACTER_FILTERS_URL}
+              defaultSort="critValue"
+              expandableRows
+              fetchParams={{
+                uid: uid,
+              }}
+            />
+          )}
+        </div>
+      </div>
+      <div className="flex">
+        <div className="content-block w-100">
+          <StylizedContentBlock revealCondition={data.account} />
+          {data.account && (
+            <CustomTable
+              fetchURL={FETCH_ARTIFACTS_URL}
+              columns={ARTIFACT_COLUMNS}
+              filtersURL={FETCH_ARTIFACT_FILTERS_URL}
+              defaultSort="critValue"
+              fetchParams={{
+                uid: uid,
+              }}
+            />
+          )}
+        </div>
+      </div>
     </div>
   );
 };
