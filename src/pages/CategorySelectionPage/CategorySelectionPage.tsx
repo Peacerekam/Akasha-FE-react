@@ -40,7 +40,7 @@ type Category = {
 };
 
 export const CategorySelectionPage = () => {
-  const [categories, setCategories] = useState<Category[]>();
+  // const [categories, setCategories] = useState<Category[]>();
   const [categoriesTransformed, setCategoriesTransformed] =
     useState<TransformedCategories[]>();
 
@@ -54,11 +54,9 @@ export const CategorySelectionPage = () => {
   const fetchCategories = async () => {
     const response = await axios.get(FETCH_CATEGORIES_URL);
     const { data, dataTransformed } = response.data;
-    setCategories(data);
+    // setCategories(data);
     setCategoriesTransformed(dataTransformed);
   };
-
-  console.log("categories", categories);
 
   return (
     <div className="flex">
@@ -88,6 +86,7 @@ export const CategorySelectionPage = () => {
             if (calcNames.length === 0) return <></>;
             return (
               <div
+                key={`${category.characterName}=${index}`}
                 className="block-highlight"
                 style={{
                   width: 250,
@@ -96,7 +95,6 @@ export const CategorySelectionPage = () => {
                   minWidth: 240,
                   minHeight: 350,
                 }}
-                key={`${category.characterName}=${index}`}
               >
                 <div
                   style={{
@@ -111,10 +109,10 @@ export const CategorySelectionPage = () => {
                 </div>
 
                 <div style={{ marginTop: 10, fontWeight: 400, fontSize: 16 }}>
-                  {calcNames.map((calcName) => {
+                  {calcNames.map((calcName, i) => {
                     const calcs = category.calcs[calcName];
                     return (
-                      <div>
+                      <div key={`${calcName}-${i}`}>
                         <div
                           style={{
                             marginTop: 30,
@@ -127,7 +125,7 @@ export const CategorySelectionPage = () => {
                         <div>
                           {calcs.map((calc) => {
                             return (
-                              <span>
+                              <span key={calc.calculationId}>
                                 <a
                                   title={calc.weapon?.name}
                                   onClick={(event) => {

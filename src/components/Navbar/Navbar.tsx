@@ -51,7 +51,7 @@ export const Navbar: React.FC = () => {
         className="logo-wrapper"
         onClick={(event) => {
           event.preventDefault();
-          navigate("/");
+          navigate(`${pathname}`);
         }}
       >
         <span className="logo">
@@ -62,7 +62,7 @@ export const Navbar: React.FC = () => {
 
       {NAVIGATION.map((nav) =>
         nav.name === "spacer" ? (
-          <div className="navbar-spacer" />
+          <div key={nav.name} className="navbar-spacer" />
         ) : (
           <a
             key={nav.name}
