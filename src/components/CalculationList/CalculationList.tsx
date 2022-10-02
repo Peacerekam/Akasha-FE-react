@@ -12,7 +12,11 @@ type CalculationResponse = {
   stats: any;
 };
 
-export const CalculationList = ({ row }: any) => {
+type CalculationListProps = {
+  row: any;
+};
+
+export const CalculationList: React.FC<CalculationListProps> = ({ row }) => {
   const calculationIds = useMemo(
     () =>
       Object.keys(row.calculations).sort((a: any, b: any) =>

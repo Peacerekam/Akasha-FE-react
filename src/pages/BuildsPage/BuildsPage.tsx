@@ -30,7 +30,7 @@ export type BuildsColumns = {
   [key: string]: any;
 };
 
-export const BuildsPage = () => {
+export const BuildsPage: React.FC = () => {
   const navigate = useNavigate();
   const pathname = window.location.pathname;
 

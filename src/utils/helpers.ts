@@ -158,6 +158,8 @@ export const arrayPushOrSplice = (prev: any[], element: any) => {
 };
 
 export const filtersQueryToArray = (value: string) => {
+  // example input value:
+  // [name]Aloy[weapon.name]Apprentice's Notes[constellation]2[setName]Crimson Witch of Flames
   const filters: any[] = [];
   const _tmp = value.split("[").slice(1);
   _tmp.forEach((str) => {
@@ -172,4 +174,17 @@ export const filtersQueryToArray = (value: string) => {
     });
   });
   return filters;
+};
+
+export const uidsToQuery = (uids: (string | number)[]) => {
+  // example output:
+  // [uid]123124[uid]32323232[uid]see[uid]algoinde
+  let stringified = "";
+
+  uids.forEach((uid) => {
+    if (!uid) return;
+    stringified += `[uid]${uid}`;
+  });
+
+  return stringified;
 };

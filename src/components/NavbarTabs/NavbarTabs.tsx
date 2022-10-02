@@ -1,64 +1,22 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { BACKEND_URL } from "../../utils/helpers";
+import {LastProfilesContext} from "../../context/LastProfiles/LastProfilesContext";
 import "./style.scss";
 
 export const NavbarTabs: React.FC = () => {
-  const [lastProfiles, setLastProfiles] = useState<any[]>([]);
-  const [nicknameMap, setNicknameMap] = useState<any>({});
-  const [_timeout, _setTimeout] = useState<any>();
   // @KM: @TODO: consider LocalStorage  for keeping tabs
 
+  const { lastProfiles, nicknameMap, removeTab, updateLastProfiles } = useContext(LastProfilesContext);
   const navigate = useNavigate();
 
-  // BrowserRouter
-  // const { pathname } = window.location;
-  
   // HashRouter
-  const hash = window.location.hash.replace('#','');
+  const hash = window.location.hash.replace("#", "");
   const pathname = window.location.pathname;
 
   useEffect(() => {
-    if (_timeout) clearTimeout(_timeout);
-
-    const profileURL = "/profile/";
-    if (!hash.includes(profileURL)) return;
-
-    const uid = hash.replace(profileURL, "")
-    if (lastProfiles.includes(uid)) return;
-
-    if (!nicknameMap[uid]) {
-      getNickname(uid);
-    }
-
-    setLastProfiles((prev) => Array.from(new Set([...prev.slice(-12), uid])));
+    updateLastProfiles(hash)
   }, [hash]);
 
-  const getNickname = async (uid: string) => {
-    const getNicknameURL = `${BACKEND_URL}/api/nickname/${uid}`;
-    const { data } = await axios.get(getNicknameURL);
-    if (data.data.nickname === null) {
-      const _t = setTimeout(() => getNickname(uid), 1000);
-      _setTimeout(_t);
-    } else {
-      setNicknameMap((prev: any) => ({
-        ...prev,
-        [uid]: data.data.nickname,
-      }));
-    }
-  };
-
-  const removeTab = (uid: string) => {
-    setLastProfiles((prev) => {
-      const arr = [...prev];
-      const index = arr.indexOf(uid);
-      if (index > -1) {
-        arr.splice(index, 1);
-      }
-      return arr;
-    });
-  };
 
   return (
     <div className="navbar-tabs">
@@ -67,9 +25,7 @@ export const NavbarTabs: React.FC = () => {
         return (
           <div
             key={`tab-${uid}-${nicknameMap[uid]}`}
-            className={`navbar-tab ${
-              hash.endsWith(uid) ? "active-tab" : ""
-            }`}
+            className={`navbar-tab ${hash.endsWith(uid) ? "active-tab" : ""}`}
           >
             <a
               // @KM: @TODO: classname fade-in ofsome kind

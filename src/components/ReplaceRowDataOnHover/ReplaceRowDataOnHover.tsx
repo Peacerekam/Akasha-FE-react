@@ -1,12 +1,14 @@
 import React from "react";
 import "./style.scss";
 
-export const ReplaceRowDataOnHover = ({
-  data,
-  onHoverData,
-}: {
+type ReplaceRowDataOnHoverProps = {
   data: any;
   onHoverData: any;
+};
+
+export const ReplaceRowDataOnHover: React.FC<ReplaceRowDataOnHoverProps> = ({
+  data,
+  onHoverData,
 }) => {
   return (
     <>

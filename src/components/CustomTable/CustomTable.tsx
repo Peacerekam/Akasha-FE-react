@@ -26,6 +26,7 @@ type CustomTableProps = {
   expandableRows?: boolean;
   hidePagination?: boolean;
   projectParamsToPath?: boolean;
+  ignoreEmptyUidsArray?: boolean;
 };
 
 export type FetchParams = {
@@ -34,6 +35,7 @@ export type FetchParams = {
   size: number;
   page: number;
   filter?: string;
+  uids?: string;
 };
 
 export const CustomTable: React.FC<CustomTableProps> = ({
@@ -46,9 +48,9 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   expandableRows = false,
   hidePagination = false,
   projectParamsToPath = false,
+  ignoreEmptyUidsArray = false,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [listingType, setListingType] = useState<"table" | "custom">("table");
   const [hoverPreview, setHoverPreview] = useState<any | null>(null);
   const [expandedRows, setExpandedRows] = useState<string[]>([]);
   const [rows, setRows] = useState<any[]>([]);
@@ -60,6 +62,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     size: 20,
     page: 1,
     filter: "",
+    uids: "",
   };
   const [params, setParams] = useState<FetchParams>(defaultParams);
 
@@ -112,24 +115,32 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   }, [projectParamsToPath]);
 
   useEffect(() => {
-    console.log("useEffect params/fetchURL", params, fetchURL);
-
     if (projectParamsToPath) {
       appendParamsToURL();
     }
 
     if (fetchURL) {
+      if (ignoreEmptyUidsArray && (!fetchParams.uids && !fetchParams.uid)) {
+        setExpandedRows([]);
+        setTotalRowsCount(0);
+        setRows([]);
+        return;
+      }
+
       const abortController = new AbortController();
       handleFetch(abortController);
       return () => {
         abortController.abort();
       };
     }
-  }, [JSON.stringify(params), fetchURL, projectParamsToPath]);
+  }, [
+    JSON.stringify(params),
+    JSON.stringify(fetchParams),
+    fetchURL,
+    projectParamsToPath,
+  ]);
 
   useEffect(() => {
-    console.log("useEffect expandedRows", expandedRows);
-
     setRows((prev) => {
       let newRows = prev.filter((row) => !row.isExpandRow);
       for (const expandedRowId of expandedRows) {
@@ -307,15 +318,9 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   );
 
   const renderRows = useMemo(() => {
-    console.log("useMemo renderRows", rows);
-
     const updateTableHoverElement = (props: any) => {
       const el = (
-        <TableHoverElement
-          currentCategory={calculationColumn}
-          listingType={listingType}
-          {...props}
-        />
+        <TableHoverElement currentCategory={calculationColumn} {...props} />
       );
       setHoverPreview(el);
     };
@@ -370,7 +375,6 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     // JSON.stringify(expandedRows),
     // params.sort,
     JSON.stringify(rows),
-    listingType,
     calculationColumn,
     columns.length,
   ]);

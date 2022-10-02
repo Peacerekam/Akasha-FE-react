@@ -6,7 +6,13 @@ import { BACKEND_URL } from "../../utils/helpers";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import "./style.scss";
 
-export const CalculationResultWidget = ({ uid }: { uid?: string }) => {
+type CalculationResultWidgetProps = {
+  uid?: string;
+};
+
+export const CalculationResultWidget: React.FC<
+  CalculationResultWidgetProps
+> = ({ uid }) => {
   const [data, setData] = useState<any[]>([]);
 
   const fetchCalcData = async (
@@ -63,7 +69,6 @@ export const CalculationResultWidget = ({ uid }: { uid?: string }) => {
         tmpIncludeCheck.push(calc.characterName);
         finalArr.push(calc);
       }
-      console.log("finalArr", finalArr);
 
       return finalArr;
     }
@@ -73,12 +78,11 @@ export const CalculationResultWidget = ({ uid }: { uid?: string }) => {
   const tilesList = useMemo(
     () =>
       resultsArray.map((calc: any, index: number) => {
-        const { name, ranking, outOf, details, weapon, result, stats, short } = calc;
+        const { name, ranking, outOf, details, weapon, result, stats, short } =
+          calc;
         return (
           <div key={`${name}-${weapon.name}`} className="highlight-tile">
-            <div className="highlight-tile-pill">
-              {short ? short : "---"}
-            </div>
+            <div className="highlight-tile-pill">{short ? short : "---"}</div>
             <div className="flex">
               <img className="table-icon" src={calc.characterIcon} />
               <WeaponMiniDisplay

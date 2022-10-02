@@ -39,7 +39,7 @@ type Category = {
   }[];
 };
 
-export const CategorySelectionPage = () => {
+export const CategorySelectionPage: React.FC = () => {
   // const [categories, setCategories] = useState<Category[]>();
   const [categoriesTransformed, setCategoriesTransformed] =
     useState<TransformedCategories[]>();
@@ -53,8 +53,7 @@ export const CategorySelectionPage = () => {
 
   const fetchCategories = async () => {
     const response = await axios.get(FETCH_CATEGORIES_URL);
-    const { data, dataTransformed } = response.data;
-    // setCategories(data);
+    const { dataTransformed } = response.data;
     setCategoriesTransformed(dataTransformed);
   };
 

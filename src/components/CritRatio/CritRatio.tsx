@@ -1,13 +1,12 @@
 import { getCharacterCvColor } from "../../utils/helpers";
-import "./style.scss"
+import "./style.scss";
 
-export const CritRatio = ({
-  stats,
-  overrideCV,
-}: {
+type CritRatioProps = {
   stats: any;
   overrideCV?: number;
-}) => {
+};
+
+export const CritRatio: React.FC<CritRatioProps> = ({ stats, overrideCV }) => {
   const cr = stats.critRate?.value
     ? stats.critRate?.value * 100
     : stats.critRate;
@@ -21,17 +20,11 @@ export const CritRatio = ({
   const textColor = getCharacterCvColor(cv);
 
   return (
-    <div className="table-crits-display" >
-      <div >
+    <div className="table-crits-display">
+      <div>
         {cr.toFixed(1)} : {cd.toFixed(1)}{" "}
       </div>
-      {cv ? (
-        <div  style={{ color: textColor }}>
-          {cv.toFixed(1)} cv
-        </div>
-      ) : (
-        ""
-      )}
+      {cv ? <div style={{ color: textColor }}>{cv.toFixed(1)} cv</div> : ""}
     </div>
   );
 };

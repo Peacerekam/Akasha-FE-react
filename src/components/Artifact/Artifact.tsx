@@ -14,17 +14,19 @@ import RarityStar from "../../assets/images/star.png";
 
 import "./style.scss";
 
-export const Artifact = ({
-  artifact,
-  width = 270,
-  equipped,
-}: {
+type ArtifactProps = {
   artifact: {
     [key: string]: any;
     stars: number;
   };
   width?: any;
   equipped?: any;
+};
+
+export const Artifact: React.FC<ArtifactProps> = ({
+  artifact,
+  width = 270,
+  equipped,
 }) => {
   const artifactBg = {
     5: ArtifactBackground,
@@ -102,7 +104,7 @@ export const Artifact = ({
             const style = {
               backgroundImage: `url(${build.nameCardLink})`,
               boxShadow: `0 0 0 2px ${borderColor}`,
-              backgroundPosition: 'center',
+              backgroundPosition: "center",
             } as React.CSSProperties;
 
             return (

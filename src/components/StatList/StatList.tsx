@@ -80,12 +80,12 @@ const getStatsFromRow = (row: any) => {
   };
 };
 
-export const StatList = ({
+export const StatList: React.FC<StatListProps> = ({
   row,
   currentCategory,
   showCharacter,
   showWeapon,
-}: StatListProps) => {
+}) => {
   const stats = currentCategory
     ? getStatsFromCalculation(row, currentCategory)
     : getStatsFromRow(row);

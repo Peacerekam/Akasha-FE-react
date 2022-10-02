@@ -20,9 +20,11 @@ import HydroDMG from "../../assets/icons/WATER_ADD_HURT.png";
 import PhysicalDMG from "../../assets/icons/PHYSICAL_ADD_HURT.png";
 import CryoDMG from "../../assets/icons/ICE_ADD_HURT.png";
 import HealingBonus from "../../assets/icons/HEAL_ADD.png";
-import { faFlower, faPlume, faSands, faGoblet, faCirclet } from './faIcons';
+import { faFlower, faPlume, faSands, faGoblet, faCirclet } from "./faIcons";
 
 import "./style.scss";
+
+type StatIconProps = { name: string };
 
 const statKeys: any = {
   "Crit Rate": CritRate,
@@ -76,7 +78,7 @@ const statKeys: any = {
 
 export const isIcon = (name: string) => !!statKeys[name];
 
-export const StatIcon = ({ name }: { name: string }) => {
+export const StatIcon: React.FC<StatIconProps> = ({ name }) => {
   const asset = statKeys[name];
   if (!name) return null;
 

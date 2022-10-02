@@ -3,14 +3,16 @@ import "./style.scss";
 
 type StylizedBlockTypes = "gradient";
 
-export const StylizedContentBlock = ({
-  variant,
-  revealCondition = true,
-  overrideImage,
-}: {
+type StylizedContentBlockProps = {
   variant?: StylizedBlockTypes;
   revealCondition?: boolean;
   overrideImage?: string;
+};
+
+export const StylizedContentBlock: React.FC<StylizedContentBlockProps> = ({
+  variant,
+  revealCondition = true,
+  overrideImage,
 }) => {
   const classNames = useMemo(
     () =>

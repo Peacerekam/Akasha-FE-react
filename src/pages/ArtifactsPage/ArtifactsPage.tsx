@@ -31,7 +31,7 @@ export type ArtifactColumns = {
   [key: string]: any;
 };
 
-export const ArtifactsPage = () => {
+export const ArtifactsPage: React.FC = () => {
   const navigate = useNavigate();
 
   const pathname = window.location.pathname;

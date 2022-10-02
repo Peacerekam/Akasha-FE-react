@@ -11,10 +11,16 @@ import {
 import { StatIcon } from "../StatIcon";
 import "./style.scss";
 
-export const ArtifactListCompact = ({ row }: any) => {
+type ArtifactListCompactProps = {
+  row: any;
+};
+
+export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
+  row,
+}) => {
   const reordered = useMemo(
     () => getArtifactsInOrder(row.artifactObjects),
-    [row]
+    [JSON.stringify(row)]
   );
 
   const compactList = useMemo(
@@ -43,12 +49,14 @@ export const ArtifactListCompact = ({ row }: any) => {
               {substatKeys.map((key: any) => {
                 if (!key) return <></>;
 
-                const substatValue = getInGameSubstatValue(artifact.substats[key], key);
+                const substatValue = getInGameSubstatValue(
+                  artifact.substats[key],
+                  key
+                );
                 const isCV = key.includes("Crit");
 
                 return (
                   <div
-                    
                     key={normalizeText(key)}
                     className={`substat flex nowrap ${normalizeText(
                       key.replace("substats", "")

@@ -10,16 +10,16 @@ import {
 } from "./pages";
 
 import { Footer, Navbar, NavbarTabs } from "./components";
+import { LastProfilesContextProvider } from "./context/LastProfiles/LastProfilesContext";
 
-function App() {
+const App = () => {
   return (
-    <div>
+    <LastProfilesContextProvider>
       <HashRouter>
         <Navbar />
         <NavbarTabs />
         <div className="content-wrapper">
           <Routes>
-
             {/* Dashboard? */}
             <Route
               path="/"
@@ -52,8 +52,8 @@ function App() {
           <Footer />
         </div>
       </HashRouter>
-    </div>
+    </LastProfilesContextProvider>
   );
-}
+};
 
 export default App;

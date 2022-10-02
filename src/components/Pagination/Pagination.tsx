@@ -8,16 +8,18 @@ import {
 import { FetchParams } from "../CustomTable";
 import "./style.scss";
 
-export const Pagination = ({
-  totalRows = 0,
-  pageSize = 0,
-  pageNumber = 0,
-  setParams = null,
-}: {
+type PaginationProps = {
   totalRows?: number;
   pageSize?: number;
   pageNumber?: number;
   setParams?: React.Dispatch<React.SetStateAction<FetchParams>> | null;
+};
+
+export const Pagination: React.FC<PaginationProps> = ({
+  totalRows = 0,
+  pageSize = 0,
+  pageNumber = 0,
+  setParams = null,
 }) => {
   const lastPage = Math.ceil(totalRows / pageSize);
   const disableNext = pageNumber === lastPage;

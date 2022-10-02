@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -17,12 +23,14 @@ import {
   FETCH_LEADERBOARDS_URL,
   getCharacterCvColor,
   FETCH_CHARACTER_FILTERS_URL,
+  uidsToQuery,
 } from "../../utils/helpers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { TableColumn } from "../../types/TableColumn";
 
 import { StylizedContentBlock } from "../../components/StylizedContentBlock";
+import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
 
 type CategoriesById = {
   [key: string]: {
@@ -34,28 +42,12 @@ type CategoriesById = {
       id: string;
       name: string;
       details: string;
+      short: string;
     };
     weapon?: {
       name: string;
       icon: string;
     };
-  };
-};
-
-type TransformedCategories = {
-  characterName: string;
-  icon: string;
-  calcs: {
-    [calcName: string]: {
-      label: string;
-      characterId: string;
-      calculationId: string;
-      details: string;
-      weapon?: {
-        name: string;
-        icon: string;
-      };
-    }[];
   };
 };
 
@@ -68,6 +60,7 @@ type Category = {
       calculationId: string;
       characterId: number;
       details: string;
+      short: string;
       weapon?: {
         icon: string;
         name: string;
@@ -82,16 +75,14 @@ export const ARBadge = ({ adventureRank }: any) => (
   </span>
 );
 
-export const LeaderboardsPage = () => {
+export const LeaderboardsPage: React.FC = () => {
   const [currentCategory, setCurrentCategory] = useState<string>("");
   const [categories, setCategories] = useState<Category[]>();
-  const [categoriesTransformed, setCategoriesTransformed] =
-    useState<TransformedCategories[]>();
-  const [inputUID, setInputUID] = useState<string>("701464050");
-  const [foundData, setFoundData] = useState<any[]>([]);
-  const [searchFetchURL, setSearchFetchURL] = useState<string>("");
+  const [inputUID, setInputUID] = useState<string>("");
+  const [lookupUID, setLookupUID] = useState<string>("");
   const [hoverPreview, setHoverPreview] = useState<any | null>(null);
 
+  const { lastProfiles } = useContext(LastProfilesContext);
   const navigate = useNavigate();
   const { calculationId } = useParams();
   const pathname = window.location.pathname;
@@ -104,7 +95,7 @@ export const LeaderboardsPage = () => {
   const calculationSortKey = currentCategory
     ? `calculations.${currentCategory}.result`
     : "";
-  
+
   const categoriesById = useMemo(() => {
     const map: CategoriesById = {};
     if (!categories) return map;
@@ -119,6 +110,7 @@ export const LeaderboardsPage = () => {
             id: calc.value.calculationId,
             name: calc.label,
             details: calc.value.details,
+            short: calc.value.short,
           },
           weapon: calc.value.weapon,
         };
@@ -155,7 +147,6 @@ export const LeaderboardsPage = () => {
   }, [categories]);
 
   useEffect(() => {
-    setSearchFetchURL(`${FETCH_LEADERBOARDS_URL}?uid=${inputUID}`);
     fetchCategories();
   }, []);
 
@@ -295,7 +286,7 @@ export const LeaderboardsPage = () => {
         },
       },
       {
-        name: "Result", // currentCategory.split(' - ')[1],
+        name: displayCategory?.calculation.short, // currentCategory.split(' - ')[1],
         // width: "100px",
         sortable: true,
         sortField: calculationSortKey,
@@ -308,15 +299,19 @@ export const LeaderboardsPage = () => {
         },
       },
     ],
-    [currentCategory, calculationSortKey, FETCH_LEADERBOARDS_URL]
+    [
+      currentCategory,
+      displayCategory,
+      calculationSortKey,
+      FETCH_LEADERBOARDS_URL,
+    ]
   );
 
   const fetchCategories = async () => {
     const response = await axios.get(FETCH_CATEGORIES_URL);
-    const { data, dataTransformed } = response.data;
+    const { data } = response.data;
 
     setCategories(data);
-    setCategoriesTransformed(dataTransformed);
   };
 
   const updateTableHoverElement = (props: any) => {
@@ -386,7 +381,7 @@ export const LeaderboardsPage = () => {
           src={player.profilePictureLink}
           className="podium-player-icon"
         />
-        <div className="rung-player-score">{result || '---'}</div>
+        <div className="rung-player-score">{result || "---"}</div>
         <div className="rung-player-name">
           <div style={squishNameFactor}>{player.nickname}</div>
         </div>
@@ -508,20 +503,14 @@ export const LeaderboardsPage = () => {
                 setInputUID(event.target.value);
               }}
               onKeyDown={(event) => {
-                if (inputUID === "") return;
                 if (event.key === "Enter") {
-                  // fetchUserResult();
-                  setSearchFetchURL(
-                    `${FETCH_LEADERBOARDS_URL}?uid=${inputUID}`
-                  );
+                  setLookupUID(inputUID);
                 }
               }}
             />
             <button
               onClick={() => {
-                // fetchUserResult();
-                if (inputUID === "") return;
-                setSearchFetchURL(`${FETCH_LEADERBOARDS_URL}?uid=${inputUID}`);
+                setLookupUID(inputUID);
               }}
             >
               search
@@ -531,11 +520,16 @@ export const LeaderboardsPage = () => {
         {displayCategory && (
           <div>
             <CustomTable
-              fetchURL={searchFetchURL}
+              fetchURL={FETCH_LEADERBOARDS_URL}
+              fetchParams={{
+                uids: uidsToQuery(lastProfiles),
+                uid: lookupUID,
+              }}
               columns={LEADERBOARDS_COLUMNS}
               defaultSort={calculationSortKey}
               calculationColumn={currentCategory}
               expandableRows
+              ignoreEmptyUidsArray
               // hidePagination
             />
 

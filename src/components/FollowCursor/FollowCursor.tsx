@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 
-export const FollowCursor: React.FC<{
+type FollowCursorProps = {
   children: any;
   data: {
     offsetX: number;
     offsetY: number;
   };
-}> = ({ children, data: { offsetX, offsetY } }) => {
+};
+
+export const FollowCursor: React.FC<FollowCursorProps> = ({
+  children,
+  data: { offsetX, offsetY },
+}) => {
   const [coords, setCoords] = useState({
     x: 0,
     y: 0,

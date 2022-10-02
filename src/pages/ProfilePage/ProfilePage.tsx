@@ -31,7 +31,7 @@ import { TableColumn } from "../../types/TableColumn";
 import { StylizedContentBlock } from "../../components/StylizedContentBlock";
 import "./style.scss";
 
-export const ProfilePage = () => {
+export const ProfilePage: React.FC = () => {
   //  split into 3 different states later?
   const [data, setData] = useState<{
     artifacts: any[];
