@@ -224,7 +224,7 @@ export const StatList: React.FC<StatListProps> = ({
         <div className="relative">
           <span className="refinement-display">
             <span className={currentCategory ? "strike-through" : ""}>
-              C{row.constellationsIdList?.length ?? 0}
+              C{row.constellation ?? 0}
             </span>
           </span>
         </div>

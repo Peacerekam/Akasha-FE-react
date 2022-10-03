@@ -26,7 +26,7 @@ export type BuildsColumns = {
   icon: string;
   totalCritValue: number;
   nickname: string;
-  constellationsIdList: number[];
+  constellation: number;
   [key: string]: any;
 };
 
@@ -87,9 +87,7 @@ export const BuildsPage: React.FC = () => {
       sortable: true,
       sortField: "constellation",
       cell: (row) => {
-        const constellation = row.constellationsIdList
-          ? row.constellationsIdList.length
-          : 0;
+        const constellation = row.constellation ?? 0;
         return (
           <div className="c-badge-wrapper">
             <div className={`c-badge c-${constellation}-badge`}>

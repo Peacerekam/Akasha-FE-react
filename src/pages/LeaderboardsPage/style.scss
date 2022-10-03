@@ -1,0 +1,10 @@
+.other-calculations-display {
+  display: flex;
+  margin: 10px;
+  gap: 20px;
+
+  .highlight-tile {
+    height: 60px !important;
+    padding-bottom: 5px;
+  }
+}

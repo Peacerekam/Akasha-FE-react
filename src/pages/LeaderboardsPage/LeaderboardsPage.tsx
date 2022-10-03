@@ -17,6 +17,7 @@ import {
   CustomTable,
   Spinner,
   TableHoverElement,
+  WeaponMiniDisplay,
 } from "../../components";
 import {
   FETCH_CATEGORIES_URL,
@@ -32,6 +33,8 @@ import { TableColumn } from "../../types/TableColumn";
 import { StylizedContentBlock } from "../../components/StylizedContentBlock";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
 
+import "./style.scss";
+
 type CategoriesById = {
   [key: string]: {
     character: {
@@ -43,10 +46,12 @@ type CategoriesById = {
       name: string;
       details: string;
       short: string;
+      order: number;
     };
     weapon?: {
       name: string;
       icon: string;
+      refinement: number;
     };
   };
 };
@@ -61,9 +66,11 @@ type Category = {
       characterId: number;
       details: string;
       short: string;
+      order: number;
       weapon?: {
         icon: string;
         name: string;
+        refinement: number;
       };
     };
   }[];
@@ -107,6 +114,7 @@ export const LeaderboardsPage: React.FC = () => {
             icon: category.icon,
           },
           calculation: {
+            order: calc.value.order,
             id: calc.value.calculationId,
             name: calc.label,
             details: calc.value.details,
@@ -148,7 +156,7 @@ export const LeaderboardsPage: React.FC = () => {
 
   useEffect(() => {
     fetchCategories();
-  }, []);
+  }, [calculationId]);
 
   useEffect(() => {
     if (calculationId) {
@@ -169,6 +177,7 @@ export const LeaderboardsPage: React.FC = () => {
         name: "Owner",
         // sortable: true,
         // sortField: "uid",
+        sortField: "owner.nickname",
         width: "180px",
         cell: (row) => {
           return (
@@ -180,8 +189,8 @@ export const LeaderboardsPage: React.FC = () => {
               }}
               href={`${pathname}#/profile/${row.uid}`}
             >
-              <ARBadge adventureRank={row.adventureRank} />
-              {row.nickname}
+              <ARBadge adventureRank={row.owner?.adventureRank} />
+              {row.owner?.nickname}
             </a>
           );
         },
@@ -351,7 +360,7 @@ export const LeaderboardsPage: React.FC = () => {
 
     const squishNameFactor = {
       transform: `scaleX(${
-        player.nickname.length > 8 ? 8 / player.nickname.length : 1
+        player?.nickname?.length > 8 ? 8 / player?.nickname?.length : 1
       })`,
     };
 
@@ -383,7 +392,7 @@ export const LeaderboardsPage: React.FC = () => {
         />
         <div className="rung-player-score">{result || "---"}</div>
         <div className="rung-player-name">
-          <div style={squishNameFactor}>{player.nickname}</div>
+          <div style={squishNameFactor}>{player?.nickname}</div>
         </div>
         <div className="rung-geometry">
           <div>{position}</div>
@@ -417,10 +426,46 @@ export const LeaderboardsPage: React.FC = () => {
         </div> */}
       </div>
     );
-  }, [initialData.rows.length]);
+  }, [initialData.rows.length, calculationId]);
+
+  const sortedCategoriesWithSameCharacter = useMemo(
+    () =>
+      Object.keys(categoriesById)
+        .filter(
+          (id) =>
+            id.slice(0, -2) === displayCategory.calculation.id.slice(0, -2)
+        )
+        .sort((a, b) => {
+          const nameA = categoriesById[a].calculation.name;
+          const nameB = categoriesById[b].calculation.name;
+          const orderA = categoriesById[a].calculation.order;
+          const orderB = categoriesById[b].calculation.order;
+          return nameA > nameB
+            ? orderA < orderB
+              ? -1
+              : 1
+            : orderA > orderB
+            ? 1
+            : -1;
+        })
+        .map((id) => {
+          const _category = categoriesById[id];
+          const _title = `${_category.character.name} - ${
+            _category.calculation.name
+          } - ${_category.weapon?.name} R${
+            (_category.weapon?.refinement ?? 0) + 1
+          }`;
+          return {
+            id,
+            _category,
+            _title,
+          };
+        }),
+    [categoriesById, displayCategory]
+  );
 
   return (
-    <div className="flex">
+    <div className="flex" key={calculationId}>
       {hoverPreview}
       <div className="content-block w-100">
         <StylizedContentBlock
@@ -434,8 +479,7 @@ export const LeaderboardsPage: React.FC = () => {
             onClick={() => navigate("/leaderboards")}
           >
             <FontAwesomeIcon icon={faChevronLeft} size="1x" /> back to
-            categories / or make a neat modal || on hover picker for categories
-            on this page
+            categories
           </button>
         </div>
         <div
@@ -487,6 +531,37 @@ export const LeaderboardsPage: React.FC = () => {
             )}
           </div>
         </div>
+        <div className="relative other-calculations-display block-highlight highlight-tile-container">
+          {false && sortedCategoriesWithSameCharacter.map((c, index) => {
+            const thisName = c._category.calculation.short;
+            const weaponicon = c._category.weapon?.icon ?? "";
+            const weaponRefinement = c._category.weapon?.refinement ?? 0;
+
+            return (
+              <a
+                title={c._title}
+                className="highlight-tile"
+                onClick={(event) => {
+                  event.preventDefault();
+                  navigate(`/leaderboards/${c.id}`);
+                }}
+                href={`${pathname}#/leaderboards/${c.id}`}
+              >
+                <div className="highlight-tile-pill">{thisName}</div>
+                <div className="flex">
+                  <img
+                    className="table-icon"
+                    src={c._category.character.icon}
+                  />
+                  <WeaponMiniDisplay
+                    icon={weaponicon}
+                    refinement={weaponRefinement}
+                  />
+                </div>
+              </a>
+            );
+          })}
+        </div>
       </div>
 
       <div className="content-block w-100">
@@ -535,6 +610,9 @@ export const LeaderboardsPage: React.FC = () => {
 
             {/* spacer */}
             <div style={{ marginTop: "30px" }} />
+
+            {/* <div className="relative"> {calculationSortKey} </div>
+            <div className="relative"> {currentCategory} </div> */}
 
             <CustomTable
               fetchURL={FETCH_LEADERBOARDS_URL}

@@ -218,9 +218,7 @@ export const ProfilePage: React.FC = () => {
       sortable: true,
       sortField: "constellation",
       cell: (row) => {
-        const constellation = row.constellationsIdList
-          ? row.constellationsIdList.length
-          : 0;
+        const constellation = row.constellation ?? 0;
 
         return (
           <div className="table-icon-text-pair c-badge-wrapper">
