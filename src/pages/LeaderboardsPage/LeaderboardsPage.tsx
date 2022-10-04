@@ -177,7 +177,7 @@ export const LeaderboardsPage: React.FC = () => {
         name: "Owner",
         // sortable: true,
         // sortField: "uid",
-        sortField: "owner.nickname",
+        // sortField: "owner.nickname",
         width: "180px",
         cell: (row) => {
           return (
@@ -360,7 +360,7 @@ export const LeaderboardsPage: React.FC = () => {
 
     const squishNameFactor = {
       transform: `scaleX(${
-        player?.nickname?.length > 8 ? 8 / player?.nickname?.length : 1
+        player?.owner?.nickname?.length > 8 ? 8 / player?.owner?.nickname?.length : 1
       })`,
     };
 
@@ -392,7 +392,7 @@ export const LeaderboardsPage: React.FC = () => {
         />
         <div className="rung-player-score">{result || "---"}</div>
         <div className="rung-player-name">
-          <div style={squishNameFactor}>{player?.nickname}</div>
+          <div style={squishNameFactor}>{player?.owner?.nickname}</div>
         </div>
         <div className="rung-geometry">
           <div>{position}</div>

@@ -44,11 +44,11 @@ export const BuildsPage: React.FC = () => {
     },
     {
       name: "Owner",
-      sortField: "uid",
+      sortField: "owner.nickname",
       width: "180px",
-      sortable: false,
+      sortable: true,
       cell: (row) => {
-        if (!row.adventureRank) return <></>;
+        if (!row.owner?.adventureRank) return <></>;
 
         return (
           <a
@@ -59,8 +59,8 @@ export const BuildsPage: React.FC = () => {
             }}
             href={`${pathname}#/profile/${row.uid}`}
           >
-            <ARBadge adventureRank={row.adventureRank} />
-            {row.nickname}
+            <ARBadge adventureRank={row.owner.adventureRank} />
+            {row.owner.nickname}
           </a>
         );
       },

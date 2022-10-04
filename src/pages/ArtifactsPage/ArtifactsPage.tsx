@@ -64,11 +64,11 @@ export const ArtifactsPage: React.FC = () => {
     },
     {
       name: "Owner",
-      sortable: false,
-      sortField: "uid",
+      sortable: true,
+      sortField: "owner.nickname",
       width: "180px",
       cell: (row) => {
-        if (!row.adventureRank) return <></>;
+        if (!row.owner?.adventureRank) return <></>;
         return (
           <a
             className="row-link-element"
@@ -78,8 +78,8 @@ export const ArtifactsPage: React.FC = () => {
             }}
             href={`${pathname}#/profile/${row.uid}`}
           >
-            <ARBadge adventureRank={row.adventureRank} />
-            {row.nickname}
+            <ARBadge adventureRank={row.owner.adventureRank} />
+            {row.owner.nickname}
           </a>
         );
       },

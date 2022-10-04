@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import {
   getArtifactsInOrder,
@@ -7,6 +7,7 @@ import {
   getArtifactCvClassName,
   isPercent,
   getInGameSubstatValue,
+  BACKEND_URL,
 } from "../../utils/helpers";
 import { StatIcon } from "../StatIcon";
 import "./style.scss";
@@ -18,9 +19,21 @@ type ArtifactListCompactProps = {
 export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
   row,
 }) => {
+  const [artifacts, setArtifacts] = useState<any[]>([]);
+
+  const getArtifacts = async () => {
+    const artDetailsURL = `${BACKEND_URL}/api/builds/${row.uid}/${row.characterId}/${row.type}`;
+    const { data } = await axios.get(artDetailsURL);
+    setArtifacts(data.data);
+  };
+
+  useEffect(() => {
+    getArtifacts();
+  }, []);
+
   const reordered = useMemo(
-    () => getArtifactsInOrder(row.artifactObjects),
-    [JSON.stringify(row)]
+    () => getArtifactsInOrder(artifacts),
+    [JSON.stringify(artifacts)]
   );
 
   const compactList = useMemo(
@@ -75,7 +88,7 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
           </div>
         );
       }),
-    [row]
+    [JSON.stringify(reordered)]
   );
 
   // @KM: @TODO: remove later or rework
