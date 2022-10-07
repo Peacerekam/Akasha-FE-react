@@ -31,14 +31,15 @@ const App = () => {
             <Route path="/artifacts" element={<ArtifactsPage />} />
             <Route path="/builds" element={<BuildsPage />} />
 
-            {/* @KM: @TODO: /auth ? */}
-            {/* <Route path="/auth" element={<>nothing here</>} /> */}
+            {/* @TODO: /auth ? */}
+            {/* <Route path="/auth" element={<>nothing here yet.</>} /> */}
 
-            {/* @KM: @TODO: /users ? */}
+            {/* @TODO: /users ? */}
             {/* <Route path="/users" element={<>nothing here</>} /> */}
 
-            {/* @KM: @TODO: /profile ? */}
-            {/* <Route path="/profile" element={<>nothing here</>} /> */}
+            {/* @TODO: /profile ? */}
+            {/* <Route path="/profile" element={<>nothing here yet.</>} /> */}
+
             <Route path="/profile/:uid" element={<ProfilePage />} />
 
             <Route path="/leaderboards" element={<CategorySelectionPage />} />
@@ -47,7 +48,7 @@ const App = () => {
               element={<LeaderboardsPage />}
             />
 
-            <Route path="*" element={"404"} />
+            <Route path="*" element={"nope."} />
           </Routes>
           <Footer />
         </div>

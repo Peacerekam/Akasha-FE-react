@@ -43,8 +43,6 @@ export const CalculationResultWidget: React.FC<
   }, [uid]);
 
   const resultsArray = useMemo(() => {
-    console.log("\n\nuseMemo renderTiles");
-
     if (data.length > 0 && data[0].characterId) {
       const filtered = data.filter(
         (r) => Object.keys(r.calculations).length > 0
@@ -68,7 +66,7 @@ export const CalculationResultWidget: React.FC<
       // group by character name instead
       // on hover show other results
       const finalArr = [];
-      let tmpIncludeCheck: any[] = [];
+      const tmpIncludeCheck: any[] = [];
       for (const calc of sorted) {
         if (tmpIncludeCheck.includes(calc.characterName)) continue;
         tmpIncludeCheck.push(calc.characterName);
@@ -96,7 +94,7 @@ export const CalculationResultWidget: React.FC<
             >
               <div className="highlight-tile-pill">{short ? short : "---"}</div>
               <div className="flex">
-                <img className="table-icon" src={calc.characterIcon} />
+                <img alt="Icon" className="table-icon" src={calc.characterIcon} />
                 <WeaponMiniDisplay
                   icon={weapon.icon}
                   refinement={weapon?.refinement || 1}

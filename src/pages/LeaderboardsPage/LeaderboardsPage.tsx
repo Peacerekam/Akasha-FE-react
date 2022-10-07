@@ -312,7 +312,7 @@ export const LeaderboardsPage: React.FC = () => {
       currentCategory,
       displayCategory,
       calculationSortKey,
-      FETCH_LEADERBOARDS_URL,
+      // FETCH_LEADERBOARDS_URL, @TODO: not needed?
     ]
   );
 

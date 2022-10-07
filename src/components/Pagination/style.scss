@@ -69,7 +69,7 @@
         left: 0;
         font-size: 12px;
         text-align: center;
-        user-select: none; // @KM is it needed?
+        user-select: none;
         cursor: pointer;
         opacity: 0.3;
       }
@@ -83,7 +83,7 @@
         min-height: 30px;
         padding: 5px;
         text-align: center;
-        user-select: none; // @KM is it needed?
+        user-select: none;
 
         &:disabled {
           cursor: default;

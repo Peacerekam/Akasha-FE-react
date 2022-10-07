@@ -54,7 +54,6 @@ export const ProfilePage: React.FC = () => {
       };
 
       const { data } = await axios.get(url, opts);
-      // cancel or reject the promise or requestif theresnew fetch?
       setData(data.data);
     } catch (err) {
       // const typedError = err as Error
@@ -77,7 +76,7 @@ export const ProfilePage: React.FC = () => {
   } as React.CSSProperties;
 
   // move this somewhere else i think
-  const ARTIFACT_COLUMNS: TableColumn<ArtifactColumns>[] = [
+  const ARTIFACT_COLUMNS: TableColumn<ArtifactColumns>[] = useMemo(() => [
     {
       name: "#",
       width: "0px",
@@ -183,10 +182,10 @@ export const ProfilePage: React.FC = () => {
         );
       },
     },
-  ];
+  ], []);
 
   // move this somewhere else i think
-  const BUILDS_COLUMNS: TableColumn<BuildsColumns>[] = [
+  const BUILDS_COLUMNS: TableColumn<BuildsColumns>[] = useMemo(() => [
     {
       name: "#",
       width: "0px",
@@ -325,9 +324,9 @@ export const ProfilePage: React.FC = () => {
         );
       },
     },
-  ];
+  ], []);
 
-  // @KM: @TODO: sum them on server side so we can sort by that?
+  // @TODO: sum them on server side so we can sort by that?
   const sumOfAchievementPoints = data.account?.achievements?.reduce(
     (accumulator: any, currentValue: any) =>
       accumulator + currentValue.score * currentValue.count,

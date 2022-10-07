@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -34,7 +34,7 @@ export const BuildsPage: React.FC = () => {
   const navigate = useNavigate();
   const pathname = window.location.pathname;
 
-  const BUILDS_COLUMNS: TableColumn<BuildsColumns>[] = [
+  const BUILDS_COLUMNS: TableColumn<BuildsColumns>[] = useMemo(() => [
     {
       name: "#",
       width: "0px",
@@ -199,7 +199,7 @@ export const BuildsPage: React.FC = () => {
         );
       },
     },
-  ];
+  ], []);
 
   return (
     <div className="flex">

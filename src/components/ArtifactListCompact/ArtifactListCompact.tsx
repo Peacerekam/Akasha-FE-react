@@ -91,11 +91,6 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
     [JSON.stringify(reordered)]
   );
 
-  // @KM: @TODO: remove later or rework
-  // if (!data.artifactsObjects) {
-  //   return <ArtifactDetails artifactId={data._id} />;
-  // }
-
   return (
     <div className="flex expanded-row">
       {reordered.length > 0 ? compactList : "no artifacts equipped"}

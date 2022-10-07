@@ -29,20 +29,20 @@ export const TableHoverElement: React.FC<TableHoverElementProps> = ({
   }>({});
 
   const getArtifactDetails = async () => {
-    const artDetailsURL = `${BACKEND_URL}/api/artifact/${rowData.md5}`;
+    const artDetailsURL = `${BACKEND_URL}/api/artifact/${rowData._id}`;
     const { data } = await axios.get(artDetailsURL);
     setArtifactDetails((prev) => ({
       ...prev,
-      [rowData.md5]: data.data,
+      [rowData._id]: data.data,
     }));
   };
 
   const isArtifact = !!rowData.mainStatKey;
 
   useEffect(() => {
-    if (!isArtifact || artifactDetails?.[rowData.md5]) return;
+    if (!isArtifact || artifactDetails?.[rowData._id]) return;
     getArtifactDetails();
-  }, [rowData.md5]);
+  }, [rowData._id]);
 
   useEffect(() => {
     if (!row) return;
@@ -66,7 +66,7 @@ export const TableHoverElement: React.FC<TableHoverElementProps> = ({
   if (isArtifact) {
     const wrapperClassNames = [hide ? "fade-out" : "fade-in"].join(" ").trim();
 
-    const equippedOn = artifactDetails?.[rowData.md5]?.builds;
+    const equippedOn = artifactDetails?.[rowData._id]?.builds;
     return (
       <FollowCursor
         data={{

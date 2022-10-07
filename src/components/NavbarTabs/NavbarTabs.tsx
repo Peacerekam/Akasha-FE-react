@@ -4,7 +4,7 @@ import {LastProfilesContext} from "../../context/LastProfiles/LastProfilesContex
 import "./style.scss";
 
 export const NavbarTabs: React.FC = () => {
-  // @KM: @TODO: consider LocalStorage  for keeping tabs
+  // @TODO: consider LocalStorage  for keeping tabs
 
   const { lastProfiles, nicknameMap, removeTab, updateLastProfiles } = useContext(LastProfilesContext);
   const navigate = useNavigate();
@@ -28,7 +28,6 @@ export const NavbarTabs: React.FC = () => {
             className={`navbar-tab ${hash.endsWith(uid) ? "active-tab" : ""}`}
           >
             <a
-              // @KM: @TODO: classname fade-in ofsome kind
               href={`${pathname}#/profile/${uid}`}
               onClick={(event) => {
                 event.preventDefault();

@@ -66,13 +66,8 @@ $substats: "flathp", "hp_", "flatatk", "atk_", "flatdef", "def_", "critrate",
   // overflow: hidden;
 }
 
-// @KM: reimplement later
-.hide-on-table {
-  display: none;
-}
-
 .custom-table-wrapper {
-  // @KM: @TODO: use perfect scroll instead?
+  // @TODO: use perfect scroll instead?
   // overflow: auto;
   &.disable-table {
     table.custom-table {
@@ -103,8 +98,6 @@ $substats: "flathp", "hp_", "flatatk", "atk_", "flatdef", "def_", "critrate",
   }
 
   table.custom-table {
-    // @KM: @TODO: whats the reason for this hidden
-    // overflow: hidden;
     width: 100%;
     text-align: left;
     // border: 0;

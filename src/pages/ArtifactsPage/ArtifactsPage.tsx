@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import {
   allSubstatsInOrder,
@@ -36,28 +36,14 @@ export const ArtifactsPage: React.FC = () => {
 
   const pathname = window.location.pathname;
 
-  const ARTIFACT_COLUMNS: TableColumn<ArtifactColumns>[] = [
+  const ARTIFACT_COLUMNS: TableColumn<ArtifactColumns>[] = useMemo(() => [
     {
       name: "#",
       width: "0px",
       cell: (row) => {
         return (
-          <div>
-            <div className="hide-on-table">
-              <a
-                className="hide-text-decoration"
-                onClick={(event) => {
-                  event.preventDefault();
-                  navigate(`/profile/${row.uid}`);
-                }}
-                href={`${pathname}#/profile/${row.uid}`}
-              >
-                <Artifact artifact={row} width={180} />
-              </a>
-            </div>
-            <div className="hide-on-custom">
-              <span>{row.index}</span>
-            </div>
+          <div className="hide-on-custom">
+            <span>{row.index}</span>
           </div>
         );
       },
@@ -181,7 +167,7 @@ export const ArtifactsPage: React.FC = () => {
         );
       },
     },
-  ];
+  ], []);
 
   return (
     <div className="flex">

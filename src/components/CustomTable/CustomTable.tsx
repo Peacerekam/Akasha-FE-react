@@ -74,7 +74,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   );
 
   const appendParamsToURL = () => {
-    let tmp: string[] = [];
+    const tmp: string[] = [];
     for (const key of Object.keys(params)) {
       const value = (params as any)[key];
       if ((defaultParams as any)[key] === value) continue;
@@ -142,7 +142,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
   useEffect(() => {
     setRows((prev) => {
-      let newRows = prev.filter((row) => !row.isExpandRow);
+      const newRows = prev.filter((row) => !row.isExpandRow);
       for (const expandedRowId of expandedRows) {
         const index = newRows.findIndex((row) => row._id === expandedRowId);
         if (index === -1) continue;

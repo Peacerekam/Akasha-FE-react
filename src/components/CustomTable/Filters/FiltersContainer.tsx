@@ -36,8 +36,6 @@ const getRelativeCoords = (event: React.MouseEvent<HTMLElement>) => {
 const applyModalBodyStyle = ({ offsetX, offsetY }: any) => {
   const _body = document.querySelector("body");
   if (!_body) return;
-
-  // @KM: @TODO: when we got ref, apply this to ref instead of body
   _body.style.setProperty("--modal-offset-x", `${offsetX}px`);
   _body.style.setProperty("--modal-offset-y", `${offsetY}px`);
   _body?.classList.add("overflow-hidden");
@@ -229,30 +227,9 @@ export const FiltersContainer = ({
         handleAddFilter={handleAddFilter}
         handleModifyFilter={handleModifyFilter}
       />
-      {/* @KM: perfect scroll here?  */}
+      {/* @TODO: perfect scroll here?  */}
       <div className="filters-container">
         <div className="pills-container">
-          {/* {pills.length > 0
-            ? pills.map((pill, index) => (
-                <span
-                  key={`${pill.name}-${pill.value}-${index}`}
-                  className="pill"
-                >
-                  <span
-                    className="pill-label"
-                    onClick={(event) => handleOpenFilters(event, index)}
-                  >
-                    {formatPillName(pill)}
-                  </span>
-                  <span
-                    className="pill-close"
-                    onClick={() => handleRemoveFilter(pill)}
-                  >
-                    ×
-                  </span>
-                </span>
-              ))
-            : null} */}
           <CustomQueryBuilder
             optionGroups={optionGroups}
             handleReplaceFilter={handleReplaceFilter}

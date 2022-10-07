@@ -80,7 +80,7 @@ export const getSubstatsInOrder = (
   const reordered: any[] = [];
   const arr = [...allSubstatsInOrder];
 
-  // @KM: cool feature but wont work in my case
+  // @TODO: cool feature but wont work in my case
   // if (unshiftKey) {
   //   const index = arr.indexOf(unshiftKey);
   //   if (index > -1) {
@@ -164,8 +164,8 @@ export const filtersQueryToArray = (value: string) => {
   const _tmp = value.split("[").slice(1);
   _tmp.forEach((str) => {
     const _vals = str.split("]");
-    let key = _vals[0];
-    let value = isNaN(+_vals[1]) ? _vals[1] : +_vals[1];
+    const key = _vals[0];
+    const value = isNaN(+_vals[1]) ? _vals[1] : +_vals[1];
     if (key === undefined || value === undefined) return;
 
     filters.push({

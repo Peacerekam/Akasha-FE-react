@@ -30,7 +30,7 @@ export const Artifact: React.FC<ArtifactProps> = ({
 }) => {
   const artifactBg = {
     5: ArtifactBackground,
-    // @KM: @TODO: add more background to artifacts
+    // @TODO: add more background to artifacts
     4: NoArtifact,
     3: NoArtifact,
     2: NoArtifact,
