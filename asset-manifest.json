@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/akasha/static/css/main.3617f7a7.css",
-    "main.js": "/akasha/static/js/main.2c97d138.js",
+    "main.css": "/akasha/static/css/main.0c06849c.css",
+    "main.js": "/akasha/static/js/main.582dbff0.js",
     "static/media/domain-background.jpg": "/akasha/static/media/domain-background.0a81fdf6664ed1cc2103.jpg",
     "static/media/Concept_Art_Liyue_Harbor.webp": "/akasha/static/media/Concept_Art_Liyue_Harbor.f8171af7664b92ab1f75.webp",
     "static/media/artifact-5star-bg.png": "/akasha/static/media/artifact-5star-bg.d3acf537af5dac14761d.png",
@@ -12,11 +12,11 @@
     "static/media/ROCK_ADD_HURT.png": "/akasha/static/media/ROCK_ADD_HURT.3c5a19c4deba2769e0e7.png",
     "static/media/ICE_ADD_HURT.png": "/akasha/static/media/ICE_ADD_HURT.94a0dd7a9e37418e45b2.png",
     "index.html": "/akasha/index.html",
-    "main.3617f7a7.css.map": "/akasha/static/css/main.3617f7a7.css.map",
-    "main.2c97d138.js.map": "/akasha/static/js/main.2c97d138.js.map"
+    "main.0c06849c.css.map": "/akasha/static/css/main.0c06849c.css.map",
+    "main.582dbff0.js.map": "/akasha/static/js/main.582dbff0.js.map"
   },
   "entrypoints": [
-    "static/css/main.3617f7a7.css",
-    "static/js/main.2c97d138.js"
+    "static/css/main.0c06849c.css",
+    "static/js/main.582dbff0.js"
   ]
 }
