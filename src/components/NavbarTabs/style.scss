@@ -25,7 +25,10 @@
     height: 32px;
     display: flex;
     position: relative;
+    opacity: 0;
     animation: slideIn 0.7s ease-in-out;
+    animation-delay: var(--slideDelay);
+    animation-fill-mode: forwards;
     background-color: #395b64;
   
     &:not(:first-child) {
