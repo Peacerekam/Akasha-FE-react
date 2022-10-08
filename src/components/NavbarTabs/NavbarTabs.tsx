@@ -14,7 +14,7 @@ export const NavbarTabs: React.FC = () => {
   const pathname = window.location.pathname;
 
   useEffect(() => {
-    updateLastProfiles(hash);
+    setTimeout(() => updateLastProfiles(hash), 1);
     if (lastProfiles.length > 0) setAnimationStagger(0);
   }, [hash]);
 
