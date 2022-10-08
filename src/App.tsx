@@ -7,6 +7,7 @@ import {
   BuildsPage,
   LeaderboardsPage,
   CategorySelectionPage,
+  DashboardPage,
 } from "./pages";
 
 import { Footer, Navbar, NavbarTabs } from "./components";
@@ -23,9 +24,7 @@ const App = () => {
             {/* Dashboard? */}
             <Route
               path="/"
-              element={
-                <>Working tabs: Artifacts, Builds, Leaderboards, My Profile</>
-              }
+              element={<DashboardPage />}
             />
 
             <Route path="/artifacts" element={<ArtifactsPage />} />
