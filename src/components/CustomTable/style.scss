@@ -6,7 +6,7 @@ $substats: "flathp", "hp_", "flatatk", "atk_", "flatdef", "def_", "critrate",
 @each $substat in $substats {
   .highlight-#{$substat} {
     .substat {
-      opacity: 0.4;
+      opacity: 0.5;
     }
     .#{$substat} {
       opacity: 1;

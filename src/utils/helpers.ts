@@ -146,6 +146,26 @@ export const isPercent = (key: string) => {
   );
 };
 
+export const getSubstatEfficiency = (key: string, value: number) => {
+  console.log(key, value);
+  const maxValue =
+    {
+      critdmg: 46.8,
+      critrate: 23.4,
+      hp_: 34.8,
+      atk_: 34.8,
+      def_: 43.8,
+      flathp: 1794,
+      flatatk: 114,
+      flatdef: 138,
+      elementalmastery: 138,
+      energyrecharge: 39,
+    }[key] || 1000;
+
+  const subEff = value / maxValue;
+  return Math.min(1, Math.max(0.2, subEff * 2.5)).toFixed(2);
+};
+
 export const arrayPushOrSplice = (prev: any[], element: any) => {
   const arr = [...prev];
   if (arr.includes(element)) {

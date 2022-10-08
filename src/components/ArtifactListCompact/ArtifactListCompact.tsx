@@ -8,6 +8,7 @@ import {
   isPercent,
   getInGameSubstatValue,
   BACKEND_URL,
+  getSubstatEfficiency,
 } from "../../utils/helpers";
 import { StatIcon } from "../StatIcon";
 import "./style.scss";
@@ -68,14 +69,27 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
                 );
                 const isCV = key.includes("Crit");
 
+                const normSubName = normalizeText(key.replace("substats", ""));
+                const classNames = [
+                  "substat flex nowrap gap-5",
+                  normalizeText(normSubName),
+                  isCV ? "critvalue" : "",
+                ]
+                  .join(" ")
+                  .trim();
+
+                const opacity = getSubstatEfficiency(
+                  normSubName,
+                  artifact.substats[key]
+                );
+
                 return (
                   <div
                     key={normalizeText(key)}
-                    className={`substat flex nowrap ${normalizeText(
-                      key.replace("substats", "")
-                    )} ${isCV ? "critvalue" : ""}`}
+                    className={classNames}
+                    style={{ opacity: opacity }}
                   >
-                    <span style={{ marginRight: "5px" }}>
+                    <span>
                       <StatIcon name={key} />
                     </span>
                     {substatValue}

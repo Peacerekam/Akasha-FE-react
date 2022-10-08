@@ -3,6 +3,7 @@ import {
   getArtifactCvClassName,
   getCharacterCvColor,
   getInGameSubstatValue,
+  getSubstatEfficiency,
   isPercent,
   normalizeText,
 } from "../../utils/helpers";
@@ -82,12 +83,17 @@ export const Artifact: React.FC<ArtifactProps> = ({
             key
           );
           const isCV = key.includes("Crit");
+          const normSubName = normalizeText(key);
+          const opacity = getSubstatEfficiency(
+            normSubName,
+            artifact.substats[key]
+          );
+
           return (
             <div
-              key={normalizeText(key)}
-              className={`substat ${normalizeText(key)} ${
-                isCV ? "critvalue" : ""
-              }`}
+              style={{ opacity: opacity }}
+              key={normSubName}
+              className={`substat ${normSubName} ${isCV ? "critvalue" : ""}`}
             >
               {substatName.replace("Flat ", "")}+{substatValue}
               {isPercent(key) ? "%" : ""}
