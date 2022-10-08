@@ -17,7 +17,6 @@ export const NavbarTabs: React.FC = () => {
     updateLastProfiles(hash)
   }, [hash]);
 
-
   return (
     <div className="navbar-tabs">
       {lastProfiles.map((uid) => {

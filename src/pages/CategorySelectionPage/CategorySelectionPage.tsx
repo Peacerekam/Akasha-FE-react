@@ -85,14 +85,14 @@ export const CategorySelectionPage: React.FC = () => {
             if (calcNames.length === 0) return <></>;
             return (
               <div
-                key={`${category.characterName}=${index}`}
+                key={`${category.characterName}-${index}`}
                 className="block-highlight"
                 style={{
                   width: 250,
+                  // flexGrow: 1,
                   padding: 20,
                   textAlign: "center",
                   minWidth: 240,
-                  minHeight: 350,
                 }}
               >
                 <div
@@ -144,14 +144,6 @@ export const CategorySelectionPage: React.FC = () => {
                                       {/* <span>{calc.weapon.name}</span> */}
                                     </span>
                                   )}
-                                  <span
-                                    style={{
-                                      width: 200,
-                                      whiteSpace: "break-spaces",
-                                      // overflow: "hidden",
-                                      // textOverflow: "ellipsis",
-                                    }}
-                                  ></span>
                                 </a>
                               </span>
                             );

@@ -360,7 +360,9 @@ export const LeaderboardsPage: React.FC = () => {
 
     const squishNameFactor = {
       transform: `scaleX(${
-        player?.owner?.nickname?.length > 8 ? 8 / player?.owner?.nickname?.length : 1
+        player?.owner?.nickname?.length > 8
+          ? 8 / player?.owner?.nickname?.length
+          : 1
       })`,
     };
 
@@ -519,12 +521,14 @@ export const LeaderboardsPage: React.FC = () => {
                 </div>
                 <div style={{ margin: 10 }}>
                   <div>
-                    Weapon:
-                    <img
-                      className="table-icon"
-                      src={displayCategory.weapon?.icon}
-                    />
-                    {displayCategory.weapon?.name}
+                    <span className="flex gap-10">
+                      Weapon:
+                      <WeaponMiniDisplay
+                        icon={displayCategory.weapon?.icon || ""}
+                        refinement={displayCategory.weapon?.refinement || 1}
+                      />
+                      {displayCategory.weapon?.name}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -532,35 +536,36 @@ export const LeaderboardsPage: React.FC = () => {
           </div>
         </div>
         <div className="relative other-calculations-display block-highlight highlight-tile-container">
-          {false && sortedCategoriesWithSameCharacter.map((c, index) => {
-            const thisName = c._category.calculation.short;
-            const weaponicon = c._category.weapon?.icon ?? "";
-            const weaponRefinement = c._category.weapon?.refinement ?? 0;
+          {false &&
+            sortedCategoriesWithSameCharacter.map((c, index) => {
+              const thisName = c._category.calculation.short;
+              const weaponicon = c._category.weapon?.icon ?? "";
+              const weaponRefinement = c._category.weapon?.refinement ?? 0;
 
-            return (
-              <a
-                title={c._title}
-                className="highlight-tile"
-                onClick={(event) => {
-                  event.preventDefault();
-                  navigate(`/leaderboards/${c.id}`);
-                }}
-                href={`${pathname}#/leaderboards/${c.id}`}
-              >
-                <div className="highlight-tile-pill">{thisName}</div>
-                <div className="flex">
-                  <img
-                    className="table-icon"
-                    src={c._category.character.icon}
-                  />
-                  <WeaponMiniDisplay
-                    icon={weaponicon}
-                    refinement={weaponRefinement}
-                  />
-                </div>
-              </a>
-            );
-          })}
+              return (
+                <a
+                  title={c._title}
+                  className="highlight-tile"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    navigate(`/leaderboards/${c.id}`);
+                  }}
+                  href={`${pathname}#/leaderboards/${c.id}`}
+                >
+                  <div className="highlight-tile-pill">{thisName}</div>
+                  <div className="flex">
+                    <img
+                      className="table-icon"
+                      src={c._category.character.icon}
+                    />
+                    <WeaponMiniDisplay
+                      icon={weaponicon}
+                      refinement={weaponRefinement}
+                    />
+                  </div>
+                </a>
+              );
+            })}
         </div>
       </div>
 

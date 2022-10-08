@@ -10,6 +10,8 @@ type CalculationResponse = {
   outOf: number;
   name: string;
   details: string;
+  short: string;
+  icon: string;
   weapon: { name: string; icon: string; refinement?: number };
   stats: any;
 };
@@ -73,12 +75,59 @@ export const CalculationList: React.FC<CalculationListProps> = ({ row }) => {
     [JSON.stringify(calculationIds)]
   );
 
+  // const tilesList = useMemo(
+  //   () =>
+  //     calculationIds.map((id: any, index) => {
+  //       const calc: CalculationResponse = calculations[id];
+  //       const { name, ranking, outOf, weapon, short } = calc;
+  //       return (
+  //         <div key={`${name}-${weapon.name}`}>
+  //           <a
+  //             title={`${calc.name} - ${weapon.name} R${
+  //               weapon?.refinement || 1
+  //             }`}
+  //             className="highlight-tile"
+  //             onClick={(event) => {
+  //               event.preventDefault();
+  //               // navigate(`/leaderboards/${id}`);
+  //             }}
+  //             // href={`${pathname}#/leaderboards/${id}`}
+  //           >
+  //             <div className="highlight-tile-pill">{short ? short : "---"}</div>
+  //             <div className="flex">
+  //               <img
+  //                 alt="Icon"
+  //                 className="table-icon"
+  //                 src={calc.icon}
+  //               />
+  //               <WeaponMiniDisplay
+  //                 icon={weapon.icon}
+  //                 refinement={weapon?.refinement || 1}
+  //               />
+  //             </div>
+  //             <div>
+  //               {ranking ? `top ${Math.ceil((ranking / outOf) * 100)}%` : ""}
+  //             </div>
+  //             <span>
+  //               {ranking ?? "---"}
+  //               <span className="opacity-5">/{outOf}</span>
+  //             </span>
+  //           </a>
+  //         </div>
+  //       );
+  //     }),
+  //   [calculationIds]
+  // );
+
   return (
     <div className="expanded-row flex">
       {calculationIds.length > 0 ? (
-        <table cellSpacing={0} className="calculation-list">
-          <tbody>{compactList}</tbody>
-        </table>
+        <>
+          {/* <div className="highlight-tile-container">{tilesList}</div> */}
+          <table cellSpacing={0} className="calculation-list">
+            <tbody>{compactList}</tbody>
+          </table>
+        </>
       ) : (
         "no calculations found"
       )}

@@ -22,8 +22,26 @@ const LastProfilesContextProvider: React.FC<{ children: any }> = ({
   children,
 }) => {
   const [lastProfiles, setLastProfiles] = useState<any[]>([]);
-  const [nicknameMap, setNicknameMap] = useState<any>({});
+  const [nicknameMap, setNicknameMap] = useState<{ [key: string]: string }>({});
   const [_timeout, _setTimeout] = useState<any>();
+
+  useEffect(() => {
+    const combined = JSON.parse(localStorage.getItem("navbarTabs") ?? "{}");
+    if (combined.lastProfiles) {
+      setLastProfiles(combined.lastProfiles);
+    }
+    if (combined.nicknameMap) {
+      setNicknameMap(combined.nicknameMap);
+    }
+  }, []);
+
+  useEffect(() => {
+    const combined = {
+      lastProfiles,
+      nicknameMap,
+    };
+    localStorage.setItem("navbarTabs", JSON.stringify(combined));
+  }, [JSON.stringify(lastProfiles), JSON.stringify(nicknameMap)]);
 
   const updateLastProfiles = (hash: string) => {
     if (_timeout) clearTimeout(_timeout);

@@ -85,6 +85,7 @@ export const CalculationResultWidget: React.FC<
         return (
           <div key={`${name}-${weapon.name}`} >
             <a
+              title={`${calc.name} - ${weapon.name} R${weapon?.refinement || 1}`}
               className="highlight-tile"
               onClick={(event) => {
                 event.preventDefault();
