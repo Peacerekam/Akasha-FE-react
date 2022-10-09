@@ -37,6 +37,10 @@ export const ProfilePage: React.FC = () => {
     artifacts: any[];
     characters: any[];
     account: any;
+    error?: {
+      title: string;
+      description: string;
+    };
   }>({ artifacts: [], characters: [], account: null });
 
   const { uid } = useParams();
@@ -76,255 +80,261 @@ export const ProfilePage: React.FC = () => {
   } as React.CSSProperties;
 
   // move this somewhere else i think
-  const ARTIFACT_COLUMNS: TableColumn<ArtifactColumns>[] = useMemo(() => [
-    {
-      name: "#",
-      width: "0px",
-      cell: (row) => {
-        return <span>{row.index}</span>;
+  const ARTIFACT_COLUMNS: TableColumn<ArtifactColumns>[] = useMemo(
+    () => [
+      {
+        name: "#",
+        width: "0px",
+        cell: (row) => {
+          return <span>{row.index}</span>;
+        },
       },
-    },
-    {
-      name: "Name",
-      sortable: true,
-      sortField: "name",
-      cell: (row) => {
-        return (
-          <div className="table-icon-text-pair">
-            <img className="table-icon" src={row.icon} />{" "}
-            <span
-              style={{
-                color: {
-                  5: "orange",
-                  4: "blueviolet",
-                  3: "cornflowerblue",
-                  2: "greenyellow",
-                  1: "gray",
-                }[row.stars],
-              }}
-            >
-              {/* <div style={{ marginBottom: '5px'}}>{"⭐".repeat(row.stars)}</div> */}
-              <div>
-                {row.name}
-                {/* {row.level ? `+${row.level - 1}` : ""} */}
-              </div>
-            </span>
-          </div>
-        );
-      },
-    },
-    {
-      name: "Main stat",
-      sortable: true,
-      sortField: "mainStatKey",
-      cell: (row) => {
-        const key = row.mainStatKey.replace("Flat ", "").replace("%", "");
-        const isPercenrage =
-          row.mainStatKey.endsWith("%") ||
-          row.mainStatKey?.endsWith("Bonus") ||
-          ["Energy Recharge", "Crit RATE", "Crit DMG"].includes(
-            row.mainStatKey
+      {
+        name: "Name",
+        sortable: true,
+        sortField: "name",
+        cell: (row) => {
+          return (
+            <div className="table-icon-text-pair">
+              <img className="table-icon" src={row.icon} />{" "}
+              <span
+                style={{
+                  color: {
+                    5: "orange",
+                    4: "blueviolet",
+                    3: "cornflowerblue",
+                    2: "greenyellow",
+                    1: "gray",
+                  }[row.stars],
+                }}
+              >
+                {/* <div style={{ marginBottom: '5px'}}>{"⭐".repeat(row.stars)}</div> */}
+                <div>
+                  {row.name}
+                  {/* {row.level ? `+${row.level - 1}` : ""} */}
+                </div>
+              </span>
+            </div>
           );
-        return (
-          <div className="nowrap">
-            {row.mainStatValue}
-            {isPercenrage ? "%" : ""} {key}
-          </div>
-        );
+        },
       },
-    },
-    ...[0, 1, 2, 3].map((i) => ({
-      name: <span className="weak-filler-line" />,
-      sortable: true,
-      sortFields: allSubstatsInOrder.map((key) => `substats.${key}`),
-      colSpan: i === 0 ? 4 : 0,
-      width: "100px",
-      getDynamicTdClassName: (row: any) => {
-        const reordered = getSubstatsInOrder(row);
-        const key = reordered?.[i];
-        if (!key) return "";
-        return normalizeText(key);
+      {
+        name: "Main stat",
+        sortable: true,
+        sortField: "mainStatKey",
+        cell: (row) => {
+          const key = row.mainStatKey.replace("Flat ", "").replace("%", "");
+          const isPercenrage =
+            row.mainStatKey.endsWith("%") ||
+            row.mainStatKey?.endsWith("Bonus") ||
+            ["Energy Recharge", "Crit RATE", "Crit DMG"].includes(
+              row.mainStatKey
+            );
+          return (
+            <div className="nowrap">
+              {row.mainStatValue}
+              {isPercenrage ? "%" : ""} {key}
+            </div>
+          );
+        },
       },
-      cell: (row: any) => {
-        const reordered = getSubstatsInOrder(row);
-        const key = reordered?.[i];
+      ...[0, 1, 2, 3].map((i) => ({
+        name: <span className="weak-filler-line" />,
+        sortable: true,
+        sortFields: allSubstatsInOrder.map((key) => `substats.${key}`),
+        colSpan: i === 0 ? 4 : 0,
+        width: "100px",
+        getDynamicTdClassName: (row: any) => {
+          const reordered = getSubstatsInOrder(row);
+          const key = reordered?.[i];
+          if (!key) return "";
+          return normalizeText(key);
+        },
+        cell: (row: any) => {
+          const reordered = getSubstatsInOrder(row);
+          const key = reordered?.[i];
 
-        if (!key) return <></>;
+          if (!key) return <></>;
 
-        const substatValue = getInGameSubstatValue(row.substats[key], key);
-        const isCV = key.includes("Crit");
+          const substatValue = getInGameSubstatValue(row.substats[key], key);
+          const isCV = key.includes("Crit");
 
-        return (
-          <div
-            key={normalizeText(key)}
-            className={`substat flex nowrap ${normalizeText(key)} ${
-              isCV ? "critvalue" : ""
-            }`}
-          >
-            <span style={{ marginRight: "5px" }}>
-              <StatIcon name={key} />
-            </span>
-            {substatValue}
-            {isPercent(key) ? "%" : ""}
-          </div>
-        );
+          return (
+            <div
+              key={normalizeText(key)}
+              className={`substat flex nowrap ${normalizeText(key)} ${
+                isCV ? "critvalue" : ""
+              }`}
+            >
+              <span style={{ marginRight: "5px" }}>
+                <StatIcon name={key} />
+              </span>
+              {substatValue}
+              {isPercent(key) ? "%" : ""}
+            </div>
+          );
+        },
+      })),
+      {
+        name: "Crit Value",
+        sortable: true,
+        sortField: "critValue",
+        width: "100px",
+        cell: (row) => {
+          const textColor = getArtifactCvColor(row.critValue);
+          return (
+            <span style={{ color: textColor }}>{row.critValue.toFixed(1)}</span>
+          );
+        },
       },
-    })),
-    {
-      name: "Crit Value",
-      sortable: true,
-      sortField: "critValue",
-      width: "100px",
-      cell: (row) => {
-        const textColor = getArtifactCvColor(row.critValue);
-        return (
-          <span style={{ color: textColor }}>{row.critValue.toFixed(1)}</span>
-        );
-      },
-    },
-  ], []);
+    ],
+    []
+  );
 
   // move this somewhere else i think
-  const BUILDS_COLUMNS: TableColumn<BuildsColumns>[] = useMemo(() => [
-    {
-      name: "#",
-      width: "0px",
-      cell: (row) => {
-        return <span>{row.index}</span>;
+  const BUILDS_COLUMNS: TableColumn<BuildsColumns>[] = useMemo(
+    () => [
+      {
+        name: "#",
+        width: "0px",
+        cell: (row) => {
+          return <span>{row.index}</span>;
+        },
       },
-    },
-    {
-      name: "Name",
-      sortable: true,
-      sortField: "name",
-      width: "180px",
-      cell: (row) => {
-        return (
-          <div className="table-icon-text-pair">
-            <img className="table-icon" src={row.icon} />
-            {row.type !== "current" ? (
-              <ReplaceRowDataOnHover data={row.name} onHoverData={row.type} />
-            ) : (
-              row.name
-            )}
-          </div>
-        );
-      },
-    },
-    {
-      name: "Constellation",
-      width: "100px",
-      sortable: true,
-      sortField: "constellation",
-      cell: (row) => {
-        const constellation = row.constellation ?? 0;
-
-        return (
-          <div className="table-icon-text-pair c-badge-wrapper">
-            <div className={`c-badge c-${constellation}-badge`}>
-              C{constellation}
+      {
+        name: "Name",
+        sortable: true,
+        sortField: "name",
+        width: "180px",
+        cell: (row) => {
+          return (
+            <div className="table-icon-text-pair">
+              <img className="table-icon" src={row.icon} />
+              {row.type !== "current" ? (
+                <ReplaceRowDataOnHover data={row.name} onHoverData={row.type} />
+              ) : (
+                row.name
+              )}
             </div>
-          </div>
-        );
+          );
+        },
       },
-    },
-    {
-      name: "Weapon",
-      width: "60px",
-      sortable: true,
-      sortField: "weapon.name",
-      cell: (row) => {
-        const refinement =
-          (row.weapon.weaponInfo.refinementLevel.value ?? 0) + 1;
-        return (
-          <WeaponMiniDisplay icon={row.weapon.icon} refinement={refinement} />
-        );
+      {
+        name: "Constellation",
+        width: "100px",
+        sortable: true,
+        sortField: "constellation",
+        cell: (row) => {
+          const constellation = row.constellation ?? 0;
+
+          return (
+            <div className="table-icon-text-pair c-badge-wrapper">
+              <div className={`c-badge c-${constellation}-badge`}>
+                C{constellation}
+              </div>
+            </div>
+          );
+        },
       },
-    },
-    {
-      name: "Sets",
-      sortField: "artifactSetsFlat",
-      sortable: true,
-      width: "80px",
-      cell: (row) => {
-        return <DisplaySets artifactSets={row.artifactSets} />;
+      {
+        name: "Weapon",
+        width: "60px",
+        sortable: true,
+        sortField: "weapon.name",
+        cell: (row) => {
+          const refinement =
+            (row.weapon.weaponInfo.refinementLevel.value ?? 0) + 1;
+          return (
+            <WeaponMiniDisplay icon={row.weapon.icon} refinement={refinement} />
+          );
+        },
       },
-    },
-    {
-      name: "Crit Ratio",
-      sortable: true,
-      sortField: "critValue",
-      cell: (row) => {
-        return <CritRatio stats={row.stats} overrideCV={row.critValue} />;
+      {
+        name: "Sets",
+        sortField: "artifactSetsFlat",
+        sortable: true,
+        width: "80px",
+        cell: (row) => {
+          return <DisplaySets artifactSets={row.artifactSets} />;
+        },
       },
-    },
-    {
-      name: "Max HP",
-      sortable: true,
-      sortField: "stats.maxHp.value",
-      cell: (row) => {
-        return (
-          <div className="flex gap-3 nowrap">
-            <StatIcon name="HP" />
-            {row.stats.maxHp.value.toFixed(0)}
-          </div>
-        );
+      {
+        name: "Crit Ratio",
+        sortable: true,
+        sortField: "critValue",
+        cell: (row) => {
+          return <CritRatio stats={row.stats} overrideCV={row.critValue} />;
+        },
       },
-    },
-    {
-      name: "ATK",
-      sortable: true,
-      sortField: "stats.atk.value",
-      cell: (row) => {
-        return (
-          <div className="flex gap-3 nowrap">
-            <StatIcon name="ATK" />
-            {row.stats.atk.value.toFixed(0)}
-          </div>
-        );
+      {
+        name: "Max HP",
+        sortable: true,
+        sortField: "stats.maxHp.value",
+        cell: (row) => {
+          return (
+            <div className="flex gap-3 nowrap">
+              <StatIcon name="HP" />
+              {row.stats.maxHp.value.toFixed(0)}
+            </div>
+          );
+        },
       },
-    },
-    {
-      name: "DEF",
-      sortable: true,
-      sortField: "stats.def.value",
-      cell: (row) => {
-        return (
-          <div className="flex gap-3 nowrap">
-            <StatIcon name="DEF" />
-            {row.stats.def.value.toFixed(0)}
-          </div>
-        );
+      {
+        name: "ATK",
+        sortable: true,
+        sortField: "stats.atk.value",
+        cell: (row) => {
+          return (
+            <div className="flex gap-3 nowrap">
+              <StatIcon name="ATK" />
+              {row.stats.atk.value.toFixed(0)}
+            </div>
+          );
+        },
       },
-    },
-    {
-      name: "EM",
-      sortable: true,
-      sortField: "stats.elementalMastery.value",
-      cell: (row) => {
-        return (
-          <div className="flex gap-3 nowrap">
-            <StatIcon name="Elemental Mastery" />
-            {+row.stats.elementalMastery.value.toFixed(0) || 0}
-          </div>
-        );
+      {
+        name: "DEF",
+        sortable: true,
+        sortField: "stats.def.value",
+        cell: (row) => {
+          return (
+            <div className="flex gap-3 nowrap">
+              <StatIcon name="DEF" />
+              {row.stats.def.value.toFixed(0)}
+            </div>
+          );
+        },
       },
-    },
-    {
-      name: "ER%",
-      sortable: true,
-      sortField: "stats.energyRecharge.value",
-      cell: (row) => {
-        return (
-          <div className="flex gap-3 nowrap">
-            <StatIcon name="Energy Recharge" />
-            {(row.stats.energyRecharge.value * 100).toFixed(1)}%
-            {/* {(row.stats.energyRecharge.value * 100).toFixed(1)}% */}
-          </div>
-        );
+      {
+        name: "EM",
+        sortable: true,
+        sortField: "stats.elementalMastery.value",
+        cell: (row) => {
+          return (
+            <div className="flex gap-3 nowrap">
+              <StatIcon name="Elemental Mastery" />
+              {+row.stats.elementalMastery.value.toFixed(0) || 0}
+            </div>
+          );
+        },
       },
-    },
-  ], []);
+      {
+        name: "ER%",
+        sortable: true,
+        sortField: "stats.energyRecharge.value",
+        cell: (row) => {
+          return (
+            <div className="flex gap-3 nowrap">
+              <StatIcon name="Energy Recharge" />
+              {(row.stats.energyRecharge.value * 100).toFixed(1)}%
+              {/* {(row.stats.energyRecharge.value * 100).toFixed(1)}% */}
+            </div>
+          );
+        },
+      },
+    ],
+    []
+  );
 
   // @TODO: sum them on server side so we can sort by that?
   const sumOfAchievementPoints = data.account?.achievements?.reduce(
@@ -333,7 +343,7 @@ export const ProfilePage: React.FC = () => {
     0
   );
 
-  const renderGenshinCard = useMemo(
+  const displayGenshinCard = useMemo(
     () =>
       data.account?.playerInfo ? (
         <div className="genshin-user-card">
@@ -373,6 +383,22 @@ export const ProfilePage: React.FC = () => {
       ),
     [JSON.stringify(data.account)]
   );
+
+  if (data.error) {
+    return (
+      <div className="error-msg">
+        <div className="error-title">{data.error.title}</div>
+        <div className="error-desc">
+          {data.error.description
+            .split(".")
+            .filter((d) => d)
+            .map((block) => (
+              <div>{block}.</div>
+            ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={cssVariables}>
@@ -433,7 +459,7 @@ export const ProfilePage: React.FC = () => {
             revealCondition={data.account}
           />
           <div className="flex gap-10 nowrap">
-            {renderGenshinCard}
+            {displayGenshinCard}
             <div className="profile-highlights">
               {data.account && <CalculationResultWidget uid={uid} />}
             </div>

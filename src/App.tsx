@@ -10,22 +10,19 @@ import {
   DashboardPage,
 } from "./pages";
 
-import { Footer, Navbar, NavbarTabs } from "./components";
+import { Footer, Navbar, NavbarTabs, NotificationBar } from "./components";
 import { LastProfilesContextProvider } from "./context/LastProfiles/LastProfilesContext";
 
 const App = () => {
   return (
     <LastProfilesContextProvider>
       <HashRouter>
+        <NotificationBar />
         <Navbar />
         <NavbarTabs />
         <div className="content-wrapper">
           <Routes>
-            {/* Dashboard? */}
-            <Route
-              path="/"
-              element={<DashboardPage />}
-            />
+            <Route path="/" element={<DashboardPage />} />
 
             <Route path="/artifacts" element={<ArtifactsPage />} />
             <Route path="/builds" element={<BuildsPage />} />

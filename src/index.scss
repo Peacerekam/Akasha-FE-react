@@ -172,6 +172,26 @@ body {
   animation-fill-mode: forwards;
 }
 
+.error-msg {
+  text-align: center;
+  margin: 150px auto;
+  max-width: 1000px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  .error-title {
+    max-width: 800px;
+    font-family: "GenshinFont";
+    font-size: 45px;
+  }
+  .error-desc {
+    max-width: 750px;
+    margin-top: 20px;
+    font-size: 25px;
+    opacity: 0.65;
+  }
+}
+
 // @TODO: export podium to diff component
 @keyframes rungRaise {
   0% {

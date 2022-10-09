@@ -4,6 +4,8 @@ import React, { useMemo } from "react";
 import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
 import { StylizedContentBlock } from "../../components/StylizedContentBlock";
 
+import "./style.scss"
+
 export const DashboardPage: React.FC = () => {
   // const navigate = useNavigate();
   // const pathname = window.location.pathname;

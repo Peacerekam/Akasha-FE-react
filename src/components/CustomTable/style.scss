@@ -92,6 +92,9 @@ $substats: "flathp", "hp_", "flatatk", "atk_", "flatdef", "def_", "critrate",
           display: flex;
           justify-content: center;
           align-items: center;
+          td {
+            pointer-events: none;
+          }
         }
       }
     }

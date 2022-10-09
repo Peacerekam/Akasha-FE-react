@@ -1,0 +1,35 @@
+.notification-bar {
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #d32f2f;
+  color: white;
+  font-weight: 600;
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  cursor: pointer;
+  transition: 0.5s ease-in-out;
+  &.reveal {
+    max-height: 40px;
+  }
+  &.hide {
+    max-height: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    .notification-text {
+      opacity: 0;
+    }
+  }
+  .notification-text {
+    transition: 0.5s ease-in-out;
+    opacity: 1;
+    width: 100%;
+  }
+  .close-notification {
+    float: right;
+    margin-right: 16px;
+    margin-left: 16px;
+  }
+}

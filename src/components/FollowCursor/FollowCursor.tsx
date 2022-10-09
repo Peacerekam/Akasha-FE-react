@@ -28,6 +28,8 @@ export const FollowCursor: React.FC<FollowCursorProps> = ({
         clientY: event.clientY,
       });
     };
+
+    // test "pointermove" later?
     window.addEventListener("mousemove", handleWindowMouseMove);
 
     return () => {

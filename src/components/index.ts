@@ -15,3 +15,4 @@ export * from "./CalculationList";
 export * from "./Pagination";
 export * from "./ArtifactListCompact";
 export * from "./ReplaceRowDataOnHover";
+export * from "./NotificationBar";

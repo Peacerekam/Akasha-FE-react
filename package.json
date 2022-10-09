@@ -2,7 +2,7 @@
   "name": "akasha-system",
   "version": "0.1.0",
   "private": true,
-  "homepage": "/akasha",
+  "homepage": "/akasha/",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.2.0",
     "@fortawesome/free-solid-svg-icons": "^6.2.0",
