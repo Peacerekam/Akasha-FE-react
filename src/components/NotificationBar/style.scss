@@ -1,6 +1,7 @@
 .notification-bar {
   position: sticky;
   top: 0;
+  z-index: 9999;
   overflow: hidden;
   display: flex;
   justify-content: center;
