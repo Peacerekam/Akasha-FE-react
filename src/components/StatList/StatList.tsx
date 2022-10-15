@@ -4,7 +4,7 @@ import "./style.scss";
 
 type StatListProps = {
   row: any;
-  currentCategory: string;
+  currentCategory?: string;
   showCharacter: boolean;
   showWeapon: boolean;
 };

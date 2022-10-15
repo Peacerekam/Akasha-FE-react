@@ -36,8 +36,12 @@ const LastProfilesContextProvider: React.FC<{ children: any }> = ({
   }, []);
 
   useEffect(() => {
+    const nicknameMapKeys = Object.keys(nicknameMap);
+    const cleanedUpLastProfiles = lastProfiles.filter((uid) =>
+      nicknameMapKeys.includes(uid)
+    );
     const combined = {
-      lastProfiles,
+      lastProfiles: cleanedUpLastProfiles,
       nicknameMap,
     };
     localStorage.setItem("navbarTabs", JSON.stringify(combined));
@@ -60,7 +64,8 @@ const LastProfilesContextProvider: React.FC<{ children: any }> = ({
   };
 
   const getNickname = async (uid: string) => {
-    const getNicknameURL = `${BACKEND_URL}/api/nickname/${uid}`;
+    const _uid = encodeURIComponent(uid);
+    const getNicknameURL = `${BACKEND_URL}/api/user/nickname/${_uid}`;
     const { data } = await axios.get(getNicknameURL);
     if (data.data.nickname === null) {
       const _t = setTimeout(() => getNickname(uid), 1000);
@@ -81,6 +86,11 @@ const LastProfilesContextProvider: React.FC<{ children: any }> = ({
         arr.splice(index, 1);
       }
       return arr;
+    });
+    setNicknameMap((prev) => {
+      const obj = { ...prev };
+      delete obj[uid];
+      return obj;
     });
   };
 

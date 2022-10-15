@@ -2,7 +2,7 @@
 .genshin-user-card,
 .profile-highlights {
   background: rgba(black, 0.3);
-  box-shadow: inset 0 0 15px 15px rgba(black, 0.1);//, inset 0 0 0 1px rgba(black, 0.4);
+  box-shadow: inset 0 0 15px 15px rgba(black, 0.1); //, inset 0 0 0 1px rgba(black, 0.4);
 }
 
 .profile-highlights {
@@ -10,6 +10,188 @@
   // max-width: 100%;
   overflow: hidden;
   // box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.custom-namecard-preview-wrapper {
+  margin-top: 20px;
+  margin-left: 20px;
+  font-size: 16px;
+  .patreons-only {
+    width: 310px;
+    margin-top: 10px;
+    text-align: center;
+    filter: drop-shadow(0 0 5px cyan);
+    a {
+      color: white;
+      font-weight: 600;
+    }
+  }
+  .custom-namecard-upload {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    .custom-file-upload {
+      width: 205px;
+      margin-top: 2px;
+      cursor: pointer;
+      &:hover {
+        > div {
+          &:first-child {
+            background-color: orange;
+            color: black;
+          }
+        }
+      }
+      > div {
+        white-space: nowrap;
+        border-radius: 5px;
+        padding: 2px;
+        margin: 0 3px;
+        text-align: center;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        &:first-child {
+          background-color: white;
+          color: #2c3333;
+          margin-bottom: 2px;
+        }
+        &:nth-child(2) {
+          font-style: italic;
+        }
+      }
+      &[disabled],
+      &:disabled {
+        opacity: 0 !important;
+      }
+    }
+    input {
+      display: none;
+    }
+    button {
+      &[disabled],
+      &:disabled {
+        opacity: 0.3 !important;
+      }
+    }
+  }
+}
+
+@keyframes noticeMeSenpai {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.profile-settings-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  // left: 15px;
+  z-index: 18;
+  animation: spin 15s linear infinite;
+  &:hover {
+    color: orange;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    right: -30px;
+    bottom: -30px;
+    background-color: orange;
+    animation: noticeMeSenpai 2s ease-in-out;
+    opacity: 0;
+    filter: blur(70px);
+    z-index: 17;
+    pointer-events: none;
+  }
+}
+
+.compact-table-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 30px;
+  margin-bottom: 10px;
+
+  .perfect-scroll-wrapper {
+    flex-grow: 1;
+    .build-search-input {
+      margin-top: 10px;
+      margin-bottom: 5px;
+      input {
+        width: calc(100% - 45px);
+        background-color: rgba(0, 0, 0, 0.4);
+        color: white;
+        border: none;
+        padding: 7px 15px;
+        outline: none;
+      }
+      .fake-placeholder {
+        position: absolute;
+        top: 0;
+        left: 0;
+        color: hsl(0, 0%, 50%);
+        padding: 7px 15px;
+        pointer-events: none;
+      }
+    }
+  }
+  .compact-table {
+    // overflow-y: scroll;
+    // overflow: hidden;
+    max-height: 390px;
+    flex-grow: 1;
+    width: 100%;
+    .compact-table-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      cursor: pointer;
+      margin-right: 15px;
+      padding-left: 4px;
+      &.has-custom-namecard {
+        box-shadow: inset 2px 0 0px 0px rgba(cyan, 0.5);
+        background-color: rgba(0, 255, 255, 0.05);
+        &:hover {
+          box-shadow: inset 2px 0 0px 0px rgba(cyan, 0.75);
+          background-color: rgba(cyan, 0.2);
+        }
+      }
+      &.selected-build-row {
+        color: orange;
+        box-shadow: inset 2px 0 0px 0px cyan;
+      }
+      &:nth-child(2n) {
+        background-color: rgba(0, 0, 0, 0.212);
+        &.has-custom-namecard {
+          background-color: rgba(cyan, 0.1);
+          &:hover {
+            background-color: rgba(cyan, 0.2);
+          }
+        }
+      }
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.333);
+        color: orange;
+      }
+      .compact-table-name {
+        flex-grow: 1;
+      }
+    }
+  }
 }
 
 .genshin-user-card {
@@ -98,4 +280,13 @@
     bottom: 8px;
     right: 10px;
   }
+}
+
+.build-name-input {
+  border: none;
+  padding: 3px 6px;
+  background: darken(#2c3333, 5);
+  color: orange;
+  outline: none;
+  width: calc(100% - 15px);
 }

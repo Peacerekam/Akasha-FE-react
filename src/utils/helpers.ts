@@ -6,15 +6,18 @@ const urls = {
   heroku: "https://akasha-backend.herokuapp.com",
 };
 
-export const BACKEND_URL = urls["heroku"];
+export const BACKEND_URL = urls["localhost"];
+
+export const PATREON_URL = "https://patreon.com/user?u=4105697";
+export const DISCORD_URL = "https://discord.gg/vmdPppZVa8";
 
 export const FETCH_ARTIFACTS_URL = `${BACKEND_URL}/api/artifacts`;
 export const FETCH_BUILDS_URL = `${BACKEND_URL}/api/builds/`;
 export const FETCH_LEADERBOARDS_URL = `${BACKEND_URL}/api/leaderboards`;
-export const FETCH_CATEGORIES_URL = `${BACKEND_URL}/api/getCategories`;
+export const FETCH_CATEGORIES_URL = `${BACKEND_URL}/api/leaderboards/categories`;
 
-export const FETCH_CHARACTER_FILTERS_URL = `${BACKEND_URL}/api/getTableCharacterFilters/`;
-export const FETCH_ARTIFACT_FILTERS_URL = `${BACKEND_URL}/api/getTableArtifactFilters/`;
+export const FETCH_CHARACTER_FILTERS_URL = `${BACKEND_URL}/api/filters/characters/`;
+export const FETCH_ARTIFACT_FILTERS_URL = `${BACKEND_URL}/api/filters/artifacts/`;
 
 export const normalizeText = (test: string) => {
   const regex = /[^A-Za-z0-9%]/g;
@@ -147,7 +150,6 @@ export const isPercent = (key: string) => {
 };
 
 export const getSubstatEfficiency = (key: string, value: number) => {
-  console.log(key, value);
   const maxValue =
     {
       critdmg: 46.8,

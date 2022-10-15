@@ -1,5 +1,8 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDiscord, faPatreon } from "@fortawesome/free-brands-svg-icons";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { DISCORD_URL, PATREON_URL } from "../../utils/helpers";
 import "./style.scss";
 
 const NAVIGATION = [
@@ -7,6 +10,11 @@ const NAVIGATION = [
   //   name: "Users",
   //   path: "/users",
   // },
+  {
+    /* this should be saved from discord auth */
+    name: "Profiles",
+    path: "/profile",
+  },
   {
     name: "Artifacts",
     path: "/artifacts",
@@ -24,9 +32,16 @@ const NAVIGATION = [
     path: "spacer",
   },
   {
-    /* this should be saved from discord auth */
-    name: "Mimee",
-    path: "/profile/701464050",
+    icon: <FontAwesomeIcon icon={faPatreon} size="1x" />,
+    name: "Patreon",
+    path: PATREON_URL,
+    external: true,
+  },
+  {
+    icon: <FontAwesomeIcon icon={faDiscord} size="1x" />,
+    name: "Discord",
+    path: DISCORD_URL,
+    external: true,
   },
   // {
   //   name: "Discord Auth",
@@ -51,7 +66,7 @@ export const Navbar: React.FC = () => {
         className="logo-wrapper"
         onClick={(event) => {
           event.preventDefault();
-          navigate('/');
+          navigate("/");
         }}
       >
         <span className="logo">
@@ -60,22 +75,24 @@ export const Navbar: React.FC = () => {
         </span>
       </a>
 
-      {NAVIGATION.map((nav) =>
+      {NAVIGATION.map((nav, i) =>
         nav.name === "spacer" ? (
           <div key={nav.name} className="navbar-spacer" />
         ) : (
           <a
-            key={nav.name}
+            key={`${nav.name}-${i}`}
             className={
               hash !== "/" && hash.startsWith(nav.path) ? "active-tab" : ""
             }
-            href={`${pathname}#${nav.path}`}
+            target={nav.external ? "_blank" : undefined}
+            href={nav.external ? nav.path : `${pathname}#${nav.path}`}
             onClick={(event) => {
+              if (nav.external) return;
               event.preventDefault();
               navigate(nav.path);
             }}
           >
-            {nav.name}
+            {nav.icon ? <span>{nav.icon}</span> : ""} {nav.name}
           </a>
         )
       )}

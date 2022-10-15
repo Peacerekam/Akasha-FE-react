@@ -21,15 +21,17 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-color: gray;
+  background-color: #2c3333;
   width: 300px;
   min-height: 100px;
   position: relative;
   overflow: hidden;
-  border-width: 3px;
+  border-width: 1px;
   border-style: solid;
-  padding: 5px 10px !important;
-  border-width: 1px !important;
+  padding: 5px 10px;
+  // @TODO: ???
+  top: 10px;
+  left: 10px;
 
   .above-darken {
     div {

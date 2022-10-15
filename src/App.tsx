@@ -1,5 +1,6 @@
 import React from "react";
 import { Routes, Route, HashRouter } from "react-router-dom";
+import { LastProfilesContextProvider } from "./context/LastProfiles/LastProfilesContext";
 
 import {
   ArtifactsPage,
@@ -10,8 +11,12 @@ import {
   DashboardPage,
 } from "./pages";
 
-import { Footer, Navbar, NavbarTabs, NotificationBar } from "./components";
-import { LastProfilesContextProvider } from "./context/LastProfiles/LastProfilesContext";
+import {
+  Footer,
+  Navbar,
+  NavbarTabs,
+  NotificationBar,
+} from "./components";
 
 const App = () => {
   return (

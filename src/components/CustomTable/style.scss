@@ -51,8 +51,22 @@ $substats: "flathp", "hp_", "flatatk", "atk_", "flatdef", "def_", "critrate",
   }
 }
 
+@keyframes fadeOutNatural {
+  0% {
+    opacity: 1 !important;
+  }
+  99% {
+    opacity: 0 !important;
+  }
+  100% {
+    opacity: 0;
+    display: none;
+  }
+}
+
 .table-icon {
   width: 25px;
+  height: 25px;
   // filter: drop-shadow(0px 0px 3px rgba(black, 0.5));
 }
 
@@ -64,6 +78,11 @@ $substats: "flathp", "hp_", "flatatk", "atk_", "flatdef", "def_", "critrate",
   animation: fadeOut 0.3s ease-in-out;
   animation-fill-mode: forwards;
   // overflow: hidden;
+}
+
+.fade-out-natural {
+  animation: fadeOutNatural 0.3s ease-in-out;
+  animation-fill-mode: forwards;
 }
 
 .custom-table-wrapper {

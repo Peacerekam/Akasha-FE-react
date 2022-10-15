@@ -3,24 +3,33 @@ import React, { useEffect, useState } from "react";
 import { BACKEND_URL } from "../../utils/helpers";
 import "./style.scss";
 
+type Notification = {
+  color: string;
+  message: string;
+};
+
 export const NotificationBar: React.FC = () => {
-  const [notificationText, setNotificationText] = useState<string>();
+  const [notification, setNotification] = useState<Notification>();
   const [hide, setHide] = useState(false);
 
-  const getNotificationText = async () => {
-    const notificationURL = `${BACKEND_URL}/api/getNotificationText`;
+  const getNotification = async () => {
+    const notificationURL = `${BACKEND_URL}/api/notifications/topbar`;
     const { data } = await axios.get(notificationURL);
-    if (data?.message) {
-      setNotificationText(data.message);
+    if (data) {
+      setNotification(data);
     }
   };
 
   useEffect(() => {
-    getNotificationText();
+    getNotification();
   }, []);
 
-  const isHidden = hide || !notificationText;
-  const classNames = ["notification-bar", isHidden ? "hide" : "reveal"]
+  const isHidden = hide || !notification;
+  const classNames = [
+    notification?.color ? `notification-color-${notification?.color}` : "",
+    "notification-bar",
+    isHidden ? "hide" : "reveal",
+  ]
     .join(" ")
     .trim();
 
@@ -32,7 +41,7 @@ export const NotificationBar: React.FC = () => {
         setHide(true);
       }}
     >
-      <span className="notification-text">{notificationText}</span>
+      <span className="notification-text">{notification?.message}</span>
       <span className="close-notification">×</span>
     </div>
   );

@@ -147,7 +147,7 @@ export const FiltersModal = ({
                 }}
               />
               <button
-                className="remove-filter-btn"
+                className="remove-btn"
                 onClick={() => handleRemoveFilter(pill)}
               >
                 <FontAwesomeIcon
@@ -199,8 +199,8 @@ export const FiltersModal = ({
         className="react-select-menu-container"
         ref={(newRef) => setModalContainerRef(newRef || undefined)}
       />
-      <div className="filters-modal-wrapper" onClick={handleCloseFilters}>
-        <div className="filters-modal">
+      <div className="modal-wrapper" onClick={handleCloseFilters}>
+        <div className="modal">
           {modalHeader}
           <div className="modal-content">
             {modalContent}

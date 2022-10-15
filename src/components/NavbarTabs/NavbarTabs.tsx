@@ -10,7 +10,7 @@ export const NavbarTabs: React.FC = () => {
   const navigate = useNavigate();
 
   // HashRouter
-  const hash = window.location.hash.replace("#", "");
+  const hash = window.location.hash.replace("#", "").split("?")[0];
   const pathname = window.location.pathname;
 
   useEffect(() => {

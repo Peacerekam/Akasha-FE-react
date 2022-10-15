@@ -120,7 +120,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     }
 
     if (fetchURL) {
-      if (ignoreEmptyUidsArray && (!fetchParams.uids && !fetchParams.uid)) {
+      if (ignoreEmptyUidsArray && !fetchParams.uids && !fetchParams.uid) {
         setExpandedRows([]);
         setTotalRowsCount(0);
         setRows([]);
@@ -317,6 +317,11 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     []
   );
 
+  const hasOwnerColumn = useMemo(
+    () => columns.findIndex((c) => c.name === "Owner") > -1,
+    [columns]
+  );
+
   const renderRows = useMemo(() => {
     const updateTableHoverElement = (props: any) => {
       const el = (
@@ -332,6 +337,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
     return rows.map((row) => {
       const { isExpandRow } = row;
+
       if (isExpandRow) {
         return (
           <tr key={`${row._id}-expanded`} className="expanded-tr">
@@ -339,10 +345,27 @@ export const CustomTable: React.FC<CustomTableProps> = ({
           </tr>
         );
       }
+
+      // @TODO: patreon
+      const patreonObj = row.owner?.patreon;
+      
+      const rowClassNames = [
+        expandableRows ? "pointer" : "",
+        hasOwnerColumn && !!patreonObj?.active ? "decorate-row" : "",
+        hasOwnerColumn && !!patreonObj?.active ? `patreon-${patreonObj?.color}` : "",
+        // {
+        //   1: "decorate-row patreon-gold",
+        //   2: "decorate-row patreon-white",
+        //   3: "decorate-row patreon-brown",
+        // }[row.index as number],
+      ]
+        .join(" ")
+        .trim();
+
       return (
         <tr
           key={row._id}
-          className={expandableRows ? "pointer" : ""}
+          className={rowClassNames}
           onMouseEnter={() => updateTableHoverElement({ row })}
           onMouseLeave={() => updateTableHoverElement({ hide: true })}
           onClick={() => handleClickRow(row)}

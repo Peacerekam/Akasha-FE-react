@@ -16,14 +16,14 @@ export const CalculationResultWidget: React.FC<
 > = ({ uid }) => {
   const [data, setData] = useState<any[]>([]);
   const navigate = useNavigate();
-  
   const pathname = window.location.pathname;
 
   const fetchCalcData = async (
     uid: string,
     abortController: AbortController
   ) => {
-    const fetchURL = `${BACKEND_URL}/api/calculations/${uid}`;
+    const _uid = encodeURIComponent(uid);
+    const fetchURL = `${BACKEND_URL}/api/leaderboards/calculations/${_uid}`;
     const opts = {
       signal: abortController.signal,
     } as any;
@@ -83,9 +83,11 @@ export const CalculationResultWidget: React.FC<
       resultsArray.map((calc: any, index: number) => {
         const { name, ranking, outOf, weapon, short, id } = calc;
         return (
-          <div key={`${name}-${weapon.name}`} >
+          <div key={`${name}-${weapon.name}`}>
             <a
-              title={`${calc.name} - ${weapon.name} R${weapon?.refinement || 1}`}
+              title={`${calc.name} - ${weapon.name} R${
+                weapon?.refinement || 1
+              }`}
               className="highlight-tile"
               onClick={(event) => {
                 event.preventDefault();
@@ -95,7 +97,11 @@ export const CalculationResultWidget: React.FC<
             >
               <div className="highlight-tile-pill">{short ? short : "---"}</div>
               <div className="flex">
-                <img alt="Icon" className="table-icon" src={calc.characterIcon} />
+                <img
+                  alt="Icon"
+                  className="table-icon"
+                  src={calc.characterIcon}
+                />
                 <WeaponMiniDisplay
                   icon={weapon.icon}
                   refinement={weapon?.refinement || 1}
@@ -106,7 +112,7 @@ export const CalculationResultWidget: React.FC<
               </div>
               <span>
                 {ranking ?? "---"}
-                <span className="opacity-5">/{outOf}</span>
+                <span className="opacity-5">/{outOf ?? "---"}</span>
               </span>
             </a>
           </div>

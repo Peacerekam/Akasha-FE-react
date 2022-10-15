@@ -1,6 +1,8 @@
 import axios from "axios";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGear } from "@fortawesome/free-solid-svg-icons";
 
 import {
   allSubstatsInOrder,
@@ -30,10 +32,16 @@ import { CalculationResultWidget } from "../../components/CalculationResultWidge
 import { TableColumn } from "../../types/TableColumn";
 import { StylizedContentBlock } from "../../components/StylizedContentBlock";
 import "./style.scss";
+import { ProfileSettingsModal } from "./ProfileSettingsModal";
+import {
+  applyModalBodyStyle,
+  getRelativeCoords,
+} from "../../components/CustomTable/Filters";
 
 export const ProfilePage: React.FC = () => {
   //  split into 3 different states later?
-  const [data, setData] = useState<{
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [responseData, setResponseData] = useState<{
     artifacts: any[];
     characters: any[];
     account: any;
@@ -42,6 +50,7 @@ export const ProfilePage: React.FC = () => {
       description: string;
     };
   }>({ artifacts: [], characters: [], account: null });
+  const [fetchCount, setFetchCount] = useState(0);
 
   const { uid } = useParams();
 
@@ -50,15 +59,16 @@ export const ProfilePage: React.FC = () => {
     abortController: AbortController
   ) => {
     try {
-      const url = `${BACKEND_URL}/api/user/${uid}`;
-      setData({ artifacts: [], characters: [], account: null });
+      const _uid = encodeURIComponent(uid);
+      const url = `${BACKEND_URL}/api/user/${_uid}`;
+      setResponseData({ artifacts: [], characters: [], account: null });
 
       const opts = {
         signal: abortController?.signal,
       };
 
       const { data } = await axios.get(url, opts);
-      setData(data.data);
+      setResponseData(data.data);
     } catch (err) {
       // const typedError = err as Error
       // if (typedError.name !== "CanceledError") return;
@@ -76,7 +86,7 @@ export const ProfilePage: React.FC = () => {
   }, [uid]);
 
   const cssVariables = {
-    "--name-card-url": `url(${data?.account?.nameCardLink})`,
+    "--name-card-url": `url(${responseData?.account?.nameCardLink})`,
   } as React.CSSProperties;
 
   // move this somewhere else i think
@@ -337,37 +347,24 @@ export const ProfilePage: React.FC = () => {
   );
 
   // @TODO: sum them on server side so we can sort by that?
-  const sumOfAchievementPoints = data.account?.achievements?.reduce(
+  const sumOfAchievementPoints = responseData.account?.achievements?.reduce(
     (accumulator: any, currentValue: any) =>
       accumulator + currentValue.score * currentValue.count,
     0
   );
 
-  const displayGenshinCard = useMemo(
-    () =>
-      data.account?.playerInfo ? (
-        <div className="genshin-user-card">
-          <img
-            className="profile-picture"
-            src={data.account.profilePictureLink}
-          />
-          <div className="genshin-card-content">
-            <div className="card-big-text">
-              {data.account.playerInfo.nickname}
-            </div>
-            <div className="card-signature">
-              {data.account.playerInfo.signature}
-            </div>
-          </div>
-          <div
-            className={`float-top-right ar-badge ar-${
-              Math.floor(data.account.playerInfo.level / 5) * 5
-            }-badge`}
-          >
-            AR{data.account.playerInfo.level}
-          </div>
-        </div>
-      ) : (
+  const handleToggleModal = (event: React.MouseEvent<HTMLElement>) => {
+    setShowSettingsModal((prev) => !prev);
+
+    const offsets = getRelativeCoords(event);
+    applyModalBodyStyle(offsets);
+  };
+
+  const displayGenshinCard = useMemo(() => {
+    const playerInfo = responseData.account?.playerInfo;
+
+    if (!playerInfo) {
+      return (
         <div className="genshin-user-card">
           <div
             style={{
@@ -380,16 +377,35 @@ export const ProfilePage: React.FC = () => {
             <Spinner />
           </div>
         </div>
-      ),
-    [JSON.stringify(data.account)]
-  );
+      );
+    }
 
-  if (data.error) {
+    const arBadgeClassNames = [
+      "float-top-right ar-badge",
+      `ar-${Math.floor(playerInfo.level / 5) * 5}-badge`,
+    ].join(" ");
+
+    return (
+      <div className="genshin-user-card" onClick={handleToggleModal}>
+        <img
+          className="profile-picture"
+          src={responseData.account.profilePictureLink}
+        />
+        <div className="genshin-card-content">
+          <div className="card-big-text">{playerInfo.nickname}</div>
+          <div className="card-signature">{playerInfo.signature}</div>
+        </div>
+        <div className={arBadgeClassNames}>AR{playerInfo.level}</div>
+      </div>
+    );
+  }, [JSON.stringify(responseData.account)]);
+
+  if (responseData.error) {
     return (
       <div className="error-msg">
-        <div className="error-title">{data.error.title}</div>
+        <div className="error-title">{responseData.error.title}</div>
         <div className="error-desc">
-          {data.error.description
+          {responseData.error.description
             .split(".")
             .filter((d) => d)
             .map((block) => (
@@ -400,12 +416,14 @@ export const ProfilePage: React.FC = () => {
     );
   }
 
+  const triggerRefetch = () => setFetchCount((prev) => prev + 1);
+
   return (
     <div style={cssVariables}>
       <div className="flex">
         <div>
           {false &&
-            data.account?.achievements?.map((achievement: any) => {
+            responseData.account?.achievements?.map((achievement: any) => {
               return (
                 <div key={achievement.id}>
                   <div
@@ -451,20 +469,38 @@ export const ProfilePage: React.FC = () => {
           </div>
         )}
       </div>
-
+      floating cloud thingy: "is this your profile? authenticate to access page
+      settings!"
+      <div>
+        <button
+          onClick={handleToggleModal}
+          className="profile-settings-btn"
+          key={uid}
+        >
+          <FontAwesomeIcon icon={faGear} size="2x" />
+        </button>
+        <div>
+          <ProfileSettingsModal
+            isOpen={showSettingsModal}
+            toggleModal={handleToggleModal}
+            accountData={responseData?.account}
+            parentRefetchData={triggerRefetch}
+          />
+        </div>
+      </div>
       <div className="flex">
-        <div className="content-block w-100 ">
+        <div className="content-block w-100 " key={fetchCount}>
           <StylizedContentBlock
             variant="gradient"
-            revealCondition={data.account}
+            revealCondition={responseData.account}
           />
-          <div className="flex gap-10 nowrap">
+          <div className="flex gap-10 nowrap pointer">
             {displayGenshinCard}
             <div className="profile-highlights">
-              {data.account && <CalculationResultWidget uid={uid} />}
+              {responseData.account && <CalculationResultWidget uid={uid} />}
             </div>
           </div>
-          {data.account && (
+          {responseData.account && (
             <CustomTable
               fetchURL={FETCH_BUILDS_URL}
               columns={BUILDS_COLUMNS}
@@ -479,9 +515,9 @@ export const ProfilePage: React.FC = () => {
         </div>
       </div>
       <div className="flex">
-        <div className="content-block w-100">
-          <StylizedContentBlock revealCondition={data.account} />
-          {data.account && (
+        <div className="content-block w-100" key={fetchCount}>
+          <StylizedContentBlock revealCondition={responseData.account} />
+          {responseData.account && (
             <CustomTable
               fetchURL={FETCH_ARTIFACTS_URL}
               columns={ARTIFACT_COLUMNS}

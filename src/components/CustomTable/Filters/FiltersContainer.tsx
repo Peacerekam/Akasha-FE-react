@@ -26,14 +26,14 @@ export type OptionsResponse = {
   options: FilterOption[];
 }[];
 
-const getRelativeCoords = (event: React.MouseEvent<HTMLElement>) => {
+export const getRelativeCoords = (event: React.MouseEvent<HTMLElement>) => {
   const { innerWidth, innerHeight } = window;
   const offsetX = event.clientX - innerWidth / 2;
   const offsetY = event.clientY - innerHeight / 2;
   return { offsetY, offsetX };
 };
 
-const applyModalBodyStyle = ({ offsetX, offsetY }: any) => {
+export const applyModalBodyStyle = ({ offsetX, offsetY }: any) => {
   const _body = document.querySelector("body");
   if (!_body) return;
   _body.style.setProperty("--modal-offset-x", `${offsetX}px`);

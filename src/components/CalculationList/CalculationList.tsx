@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { BACKEND_URL } from "../../utils/helpers";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import "./style.scss";
@@ -23,8 +24,13 @@ type CalculationListProps = {
 export const CalculationList: React.FC<CalculationListProps> = ({ row }) => {
   const [calculations, setCalculations] = useState<any[]>([]);
 
+  const navigate = useNavigate();
+  const pathname = window.location.pathname;
+
   const getCalculations = async () => {
-    const calcDetailsURL = `${BACKEND_URL}/api/leaderboards/${row.uid}/${row.characterId}/${row.type}`;
+    const _uid = encodeURIComponent(row.uid);
+    const _type = encodeURIComponent(row.type);
+    const calcDetailsURL = `${BACKEND_URL}/api/leaderboards/${_uid}/${row.characterId}/${_type}`;
     const { data } = await axios.get(calcDetailsURL);
     setCalculations(data.data);
   };
@@ -67,7 +73,17 @@ export const CalculationList: React.FC<CalculationListProps> = ({ row }) => {
               />
             </td>
             <td>{weapon?.name}</td>
-            <td>{name}</td>
+            <td>
+              <a
+                href={`${pathname}#/leaderboards/${id}`}
+                onClick={(event) => {
+                  event.preventDefault();
+                  navigate(`/leaderboards/${id}`);
+                }}
+              >
+                {name}
+              </a>
+            </td>
             <td>{calc.result.toFixed(0)}</td>
           </tr>
         );

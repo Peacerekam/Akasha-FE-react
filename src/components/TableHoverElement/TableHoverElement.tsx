@@ -3,17 +3,17 @@ import React, { useEffect, useState } from "react";
 
 import { BACKEND_URL, getCharacterCvColor } from "../../utils/helpers";
 import { Artifact } from "../Artifact";
-import { CritRatio } from "../CritRatio";
 import { FollowCursor } from "../FollowCursor";
 import { StatList } from "../StatList";
 import { ArtifactDetailsResponse } from "../../types/ArtifactDetailsResponse";
 
 import "./style.scss";
+import { FancyBuildBorder } from "../FancyBuildBorder";
 
 type TableHoverElementProps = {
   row?: any;
   hide?: boolean;
-  currentCategory: string;
+  currentCategory?: string;
 };
 
 export const TableHoverElement: React.FC<TableHoverElementProps> = ({
@@ -29,7 +29,7 @@ export const TableHoverElement: React.FC<TableHoverElementProps> = ({
   }>({});
 
   const getArtifactDetails = async () => {
-    const artDetailsURL = `${BACKEND_URL}/api/artifact/${rowData._id}`;
+    const artDetailsURL = `${BACKEND_URL}/api/artifacts/${rowData._id}`;
     const { data } = await axios.get(artDetailsURL);
     setArtifactDetails((prev) => ({
       ...prev,
@@ -64,7 +64,10 @@ export const TableHoverElement: React.FC<TableHoverElementProps> = ({
   if (hidden) return null;
 
   if (isArtifact) {
-    const wrapperClassNames = [hide ? "fade-out" : "fade-in"].join(" ").trim();
+    const wrapperClassNames = [
+      "row-hover-artifact-preview",
+      hide ? "fade-out" : "fade-in",
+    ].join(" ");
 
     const equippedOn = artifactDetails?.[rowData._id]?.builds;
     return (
@@ -81,18 +84,8 @@ export const TableHoverElement: React.FC<TableHoverElementProps> = ({
     );
   }
 
-  const cv = rowData?.critValue || 0;
-  const style = {
-    "--name-card-url": `url(${rowData?.nameCardLink})`,
-    border: `2px solid ${getCharacterCvColor(cv)}`,
-  } as React.CSSProperties;
-
-  const wrapperClassNames = [
-    "row-hover-build-preview",
-    hide ? "fade-out" : "fade-in",
-  ]
-    .join(" ")
-    .trim();
+  // @TODO: patreon
+  const patreonObj = rowData?.owner?.patreon;
 
   return (
     <FollowCursor
@@ -101,25 +94,18 @@ export const TableHoverElement: React.FC<TableHoverElementProps> = ({
         offsetY: 165,
       }}
     >
-      <div className="flex">
-        <div style={style} className={wrapperClassNames}>
-          {/* some wrapper with nice bg i guess */}
-          <div className="above-darken">
-            <StatList
-              row={rowData}
-              currentCategory={currentCategory}
-              showCharacter
-              showWeapon
-            />
-          </div>
-          <div className="darken" />
-          {/* <div>
-              Calculation result:{" "}
-              {currentCategory &&
-                row.calculations[currentCategory].result.toFixed(0)}
-            </div> */}
-        </div>
-      </div>
+      <FancyBuildBorder
+        hide={hide ?? false}
+        rowData={rowData}
+        patreonObj={patreonObj}
+      >
+        <StatList
+          row={rowData}
+          currentCategory={currentCategory}
+          showCharacter
+          showWeapon
+        />
+      </FancyBuildBorder>
     </FollowCursor>
   );
 };

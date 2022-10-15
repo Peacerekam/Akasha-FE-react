@@ -1,0 +1,216 @@
+@use "sass:map";
+
+$patreon-colors: cyan, lime, red, white, orange, fuchsia, gold, silver, brown;
+
+.custom-table-wrapper {
+  table.custom-table {
+    @each $color in $patreon-colors {
+      tr.decorate-row.patreon-#{$color} {
+        $patreon-color: $color;
+
+        &:hover {
+          td:first-child {
+            box-shadow: inset 2px 0 0 0 darken($patreon-color, 10);
+          }
+        }
+        td:first-child {
+          box-shadow: inset 2px 0 0 0 $patreon-color;
+          &::after {
+            background-color: $patreon-color;
+          }
+        }
+        td:not(.highlight-cell) {
+          background-color: rgba($patreon-color, 0.1);
+        }
+        td.highlight-cell {
+          background-color: rgba(darken($patreon-color, 40), 0.3) !important;
+        }
+      }
+    }
+
+    tr.decorate-row {
+      td:first-child {
+        position: relative;
+        &::after {
+          position: absolute;
+          content: "";
+          width: 3px;
+          height: 100%;
+          left: -2px;
+          top: 0;
+          pointer-events: none;
+          filter: blur(5px);
+        }
+      }
+    }
+  }
+}
+
+.patreon-stat-list {
+  &.row-hover-build-preview {
+    border-color: cyan !important;
+  }
+}
+
+.patreon-stat-decoration {
+  position: absolute;
+  // width: 100%;
+  width: 322px;
+  height: 100%;
+  top: 10px;
+  left: 10px;
+
+  &.hide {
+    opacity: 0;
+  }
+
+  // box-shadow: rgba(240, 46, 170, 0.4) 0 0 0 5px,
+  //   rgba(240, 46, 170, 0.3) 0 0 0 10px, rgba(240, 46, 170, 0.2) 0 0 0 15px,
+  //   rgba(240, 46, 170, 0.1) 0 0 0 20px, rgba(240, 46, 170, 0.05) 0 0 0 25px;
+
+  // .corner {
+  //   // filter: blur(2px);
+  //   z-index: 9909;
+  //   background-color: transparent;
+  //   border-left: 5px solid cyan;
+  //   border-top: 5px solid cyan;
+  //   width: 20px;
+  //   height: 20px;
+  //   position: absolute;
+  //   &.top-left {
+  //     top: -5px;
+  //     left: -5px;
+  //   }
+  //   &.top-right {
+  //     top: -5px;
+  //     right: -5px;
+  //     transform: scaleX(-1);
+  //   }
+  //   &.bottom-left {
+  //     bottom: -5px;
+  //     left: -5px;
+  //     transform: scaleY(-1);
+  //   }
+  //   &.bottom-right {
+  //     bottom: -5px;
+  //     right: -5px;
+  //     transform: scale(-1);
+  //   }
+  // }
+
+  // background: linear-gradient(to right, red, orange);
+  // padding: 5px;
+  // left: 5px;
+  // top: 5px;
+
+  .border {
+    --border-width: 3px;
+    --gradient-from: transparent;
+    --gradient-to: cyan;
+    --animation-duration: 1.5s;
+    --offset: -1px;
+    --gradient-pattern: var(--gradient-from) 50%, var(--gradient-to) 100%;
+
+    z-index: 9909;
+    background-color: transparent;
+    position: absolute;
+    background-size: 200% 200% !important;
+    border-radius: 100px;
+    overflow: hidden;
+
+    filter: drop-shadow(0 0 5px cyan);
+    opacity: 0;
+
+    &.top {
+      left: 0;
+      top: var(--offset);
+      width: 100%;
+      height: var(--border-width);
+      background: linear-gradient(to right, var(--gradient-pattern));
+      animation: var(--animation-duration) borderFlowTop infinite linear;
+    }
+    &.right {
+      top: 0;
+      right: var(--offset);
+      height: 100%;
+      width: var(--border-width);
+      background: linear-gradient(to bottom, var(--gradient-pattern));
+      animation: var(--animation-duration) borderFlowRight infinite linear;
+      // animation-delay: calc(calc(var(--animation-duration) * 0.25));
+      animation-delay: calc(calc(var(--animation-duration) * 0.5));
+    }
+    &.bottom {
+      bottom: var(--offset);
+      right: 0;
+      width: 100%;
+      height: var(--border-width);
+      background: linear-gradient(to left, var(--gradient-pattern));
+      animation: var(--animation-duration) borderFlowBottom infinite linear;
+      // animation-delay: calc(calc(var(--animation-duration) * 0.5));
+    }
+    &.left {
+      top: 0;
+      left: var(--offset);
+      height: 100%;
+      width: var(--border-width);
+      background: linear-gradient(to top, var(--gradient-pattern));
+      animation: var(--animation-duration) borderFlowLeft infinite linear;
+      // animation-delay: calc(calc(var(--animation-duration) * 0.75));
+      animation-delay: calc(calc(var(--animation-duration) * 0.5));
+    }
+  }
+}
+
+@keyframes borderFlowTop {
+  0% {
+    opacity: 1;
+    background-position-x: 207%;
+  }
+  100% {
+    opacity: 1;
+    background-position-x: 0%;
+  }
+}
+
+@keyframes borderFlowRight {
+  0% {
+    opacity: 1;
+    background-position-y: 207%;
+  }
+  100% {
+    opacity: 1;
+    background-position-y: 0%;
+    opacity: 1;
+  }
+}
+
+@keyframes borderFlowBottom {
+  0% {
+    opacity: 1;
+    background-position-x: -107%;
+  }
+  100% {
+    background-position-x: 100%;
+    opacity: 1;
+  }
+}
+
+@keyframes borderFlowLeft {
+  0% {
+    opacity: 1;
+    background-position-y: -107%;
+  }
+  100% {
+    opacity: 1;
+    background-position-y: 100%;
+  }
+}
+
+// .stat-list {
+//   @each $color in $patreon-colors {
+//     &.patreon-#{$color} {
+//       // border:  2px solid $color;
+//       color: $color;
+//     }
+//   }
+// }

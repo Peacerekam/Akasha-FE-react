@@ -1,13 +1,22 @@
 .calculation-list {
   font-size: 14px;
-  tr {
-    td:first-child {
-      text-align: right;
-    }
-    td:last-child {
+  a {
+    text-decoration: none;
+    color: white;
+    &:hover {
       color: orange;
-      font-weight: 600;
-      text-align: right;
+    }
+  }
+  tr {
+    td {
+      &:first-child {
+        text-align: right;
+      }
+      &:last-child {
+        color: orange;
+        font-weight: 600;
+        text-align: right;
+      }
     }
   }
 }
