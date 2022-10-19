@@ -200,7 +200,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     const response = await axios.post(postBuildNameURL, null, opts); // no formData attached
     if (response.data.error) return;
 
-    fetchBuildsData(accountData?.uid);
+    await fetchBuildsData(accountData?.uid);
     const newBuildId = `${selectedBuild.characterId}${newBuildName}`;
     setSelectedBuildId(newBuildId);
   };
