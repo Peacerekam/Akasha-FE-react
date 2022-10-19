@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
-import { StylizedContentBlock } from "../../components/StylizedContentBlock";
+import { StylizedContentBlock } from "../../components";
 import { FETCH_CATEGORIES_URL } from "../../utils/helpers";
 
 type TransformedCategories = {

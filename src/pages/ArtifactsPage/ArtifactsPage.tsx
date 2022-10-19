@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useContext, useMemo } from "react";
 
 import {
   allSubstatsInOrder,
@@ -10,13 +10,13 @@ import {
   normalizeText,
 } from "../../utils/helpers";
 import { useNavigate } from "react-router-dom";
-import { Artifact, CustomTable, StatIcon } from "../../components";
+import { CustomTable, StatIcon, StylizedContentBlock } from "../../components";
 import { ARBadge } from "../LeaderboardsPage";
 import { TableColumn } from "../../types/TableColumn";
 
 import DomainBackground from "../../assets/images/domain-background.jpg";
-import { StylizedContentBlock } from "../../components/StylizedContentBlock";
 import { FETCH_ARTIFACT_FILTERS_URL } from "../../utils/helpers";
+import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 
 export type ArtifactColumns = {
   _id: string;
@@ -32,145 +32,150 @@ export type ArtifactColumns = {
 };
 
 export const ArtifactsPage: React.FC = () => {
+  const { hoverElement } = useContext(HoverElementContext);
   const navigate = useNavigate();
 
   const pathname = window.location.pathname;
 
-  const ARTIFACT_COLUMNS: TableColumn<ArtifactColumns>[] = useMemo(() => [
-    {
-      name: "#",
-      width: "0px",
-      cell: (row) => {
-        return (
-          <div className="hide-on-custom">
-            <span>{row.index}</span>
-          </div>
-        );
+  const ARTIFACT_COLUMNS: TableColumn<ArtifactColumns>[] = useMemo(
+    () => [
+      {
+        name: "#",
+        width: "0px",
+        cell: (row) => {
+          return (
+            <div className="hide-on-custom">
+              <span>{row.index}</span>
+            </div>
+          );
+        },
       },
-    },
-    {
-      name: "Owner",
-      sortable: true,
-      sortField: "owner.nickname",
-      width: "180px",
-      cell: (row) => {
-        if (!row.owner?.adventureRank) return <></>;
-        return (
-          <a
-            className="row-link-element"
-            onClick={(event) => {
-              event.preventDefault();
-              navigate(`/profile/${row.uid}`);
-            }}
-            href={`${pathname}#/profile/${row.uid}`}
-          >
-            <ARBadge adventureRank={row.owner.adventureRank} />
-            {row.owner.nickname}
-          </a>
-        );
-      },
-    },
-    {
-      name: "Name",
-      sortable: true,
-      sortField: "name",
-      width: "300px",
-      cell: (row) => {
-        return (
-          <div className="table-icon-text-pair">
-            <img className="table-icon" src={row.icon} />{" "}
-            <span
-              style={{
-                color: {
-                  5: "orange",
-                  4: "blueviolet",
-                  3: "cornflowerblue",
-                  2: "greenyellow",
-                  1: "gray",
-                }[row.stars],
+      {
+        name: "Owner",
+        sortable: true,
+        sortField: "owner.nickname",
+        width: "180px",
+        cell: (row) => {
+          if (!row.owner?.adventureRank) return <></>;
+          return (
+            <a
+              className="row-link-element"
+              onClick={(event) => {
+                event.preventDefault();
+                navigate(`/profile/${row.uid}`);
               }}
+              href={`${pathname}#/profile/${row.uid}`}
             >
-              {/* <div style={{ marginBottom: '5px'}}>{"⭐".repeat(row.stars)}</div> */}
-              <div>
-                {row.name}
-                {/* {row.level ? `+${row.level - 1}` : ""} */}
-              </div>
-            </span>
-          </div>
-        );
+              <ARBadge adventureRank={row.owner.adventureRank} />
+              {row.owner.nickname}
+            </a>
+          );
+        },
       },
-    },
-    {
-      name: "Main stat",
-      sortable: true,
-      sortField: "mainStatKey",
-      cell: (row) => {
-        const key = row.mainStatKey.replace("Flat ", "").replace("%", "");
-        const isPercenrage =
-          row.mainStatKey.endsWith("%") ||
-          row.mainStatKey?.endsWith("Bonus") ||
-          ["Energy Recharge"].includes(row.mainStatKey);
-        return (
-          <div className="nowrap">
-            {row.mainStatValue}
-            {isPercenrage ? "%" : ""} {key}
-          </div>
-        );
+      {
+        name: "Name",
+        sortable: true,
+        sortField: "name",
+        width: "300px",
+        cell: (row) => {
+          return (
+            <div className="table-icon-text-pair">
+              <img className="table-icon" src={row.icon} />{" "}
+              <span
+                style={{
+                  color: {
+                    5: "orange",
+                    4: "blueviolet",
+                    3: "cornflowerblue",
+                    2: "greenyellow",
+                    1: "gray",
+                  }[row.stars],
+                }}
+              >
+                {/* <div style={{ marginBottom: '5px'}}>{"⭐".repeat(row.stars)}</div> */}
+                <div>
+                  {row.name}
+                  {/* {row.level ? `+${row.level - 1}` : ""} */}
+                </div>
+              </span>
+            </div>
+          );
+        },
       },
-    },
-    ...[0, 1, 2, 3].map((i) => ({
-      name: <span className="weak-filler-line" />,
-      sortable: true,
-      sortFields: allSubstatsInOrder.map((key) => `substats.${key}`),
-      colSpan: i === 0 ? 4 : 0,
-      width: "100px",
-      getDynamicTdClassName: (row: any) => {
-        const reordered = getSubstatsInOrder(row);
-        const key = reordered?.[i];
-        if (!key) return "";
-        return normalizeText(key);
+      {
+        name: "Main stat",
+        sortable: true,
+        sortField: "mainStatKey",
+        cell: (row) => {
+          const key = row.mainStatKey.replace("Flat ", "").replace("%", "");
+          const isPercenrage =
+            row.mainStatKey.endsWith("%") ||
+            row.mainStatKey?.endsWith("Bonus") ||
+            ["Energy Recharge"].includes(row.mainStatKey);
+          return (
+            <div className="nowrap">
+              {row.mainStatValue}
+              {isPercenrage ? "%" : ""} {key}
+            </div>
+          );
+        },
       },
-      cell: (row: any) => {
-        const reordered = getSubstatsInOrder(row);
-        const key = reordered?.[i];
+      ...[0, 1, 2, 3].map((i) => ({
+        name: <span className="weak-filler-line" />,
+        sortable: true,
+        sortFields: allSubstatsInOrder.map((key) => `substats.${key}`),
+        colSpan: i === 0 ? 4 : 0,
+        width: "100px",
+        getDynamicTdClassName: (row: any) => {
+          const reordered = getSubstatsInOrder(row);
+          const key = reordered?.[i];
+          if (!key) return "";
+          return normalizeText(key);
+        },
+        cell: (row: any) => {
+          const reordered = getSubstatsInOrder(row);
+          const key = reordered?.[i];
 
-        if (!key) return <></>;
+          if (!key) return <></>;
 
-        const substatValue = getInGameSubstatValue(row.substats[key], key);
-        const isCV = key.includes("Crit");
+          const substatValue = getInGameSubstatValue(row.substats[key], key);
+          const isCV = key.includes("Crit");
 
-        return (
-          <div
-            key={normalizeText(key)}
-            className={`substat flex nowrap ${normalizeText(key)} ${
-              isCV ? "critvalue" : ""
-            }`}
-          >
-            <span style={{ marginRight: "5px" }}>
-              <StatIcon name={key} />
-            </span>
-            {substatValue}
-            {isPercent(key) ? "%" : ""}
-          </div>
-        );
+          return (
+            <div
+              key={normalizeText(key)}
+              className={`substat flex nowrap ${normalizeText(key)} ${
+                isCV ? "critvalue" : ""
+              }`}
+            >
+              <span style={{ marginRight: "5px" }}>
+                <StatIcon name={key} />
+              </span>
+              {substatValue}
+              {isPercent(key) ? "%" : ""}
+            </div>
+          );
+        },
+      })),
+      {
+        name: "Crit Value",
+        sortable: true,
+        sortField: "critValue",
+        width: "100px",
+        cell: (row) => {
+          const textColor = getArtifactCvColor(row.critValue);
+          return (
+            <span style={{ color: textColor }}>{row.critValue.toFixed(1)}</span>
+          );
+        },
       },
-    })),
-    {
-      name: "Crit Value",
-      sortable: true,
-      sortField: "critValue",
-      width: "100px",
-      cell: (row) => {
-        const textColor = getArtifactCvColor(row.critValue);
-        return (
-          <span style={{ color: textColor }}>{row.critValue.toFixed(1)}</span>
-        );
-      },
-    },
-  ], []);
+    ],
+    []
+  );
 
   return (
     <div className="flex">
+      {hoverElement}
       <div className="content-block w-100">
         <StylizedContentBlock overrideImage={DomainBackground} />
         <CustomTable

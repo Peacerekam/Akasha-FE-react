@@ -30,7 +30,7 @@ export const customTheme = {
   placeholder: (provided: any) => {
     return {
       ...provided,
-      paddingLeft: 7,
+      paddingLeft: 6,
       fontSize: 13,
       marginBottom: 2,
     };

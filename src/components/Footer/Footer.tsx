@@ -10,7 +10,7 @@ export const Footer: React.FC = () => {
         Akasha System
       </span>
       <span>
-        <a target="_blank" href="https://enka.network/">
+        <a target="_blank" rel="noreferrer" href="https://enka.network/">
           <img src={PoweredByEnka} />
         </a>
       </span>

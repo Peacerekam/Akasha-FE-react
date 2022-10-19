@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGear } from "@fortawesome/free-solid-svg-icons";
+import { faGear, faRotateRight } from "@fortawesome/free-solid-svg-icons";
 
 import {
   allSubstatsInOrder,
@@ -27,41 +27,43 @@ import {
   Spinner,
   CustomTable,
   ReplaceRowDataOnHover,
+  Timer,
+  StylizedContentBlock,
+  CalculationResultWidget,
 } from "../../components";
-import { CalculationResultWidget } from "../../components/CalculationResultWidget";
 import { TableColumn } from "../../types/TableColumn";
-import { StylizedContentBlock } from "../../components/StylizedContentBlock";
-import "./style.scss";
 import { ProfileSettingsModal } from "./ProfileSettingsModal";
 import {
   applyModalBodyStyle,
   getRelativeCoords,
 } from "../../components/CustomTable/Filters";
+import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
+import "./style.scss";
 
 export const ProfilePage: React.FC = () => {
-  //  split into 3 different states later?
+  const [enableRefreshBtn, setEnableRefreshBtn] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [fetchCount, setFetchCount] = useState(0);
+  const [refreshTime, setRefreshTime] = useState<number>();
   const [responseData, setResponseData] = useState<{
-    artifacts: any[];
-    characters: any[];
     account: any;
     error?: {
       title: string;
       description: string;
     };
-  }>({ artifacts: [], characters: [], account: null });
-  const [fetchCount, setFetchCount] = useState(0);
+  }>({ account: null });
 
   const { uid } = useParams();
+  const { hoverElement } = useContext(HoverElementContext);
 
   const fetchProfile = async (
     uid: string,
-    abortController: AbortController
+    abortController?: AbortController
   ) => {
     try {
       const _uid = encodeURIComponent(uid);
       const url = `${BACKEND_URL}/api/user/${_uid}`;
-      setResponseData({ artifacts: [], characters: [], account: null });
+      setResponseData({ account: null });
 
       const opts = {
         signal: abortController?.signal,
@@ -69,6 +71,16 @@ export const ProfilePage: React.FC = () => {
 
       const { data } = await axios.get(url, opts);
       setResponseData(data.data);
+
+      if (!data?.data?.account?.profilePictureLink) {
+        // this is null only if document doesnt exist in database
+        handleRefreshData();
+      }
+
+      const getTime = new Date().getTime();
+      const then = getTime + data.ttl;
+      setRefreshTime(then);
+      setEnableRefreshBtn(then < 0);
     } catch (err) {
       // const typedError = err as Error
       // if (typedError.name !== "CanceledError") return;
@@ -353,6 +365,26 @@ export const ProfilePage: React.FC = () => {
     0
   );
 
+  const handleRefreshData = async () => {
+    if (!uid) return;
+    setEnableRefreshBtn(false);
+    const _uid = encodeURIComponent(uid);
+    const refreshURL = `${BACKEND_URL}/api/user/refresh/${_uid}`;
+    const { data } = await axios.get(refreshURL);
+    const {
+      ttl,
+      ttlMax,
+      // message,
+    } = data;
+
+    if (ttl === 0) {
+      fetchProfile(uid);
+    }
+    const getTime = new Date().getTime();
+    const then = getTime + (ttl || ttlMax);
+    setRefreshTime(then);
+  };
+
   const handleToggleModal = (event: React.MouseEvent<HTMLElement>) => {
     setShowSettingsModal((prev) => !prev);
 
@@ -400,6 +432,45 @@ export const ProfilePage: React.FC = () => {
     );
   }, [JSON.stringify(responseData.account)]);
 
+  const handleTimerFinish = () => {
+    setEnableRefreshBtn(true);
+  };
+
+  const displayFloatingButtons = useMemo(() => {
+    const refreshBtnClassName = [
+      "floating-button",
+      enableRefreshBtn ? "" : "disable-btn",
+    ]
+      .join(" ")
+      .trim();
+
+    return (
+      <div className="floating-profile-buttons-wrapper">
+        <div className="floating-profile-buttons">
+          {refreshTime && (
+            <Timer until={refreshTime} onFinish={handleTimerFinish} />
+          )}
+          <div
+            title="Refresh builds"
+            className={refreshBtnClassName}
+            onClick={handleRefreshData}
+            key={`refresh-${uid}`}
+          >
+            <FontAwesomeIcon icon={faRotateRight} size="1x" />
+          </div>
+          <div
+            title="Profile settings"
+            className="floating-button"
+            onClick={handleToggleModal}
+            key={`settings-${uid}`}
+          >
+            <FontAwesomeIcon icon={faGear} size="1x" />
+          </div>
+        </div>
+      </div>
+    );
+  }, [enableRefreshBtn, refreshTime]);
+
   if (responseData.error) {
     return (
       <div className="error-msg">
@@ -420,6 +491,7 @@ export const ProfilePage: React.FC = () => {
 
   return (
     <div style={cssVariables}>
+      {hoverElement}
       <div className="flex">
         <div>
           {false &&
@@ -469,16 +541,8 @@ export const ProfilePage: React.FC = () => {
           </div>
         )}
       </div>
-      floating cloud thingy: "is this your profile? authenticate to access page
-      settings!"
+      {displayFloatingButtons}
       <div>
-        <button
-          onClick={handleToggleModal}
-          className="profile-settings-btn"
-          key={uid}
-        >
-          <FontAwesomeIcon icon={faGear} size="2x" />
-        </button>
         <div>
           <ProfileSettingsModal
             isOpen={showSettingsModal}

@@ -1,5 +1,10 @@
 .stylized-content-block-wrapper {
-  position: relative;
+
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+
   padding: 0 !important;
   opacity: 0;
   &.gradient {

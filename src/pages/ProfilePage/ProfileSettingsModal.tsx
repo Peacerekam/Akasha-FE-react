@@ -1,19 +1,19 @@
+import { useEffect, useMemo, useRef, useState } from "react";
+import axios from "axios";
+import PerfectScrollbar from "react-perfect-scrollbar";
+import Highlighter from "react-highlight-words";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faCheck,
   faX,
   faEye,
   faEyeSlash,
   faUpload,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import axios from "axios";
-import { useEffect, useMemo, useRef, useState } from "react";
+
 import { StatList } from "../../components";
 import { FancyBuildBorder } from "../../components/FancyBuildBorder";
 import { BACKEND_URL, PATREON_URL } from "../../utils/helpers";
-import Highlighter from "react-highlight-words";
 import { BuildNameInput } from "./BuildNameInput";
 
 type ProfileSettingsModalProps = {
@@ -37,6 +37,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
   const [fileData, setFileData] = useState<any>(null);
   const [builds, setBuilds] = useState<any[]>([]);
   const [searchText, setSearchText] = useState<string>("");
+  const [isDirty, setIsDirty] = useState(false);
   const uploadInput = useRef<HTMLInputElement>(null);
 
   const fetchBuildsData = async (
@@ -71,14 +72,13 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
   }, [accountData?.uid]);
 
   useEffect(() => {
-    if (!isOpen) setSelectedBuildId("");
-    setSearchText("");
+    if (!isOpen) return;
     if (builds.length === 0 || selectedBuildId) return;
     const buildId = getBuildId(builds[0]);
     setSelectedBuildId(buildId);
   }, [builds, isOpen]);
 
-  const submitNamecard = async () => {
+  const handleSubmitNamecard = async () => {
     const file = uploadInput?.current?.files?.[0];
     if (!file || !selectedBuild) return;
 
@@ -97,11 +97,11 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     });
 
     clearBgImage();
-    parentRefetchData();
     fetchBuildsData(accountData?.uid);
+    setIsDirty(true);
   };
 
-  const handleAddImage = (files: FileList | null) => {
+  const handleAddPreviewImage = (files: FileList | null) => {
     if (files?.length !== 1) return;
     const file = files[0];
     window.URL.revokeObjectURL(backgroundPreview);
@@ -117,6 +117,11 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     toggleModal(event);
     clearBgImage();
     setSelectedBuildId("");
+    setSearchText("");
+    if (isDirty) {
+      parentRefetchData();
+      setIsDirty(false);
+    }
     const _body = document.querySelector("body");
     _body?.classList.remove("overflow-hidden");
   };
@@ -142,14 +147,62 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
   };
 
   const handleDeleteBackground = async () => {
+    setIsDirty(true);
     const { uid, characterId, type } = selectedBuild;
     const _uid = encodeURIComponent(uid);
     const _type = encodeURIComponent(type);
-    const deleteNamecardURL = `${BACKEND_URL}/api/user/namecard/delete/${_uid}/${characterId}/${_type}`;
-    await axios.get(deleteNamecardURL);
+    const postNamecardURL = `${BACKEND_URL}/api/user/namecard/${_uid}/${characterId}/${_type}`;
+    await axios.post(postNamecardURL); // no formData attached
     clearBgImage();
-    parentRefetchData();
     fetchBuildsData(accountData?.uid);
+  };
+
+  const handleToggleBuildVisibility = async (char: any) => {
+    setIsDirty(true);
+    const { uid, characterId, type } = char;
+    const _uid = encodeURIComponent(uid);
+    const _type = encodeURIComponent(type);
+    const toggleVisibilityURL = `${BACKEND_URL}/api/user/toggleBuildVisibility/${_uid}/${characterId}/${_type}`;
+    await axios.post(toggleVisibilityURL);
+    fetchBuildsData(accountData?.uid);
+  };
+
+  const handleDeleteBuild = async (char: any) => {
+    setIsDirty(true);
+    const { uid, characterId, type } = char;
+    const _uid = encodeURIComponent(uid);
+    const _type = encodeURIComponent(type);
+    const deleteBuildURL = `${BACKEND_URL}/api/user/deleteBuild/${_uid}/${characterId}/${_type}`;
+    await axios.post(deleteBuildURL);
+    fetchBuildsData(accountData?.uid);
+  };
+
+  const handleChangeBuildName = async (event: any) => {
+    let newBuildName = event?.target?.value?.trim();
+
+    if (newBuildName === selectedBuild.name) {
+      newBuildName = "current";
+    }
+    if (newBuildName === selectedBuild.type || !newBuildName) {
+      return;
+    }
+
+    setIsDirty(true);
+
+    const { uid, characterId, type } = selectedBuild;
+    const _uid = encodeURIComponent(uid);
+    const _type = encodeURIComponent(type);
+
+    const postBuildNameURL = `${BACKEND_URL}/api/user/setBuildName/${_uid}/${characterId}/${_type}`;
+    const opts = {
+      params: { buildName: newBuildName },
+    };
+    const response = await axios.post(postBuildNameURL, null, opts); // no formData attached
+    if (response.data.error) return;
+
+    fetchBuildsData(accountData?.uid);
+    const newBuildId = `${selectedBuild.characterId}${newBuildName}`;
+    setSelectedBuildId(newBuildId);
   };
 
   const filteredBuilds = useMemo(() => {
@@ -164,21 +217,6 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     };
     return builds.filter(filterFunc);
   }, [searchText, builds]);
-
-  const changeBuildName = (event: any) => {
-    let newBuildName = event?.target?.value?.trim()
-
-    if (newBuildName === selectedBuild.name) {
-      newBuildName = "current"
-    }
-    if (newBuildName === selectedBuild.type) {
-      return;
-    }
-
-    // @TODO: send request to change name
-    // on backend you must make sure theres no duplicate build names
-    console.log(newBuildName)
-  };
 
   const modalContent = useMemo(() => {
     const displayBuildSettingsRow = (char: any) => {
@@ -207,7 +245,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
             {selectedBuildId === buildId ? (
               <BuildNameInput
                 defaultValue={displayName}
-                onBlur={changeBuildName}
+                onBlur={handleChangeBuildName}
               />
             ) : (
               <Highlighter
@@ -222,18 +260,34 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
           {isHidden ? (
             <>
               <div>HIDDEN</div>
-              <button className="regular-btn" onClick={() => {}}>
+              <button
+                className="regular-btn"
+                title="Toggle build visibility"
+                onClick={() => handleToggleBuildVisibility(char)}
+              >
                 <FontAwesomeIcon icon={faEyeSlash} size="1x" />
               </button>
             </>
           ) : (
             <>
               <div>VISIBLE</div>
-              <button className="regular-btn" onClick={() => {}}>
+              <button
+                className="regular-btn"
+                title="Toggle build visibility"
+                onClick={() => handleToggleBuildVisibility(char)}
+              >
                 <FontAwesomeIcon icon={faEye} size="1x" />
               </button>
             </>
           )}
+
+          <button
+            className="remove-btn"
+            title="Delete build"
+            onClick={() => handleDeleteBuild(char)}
+          >
+            <FontAwesomeIcon icon={faTrash} size="1x" />
+          </button>
         </div>
       );
     };
@@ -263,7 +317,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
           {!patreonObj ? (
             <div className="patreons-only">
               Become{" "}
-              <a target="_blank" href={PATREON_URL}>
+              <a target="_blank" rel="noreferrer" href={PATREON_URL}>
                 patreon
               </a>{" "}
               to customize this background image
@@ -273,7 +327,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
               <button
                 disabled={!backgroundPreview || !patreonObj}
                 className={uploadBtnClassNames}
-                onClick={submitNamecard}
+                onClick={handleSubmitNamecard}
               >
                 <FontAwesomeIcon icon={faUpload} size="1x" />
               </button>
@@ -287,7 +341,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
                 ref={uploadInput}
                 type="file"
                 accept="image/*"
-                onChange={(e) => handleAddImage(e.target.files)}
+                onChange={(e) => handleAddPreviewImage(e.target.files)}
               />
               <button
                 title="Clear background preview"
@@ -298,7 +352,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
                 <FontAwesomeIcon icon={faX} size="1x" />
               </button>
               <button
-                title="Delete background"
+                title="Delete background image"
                 disabled={!selectedBuild?.customNamecard}
                 className="remove-btn"
                 onClick={handleDeleteBackground}
@@ -336,17 +390,17 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     accountData?.nameCardLink,
   ]);
 
-  const modalButtons = (
-    <div className="modal-buttons">
-      <button
-        className="apply-btn"
-        onClick={(event) => handleCloseModal(event, true)}
-      >
-        <FontAwesomeIcon className="filter-icon" icon={faCheck} size="1x" />
-        OK
-      </button>
-    </div>
-  );
+  // const modalButtons = (
+  //   <div className="modal-buttons">
+  //     <button
+  //       className="apply-btn"
+  //       onClick={(event) => handleCloseModal(event, true)}
+  //     >
+  //       <FontAwesomeIcon className="filter-icon" icon={faCheck} size="1x" />
+  //       OK
+  //     </button>
+  //   </div>
+  // );
 
   if (!isOpen) return null;
 

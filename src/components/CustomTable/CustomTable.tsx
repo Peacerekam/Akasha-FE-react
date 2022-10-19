@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
@@ -9,12 +15,12 @@ import {
   Spinner,
   Pagination,
   ArtifactListCompact,
-  TableHoverElement,
 } from "../../components";
 import { arrayPushOrSplice, normalizeText } from "../../utils/helpers";
 import { FiltersContainer, FilterOption } from "./Filters";
 import { useNavigate } from "react-router-dom";
 import "./style.scss";
+import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 
 type CustomTableProps = {
   columns: any[];
@@ -51,10 +57,10 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   ignoreEmptyUidsArray = false,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [hoverPreview, setHoverPreview] = useState<any | null>(null);
   const [expandedRows, setExpandedRows] = useState<string[]>([]);
   const [rows, setRows] = useState<any[]>([]);
   const [totalRowsCount, setTotalRowsCount] = useState<number>(0);
+  const { updateTableHoverElement } = useContext(HoverElementContext);
 
   const defaultParams = {
     sort: defaultSort || "",
@@ -323,13 +329,6 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   );
 
   const renderRows = useMemo(() => {
-    const updateTableHoverElement = (props: any) => {
-      const el = (
-        <TableHoverElement currentCategory={calculationColumn} {...props} />
-      );
-      setHoverPreview(el);
-    };
-
     const handleClickRow = (row: any) => {
       if (!expandableRows) return;
       setExpandedRows((prev) => arrayPushOrSplice(prev, row._id));
@@ -348,11 +347,13 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
       // @TODO: patreon
       const patreonObj = row.owner?.patreon;
-      
+
       const rowClassNames = [
         expandableRows ? "pointer" : "",
         hasOwnerColumn && !!patreonObj?.active ? "decorate-row" : "",
-        hasOwnerColumn && !!patreonObj?.active ? `patreon-${patreonObj?.color}` : "",
+        hasOwnerColumn && !!patreonObj?.active
+          ? `patreon-${patreonObj?.color}`
+          : "",
         // {
         //   1: "decorate-row patreon-gold",
         //   2: "decorate-row patreon-white",
@@ -366,8 +367,15 @@ export const CustomTable: React.FC<CustomTableProps> = ({
         <tr
           key={row._id}
           className={rowClassNames}
-          onMouseEnter={() => updateTableHoverElement({ row })}
-          onMouseLeave={() => updateTableHoverElement({ hide: true })}
+          onMouseEnter={() =>
+            updateTableHoverElement({ row, currentCategory: calculationColumn })
+          }
+          onMouseLeave={() =>
+            updateTableHoverElement({
+              hide: true,
+              currentCategory: calculationColumn,
+            })
+          }
           onClick={() => handleClickRow(row)}
         >
           {columns.map((column, index) => {
@@ -452,7 +460,6 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
   return (
     <div className={wrapperClassNames}>
-      {hoverPreview}
       {filtersURL && (
         <FiltersContainer
           fetchURL={filtersURL}

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useContext, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -8,16 +8,17 @@ import {
   DisplaySets,
   CustomTable,
   ReplaceRowDataOnHover,
+  StylizedContentBlock
 } from "../../components";
 import { TableColumn } from "../../types/TableColumn";
 import { ARBadge } from "../LeaderboardsPage";
 
 import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
-import { StylizedContentBlock } from "../../components/StylizedContentBlock";
 import {
   FETCH_BUILDS_URL,
   FETCH_CHARACTER_FILTERS_URL,
 } from "../../utils/helpers";
+import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 
 export type BuildsColumns = {
   _id: string;
@@ -31,6 +32,7 @@ export type BuildsColumns = {
 };
 
 export const BuildsPage: React.FC = () => {
+  const { hoverElement } = useContext(HoverElementContext);
   const navigate = useNavigate();
   const pathname = window.location.pathname;
 
@@ -203,6 +205,7 @@ export const BuildsPage: React.FC = () => {
 
   return (
     <div className="flex">
+      {hoverElement}
       <div className="content-block w-100">
         <StylizedContentBlock overrideImage={DomainBackground} />
         <CustomTable

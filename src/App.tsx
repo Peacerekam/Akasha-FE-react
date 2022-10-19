@@ -1,6 +1,7 @@
 import React from "react";
 import { Routes, Route, HashRouter } from "react-router-dom";
 import { LastProfilesContextProvider } from "./context/LastProfiles/LastProfilesContext";
+import { HoverElementContextProvider } from "./context/HoverElement/HoverElementContext";
 
 import {
   ArtifactsPage,
@@ -9,14 +10,10 @@ import {
   LeaderboardsPage,
   CategorySelectionPage,
   DashboardPage,
+  UIDSearchPage,
 } from "./pages";
 
-import {
-  Footer,
-  Navbar,
-  NavbarTabs,
-  NotificationBar,
-} from "./components";
+import { Footer, Navbar, NavbarTabs, NotificationBar } from "./components";
 
 const App = () => {
   return (
@@ -26,31 +23,33 @@ const App = () => {
         <Navbar />
         <NavbarTabs />
         <div className="content-wrapper">
-          <Routes>
-            <Route path="/" element={<DashboardPage />} />
+          <HoverElementContextProvider>
+            <Routes>
+              <Route path="/" element={<DashboardPage />} />
 
-            <Route path="/artifacts" element={<ArtifactsPage />} />
-            <Route path="/builds" element={<BuildsPage />} />
+              <Route path="/artifacts" element={<ArtifactsPage />} />
+              <Route path="/builds" element={<BuildsPage />} />
 
-            {/* @TODO: /auth ? */}
-            {/* <Route path="/auth" element={<>nothing here yet.</>} /> */}
+              {/* @TODO: /auth ? */}
+              {/* <Route path="/auth" element={<>nothing here yet.</>} /> */}
 
-            {/* @TODO: /users ? */}
-            {/* <Route path="/users" element={<>nothing here</>} /> */}
+              {/* @TODO: /users ? */}
+              {/* <Route path="/users" element={<>nothing here</>} /> */}
 
-            {/* @TODO: /profile ? */}
-            {/* <Route path="/profile" element={<>nothing here yet.</>} /> */}
+              {/* @TODO: /profile ? */}
+              <Route path="/profile" element={<UIDSearchPage />} />
 
-            <Route path="/profile/:uid" element={<ProfilePage />} />
+              <Route path="/profile/:uid" element={<ProfilePage />} />
 
-            <Route path="/leaderboards" element={<CategorySelectionPage />} />
-            <Route
-              path="/leaderboards/:calculationId"
-              element={<LeaderboardsPage />}
-            />
+              <Route path="/leaderboards" element={<CategorySelectionPage />} />
+              <Route
+                path="/leaderboards/:calculationId"
+                element={<LeaderboardsPage />}
+              />
 
-            <Route path="*" element={"nope."} />
-          </Routes>
+              <Route path="*" element={"nope."} />
+            </Routes>
+          </HoverElementContextProvider>
           <Footer />
         </div>
       </HashRouter>

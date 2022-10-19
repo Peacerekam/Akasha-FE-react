@@ -37,8 +37,10 @@ body {
 
 .content-block {
   border-radius: 2px;
-  overflow-y: hidden;
-  overflow-x: auto;
+
+  position: relative;
+  overflow: visible; 
+
   background-color: #2c3333;
   margin: 20px 0;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;

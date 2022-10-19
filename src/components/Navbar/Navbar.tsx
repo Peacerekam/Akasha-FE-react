@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord, faPatreon } from "@fortawesome/free-brands-svg-icons";
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { DISCORD_URL, PATREON_URL } from "../../utils/helpers";
 import "./style.scss";
 
@@ -51,7 +51,8 @@ const NAVIGATION = [
 
 export const Navbar: React.FC = () => {
   const navigate = useNavigate();
-
+  const location = useLocation();
+  // console.log(location)
   // BrowserRouter
   // const { pathname } = window.location;
 
@@ -82,9 +83,10 @@ export const Navbar: React.FC = () => {
           <a
             key={`${nav.name}-${i}`}
             className={
-              hash !== "/" && hash.startsWith(nav.path) ? "active-tab" : ""
+              hash !== "/" && location.pathname === nav.path ? "active-tab" : ""
             }
             target={nav.external ? "_blank" : undefined}
+            rel="noreferrer"
             href={nav.external ? nav.path : `${pathname}#${nav.path}`}
             onClick={(event) => {
               if (nav.external) return;

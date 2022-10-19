@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-import { BACKEND_URL, getCharacterCvColor } from "../../utils/helpers";
+import { BACKEND_URL } from "../../utils/helpers";
 import { Artifact } from "../Artifact";
 import { FollowCursor } from "../FollowCursor";
 import { StatList } from "../StatList";

@@ -77,48 +77,6 @@
   }
 }
 
-@keyframes noticeMeSenpai {
-  0% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 0.8;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-.profile-settings-btn {
-  background: transparent;
-  border: none;
-  color: white;
-  cursor: pointer;
-  position: fixed;
-  bottom: 15px;
-  right: 15px;
-  // left: 15px;
-  z-index: 18;
-  animation: spin 15s linear infinite;
-  &:hover {
-    color: orange;
-  }
-  &::after {
-    content: "";
-    position: absolute;
-    width: 100px;
-    height: 100px;
-    right: -30px;
-    bottom: -30px;
-    background-color: orange;
-    animation: noticeMeSenpai 2s ease-in-out;
-    opacity: 0;
-    filter: blur(70px);
-    z-index: 17;
-    pointer-events: none;
-  }
-}
-
 .compact-table-wrapper {
   display: flex;
   justify-content: space-between;
@@ -144,7 +102,7 @@
         top: 0;
         left: 0;
         color: hsl(0, 0%, 50%);
-        padding: 7px 15px;
+        padding: 6px 15px;
         pointer-events: none;
       }
     }
@@ -289,4 +247,27 @@
   color: orange;
   outline: none;
   width: calc(100% - 15px);
+}
+
+.floating-profile-buttons-wrapper {
+  position: relative;
+  .floating-profile-buttons {
+    width: 100%;
+    position: absolute;
+    bottom: -10px;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    align-items: flex-end;
+    .floating-button {
+      cursor: pointer;
+      &:hover {
+        color: orange;
+      }
+      &.disable-btn {
+        pointer-events: none;
+        opacity: 0.5;
+      }
+    }
+  }
 }

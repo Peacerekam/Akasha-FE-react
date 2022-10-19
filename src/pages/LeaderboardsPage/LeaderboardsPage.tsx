@@ -18,6 +18,7 @@ import {
   Spinner,
   TableHoverElement,
   WeaponMiniDisplay,
+  StylizedContentBlock
 } from "../../components";
 import {
   FETCH_CATEGORIES_URL,
@@ -30,10 +31,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { TableColumn } from "../../types/TableColumn";
 
-import { StylizedContentBlock } from "../../components/StylizedContentBlock";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
 
 import "./style.scss";
+import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 
 type CategoriesById = {
   [key: string]: {
@@ -87,11 +88,12 @@ export const LeaderboardsPage: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>();
   const [inputUID, setInputUID] = useState<string>("");
   const [lookupUID, setLookupUID] = useState<string>("");
-  const [hoverPreview, setHoverPreview] = useState<any | null>(null);
 
   const { lastProfiles } = useContext(LastProfilesContext);
-  const navigate = useNavigate();
+  const { hoverElement, updateTableHoverElement } =
+    useContext(HoverElementContext);
   const { calculationId } = useParams();
+  const navigate = useNavigate();
   const pathname = window.location.pathname;
 
   const [initialData, setInitialData] = useState({
@@ -323,17 +325,6 @@ export const LeaderboardsPage: React.FC = () => {
     setCategories(data);
   };
 
-  const updateTableHoverElement = (props: any) => {
-    const el = (
-      <TableHoverElement
-        currentCategory={currentCategory}
-        listingType={"table"}
-        {...props}
-      />
-    );
-    setHoverPreview(el);
-  };
-
   const iconUrlToNamecardUrl = (url: string) => {
     return url
       .replace("UI_AvatarIcon", "UI_NameCardPic")
@@ -378,8 +369,8 @@ export const LeaderboardsPage: React.FC = () => {
 
     return (
       <a
-        onMouseEnter={() => updateTableHoverElement({ row: player })}
-        onMouseLeave={() => updateTableHoverElement({ hide: true })}
+        onMouseEnter={() => updateTableHoverElement({ row: player, currentCategory })}
+        onMouseLeave={() => updateTableHoverElement({ hide: true, currentCategory })}
         className={wrapperClassNames}
         onClick={(event) => {
           event.preventDefault();
@@ -468,7 +459,7 @@ export const LeaderboardsPage: React.FC = () => {
 
   return (
     <div className="flex" key={calculationId}>
-      {hoverPreview}
+      {hoverElement}
       <div className="content-block w-100">
         <StylizedContentBlock
           variant="gradient"
