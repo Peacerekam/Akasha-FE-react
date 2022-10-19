@@ -18,7 +18,7 @@ import {
   Spinner,
   TableHoverElement,
   WeaponMiniDisplay,
-  StylizedContentBlock
+  StylizedContentBlock,
 } from "../../components";
 import {
   FETCH_CATEGORIES_URL,
@@ -84,23 +84,26 @@ export const ARBadge = ({ adventureRank }: any) => (
 );
 
 export const LeaderboardsPage: React.FC = () => {
-  const [currentCategory, setCurrentCategory] = useState<string>("");
+  // state
   const [categories, setCategories] = useState<Category[]>();
   const [inputUID, setInputUID] = useState<string>("");
   const [lookupUID, setLookupUID] = useState<string>("");
-
-  const { lastProfiles } = useContext(LastProfilesContext);
-  const { hoverElement, updateTableHoverElement } =
-    useContext(HoverElementContext);
-  const { calculationId } = useParams();
-  const navigate = useNavigate();
-  const pathname = window.location.pathname;
-
-  const [initialData, setInitialData] = useState({
+  const [podiumData, setPodiumData] = useState({
     rows: [] as any,
     totalRows: 0,
   });
 
+  // context
+  const { lastProfiles } = useContext(LastProfilesContext);
+  const { hoverElement, updateTableHoverElement } =
+    useContext(HoverElementContext);
+
+  // hooks
+  const { calculationId } = useParams();
+  const navigate = useNavigate();
+
+  const pathname = window.location.pathname;
+  const currentCategory = calculationId ?? "";
   const calculationSortKey = currentCategory
     ? `calculations.${currentCategory}.result`
     : "";
@@ -129,7 +132,7 @@ export const LeaderboardsPage: React.FC = () => {
     return map;
   }, [categories]);
 
-  const displayCategory = categoriesById[currentCategory];
+  const displayCategory = categoriesById[calculationId ?? ""];
 
   const handleFetchLeaderboard = async () => {
     const opts = {
@@ -144,7 +147,7 @@ export const LeaderboardsPage: React.FC = () => {
     const response = await axios.get(FETCH_LEADERBOARDS_URL, opts);
     const { data, totalRows } = response.data;
 
-    setInitialData({
+    setPodiumData({
       rows: data,
       totalRows,
     });
@@ -154,16 +157,10 @@ export const LeaderboardsPage: React.FC = () => {
     if (categories) {
       handleFetchLeaderboard();
     }
-  }, [categories]);
+  }, [categories, calculationSortKey]);
 
   useEffect(() => {
     fetchCategories();
-  }, [calculationId]);
-
-  useEffect(() => {
-    if (calculationId) {
-      setCurrentCategory(calculationId);
-    }
   }, [calculationId]);
 
   const LEADERBOARDS_COLUMNS: TableColumn<BuildsColumns>[] = useMemo(
@@ -332,72 +329,79 @@ export const LeaderboardsPage: React.FC = () => {
   };
 
   const blockBackgroundImage =
-    initialData.rows.length > 0
-      ? iconUrlToNamecardUrl(initialData.rows[0].icon)
+    podiumData.rows.length > 0
+      ? iconUrlToNamecardUrl(podiumData.rows[0].icon)
       : "";
 
-  const renderRung = (position: 1 | 2 | 3) => {
-    const player = initialData.rows[position - 1] ?? null;
-    if (!player) return null;
+  const renderRung = useCallback(
+    (position: 1 | 2 | 3) => {
+      const player = podiumData.rows[position - 1] ?? null;
+      if (!player) return null;
 
-    const wrapperClassNames = [
-      "pointer rung-wrapper",
-      position === 1 ? "gold" : "",
-      position === 2 ? "silver" : "",
-      position === 3 ? "bronze" : "",
-    ]
-      .join(" ")
-      .trim();
+      const wrapperClassNames = [
+        "pointer rung-wrapper",
+        position === 1 ? "gold" : "",
+        position === 2 ? "silver" : "",
+        position === 3 ? "bronze" : "",
+      ]
+        .join(" ")
+        .trim();
 
-    const squishNameFactor = {
-      transform: `scaleX(${
-        player?.owner?.nickname?.length > 8
-          ? 8 / player?.owner?.nickname?.length
-          : 1
-      })`,
-    };
+      const squishNameFactor = {
+        transform: `scaleX(${
+          player?.owner?.nickname?.length > 8
+            ? 8 / player?.owner?.nickname?.length
+            : 1
+        })`,
+      };
 
-    const result = player.calculations[currentCategory]?.result.toFixed(0);
+      const result = player.calculations[currentCategory]?.result.toFixed(0);
 
-    const cv = player?.critValue || 0;
-    const borderColor = getCharacterCvColor(cv);
-    const imageStyle = {
-      boxShadow: `0 0 0 2px ${borderColor}`,
-      background: `url(${player.nameCardLink})`,
-      backgroundPosition: "center",
-    } as React.CSSProperties;
+      const cv = player?.critValue || 0;
+      const borderColor = getCharacterCvColor(cv);
+      const imageStyle = {
+        boxShadow: `0 0 0 2px ${borderColor}`,
+        backgroundImage: `url(${player.nameCardLink})`,
+        backgroundPosition: "center",
+      } as React.CSSProperties;
 
-    return (
-      <a
-        onMouseEnter={() => updateTableHoverElement({ row: player, currentCategory })}
-        onMouseLeave={() => updateTableHoverElement({ hide: true, currentCategory })}
-        className={wrapperClassNames}
-        onClick={(event) => {
-          event.preventDefault();
-          navigate(`/profile/${player.uid}`);
-        }}
-        href={`${pathname}#/profile/${player.uid}`}
-      >
-        <img
-          style={imageStyle}
-          src={player.profilePictureLink}
-          className="podium-player-icon"
-        />
-        <div className="rung-player-score">{result || "---"}</div>
-        <div className="rung-player-name">
-          <div style={squishNameFactor}>{player?.owner?.nickname}</div>
-        </div>
-        <div className="rung-geometry">
-          <div>{position}</div>
-        </div>
-      </a>
-    );
-  };
+      return (
+        <a
+          onMouseEnter={() =>
+            updateTableHoverElement({ row: player, currentCategory })
+          }
+          onMouseLeave={() =>
+            updateTableHoverElement({ hide: true, currentCategory })
+          }
+          className={wrapperClassNames}
+          onClick={(event) => {
+            event.preventDefault();
+            navigate(`/profile/${player.uid}`);
+          }}
+          href={`${pathname}#/profile/${player.uid}`}
+        >
+          <img
+            style={imageStyle}
+            src={player.profilePictureLink}
+            className="podium-player-icon"
+          />
+          <div className="rung-player-score">{result || "---"}</div>
+          <div className="rung-player-name">
+            <div style={squishNameFactor}>{player?.owner?.nickname}</div>
+          </div>
+          <div className="rung-geometry">
+            <div>{position}</div>
+          </div>
+        </a>
+      );
+    },
+    [JSON.stringify(podiumData.rows), currentCategory]
+  );
 
-  const Podium = useCallback(() => {
+  const displayPodium = useMemo(() => {
     return (
       <div className="podium-wrapper">
-        {initialData.rows.length === 0 ? (
+        {podiumData.rows.length === 0 ? (
           <div
             style={{ display: "flex", alignItems: "center", height: "100%" }}
           >
@@ -419,7 +423,7 @@ export const LeaderboardsPage: React.FC = () => {
         </div> */}
       </div>
     );
-  }, [initialData.rows.length, calculationId]);
+  }, [JSON.stringify(podiumData.rows)]);
 
   const sortedCategoriesWithSameCharacter = useMemo(
     () =>
@@ -460,10 +464,10 @@ export const LeaderboardsPage: React.FC = () => {
   return (
     <div className="flex" key={calculationId}>
       {hoverElement}
-      <div className="content-block w-100">
+      <div className="content-block w-100" key={currentCategory}>
         <StylizedContentBlock
           variant="gradient"
-          revealCondition={initialData.rows.length > 0}
+          revealCondition={podiumData.rows.length > 0}
           overrideImage={blockBackgroundImage}
         />
         <div className="relative">
@@ -482,7 +486,7 @@ export const LeaderboardsPage: React.FC = () => {
             margin: "10px",
           }}
         >
-          <Podium />
+          {displayPodium}
           <div style={{}}>
             {displayCategory && (
               <div>
@@ -562,7 +566,7 @@ export const LeaderboardsPage: React.FC = () => {
 
       <div className="content-block w-100">
         <StylizedContentBlock
-          revealCondition={initialData.rows.length > 0}
+          revealCondition={podiumData.rows.length > 0}
           overrideImage={blockBackgroundImage}
         />
         <div className="relative" style={{ textAlign: "center" }}>
@@ -573,7 +577,8 @@ export const LeaderboardsPage: React.FC = () => {
               onChange={(event) => {
                 setInputUID(event.target.value);
               }}
-              onKeyDown={(event) => {
+              onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
+                console.log("event.target", event.target);
                 if (event.key === "Enter") {
                   setLookupUID(inputUID);
                 }
@@ -589,7 +594,7 @@ export const LeaderboardsPage: React.FC = () => {
           </div>
         </div>
         {displayCategory && (
-          <div>
+          <div key={currentCategory}>
             <CustomTable
               fetchURL={FETCH_LEADERBOARDS_URL}
               fetchParams={{

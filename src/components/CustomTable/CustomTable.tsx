@@ -144,6 +144,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     JSON.stringify(fetchParams),
     fetchURL,
     projectParamsToPath,
+    ignoreEmptyUidsArray,
   ]);
 
   useEffect(() => {
