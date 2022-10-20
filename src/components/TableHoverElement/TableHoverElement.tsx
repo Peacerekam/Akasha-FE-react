@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-import { BACKEND_URL } from "../../utils/helpers";
 import { Artifact } from "../Artifact";
 import { FollowCursor } from "../FollowCursor";
 import { StatList } from "../StatList";
@@ -29,7 +28,7 @@ export const TableHoverElement: React.FC<TableHoverElementProps> = ({
   }>({});
 
   const getArtifactDetails = async () => {
-    const artDetailsURL = `${BACKEND_URL}/api/artifacts/${rowData._id}`;
+    const artDetailsURL = `/api/artifacts/${rowData._id}`;
     const { data } = await axios.get(artDetailsURL);
     setArtifactDetails((prev) => ({
       ...prev,

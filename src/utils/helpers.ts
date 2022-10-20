@@ -1,23 +1,13 @@
-const urls = {
-  localhost: "http://localhost:5033",
-  vps: "http://149.57.165.73:5033",
-  proxy: "http://localhost:3100/akasha",
-  prod: "https://www.mimee.ovh/akasha",
-  heroku: "https://akasha-backend.herokuapp.com",
-};
-
-export const BACKEND_URL = urls["localhost"];
-
 export const PATREON_URL = "https://patreon.com/user?u=4105697";
 export const DISCORD_URL = "https://discord.gg/vmdPppZVa8";
 
-export const FETCH_ARTIFACTS_URL = `${BACKEND_URL}/api/artifacts`;
-export const FETCH_BUILDS_URL = `${BACKEND_URL}/api/builds/`;
-export const FETCH_LEADERBOARDS_URL = `${BACKEND_URL}/api/leaderboards`;
-export const FETCH_CATEGORIES_URL = `${BACKEND_URL}/api/leaderboards/categories`;
+export const FETCH_ARTIFACTS_URL = `/api/artifacts`;
+export const FETCH_BUILDS_URL = `/api/builds/`;
+export const FETCH_LEADERBOARDS_URL = `/api/leaderboards`;
+export const FETCH_CATEGORIES_URL = `/api/leaderboards/categories`;
 
-export const FETCH_CHARACTER_FILTERS_URL = `${BACKEND_URL}/api/filters/characters/`;
-export const FETCH_ARTIFACT_FILTERS_URL = `${BACKEND_URL}/api/filters/artifacts/`;
+export const FETCH_CHARACTER_FILTERS_URL = `/api/filters/characters/`;
+export const FETCH_ARTIFACT_FILTERS_URL = `/api/filters/artifacts/`;
 
 export const normalizeText = (test: string) => {
   const regex = /[^A-Za-z0-9%]/g;

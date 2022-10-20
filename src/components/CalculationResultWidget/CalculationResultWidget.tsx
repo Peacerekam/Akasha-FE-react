@@ -3,7 +3,6 @@ import React, { useMemo, useState, useEffect } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { useNavigate } from "react-router-dom";
 
-import { BACKEND_URL } from "../../utils/helpers";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import "./style.scss";
 
@@ -23,7 +22,7 @@ export const CalculationResultWidget: React.FC<
     abortController: AbortController
   ) => {
     const _uid = encodeURIComponent(uid);
-    const fetchURL = `${BACKEND_URL}/api/leaderboards/calculations/${_uid}`;
+    const fetchURL = `/api/leaderboards/calculations/${_uid}`;
     const opts = {
       signal: abortController.signal,
     } as any;

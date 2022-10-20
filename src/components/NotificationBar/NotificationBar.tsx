@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { BACKEND_URL } from "../../utils/helpers";
 import "./style.scss";
 
 type Notification = {
@@ -13,7 +12,7 @@ export const NotificationBar: React.FC = () => {
   const [hide, setHide] = useState(false);
 
   const getNotification = async () => {
-    const notificationURL = `${BACKEND_URL}/api/notifications/topbar`;
+    const notificationURL = `/api/notifications/topbar`;
     const { data } = await axios.get(notificationURL);
     if (data) {
       setNotification(data);

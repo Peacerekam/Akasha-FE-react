@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { BACKEND_URL } from "../../utils/helpers";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import "./style.scss";
 
@@ -30,7 +29,7 @@ export const CalculationList: React.FC<CalculationListProps> = ({ row }) => {
   const getCalculations = async () => {
     const _uid = encodeURIComponent(row.uid);
     const _type = encodeURIComponent(row.type);
-    const calcDetailsURL = `${BACKEND_URL}/api/leaderboards/${_uid}/${row.characterId}/${_type}`;
+    const calcDetailsURL = `/api/leaderboards/${_uid}/${row.characterId}/${_type}`;
     const { data } = await axios.get(calcDetailsURL);
     setCalculations(data.data);
   };

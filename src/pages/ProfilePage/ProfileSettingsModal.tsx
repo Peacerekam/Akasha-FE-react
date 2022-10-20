@@ -13,7 +13,7 @@ import {
 
 import { StatList } from "../../components";
 import { FancyBuildBorder } from "../../components/FancyBuildBorder";
-import { BACKEND_URL, PATREON_URL } from "../../utils/helpers";
+import { PATREON_URL } from "../../utils/helpers";
 import { BuildNameInput } from "./BuildNameInput";
 
 type ProfileSettingsModalProps = {
@@ -45,7 +45,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     abortController?: AbortController
   ) => {
     const _uid = encodeURIComponent(uid);
-    const fetchURL = `${BACKEND_URL}/api/builds/${_uid}`;
+    const fetchURL = `/api/builds/${_uid}`;
     const opts = {
       signal: abortController?.signal,
     } as any;
@@ -89,7 +89,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     const { uid, characterId, type } = selectedBuild;
     const _uid = encodeURIComponent(uid);
     const _type = encodeURIComponent(type);
-    const postNamecardURL = `${BACKEND_URL}/api/user/namecard/${_uid}/${characterId}/${_type}`;
+    const postNamecardURL = `/api/user/namecard/${_uid}/${characterId}/${_type}`;
     const response = await axios.post(postNamecardURL, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -151,7 +151,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     const { uid, characterId, type } = selectedBuild;
     const _uid = encodeURIComponent(uid);
     const _type = encodeURIComponent(type);
-    const postNamecardURL = `${BACKEND_URL}/api/user/namecard/${_uid}/${characterId}/${_type}`;
+    const postNamecardURL = `/api/user/namecard/${_uid}/${characterId}/${_type}`;
     await axios.post(postNamecardURL); // no formData attached
     clearBgImage();
     fetchBuildsData(accountData?.uid);
@@ -162,7 +162,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     const { uid, characterId, type } = char;
     const _uid = encodeURIComponent(uid);
     const _type = encodeURIComponent(type);
-    const toggleVisibilityURL = `${BACKEND_URL}/api/user/toggleBuildVisibility/${_uid}/${characterId}/${_type}`;
+    const toggleVisibilityURL = `/api/user/toggleBuildVisibility/${_uid}/${characterId}/${_type}`;
     await axios.post(toggleVisibilityURL);
     fetchBuildsData(accountData?.uid);
   };
@@ -172,7 +172,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     const { uid, characterId, type } = char;
     const _uid = encodeURIComponent(uid);
     const _type = encodeURIComponent(type);
-    const deleteBuildURL = `${BACKEND_URL}/api/user/deleteBuild/${_uid}/${characterId}/${_type}`;
+    const deleteBuildURL = `/api/user/deleteBuild/${_uid}/${characterId}/${_type}`;
     await axios.post(deleteBuildURL);
     fetchBuildsData(accountData?.uid);
   };
@@ -193,7 +193,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     const _uid = encodeURIComponent(uid);
     const _type = encodeURIComponent(type);
 
-    const postBuildNameURL = `${BACKEND_URL}/api/user/setBuildName/${_uid}/${characterId}/${_type}`;
+    const postBuildNameURL = `/api/user/setBuildName/${_uid}/${characterId}/${_type}`;
     const opts = {
       params: { buildName: newBuildName },
     };

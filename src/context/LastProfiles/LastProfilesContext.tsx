@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, { createContext, useState, useEffect } from "react";
-import { BACKEND_URL } from "../../utils/helpers";
 
 type LastProfiles = {
   lastProfiles: string[];
@@ -65,7 +64,7 @@ const LastProfilesContextProvider: React.FC<{ children: any }> = ({
 
   const getNickname = async (uid: string) => {
     const _uid = encodeURIComponent(uid);
-    const getNicknameURL = `${BACKEND_URL}/api/user/nickname/${_uid}`;
+    const getNicknameURL = `/api/user/nickname/${_uid}`;
     const { data } = await axios.get(getNicknameURL);
     if (data.data.nickname === null) {
       const _t = setTimeout(() => getNickname(uid), 1000);

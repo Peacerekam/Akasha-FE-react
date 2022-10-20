@@ -6,7 +6,6 @@ import { faGear, faRotateRight } from "@fortawesome/free-solid-svg-icons";
 
 import {
   allSubstatsInOrder,
-  BACKEND_URL,
   FETCH_ARTIFACTS_URL,
   FETCH_ARTIFACT_FILTERS_URL,
   FETCH_BUILDS_URL,
@@ -62,7 +61,7 @@ export const ProfilePage: React.FC = () => {
   ) => {
     try {
       const _uid = encodeURIComponent(uid);
-      const url = `${BACKEND_URL}/api/user/${_uid}`;
+      const url = `/api/user/${_uid}`;
       setResponseData({ account: null });
 
       const opts = {
@@ -369,7 +368,7 @@ export const ProfilePage: React.FC = () => {
     if (!uid) return;
     setEnableRefreshBtn(false);
     const _uid = encodeURIComponent(uid);
-    const refreshURL = `${BACKEND_URL}/api/user/refresh/${_uid}`;
+    const refreshURL = `/api/user/refresh/${_uid}`;
     const { data } = await axios.get(refreshURL);
     const {
       ttl,

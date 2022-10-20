@@ -14,6 +14,18 @@ import {
 } from "./pages";
 
 import { Footer, Navbar, NavbarTabs, NotificationBar } from "./components";
+import axios from "axios";
+
+// @TODO: env variables
+const urls = {
+  localhost: "http://localhost:5033",
+  vps: "http://149.57.165.73:5033",
+  proxy: "http://localhost:3100/akasha",
+  prod: "https://www.mimee.ovh/akasha",
+  heroku: "https://akasha-backend.herokuapp.com",
+};
+
+axios.defaults.baseURL = urls["localhost"];
 
 const App = () => {
   return (

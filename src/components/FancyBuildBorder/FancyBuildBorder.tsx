@@ -1,4 +1,4 @@
-import { BACKEND_URL, getCharacterCvColor } from "../../utils/helpers";
+import { getCharacterCvColor } from "../../utils/helpers";
 
 type FancyBuildBorderProps = {
   hide: boolean;
@@ -60,7 +60,7 @@ export const FancyBuildBorder: React.FC<FancyBuildBorderProps> = ({
 
   const _customNamecard = encodeURIComponent(rowData?.customNamecard);
   const customNamecard = patreonHasCustomNamecard
-    ? `${BACKEND_URL}/public/namecards/${_customNamecard}`
+    ? `/public/namecards/${_customNamecard}`
     : null;
 
   const backgroundImage =
