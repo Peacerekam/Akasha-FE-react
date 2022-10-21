@@ -16,7 +16,6 @@ import {
   DisplaySets,
   CustomTable,
   Spinner,
-  TableHoverElement,
   WeaponMiniDisplay,
   StylizedContentBlock,
 } from "../../components";
@@ -30,11 +29,9 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { TableColumn } from "../../types/TableColumn";
-
-import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
-
-import "./style.scss";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
+import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
+import "./style.scss";
 
 type CategoriesById = {
   [key: string]: {
@@ -598,7 +595,7 @@ export const LeaderboardsPage: React.FC = () => {
             <CustomTable
               fetchURL={FETCH_LEADERBOARDS_URL}
               fetchParams={{
-                uids: uidsToQuery(lastProfiles),
+                uids: uidsToQuery(lastProfiles.map((a) => a.uid)),
                 uid: lookupUID,
               }}
               columns={LEADERBOARDS_COLUMNS}

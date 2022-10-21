@@ -16,11 +16,15 @@ import {
   Pagination,
   ArtifactListCompact,
 } from "../../components";
-import { arrayPushOrSplice, normalizeText } from "../../utils/helpers";
+import {
+  abortSignalCatcher,
+  arrayPushOrSplice,
+  normalizeText,
+} from "../../utils/helpers";
 import { FiltersContainer, FilterOption } from "./Filters";
-import { useNavigate } from "react-router-dom";
-import "./style.scss";
+import { useLocation, useNavigate } from "react-router-dom";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
+import "./style.scss";
 
 type CustomTableProps = {
   columns: any[];
@@ -61,6 +65,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   const [rows, setRows] = useState<any[]>([]);
   const [totalRowsCount, setTotalRowsCount] = useState<number>(0);
   const { updateTableHoverElement } = useContext(HoverElementContext);
+  const location = useLocation();
 
   const defaultParams = {
     sort: defaultSort || "",
@@ -93,11 +98,9 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   };
 
   const readParamsFromURL = () => {
-    const { hash } = window.location;
-    const searchQueryStart = hash.indexOf("?");
-    if (searchQueryStart === -1) return;
+    if (!location.search) return;
 
-    const searchQuery = hash.slice(searchQueryStart, hash.length);
+    const searchQuery = location.search;
     const query = new URLSearchParams(searchQuery);
 
     const tmp: any = {};
@@ -179,12 +182,17 @@ export const CustomTable: React.FC<CustomTableProps> = ({
           ...fetchParams,
         },
       } as any;
-      const response = await axios.get(fetchURL, opts);
-      const { data, totalRows } = response.data;
 
-      setExpandedRows([]);
-      setTotalRowsCount(totalRows);
-      setRows(data);
+      const getSetData = async () => {
+        const response = await axios.get(fetchURL, opts);
+        const { data, totalRows } = response.data;
+
+        setExpandedRows([]);
+        setTotalRowsCount(totalRows);
+        setRows(data);
+      };
+
+      await abortSignalCatcher(getSetData);
       setIsLoading(false);
     } catch (err) {}
 

@@ -3,9 +3,13 @@ import { useState, useEffect, useMemo } from "react";
 import { faList } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FiltersModal } from "./FiltersModal";
-import { filtersQueryToArray } from "../../../utils/helpers";
+import {
+  abortSignalCatcher,
+  filtersQueryToArray,
+} from "../../../utils/helpers";
 import { CustomQueryBuilder } from "./CustomQueryBuilder";
 import "./style.scss";
+import { useLocation } from "react-router-dom";
 
 type FiltersContainerProps = {
   onFiltersChange: (filters: FilterOption[]) => void;
@@ -46,35 +50,36 @@ export const FiltersContainer = ({
   fetchURL,
   projectParamsToPath,
 }: FiltersContainerProps) => {
+  const [initialLoad, setInitialLoad] = useState(true);
   const [showFiltersModal, setShowFiltersModal] = useState(false);
   const [filterSelectFocus, setFilterSelectFocus] = useState<number>();
   const [optionGroups, setOptionGroups] = useState<OptionsResponse>([]);
   const [filtersArray, setFiltersArray] = useState<FilterOption[]>([
     { name: "", value: "" },
   ]);
-  const [initialLoad, setInitialLoad] = useState(true);
+
+  const location = useLocation();
 
   const fetchFilters = async (
     fetchURL: string,
     abortController: AbortController
   ) => {
-    try {
-      const opts = {
-        signal: abortController?.signal,
-      };
+    const opts = {
+      signal: abortController?.signal,
+    };
 
+    const getSetData = async () => {
       const { data } = await axios.get(fetchURL, opts);
-      // cancel or reject the promise or requestif theresnew fetch?
       setOptionGroups(data.data);
-    } catch (err) {}
+    };
+
+    await abortSignalCatcher(getSetData);
   };
 
   const fillPillsFromURL = () => {
-    const { hash } = window.location;
-    const searchQueryStart = hash.indexOf("?");
-    if (searchQueryStart === -1) return;
+    if (!location.search) return;
 
-    const searchQuery = hash.slice(searchQueryStart, hash.length);
+    const searchQuery = location.search;
     const query = new URLSearchParams(searchQuery);
 
     const tmp: any[] = [];

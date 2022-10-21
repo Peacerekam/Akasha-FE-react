@@ -1,3 +1,4 @@
+import axios from "axios";
 import { getCharacterCvColor } from "../../utils/helpers";
 
 type FancyBuildBorderProps = {
@@ -25,7 +26,6 @@ export const FancyBuildBorder: React.FC<FancyBuildBorderProps> = ({
     .join(" ")
     .trim();
 
-  // @TODO: here!!
   const fancyBorderClassNames = [
     "patreon-stat-decoration",
     hide ? "hide" : "",
@@ -60,7 +60,7 @@ export const FancyBuildBorder: React.FC<FancyBuildBorderProps> = ({
 
   const _customNamecard = encodeURIComponent(rowData?.customNamecard);
   const customNamecard = patreonHasCustomNamecard
-    ? `/public/namecards/${_customNamecard}`
+    ? `${axios.defaults.baseURL}/public/namecards/${_customNamecard}`
     : null;
 
   const backgroundImage =

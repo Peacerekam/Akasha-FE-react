@@ -13,7 +13,7 @@ import {
 
 import { StatList } from "../../components";
 import { FancyBuildBorder } from "../../components/FancyBuildBorder";
-import { PATREON_URL } from "../../utils/helpers";
+import { abortSignalCatcher, PATREON_URL } from "../../utils/helpers";
 import { BuildNameInput } from "./BuildNameInput";
 
 type ProfileSettingsModalProps = {
@@ -49,9 +49,14 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     const opts = {
       signal: abortController?.signal,
     } as any;
-    const response = await axios.get(fetchURL, opts);
-    const { data } = response.data;
-    setBuilds(data);
+    
+    const getSetData = async () => {
+      const response = await axios.get(fetchURL, opts);
+      const { data } = response.data;
+      setBuilds(data);
+    };
+
+    await abortSignalCatcher(getSetData);
   };
 
   const getBuildId = (build: any) => `${build.characterId}${build.type}`;

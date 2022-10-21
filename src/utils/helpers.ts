@@ -200,3 +200,19 @@ export const uidsToQuery = (uids: (string | number)[]) => {
 
   return stringified;
 };
+
+export const abortSignalCatcher = async (cb: any, onError?: any) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await cb();
+    } catch (err) {
+      const _err = err as any;
+      const ERR_CANCELED =
+        _err?.name === "CanceledError" || _err?.code === "ERR_CANCELED";
+
+      if (ERR_CANCELED) return;
+      if (onError) await onError(_err);
+    }
+    resolve(true);
+  });
+};

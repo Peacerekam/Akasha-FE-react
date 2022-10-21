@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear, faRotateRight } from "@fortawesome/free-solid-svg-icons";
 
 import {
+  abortSignalCatcher,
   allSubstatsInOrder,
   FETCH_ARTIFACTS_URL,
   FETCH_ARTIFACT_FILTERS_URL,
@@ -36,6 +37,7 @@ import {
   applyModalBodyStyle,
   getRelativeCoords,
 } from "../../components/CustomTable/Filters";
+import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import "./style.scss";
 
@@ -54,25 +56,30 @@ export const ProfilePage: React.FC = () => {
 
   const { uid } = useParams();
   const { hoverElement } = useContext(HoverElementContext);
+  const { addTab } = useContext(LastProfilesContext);
 
   const fetchProfile = async (
     uid: string,
     abortController?: AbortController
   ) => {
-    try {
-      const _uid = encodeURIComponent(uid);
-      const url = `/api/user/${_uid}`;
-      setResponseData({ account: null });
+    const _uid = encodeURIComponent(uid);
+    const url = `/api/user/${_uid}`;
+    setResponseData({ account: null });
 
-      const opts = {
-        signal: abortController?.signal,
-      };
+    const opts = {
+      signal: abortController?.signal,
+    };
 
+    const getSetData = async () => {
       const { data } = await axios.get(url, opts);
       setResponseData(data.data);
 
+      if (data?.data?.account?.playerInfo?.nickname) {
+        handleAddNewTab(data.data);
+      }
+
       if (!data?.data?.account?.profilePictureLink) {
-        // this is null only if document doesnt exist in database
+        // this is null only if document doesnt exist in database yet
         handleRefreshData();
       }
 
@@ -80,11 +87,14 @@ export const ProfilePage: React.FC = () => {
       const then = getTime + data.ttl;
       setRefreshTime(then);
       setEnableRefreshBtn(then < 0);
-    } catch (err) {
-      // const typedError = err as Error
-      // if (typedError.name !== "CanceledError") return;
-      // console.log(typedError);
-    }
+    };
+
+    await abortSignalCatcher(getSetData);
+  };
+
+  const handleAddNewTab = ({ account }: any) => {
+    if (!uid) return;
+    addTab(uid, account?.playerInfo?.nickname ?? "???");
   };
 
   useEffect(() => {

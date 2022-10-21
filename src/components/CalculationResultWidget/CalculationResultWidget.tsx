@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useMemo, useState, useEffect } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { useNavigate } from "react-router-dom";
-
+import { abortSignalCatcher } from "../../utils/helpers";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import "./style.scss";
 
@@ -26,9 +26,14 @@ export const CalculationResultWidget: React.FC<
     const opts = {
       signal: abortController.signal,
     } as any;
-    const response = await axios.get(fetchURL, opts);
-    const { data } = response.data;
-    setData(data);
+
+    const getSetData = async () => {
+      const response = await axios.get(fetchURL, opts);
+      const { data } = response.data;
+      setData(data);
+    };
+
+    await abortSignalCatcher(getSetData);
   };
 
   useEffect(() => {

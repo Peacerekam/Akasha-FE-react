@@ -1,27 +1,22 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
 import "./style.scss";
 
 export const NavbarTabs: React.FC = () => {
   const [animationStagger, setAnimationStagger] = useState(200);
-  const { lastProfiles, nicknameMap, removeTab, updateLastProfiles } =
-    useContext(LastProfilesContext);
+  const { lastProfiles, removeTab } = useContext(LastProfilesContext);
   const navigate = useNavigate();
-
-  // HashRouter
-  const hash = window.location.hash.replace("#", "").split("?")[0];
-  const pathname = window.location.pathname;
+  const location = useLocation();
 
   useEffect(() => {
-    setTimeout(() => updateLastProfiles(hash), 1);
     if (lastProfiles.length > 0) setAnimationStagger(0);
-  }, [hash]);
+  }, [location.pathname]);
 
   return (
     <div className="navbar-tabs">
-      {lastProfiles.map((uid, index) => {
-        if (!nicknameMap[uid]) return null;
+      {lastProfiles.map((profile, index) => {
+        const { uid, nickname } = profile;
 
         const style = {
           "--slideDelay": `${index * animationStagger}ms`,
@@ -29,18 +24,20 @@ export const NavbarTabs: React.FC = () => {
 
         return (
           <div
-            key={`tab-${uid}-${nicknameMap[uid]}`}
-            className={`navbar-tab ${hash.endsWith(uid) ? "active-tab" : ""}`}
+            key={`tab-${uid}-${nickname}`}
+            className={`navbar-tab ${
+              location.pathname.endsWith(uid) ? "active-tab" : ""
+            }`}
             style={style}
           >
             <a
-              href={`${pathname}#/profile/${uid}`}
+              href={`${window.location.pathname}#/profile/${uid}`}
               onClick={(event) => {
                 event.preventDefault();
                 navigate(`/profile/${uid}`);
               }}
             >
-              {nicknameMap[uid] ?? uid}
+              {nickname ?? uid}
             </a>
             <span
               className="close-tab"

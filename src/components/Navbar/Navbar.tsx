@@ -1,17 +1,12 @@
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord, faPatreon } from "@fortawesome/free-brands-svg-icons";
-import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { DISCORD_URL, PATREON_URL } from "../../utils/helpers";
 import "./style.scss";
 
 const NAVIGATION = [
-  // {
-  //   name: "Users",
-  //   path: "/users",
-  // },
   {
-    /* this should be saved from discord auth */
     name: "Profiles",
     path: "/profile",
   },
@@ -52,12 +47,12 @@ const NAVIGATION = [
 export const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  // console.log(location)
+
   // BrowserRouter
   // const { pathname } = window.location;
 
   // HashRouter
-  const hash = window.location.hash.replace("#", "");
+  // const hash = window.location.hash.replace("#", "");
   const pathname = window.location.pathname;
 
   return (
@@ -83,7 +78,10 @@ export const Navbar: React.FC = () => {
           <a
             key={`${nav.name}-${i}`}
             className={
-              hash !== "/" && location.pathname === nav.path ? "active-tab" : ""
+              // hash !== "/" && location.pathname === nav.path ? "active-tab" : ""
+              location.pathname !== "/" && location.pathname === nav.path
+                ? "active-tab"
+                : ""
             }
             target={nav.external ? "_blank" : undefined}
             rel="noreferrer"
