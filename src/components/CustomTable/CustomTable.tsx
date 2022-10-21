@@ -172,31 +172,27 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   const handleFetch = async (abortController: AbortController) => {
     if (!fetchURL) return;
 
-    try {
-      setIsLoading(true);
+    setIsLoading(true);
 
-      const opts = {
-        signal: abortController.signal,
-        params: {
-          ...params,
-          ...fetchParams,
-        },
-      } as any;
+    const opts = {
+      signal: abortController.signal,
+      params: {
+        ...params,
+        ...fetchParams,
+      },
+    } as any;
 
-      const getSetData = async () => {
-        const response = await axios.get(fetchURL, opts);
-        const { data, totalRows } = response.data;
+    const getSetData = async () => {
+      const response = await axios.get(fetchURL, opts);
+      const { data, totalRows } = response.data;
 
-        setExpandedRows([]);
-        setTotalRowsCount(totalRows);
-        setRows(data);
-      };
+      setExpandedRows([]);
+      setTotalRowsCount(totalRows);
+      setRows(data);
+    };
 
-      await abortSignalCatcher(getSetData);
-      setIsLoading(false);
-    } catch (err) {}
-
-    // if (dataFeed) dataFeed(data)
+    await abortSignalCatcher(getSetData);
+    setIsLoading(false);
   };
 
   const tableClassNames = useMemo(
