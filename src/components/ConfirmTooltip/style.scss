@@ -1,0 +1,44 @@
+.confirm-tooltip {
+  position: absolute;
+  background-color: #40839b;
+  color: white;
+  border-radius: 2px;
+  // width: 125px;
+  z-index: 10;
+  width: max-content;
+  right: 0;
+  bottom: 0;
+  font-size: 13px;
+  cursor: default;
+  display: flex;
+  height: 29px;
+  align-items: center;
+  gap: 10px;
+  padding-left: 10px;
+  box-shadow: 0 0 50px 0px black;
+
+  .confirm-tooltip-text {
+    transform: skewX(-7deg);
+    opacity: 0.85;
+  }
+
+  .confirm-buttons {
+    div {
+      cursor: pointer;
+      text-transform: uppercase;
+      padding: 10px;
+      &:nth-child(1) {
+        color: lighten(rgb(144, 238, 144),15);
+        &:hover {
+          color: lime;
+        }
+      }
+      &:nth-child(2) {
+        color: lighten(red, 35);
+        &:hover {
+          color: red;
+        }
+      }
+    }
+  }
+}

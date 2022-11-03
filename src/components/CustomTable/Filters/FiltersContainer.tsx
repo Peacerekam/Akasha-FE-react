@@ -183,11 +183,6 @@ export const FiltersContainer = ({
     });
   };
 
-  const handleReplaceFilter = (filters: FilterOption[]) => {
-    console.log("repalced filters", filters);
-    setFiltersArray(filters);
-  };
-
   const formatPillName = (pill: FilterOption) => {
     const equipTypeMap = {
       EQUIP_BRACER: "Flower",
@@ -209,29 +204,33 @@ export const FiltersContainer = ({
     );
   };
 
-  // const pills = useMemo(
-  //   () => filtersArray.filter((f) => f.value !== ""),
-  //   [filtersArray]
-  // );
+  const handleReplaceFilter = (filters: FilterOption[]) => {
+    setFiltersArray(filters);
+  };
 
   const pills = useMemo(
     () => filtersArray.filter((f) => f.value !== ""),
     [JSON.stringify(filtersArray)]
   );
 
+  // shrug
+  const ENABLE_FILTERS_MODAL_FEATURE = false;
+
   return (
     <>
-      <FiltersModal
-        isOpen={showFiltersModal}
-        toggleModal={handleToggleModal}
-        optionGroups={optionGroups}
-        filtersArray={filtersArray}
-        setFilterSelectFocus={setFilterSelectFocus}
-        filterSelectFocus={filterSelectFocus}
-        handleRemoveFilter={handleRemoveFilter}
-        handleAddFilter={handleAddFilter}
-        handleModifyFilter={handleModifyFilter}
-      />
+      {ENABLE_FILTERS_MODAL_FEATURE && (
+        <FiltersModal
+          isOpen={showFiltersModal}
+          toggleModal={handleToggleModal}
+          optionGroups={optionGroups}
+          filtersArray={filtersArray}
+          setFilterSelectFocus={setFilterSelectFocus}
+          filterSelectFocus={filterSelectFocus}
+          handleRemoveFilter={handleRemoveFilter}
+          handleAddFilter={handleAddFilter}
+          handleModifyFilter={handleModifyFilter}
+        />
+      )}
       {/* @TODO: perfect scroll here?  */}
       <div className="filters-container">
         <div className="pills-container">
@@ -241,9 +240,11 @@ export const FiltersContainer = ({
             pills={pills}
           />
         </div>
-        <div className="filter-icon" onClick={handleToggleModal}>
-          <FontAwesomeIcon icon={faList} size="1x" />
-        </div>
+        {ENABLE_FILTERS_MODAL_FEATURE && (
+          <div className="filter-icon" onClick={handleToggleModal}>
+            <FontAwesomeIcon icon={faList} size="1x" />
+          </div>
+        )}
       </div>
     </>
   );

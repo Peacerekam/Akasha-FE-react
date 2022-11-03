@@ -2,7 +2,11 @@ import axios from "axios";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGear, faRotateRight } from "@fortawesome/free-solid-svg-icons";
+import {
+  faGear,
+  faRotateRight,
+  faKey,
+} from "@fortawesome/free-solid-svg-icons";
 
 import {
   abortSignalCatcher,
@@ -30,6 +34,7 @@ import {
   Timer,
   StylizedContentBlock,
   CalculationResultWidget,
+  ConfirmTooltip,
 } from "../../components";
 import { TableColumn } from "../../types/TableColumn";
 import { ProfileSettingsModal } from "./ProfileSettingsModal";
@@ -39,6 +44,7 @@ import {
 } from "../../components/CustomTable/Filters";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
+import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
 import "./style.scss";
 
 export const ProfilePage: React.FC = () => {
@@ -57,6 +63,8 @@ export const ProfilePage: React.FC = () => {
   const { uid } = useParams();
   const { hoverElement } = useContext(HoverElementContext);
   const { addTab } = useContext(LastProfilesContext);
+  const { isAuthenticated, isBound } = useContext(SessionDataContext);
+  const isAccountOwner = useMemo(() => isBound(uid), [uid, isAuthenticated]);
 
   const fetchProfile = async (
     uid: string,
@@ -395,8 +403,8 @@ export const ProfilePage: React.FC = () => {
   };
 
   const handleToggleModal = (event: React.MouseEvent<HTMLElement>) => {
+    if (!isAccountOwner) return;
     setShowSettingsModal((prev) => !prev);
-
     const offsets = getRelativeCoords(event);
     applyModalBodyStyle(offsets);
   };
@@ -427,7 +435,15 @@ export const ProfilePage: React.FC = () => {
     ].join(" ");
 
     return (
-      <div className="genshin-user-card" onClick={handleToggleModal}>
+      <div
+        className={[
+          "genshin-user-card",
+          isAccountOwner ? "pointer clickable-card" : "",
+        ]
+          .join(" ")
+          .trim()}
+        onClick={handleToggleModal}
+      >
         <img
           className="profile-picture"
           src={responseData.account.profilePictureLink}
@@ -439,7 +455,7 @@ export const ProfilePage: React.FC = () => {
         <div className={arBadgeClassNames}>AR{playerInfo.level}</div>
       </div>
     );
-  }, [JSON.stringify(responseData.account)]);
+  }, [JSON.stringify(responseData.account), isAccountOwner]);
 
   const handleTimerFinish = () => {
     setEnableRefreshBtn(true);
@@ -453,11 +469,27 @@ export const ProfilePage: React.FC = () => {
       .join(" ")
       .trim();
 
+    const bindAccount = async (uid?: string) => {
+      if (!uid) return;
+      const _uid = encodeURIComponent(uid);
+      const bindAccountURL = `/api/user/bind/${_uid}`;
+      const response = await axios.post(bindAccountURL);
+      console.log("bindAccount", response.data);
+      // use <Timer /> ?
+      // maybe save {until} to localstorage or session
+    };
+
+    const showBindAccBtn = isAuthenticated && !isAccountOwner;
+
     return (
       <div className="floating-profile-buttons-wrapper">
         <div className="floating-profile-buttons">
           {refreshTime && (
-            <Timer until={refreshTime} onFinish={handleTimerFinish} />
+            <Timer
+              until={refreshTime}
+              label={"refresh in:"}
+              onFinish={handleTimerFinish}
+            />
           )}
           <div
             title="Refresh builds"
@@ -467,18 +499,34 @@ export const ProfilePage: React.FC = () => {
           >
             <FontAwesomeIcon icon={faRotateRight} size="1x" />
           </div>
-          <div
-            title="Profile settings"
-            className="floating-button"
-            onClick={handleToggleModal}
-            key={`settings-${uid}`}
-          >
-            <FontAwesomeIcon icon={faGear} size="1x" />
-          </div>
+          {showBindAccBtn && (
+            <ConfirmTooltip
+              text="Do you want to bind this account?"
+              onConfirm={() => bindAccount(uid)}
+            >
+              <div
+                title="Bind account"
+                className="floating-button"
+                key={`bind-${uid}`}
+              >
+                <FontAwesomeIcon icon={faKey} size="1x" />
+              </div>
+            </ConfirmTooltip>
+          )}
+          {isAccountOwner && (
+            <div
+              title="Profile settings"
+              className="floating-button"
+              onClick={handleToggleModal}
+              key={`settings-${uid}`}
+            >
+              <FontAwesomeIcon icon={faGear} size="1x" />
+            </div>
+          )}
         </div>
       </div>
     );
-  }, [enableRefreshBtn, refreshTime]);
+  }, [enableRefreshBtn, refreshTime, isAuthenticated, isAccountOwner]);
 
   if (responseData.error) {
     return (
@@ -567,7 +615,7 @@ export const ProfilePage: React.FC = () => {
             variant="gradient"
             revealCondition={responseData.account}
           />
-          <div className="flex gap-10 nowrap pointer">
+          <div className="flex gap-10 nowrap">
             {displayGenshinCard}
             <div className="profile-highlights">
               {responseData.account && <CalculationResultWidget uid={uid} />}

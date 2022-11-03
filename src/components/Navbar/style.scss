@@ -5,6 +5,13 @@
   padding: 0 25px;
   flex-wrap: wrap;
   // box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+  .navbar-img {
+    width: 22px;
+    height: 22px;
+    border-radius: 100px;
+    box-shadow: rgba(black, 0.5) 0px 0px 3px 1px;
+  }
   .logo-wrapper {
     position: relative;
     .logo {
@@ -31,7 +38,8 @@
     height: 64px;
     display: flex;
     gap: 5px;
-    place-items: center;
+    justify-content: center;
+    align-items: center;
     transition: 0.2s !important;
     cursor: pointer;
     padding: 0 15px;
@@ -47,6 +55,56 @@
     box-shadow: #e7f6f2 0 -2px 0 inset !important;
     &:hover {
       background-color: lighten(#426a74, 2) !important;
+    }
+  }
+}
+
+.log-in-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin: 30px 0;
+  // .profile-highlights {
+  //   width: max-content;
+  //   padding: 25px;
+  // }
+  .log-in-title {
+    text-align: center;
+    font-size: 14px;
+    opacity: 0.8;
+  }
+  .log-in-methods-container {
+    display: flex;
+    gap: 0px;
+    justify-content: center;
+    margin: 20px 0 10px;
+    .method-wrapper {
+      color: #e7f6f2;
+      text-decoration: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      width: 80px;
+      background-color: transparent;
+      padding: 20px;
+      .method-text {
+        text-align: center;
+        font-weight: 600;
+      }
+      &:hover {
+        filter: drop-shadow(0 0 15px rgba(black, 0.6));
+      }
+      &.patreon-wrapper {
+        &:hover {
+          color: #ff424d;
+        }
+      }
+      &.discord-wrapper {
+        &:hover {
+          color: #5562ea;
+        }
+      }
     }
   }
 }

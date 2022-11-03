@@ -1,4 +1,4 @@
-export const customTheme = {
+export const reactSelectCustomFilterTheme = {
   menu: (provided: any, state: any) => ({
     ...provided,
     color: "white",
@@ -40,28 +40,33 @@ export const customTheme = {
     return {
       ...provided,
       paddingLeft: 5,
+      paddingRight: 5,
       flexWrap: "nowrap",
+      cursor: "text",
     };
   },
 
   indicatorsContainer: (provided: any) => {
     return {
-      ...provided,
-      span: {
-        opacity: 0.25,
-      },
-      // border: '2px solid red'
-      " > div:first-of-type": {
-        cursor: "pointer",
-        color: "rgba(255,255,255, 0.7)",
-        "&:hover": {
-          color: "rgba(255,255,255, 1)",
-        },
-      },
-      " > div:last-child": {
-        display: "none",
-      },
+      display: "none",
     };
+    // return {
+    //   ...provided,
+    //   span: {
+    //     opacity: 0.25,
+    //   },
+    //   // border: '2px solid red'
+    //   " > div:first-of-type": {
+    //     cursor: "pointer",
+    //     color: "rgba(255,255,255, 0.7)",
+    //     "&:hover": {
+    //       color: "rgba(255,255,255, 1)",
+    //     },
+    //   },
+    //   " > div:last-child": {
+    //     display: "none",
+    //   },
+    // };
   },
 
   // indicatorSeparator: () => {
@@ -96,20 +101,20 @@ export const customTheme = {
       backgroundColor: "#202525",
       borderColor: "rgba(255,255,255, 0.3)",
       color: "white",
-      position: 'relative',
+      position: "relative",
     };
 
     if (state.isFocused) {
       style.backgroundColor = "#40839b55";
-      style['> span > span > span:last-child::after'] = {
-          content: '"Press enter to apply"',
-          position: 'relative',
-          // color: '#202525',
-          color: 'white',
-          opacity: 0.2,
-          fontSize: 13,
-          left: 20,
-      }
+      style["> span > span > span:last-child::after"] = {
+        content: '"Press enter to apply"',
+        position: "relative",
+        // color: '#202525',
+        color: "white",
+        opacity: 0.2,
+        fontSize: 13,
+        left: 20,
+      };
     }
     if (state.isSelected) {
       style.backgroundColor = "#40839b";

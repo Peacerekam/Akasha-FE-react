@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMemo, useState } from "react";
 import ReactSelect from "react-select";
 import { FilterOption, OptionsResponse } from "./FiltersContainer";
-import { darkTheme } from "../../../utils/reactSelectDarkTheme";
+import { reactSelectDarkTheme } from "../../../utils/reactSelectDarkTheme";
 import { isIcon } from "../../StatIcon";
 import { StatIcon } from "../../StatIcon/StatIcon";
 
@@ -12,7 +12,7 @@ type FiltersModalProps = {
   isOpen: boolean;
   optionGroups: OptionsResponse;
   filterSelectFocus: number | undefined;
-  toggleModal: (event: React.MouseEvent<HTMLElement>) => void; 
+  toggleModal: (event: React.MouseEvent<HTMLElement>) => void;
   setFilterSelectFocus: (value: number | undefined) => void;
   handleRemoveFilter: (value: FilterOption) => void;
   handleAddFilter: (value: FilterOption) => void;
@@ -108,7 +108,7 @@ export const FiltersModal = ({
               className="flex gap-10 nowrap"
             >
               <ReactSelect
-                styles={darkTheme}
+                styles={reactSelectDarkTheme}
                 className="w-100 filter-select"
                 menuPortalTarget={modalContainerRef}
                 defaultValue={defaultGroup}
@@ -124,14 +124,14 @@ export const FiltersModal = ({
                 }}
               />
               <ReactSelect
-                styles={darkTheme}
+                styles={reactSelectDarkTheme}
                 className={`w-100 filter-select ${
                   isDisabled ? "opacity-5" : ""
                 }`}
                 menuPortalTarget={modalContainerRef}
                 openMenuOnFocus
                 autoFocus={autofocus}
-                // menuIsOpen={autofocus}
+                menuIsOpen={true}
                 defaultValue={defaultOption}
                 options={fieldValuesOptions}
                 isDisabled={isDisabled}

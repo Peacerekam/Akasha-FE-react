@@ -3,10 +3,15 @@ import "./style.scss";
 
 type TimerProps = {
   until: number;
+  label?: string;
   onFinish?: () => void;
 };
 
-export const Timer: React.FC<TimerProps> = ({ until, onFinish }) => {
+export const Timer: React.FC<TimerProps> = ({
+  until,
+  label = "",
+  onFinish,
+}) => {
   const [timestamp, setTimestamp] = useState<number>(0);
 
   const getTimestamp = () => {
@@ -46,7 +51,7 @@ export const Timer: React.FC<TimerProps> = ({ until, onFinish }) => {
 
   return (
     <span className="refresh-timer">
-      <span>refresh in:</span> <span>{getFormattedText(timestamp)}</span>
+      {label && <span>{label}</span>} <span>{getFormattedText(timestamp)}</span>
     </span>
   );
 };

@@ -5,7 +5,7 @@ export type NicknameUidPair = {
   nickname: string;
 };
 
-type LastProfilesContext = {
+type LastProfilesContextType = {
   lastProfiles: NicknameUidPair[];
   addTab: (uid: string, nickname: string) => void;
   removeTab: (uid: string) => void;
@@ -15,7 +15,7 @@ const defaultValue = {
   lastProfiles: [],
   addTab: () => {},
   removeTab: () => {},
-} as LastProfilesContext;
+} as LastProfilesContextType;
 
 const LastProfilesContext = createContext(defaultValue);
 
@@ -44,7 +44,7 @@ const LastProfilesContextProvider: React.FC<{ children: any }> = ({
   useEffect(() => {
     const obj = { lastProfiles };
     localStorage.setItem("navbarTabs", JSON.stringify(obj));
-  }, [JSON.stringify(lastProfiles)]);
+  }, [lastProfiles]);
 
   // add tab to state
   const addTab = (uid: string, nickname: string) => {
@@ -52,7 +52,7 @@ const LastProfilesContextProvider: React.FC<{ children: any }> = ({
       const index = prev.findIndex((a) => a.uid === uid);
       if (index > -1) return prev;
       const newProfile = { uid, nickname };
-      return [...prev, newProfile];
+      return [...prev, newProfile].slice(-10);
     });
   };
 

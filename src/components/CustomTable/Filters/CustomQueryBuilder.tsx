@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import ReactSelect, { MultiValue } from "react-select";
 import Highlighter from "react-highlight-words";
-import { customTheme } from "../../../utils/reactSelectCustomFilterTheme";
+import { reactSelectCustomFilterTheme } from "../../../utils/reactSelectCustomFilterTheme";
 import { isIcon, StatIcon } from "../../StatIcon";
 import { OptionsResponse, FilterOption } from "./FiltersContainer";
 
@@ -94,7 +94,7 @@ export const CustomQueryBuilder = ({
         isMulti
         options={fieldKeyOptions}
         menuPortalTarget={document.body}
-        styles={customTheme}
+        styles={reactSelectCustomFilterTheme}
         maxMenuHeight={450}
         getOptionValue={(option: any) => option.rawLabel}
         placeholder="no filters"

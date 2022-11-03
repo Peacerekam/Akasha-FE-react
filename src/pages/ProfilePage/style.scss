@@ -44,6 +44,7 @@
         }
       }
       > div {
+        user-select: none;
         white-space: nowrap;
         border-radius: 5px;
         padding: 2px;
@@ -171,6 +172,11 @@
   // margin: 10px;
   // box-shadow: rgb  a(0, 0, 0, 0.24) 0px 3px 8px;
   // background: #00000066;
+  &.clickable-card {
+    &:hover {
+      background-color: rgba(black, 0.5) !important;
+    }
+  }
   .profile-picture {
     margin: 2px;
   }

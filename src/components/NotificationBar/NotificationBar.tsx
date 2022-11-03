@@ -11,16 +11,21 @@ export const NotificationBar: React.FC = () => {
   const [notification, setNotification] = useState<Notification>();
   const [hide, setHide] = useState(false);
 
-  const getNotification = async () => {
+  const getNotification = async (abortController: AbortController) => {
     const notificationURL = `/api/notifications/topbar`;
-    const { data } = await axios.get(notificationURL);
+    const opts = { signal: abortController?.signal };
+    const { data } = await axios.get(notificationURL, opts);
     if (data) {
       setNotification(data);
     }
   };
 
   useEffect(() => {
-    getNotification();
+    const abortController = new AbortController();
+    getNotification(abortController);
+    return () => {
+      abortController.abort();
+    };
   }, []);
 
   const isHidden = hide || !notification;

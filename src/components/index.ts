@@ -18,4 +18,5 @@ export * from "./ReplaceRowDataOnHover";
 export * from "./NotificationBar";
 export * from "./StylizedContentBlock";
 export * from "./Timer";
+export * from "./ConfirmTooltip";
 export * from "./CalculationResultWidget"

@@ -1,4 +1,4 @@
-export const darkTheme = {
+export const reactSelectDarkTheme = {
   menu: (provided: any, state: any) => ({
     ...provided,
     color: "white",
