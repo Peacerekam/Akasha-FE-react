@@ -4,6 +4,7 @@ import React, { createContext, useState, useEffect, useCallback } from "react";
 type SessionProfile = {
   username?: string;
   profilePicture?: string;
+  isPatreon?: boolean;
 };
 
 type SessionDataContextType = {
@@ -12,14 +13,16 @@ type SessionDataContextType = {
   isAuthenticated: boolean;
   isFetching: boolean;
   isBound: (uid?: string) => boolean;
+  fetchSessionData: (modifyIsFetching?: boolean) => void;
 };
 
 const defaultValue = {
   boundAccounts: [],
   profileObject: {},
   isAuthenticated: false,
-  isBound: () => false,
   isFetching: false,
+  isBound: () => false,
+  fetchSessionData: () => {},
 } as SessionDataContextType;
 
 const SessionDataContext = createContext(defaultValue);
@@ -41,29 +44,38 @@ const SessionDataContextProvider: React.FC<{ children: any }> = ({
     [boundAccounts]
   );
 
-  const fetchSessionData = useCallback(async () => {
-    setIsFetching(true);
+  const fetchSessionData = useCallback(async (modifyIsFetching = false) => {
+    if (modifyIsFetching) {
+      setIsFetching(true);
+    }
+
     const getSessionURL = "/auth/status/";
     const response = await axios.get(getSessionURL);
     const { data } = response.data;
     setBoundAccounts(data.accounts);
+    console.log('data', data, 'modifyIsFetching', modifyIsFetching)
     if (data.username) {
       setIsAuthenticated(true);
-      const { username, profilePicture } = data;
+      const { username, profilePicture, isPatreon } = data;
       setProfileObject({
         username,
         profilePicture,
+        isPatreon,
       });
     }
-    setIsFetching(false);
+
+    if (modifyIsFetching) {
+      setIsFetching(false);
+    }
   }, []);
 
   // read from local storage
   useEffect(() => {
-    fetchSessionData();
+    fetchSessionData(true);
   }, [fetchSessionData]);
 
   const value = {
+    fetchSessionData,
     boundAccounts,
     profileObject,
     isAuthenticated,

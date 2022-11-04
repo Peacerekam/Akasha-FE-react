@@ -108,3 +108,46 @@
     }
   }
 }
+
+.modal-spacer {
+  width: calc(100% - 50px);
+  height: 1px;
+  background-color: #5c5c5c;
+  margin: 30px auto 0;
+}
+
+.account-info {
+  font-size: 16px;
+  table {
+    width: 100%;
+    .centered-td {
+      display: flex;
+      align-items: center;
+      .navbar-img {
+        margin-right: 8px;
+      }
+    }
+    tr {
+      height: 29px;
+      td {
+        .filter-icon {
+          margin-right: 8px;
+          width: 22px;
+        }
+      }
+    }
+  }
+  .bound-account {
+    padding: 0;
+    height: auto;
+    gap: 5px;
+    display: flex;
+    align-items: center;
+    padding: 2px;
+    padding-left: 0;
+
+    .ar-badge {
+      margin: 0;
+    }
+  }
+}

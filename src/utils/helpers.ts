@@ -1,3 +1,5 @@
+import { IHash } from "../types/IHash";
+
 export const PATREON_URL = "https://patreon.com/user?u=4105697";
 export const DISCORD_URL = "https://discord.gg/vmdPppZVa8";
 
@@ -12,6 +14,13 @@ export const FETCH_ARTIFACT_FILTERS_URL = `/api/filters/artifacts/`;
 export const normalizeText = (test: string) => {
   const regex = /[^A-Za-z0-9%]/g;
   return test.replace(regex, "").replace(/%/g, "_").toLowerCase();
+};
+
+export const _getEncodeURIComponents = (input: IHash): IHash => {
+  return Object.keys(input).reduce((accumulator, key) => {
+    accumulator[`_${key}`] = encodeURIComponent(input[key]);
+    return accumulator;
+  }, {} as IHash);
 };
 
 export const ascensionToLevel = (ascension = 0) => {

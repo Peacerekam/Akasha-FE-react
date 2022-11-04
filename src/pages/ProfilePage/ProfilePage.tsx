@@ -63,8 +63,13 @@ export const ProfilePage: React.FC = () => {
   const { uid } = useParams();
   const { hoverElement } = useContext(HoverElementContext);
   const { addTab } = useContext(LastProfilesContext);
-  const { isAuthenticated, isBound } = useContext(SessionDataContext);
-  const isAccountOwner = useMemo(() => isBound(uid), [uid, isAuthenticated]);
+  const { isAuthenticated, isBound, fetchSessionData, boundAccounts } =
+    useContext(SessionDataContext);
+
+  const isAccountOwner = useMemo(
+    () => isBound(uid),
+    [uid, isAuthenticated, boundAccounts]
+  );
 
   const fetchProfile = async (
     uid: string,
@@ -88,13 +93,16 @@ export const ProfilePage: React.FC = () => {
 
       if (!data?.data?.account?.profilePictureLink) {
         // this is null only if document doesnt exist in database yet
-        handleRefreshData();
+        console.log('!data?.data?.account?.profilePictureLink -> data', data)
+        await handleRefreshData();
       }
 
       const getTime = new Date().getTime();
       const then = getTime + data.ttl;
       setRefreshTime(then);
       setEnableRefreshBtn(then < 0);
+      console.log('setRefreshTime', then)
+      console.log('setEnableRefreshBtn', then < 0)
     };
 
     await abortSignalCatcher(getSetData);
@@ -395,11 +403,12 @@ export const ProfilePage: React.FC = () => {
     } = data;
 
     if (ttl === 0) {
-      fetchProfile(uid);
+      await fetchProfile(uid);
     }
     const getTime = new Date().getTime();
     const then = getTime + (ttl || ttlMax);
     setRefreshTime(then);
+    fetchSessionData();
   };
 
   const handleToggleModal = (event: React.MouseEvent<HTMLElement>) => {

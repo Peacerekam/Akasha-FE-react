@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import axios from "axios";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import Highlighter from "react-highlight-words";
@@ -13,8 +13,9 @@ import {
 
 import { ConfirmTooltip, StatList } from "../../components";
 import { FancyBuildBorder } from "../../components/FancyBuildBorder";
-import { abortSignalCatcher, PATREON_URL } from "../../utils/helpers";
+import { abortSignalCatcher, PATREON_URL, _getEncodeURIComponents } from "../../utils/helpers";
 import { BuildNameInput } from "./BuildNameInput";
+import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
 
 type ProfileSettingsModalProps = {
   isOpen: boolean;
@@ -39,6 +40,10 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
   const [searchText, setSearchText] = useState<string>("");
   const [isDirty, setIsDirty] = useState(false);
   const uploadInput = useRef<HTMLInputElement>(null);
+
+  // @TODO: .....................
+  const { profileObject } = useContext(SessionDataContext);
+  const isPatreon = !!profileObject.isPatreon
 
   const fetchBuildsData = async (
     uid: string,
@@ -143,8 +148,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
 
       // @TODO: need to handle auth as well
       const { uid, characterId, type } = selectedBuild;
-      const _uid = encodeURIComponent(uid);
-      const _type = encodeURIComponent(type);
+      const { _uid, _type } = _getEncodeURIComponents({ uid, type })
       const postNamecardURL = `/api/user/namecard/${_uid}/${characterId}/${_type}`;
 
       // const response = ...
@@ -170,8 +174,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     const handleDeleteBackground = async () => {
       setIsDirty(true);
       const { uid, characterId, type } = selectedBuild;
-      const _uid = encodeURIComponent(uid);
-      const _type = encodeURIComponent(type);
+      const { _uid, _type } = _getEncodeURIComponents({ uid, type })
       const postNamecardURL = `/api/user/namecard/${_uid}/${characterId}/${_type}`;
       await axios.post(postNamecardURL); // no formData attached
       clearBgImage();
@@ -181,19 +184,16 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     const handleToggleBuildVisibility = async (char: any) => {
       setIsDirty(true);
       const { uid, characterId, type } = char;
-      const _uid = encodeURIComponent(uid);
-      const _type = encodeURIComponent(type);
+      const { _uid, _type } = _getEncodeURIComponents({ uid, type })
       const toggleVisibilityURL = `/api/user/toggleBuildVisibility/${_uid}/${characterId}/${_type}`;
       await axios.post(toggleVisibilityURL);
       fetchBuildsData(accountData?.uid);
     };
 
     const handleDeleteBuild = async (char: any) => {
-      return;
       setIsDirty(true);
       const { uid, characterId, type } = char;
-      const _uid = encodeURIComponent(uid);
-      const _type = encodeURIComponent(type);
+      const { _uid, _type } = _getEncodeURIComponents({ uid, type })
       const deleteBuildURL = `/api/user/deleteBuild/${_uid}/${characterId}/${_type}`;
       await axios.post(deleteBuildURL);
       fetchBuildsData(accountData?.uid);
@@ -212,8 +212,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       setIsDirty(true);
 
       const { uid, characterId, type } = selectedBuild;
-      const _uid = encodeURIComponent(uid);
-      const _type = encodeURIComponent(type);
+      const { _uid, _type } = _getEncodeURIComponents({ uid, type })
 
       const postBuildNameURL = `/api/user/setBuildName/${_uid}/${characterId}/${_type}`;
       const opts = {
@@ -264,7 +263,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
               />
             )}
           </div>
-          {char?.customNamecard && <div>🖼️</div>}
+          {char?.customNamecard && !isHidden && <div>🖼️</div>}
           {isHidden ? (
             <>
               <div>HIDDEN</div>
@@ -289,7 +288,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
             </>
           )}
           <ConfirmTooltip
-            text={`Delete ${displayName}?`}
+            text={`Delete "${displayName}"?`}
             onConfirm={() => handleDeleteBuild(char)}
           >
             <button className="remove-btn" title="Delete build">
@@ -322,7 +321,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
           >
             <StatList row={selectedBuild} showCharacter showWeapon />
           </FancyBuildBorder>
-          {!patreonObj ? (
+          {!isPatreon ? (
             <div className="patreons-only">
               Become{" "}
               <a target="_blank" rel="noreferrer" href={PATREON_URL}>

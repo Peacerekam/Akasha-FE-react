@@ -89,7 +89,7 @@ export const Navbar: React.FC = () => {
             path: "",
           },
     ],
-    [profileObject, isAuthenticated]
+    [profileObject, isAuthenticated, isFetching]
   );
 
   const displayNavElement = (nav: NavElement, i: number) => {
