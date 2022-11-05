@@ -6,10 +6,9 @@ import React, {
   useState,
 } from "react";
 import axios from "axios";
+import { debounce } from "lodash";
 import { useNavigate, useParams } from "react-router-dom";
-
 import { BuildsColumns } from "../BuildsPage";
-
 import {
   CritRatio,
   StatIcon,
@@ -74,11 +73,14 @@ type Category = {
   }[];
 };
 
-export const ARBadge = ({ adventureRank }: any) => (
-  <span className={`ar-badge ar-${Math.floor(adventureRank / 5) * 5}-badge`}>
-    AR{adventureRank}
-  </span>
-);
+export const ARBadge = ({ adventureRank }: any) => {
+  const className = adventureRank
+    ? `ar-${Math.floor(adventureRank / 5) * 5}-badge`
+    : "ar-60-badge";
+  return (
+    <span className={`ar-badge ${className}`}>AR{adventureRank ?? " ?"}</span>
+  );
+};
 
 export const LeaderboardsPage: React.FC = () => {
   // state
@@ -159,6 +161,12 @@ export const LeaderboardsPage: React.FC = () => {
   useEffect(() => {
     fetchCategories();
   }, [calculationId]);
+
+  const debouncedSetLookupUID = useCallback(debounce(setLookupUID, 350), []);
+
+  useEffect(() => {
+    debouncedSetLookupUID(inputUID);
+  }, [inputUID]);
 
   const LEADERBOARDS_COLUMNS: TableColumn<BuildsColumns>[] = useMemo(
     () => [
@@ -566,28 +574,20 @@ export const LeaderboardsPage: React.FC = () => {
           revealCondition={podiumData.rows.length > 0}
           overrideImage={blockBackgroundImage}
         />
-        <div className="relative" style={{ textAlign: "center" }}>
+        <div className="relative search-input-wrapper">
           UID / nickname
           <div>
-            <input
-              defaultValue={inputUID}
-              onChange={(event) => {
-                setInputUID(event.target.value);
-              }}
-              onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
-                console.log("event.target", event.target);
-                if (event.key === "Enter") {
-                  setLookupUID(inputUID);
-                }
-              }}
-            />
-            <button
-              onClick={() => {
-                setLookupUID(inputUID);
-              }}
-            >
-              search
-            </button>
+            <div className="search-input relative">
+              <input
+                defaultValue={inputUID}
+                onChange={(event) => {
+                  setInputUID(event.target.value);
+                }}
+              />
+              {!inputUID && (
+                <span className="fake-placeholder">type here...</span>
+              )}
+            </div>
           </div>
         </div>
         {displayCategory && (

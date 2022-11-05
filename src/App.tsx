@@ -9,7 +9,7 @@ import {
   BuildsPage,
   LeaderboardsPage,
   CategorySelectionPage,
-  DashboardPage,
+  // DashboardPage,
   UIDSearchPage,
 } from "./pages";
 
@@ -17,16 +17,17 @@ import { Footer, Navbar, NavbarTabs, NotificationBar } from "./components";
 import { SessionDataContextProvider } from "./context/SessionData/SessionDataContext";
 import axios from "axios";
 
-// @TODO: env variables
+// @TODO: env variables later on...
 const urls = {
+  prod: "https://www.mimee.ovh",
+  ovh: "http://146.59.86.233:5033",
   localhost: "http://localhost:5033",
-  vps: "http://149.57.165.73:5033",
+  virmach: "http://149.57.165.73:5033",
   proxy: "http://localhost:3100/akasha",
-  prod: "https://www.mimee.ovh/akasha",
   heroku: "https://akasha-backend.herokuapp.com",
 };
 
-axios.defaults.baseURL = urls["localhost"];
+axios.defaults.baseURL = urls["prod"];
 axios.defaults.withCredentials = true;
 
 const App = () => {

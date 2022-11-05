@@ -5,12 +5,14 @@ type TimerProps = {
   until: number;
   label?: string;
   onFinish?: () => void;
+  removeStyling?: boolean;
 };
 
 export const Timer: React.FC<TimerProps> = ({
   until,
   label = "",
   onFinish,
+  removeStyling = false,
 }) => {
   const [timestamp, setTimestamp] = useState<number>(0);
 
@@ -49,8 +51,12 @@ export const Timer: React.FC<TimerProps> = ({
     return timeLeft;
   };
 
+  const classNames = removeStyling
+    ? ""
+    : ["refresh-timer", label ? "" : "no-label"].join(" ").trim();
+
   return (
-    <span className="refresh-timer">
+    <span className={classNames}>
       {label && <span>{label}</span>} <span>{getFormattedText(timestamp)}</span>
     </span>
   );

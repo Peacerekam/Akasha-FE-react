@@ -1,6 +1,6 @@
 import { IHash } from "../types/IHash";
 
-export const PATREON_URL = "https://patreon.com/user?u=4105697";
+export const PATREON_URL = "https://www.patreon.com/mimee";
 export const DISCORD_URL = "https://discord.gg/vmdPppZVa8";
 
 export const FETCH_ARTIFACTS_URL = `/api/artifacts`;

@@ -35,6 +35,38 @@ body {
   overflow: hidden;
 }
 
+.search-input-wrapper {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.search-input {
+  // margin-top: 10px;
+  // margin-bottom: 5px;
+  width: 250px;
+  input {
+    background-color: rgba(0, 0, 0, 0.4);
+    color: white;
+    border: none;
+    padding: 7px 15px;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .fake-placeholder {
+    position: absolute;
+    top: 0;
+    left: 1px;
+    color: hsl(0, 0%, 50%);
+    padding: 6px 15px;
+    pointer-events: none;
+    font-size: 13px;
+  }
+}
+
 .content-block {
   border-radius: 2px;
 

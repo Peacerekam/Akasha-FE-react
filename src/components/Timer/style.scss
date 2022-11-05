@@ -7,4 +7,7 @@
   display: flex;
   justify-content: space-between;
   pointer-events: none;
+  &.no-label {
+    width: 3ch;
+  }
 }

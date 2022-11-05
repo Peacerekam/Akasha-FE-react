@@ -35,6 +35,7 @@ import {
   StylizedContentBlock,
   CalculationResultWidget,
   ConfirmTooltip,
+  GenshinUserCard,
 } from "../../components";
 import { TableColumn } from "../../types/TableColumn";
 import { ProfileSettingsModal } from "./ProfileSettingsModal";
@@ -48,9 +49,12 @@ import { SessionDataContext } from "../../context/SessionData/SessionDataContext
 import "./style.scss";
 
 export const ProfilePage: React.FC = () => {
-  const [enableRefreshBtn, setEnableRefreshBtn] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [enableRefreshBtn, setEnableRefreshBtn] = useState(false);
+  const [enableBindhBtn, setEnableBindBtn] = useState(false);
+  const [bindSecret, setBindSecret] = useState("");
   const [fetchCount, setFetchCount] = useState(0);
+  const [bindTime, setBindTime] = useState<number>();
   const [refreshTime, setRefreshTime] = useState<number>();
   const [responseData, setResponseData] = useState<{
     account: any;
@@ -93,16 +97,19 @@ export const ProfilePage: React.FC = () => {
 
       if (!data?.data?.account?.profilePictureLink) {
         // this is null only if document doesnt exist in database yet
-        console.log('!data?.data?.account?.profilePictureLink -> data', data)
+        console.log("!data?.data?.account?.profilePictureLink -> data", data);
         await handleRefreshData();
       }
 
       const getTime = new Date().getTime();
-      const then = getTime + data.ttl;
-      setRefreshTime(then);
-      setEnableRefreshBtn(then < 0);
-      console.log('setRefreshTime', then)
-      console.log('setEnableRefreshBtn', then < 0)
+      const thenTTL = getTime + data.ttl;
+      setRefreshTime(thenTTL);
+      setEnableRefreshBtn(thenTTL < 0);
+
+      const thenBindTTL = getTime + data.bindTTL;
+      setBindTime(thenBindTTL);
+      setEnableBindBtn(thenBindTTL < 0);
+      setBindSecret(data.secret);
     };
 
     await abortSignalCatcher(getSetData);
@@ -418,56 +425,23 @@ export const ProfilePage: React.FC = () => {
     applyModalBodyStyle(offsets);
   };
 
-  const displayGenshinCard = useMemo(() => {
-    const playerInfo = responseData.account?.playerInfo;
-
-    if (!playerInfo) {
-      return (
-        <div className="genshin-user-card">
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              width: "100%",
-            }}
-          >
-            <Spinner />
-          </div>
-        </div>
-      );
-    }
-
-    const arBadgeClassNames = [
-      "float-top-right ar-badge",
-      `ar-${Math.floor(playerInfo.level / 5) * 5}-badge`,
-    ].join(" ");
-
-    return (
-      <div
-        className={[
-          "genshin-user-card",
-          isAccountOwner ? "pointer clickable-card" : "",
-        ]
-          .join(" ")
-          .trim()}
-        onClick={handleToggleModal}
-      >
-        <img
-          className="profile-picture"
-          src={responseData.account.profilePictureLink}
-        />
-        <div className="genshin-card-content">
-          <div className="card-big-text">{playerInfo.nickname}</div>
-          <div className="card-signature">{playerInfo.signature}</div>
-        </div>
-        <div className={arBadgeClassNames}>AR{playerInfo.level}</div>
-      </div>
-    );
-  }, [JSON.stringify(responseData.account), isAccountOwner]);
+  const displayGenshinCard = useMemo(
+    () => (
+      <GenshinUserCard
+        accountData={responseData}
+        isAccountOwner={isAccountOwner}
+        handleToggleModal={handleToggleModal}
+      />
+    ),
+    [JSON.stringify(responseData.account), isAccountOwner, handleToggleModal]
+  );
 
   const handleTimerFinish = () => {
     setEnableRefreshBtn(true);
+  };
+
+  const handleBindTimerFinish = () => {
+    setEnableBindBtn(true);
   };
 
   const displayFloatingButtons = useMemo(() => {
@@ -478,14 +452,21 @@ export const ProfilePage: React.FC = () => {
       .join(" ")
       .trim();
 
+    const bindBtnClassName = [
+      "floating-button",
+      enableBindhBtn ? "" : "disable-btn",
+    ]
+      .join(" ")
+      .trim();
+
     const bindAccount = async (uid?: string) => {
       if (!uid) return;
+      setEnableBindBtn(false);
       const _uid = encodeURIComponent(uid);
       const bindAccountURL = `/api/user/bind/${_uid}`;
-      const response = await axios.post(bindAccountURL);
-      console.log("bindAccount", response.data);
-      // use <Timer /> ?
-      // maybe save {until} to localstorage or session
+      const { data } = await axios.post(bindAccountURL);
+      setBindSecret(data.secret);
+      await fetchProfile(uid);
     };
 
     const showBindAccBtn = isAuthenticated && !isAccountOwner;
@@ -509,18 +490,23 @@ export const ProfilePage: React.FC = () => {
             <FontAwesomeIcon icon={faRotateRight} size="1x" />
           </div>
           {showBindAccBtn && (
-            <ConfirmTooltip
-              text="Do you want to bind this account?"
-              onConfirm={() => bindAccount(uid)}
-            >
-              <div
-                title="Bind account"
-                className="floating-button"
-                key={`bind-${uid}`}
+            <>
+              {bindTime && (
+                <Timer until={bindTime} onFinish={handleBindTimerFinish} />
+              )}
+              <ConfirmTooltip
+                text="Do you want to bind this account?"
+                onConfirm={() => bindAccount(uid)}
               >
-                <FontAwesomeIcon icon={faKey} size="1x" />
-              </div>
-            </ConfirmTooltip>
+                <div
+                  title="Bind account"
+                  className={bindBtnClassName}
+                  key={`bind-${uid}`}
+                >
+                  <FontAwesomeIcon icon={faKey} size="1x" />
+                </div>
+              </ConfirmTooltip>
+            </>
           )}
           {isAccountOwner && (
             <div
@@ -535,7 +521,45 @@ export const ProfilePage: React.FC = () => {
         </div>
       </div>
     );
-  }, [enableRefreshBtn, refreshTime, isAuthenticated, isAccountOwner]);
+  }, [
+    enableRefreshBtn,
+    enableBindhBtn,
+    refreshTime,
+    isAuthenticated,
+    isAccountOwner,
+    uid,
+  ]);
+
+  const displayBindMessage = useMemo(() => {
+    if (!bindTime || !bindSecret) return <></>;
+    return (
+      <div className="bind-message-wrapper">
+        <div className="bind-message">
+          <div>
+            Time left to bind the account:{" "}
+            <span className="important-text">
+              <Timer
+                removeStyling
+                until={bindTime}
+                onFinish={() => setBindSecret("")}
+              />
+            </span>
+          </div>
+          <div>
+            Your secret code is:{" "}
+            <span className="important-text">{bindSecret}</span>
+          </div>
+          <div className="less-important">
+            Add secret code to your in-game signature and press refresh button.
+          </div>
+          <div className="less-important">
+            Be aware it might take around 5 minutes for in-game changes to be
+            reflected on the profile page.
+          </div>
+        </div>
+      </div>
+    );
+  }, [bindSecret, enableBindhBtn, bindTime]);
 
   if (responseData.error) {
     return (
@@ -546,7 +570,7 @@ export const ProfilePage: React.FC = () => {
             .split(".")
             .filter((d) => d)
             .map((block) => (
-              <div>{block}.</div>
+              <div>{block}</div>
             ))}
         </div>
       </div>
@@ -558,6 +582,7 @@ export const ProfilePage: React.FC = () => {
   return (
     <div style={cssVariables}>
       {hoverElement}
+      {displayBindMessage}
       <div className="flex">
         <div>
           {false &&

@@ -1,11 +1,17 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faX, faXmark } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCheck,
+  faX,
+  faXmark,
+  faRightFromBracket,
+} from "@fortawesome/free-solid-svg-icons";
 import { faDiscord, faPatreon } from "@fortawesome/free-brands-svg-icons";
 import { useContext } from "react";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
 import { ARBadge } from "../../pages";
+import { ConfirmTooltip } from "../ConfirmTooltip";
 
 type LogInModalProps = {
   isOpen: boolean;
@@ -32,10 +38,17 @@ export const LogInModal: React.FC<LogInModalProps> = ({
 
   if (!isOpen) return null;
 
+  // @TODO: show spinner after clicking any of the links?
   const patreonAuthLink = `${axios.defaults.baseURL}/auth/patreon`;
   const discordAuthLink = `${axios.defaults.baseURL}/auth/discord`;
 
-  // @TODO: show spinner after clicking any of the links
+  const handleLogout = async () => {
+    try {
+      const logoutURL = "/api/logout";
+      await axios.post(logoutURL);
+      window.location.reload();
+    } catch (err) {}
+  };
 
   return (
     <div className="modal-wrapper" onClick={handleCloseModal}>
@@ -63,8 +76,20 @@ export const LogInModal: React.FC<LogInModalProps> = ({
                         <img
                           className="navbar-img"
                           src={profileObject.profilePicture}
-                        />{" "}
-                        {profileObject?.username}
+                        />
+                        <span style={{ flex: 1 }}>
+                          {profileObject?.username}
+                        </span>
+                        <ConfirmTooltip
+                          text="Do you want to log out?"
+                          onConfirm={handleLogout}
+                        >
+                          <FontAwesomeIcon
+                            className="filter-icon hoverable-icon"
+                            icon={faRightFromBracket}
+                            size="1x"
+                          />
+                        </ConfirmTooltip>
                       </div>
                     </td>
                   </tr>
@@ -72,7 +97,7 @@ export const LogInModal: React.FC<LogInModalProps> = ({
                     <td>Patreon:</td>
                     <td
                       style={{
-                        color: profileObject?.isPatreon ? "lime" : "red",
+                        color: profileObject?.isPatreon ? "#90ee90" : "red",
                       }}
                     >
                       <FontAwesomeIcon
