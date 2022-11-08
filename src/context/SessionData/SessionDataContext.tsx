@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { createContext, useState, useEffect, useCallback } from "react";
+import { optsParamsSessionID } from "../../utils/helpers";
 
 type SessionProfile = {
   username?: string;
@@ -50,10 +51,10 @@ const SessionDataContextProvider: React.FC<{ children: any }> = ({
     }
 
     const getSessionURL = "/auth/status/";
-    const response = await axios.get(getSessionURL);
+    const response = await axios.get(getSessionURL, optsParamsSessionID());
     const { data } = response.data;
     setBoundAccounts(data.accounts);
-    console.log('data', data, 'modifyIsFetching', modifyIsFetching)
+    console.log("data", data, "modifyIsFetching", modifyIsFetching);
     if (data.username) {
       setIsAuthenticated(true);
       const { username, profilePicture, isPatreon } = data;

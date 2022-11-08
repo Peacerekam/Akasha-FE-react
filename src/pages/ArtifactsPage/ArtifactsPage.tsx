@@ -17,6 +17,7 @@ import { TableColumn } from "../../types/TableColumn";
 import DomainBackground from "../../assets/images/domain-background.jpg";
 import { FETCH_ARTIFACT_FILTERS_URL } from "../../utils/helpers";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
+import { BASENAME } from "../../App";
 
 export type ArtifactColumns = {
   _id: string;
@@ -64,7 +65,7 @@ export const ArtifactsPage: React.FC = () => {
                 event.preventDefault();
                 navigate(`/profile/${row.uid}`);
               }}
-              href={`${pathname}#/profile/${row.uid}`}
+              href={`${BASENAME}/profile/${row.uid}`}
             >
               <ARBadge adventureRank={row.owner.adventureRank} />
               {row.owner.nickname}

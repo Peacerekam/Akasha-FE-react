@@ -1,5 +1,5 @@
 # Akasha System (work in progress)
-React frontend for Akasha System, app link: https://peacerekam.github.io/akasha/#/builds
+React frontend for Akasha System, app link: https://peacerekam.github.io/akasha/builds / https://mimee.ovh/akasha
 
 ![obraz](https://user-images.githubusercontent.com/26521952/192246970-8158aec3-7622-481e-b258-9322ee726532.png)
 ![obraz](https://user-images.githubusercontent.com/26521952/192246480-42bea284-7204-462b-8962-0f253a3ae9cd.png)

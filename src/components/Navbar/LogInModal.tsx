@@ -12,6 +12,8 @@ import { useContext } from "react";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
 import { ARBadge } from "../../pages";
 import { ConfirmTooltip } from "../ConfirmTooltip";
+import { optsParamsSessionID } from "../../utils/helpers";
+import { BASENAME } from "../../App";
 
 type LogInModalProps = {
   isOpen: boolean;
@@ -45,7 +47,7 @@ export const LogInModal: React.FC<LogInModalProps> = ({
   const handleLogout = async () => {
     try {
       const logoutURL = "/api/logout";
-      await axios.post(logoutURL);
+      await axios.post(logoutURL, null, optsParamsSessionID());
       window.location.reload();
     } catch (err) {}
   };
@@ -124,7 +126,7 @@ export const LogInModal: React.FC<LogInModalProps> = ({
                               handleCloseModal(event, true);
                               navigate(`/profile/${uid}`);
                             }}
-                            href={`${window.location.pathname}#/profile/${uid}`}
+                            href={`${BASENAME}/profile/${uid}`}
                           >
                             <img
                               className="table-icon"

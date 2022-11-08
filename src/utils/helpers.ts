@@ -23,6 +23,18 @@ export const _getEncodeURIComponents = (input: IHash): IHash => {
   }, {} as IHash);
 };
 
+export const getSessionIdFromCookie = () => {
+  return document.cookie?.split("connect.sid=s%3A")?.[1]?.split(".")?.[0] ?? "";
+};
+
+export const optsParamsSessionID = () => {
+  return {
+    params: {
+      sessionID: getSessionIdFromCookie(),
+    },
+  };
+};
+
 export const ascensionToLevel = (ascension = 0) => {
   return (
     {

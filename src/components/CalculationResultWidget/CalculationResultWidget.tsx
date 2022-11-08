@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useMemo, useState, useEffect } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { useNavigate } from "react-router-dom";
+import { BASENAME } from "../../App";
 import { abortSignalCatcher } from "../../utils/helpers";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import "./style.scss";
@@ -97,7 +98,7 @@ export const CalculationResultWidget: React.FC<
                 event.preventDefault();
                 navigate(`/leaderboards/${id}`);
               }}
-              href={`${pathname}#/leaderboards/${id}`}
+              href={`${BASENAME}/leaderboards/${id}`}
             >
               <div className="highlight-tile-pill">{short ? short : "---"}</div>
               <div className="flex">

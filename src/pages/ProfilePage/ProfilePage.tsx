@@ -20,6 +20,7 @@ import {
   getSubstatsInOrder,
   isPercent,
   normalizeText,
+  optsParamsSessionID,
 } from "../../utils/helpers";
 import { ArtifactColumns } from "../ArtifactsPage";
 import { BuildsColumns } from "../BuildsPage";
@@ -47,6 +48,7 @@ import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesCont
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
 import "./style.scss";
+import { getSessionIdFromCookie } from "../../utils/helpers";
 
 export const ProfilePage: React.FC = () => {
   const [showSettingsModal, setShowSettingsModal] = useState(false);
@@ -85,6 +87,9 @@ export const ProfilePage: React.FC = () => {
 
     const opts = {
       signal: abortController?.signal,
+      params: {
+        sessionID: getSessionIdFromCookie(),
+      },
     };
 
     const getSetData = async () => {
@@ -402,7 +407,7 @@ export const ProfilePage: React.FC = () => {
     setEnableRefreshBtn(false);
     const _uid = encodeURIComponent(uid);
     const refreshURL = `/api/user/refresh/${_uid}`;
-    const { data } = await axios.get(refreshURL);
+    const { data } = await axios.get(refreshURL, optsParamsSessionID());
     const {
       ttl,
       ttlMax,
@@ -464,7 +469,11 @@ export const ProfilePage: React.FC = () => {
       setEnableBindBtn(false);
       const _uid = encodeURIComponent(uid);
       const bindAccountURL = `/api/user/bind/${_uid}`;
-      const { data } = await axios.post(bindAccountURL);
+      const { data } = await axios.post(
+        bindAccountURL,
+        null,
+        optsParamsSessionID()
+      );
       setBindSecret(data.secret);
       await fetchProfile(uid);
     };

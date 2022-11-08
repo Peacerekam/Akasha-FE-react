@@ -13,9 +13,15 @@ import {
 
 import { ConfirmTooltip, StatList } from "../../components";
 import { FancyBuildBorder } from "../../components/FancyBuildBorder";
-import { abortSignalCatcher, PATREON_URL, _getEncodeURIComponents } from "../../utils/helpers";
+import {
+  abortSignalCatcher,
+  getSessionIdFromCookie,
+  PATREON_URL,
+  _getEncodeURIComponents,
+} from "../../utils/helpers";
 import { BuildNameInput } from "./BuildNameInput";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
+import { optsParamsSessionID } from "../../utils/helpers";
 
 type ProfileSettingsModalProps = {
   isOpen: boolean;
@@ -43,7 +49,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
 
   // @TODO: .....................
   const { profileObject } = useContext(SessionDataContext);
-  const isPatreon = !!profileObject.isPatreon
+  const isPatreon = !!profileObject.isPatreon;
 
   const fetchBuildsData = async (
     uid: string,
@@ -148,13 +154,16 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
 
       // @TODO: need to handle auth as well
       const { uid, characterId, type } = selectedBuild;
-      const { _uid, _type } = _getEncodeURIComponents({ uid, type })
+      const { _uid, _type } = _getEncodeURIComponents({ uid, type });
       const postNamecardURL = `/api/user/namecard/${_uid}/${characterId}/${_type}`;
 
       // const response = ...
       await axios.post(postNamecardURL, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+        },
+        params: {
+          sessionID: getSessionIdFromCookie(),
         },
       });
 
@@ -174,9 +183,9 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     const handleDeleteBackground = async () => {
       setIsDirty(true);
       const { uid, characterId, type } = selectedBuild;
-      const { _uid, _type } = _getEncodeURIComponents({ uid, type })
+      const { _uid, _type } = _getEncodeURIComponents({ uid, type });
       const postNamecardURL = `/api/user/namecard/${_uid}/${characterId}/${_type}`;
-      await axios.post(postNamecardURL); // no formData attached
+      await axios.post(postNamecardURL, null, optsParamsSessionID()); // no formData attached
       clearBgImage();
       fetchBuildsData(accountData?.uid);
     };
@@ -184,18 +193,18 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     const handleToggleBuildVisibility = async (char: any) => {
       setIsDirty(true);
       const { uid, characterId, type } = char;
-      const { _uid, _type } = _getEncodeURIComponents({ uid, type })
+      const { _uid, _type } = _getEncodeURIComponents({ uid, type });
       const toggleVisibilityURL = `/api/user/toggleBuildVisibility/${_uid}/${characterId}/${_type}`;
-      await axios.post(toggleVisibilityURL);
+      await axios.post(toggleVisibilityURL, null, optsParamsSessionID());
       fetchBuildsData(accountData?.uid);
     };
 
     const handleDeleteBuild = async (char: any) => {
       setIsDirty(true);
       const { uid, characterId, type } = char;
-      const { _uid, _type } = _getEncodeURIComponents({ uid, type })
+      const { _uid, _type } = _getEncodeURIComponents({ uid, type });
       const deleteBuildURL = `/api/user/deleteBuild/${_uid}/${characterId}/${_type}`;
-      await axios.post(deleteBuildURL);
+      await axios.post(deleteBuildURL, null, optsParamsSessionID());
       fetchBuildsData(accountData?.uid);
     };
 
@@ -212,11 +221,14 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       setIsDirty(true);
 
       const { uid, characterId, type } = selectedBuild;
-      const { _uid, _type } = _getEncodeURIComponents({ uid, type })
+      const { _uid, _type } = _getEncodeURIComponents({ uid, type });
 
       const postBuildNameURL = `/api/user/setBuildName/${_uid}/${characterId}/${_type}`;
       const opts = {
-        params: { buildName: newBuildName },
+        params: {
+          buildName: newBuildName,
+          sessionID: getSessionIdFromCookie(),
+        },
       };
       const response = await axios.post(postBuildNameURL, null, opts); // no formData attached
       if (response.data.error) return;

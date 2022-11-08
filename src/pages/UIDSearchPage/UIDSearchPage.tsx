@@ -11,6 +11,7 @@ import {
 } from "../../components";
 import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
 import "./style.scss";
+import { BASENAME } from "../../App";
 
 export const UIDSearchPage: React.FC = () => {
   const [searchUID, setSearchUID] = useState("");
@@ -28,7 +29,10 @@ export const UIDSearchPage: React.FC = () => {
 
   const fetchAccounts = useCallback(
     async (providedUID: string) => {
-      if (!providedUID) setResults([]);
+      if (!providedUID) {
+        setResults([]);
+        return;
+      }
 
       const typedResult = {
         uid: providedUID,
@@ -83,12 +87,12 @@ export const UIDSearchPage: React.FC = () => {
                 )}
               </div>
               <div className="uid-results">
-                {results.map((result) => {
+                {results.map((result, i) => {
                   return (
                     <a
-                      key={result.uid}
+                      key={`${result.uid}-${i}`}
                       className="uid-result"
-                      href={`${window.location.pathname}#/profile/${result.uid}`}
+                      href={`${BASENAME}/profile/${result.uid}`}
                       onClick={(event) => {
                         event.preventDefault();
                         navigate(`/profile/${result.uid}`);

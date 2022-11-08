@@ -19,6 +19,7 @@ import {
   FETCH_CHARACTER_FILTERS_URL,
 } from "../../utils/helpers";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
+import { BASENAME } from "../../App";
 
 export type BuildsColumns = {
   _id: string;
@@ -59,7 +60,7 @@ export const BuildsPage: React.FC = () => {
               event.preventDefault();
               navigate(`/profile/${row.uid}`);
             }}
-            href={`${pathname}#/profile/${row.uid}`}
+            href={`${BASENAME}/profile/${row.uid}`}
           >
             <ARBadge adventureRank={row.owner.adventureRank} />
             {row.owner.nickname}

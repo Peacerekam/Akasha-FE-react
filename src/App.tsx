@@ -1,5 +1,6 @@
-import React from "react";
-import { Routes, Route, HashRouter } from "react-router-dom";
+import axios from "axios";
+import React, { useEffect } from "react";
+import { Routes, Route, HashRouter, BrowserRouter } from "react-router-dom";
 import { LastProfilesContextProvider } from "./context/LastProfiles/LastProfilesContext";
 import { HoverElementContextProvider } from "./context/HoverElement/HoverElementContext";
 
@@ -15,13 +16,13 @@ import {
 
 import { Footer, Navbar, NavbarTabs, NotificationBar } from "./components";
 import { SessionDataContextProvider } from "./context/SessionData/SessionDataContext";
-import axios from "axios";
 
 // @TODO: env variables later on...
 const urls = {
   prod: "https://www.mimee.ovh",
   ovh: "http://146.59.86.233:5033",
   localhost: "http://localhost:5033",
+  localhost80: "http://localhost:80",
   virmach: "http://149.57.165.73:5033",
   proxy: "http://localhost:3100/akasha",
   heroku: "https://akasha-backend.herokuapp.com",
@@ -30,11 +31,29 @@ const urls = {
 axios.defaults.baseURL = urls["prod"];
 axios.defaults.withCredentials = true;
 
+const domainRedirect = () => {
+  const _from = "peacerekam.github.io";
+  const _to = "mimee.ovh";
+  const currentHref = window.location.href;
+  if (currentHref.includes(_from)) {
+    const newHref = currentHref
+      .replace(_from, _to) // change domain
+      .replace("/#/", "/"); // HashRouter to BrowserRouter
+    window.location.href = newHref;
+  }
+};
+
+export const BASENAME = "/akasha"
+
 const App = () => {
+  useEffect(() => {
+    domainRedirect();
+  }, []);
+
   return (
     <LastProfilesContextProvider>
       <SessionDataContextProvider>
-        <HashRouter>
+        <BrowserRouter basename={BASENAME}>
           <NotificationBar />
           <Navbar />
           <NavbarTabs />
@@ -78,7 +97,7 @@ const App = () => {
             </HoverElementContextProvider>
             <Footer />
           </div>
-        </HashRouter>
+        </BrowserRouter>
       </SessionDataContextProvider>
     </LastProfilesContextProvider>
   );

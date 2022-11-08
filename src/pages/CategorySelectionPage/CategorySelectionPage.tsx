@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
 import { StylizedContentBlock } from "../../components";
 import { FETCH_CATEGORIES_URL } from "../../utils/helpers";
+import { BASENAME } from "../../App";
 
 type TransformedCategories = {
   characterName: string;
@@ -133,7 +134,7 @@ export const CategorySelectionPage: React.FC = () => {
                                       `/leaderboards/${calc.calculationId}`
                                     );
                                   }}
-                                  href={`${pathname}#/leaderboards/${calc.calculationId}`}
+                                  href={`${BASENAME}/leaderboards/${calc.calculationId}`}
                                 >
                                   {calc.weapon && (
                                     <span>

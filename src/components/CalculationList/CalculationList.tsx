@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { BASENAME } from "../../App";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import "./style.scss";
 
@@ -74,7 +75,7 @@ export const CalculationList: React.FC<CalculationListProps> = ({ row }) => {
             <td>{weapon?.name}</td>
             <td>
               <a
-                href={`${pathname}#/leaderboards/${id}`}
+                href={`${BASENAME}/leaderboards/${id}`}
                 onClick={(event) => {
                   event.preventDefault();
                   navigate(`/leaderboards/${id}`);
@@ -106,7 +107,7 @@ export const CalculationList: React.FC<CalculationListProps> = ({ row }) => {
   //               event.preventDefault();
   //               // navigate(`/leaderboards/${id}`);
   //             }}
-  //             // href={`${pathname}#/leaderboards/${id}`}
+  //             // href={`/leaderboards/${id}`}
   //           >
   //             <div className="highlight-tile-pill">{short ? short : "---"}</div>
   //             <div className="flex">

@@ -31,6 +31,7 @@ import { TableColumn } from "../../types/TableColumn";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
 import "./style.scss";
+import { BASENAME } from "../../App";
 
 type CategoriesById = {
   [key: string]: {
@@ -191,7 +192,7 @@ export const LeaderboardsPage: React.FC = () => {
                 event.preventDefault();
                 navigate(`/profile/${row.uid}`);
               }}
-              href={`${pathname}#/profile/${row.uid}`}
+              href={`${BASENAME}/profile/${row.uid}`}
             >
               <ARBadge adventureRank={row.owner?.adventureRank} />
               {row.owner?.nickname}
@@ -383,7 +384,7 @@ export const LeaderboardsPage: React.FC = () => {
             event.preventDefault();
             navigate(`/profile/${player.uid}`);
           }}
-          href={`${pathname}#/profile/${player.uid}`}
+          href={`${BASENAME}/profile/${player.uid}`}
         >
           <img
             style={imageStyle}
@@ -550,7 +551,7 @@ export const LeaderboardsPage: React.FC = () => {
                     event.preventDefault();
                     navigate(`/leaderboards/${c.id}`);
                   }}
-                  href={`${pathname}#/leaderboards/${c.id}`}
+                  href={`${BASENAME}/leaderboards/${c.id}`}
                 >
                   <div className="highlight-tile-pill">{thisName}</div>
                   <div className="flex">
