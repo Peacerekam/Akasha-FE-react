@@ -94,6 +94,7 @@ export const ProfilePage: React.FC = () => {
 
     const getSetData = async () => {
       const { data } = await axios.get(url, opts);
+
       setResponseData(data.data);
 
       if (data?.data?.account?.playerInfo?.nickname) {
@@ -101,8 +102,6 @@ export const ProfilePage: React.FC = () => {
       }
 
       if (!data?.data?.account?.profilePictureLink) {
-        // this is null only if document doesnt exist in database yet
-        console.log("!data?.data?.account?.profilePictureLink -> data", data);
         await handleRefreshData();
       }
 
@@ -408,6 +407,7 @@ export const ProfilePage: React.FC = () => {
     const _uid = encodeURIComponent(uid);
     const refreshURL = `/api/user/refresh/${_uid}`;
     const { data } = await axios.get(refreshURL, optsParamsSessionID());
+
     const {
       ttl,
       ttlMax,
