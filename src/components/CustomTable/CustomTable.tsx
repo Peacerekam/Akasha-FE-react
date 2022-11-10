@@ -255,14 +255,22 @@ export const CustomTable: React.FC<CustomTableProps> = ({
         .join(" ")
         .trim();
 
+      const fixKey =
+        {
+          critValue: "Crit Value",
+          critRate: "Crit Rate",
+          critDamage: "Crit DMG",
+          critDMG: "Crit DMG",
+        }[displayKey] || displayKey;
+
       return (
         <div
           key={key}
           className={classNames}
           onClick={() => handleSetSort(key)}
         >
-          <StatIcon name={displayKey} />
-          {displayKey}
+          <StatIcon name={fixKey} />
+          {fixKey}
           {isHighlighted ? displaySortIcon(params.order) : null}
         </div>
       );
@@ -286,9 +294,18 @@ export const CustomTable: React.FC<CustomTableProps> = ({
       if (sortFields?.includes(params.sort)) {
         const key = params.sort.split(".").pop();
         if (!key) return null;
+
+        const fixKey =
+          {
+            critValue: "Crit Value",
+            critRate: "Crit Rate",
+            critDamage: "Crit DMG",
+            critDMG: "Crit DMG",
+          }[key] || key;
+
         columnName = (
           <>
-            <StatIcon name={key} /> {key}
+            <StatIcon name={fixKey} /> {fixKey}
           </>
         );
       }
@@ -384,8 +401,10 @@ export const CustomTable: React.FC<CustomTableProps> = ({
           onClick={() => handleClickRow(row)}
         >
           {columns.map((column, index) => {
-            const { sortField, getDynamicTdClassName } = column;
-            const isHighlighted = params.sort && sortField === params.sort;
+            const { sortField, sortFields, getDynamicTdClassName } = column;
+            const isHighlighted =
+              params.sort &&
+              (sortField === params.sort || sortFields?.includes(params.sort));
 
             const tdClassNames = [
               isHighlighted ? "highlight-cell" : "",

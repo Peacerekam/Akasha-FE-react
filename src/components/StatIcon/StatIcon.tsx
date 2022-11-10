@@ -26,7 +26,9 @@ import "./style.scss";
 
 type StatIconProps = { name: string };
 
-const statKeys: any = {
+const statKeys: {
+  [key: string]: any;
+} = {
   "Crit Rate": CritRate,
   "Crit RATE": CritRate,
   "Crit DMG": CritDMG,
@@ -74,17 +76,24 @@ const statKeys: any = {
     type: "faIcon",
     value: faCirclet,
   },
+  "Crit Value": {
+    type: "empty",
+  },
 };
 
 export const isIcon = (name: string) => !!statKeys[name];
 
 export const StatIcon: React.FC<StatIconProps> = ({ name }) => {
   const asset = statKeys[name];
-  if (!name) return null;
+  if (!asset) return null;
 
-  return asset.type === "faIcon" ? (
-    <FontAwesomeIcon icon={asset.value} size="1x" />
-  ) : (
-    <img className="stat-icon" src={asset} />
-  );
+  if (asset.type === "faIcon") {
+    return <FontAwesomeIcon icon={asset.value} size="1x" />;
+  }
+
+  if (asset.type === "empty") {
+    return <span className="empty-stat-icon"/>;
+  }
+
+  return <img className="stat-icon" src={asset} />;
 };

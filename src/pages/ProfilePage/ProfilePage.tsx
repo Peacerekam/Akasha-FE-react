@@ -320,7 +320,7 @@ export const ProfilePage: React.FC = () => {
       {
         name: "Crit Ratio",
         sortable: true,
-        sortField: "critValue",
+        sortFields: ["critValue", "stats.critRate", "stats.critDamage"],
         cell: (row) => {
           return <CritRatio stats={row.stats} overrideCV={row.critValue} />;
         },
@@ -555,11 +555,11 @@ export const ProfilePage: React.FC = () => {
             </span>
           </div>
           <div>
-            Your secret code is:{" "}
+            Your binding code is:{" "}
             <span className="important-text">{bindSecret}</span>
           </div>
           <div className="less-important">
-            Add secret code to your in-game signature and press refresh button.
+            Add binding code to your in-game signature and press refresh button.
           </div>
           <div className="less-important">
             Be aware it might take around 5 minutes for in-game changes to be

@@ -212,7 +212,11 @@ export const LeaderboardsPage: React.FC = () => {
       {
         name: "Crit Ratio",
         sortable: true,
-        sortField: `calculations.${currentCategory}.stats.critValue`,
+        sortFields: [
+          "stats.critValue",
+          "stats.critRate",
+          "stats.critDMG",
+        ].map((x) => `calculations.${currentCategory}.${x}`),
         cell: (row) => {
           const build = row.calculations[currentCategory]?.stats;
           return build ? <CritRatio stats={build} /> : <></>;

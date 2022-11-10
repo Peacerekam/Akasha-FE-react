@@ -8,7 +8,7 @@ import {
   DisplaySets,
   CustomTable,
   ReplaceRowDataOnHover,
-  StylizedContentBlock
+  StylizedContentBlock,
 } from "../../components";
 import { TableColumn } from "../../types/TableColumn";
 import { ARBadge } from "../LeaderboardsPage";
@@ -37,172 +37,175 @@ export const BuildsPage: React.FC = () => {
   const navigate = useNavigate();
   const pathname = window.location.pathname;
 
-  const BUILDS_COLUMNS: TableColumn<BuildsColumns>[] = useMemo(() => [
-    {
-      name: "#",
-      width: "0px",
-      cell: (row) => {
-        return <div>{row.index}</div>;
+  const BUILDS_COLUMNS: TableColumn<BuildsColumns>[] = useMemo(
+    () => [
+      {
+        name: "#",
+        width: "0px",
+        cell: (row) => {
+          return <div>{row.index}</div>;
+        },
       },
-    },
-    {
-      name: "Owner",
-      sortField: "owner.nickname",
-      width: "180px",
-      sortable: true,
-      cell: (row) => {
-        if (!row.owner?.adventureRank) return <></>;
+      {
+        name: "Owner",
+        sortField: "owner.nickname",
+        width: "180px",
+        sortable: true,
+        cell: (row) => {
+          if (!row.owner?.adventureRank) return <></>;
 
-        return (
-          <a
-            className="row-link-element"
-            onClick={(event) => {
-              event.preventDefault();
-              navigate(`/profile/${row.uid}`);
-            }}
-            href={`${BASENAME}/profile/${row.uid}`}
-          >
-            <ARBadge adventureRank={row.owner.adventureRank} />
-            {row.owner.nickname}
-          </a>
-        );
+          return (
+            <a
+              className="row-link-element"
+              onClick={(event) => {
+                event.preventDefault();
+                navigate(`/profile/${row.uid}`);
+              }}
+              href={`${BASENAME}/profile/${row.uid}`}
+            >
+              <ARBadge adventureRank={row.owner.adventureRank} />
+              {row.owner.nickname}
+            </a>
+          );
+        },
       },
-    },
-    {
-      name: "Name",
-      sortable: true,
-      sortField: "name",
-      cell: (row) => {
-        return (
-          <div className="table-icon-text-pair">
-            <img className="table-icon" src={row.icon} />
-            {row.type !== "current" ? (
-              <ReplaceRowDataOnHover data={row.name} onHoverData={row.type} />
-            ) : (
-              row.name
-            )}
-          </div>
-        );
-      },
-    },
-    {
-      name: "Constellation",
-      sortable: true,
-      sortField: "constellation",
-      cell: (row) => {
-        const constellation = row.constellation ?? 0;
-        return (
-          <div className="c-badge-wrapper">
-            <div className={`c-badge c-${constellation}-badge`}>
-              C{constellation}
+      {
+        name: "Name",
+        sortable: true,
+        sortField: "name",
+        cell: (row) => {
+          return (
+            <div className="table-icon-text-pair">
+              <img className="table-icon" src={row.icon} />
+              {row.type !== "current" ? (
+                <ReplaceRowDataOnHover data={row.name} onHoverData={row.type} />
+              ) : (
+                row.name
+              )}
             </div>
-          </div>
-        );
+          );
+        },
       },
-    },
-    {
-      name: "Weapon",
-      // grow: 0,
-      width: "60px",
-      sortable: true,
-      sortField: "weapon.name",
-      cell: (row) => {
-        const refinement =
-          (row.weapon.weaponInfo?.refinementLevel?.value ?? 0) + 1;
-        return (
-          <WeaponMiniDisplay icon={row.weapon.icon} refinement={refinement} />
-        );
+      {
+        name: "Constellation",
+        sortable: true,
+        sortField: "constellation",
+        cell: (row) => {
+          const constellation = row.constellation ?? 0;
+          return (
+            <div className="c-badge-wrapper">
+              <div className={`c-badge c-${constellation}-badge`}>
+                C{constellation}
+              </div>
+            </div>
+          );
+        },
       },
-    },
-    {
-      name: "Sets",
-      sortable: true,
-      sortField: "artifactSetsFlat",
-      cell: (row) => {
-        return <DisplaySets artifactSets={row.artifactSets} />;
+      {
+        name: "Weapon",
+        // grow: 0,
+        width: "60px",
+        sortable: true,
+        sortField: "weapon.name",
+        cell: (row) => {
+          const refinement =
+            (row.weapon.weaponInfo?.refinementLevel?.value ?? 0) + 1;
+          return (
+            <WeaponMiniDisplay icon={row.weapon.icon} refinement={refinement} />
+          );
+        },
       },
-    },
-    {
-      name: "Crit Ratio",
-      sortable: true,
-      sortField: "critValue",
-      cell: (row) => {
-        return <CritRatio stats={row.stats} overrideCV={row.critValue} />;
+      {
+        name: "Sets",
+        sortable: true,
+        sortField: "artifactSetsFlat",
+        cell: (row) => {
+          return <DisplaySets artifactSets={row.artifactSets} />;
+        },
       },
-    },
-    {
-      name: "Max HP",
-      // selector: (row) => row.stats.maxHp.value.toFixed(0),
-      sortable: true,
-      sortField: "stats.maxHp.value",
-      cell: (row) => {
-        return (
-          <div className="flex gap-3 nowrap">
-            <StatIcon name="HP" />
-            {row.stats.maxHp.value.toFixed(0)}
-          </div>
-        );
+      {
+        name: "Crit Ratio",
+        sortable: true,
+        sortFields: ["critValue", "stats.critRate", "stats.critDamage"],
+        cell: (row) => {
+          return <CritRatio stats={row.stats} overrideCV={row.critValue} />;
+        },
       },
-    },
-    {
-      name: "ATK",
-      // selector: (row) => row.stats.atk.value.toFixed(0),
-      sortable: true,
-      sortField: "stats.atk.value",
-      cell: (row) => {
-        return (
-          <div className="flex gap-3 nowrap">
-            <StatIcon name="ATK" />
-            {row.stats.atk.value.toFixed(0)}
-          </div>
-        );
+      {
+        name: "Max HP",
+        // selector: (row) => row.stats.maxHp.value.toFixed(0),
+        sortable: true,
+        sortField: "stats.maxHp.value",
+        cell: (row) => {
+          return (
+            <div className="flex gap-3 nowrap">
+              <StatIcon name="HP" />
+              {row.stats.maxHp.value.toFixed(0)}
+            </div>
+          );
+        },
       },
-    },
-    {
-      name: "DEF",
-      // selector: (row) => row.stats.def.value.toFixed(0),
-      sortable: true,
-      sortField: "stats.def.value",
-      cell: (row) => {
-        return (
-          <div className="flex gap-3 nowrap">
-            <StatIcon name="DEF" />
-            {row.stats.def.value.toFixed(0)}
-          </div>
-        );
+      {
+        name: "ATK",
+        // selector: (row) => row.stats.atk.value.toFixed(0),
+        sortable: true,
+        sortField: "stats.atk.value",
+        cell: (row) => {
+          return (
+            <div className="flex gap-3 nowrap">
+              <StatIcon name="ATK" />
+              {row.stats.atk.value.toFixed(0)}
+            </div>
+          );
+        },
       },
-    },
-    {
-      name: "EM",
-      // selector: (row) => row.stats.elementalMastery.value.toFixed(0),
-      sortable: true,
-      sortField: "stats.elementalMastery.value",
-      cell: (row) => {
-        return (
-          <div className="flex gap-3 nowrap">
-            <StatIcon name="Elemental Mastery" />
-            {+row.stats.elementalMastery.value.toFixed(0) || 0}
-          </div>
-        );
+      {
+        name: "DEF",
+        // selector: (row) => row.stats.def.value.toFixed(0),
+        sortable: true,
+        sortField: "stats.def.value",
+        cell: (row) => {
+          return (
+            <div className="flex gap-3 nowrap">
+              <StatIcon name="DEF" />
+              {row.stats.def.value.toFixed(0)}
+            </div>
+          );
+        },
       },
-    },
-    {
-      name: "ER%",
-      // selector: (row) =>
-      //   `${(row.stats.energyRecharge.value * 100).toFixed(1)}%`,
-      sortable: true,
-      sortField: "stats.energyRecharge.value",
-      cell: (row) => {
-        return (
-          <div className="flex gap-3 nowrap">
-            <StatIcon name="Energy Recharge" />
-            {(row.stats.energyRecharge.value * 100).toFixed(1)}%
-            {/* {(row.stats.energyRecharge.value * 100).toFixed(1)}% */}
-          </div>
-        );
+      {
+        name: "EM",
+        // selector: (row) => row.stats.elementalMastery.value.toFixed(0),
+        sortable: true,
+        sortField: "stats.elementalMastery.value",
+        cell: (row) => {
+          return (
+            <div className="flex gap-3 nowrap">
+              <StatIcon name="Elemental Mastery" />
+              {+row.stats.elementalMastery.value.toFixed(0) || 0}
+            </div>
+          );
+        },
       },
-    },
-  ], []);
+      {
+        name: "ER%",
+        // selector: (row) =>
+        //   `${(row.stats.energyRecharge.value * 100).toFixed(1)}%`,
+        sortable: true,
+        sortField: "stats.energyRecharge.value",
+        cell: (row) => {
+          return (
+            <div className="flex gap-3 nowrap">
+              <StatIcon name="Energy Recharge" />
+              {(row.stats.energyRecharge.value * 100).toFixed(1)}%
+              {/* {(row.stats.energyRecharge.value * 100).toFixed(1)}% */}
+            </div>
+          );
+        },
+      },
+    ],
+    []
+  );
 
   return (
     <div className="flex">

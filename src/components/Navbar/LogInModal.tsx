@@ -123,6 +123,7 @@ export const LogInModal: React.FC<LogInModalProps> = ({
                             key={acc.uid}
                             className="bound-account centered-td"
                             onClick={(event) => {
+                              event.preventDefault();
                               handleCloseModal(event, true);
                               navigate(`/profile/${uid}`);
                             }}
