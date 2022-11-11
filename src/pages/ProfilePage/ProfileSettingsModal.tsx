@@ -323,69 +323,72 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
 
     return (
       <div className="compact-table-wrapper">
-        <div className="custom-namecard-preview-wrapper">
-          <FancyBuildBorder
-            hide={false}
-            rowData={selectedBuild}
-            overwriteBackground={backgroundPreview}
-            patreonObj={patreonObj}
-            resetOffset
-          >
-            <StatList row={selectedBuild} showCharacter showWeapon />
-          </FancyBuildBorder>
-          {!isPatreon ? (
-            <div className="patreons-only">
-              Become{" "}
-              <a target="_blank" rel="noreferrer" href={PATREON_URL}>
-                patreon
-              </a>{" "}
-              to customize this background image
-            </div>
-          ) : (
-            <div className="custom-namecard-upload">
-              <button
-                disabled={!backgroundPreview || !patreonObj}
-                className={uploadBtnClassNames}
-                onClick={handleSubmitNamecard}
-              >
-                <FontAwesomeIcon icon={faUpload} size="1x" />
-              </button>
-              <label htmlFor="namecard-upload" className="custom-file-upload">
-                <div>Choose background file </div>
-                <div>{fileData ? fileData.name : ""}</div>
-              </label>
-              <input
-                id="namecard-upload"
-                disabled={!patreonObj}
-                ref={uploadInput}
-                type="file"
-                accept="image/*"
-                onChange={(e) => handleAddPreviewImage(e.target.files)}
-              />
-              <button
-                title="Clear background preview"
-                disabled={!backgroundPreview}
-                className="remove-btn"
-                onClick={clearBgImage}
-              >
-                <FontAwesomeIcon icon={faX} size="1x" />
-              </button>
-              <ConfirmTooltip
-                text="Delete background image?"
-                onConfirm={handleDeleteBackground}
-              >
+        {selectedBuild?._id && (
+          <div className="custom-namecard-preview-wrapper">
+            <FancyBuildBorder
+              hide={false}
+              rowData={selectedBuild}
+              overwriteBackground={backgroundPreview}
+              patreonObj={patreonObj}
+              resetOffset
+            >
+              <StatList row={selectedBuild} showCharacter showWeapon />
+            </FancyBuildBorder>
+
+            {!isPatreon ? (
+              <div className="patreons-only">
+                Become{" "}
+                <a target="_blank" rel="noreferrer" href={PATREON_URL}>
+                  patreon
+                </a>{" "}
+                to customize this background image
+              </div>
+            ) : (
+              <div className="custom-namecard-upload">
                 <button
-                  title="Delete background image"
-                  disabled={!selectedBuild?.customNamecard}
-                  className="remove-btn"
-                  // onClick={handleDeleteBackground}
+                  disabled={!backgroundPreview || !patreonObj}
+                  className={uploadBtnClassNames}
+                  onClick={handleSubmitNamecard}
                 >
-                  <FontAwesomeIcon icon={faTrash} size="1x" />
+                  <FontAwesomeIcon icon={faUpload} size="1x" />
                 </button>
-              </ConfirmTooltip>
-            </div>
-          )}
-        </div>
+                <label htmlFor="namecard-upload" className="custom-file-upload">
+                  <div>Choose background file </div>
+                  <div>{fileData ? fileData.name : ""}</div>
+                </label>
+                <input
+                  id="namecard-upload"
+                  disabled={!patreonObj}
+                  ref={uploadInput}
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleAddPreviewImage(e.target.files)}
+                />
+                <button
+                  title="Clear background preview"
+                  disabled={!backgroundPreview}
+                  className="remove-btn"
+                  onClick={clearBgImage}
+                >
+                  <FontAwesomeIcon icon={faX} size="1x" />
+                </button>
+                <ConfirmTooltip
+                  text="Delete background image?"
+                  onConfirm={handleDeleteBackground}
+                >
+                  <button
+                    title="Delete background image"
+                    disabled={!selectedBuild?.customNamecard}
+                    className="remove-btn"
+                    // onClick={handleDeleteBackground}
+                  >
+                    <FontAwesomeIcon icon={faTrash} size="1x" />
+                  </button>
+                </ConfirmTooltip>
+              </div>
+            )}
+          </div>
+        )}
         <div className="perfect-scroll-wrapper">
           <div className="build-search-input relative">
             <input

@@ -160,7 +160,7 @@ export const isPercent = (key: string) => {
   );
 };
 
-export const getSubstatEfficiency = (key: string, value: number) => {
+export const getSubstatPercentageEfficiency = (key: string, value: number) => {
   const maxValue =
     {
       critdmg: 46.8,
@@ -181,8 +181,8 @@ export const getSubstatEfficiency = (key: string, value: number) => {
 
 export const arrayPushOrSplice = (prev: any[], element: any) => {
   const arr = [...prev];
-  if (arr.includes(element)) {
-    const index = arr.indexOf(element);
+  const index = arr.indexOf(element);
+  if (index > -1) {
     arr.splice(index, 1);
   } else {
     arr.push(element);

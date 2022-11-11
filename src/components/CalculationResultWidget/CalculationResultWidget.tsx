@@ -65,7 +65,8 @@ export const CalculationResultWidget: React.FC<
         }
       }
       const sorted = calcArray.sort((a: any, b: any) =>
-        a.ranking > b.ranking ? 1 : -1
+        // a.ranking > b.ranking ? 1 : -1
+        a.ranking / a.outOf > b.ranking / b.outOf ? 1 : -1
       );
 
       // group by character name instead

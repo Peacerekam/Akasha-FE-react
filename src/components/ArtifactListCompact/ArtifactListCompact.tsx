@@ -7,8 +7,13 @@ import {
   getArtifactCvClassName,
   isPercent,
   getInGameSubstatValue,
-  getSubstatEfficiency,
+  getSubstatPercentageEfficiency,
 } from "../../utils/helpers";
+import {
+  REAL_SUBSTAT_VALUES,
+  STAT_NAMES,
+} from "../../utils/substats";
+import { RollList } from "../RollList";
 import { StatIcon } from "../StatIcon";
 import "./style.scss";
 
@@ -38,73 +43,95 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
     [JSON.stringify(artifacts)]
   );
 
-  const compactList = useMemo(
-    () =>
-      reordered.map((artifact: any) => {
-        const substatKeys = Object.keys(artifact.substats);
-        const className = getArtifactCvClassName(artifact.critValue);
+  const compactList = useMemo(() => {
+    return (
+      <>
+        {reordered.map((artifact: any) => {
+          const substatKeys = Object.keys(artifact.substats);
+          const className = getArtifactCvClassName(artifact.critValue);
 
-        return (
-          <div
-            key={artifact._id}
-            className={`flex compact-artifact ${className}`}
-          >
-            <div className="compact-artifact-icon-container">
-              <img className="compact-artifact-icon" src={artifact.icon} />
-              <span className="compact-artifact-crit-value">
-                <span>{Math.round(artifact.critValue * 10) / 10} cv</span>
-              </span>
-              <span className="compact-artifact-main-stat">
-                <StatIcon name={artifact.mainStatKey} />
-                {artifact.mainStatValue}
-                {isPercent(artifact.mainStatKey) ? "%" : ""}
-              </span>
+          const summedArtifactRolls: {
+            [key: string]: { count: number; sum: number; };
+          } = artifact.substatsIdList.reduce((acc: any, id: number) => {
+            const { value, type } = REAL_SUBSTAT_VALUES[id];
+            const realStatName = STAT_NAMES[type];
+            return {
+              ...acc,
+              [realStatName]: {
+                count: (acc[realStatName]?.count ?? 0) + 1,
+                sum: (acc[realStatName]?.sum ?? 0) + value,
+              },
+            };
+          }, {});
+
+          return (
+            <div
+              key={artifact._id}
+              className={`flex compact-artifact ${className}`}
+            >
+              <div className="compact-artifact-icon-container">
+                <img className="compact-artifact-icon" src={artifact.icon} />
+                <span className="compact-artifact-crit-value">
+                  <span>{Math.round(artifact.critValue * 10) / 10} cv</span>
+                </span>
+                <span className="compact-artifact-main-stat">
+                  <StatIcon name={artifact.mainStatKey} />
+                  {artifact.mainStatValue}
+                  {isPercent(artifact.mainStatKey) ? "%" : ""}
+                </span>
+              </div>
+              <div className="compact-artifact-subs">
+                {substatKeys.map((key: any) => {
+                  if (!key) return <></>;
+
+                  const substatValue = getInGameSubstatValue(
+                    artifact.substats[key],
+                    key
+                  );
+                  const isCV = key.includes("Crit");
+
+                  const normSubName = normalizeText(
+                    key.replace("substats", "")
+                  );
+                  const classNames = [
+                    "substat flex nowrap gap-5",
+                    normalizeText(normSubName),
+                    isCV ? "critvalue" : "",
+                  ]
+                    .join(" ")
+                    .trim();
+
+                  const opacity = getSubstatPercentageEfficiency(
+                    normSubName,
+                    artifact.substats[key]
+                  );
+
+                  const rollDots = "•".repeat(summedArtifactRolls[key].count);
+
+                  return (
+                    <div
+                      key={normalizeText(key)}
+                      className={classNames}
+                      style={{ opacity: opacity }}
+                    >
+                      <span className="roll-dots">{rollDots}</span>
+                      <span>
+                        <StatIcon name={key} />
+                      </span>
+                      {substatValue}
+                      {isPercent(key) ? "%" : ""}
+                    </div>
+                  );
+                })}
+              </div>
+              {/* <Artifact key={art._id} artifact={art} width={200} /> */}
             </div>
-            <div className="compact-artifact-subs">
-              {substatKeys.map((key: any) => {
-                if (!key) return <></>;
-
-                const substatValue = getInGameSubstatValue(
-                  artifact.substats[key],
-                  key
-                );
-                const isCV = key.includes("Crit");
-
-                const normSubName = normalizeText(key.replace("substats", ""));
-                const classNames = [
-                  "substat flex nowrap gap-5",
-                  normalizeText(normSubName),
-                  isCV ? "critvalue" : "",
-                ]
-                  .join(" ")
-                  .trim();
-
-                const opacity = getSubstatEfficiency(
-                  normSubName,
-                  artifact.substats[key]
-                );
-
-                return (
-                  <div
-                    key={normalizeText(key)}
-                    className={classNames}
-                    style={{ opacity: opacity }}
-                  >
-                    <span>
-                      <StatIcon name={key} />
-                    </span>
-                    {substatValue}
-                    {isPercent(key) ? "%" : ""}
-                  </div>
-                );
-              })}
-            </div>
-            {/* <Artifact key={art._id} artifact={art} width={200} /> */}
-          </div>
-        );
-      }),
-    [JSON.stringify(reordered)]
-  );
+          );
+        })}
+        <RollList artifacts={reordered} character={row.name} />
+      </>
+    );
+  }, [JSON.stringify(reordered)]);
 
   return (
     <div className="flex expanded-row">

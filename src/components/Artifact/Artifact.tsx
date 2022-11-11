@@ -3,7 +3,7 @@ import {
   getArtifactCvClassName,
   getCharacterCvColor,
   getInGameSubstatValue,
-  getSubstatEfficiency,
+  getSubstatPercentageEfficiency,
   isPercent,
   normalizeText,
 } from "../../utils/helpers";
@@ -14,6 +14,11 @@ import NoArtifact from "../../assets/images/no-artifact.png";
 import RarityStar from "../../assets/images/star.png";
 
 import "./style.scss";
+import {
+  getSubstatEfficiency,
+  REAL_SUBSTAT_VALUES,
+  STAT_NAMES,
+} from "../../utils/substats";
 
 type ArtifactProps = {
   artifact: {
@@ -52,6 +57,23 @@ export const Artifact: React.FC<ArtifactProps> = ({
     artifact.mainStatKey?.endsWith("Bonus") ||
     ["Energy Recharge"].includes(artifact.mainStatKey);
 
+  const summedArtifactRolls: {
+    [key: string]: { count: number; sum: number; rv: number };
+  } = artifact.substatsIdList.reduce((acc: any, id: number) => {
+    const { value, type } = REAL_SUBSTAT_VALUES[id];
+    const realStatName = STAT_NAMES[type];
+    return {
+      ...acc,
+      [realStatName]: {
+        count: (acc[realStatName]?.count ?? 0) + 1,
+        sum: (acc[realStatName]?.sum ?? 0) + value,
+        rv:
+          (acc[realStatName]?.rv ?? 0) +
+          getSubstatEfficiency(value, realStatName),
+      },
+    };
+  }, {});
+
   return (
     <div
       style={style}
@@ -84,7 +106,7 @@ export const Artifact: React.FC<ArtifactProps> = ({
           );
           const isCV = key.includes("Crit");
           const normSubName = normalizeText(key);
-          const opacity = getSubstatEfficiency(
+          const opacity = getSubstatPercentageEfficiency(
             normSubName,
             artifact.substats[key]
           );
@@ -97,6 +119,7 @@ export const Artifact: React.FC<ArtifactProps> = ({
             >
               {substatName.replace("Flat ", "")}+{substatValue}
               {isPercent(key) ? "%" : ""}
+              <span className="rv-display">{summedArtifactRolls[key].rv}%</span>
             </div>
           );
         })}
