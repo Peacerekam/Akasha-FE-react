@@ -212,11 +212,9 @@ export const LeaderboardsPage: React.FC = () => {
       {
         name: "Crit Ratio",
         sortable: true,
-        sortFields: [
-          "stats.critValue",
-          "stats.critRate",
-          "stats.critDMG",
-        ].map((x) => `calculations.${currentCategory}.${x}`),
+        sortFields: ["stats.critValue", "stats.critRate", "stats.critDMG"].map(
+          (x) => `calculations.${currentCategory}.${x}`
+        ),
         cell: (row) => {
           const build = row.calculations[currentCategory]?.stats;
           return build ? <CritRatio stats={build} /> : <></>;
@@ -480,64 +478,65 @@ export const LeaderboardsPage: React.FC = () => {
           revealCondition={podiumData.rows.length > 0}
           overrideImage={blockBackgroundImage}
         />
-        <div className="relative">
-          <button
-            className="pointer back-btn"
-            onClick={() => navigate("/leaderboards")}
-          >
-            <FontAwesomeIcon icon={faChevronLeft} size="1x" /> back to
-            categories
-          </button>
-        </div>
         <div
-          className="flex nowrap relative block-highlight"
+          className="relative block-highlight"
           style={{
             whiteSpace: "break-spaces",
             margin: "10px",
           }}
         >
-          {displayPodium}
-          <div style={{}}>
-            {displayCategory && (
-              <div>
-                <div style={{ margin: 10 }}>
-                  <div
-                    className="flex gap-10"
-                    style={{
-                      fontSize: 30,
-                      borderBottom: "1px solid white",
-                    }}
-                  >
-                    <img
-                      style={{ width: 40, marginBottom: 15 }}
-                      src={displayCategory.character.icon}
-                    />
+          <div>
+            <button
+              className="pointer back-btn"
+              onClick={() => navigate("/leaderboards")}
+            >
+              <FontAwesomeIcon icon={faChevronLeft} size="1x" /> GO BACK
+            </button>
+          </div>
+          <div className="flex nowrap ">
+            {displayPodium}
+            <div>
+              {displayCategory && (
+                <div>
+                  <div style={{ margin: 10, minWidth: 400 }}>
                     <div
+                      className="flex gap-10"
                       style={{
-                        display: "flex",
-                        alignItems: "center",
+                        fontSize: 30,
+                        borderBottom: "1px solid white",
                       }}
                     >
-                      {displayCategory.character.name} -{" "}
-                      {displayCategory.calculation.name}
+                      <img
+                        style={{ width: 40, marginBottom: 15 }}
+                        src={displayCategory.character.icon}
+                      />
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        {displayCategory.character.name} -{" "}
+                        {displayCategory.calculation.name}
+                      </div>
+                    </div>
+                    <div>{displayCategory.calculation.details}</div>
+                  </div>
+                  <div style={{ margin: 10 }}>
+                    <div>
+                      <span className="flex gap-10">
+                        Weapon:
+                        <WeaponMiniDisplay
+                          icon={displayCategory.weapon?.icon || ""}
+                          refinement={displayCategory.weapon?.refinement || 1}
+                        />
+                        {displayCategory.weapon?.name}
+                      </span>
                     </div>
                   </div>
-                  <div>{displayCategory.calculation.details}</div>
                 </div>
-                <div style={{ margin: 10 }}>
-                  <div>
-                    <span className="flex gap-10">
-                      Weapon:
-                      <WeaponMiniDisplay
-                        icon={displayCategory.weapon?.icon || ""}
-                        refinement={displayCategory.weapon?.refinement || 1}
-                      />
-                      {displayCategory.weapon?.name}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
         <div className="relative other-calculations-display block-highlight highlight-tile-container">

@@ -11,7 +11,7 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { ConfirmTooltip, StatList } from "../../components";
+import { ConfirmTooltip, Spinner, StatList } from "../../components";
 import { FancyBuildBorder } from "../../components/FancyBuildBorder";
 import {
   abortSignalCatcher,
@@ -45,6 +45,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
   const [builds, setBuilds] = useState<any[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [isDirty, setIsDirty] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const uploadInput = useRef<HTMLInputElement>(null);
 
   // @TODO: .....................
@@ -148,6 +149,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     const handleSubmitNamecard = async () => {
       const file = uploadInput?.current?.files?.[0];
       if (!file || !selectedBuild) return;
+      setIsUploading(true);
 
       const formData = new FormData();
       formData.append("file", file);
@@ -167,6 +169,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
         },
       });
 
+      setIsUploading(false);
       clearBgImage();
       fetchBuildsData(accountData?.uid);
       setIsDirty(true);
@@ -182,34 +185,40 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
 
     const handleDeleteBackground = async () => {
       setIsDirty(true);
+      setIsUploading(true);
       const { uid, characterId, type } = selectedBuild;
       const { _uid, _type } = _getEncodeURIComponents({ uid, type });
       const postNamecardURL = `/api/user/namecard/${_uid}/${characterId}/${_type}`;
       await axios.post(postNamecardURL, null, optsParamsSessionID()); // no formData attached
+      setIsUploading(false);
       clearBgImage();
       fetchBuildsData(accountData?.uid);
     };
 
     const handleToggleBuildVisibility = async (char: any) => {
       setIsDirty(true);
+      setIsUploading(true);
       const { uid, characterId, type } = char;
       const { _uid, _type } = _getEncodeURIComponents({ uid, type });
       const toggleVisibilityURL = `/api/user/toggleBuildVisibility/${_uid}/${characterId}/${_type}`;
       await axios.post(toggleVisibilityURL, null, optsParamsSessionID());
+      setIsUploading(false);
       fetchBuildsData(accountData?.uid);
     };
 
     const handleDeleteBuild = async (char: any) => {
       setIsDirty(true);
+      setIsUploading(true);
       const { uid, characterId, type } = char;
       const { _uid, _type } = _getEncodeURIComponents({ uid, type });
       const deleteBuildURL = `/api/user/deleteBuild/${_uid}/${characterId}/${_type}`;
       await axios.post(deleteBuildURL, null, optsParamsSessionID());
+      setIsUploading(false);
       fetchBuildsData(accountData?.uid);
     };
 
     const handleChangeBuildName = async (event: any) => {
-      let newBuildName = event?.target?.value?.trim();
+      let newBuildName = event?.target?.value?.trim()?.slice(0, 40);
 
       if (newBuildName === selectedBuild.name) {
         newBuildName = "current";
@@ -219,6 +228,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       }
 
       setIsDirty(true);
+      setIsUploading(true);
 
       const { uid, characterId, type } = selectedBuild;
       const { _uid, _type } = _getEncodeURIComponents({ uid, type });
@@ -235,6 +245,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
 
       await fetchBuildsData(accountData?.uid);
       const newBuildId = `${selectedBuild.characterId}${newBuildName}`;
+      setIsUploading(false);
       setSelectedBuildId(newBuildId);
     };
 
@@ -345,46 +356,55 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
               </div>
             ) : (
               <div className="custom-namecard-upload">
-                <button
-                  disabled={!backgroundPreview || !patreonObj}
-                  className={uploadBtnClassNames}
-                  onClick={handleSubmitNamecard}
-                >
-                  <FontAwesomeIcon icon={faUpload} size="1x" />
-                </button>
-                <label htmlFor="namecard-upload" className="custom-file-upload">
-                  <div>Choose background file </div>
-                  <div>{fileData ? fileData.name : ""}</div>
-                </label>
-                <input
-                  id="namecard-upload"
-                  disabled={!patreonObj}
-                  ref={uploadInput}
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handleAddPreviewImage(e.target.files)}
-                />
-                <button
-                  title="Clear background preview"
-                  disabled={!backgroundPreview}
-                  className="remove-btn"
-                  onClick={clearBgImage}
-                >
-                  <FontAwesomeIcon icon={faX} size="1x" />
-                </button>
-                <ConfirmTooltip
-                  text="Delete background image?"
-                  onConfirm={handleDeleteBackground}
-                >
-                  <button
-                    title="Delete background image"
-                    disabled={!selectedBuild?.customNamecard}
-                    className="remove-btn"
-                    // onClick={handleDeleteBackground}
-                  >
-                    <FontAwesomeIcon icon={faTrash} size="1x" />
-                  </button>
-                </ConfirmTooltip>
+                {isUploading ? (
+                  <Spinner />
+                ) : (
+                  <>
+                    <button
+                      disabled={!backgroundPreview || !patreonObj}
+                      className={uploadBtnClassNames}
+                      onClick={handleSubmitNamecard}
+                    >
+                      <FontAwesomeIcon icon={faUpload} size="1x" />
+                    </button>
+                    <label
+                      htmlFor="namecard-upload"
+                      className="custom-file-upload"
+                    >
+                      <div>Choose background file </div>
+                      <div>{fileData ? fileData.name : ""}</div>
+                    </label>
+                    <input
+                      id="namecard-upload"
+                      disabled={!patreonObj}
+                      ref={uploadInput}
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleAddPreviewImage(e.target.files)}
+                    />
+                    <button
+                      title="Clear background preview"
+                      disabled={!backgroundPreview}
+                      className="remove-btn"
+                      onClick={clearBgImage}
+                    >
+                      <FontAwesomeIcon icon={faX} size="1x" />
+                    </button>
+                    <ConfirmTooltip
+                      text="Delete background image?"
+                      onConfirm={handleDeleteBackground}
+                    >
+                      <button
+                        title="Delete background image"
+                        disabled={!selectedBuild?.customNamecard}
+                        className="remove-btn"
+                        // onClick={handleDeleteBackground}
+                      >
+                        <FontAwesomeIcon icon={faTrash} size="1x" />
+                      </button>
+                    </ConfirmTooltip>
+                  </>
+                )}
               </div>
             )}
           </div>
@@ -416,6 +436,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     selectedBuild,
     searchText,
     selectedBuildId,
+    isUploading,
   ]);
 
   // const modalButtons = (

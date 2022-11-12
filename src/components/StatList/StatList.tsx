@@ -113,7 +113,7 @@ export const StatList: React.FC<StatListProps> = ({
     });
   };
 
-  const displayHighestDamageValue = () => {
+  const displayDamageValues = () => {
     const {
       pyroDMG,
       hydroDMG,
@@ -125,41 +125,59 @@ export const StatList: React.FC<StatListProps> = ({
       physicalDMG,
     } = stats;
 
-    const dmgStats: any = {
-      "Pyro DMG Bonus": pyroDMG,
-      "Electro DMG Bonus": electroDMG,
-      "Cryo DMG Bonus": cryoDMG,
-      "Geo DMG Bonus": geoDMG,
-      "Dendro DMG Bonus": dendroDMG,
-      "Anemo DMG Bonus": anemoDMG,
-      "Hydro DMG Bonus": hydroDMG,
-      "Physical DMG Bonus": physicalDMG,
-    };
+    const dmgStats: any[] = [
+      {
+        name: "Pyro DMG Bonus",
+        value: pyroDMG,
+      },
+      {
+        name: "Electro DMG Bonus",
+        value: electroDMG,
+      },
+      {
+        name: "Cryo DMG Bonus",
+        value: cryoDMG,
+      },
+      {
+        name: "Geo DMG Bonus",
+        value: geoDMG,
+      },
+      {
+        name: "Dendro DMG Bonus",
+        value: dendroDMG,
+      },
+      {
+        name: "Anemo DMG Bonus",
+        value: anemoDMG,
+      },
+      {
+        name: "Hydro DMG Bonus",
+        value: hydroDMG,
+      },
+      {
+        name: "Physical DMG Bonus",
+        value: physicalDMG,
+      },
+    ];
 
-    const highestDmgType = {
-      name: "",
-      value: 0,
-    };
+    const sorted = dmgStats
+      .sort((a, b) => (+a.value > +b.value ? -1 : 1))
+      .slice(0, 5);
+    const lowestDmg = sorted.length > 1 ? +sorted[sorted.length - 1].value : 0;
 
-    for (const key of Object.keys(dmgStats)) {
-      const value = +dmgStats[key];
-      if (value && value > highestDmgType.value) {
-        highestDmgType.name = key;
-        highestDmgType.value = value;
-      }
-    }
-
-    return (
-      highestDmgType.value > 0 && (
-        <div className="table-stat-row">
-          <div className="flex gap-5">
-            <StatIcon name={highestDmgType.name} />
-            <span>{highestDmgType.name}</span>
-          </div>
-          <div>{highestDmgType.value.toFixed(1)}%</div>
-        </div>
-      )
+    const relevantDamageTypes = sorted.filter(
+      (a: any) => +a.value !== lowestDmg && +a.value !== 0 && !isNaN(a.value)
     );
+
+    return relevantDamageTypes.map((dmgStat: any) => (
+      <div className="table-stat-row" key={dmgStat.name}>
+        <div className="flex gap-5">
+          <StatIcon name={dmgStat.name} />
+          <span>{dmgStat.name}</span>
+        </div>
+        <div>{(+dmgStat.value).toFixed(1)}%</div>
+      </div>
+    ));
   };
 
   const displayGeneralStats = () => {
@@ -243,7 +261,7 @@ export const StatList: React.FC<StatListProps> = ({
       {displayCharacter}
       {displayWeapon}
       {displayGeneralStats()}
-      {displayHighestDamageValue()}
+      {displayDamageValues()}
       {displayArtifactSets()}
     </div>
   );

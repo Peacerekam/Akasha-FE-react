@@ -8,7 +8,7 @@ import React, {
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
-// import PerfectScrollbar from "react-perfect-scrollbar";
+import PerfectScrollbar from "react-perfect-scrollbar";
 import {
   CalculationList,
   StatIcon,
@@ -491,25 +491,25 @@ export const CustomTable: React.FC<CustomTableProps> = ({
           projectParamsToPath
         />
       )}
-      {/* <PerfectScrollbar options={{}}> */}
-      <table className={tableClassNames} cellSpacing={0}>
-        <thead>
-          <tr>{renderHeaders}</tr>
-        </thead>
-        <tbody>
-          {isLoading && (
-            <tr className="dark-overlay-table-only">
-              <td>
-                <Spinner />
-              </td>
-            </tr>
-          )}
-          {rows.length > 0 && renderRows}
-          {noDataFound && noDataRow}
-          {!noDataFound && fillerRow}
-        </tbody>
-      </table>
-      {/* </PerfectScrollbar> */}
+      <PerfectScrollbar options={{}}>
+        <table className={tableClassNames} cellSpacing={0}>
+          <thead>
+            <tr>{renderHeaders}</tr>
+          </thead>
+          <tbody>
+            {isLoading && (
+              <tr className="dark-overlay-table-only">
+                <td>
+                  <Spinner />
+                </td>
+              </tr>
+            )}
+            {rows.length > 0 && renderRows}
+            {noDataFound && noDataRow}
+            {!noDataFound && fillerRow}
+          </tbody>
+        </table>
+      </PerfectScrollbar>
       {!hidePagination && (
         <Pagination
           pageSize={params.size}

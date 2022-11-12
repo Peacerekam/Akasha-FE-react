@@ -9,6 +9,10 @@
   // max-width: 100%;
   overflow: hidden;
   // box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  max-width: 100%;
+  width: calc(100% - 475px);
+  min-width: 200px;
+  flex-grow: 1;
 }
 
 .custom-namecard-preview-wrapper {
@@ -30,6 +34,11 @@
     display: flex;
     gap: 10px;
     align-items: center;
+    .lds-ellipsis {
+      height: 0;
+      left: 50%;
+      transform: translate(-50%, -20px);
+    }
     .custom-file-upload {
       width: 205px;
       margin-top: 2px;

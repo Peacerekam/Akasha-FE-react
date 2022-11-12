@@ -658,7 +658,7 @@ export const ProfilePage: React.FC = () => {
             variant="gradient"
             revealCondition={responseData.account}
           />
-          <div className="flex gap-10 nowrap">
+          <div className="flex gap-10">
             {displayGenshinCard}
             <div className="profile-highlights">
               {responseData.account && <CalculationResultWidget uid={uid} />}

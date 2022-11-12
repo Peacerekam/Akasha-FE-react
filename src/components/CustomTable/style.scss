@@ -119,6 +119,10 @@ $substats: "flathp", "hp_", "flatatk", "atk_", "flatdef", "def_", "critrate",
     }
   }
 
+  .table-overflow-wrapper {
+    overflow-x: auto;
+  }
+
   table.custom-table {
     width: 100%;
     text-align: left;
