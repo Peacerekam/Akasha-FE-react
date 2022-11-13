@@ -118,6 +118,14 @@ body {
   white-space: nowrap;
 }
 
+.white-space-nowrap {
+  white-space: nowrap;
+}
+
+.flex-wrap-no-wrap {
+  flex-wrap: nowrap;
+}
+
 .pointer {
   cursor: pointer;
 }
@@ -297,6 +305,7 @@ body {
   justify-content: center;
   width: 350px;
   margin: 20px 0;
+  flex-grow: 1;
   // .rung-player-name {
   //   > div {
   //     z-index: 2;

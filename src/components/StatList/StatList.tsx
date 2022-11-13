@@ -161,7 +161,11 @@ export const StatList: React.FC<StatListProps> = ({
     ];
 
     const sorted = dmgStats
-      .sort((a, b) => (+a.value > +b.value ? -1 : 1))
+      .sort((a, b) => {
+        const numA = +(a.value || 0);
+        const numB = +(b.value || 0);
+        return numA > numB ? -1 : 1;
+      })
       .slice(0, 5);
     const lowestDmg = sorted.length > 1 ? +sorted[sorted.length - 1].value : 0;
 
