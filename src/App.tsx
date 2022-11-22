@@ -1,8 +1,10 @@
 import axios from "axios";
 import React, { useEffect } from "react";
-import { Routes, Route, HashRouter, BrowserRouter } from "react-router-dom";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { LastProfilesContextProvider } from "./context/LastProfiles/LastProfilesContext";
 import { HoverElementContextProvider } from "./context/HoverElement/HoverElementContext";
+import { SessionDataContextProvider } from "./context/SessionData/SessionDataContext";
+import { Footer, Navbar, NavbarTabs, NotificationBar } from "./components";
 
 import {
   ArtifactsPage,
@@ -13,9 +15,6 @@ import {
   // DashboardPage,
   UIDSearchPage,
 } from "./pages";
-
-import { Footer, Navbar, NavbarTabs, NotificationBar } from "./components";
-import { SessionDataContextProvider } from "./context/SessionData/SessionDataContext";
 
 // @TODO: env variables later on...
 const urls = {
