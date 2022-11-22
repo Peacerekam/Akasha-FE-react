@@ -1,0 +1,70 @@
+.help-box-btn {
+  cursor: pointer;
+  &:hover {
+    color: orange;
+  }
+  &.close-help-box {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 7px 10px;
+  }
+  &.help-box-floating-button {
+    position: absolute;
+    top: -29px;
+    right: 0px;
+  }
+}
+
+.page-description-wrapper {
+  margin: 10px;
+  margin-bottom: 0;
+  .help-box-header {
+    font-size: 30px;
+    margin: 10px;
+  }
+  .help-box-p {
+    margin: 5px 10px 10px 10px;
+    .stat-icon, .table-icon {
+      vertical-align: sub;
+      margin: 0 3px;
+    }
+  }
+  .hide-help-box {
+    display: none;
+  }
+  .open-help-box {
+    display: block;
+  }
+  .desc-formula {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border-radius: 100px;
+    padding: 5px 10px;
+    margin: 5px;
+    width: fit-content;
+  }
+  .page-description-list {
+    margin-left: 20px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    .list-element {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      &::before {
+        content: "•";
+        margin-right: 8px;
+      }
+    }
+  }
+  a {
+    color: orange;
+    &:hover {
+      color: rgb(255, 201, 101);
+    }
+  }
+}

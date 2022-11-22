@@ -9,11 +9,9 @@ import {
   getInGameSubstatValue,
   getSubstatPercentageEfficiency,
 } from "../../utils/helpers";
-import {
-  REAL_SUBSTAT_VALUES,
-  STAT_NAMES,
-} from "../../utils/substats";
+import { REAL_SUBSTAT_VALUES, STAT_NAMES } from "../../utils/substats";
 import { RollList } from "../RollList";
+import { Spinner } from "../Spinner";
 import { StatIcon } from "../StatIcon";
 import "./style.scss";
 
@@ -24,14 +22,17 @@ type ArtifactListCompactProps = {
 export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
   row,
 }) => {
+  const [isFetching, setIsFetching] = useState(true);
   const [artifacts, setArtifacts] = useState<any[]>([]);
 
   const getArtifacts = async () => {
+    setIsFetching(true);
     const _uid = encodeURIComponent(row.uid);
     const _type = encodeURIComponent(row.type);
     const artDetailsURL = `/api/artifacts/${_uid}/${row.characterId}/${_type}`;
     const { data } = await axios.get(artDetailsURL);
     setArtifacts(data.data);
+    setIsFetching(false);
   };
 
   useEffect(() => {
@@ -51,7 +52,7 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
           const className = getArtifactCvClassName(artifact.critValue);
 
           const summedArtifactRolls: {
-            [key: string]: { count: number; sum: number; };
+            [key: string]: { count: number; sum: number };
           } = artifact.substatsIdList.reduce((acc: any, id: number) => {
             const { value, type } = REAL_SUBSTAT_VALUES[id];
             const realStatName = STAT_NAMES[type];
@@ -133,9 +134,11 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
     );
   }, [JSON.stringify(reordered)]);
 
+  const content = reordered.length > 0 ? compactList : "no artifacts equipped";
+
   return (
     <div className="flex expanded-row">
-      {reordered.length > 0 ? compactList : "no artifacts equipped"}
+      {isFetching ? <Spinner /> : content}
     </div>
   );
 };

@@ -26,12 +26,17 @@ import {
   uidsToQuery,
 } from "../../utils/helpers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChevronLeft,
+  faPeopleGroup,
+  faSkull,
+} from "@fortawesome/free-solid-svg-icons";
 import { TableColumn } from "../../types/TableColumn";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
-import "./style.scss";
 import { BASENAME } from "../../App";
+import "./style.scss";
+import { getIconElement } from "../../components/HelpBox/helpContentBuilds";
 
 type CategoriesById = {
   [key: string]: {
@@ -45,6 +50,8 @@ type CategoriesById = {
       details: string;
       short: string;
       order: number;
+      variants?: any[];
+      defaultVariant?: string;
     };
     weapon?: {
       name: string;
@@ -65,6 +72,8 @@ type Category = {
       details: string;
       short: string;
       order: number;
+      filters: any[];
+      defaultFilter?: string;
       weapon?: {
         icon: string;
         name: string;
@@ -99,10 +108,9 @@ export const LeaderboardsPage: React.FC = () => {
     useContext(HoverElementContext);
 
   // hooks
-  const { calculationId } = useParams();
+  const { calculationId, variant } = useParams();
   const navigate = useNavigate();
 
-  const pathname = window.location.pathname;
   const currentCategory = calculationId ?? "";
   const calculationSortKey = currentCategory
     ? `calculations.${currentCategory}.result`
@@ -124,6 +132,8 @@ export const LeaderboardsPage: React.FC = () => {
             name: calc.label,
             details: calc.value.details,
             short: calc.value.short,
+            variants: calc.value.filters,
+            defaultVariant: calc.value.defaultFilter,
           },
           weapon: calc.value.weapon,
         };
@@ -141,6 +151,7 @@ export const LeaderboardsPage: React.FC = () => {
         order: -1,
         size: 20,
         page: 1,
+        variant,
       },
     };
 
@@ -157,7 +168,7 @@ export const LeaderboardsPage: React.FC = () => {
     if (categories) {
       handleFetchLeaderboard();
     }
-  }, [categories, calculationSortKey]);
+  }, [categories, calculationSortKey, variant]);
 
   useEffect(() => {
     fetchCategories();
@@ -197,6 +208,22 @@ export const LeaderboardsPage: React.FC = () => {
               <ARBadge adventureRank={row.owner?.adventureRank} />
               {row.owner?.nickname}
             </a>
+          );
+        },
+      },
+      {
+        name: "Build name",
+        sortable: false,
+        sortField: "type",
+        cell: (row) => {
+          return (
+            <div className="table-icon-text-pair">
+              {row.type !== "current" ? (
+                row.type
+              ) : (
+                <span style={{ opacity: 0.25 }}>{row.name}</span>
+              )}
+            </div>
           );
         },
       },
@@ -433,41 +460,113 @@ export const LeaderboardsPage: React.FC = () => {
     );
   }, [JSON.stringify(podiumData.rows)]);
 
-  const sortedCategoriesWithSameCharacter = useMemo(
-    () =>
-      Object.keys(categoriesById)
-        .filter(
-          (id) =>
-            id.slice(0, -2) === displayCategory.calculation.id.slice(0, -2)
-        )
-        .sort((a, b) => {
-          const nameA = categoriesById[a].calculation.name;
-          const nameB = categoriesById[b].calculation.name;
-          const orderA = categoriesById[a].calculation.order;
-          const orderB = categoriesById[b].calculation.order;
-          return nameA > nameB
-            ? orderA < orderB
-              ? -1
-              : 1
-            : orderA > orderB
-            ? 1
-            : -1;
-        })
-        .map((id) => {
-          const _category = categoriesById[id];
-          const _title = `${_category.character.name} - ${
-            _category.calculation.name
-          } - ${_category.weapon?.name} R${
-            (_category.weapon?.refinement ?? 0) + 1
-          }`;
-          return {
-            id,
-            _category,
-            _title,
-          };
-        }),
-    [categoriesById, displayCategory]
+  const relatedCategories = Object.values(categoriesById)
+    .filter((c: any) => c.character.name === displayCategory.character.name)
+    .reduce((acc: any, val) => {
+      return {
+        ...acc,
+        [val.calculation.name]: {
+          ...acc[val.calculation.name],
+          ...val.calculation,
+          weapons: {
+            ...acc[val.calculation.name]?.weapons,
+            [val.weapon?.name || ""]: {
+              ...val.weapon,
+              calculationId: val.calculation.id,
+              defaultVariant: val.calculation.defaultVariant,
+            },
+          },
+        },
+      };
+    }, {});
+
+  const displayVariantSelector = displayCategory?.calculation?.variants ? (
+    <div className="variant-selection-wrapper">
+      Available sub-categories:
+      <div className="variant-selection">
+        <a
+          className={!variant ? "current-selection" : ""}
+          onClick={(event) => {
+            event.preventDefault();
+            navigate(`/leaderboards/${calculationId}/`);
+          }}
+          href={`${BASENAME}/leaderboards/${calculationId}/`}
+        >
+          NONE
+        </a>
+        {/* get this from API instead */}
+        {displayCategory?.calculation.variants?.map((val) => {
+          const isActive = variant === val.name;
+          return (
+            <a
+              className={isActive ? "current-selection" : ""}
+              onClick={(event) => {
+                event.preventDefault();
+                navigate(`/leaderboards/${calculationId}/${val.name}`);
+              }}
+              href={`${BASENAME}/leaderboards/${calculationId}/${val.name}`}
+            >
+              {val.displayName}
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  ) : null;
+
+  const displayRelevantCategories = (
+    <>
+      <div className="other-calc-container">
+        {Object.keys(relatedCategories).map((cKey) => {
+          const _cat = relatedCategories[cKey];
+          const categoryName = _cat.name;
+          return (
+            <div key={cKey}>
+              {categoryName}
+              <div className="flex">
+                {Object.keys(_cat.weapons).map((wKey: string, index) => {
+                  const _weapon = _cat.weapons[wKey];
+                  const weaponicon = _weapon.icon ?? "";
+                  const weaponRefinement = _weapon.refinement ?? 0;
+                  const isActive = _weapon.calculationId === calculationId;
+                  const leaderboardPath = `leaderboards/${
+                    _weapon.calculationId
+                  }/${_weapon?.defaultVariant || ""}`;
+
+                  return (
+                    <a
+                      className={isActive ? "current-selection" : ""}
+                      key={_weapon.name}
+                      title={`${_weapon.name} R${weaponRefinement}`}
+                      onClick={(event) => {
+                        event.preventDefault();
+                        navigate(`/${leaderboardPath}`);
+                      }}
+                      href={`${BASENAME}/${leaderboardPath}`}
+                    >
+                      <WeaponMiniDisplay
+                        icon={weaponicon}
+                        refinement={weaponRefinement}
+                      />
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {displayVariantSelector}
+    </>
   );
+
+  const testSetupObject = {
+    character: {},
+    weapon: {},
+    team: {},
+    enemy: {},
+  };
 
   return (
     <div className="flex" key={calculationId}>
@@ -496,13 +595,19 @@ export const LeaderboardsPage: React.FC = () => {
           <div className="flex">
             {displayPodium}
             {displayCategory && (
-              <div style={{  width: 'calc(100% - 400px)', minWidth: 300, flexGrow: 1 }}>
+              <div
+                style={{
+                  width: "calc(100% - 400px)",
+                  minWidth: 300,
+                  flexGrow: 1,
+                }}
+              >
                 <div style={{ margin: 10 }}>
                   <div
                     className="flex gap-10 flex-wrap-no-wrap"
                     style={{
                       fontSize: 30,
-                      borderBottom: "1px solid white",
+                      // borderBottom: "1px solid white",
                     }}
                   >
                     <img
@@ -520,6 +625,142 @@ export const LeaderboardsPage: React.FC = () => {
                     </div>
                   </div>
                   <div>{displayCategory.calculation.details}</div>
+                  <div style={{display: 'none'}} className="calc-setup-info-wrapper">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th colSpan={2}>
+                            <div
+                              className="flex gap-10"
+                              style={{ justifyContent: "center" }}
+                            >
+                              <img
+                                className="table-icon"
+                                src={displayCategory.character.icon}
+                              />
+                              Hu Tao C1 Lv. 90
+                            </div>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {/* <tr>
+                          <td>Character level</td>
+                          <td>90/90</td>
+                        </tr>
+                        <tr>
+                          <td>Constellation</td>
+                          <td>C1</td>
+                        </tr> */}
+                        <tr>
+                          <td>Talent levels</td>
+                          <td>10/10/10</td>
+                        </tr>
+                        <tr>
+                          <td>HP</td>
+                          <td>below 50%</td>
+                        </tr>
+                        <tr>
+                          <td>Skill (E)</td>
+                          <td>Active</td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                    <table>
+                      <thead>
+                        <tr>
+                          <th colSpan={2}>
+                            <div
+                              className="flex gap-10"
+                              style={{ justifyContent: "center" }}
+                            >
+                              <WeaponMiniDisplay
+                                icon={displayCategory.weapon?.icon || ""}
+                                refinement={
+                                  displayCategory.weapon?.refinement || 1
+                                }
+                              />
+                              Staff of Homa R1 Lv. 90
+                            </div>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {/* <tr>
+                          <td>Weapon level</td>
+                          <td>90/90</td>
+                        </tr>
+                        <tr>
+                          <td>Refinement</td>
+                          <td>R1</td>
+                        </tr> */}
+                        <tr>
+                          <td>HP</td>
+                          <td>below 50%</td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                    <table>
+                      <thead>
+                        <tr>
+                          <th colSpan={2}>
+                            <div
+                              className="flex gap-10"
+                              style={{ justifyContent: "center" }}
+                            >
+                              <FontAwesomeIcon icon={faPeopleGroup} size="1x" />
+                              Team buffs
+                            </div>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <StatIcon name="Hydro DMG Bonus" /> Hydro Resonance
+                          </td>
+                          <td>
+                            <StatIcon name="HP%" /> +25% HP
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>{getIconElement("Zhongli")} Dominus Lapidis</td>
+                          <td>
+                            <StatIcon name="Pyro DMG Bonus" />
+                            Enemy Pyro DMG RES -20%
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                    <table>
+                      <thead>
+                        <tr>
+                          <th colSpan={2}>
+                            <div
+                              className="flex gap-10"
+                              style={{ justifyContent: "center" }}
+                            >
+                              <FontAwesomeIcon icon={faSkull} size="1x" />
+                              Enemy Lv. 90
+                            </div>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {/* <tr>
+                          <td>Level</td>
+                          <td>90</td>
+                        </tr> */}
+                        <tr>
+                          <td>Pyro RES</td>
+                          <td>10%</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
                 <div style={{ margin: 10 }}>
                   <div>
@@ -538,36 +779,7 @@ export const LeaderboardsPage: React.FC = () => {
           </div>
         </div>
         <div className="relative other-calculations-display block-highlight highlight-tile-container">
-          {false &&
-            sortedCategoriesWithSameCharacter.map((c, index) => {
-              const thisName = c._category.calculation.short;
-              const weaponicon = c._category.weapon?.icon ?? "";
-              const weaponRefinement = c._category.weapon?.refinement ?? 0;
-
-              return (
-                <a
-                  title={c._title}
-                  className="highlight-tile"
-                  onClick={(event) => {
-                    event.preventDefault();
-                    navigate(`/leaderboards/${c.id}`);
-                  }}
-                  href={`${BASENAME}/leaderboards/${c.id}`}
-                >
-                  <div className="highlight-tile-pill">{thisName}</div>
-                  <div className="flex">
-                    <img
-                      className="table-icon"
-                      src={c._category.character.icon}
-                    />
-                    <WeaponMiniDisplay
-                      icon={weaponicon}
-                      refinement={weaponRefinement}
-                    />
-                  </div>
-                </a>
-              );
-            })}
+          {displayRelevantCategories}
         </div>
       </div>
 
@@ -599,6 +811,8 @@ export const LeaderboardsPage: React.FC = () => {
               fetchParams={{
                 uids: uidsToQuery(lastProfiles.map((a) => a.uid)),
                 uid: lookupUID,
+                variant,
+                filter: "[all]1",
               }}
               columns={LEADERBOARDS_COLUMNS}
               defaultSort={calculationSortKey}
@@ -611,12 +825,10 @@ export const LeaderboardsPage: React.FC = () => {
             {/* spacer */}
             <div style={{ marginTop: "30px" }} />
 
-            {/* <div className="relative"> {calculationSortKey} </div>
-            <div className="relative"> {currentCategory} </div> */}
-
             <CustomTable
               fetchURL={FETCH_LEADERBOARDS_URL}
-              filtersURL={FETCH_CHARACTER_FILTERS_URL}
+              fetchParams={{ variant }}
+              filtersURL={`${FETCH_CHARACTER_FILTERS_URL}?type=leaderboards`}
               columns={LEADERBOARDS_COLUMNS}
               defaultSort={calculationSortKey}
               calculationColumn={currentCategory}

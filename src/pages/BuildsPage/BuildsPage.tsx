@@ -9,6 +9,7 @@ import {
   CustomTable,
   ReplaceRowDataOnHover,
   StylizedContentBlock,
+  HelpBox,
 } from "../../components";
 import { TableColumn } from "../../types/TableColumn";
 import { ARBadge } from "../LeaderboardsPage";
@@ -212,6 +213,7 @@ export const BuildsPage: React.FC = () => {
       {hoverElement}
       <div className="content-block w-100">
         <StylizedContentBlock overrideImage={DomainBackground} />
+        <HelpBox page="builds" />
         <CustomTable
           fetchURL={FETCH_BUILDS_URL}
           filtersURL={FETCH_CHARACTER_FILTERS_URL}

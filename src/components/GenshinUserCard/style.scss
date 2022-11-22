@@ -32,10 +32,16 @@
     width: 96px;
     height: 96px;
   }
+  .default-picture {
+    margin: 12px;
+    width: 75px;
+    height: 75px;
+  }
   .genshin-card-content {
     margin: 10px;
     text-shadow: 0px 0px 5px #000;
     text-align: left;
+    min-width: 200px;
     .card-big-text {
       font-size: 25px;
       margin-bottom: 3px;

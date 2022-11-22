@@ -7,16 +7,18 @@ type CritRatioProps = {
 };
 
 export const CritRatio: React.FC<CritRatioProps> = ({ stats, overrideCV }) => {
+  const offset = 0.000001;
+
   const cr = stats.critRate?.value
-    ? stats.critRate?.value * 100
+    ? (offset + stats.critRate?.value) * 100
     : stats.critRate;
 
   const cd = stats.critDamage?.value
-    ? stats.critDamage?.value * 100
+    ? (offset + stats.critDamage?.value) * 100
     : stats.critDMG;
 
   // const cv = 2 * cr + cd;
-  const cv = stats.critValue || overrideCV || 0;
+  const cv = offset + stats.critValue || overrideCV || 0;
   const textColor = getCharacterCvColor(cv);
 
   return (

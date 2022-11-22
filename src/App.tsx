@@ -43,7 +43,7 @@ const domainRedirect = () => {
   }
 };
 
-export const BASENAME = "/akasha"
+export const BASENAME = "/akasha";
 
 const App = () => {
   useEffect(() => {
@@ -82,8 +82,14 @@ const App = () => {
                   path="/leaderboards"
                   element={<CategorySelectionPage />}
                 />
+
                 <Route
                   path="/leaderboards/:calculationId"
+                  element={<LeaderboardsPage />}
+                />
+
+                <Route
+                  path="/leaderboards/:calculationId/:variant"
                   element={<LeaderboardsPage />}
                 />
 

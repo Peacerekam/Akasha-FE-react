@@ -16,7 +16,6 @@ export const CalculationResultWidget: React.FC<
 > = ({ uid }) => {
   const [data, setData] = useState<any[]>([]);
   const navigate = useNavigate();
-  const pathname = window.location.pathname;
 
   const fetchCalcData = async (
     uid: string,
@@ -55,18 +54,34 @@ export const CalculationResultWidget: React.FC<
 
       const calcArray = [];
       for (const build of filtered) {
-        for (const calcID of Object.keys(build.calculations)) {
+        for (const calc of Object.values(build.calculations)) {
+          const _calc = calc as any;
+          const { calculationId, variant } = _calc;
+          const calcKey = `${calculationId}${variant?.name || ""}`;
+          if (!build.calculations[calcKey]?.ranking) continue;
           calcArray.push({
-            ...(build.calculations[calcID] as {}),
-            id: calcID,
+            ...(build.calculations[calcKey] as {}),
+            id: calculationId,
             characterName: build.name,
             characterIcon: build.icon,
           });
         }
       }
       const sorted = calcArray.sort((a: any, b: any) =>
-        // a.ranking > b.ranking ? 1 : -1
-        a.ranking / a.outOf > b.ranking / b.outOf ? 1 : -1
+        // (a.ranking > b.ranking ? 1 : -1)
+        {
+          const leaveOnlyNumbersRegex = /\D+/g;
+          const _rankingA = +(a.ranking + "")?.replace(
+            leaveOnlyNumbersRegex,
+            ""
+          );
+          const _rankingB = +(b.ranking + "")?.replace(
+            leaveOnlyNumbersRegex,
+            ""
+          );
+
+          return _rankingA / a.outOf > _rankingB / b.outOf ? 1 : -1;
+        }
       );
 
       // group by character name instead
@@ -87,7 +102,11 @@ export const CalculationResultWidget: React.FC<
   const tilesList = useMemo(
     () =>
       resultsArray.map((calc: any, index: number) => {
-        const { name, ranking, outOf, weapon, short, id } = calc;
+        const { name, ranking, outOf, weapon, short, id, variant } = calc;
+        const shortName = variant?.displayName || short || "---";
+        const leaveOnlyNumbersRegex = /\D+/g;
+        const _ranking = +(ranking + "")?.replace(leaveOnlyNumbersRegex, "");
+
         return (
           <div key={`${name}-${weapon.name}`}>
             <a
@@ -97,11 +116,11 @@ export const CalculationResultWidget: React.FC<
               className="highlight-tile"
               onClick={(event) => {
                 event.preventDefault();
-                navigate(`/leaderboards/${id}`);
+                navigate(`/leaderboards/${id}/${variant?.name || ""}`);
               }}
-              href={`${BASENAME}/leaderboards/${id}`}
+              href={`${BASENAME}/leaderboards/${id}/${variant?.name || ""}`}
             >
-              <div className="highlight-tile-pill">{short ? short : "---"}</div>
+              <div className="highlight-tile-pill">{shortName}</div>
               <div className="flex">
                 <img
                   alt="Icon"
@@ -114,7 +133,7 @@ export const CalculationResultWidget: React.FC<
                 />
               </div>
               <div>
-                {ranking ? `top ${Math.ceil((ranking / outOf) * 100)}%` : ""}
+                {ranking ? `top ${Math.ceil((_ranking / outOf) * 100)}%` : ""}
               </div>
               <span>
                 {ranking ?? "---"}

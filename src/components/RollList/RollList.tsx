@@ -59,6 +59,7 @@ const getDefaultRvFilters = (character: string) => {
         "Energy Recharge",
       ],
       Diona: ["HP%", "Energy Recharge"],
+      Nilou: ["Crit RATE", "Crit DMG", "HP%", "Flat HP"],
       Tartaglia: ["Crit RATE", "Crit DMG", "ATK%", "Elemental Mastery"],
       Venti: ["Elemental Mastery"],
       "Kaedehara Kazuha": ["Elemental Mastery"],
@@ -142,7 +143,7 @@ export const RollList: React.FC<RollListProps> = ({ artifacts, character }) => {
             .trim();
 
           return (
-            <div className={className} onClick={() => toggleFilter(key)}>
+            <div key={key} className={className} onClick={() => toggleFilter(key)}>
               <span>
                 <span>{_count}</span>
                 <span style={{ opacity }}>

@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
-import { StylizedContentBlock } from "../../components";
+import { HelpBox, StylizedContentBlock } from "../../components";
 import { FETCH_CATEGORIES_URL } from "../../utils/helpers";
 import { BASENAME } from "../../App";
 
-type TransformedCategories = {
+export type TransformedCategories = {
   characterName: string;
   icon: string;
   calcs: {
@@ -19,25 +19,9 @@ type TransformedCategories = {
         name: string;
         icon: string;
       };
+      defaultFilter?: string;
     }[];
   };
-};
-
-type Category = {
-  label: string;
-  icon: string;
-  options: {
-    label: string;
-    value: {
-      calculationId: string;
-      characterId: number;
-      details: string;
-      weapon?: {
-        icon: string;
-        name: string;
-      };
-    };
-  }[];
 };
 
 export const CategorySelectionPage: React.FC = () => {
@@ -68,12 +52,12 @@ export const CategorySelectionPage: React.FC = () => {
             categoriesTransformed && categoriesTransformed?.length > 0
           }
         />
+        <HelpBox page="leaderboards" />
         <div
           style={{
-            margin: "10px 5px",
             display: "flex",
             position: "relative",
-            justifyContent: "space-around",
+            justifyContent: "space-between",
             marginBottom: "15px",
             fontWeight: 600,
             fontSize: 24,
@@ -123,18 +107,19 @@ export const CategorySelectionPage: React.FC = () => {
                           {calcName}
                         </div>
                         <div>
-                          {calcs.map((calc) => {
+                          {calcs.map((calc, index) => {
+                            const leaderboardPath = `leaderboards/${
+                              calc.calculationId
+                            }/${calc.defaultFilter || ""}`;
                             return (
-                              <span key={calc.calculationId}>
+                              <span key={`${calc.calculationId}-${index}`}>
                                 <a
                                   title={calc.weapon?.name}
                                   onClick={(event) => {
                                     event.preventDefault();
-                                    navigate(
-                                      `/leaderboards/${calc.calculationId}`
-                                    );
+                                    navigate(`/${leaderboardPath}`);
                                   }}
-                                  href={`${BASENAME}/leaderboards/${calc.calculationId}`}
+                                  href={`${BASENAME}/${leaderboardPath}`}
                                 >
                                   {calc.weapon && (
                                     <span>

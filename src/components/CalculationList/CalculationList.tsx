@@ -1,3 +1,5 @@
+import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -6,13 +8,18 @@ import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import "./style.scss";
 
 type CalculationResponse = {
+  calculationId: number;
   result: number;
-  ranking: number;
+  ranking: number | string;
   outOf: number;
   name: string;
   details: string;
   short: string;
   icon: string;
+  variant?: {
+    name: string;
+    displayName: string;
+  };
   weapon: { name: string; icon: string; refinement?: number };
   stats: any;
 };
@@ -23,9 +30,9 @@ type CalculationListProps = {
 
 export const CalculationList: React.FC<CalculationListProps> = ({ row }) => {
   const [calculations, setCalculations] = useState<any[]>([]);
+  const [show, setShow] = useState(false);
 
   const navigate = useNavigate();
-  const pathname = window.location.pathname;
 
   const getCalculations = async () => {
     const _uid = encodeURIComponent(row.uid);
@@ -49,45 +56,64 @@ export const CalculationList: React.FC<CalculationListProps> = ({ row }) => {
 
   const compactList = useMemo(
     () =>
-      calculationIds.map((id: any, index) => {
-        const calc: CalculationResponse = calculations[id];
-        const { name, ranking, outOf, details, weapon, result, stats } = calc;
-        return (
-          <tr key={id}>
-            <td>
-              {ranking ?? (
-                // @TODO: something cooler than this tho
-                <span title="Rankings are cached. If you see this you need to refresh the page">
-                  -
-                </span>
-              )}
-              <span className="opacity-5">/{outOf}</span>
-            </td>
-            <td>
-              {ranking ? `top ${Math.ceil((ranking / outOf) * 100)}%` : "-"}
-            </td>
-            <td>
-              <WeaponMiniDisplay
-                icon={weapon?.icon}
-                refinement={weapon?.refinement || 1}
-              />
-            </td>
-            <td>{weapon?.name}</td>
-            <td>
-              <a
-                href={`${BASENAME}/leaderboards/${id}`}
-                onClick={(event) => {
-                  event.preventDefault();
-                  navigate(`/leaderboards/${id}`);
-                }}
-              >
-                {name}
-              </a>
-            </td>
-            <td>{calc.result.toFixed(0)}</td>
-          </tr>
-        );
-      }),
+      calculationIds
+        .filter((id: any) => calculations[id]?.ranking)
+        .map((id: any, index) => {
+          const calc: CalculationResponse = calculations[id];
+          const {
+            name,
+            ranking,
+            outOf,
+            details,
+            weapon,
+            result,
+            stats,
+            variant,
+            calculationId,
+          } = calc;
+
+          const _id = calculationId || id;
+          const leaderboardPath = `leaderboards/${_id}/${variant?.name || ""}`;
+          const leaveOnlyNumbersRegex = /\D+/g
+          const _ranking = +(ranking + "")?.replace(leaveOnlyNumbersRegex, "");
+
+          return (
+            <tr key={id}>
+              <td>
+                {ranking ?? (
+                  // @TODO: something cooler than this tho
+                  <span title="Rankings are cached. If you see this you need to refresh the page">
+                    -
+                  </span>
+                )}
+                <span className="opacity-5">/{outOf}</span>
+              </td>
+              <td>
+                {ranking ? `top ${Math.ceil((_ranking / outOf) * 100)}%` : "-"}
+              </td>
+              <td>
+                <WeaponMiniDisplay
+                  icon={weapon?.icon}
+                  refinement={weapon?.refinement || 1}
+                />
+              </td>
+              <td>{weapon?.name}</td>
+              <td>{variant?.displayName}</td>
+              <td>
+                <a
+                  href={`${BASENAME}/${leaderboardPath}`}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    navigate(`/${leaderboardPath}`);
+                  }}
+                >
+                  {name}
+                </a>
+              </td>
+              <td>{result?.toFixed(0)}</td>
+            </tr>
+          );
+        }),
     [JSON.stringify(calculationIds)]
   );
 
@@ -135,18 +161,31 @@ export const CalculationList: React.FC<CalculationListProps> = ({ row }) => {
   //   [calculationIds]
   // );
 
+  const iconClassNames = ["sort-direction-icon", !show ? "rotate-180deg" : ""]
+    .join(" ")
+    .trim();
+
   return (
     <div className="expanded-row flex">
       {calculationIds.length > 0 ? (
-        <>
+        <div className="calculation-list-wrapper">
+          <div className="clickable" onClick={() => setShow((prev) => !prev)}>
+            {show ? "Hide" : "Show"} leaderboards
+            <FontAwesomeIcon
+              className={iconClassNames}
+              // icon={params.order === -1 ? faChevronDown : faChevronUp}
+              icon={faChevronUp}
+              size="1x"
+            />
+          </div>
           {/* <div className="highlight-tile-container">{tilesList}</div> */}
-          <table cellSpacing={0} className="calculation-list">
-            <tbody>{compactList}</tbody>
-          </table>
-        </>
-      ) : (
-        "no calculations found"
-      )}
+          {show && (
+            <table cellSpacing={0} className="calculation-list">
+              <tbody>{compactList}</tbody>
+            </table>
+          )}
+        </div>
+      ) : null}
     </div>
   );
 };

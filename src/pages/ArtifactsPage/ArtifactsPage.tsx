@@ -10,7 +10,7 @@ import {
   normalizeText,
 } from "../../utils/helpers";
 import { useNavigate } from "react-router-dom";
-import { CustomTable, StatIcon, StylizedContentBlock } from "../../components";
+import { CustomTable, HelpBox, StatIcon, StylizedContentBlock } from "../../components";
 import { ARBadge } from "../LeaderboardsPage";
 import { TableColumn } from "../../types/TableColumn";
 
@@ -179,6 +179,7 @@ export const ArtifactsPage: React.FC = () => {
       {hoverElement}
       <div className="content-block w-100">
         <StylizedContentBlock overrideImage={DomainBackground} />
+        <HelpBox page="artifacts" />
         <CustomTable
           fetchURL={FETCH_ARTIFACTS_URL}
           filtersURL={FETCH_ARTIFACT_FILTERS_URL}

@@ -8,12 +8,14 @@ import {
   FetchParams,
   GenshinUserCard,
   Pagination,
+  Spinner,
 } from "../../components";
 import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
 import "./style.scss";
 import { BASENAME } from "../../App";
 
 export const UIDSearchPage: React.FC = () => {
+  const [isFetching, setIsFetching] = useState(false);
   const [searchUID, setSearchUID] = useState("");
   const [results, setResults] = useState<AccountDataForUserCard[]>([]);
   const [totalResults, setTotalResults] = useState(0);
@@ -34,6 +36,8 @@ export const UIDSearchPage: React.FC = () => {
         return;
       }
 
+      setIsFetching(true);
+
       const typedResult = {
         uid: providedUID,
         playerInfo: {
@@ -49,6 +53,7 @@ export const UIDSearchPage: React.FC = () => {
 
       setResults([typedResult, ...fetchedResults]);
       setTotalResults(data.data.totalRows);
+      setIsFetching(false);
     },
     [params.page]
   );
@@ -86,7 +91,12 @@ export const UIDSearchPage: React.FC = () => {
                   <span className="fake-placeholder">type here...</span>
                 )}
               </div>
-              <div className="uid-results">
+              <div className="uid-results relative">
+                {isFetching && (
+                  <div className="uid-results-spinner-wrapper">
+                    <Spinner />
+                  </div>
+                )}
                 {results.map((result, i) => {
                   return (
                     <a

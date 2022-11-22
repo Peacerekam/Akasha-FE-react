@@ -668,7 +668,7 @@ export const ProfilePage: React.FC = () => {
             <CustomTable
               fetchURL={FETCH_BUILDS_URL}
               columns={BUILDS_COLUMNS}
-              filtersURL={FETCH_CHARACTER_FILTERS_URL}
+              filtersURL={`${FETCH_CHARACTER_FILTERS_URL}?type=profile`}
               defaultSort="critValue"
               expandableRows
               fetchParams={{
@@ -685,7 +685,7 @@ export const ProfilePage: React.FC = () => {
             <CustomTable
               fetchURL={FETCH_ARTIFACTS_URL}
               columns={ARTIFACT_COLUMNS}
-              filtersURL={FETCH_ARTIFACT_FILTERS_URL}
+              filtersURL={`${FETCH_ARTIFACT_FILTERS_URL}?type=profile`}
               defaultSort="critValue"
               fetchParams={{
                 uid: uid,

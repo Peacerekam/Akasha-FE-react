@@ -1,5 +1,5 @@
 import React from "react";
-import { faQuestion } from "@fortawesome/free-solid-svg-icons";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Spinner } from "../Spinner";
 import "./style.scss";
@@ -78,15 +78,15 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
         ) : (
           <FontAwesomeIcon
             style={{ opacity: 0.33 }}
-            className="profile-picture"
-            icon={faQuestion}
+            className="default-picture"
+            icon={faUser}
             size="1x"
           />
         )}
 
         <div className="genshin-card-content">
           <div className="card-big-text">{playerInfo.nickname}</div>
-          <div className="card-signature">{playerInfo.signature}</div>
+          <div className="card-signature">{playerInfo.level ? playerInfo.signature : "Click to load profile from enka.network"}</div>
         </div>
         <div className={arBadgeClassNames}>AR{playerInfo.level ?? " ?"}</div>
       </div>
