@@ -66,7 +66,7 @@ const getDefaultRvFilters = (character: string) => {
       Sayu: ["Elemental Mastery%"],
       Bennett: ["Energy Recharge", "HP%", "Crit RATE", "Crit DMG"],
       Beidou: ["Energy Recharge", "ATK%", "Crit RATE", "Crit DMG"],
-      Fischl: ["Energy Recharge", "ATK%", "Crit RATE", "Crit DMG"],
+      Fischl: ["ATK%", "Crit RATE", "Crit DMG"],
       "Yae Miko": [
         "Energy Recharge",
         "ATK%",

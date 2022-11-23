@@ -215,5 +215,5 @@ export const MAX_ROLLS = Object.keys(STAT_NAMES).reduce((acc: any, val) => {
 
 export const getSubstatEfficiency = (value: number, key: string) => {
   const max = MAX_ROLLS[key];
-  return Math.round((value / max) * 100);
+  return Math.round((value / max) * 20) * 5;
 };

@@ -4,6 +4,7 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import { useNavigate } from "react-router-dom";
 import { BASENAME } from "../../App";
 import { abortSignalCatcher } from "../../utils/helpers";
+import { Spinner } from "../Spinner";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import "./style.scss";
 
@@ -14,6 +15,7 @@ type CalculationResultWidgetProps = {
 export const CalculationResultWidget: React.FC<
   CalculationResultWidgetProps
 > = ({ uid }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<any[]>([]);
   const navigate = useNavigate();
 
@@ -28,9 +30,11 @@ export const CalculationResultWidget: React.FC<
     } as any;
 
     const getSetData = async () => {
+      setIsLoading(true);
       const response = await axios.get(fetchURL, opts);
       const { data } = response.data;
       setData(data);
+      setIsLoading(false);
     };
 
     await abortSignalCatcher(getSetData);
@@ -146,8 +150,24 @@ export const CalculationResultWidget: React.FC<
     [resultsArray]
   );
 
+  if (isLoading) {
+    return (
+      <>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+          }}
+        >
+          <Spinner />
+        </div>
+      </>
+    );
+  }
   return (
-    <div>
+    <>
       {tilesList.length > 0 ? (
         <PerfectScrollbar>
           <div
@@ -158,6 +178,6 @@ export const CalculationResultWidget: React.FC<
           </div>
         </PerfectScrollbar>
       ) : null}
-    </div>
+    </>
   );
 };
