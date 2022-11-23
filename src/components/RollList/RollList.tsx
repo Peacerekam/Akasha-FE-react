@@ -36,10 +36,10 @@ const getDefaultRvFilters = (character: string) => {
       Klee: ["Crit RATE", "Crit DMG", "ATK%"],
       Zhongli: ["Crit RATE", "Crit DMG", "ATK%", "HP%"],
       Yoimiya: ["Crit RATE", "Crit DMG", "ATK%", "Elemental Mastery"],
-      Yelan: ["Crit RATE", "Crit DMG", "Elemental Mastery", "ATK%"],
+      Yelan: ["Crit RATE", "Crit DMG", "HP%", "Energy Recharge"],
       "Kamisato Ayaka": ["Crit RATE", "Crit DMG", "Energy Recharge", "ATK%"],
       "Kamisato Ayato": ["Crit RATE", "Crit DMG", "ATK%"],
-      "Arataki Itto": ["Crit RATE", "Crit DMG", "DEF%"],
+      "Arataki Itto": ["Crit RATE", "Crit DMG", "DEF%", "ATK%"],
       Eula: ["Crit RATE", "Crit DMG", "Energy Recharge", "ATK%"],
       Mona: [
         "Crit RATE",
@@ -143,7 +143,11 @@ export const RollList: React.FC<RollListProps> = ({ artifacts, character }) => {
             .trim();
 
           return (
-            <div key={key} className={className} onClick={() => toggleFilter(key)}>
+            <div
+              key={key}
+              className={className}
+              onClick={() => toggleFilter(key)}
+            >
               <span>
                 <span>{_count}</span>
                 <span style={{ opacity }}>

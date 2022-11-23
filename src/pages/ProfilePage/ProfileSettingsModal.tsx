@@ -261,6 +261,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       ]
         .join(" ")
         .trim();
+
       return (
         <div
           key={buildId}
@@ -332,9 +333,10 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       .join(" ")
       .trim();
 
+    const statListPlaceholder = <div style={{ width: 342, height: 394 }} />;
     return (
       <div className="compact-table-wrapper">
-        {selectedBuild?._id && (
+        {selectedBuild?._id ? (
           <div className="custom-namecard-preview-wrapper">
             <FancyBuildBorder
               hide={false}
@@ -408,12 +410,15 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
               </div>
             )}
           </div>
+        ) : (
+          statListPlaceholder
         )}
         <div className="perfect-scroll-wrapper">
           <div className="build-search-input relative">
             <input
               onChange={(event) => {
                 setSearchText(event.target.value);
+                setSelectedBuildId("-1");
               }}
             />
             {!searchText && <span className="fake-placeholder">no filter</span>}
