@@ -461,7 +461,7 @@ export const LeaderboardsPage: React.FC = () => {
   }, [JSON.stringify(podiumData.rows)]);
 
   const relatedCategories = Object.values(categoriesById)
-    .filter((c: any) => c.character.name === displayCategory.character.name)
+    .filter((c: any) => c.character.name === displayCategory?.character.name)
     .reduce((acc: any, val) => {
       return {
         ...acc,
