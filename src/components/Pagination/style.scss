@@ -13,6 +13,17 @@
   justify-content: center;
   position: relative;
 
+  .pagination-spinner-wrapper {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    .lds-ellipsis {
+      top: -15px;
+    }
+  }
+
   .pagination {
     margin-top: 10px;
     margin-bottom: 20px;
@@ -20,6 +31,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: opacity 0.3s;
+
+    &.is-loading {
+      pointer-events: none;
+      opacity: 0.2;
+    }
 
     .pagination-details {
       position: absolute;

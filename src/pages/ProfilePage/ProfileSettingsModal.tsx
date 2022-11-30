@@ -134,8 +134,8 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
 
   const filteredBuilds = useMemo(() => {
     const filterFunc = (a: any) => {
-      const buildType = a.type.toLowerCase();
-      const buildName = a.name.toLowerCase();
+      const buildType = a.type?.toLowerCase();
+      const buildName = a.name?.toLowerCase();
       const compareTo = searchText?.toLowerCase();
       return (
         buildName.includes(compareTo) ||

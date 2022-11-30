@@ -19,12 +19,19 @@ import {
 import {
   abortSignalCatcher,
   arrayPushOrSplice,
+  FETCH_ACCOUNTS_URL,
+  FETCH_COLLECTION_SIZE_URL,
   normalizeText,
 } from "../../utils/helpers";
 import { FiltersContainer, FilterOption } from "./Filters";
 import { useLocation, useNavigate } from "react-router-dom";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import "./style.scss";
+import {
+  FETCH_ARTIFACTS_URL,
+  FETCH_LEADERBOARDS_URL,
+  FETCH_BUILDS_URL,
+} from "../../utils/helpers";
 
 type CustomTableProps = {
   columns: any[];
@@ -48,6 +55,20 @@ export type FetchParams = {
   uids?: string;
 };
 
+const getCollectionName = (fetchURL: string = "") => {
+  if (fetchURL?.startsWith(FETCH_ACCOUNTS_URL)) {
+    return "accounts";
+  }
+
+  const collectionName = {
+    [FETCH_ARTIFACTS_URL]: "artifacts",
+    [FETCH_LEADERBOARDS_URL]: "characters",
+    [FETCH_BUILDS_URL]: "characters",
+  }[fetchURL];
+
+  return collectionName;
+};
+
 export const CustomTable: React.FC<CustomTableProps> = ({
   fetchURL = null,
   fetchParams = {},
@@ -60,9 +81,11 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   projectParamsToPath = false,
   ignoreEmptyUidsArray = false,
 }) => {
+  const [isFetchingPagination, setIsFetchingPagination] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [expandedRows, setExpandedRows] = useState<string[]>([]);
   const [rows, setRows] = useState<any[]>([]);
+  const [totalRowsHash, setTotalRowsHash] = useState<string>("");
   const [totalRowsCount, setTotalRowsCount] = useState<number>(0);
   const { updateTableHoverElement } = useContext(HoverElementContext);
   const location = useLocation();
@@ -150,6 +173,28 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     ignoreEmptyUidsArray,
   ]);
 
+  const getSetTotalRows = async (totalRowsHash: string) => {
+    if (!fetchURL) return;
+    setIsFetchingPagination(true);
+    const collectionName = getCollectionName(fetchURL);
+    const totalRowsOpts = {
+      params: {
+        variant: collectionName,
+        hash: totalRowsHash,
+      },
+    };
+
+    const response = await axios.get(FETCH_COLLECTION_SIZE_URL, totalRowsOpts);
+
+    const { totalRows } = response.data;
+    setTotalRowsCount(totalRows);
+    setIsFetchingPagination(false);
+  };
+
+  useEffect(() => {
+    if (totalRowsHash) getSetTotalRows(totalRowsHash);
+  }, [totalRowsHash]);
+
   useEffect(() => {
     setRows((prev) => {
       const newRows = prev.filter((row) => !row.isExpandRow);
@@ -184,11 +229,11 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
     const getSetData = async () => {
       const response = await axios.get(fetchURL, opts);
-      const { data, totalRows } = response.data;
+      const { data, totalRowsHash } = response.data;
 
       setExpandedRows([]);
-      setTotalRowsCount(totalRows);
       setRows(data);
+      setTotalRowsHash(totalRowsHash);
     };
 
     await abortSignalCatcher(getSetData);
@@ -512,6 +557,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
       </PerfectScrollbar>
       {!hidePagination && (
         <Pagination
+          isLoading={isFetchingPagination}
           pageSize={params.size}
           pageNumber={params.page}
           totalRows={totalRowsCount}

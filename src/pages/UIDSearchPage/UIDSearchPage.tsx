@@ -13,12 +13,14 @@ import {
 import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
 import "./style.scss";
 import { BASENAME } from "../../App";
+import { FETCH_COLLECTION_SIZE_URL } from "../../utils/helpers";
 
 export const UIDSearchPage: React.FC = () => {
   const [isFetching, setIsFetching] = useState(false);
   const [searchUID, setSearchUID] = useState("");
   const [results, setResults] = useState<AccountDataForUserCard[]>([]);
-  const [totalResults, setTotalResults] = useState(0);
+  const [totalRowsHash, setTotalRowsHash] = useState<string>("");
+  const [totalRowsCount, setTotalRowsCount] = useState<number>(0);
   const navigate = useNavigate();
 
   const defaultParams = {
@@ -31,28 +33,44 @@ export const UIDSearchPage: React.FC = () => {
 
   const fetchAccounts = useCallback(
     async (providedUID: string) => {
-      if (!providedUID) {
+      if (!providedUID?.trim()) {
         setResults([]);
         return;
       }
 
       setIsFetching(true);
 
+      // const onlyNumbersUID = providedUID.replace(/[^0-9]+/, "");
+      const isValidUID = true // onlyNumbersUID.length === 9;
+
+      // const typedResult = {
+      //   uid: onlyNumbersUID,
+      //   playerInfo: {
+      //     nickname: onlyNumbersUID,
+      //     signature: "",
+      //   },
+      // };
+
       const typedResult = {
         uid: providedUID,
         playerInfo: {
           nickname: providedUID,
-          signature: "",
+          signature: "Click to load showcase using enka.network",
         },
       };
 
       const _uid = encodeURIComponent(providedUID);
-      const searchAccountsURL = `/api/search/user/${_uid}`;
+      const searchAccountsURL = `/api/search/user?uid=${_uid}`;
+
       const { data } = await axios.get(searchAccountsURL, { params });
       const fetchedResults = data.data.accounts;
 
-      setResults([typedResult, ...fetchedResults]);
-      setTotalResults(data.data.totalRows);
+      const resultsList = isValidUID
+        ? [typedResult, ...fetchedResults]
+        : fetchedResults;
+
+      setResults(resultsList);
+      setTotalRowsHash(data.data.totalRowsHash);
       setIsFetching(false);
     },
     [params.page]
@@ -73,6 +91,30 @@ export const UIDSearchPage: React.FC = () => {
     debouncedFetchAccounts(searchUID);
   }, [searchUID, params.page]);
 
+  
+  const getSetTotalRows = async (totalRowsHash: string) => {
+    const totalRowsOpts = {
+      params: {
+        variant: "accounts",
+        hash: totalRowsHash,
+      },
+    };
+
+    const response = await axios.get(FETCH_COLLECTION_SIZE_URL, totalRowsOpts);
+
+    const { totalRows } = response.data;
+    setTotalRowsCount(totalRows);
+  };
+
+  useEffect(() => {
+    if (totalRowsHash) {
+      getSetTotalRows(totalRowsHash);
+    } else {
+      setTotalRowsCount(0)
+    }
+  }, [totalRowsHash]);
+
+
   return (
     <div>
       <div className="flex">
@@ -80,7 +122,9 @@ export const UIDSearchPage: React.FC = () => {
           <StylizedContentBlock overrideImage={DomainBackground} />
           <div className="relative">
             <div className="search-input-wrapper" style={{ margin: "50px 0" }}>
-              Enter UID / enka profile name
+              <b>Enter Genshin UID or Enka Network profile name</b>
+              <i>(nickname search works only for people who already imported their accounts)</i>
+              {/* / enka profile name */}
               <div className="search-input relative">
                 <input
                   onChange={(event) => {
@@ -122,7 +166,7 @@ export const UIDSearchPage: React.FC = () => {
                   <Pagination
                     pageSize={params.size}
                     pageNumber={params.page}
-                    totalRows={totalResults}
+                    totalRows={totalRowsCount}
                     setParams={setParams}
                   />
                 </div>

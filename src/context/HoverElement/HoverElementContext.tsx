@@ -1,4 +1,5 @@
-import React, { useState, useCallback, createContext } from "react";
+import React, { useState, useCallback, createContext, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { TableHoverElement } from "../../components";
 
 type HoverElementContextType = {
@@ -20,6 +21,12 @@ const HoverElementContextProvider: React.FC<{ children: any }> = ({
 }) => {
   const [hoverElement, setHoverElement] = useState<JSX.Element>(<></>);
   const [calculationColumn, setCalculationColumn] = useState<string>();
+  const location = useLocation();
+
+  useEffect(() => {
+    // to avoid sticky hover element glitch on new pages
+    setHoverElement(<></>);
+  }, [location.pathname]);
 
   const updateTableHoverElement = useCallback(
     (props: any) => {

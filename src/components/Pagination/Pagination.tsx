@@ -7,12 +7,14 @@ import {
 
 import { FetchParams } from "../CustomTable";
 import "./style.scss";
+import { Spinner } from "../Spinner";
 
 type PaginationProps = {
   totalRows?: number;
   pageSize?: number;
   pageNumber?: number;
   setParams?: React.Dispatch<React.SetStateAction<FetchParams>> | null;
+  isLoading?: boolean;
 };
 
 export const Pagination: React.FC<PaginationProps> = ({
@@ -20,6 +22,7 @@ export const Pagination: React.FC<PaginationProps> = ({
   pageSize = 0,
   pageNumber = 0,
   setParams = null,
+  isLoading = false,
 }) => {
   const lastPage = Math.ceil(totalRows / pageSize);
   const disableNext = pageNumber === lastPage;
@@ -126,9 +129,18 @@ export const Pagination: React.FC<PaginationProps> = ({
   const to = Math.min(pageNumber * pageSize, totalRows);
   const from = Math.max(to - pageSize + 1, 1);
 
+  const classNames = ["pagination", isLoading ? "is-loading" : ""]
+    .join(" ")
+    .trim();
+
   return (
     <div className="pagination-wrapper">
-      <div className="pagination">
+    {isLoading ? (
+      <div className="pagination-spinner-wrapper">
+        <Spinner />
+      </div>
+    ) : null}
+      <div className={classNames}>
         {totalRows > pageSize && (
           <div className="pagination-buttons">
             <span className="relative button-wrapper">

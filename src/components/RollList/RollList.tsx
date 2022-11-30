@@ -21,6 +21,7 @@ const getDefaultRvFilters = (character: string) => {
   return (
     {
       "Hu Tao": ["Crit RATE", "Crit DMG", "HP%", "Elemental Mastery"],
+      Diluc: ["Crit RATE", "Crit DMG", "ATK%", "Elemental Mastery"],
       Xiao: ["Crit RATE", "Crit DMG", "ATK%", "Energy Recharge"],
       Jean: [
         "Crit RATE",

@@ -7,6 +7,8 @@ export const FETCH_ARTIFACTS_URL = `/api/artifacts`;
 export const FETCH_BUILDS_URL = `/api/builds/`;
 export const FETCH_LEADERBOARDS_URL = `/api/leaderboards`;
 export const FETCH_CATEGORIES_URL = `/api/leaderboards/categories`;
+export const FETCH_ACCOUNTS_URL = "/api/search/user/";
+export const FETCH_COLLECTION_SIZE_URL = "/api/getCollectionSize/";
 
 export const FETCH_LEADERBOARD_FILTERS_URL = `/api/filters/leaderboards/`;
 export const FETCH_CHARACTER_FILTERS_URL = `/api/filters/characters/`;

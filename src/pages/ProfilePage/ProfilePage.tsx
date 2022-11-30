@@ -108,11 +108,11 @@ export const ProfilePage: React.FC = () => {
       const getTime = new Date().getTime();
       const thenTTL = getTime + data.ttl;
       setRefreshTime(thenTTL);
-      setEnableRefreshBtn(thenTTL < 0);
+      setEnableRefreshBtn(data.ttl === 0);
 
       const thenBindTTL = getTime + data.bindTTL;
       setBindTime(thenBindTTL);
-      setEnableBindBtn(thenBindTTL < 0);
+      setEnableBindBtn(data.bindTTL === 0);
       setBindSecret(data.secret);
     };
 
@@ -487,7 +487,7 @@ export const ProfilePage: React.FC = () => {
             <Timer
               until={refreshTime}
               label={"refresh in:"}
-              onFinish={handleTimerFinish}
+              onFinish={enableRefreshBtn ? handleTimerFinish : () => {}}
             />
           )}
           <div

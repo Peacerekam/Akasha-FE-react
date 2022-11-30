@@ -54,7 +54,7 @@ const SessionDataContextProvider: React.FC<{ children: any }> = ({
     const response = await axios.get(getSessionURL, optsParamsSessionID());
     const { data } = response.data;
     setBoundAccounts(data.accounts);
-    console.log("data", data, "modifyIsFetching", modifyIsFetching);
+    console.log(data);
     if (data.username) {
       setIsAuthenticated(true);
       const { username, profilePicture, isPatreon } = data;
