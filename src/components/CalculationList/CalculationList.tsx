@@ -36,9 +36,13 @@ export const CalculationList: React.FC<CalculationListProps> = ({ row }) => {
 
   const getCalculations = async () => {
     const _uid = encodeURIComponent(row.uid);
-    const _type = encodeURIComponent(row.type);
-    const calcDetailsURL = `/api/leaderboards/${_uid}/${row.characterId}/${_type}`;
-    const { data } = await axios.get(calcDetailsURL);
+    const calcDetailsURL = `/api/leaderboards/${_uid}/${row.characterId}`;
+    const opts = {
+      params: {
+        type: row.type,
+      },
+    };
+    const { data } = await axios.get(calcDetailsURL, opts);
     setCalculations(data.data);
   };
 

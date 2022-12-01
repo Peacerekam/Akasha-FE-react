@@ -17,7 +17,7 @@ export const CalculationResultWidget: React.FC<
   CalculationResultWidgetProps
 > = ({ uid }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [retryTimer, setRetryTimer] = useState(0);
+  const [retryTimer, setRetryTimer] = useState<number | null>(null);
   const [data, setData] = useState<any[]>([]);
   const navigate = useNavigate();
 
@@ -26,7 +26,7 @@ export const CalculationResultWidget: React.FC<
     abortController?: AbortController
   ) => {
     const _uid = encodeURIComponent(uid);
-    const fetchURL = `/api/leaderboards/calculations/${_uid}`;
+    const fetchURL = `/api/getCalculationsForUser/${_uid}`;
     const opts = {
       signal: abortController?.signal,
     } as any;
@@ -38,15 +38,21 @@ export const CalculationResultWidget: React.FC<
       setData(data);
       setIsLoading(false);
 
-      const filtered = data.filter(
-        (r: any) => Object.keys(r.calculations).length > 0
-      );
+      if (!abortController) return;
 
-      if (filtered.length === 0 && abortController) {
-        const getTime = new Date().getTime();
-        const thenTTL = getTime + 16000;
-        setRetryTimer(thenTTL);
+      // "does it have any valid rankings in it?"
+      for (const build of data) {
+        for (const calculationId of Object.keys(build.calculations)) {
+          const calc = build.calculations[calculationId];
+          if (calc.ranking) return;
+          // if there is at least one valid ranking, do not retry
+        }
       }
+
+      // if no valid rankings at all then retry in 25s
+      const getTime = new Date().getTime();
+      const thenTTL = getTime + 25000;
+      setRetryTimer(thenTTL);
     };
 
     await abortSignalCatcher(getSetData);
@@ -63,13 +69,9 @@ export const CalculationResultWidget: React.FC<
   }, [uid]);
 
   const resultsArray = useMemo(() => {
-    if (data.length > 0 && data[0].characterId) {
-      const filtered = data.filter(
-        (r) => Object.keys(r.calculations).length > 0
-      );
-
+    if (data.length > 0) {
       const calcArray = [];
-      for (const build of filtered) {
+      for (const build of data) {
         for (const calc of Object.values(build.calculations)) {
           const _calc = calc as any;
           const { calculationId, variant } = _calc;
@@ -196,22 +198,15 @@ export const CalculationResultWidget: React.FC<
           </div>
         </PerfectScrollbar>
       ) : null}
+
       {retryTimer ? (
         <div className="retrying-timer">
-          <div className="retrying-timer-label">
-            Reloading highlights in:
-          </div>
-          <Timer
-            until={retryTimer}
-            onFinish={handleFinishTimer}
-          />
+          <div className="retrying-timer-label">Reloading highlights in:</div>
+          <Timer until={retryTimer} onFinish={handleFinishTimer} />
         </div>
-      ) : tilesList.length === 0 ? (
-
+      ) : tilesList.length === 0 && retryTimer === 0 ? (
         <div className="retrying-timer">
-          <div className="retrying-timer-label">
-            no highlights available
-          </div>
+          <div className="retrying-timer-label">no highlights available</div>
         </div>
       ) : null}
     </>

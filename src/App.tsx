@@ -62,19 +62,9 @@ const App = () => {
                 {/* @TODO: later use dashboard page instead */}
                 {/* <Route path="/" element={<DashboardPage />} /> */}
                 <Route path="/" element={<UIDSearchPage />} />
-
                 <Route path="/artifacts" element={<ArtifactsPage />} />
                 <Route path="/builds" element={<BuildsPage />} />
-
-                {/* @TODO: /auth ? */}
-                {/* <Route path="/auth" element={<>nothing here yet.</>} /> */}
-
-                {/* @TODO: /users ? */}
-                {/* <Route path="/users" element={<>nothing here</>} /> */}
-
-                {/* @TODO: /profile ? */}
                 <Route path="/profile" element={<UIDSearchPage />} />
-
                 <Route path="/profile/:uid" element={<ProfilePage />} />
 
                 <Route

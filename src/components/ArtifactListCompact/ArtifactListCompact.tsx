@@ -28,9 +28,13 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
   const getArtifacts = async () => {
     setIsFetching(true);
     const _uid = encodeURIComponent(row.uid);
-    const _type = encodeURIComponent(row.type);
-    const artDetailsURL = `/api/artifacts/${_uid}/${row.characterId}/${_type}`;
-    const { data } = await axios.get(artDetailsURL);
+    const artDetailsURL = `/api/artifacts/${_uid}/${row.characterId}`;
+    const opts = {
+      params: {
+        type: row.type,
+      },
+    };
+    const { data } = await axios.get(artDetailsURL, opts);
     setArtifacts(data.data);
     setIsFetching(false);
   };

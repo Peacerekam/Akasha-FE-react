@@ -72,12 +72,12 @@ export const TableHoverElement: React.FC<TableHoverElementProps> = ({
     return (
       <FollowCursor
         data={{
-          offsetX: 135,
-          offsetY: 150,
+          offsetX: 150,
+          offsetY: 165,
         }}
       >
         <div className={wrapperClassNames}>
-          <Artifact artifact={rowData} width={250} equipped={equippedOn} />
+          <Artifact artifact={rowData} width={275} equipped={equippedOn} />
         </div>
       </FollowCursor>
     );

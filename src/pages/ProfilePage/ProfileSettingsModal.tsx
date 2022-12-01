@@ -21,7 +21,6 @@ import {
 } from "../../utils/helpers";
 import { BuildNameInput } from "./BuildNameInput";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
-import { optsParamsSessionID } from "../../utils/helpers";
 
 type ProfileSettingsModalProps = {
   isOpen: boolean;
@@ -156,8 +155,8 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
 
       // @TODO: need to handle auth as well
       const { uid, characterId, type } = selectedBuild;
-      const { _uid, _type } = _getEncodeURIComponents({ uid, type });
-      const postNamecardURL = `/api/user/namecard/${_uid}/${characterId}/${_type}`;
+      const _uid = encodeURIComponent(uid);
+      const postNamecardURL = `/api/user/namecard/${_uid}/${characterId}`;
 
       // const response = ...
       await axios.post(postNamecardURL, formData, {
@@ -166,6 +165,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
         },
         params: {
           sessionID: getSessionIdFromCookie(),
+          type,
         },
       });
 
@@ -187,9 +187,15 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       setIsDirty(true);
       setIsUploading(true);
       const { uid, characterId, type } = selectedBuild;
-      const { _uid, _type } = _getEncodeURIComponents({ uid, type });
-      const postNamecardURL = `/api/user/namecard/${_uid}/${characterId}/${_type}`;
-      await axios.post(postNamecardURL, null, optsParamsSessionID()); // no formData attached
+      const _uid = encodeURIComponent(uid);
+      const postNamecardURL = `/api/user/namecard/${_uid}/${characterId}`;
+      const opts = {
+        params: {
+          sessionID: getSessionIdFromCookie(),
+          type,
+        },
+      };
+      await axios.post(postNamecardURL, null, opts); // no formData attached
       setIsUploading(false);
       clearBgImage();
       fetchBuildsData(accountData?.uid);
@@ -199,9 +205,15 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       setIsDirty(true);
       setIsUploading(true);
       const { uid, characterId, type } = char;
-      const { _uid, _type } = _getEncodeURIComponents({ uid, type });
-      const toggleVisibilityURL = `/api/user/toggleBuildVisibility/${_uid}/${characterId}/${_type}`;
-      await axios.post(toggleVisibilityURL, null, optsParamsSessionID());
+      const _uid = encodeURIComponent(uid);
+      const toggleVisibilityURL = `/api/user/toggleBuildVisibility/${_uid}/${characterId}`;
+      const opts = {
+        params: {
+          sessionID: getSessionIdFromCookie(),
+          type,
+        },
+      };
+      await axios.post(toggleVisibilityURL, null, opts);
       setIsUploading(false);
       fetchBuildsData(accountData?.uid);
     };
@@ -210,9 +222,15 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       setIsDirty(true);
       setIsUploading(true);
       const { uid, characterId, type } = char;
-      const { _uid, _type } = _getEncodeURIComponents({ uid, type });
-      const deleteBuildURL = `/api/user/deleteBuild/${_uid}/${characterId}/${_type}`;
-      await axios.post(deleteBuildURL, null, optsParamsSessionID());
+      const _uid = encodeURIComponent(uid);
+      const deleteBuildURL = `/api/user/deleteBuild/${_uid}/${characterId}`;
+      const opts = {
+        params: {
+          sessionID: getSessionIdFromCookie(),
+          type,
+        },
+      };
+      await axios.post(deleteBuildURL, null, opts);
       setIsUploading(false);
       fetchBuildsData(accountData?.uid);
     };
@@ -231,13 +249,14 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       setIsUploading(true);
 
       const { uid, characterId, type } = selectedBuild;
-      const { _uid, _type } = _getEncodeURIComponents({ uid, type });
+      const _uid = encodeURIComponent(uid);
 
-      const postBuildNameURL = `/api/user/setBuildName/${_uid}/${characterId}/${_type}`;
+      const postBuildNameURL = `/api/user/setBuildName/${_uid}/${characterId}`;
       const opts = {
         params: {
           buildName: newBuildName,
           sessionID: getSessionIdFromCookie(),
+          type,
         },
       };
       const response = await axios.post(postBuildNameURL, null, opts); // no formData attached

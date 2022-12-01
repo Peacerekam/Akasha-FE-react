@@ -115,11 +115,11 @@
   .rv-display {
     margin-left: auto;
     text-align: end;
-    font-size: calc(var(--artifact-width) / 22);
+    font-size: calc(var(--artifact-width) / 23);
     font-family: Arial, Helvetica, sans-serif;
     background-color: black;
-    padding: 1px 4px;
-    border-radius: 20px;
+    padding: 2px 4px 1px;
+    border-radius: 50px;
     color: white;
   }
 }
