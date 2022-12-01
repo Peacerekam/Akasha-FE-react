@@ -26,3 +26,17 @@
     }
   }
 }
+
+.retrying-timer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  gap: 5px;
+  .retrying-timer-label {
+    opacity: 0.5;
+    font-family: "GenshinFont";
+    font-size: 14px;
+  }
+}

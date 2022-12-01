@@ -135,11 +135,11 @@ export const Pagination: React.FC<PaginationProps> = ({
 
   return (
     <div className="pagination-wrapper">
-    {isLoading ? (
-      <div className="pagination-spinner-wrapper">
-        <Spinner />
-      </div>
-    ) : null}
+      {isLoading ? (
+        <div className="pagination-spinner-wrapper">
+          <Spinner />
+        </div>
+      ) : null}
       <div className={classNames}>
         {totalRows > pageSize && (
           <div className="pagination-buttons">

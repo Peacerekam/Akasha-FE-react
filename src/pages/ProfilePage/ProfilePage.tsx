@@ -487,7 +487,7 @@ export const ProfilePage: React.FC = () => {
             <Timer
               until={refreshTime}
               label={"refresh in:"}
-              onFinish={enableRefreshBtn ? handleTimerFinish : () => {}}
+              onFinish={handleTimerFinish}
             />
           )}
           <div

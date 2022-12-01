@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { BASENAME } from "../../App";
 import { abortSignalCatcher } from "../../utils/helpers";
 import { Spinner } from "../Spinner";
+import { Timer } from "../Timer";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import "./style.scss";
 
@@ -16,17 +17,18 @@ export const CalculationResultWidget: React.FC<
   CalculationResultWidgetProps
 > = ({ uid }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [retryTimer, setRetryTimer] = useState(0);
   const [data, setData] = useState<any[]>([]);
   const navigate = useNavigate();
 
   const fetchCalcData = async (
     uid: string,
-    abortController: AbortController
+    abortController?: AbortController
   ) => {
     const _uid = encodeURIComponent(uid);
     const fetchURL = `/api/leaderboards/calculations/${_uid}`;
     const opts = {
-      signal: abortController.signal,
+      signal: abortController?.signal,
     } as any;
 
     const getSetData = async () => {
@@ -35,6 +37,16 @@ export const CalculationResultWidget: React.FC<
       const { data } = response.data;
       setData(data);
       setIsLoading(false);
+
+      const filtered = data.filter(
+        (r: any) => Object.keys(r.calculations).length > 0
+      );
+
+      if (filtered.length === 0 && abortController) {
+        const getTime = new Date().getTime();
+        const thenTTL = getTime + 16000;
+        setRetryTimer(thenTTL);
+      }
     };
 
     await abortSignalCatcher(getSetData);
@@ -166,6 +178,12 @@ export const CalculationResultWidget: React.FC<
       </>
     );
   }
+
+  const handleFinishTimer = async () => {
+    if (uid) await fetchCalcData(uid);
+    setRetryTimer(0);
+  };
+
   return (
     <>
       {tilesList.length > 0 ? (
@@ -177,6 +195,24 @@ export const CalculationResultWidget: React.FC<
             {tilesList}
           </div>
         </PerfectScrollbar>
+      ) : null}
+      {retryTimer ? (
+        <div className="retrying-timer">
+          <div className="retrying-timer-label">
+            Reloading highlights in:
+          </div>
+          <Timer
+            until={retryTimer}
+            onFinish={handleFinishTimer}
+          />
+        </div>
+      ) : tilesList.length === 0 ? (
+
+        <div className="retrying-timer">
+          <div className="retrying-timer-label">
+            no highlights available
+          </div>
+        </div>
       ) : null}
     </>
   );
