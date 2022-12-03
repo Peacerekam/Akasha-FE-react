@@ -1,7 +1,7 @@
 .navbar {
   color: #e7f6f2;
   display: flex;
-  padding: 0 25px;
+  padding: 0 25px 0 0;
   flex-wrap: wrap;
   background-color: #395b64;
 
@@ -13,6 +13,8 @@
   }
   .logo-wrapper {
     position: relative;
+    padding-left: 40px;
+
     .logo {
       position: relative;
       top: 4px;

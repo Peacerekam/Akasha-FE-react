@@ -128,7 +128,8 @@ export const Navbar: React.FC = () => {
       >
         <span className="logo">
           <span className="annotation">Work in progress</span>
-          Akasha System
+          <img src="favicon.svg" className="tilted-logo" />
+          <span className="logo-text">Akasha System</span>
         </span>
       </a>
 

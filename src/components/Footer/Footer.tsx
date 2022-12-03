@@ -7,7 +7,8 @@ export const Footer: React.FC = () => {
     <div className="footer">
       <span style={{ cursor: "default" }}>
         <span className="annotation">Work in progress</span>
-        Akasha System
+        <img src="favicon.svg" className="tilted-logo" />
+        <span className="logo-text">Akasha System</span>
       </span>
       <span>
         <a target="_blank" rel="noreferrer" href="https://enka.network/">
