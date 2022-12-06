@@ -4,6 +4,7 @@
   background-color: $bg-color;
   margin-top: 10px;
   overflow: hidden;
+  min-width: 180px;
 
   .compact-artifact-icon-container {
     width: 100px;
@@ -72,46 +73,52 @@
   }
 }
 
-.total-roll-list {
+.total-roll-list-wrapper{
+  width: 100%;
   display: flex;
-  gap: 5px;
-  font-family: "GenshinFont";
-  font-size: 14px;
-  // flex-wrap: wrap;
-  .total-rolls-label {
-    white-space: nowrap;
-  }
-  .roll-list-member {
-    padding: 3px 7px;
-    border-radius: 20px;
-    background-color: rgba(black, 0.5);
-    cursor: pointer;
-    &.x-prefix {
-      span {
-        :first-child {
-          &::before {
-            content: "×";
+  justify-content: center;
+  .total-roll-list {
+    display: flex;
+    gap: 5px;
+    font-family: "GenshinFont";
+    font-size: 14px;
+    // flex-wrap: wrap;
+    .total-rolls-label {
+      white-space: nowrap;
+    }
+    .roll-list-member {
+      padding: 3px 7px;
+      border-radius: 20px;
+      background-color: rgba(black, 0.5);
+      height: fit-content;
+      cursor: pointer;
+      &.x-prefix {
+        span {
+          :first-child {
+            &::before {
+              content: "×";
+            }
           }
         }
       }
-    }
-    &.active-rv {
-      box-shadow: 0 0 0 1px orange, 0 0 5px 1px rgba(orange, 0.5);
-    }
-    span {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-      :first-child {
-        color: orange;
-        margin-right: 5px;
-        font-size: 12px;
+      &.active-rv {
+        box-shadow: 0 0 0 1px orange, 0 0 5px 1px rgba(orange, 0.5);
+      }
+      span {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        :first-child {
+          color: orange;
+          margin-right: 5px;
+          font-size: 12px;
+        }
       }
     }
-  }
-  .total-roll-rv {
-    cursor: default;
-    width: 80px;
+    .total-roll-rv {
+      cursor: default;
+      width: 80px;
+    }
   }
 }

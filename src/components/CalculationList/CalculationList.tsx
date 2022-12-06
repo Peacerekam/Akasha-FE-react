@@ -52,9 +52,19 @@ export const CalculationList: React.FC<CalculationListProps> = ({ row }) => {
 
   const calculationIds = useMemo(
     () =>
-      Object.keys(calculations ?? []).sort((a: any, b: any) =>
-        calculations[a].ranking < calculations[b].ranking ? -1 : 1
-      ),
+      Object.keys(calculations ?? []).sort((a: any, b: any) => {
+        const _a = calculations[a].ranking;
+        const _b = calculations[b].ranking;
+
+        const valA = ("" + _a).startsWith("(")
+          ? +_a.slice(1, _a.length - 1)
+          : _a;
+        const valB = ("" + _b).startsWith("(")
+          ? +_b.slice(1, _b.length - 1)
+          : _b;
+
+        return valA < valB ? -1 : 1;
+      }),
     [JSON.stringify(calculations)]
   );
 
@@ -78,7 +88,7 @@ export const CalculationList: React.FC<CalculationListProps> = ({ row }) => {
 
           const _id = calculationId || id;
           const leaderboardPath = `leaderboards/${_id}/${variant?.name || ""}`;
-          const leaveOnlyNumbersRegex = /\D+/g
+          const leaveOnlyNumbersRegex = /\D+/g;
           const _ranking = +(ranking + "")?.replace(leaveOnlyNumbersRegex, "");
 
           return (

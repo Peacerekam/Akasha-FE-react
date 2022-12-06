@@ -22,6 +22,7 @@ const getDefaultRvFilters = (character: string) => {
     {
       "Hu Tao": ["Crit RATE", "Crit DMG", "HP%", "Elemental Mastery"],
       Diluc: ["Crit RATE", "Crit DMG", "ATK%", "Elemental Mastery"],
+      Yanfei: ["Crit RATE", "Crit DMG", "ATK%", "Elemental Mastery"],
       Xiao: ["Crit RATE", "Crit DMG", "ATK%", "Energy Recharge"],
       Jean: [
         "Crit RATE",
@@ -179,13 +180,15 @@ export const RollList: React.FC<RollListProps> = ({ artifacts, character }) => {
   }, [filter]);
 
   return (
-    <div className="total-roll-list">
-      {displayRolls}
-      <div className="roll-list-member total-roll-rv">
-        <span>
-          <span>RV</span>
-          <span>{getTotalRV()}%</span>
-        </span>
+    <div className="total-roll-list-wrapper">
+      <div className="total-roll-list">
+        {displayRolls}
+        <div className="roll-list-member total-roll-rv">
+          <span>
+            <span>RV</span>
+            <span>{getTotalRV()}%</span>
+          </span>
+        </div>
       </div>
     </div>
   );

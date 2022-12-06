@@ -450,8 +450,14 @@ export const ProfilePage: React.FC = () => {
   };
 
   const displayFloatingButtons = useMemo(() => {
+    const DISABLE_REFRESH_FLOATING_BUTTONS = true;
+    const defaultBtnClassName = DISABLE_REFRESH_FLOATING_BUTTONS
+      ? "disable-btn"
+      : "";
+
     const refreshBtnClassName = [
       "floating-button",
+      defaultBtnClassName,
       enableRefreshBtn ? "" : "disable-btn",
     ]
       .join(" ")
@@ -459,6 +465,7 @@ export const ProfilePage: React.FC = () => {
 
     const bindBtnClassName = [
       "floating-button",
+      defaultBtnClassName,
       enableBindhBtn ? "" : "disable-btn",
     ]
       .join(" ")

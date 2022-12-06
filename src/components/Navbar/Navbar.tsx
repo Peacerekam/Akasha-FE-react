@@ -10,6 +10,7 @@ import "./style.scss";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
 import { Spinner } from "../Spinner";
 import { BASENAME } from "../../App";
+import AkashaLogo from "../../assets/images/favicon.svg";
 
 type NavElement = {
   name: string;
@@ -128,7 +129,7 @@ export const Navbar: React.FC = () => {
       >
         <span className="logo">
           <span className="annotation">Work in progress</span>
-          <img src="favicon.svg" className="tilted-logo" />
+          <img src={AkashaLogo} className="tilted-logo" />
           <span className="logo-text">Akasha System</span>
         </span>
       </a>

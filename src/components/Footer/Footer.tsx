@@ -1,13 +1,14 @@
 import React from "react";
 import PoweredByEnka from "../../assets/images/enka.png";
+import AkashaLogo from "../../assets/images/favicon.svg";
 import "./style.scss";
 
 export const Footer: React.FC = () => {
   return (
     <div className="footer">
-      <span style={{ cursor: "default" }}>
+      <span style={{ cursor: "default", paddingLeft: 30 }}>
         <span className="annotation">Work in progress</span>
-        <img src="favicon.svg" className="tilted-logo" />
+        <img src={AkashaLogo} className="tilted-logo" />
         <span className="logo-text">Akasha System</span>
       </span>
       <span>
