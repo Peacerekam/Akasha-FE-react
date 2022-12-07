@@ -16,7 +16,7 @@ export const CustomQueryBuilder = ({
   handleReplaceFilter,
   pills,
 }: CustomQueryBuilderProps) => {
-  const [ textInput, setTextInput ] = useState('')
+  const [textInput, setTextInput] = useState("");
   const fieldKeyOptions = useMemo(
     () =>
       optionGroups.map((o, i) => {
@@ -24,7 +24,9 @@ export const CustomQueryBuilder = ({
           // index: i,
           label: o.fieldName,
           options: o.options.map((opt) => {
-            const isStatIcon = isIcon(opt.name);
+            const iconName = opt.name?.split(" - ")[0]
+            const isStatIcon = isIcon(iconName);
+
             const prefix =
               {
                 "artifactSets.$1": "1p ",
@@ -38,7 +40,7 @@ export const CustomQueryBuilder = ({
                   {opt.icon || isStatIcon ? (
                     <>
                       {isStatIcon ? (
-                        <StatIcon name={opt.name ?? ""} />
+                        <StatIcon name={iconName ?? ""} />
                       ) : (
                         <img src={opt.icon} />
                       )}
@@ -50,7 +52,12 @@ export const CustomQueryBuilder = ({
                       />
                     </>
                   ) : (
-                    opt.name
+                    <Highlighter
+                      highlightClassName="text-highlight-class"
+                      searchWords={[textInput]}
+                      autoEscape={true}
+                      textToHighlight={`${prefix}${opt.name}`}
+                    />
                   )}
                 </span>
               ),
@@ -72,7 +79,7 @@ export const CustomQueryBuilder = ({
 
     return pills.map((pill) => {
       const option = allOpts.find((opt: any) => {
-        const compA = opt.value === ""+pill.value;
+        const compA = opt.value === "" + pill.value;
         const compB = opt.fieldKey === pill.name;
         return compA && compB;
       });
