@@ -35,6 +35,10 @@ body {
   overflow: hidden;
 }
 
+.pointer-events-none {
+  pointer-events: none;
+}
+
 .search-input-wrapper {
   display: flex;
   gap: 10px;

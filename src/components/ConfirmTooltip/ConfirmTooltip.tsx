@@ -1,4 +1,4 @@
-import { faX, faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faX, faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useCallback, useEffect, useState } from "react";
 import "./style.scss";
@@ -7,12 +7,14 @@ type ConfirmTooltipProps = {
   text: string;
   onConfirm: any;
   children: JSX.Element;
+  className?: string;
 };
 
 export const ConfirmTooltip: React.FC<ConfirmTooltipProps> = ({
   text,
   onConfirm,
   children,
+  className = "",
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -43,7 +45,9 @@ export const ConfirmTooltip: React.FC<ConfirmTooltipProps> = ({
 
   return (
     <div>
-      <div onClick={handleOpen}>{children}</div>
+      <div className={className} onClick={handleOpen}>
+        {children}
+      </div>
       {isOpen && (
         <div className="relative">
           <div className="confirm-tooltip">
@@ -53,12 +57,10 @@ export const ConfirmTooltip: React.FC<ConfirmTooltipProps> = ({
               style={{ justifyContent: "space-between" }}
             >
               <div onClick={handleConfirm}>
-                
-              <FontAwesomeIcon icon={faCheck} size="1x" />
+                <FontAwesomeIcon icon={faCheck} size="1x" />
               </div>
               <div onClick={handleClose}>
-                
-              <FontAwesomeIcon icon={faXmark} size="1x" />
+                <FontAwesomeIcon icon={faXmark} size="1x" />
               </div>
             </div>
           </div>

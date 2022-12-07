@@ -490,13 +490,13 @@ export const ProfilePage: React.FC = () => {
     return (
       <div className="floating-profile-buttons-wrapper">
         <div className="floating-profile-buttons">
-          {refreshTime && (
+          {refreshTime ? (
             <Timer
               until={refreshTime}
               label={"refresh in:"}
               onFinish={handleTimerFinish}
             />
-          )}
+          ) : null}
           <div
             title="Refresh builds"
             className={refreshBtnClassName}
@@ -507,12 +507,17 @@ export const ProfilePage: React.FC = () => {
           </div>
           {showBindAccBtn && (
             <>
-              {bindTime && (
+              {bindTime ? (
                 <Timer until={bindTime} onFinish={handleBindTimerFinish} />
-              )}
+              ) : null}
               <ConfirmTooltip
                 text="Do you want to bind this account?"
                 onConfirm={() => bindAccount(uid)}
+                className={
+                  !enableBindhBtn || DISABLE_REFRESH_FLOATING_BUTTONS
+                    ? "pointer-events-none"
+                    : ""
+                }
               >
                 <div
                   title="Bind account"
@@ -524,7 +529,7 @@ export const ProfilePage: React.FC = () => {
               </ConfirmTooltip>
             </>
           )}
-          {isAccountOwner && (
+          {isAccountOwner ? (
             <div
               title="Profile settings"
               className="floating-button"
@@ -533,7 +538,7 @@ export const ProfilePage: React.FC = () => {
             >
               <FontAwesomeIcon icon={faGear} size="1x" />
             </div>
-          )}
+          ) : null}
         </div>
       </div>
     );
