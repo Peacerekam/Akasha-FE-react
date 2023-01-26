@@ -66,9 +66,11 @@ export const FancyBuildBorder: React.FC<FancyBuildBorderProps> = ({
   const backgroundImage =
     overwriteBackground || customNamecard || rowData?.nameCardLink;
 
+  const charCvColor = getCharacterCvColor(cv)
+
   const style = {
     "--name-card-url": `url(${backgroundImage})`,
-    borderColor: getCharacterCvColor(cv),
+    borderColor: charCvColor === "rainbow" ? "red" : getCharacterCvColor(cv),
     ...(offsetStyle || {}),
   } as React.CSSProperties;
 

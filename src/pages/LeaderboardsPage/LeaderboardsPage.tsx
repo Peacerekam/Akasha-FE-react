@@ -149,7 +149,7 @@ export const LeaderboardsPage: React.FC = () => {
       params: {
         sort: calculationSortKey,
         order: -1,
-        size: 20,
+        size: 3,
         page: 1,
         variant,
       },

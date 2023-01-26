@@ -3,7 +3,7 @@ import React, { useMemo, useState, useEffect } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { useNavigate } from "react-router-dom";
 import { BASENAME } from "../../App";
-import { abortSignalCatcher } from "../../utils/helpers";
+import { abortSignalCatcher, toShortThousands } from "../../utils/helpers";
 import { Spinner } from "../Spinner";
 import { Timer } from "../Timer";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
@@ -99,6 +99,7 @@ export const CalculationResultWidget: React.FC<
           );
 
           return _rankingA / a.outOf > _rankingB / b.outOf ? 1 : -1;
+          // return _rankingA > _rankingB ? 1 : -1;
         }
       );
 
@@ -155,7 +156,7 @@ export const CalculationResultWidget: React.FC<
               </div>
               <span>
                 {ranking ?? "---"}
-                <span className="opacity-5">/{outOf ?? "---"}</span>
+                <span className="opacity-5">/{toShortThousands(outOf) ?? "---"}</span>
               </span>
             </a>
           </div>

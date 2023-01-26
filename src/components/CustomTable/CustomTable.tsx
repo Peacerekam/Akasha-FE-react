@@ -32,6 +32,7 @@ import {
   FETCH_LEADERBOARDS_URL,
   FETCH_BUILDS_URL,
 } from "../../utils/helpers";
+import { useFetchTableData } from "../../hooks";
 
 type CustomTableProps = {
   columns: any[];
@@ -101,6 +102,18 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   const [params, setParams] = useState<FetchParams>(defaultParams);
 
   const navigate = useNavigate();
+
+  // @TODO: react-query
+  // @FIX react-query
+  // const {
+  //   data: _data,
+  //   isLoading,
+  //   isFetching,
+  //   isPreviousData,
+  // } = useFetchTableData(fetchURL, params);
+
+  // const rows = _data?.data || []
+  // const totalRowsHash = _data?.totalRowsHash || ''
 
   const noDataFound = useMemo(
     () => rows.length === 0 && !isLoading,
@@ -502,8 +515,8 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     const realRowsCount = rows.filter((r) => !r.isExpandRow).length;
     const numOfFillerRows = params.size - realRowsCount;
     const arr = Array(numOfFillerRows).fill(0);
-    return arr.map(() => (
-      <tr style={{ pointerEvents: "none" }}>
+    return arr.map((_, i) => (
+      <tr key={i} style={{ pointerEvents: "none" }}>
         <td colSpan={columns.length}></td>
       </tr>
     ));

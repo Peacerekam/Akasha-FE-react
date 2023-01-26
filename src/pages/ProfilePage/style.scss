@@ -13,6 +13,7 @@
   width: calc(100% - 475px);
   min-width: 200px;
   flex-grow: 1;
+  height: 100px;
 }
 
 .custom-namecard-preview-wrapper {
@@ -86,12 +87,33 @@
   }
 }
 
+@media (max-width: 800px) {
+  .settings-modal {
+    top: 150px;
+    .modal-content {
+      height: calc(100vh - 61px);
+      max-height: 100vh !important;
+      .compact-table-wrapper {
+        align-items: center;
+        .perfect-scroll-wrapper {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
 .compact-table-wrapper {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: 30px;
   margin-bottom: 10px;
+
+  @media (max-width: 800px) {
+    display: flex;
+    flex-direction: column;
+  }
 
   .perfect-scroll-wrapper {
     flex-grow: 1;
@@ -255,6 +277,9 @@
 
 .floating-profile-buttons-wrapper {
   position: relative;
+  @media (max-width: 1300px) {
+    margin-right: 10px;
+  }
   .floating-profile-buttons {
     width: 100%;
     position: absolute;

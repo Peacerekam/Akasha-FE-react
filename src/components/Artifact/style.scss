@@ -160,6 +160,23 @@
   }
 }
 
+@keyframes bloodGlow {
+  100%,
+  0% {
+    box-shadow: 0 0 0 1px red, 0 0 8px 3px red;
+  }
+  50% {
+    box-shadow: 0 0 0 1px red, 0 0 8px 3px rgba(red, 0.247);
+  }
+}
+
+.wtf-artifact {
+  animation: bloodGlow 2s infinite;
+  .compact-artifact-crit-value {
+    color: red;
+  }
+}
+
 .upper-diamond-artifact {
   box-shadow: 0 0 0 1px rgb(255, 217, 0), 0 0 8px 3px rgba(255, 217, 0, 0.623);
   .compact-artifact-crit-value {

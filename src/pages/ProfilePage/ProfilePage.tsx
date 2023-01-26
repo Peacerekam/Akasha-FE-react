@@ -17,6 +17,7 @@ import {
   FETCH_CHARACTER_FILTERS_URL,
   getArtifactCvColor,
   getInGameSubstatValue,
+  getRainbowTextStyle,
   getSubstatsInOrder,
   isPercent,
   normalizeText,
@@ -240,8 +241,16 @@ export const ProfilePage: React.FC = () => {
         width: "100px",
         cell: (row) => {
           const textColor = getArtifactCvColor(row.critValue);
+          let style = {} as React.CSSProperties;
+
+          if (textColor === "rainbow") {
+            style = getRainbowTextStyle();
+          } else {
+            style.color = textColor;
+          }
+
           return (
-            <span style={{ color: textColor }}>{row.critValue.toFixed(1)}</span>
+            <span style={style}>{row.critValue.toFixed(1)}</span>
           );
         },
       },
@@ -450,7 +459,7 @@ export const ProfilePage: React.FC = () => {
   };
 
   const displayFloatingButtons = useMemo(() => {
-    const DISABLE_REFRESH_FLOATING_BUTTONS = true;
+    const DISABLE_REFRESH_FLOATING_BUTTONS = false;
     const defaultBtnClassName = DISABLE_REFRESH_FLOATING_BUTTONS
       ? "disable-btn"
       : "";

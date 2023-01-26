@@ -7,20 +7,22 @@
 
   max-width: 465px * 2 + 20px;
   min-width: 100px;
+  width: 100%;
+  
   text-align: center;
-  display: grid;
   gap: 20px;
-  grid-template-columns: 1fr 1fr;
-  grid-template-columns: repeat(auto-fit, minmax(465px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
 
   .uid-result {
     color: white;
     text-decoration: none;
     width: min(465px, 100%);
     overflow: hidden;
-
+    margin: 0 auto;
     display: inline-block;
     position: relative;
+
     .card-background,
     .uid-result {
       width: 100%;

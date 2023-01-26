@@ -29,6 +29,21 @@ body {
   max-width: 1280px;
   margin: 10px auto 0;
   // padding: 0 10px;
+  &.dev-indicator {
+    &::after{
+      content: '';
+      // background-color: red;
+      pointer-events: none;
+      position: fixed;
+      border: 5px dashed magenta;
+      box-sizing: border-box;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      z-index: 9999;
+    }
+  }
 }
 
 .overflow-hidden {
@@ -626,5 +641,32 @@ body {
         gap: 10px;
       }
     }
+  }
+}
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 82%;
+  }
+  50% {
+    background-position: 100% 19%;
+  }
+  100% {
+    background-position: 0% 82%;
+  }
+}
+
+@keyframes filterGlowRed {
+  0% {
+    opacity: 0.8;
+    filter: drop-shadow(0 0 5px transparent)
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 5px red)
+  }
+  100% {
+    opacity: 0.8;
+    filter: drop-shadow(0 0 5px transparent)
   }
 }

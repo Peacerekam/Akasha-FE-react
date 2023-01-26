@@ -14,9 +14,25 @@ export const NotificationBar: React.FC = () => {
   const getNotification = async (abortController: AbortController) => {
     const notificationURL = `/api/notifications/topbar`;
     const opts = { signal: abortController?.signal };
+
     const { data } = await axios.get(notificationURL, opts);
-    if (data) {
-      setNotification(data);
+    if (!data) return;
+
+    const lastMessage = localStorage.getItem("seenNotification");
+    const shouldHide = lastMessage === data.message;
+
+    setHide(shouldHide);
+    setNotification(data);
+
+    if (!shouldHide) return;
+    localStorage.setItem("seenNotification", data.message);
+  };
+
+  const handleClose = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    event.preventDefault();
+    setHide(true);
+    if (notification?.message) {
+      localStorage.setItem("seenNotification", notification?.message);
     }
   };
 
@@ -38,13 +54,7 @@ export const NotificationBar: React.FC = () => {
     .trim();
 
   return (
-    <div
-      className={classNames}
-      onClick={(event) => {
-        event.preventDefault();
-        setHide(true);
-      }}
-    >
+    <div className={classNames} onClick={handleClose}>
       <span className="notification-text">{notification?.message}</span>
       <span className="close-notification">×</span>
     </div>

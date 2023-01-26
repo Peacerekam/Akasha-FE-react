@@ -71,7 +71,7 @@ export const CalculationList: React.FC<CalculationListProps> = ({ row }) => {
   const compactList = useMemo(
     () =>
       calculationIds
-        .filter((id: any) => calculations[id]?.ranking)
+        // .filter((id: any) => calculations[id]?.ranking)
         .map((id: any, index) => {
           const calc: CalculationResponse = calculations[id];
           const {
@@ -100,10 +100,10 @@ export const CalculationList: React.FC<CalculationListProps> = ({ row }) => {
                     -
                   </span>
                 )}
-                <span className="opacity-5">/{outOf}</span>
+                <span className="opacity-5">/{outOf || "???"}</span>
               </td>
               <td>
-                {ranking ? `top ${Math.ceil((_ranking / outOf) * 100)}%` : "-"}
+                {ranking ? `top ${Math.ceil((_ranking / outOf) * 100)}%` : ""}
               </td>
               <td>
                 <WeaponMiniDisplay

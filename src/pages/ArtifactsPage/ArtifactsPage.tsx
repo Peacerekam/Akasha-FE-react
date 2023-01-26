@@ -10,12 +10,20 @@ import {
   normalizeText,
 } from "../../utils/helpers";
 import { useNavigate } from "react-router-dom";
-import { CustomTable, HelpBox, StatIcon, StylizedContentBlock } from "../../components";
+import {
+  CustomTable,
+  HelpBox,
+  StatIcon,
+  StylizedContentBlock,
+} from "../../components";
 import { ARBadge } from "../LeaderboardsPage";
 import { TableColumn } from "../../types/TableColumn";
 
 import DomainBackground from "../../assets/images/domain-background.jpg";
-import { FETCH_ARTIFACT_FILTERS_URL } from "../../utils/helpers";
+import {
+  FETCH_ARTIFACT_FILTERS_URL,
+  getRainbowTextStyle,
+} from "../../utils/helpers";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { BASENAME } from "../../App";
 
@@ -165,9 +173,15 @@ export const ArtifactsPage: React.FC = () => {
         width: "100px",
         cell: (row) => {
           const textColor = getArtifactCvColor(row.critValue);
-          return (
-            <span style={{ color: textColor }}>{row.critValue.toFixed(1)}</span>
-          );
+          let style = {} as React.CSSProperties;
+
+          if (textColor === "rainbow") {
+            style = getRainbowTextStyle();
+          } else {
+            style.color = textColor;
+          }
+
+          return <span style={style}>{row.critValue.toFixed(1)}</span>;
         },
       },
     ],

@@ -481,7 +481,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     <>
       <div className="react-select-menu-container" />
       <div className="modal-wrapper" onClick={handleCloseModal}>
-        <div className="modal" style={{ width: 800 }}>
+        <div className="modal settings-modal" style={{ width: 800 }}>
           {modalHeader}
           <div className="modal-content">
             {modalContent}

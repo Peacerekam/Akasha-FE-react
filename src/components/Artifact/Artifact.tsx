@@ -129,7 +129,10 @@ export const Artifact: React.FC<ArtifactProps> = ({
         <div className="artifact-equipped-char">
           {equipped.map((build: any, index: number) => {
             const cv = build?.critValue || 0;
-            const borderColor = getCharacterCvColor(cv);
+
+            let borderColor = getCharacterCvColor(cv);
+            if (borderColor === "rainbow") borderColor = "red";
+
             const style = {
               backgroundImage: `url(${build.nameCardLink})`,
               boxShadow: `0 0 0 2px ${borderColor}`,

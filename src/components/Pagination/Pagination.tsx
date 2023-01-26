@@ -66,7 +66,7 @@ export const Pagination: React.FC<PaginationProps> = ({
     if (isCloseToEnd) {
       nEnd = lastPage;
       nStart = lastPage - endOffset + 1;
-      if (nStart < 0) nStart = 1;
+      if (nStart < 1) nStart = 1;
     }
 
     if (nStart !== 1) arr.push(1);

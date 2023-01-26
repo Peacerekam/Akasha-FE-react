@@ -1,12 +1,14 @@
 tr {
   .show-on-hover {
     display: none;
+    max-width: 170px;
   }
   &:hover .show-on-hover {
     display: inline-block;
   }
   .hide-on-hover {
     display: inline-block;
+    max-width: 170px;
   }
   &:hover .hide-on-hover {
     display: none;

@@ -115,30 +115,55 @@ export const getSubstatsInOrder = (
 };
 
 export const getCharacterCvColor = (cv: number) => {
-  if (cv >= 260) return "cyan";
-  if (cv >= 240) return "rgb(255, 217, 0)";
-  if (cv >= 220) return "orange";
-  if (cv >= 200) return "rgb(194, 102, 255)";
-  if (cv >= 180) return "rgb(102, 163, 255)";
+  const _cv = cv + 0.05;
+  if (_cv >= 300) return "rainbow";
+  if (_cv >= 260) return "cyan";
+  if (_cv >= 240) return "rgb(255, 217, 0)";
+  if (_cv >= 220) return "orange";
+  if (_cv >= 200) return "rgb(194, 102, 255)";
+  if (_cv >= 180) return "rgb(102, 163, 255)";
   return "gray";
 };
 
 export const getArtifactCvColor = (cv: number) => {
-  if (cv >= 50) return "cyan";
-  if (cv >= 45) return "rgb(255, 217, 0)";
-  if (cv >= 35) return "orange";
-  if (cv >= 25) return "rgb(194, 102, 255)";
-  if (cv >= 15) return "rgb(102, 163, 255)";
+  if (cv.toFixed(1) === "54.4") return "rainbow";
+  const _cv = cv + 0.05;
+  if (_cv >= 50) return "cyan";
+  if (_cv >= 45) return "rgb(255, 217, 0)";
+  if (_cv >= 35) return "orange";
+  if (_cv >= 25) return "rgb(194, 102, 255)";
+  if (_cv >= 15) return "rgb(102, 163, 255)";
   return "gray";
 };
 
 export const getArtifactCvClassName = (cv: number) => {
-  if (cv >= 50) return "unicorn-artifact";
-  if (cv >= 45) return "upper-diamond-artifact";
-  if (cv >= 35) return "diamond-artifact";
-  if (cv >= 25) return "good-artifact";
-  if (cv >= 15) return "ok-artifact";
+  if (cv.toFixed(1) === "54.4") return "wtf-artifact";
+  const _cv = cv + 0.05;
+  if (_cv >= 50) return "unicorn-artifact";
+  if (_cv >= 45) return "upper-diamond-artifact";
+  if (_cv >= 35) return "diamond-artifact";
+  if (_cv >= 25) return "good-artifact";
+  if (_cv >= 15) return "ok-artifact";
   return "poo-artifact";
+};
+
+export const getRainbowTextStyle = () => {
+  const style = {} as React.CSSProperties;
+  // style.background =
+  //   "linear-gradient(124deg, orange, red)";
+
+  // style.WebkitBackgroundClip = "text";
+  // style.WebkitTextFillColor = "transparent";
+  // style.WebkitTextFillColor = "rgba(255, 155, 155, 0.4)";
+  // style.backgroundSize = "1800% 1800%";
+  // style.animation = "gradientMove 3s linear infinite";
+  // style.animation = "gradientMove 3s ease infinite";
+  style.fontWeight = 600;
+  style.letterSpacing = "1px";
+  style.filter = "drop-shadow(0 0 2px black)";
+  style.color = "red";
+  style.animation = "filterGlowRed 2s ease infinite";
+  return style;
 };
 
 export const getInGameSubstatValue = (value: number, key: string) => {
@@ -239,4 +264,26 @@ export const abortSignalCatcher = async (cb: any, onError?: any) => {
     }
     resolve(true);
   });
+};
+
+export const toShortThousands = (n: number) => {
+  if (n > 9999) {
+    const thousands = n / 1000;
+
+    // if above 100k then dont show decimals ( e.g. 107k )
+    if (thousands > 99) {
+      return `${Math.round(thousands)}k`;
+    }
+
+    // if below 100k then show one decimal ( e.g. 56.6k )
+    const rounded = thousands.toFixed(1);
+
+    // if number is even then dont show unnecesary .0 decimal
+    const adjusted = rounded.endsWith(".0")
+      ? rounded.replace(".0", "")
+      : rounded;
+
+    return `${adjusted}k`;
+  }
+  return n;
 };

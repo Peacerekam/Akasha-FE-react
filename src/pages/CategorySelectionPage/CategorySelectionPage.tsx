@@ -67,86 +67,93 @@ export const CategorySelectionPage: React.FC = () => {
           }}
         >
           {categoriesTransformed.length > 0 ? (
-            categoriesTransformed?.map((category, index) => {
-              const calcNames = Object.keys(category.calcs);
-              if (calcNames.length === 0) return <></>;
-              return (
-                <div
-                  key={`${category.characterName}-${index}`}
-                  className="block-highlight"
-                  style={{
-                    width: 250,
-                    // flexGrow: 1,
-                    padding: 20,
-                    textAlign: "center",
-                    minWidth: 240,
-                  }}
-                >
+            categoriesTransformed
+              ?.filter((category) => {
+                const calcNames = Object.keys(category.calcs);
+                return calcNames.length > 0;
+              })
+              .map((category, index) => {
+                const calcNames = Object.keys(category.calcs);
+                if (calcNames.length === 0) return <></>;
+                return (
                   <div
+                    key={`${category.characterName}-${index}`}
+                    className="block-highlight"
                     style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      marginBottom: 30,
+                      width: 250,
+                      // flexGrow: 1,
+                      padding: 20,
+                      textAlign: "center",
+                      minWidth: 240,
                     }}
                   >
-                    <img
-                      style={{ width: 90, height: 90 }}
-                      src={category.icon}
-                    />
-                    <span>{category.characterName}</span>
-                  </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginBottom: 30,
+                      }}
+                    >
+                      <img
+                        style={{ width: 90, height: 90 }}
+                        src={category.icon}
+                      />
+                      <span>{category.characterName}</span>
+                    </div>
 
-                  <div style={{ marginTop: 10, fontWeight: 400, fontSize: 16 }}>
-                    {calcNames.map((calcName, i) => {
-                      const calcs = category.calcs[calcName];
-                      return (
-                        <div key={`${calcName}-${i}`}>
-                          <div
-                            style={{
-                              marginTop: 30,
-                              marginBottom: 10,
-                              fontWeight: 600,
-                            }}
-                          >
-                            {calcName}
+                    <div
+                      style={{ marginTop: 10, fontWeight: 400, fontSize: 16 }}
+                    >
+                      {calcNames.map((calcName, i) => {
+                        const calcs = category.calcs[calcName];
+                        return (
+                          <div key={`${calcName}-${i}`}>
+                            <div
+                              style={{
+                                marginTop: 30,
+                                marginBottom: 10,
+                                fontWeight: 600,
+                              }}
+                            >
+                              {calcName}
+                            </div>
+                            <div>
+                              {calcs.map((calc, index) => {
+                                const leaderboardPath = `leaderboards/${
+                                  calc.calculationId
+                                }/${calc.defaultFilter || ""}`;
+                                return (
+                                  <span key={`${calc.calculationId}-${index}`}>
+                                    <a
+                                      title={calc.weapon?.name}
+                                      onClick={(event) => {
+                                        event.preventDefault();
+                                        navigate(`/${leaderboardPath}`);
+                                      }}
+                                      href={`${BASENAME}/${leaderboardPath}`}
+                                    >
+                                      {calc.weapon && (
+                                        <span>
+                                          <img
+                                            style={{ width: 45 }}
+                                            src={calc.weapon.icon}
+                                          />
+                                          {/* <span>{calc.weapon.name}</span> */}
+                                        </span>
+                                      )}
+                                    </a>
+                                  </span>
+                                );
+                              })}
+                            </div>
                           </div>
-                          <div>
-                            {calcs.map((calc, index) => {
-                              const leaderboardPath = `leaderboards/${
-                                calc.calculationId
-                              }/${calc.defaultFilter || ""}`;
-                              return (
-                                <span key={`${calc.calculationId}-${index}`}>
-                                  <a
-                                    title={calc.weapon?.name}
-                                    onClick={(event) => {
-                                      event.preventDefault();
-                                      navigate(`/${leaderboardPath}`);
-                                    }}
-                                    href={`${BASENAME}/${leaderboardPath}`}
-                                  >
-                                    {calc.weapon && (
-                                      <span>
-                                        <img
-                                          style={{ width: 45 }}
-                                          src={calc.weapon.icon}
-                                        />
-                                        {/* <span>{calc.weapon.name}</span> */}
-                                      </span>
-                                    )}
-                                  </a>
-                                </span>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
-              );
-            })
+                );
+              })
           ) : (
             <div
               style={{

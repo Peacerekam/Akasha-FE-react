@@ -4,7 +4,11 @@
     <meta charset="utf-8" />
     <!-- @TODO: fav icon stuff -->
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon-crop.svg" type="image/svg+xml">
+    <link
+      rel="icon"
+      href="%PUBLIC_URL%/favicon-crop.svg"
+      type="image/svg+xml"
+    />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 
@@ -21,18 +25,4 @@
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
   </body>
-  <script>
-    const domainRedirect = () => {
-      const _from = "peacerekam.github.io";
-      const _to = "mimee.ovh";
-      const currentHref = window.location.href;
-      if (currentHref.includes(_from)) {
-        const newHref = currentHref
-          .replace(_from, _to) // change domain
-          .replace("/#/", "/"); // HashRouter to BrowserRouter
-        window.location.href = newHref;
-      }
-    };
-    domainRedirect();
-  </script>
 </html>
