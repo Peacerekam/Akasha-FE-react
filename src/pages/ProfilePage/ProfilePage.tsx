@@ -38,6 +38,8 @@ import {
   CalculationResultWidget,
   ConfirmTooltip,
   GenshinUserCard,
+  AdsComponent,
+  PatreonBorderInside,
 } from "../../components";
 import { TableColumn } from "../../types/TableColumn";
 import { ProfileSettingsModal } from "./ProfileSettingsModal";
@@ -50,11 +52,12 @@ import { HoverElementContext } from "../../context/HoverElement/HoverElementCont
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
 import "./style.scss";
 import { getSessionIdFromCookie } from "../../utils/helpers";
+import { showAds } from "../../App";
 
 export const ProfilePage: React.FC = () => {
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [enableRefreshBtn, setEnableRefreshBtn] = useState(false);
-  const [enableBindhBtn, setEnableBindBtn] = useState(false);
+  const [enableBindBtn, setEnableBindBtn] = useState(false);
   const [bindSecret, setBindSecret] = useState("");
   const [fetchCount, setFetchCount] = useState(0);
   const [bindTime, setBindTime] = useState<number>();
@@ -189,9 +192,14 @@ export const ProfilePage: React.FC = () => {
             ["Energy Recharge", "Crit RATE", "Crit DMG"].includes(
               row.mainStatKey
             );
+
+          const mainStatValue = isPercenrage
+            ? Math.round(row.mainStatValue * 10) / 10
+            : Math.round(row.mainStatValue);
+
           return (
             <div className="nowrap">
-              {row.mainStatValue}
+              {mainStatValue}
               {isPercenrage ? "%" : ""} {key}
             </div>
           );
@@ -249,9 +257,7 @@ export const ProfilePage: React.FC = () => {
             style.color = textColor;
           }
 
-          return (
-            <span style={style}>{row.critValue.toFixed(1)}</span>
-          );
+          return <span style={style}>{row.critValue.toFixed(1)}</span>;
         },
       },
     ],
@@ -311,6 +317,7 @@ export const ProfilePage: React.FC = () => {
         cell: (row) => {
           const refinement =
             (row.weapon.weaponInfo.refinementLevel.value ?? 0) + 1;
+
           return (
             <WeaponMiniDisplay icon={row.weapon.icon} refinement={refinement} />
           );
@@ -319,7 +326,7 @@ export const ProfilePage: React.FC = () => {
       {
         name: "Sets",
         sortField: "artifactSetsFlat",
-        sortable: true,
+        sortable: false,
         width: "80px",
         cell: (row) => {
           return <DisplaySets artifactSets={row.artifactSets} />;
@@ -328,7 +335,11 @@ export const ProfilePage: React.FC = () => {
       {
         name: "Crit Ratio",
         sortable: true,
-        sortFields: ["critValue", "stats.critRate", "stats.critDamage"],
+        sortFields: [
+          "critValue",
+          "stats.critRate.value",
+          "stats.critDamage.value",
+        ],
         cell: (row) => {
           return <CritRatio stats={row.stats} overrideCV={row.critValue} />;
         },
@@ -404,7 +415,7 @@ export const ProfilePage: React.FC = () => {
   );
 
   // @TODO: sum them on server side so we can sort by that?
-  const sumOfAchievementPoints = responseData.account?.achievements?.reduce(
+  const sumOfAchievementPoints = responseData?.account?.achievements?.reduce(
     (accumulator: any, currentValue: any) =>
       accumulator + currentValue.score * currentValue.count,
     0
@@ -475,7 +486,7 @@ export const ProfilePage: React.FC = () => {
     const bindBtnClassName = [
       "floating-button",
       defaultBtnClassName,
-      enableBindhBtn ? "" : "disable-btn",
+      enableBindBtn ? "" : "disable-btn",
     ]
       .join(" ")
       .trim();
@@ -510,7 +521,7 @@ export const ProfilePage: React.FC = () => {
             title="Refresh builds"
             className={refreshBtnClassName}
             onClick={handleRefreshData}
-            key={`refresh-${uid}`}
+            key={`refresh-${uid}-${!!enableRefreshBtn}`}
           >
             <FontAwesomeIcon icon={faRotateRight} size="1x" />
           </div>
@@ -523,7 +534,7 @@ export const ProfilePage: React.FC = () => {
                 text="Do you want to bind this account?"
                 onConfirm={() => bindAccount(uid)}
                 className={
-                  !enableBindhBtn || DISABLE_REFRESH_FLOATING_BUTTONS
+                  !enableBindBtn || DISABLE_REFRESH_FLOATING_BUTTONS
                     ? "pointer-events-none"
                     : ""
                 }
@@ -531,7 +542,7 @@ export const ProfilePage: React.FC = () => {
                 <div
                   title="Bind account"
                   className={bindBtnClassName}
-                  key={`bind-${uid}`}
+                  key={`bind-${uid}-${defaultBtnClassName}`}
                 >
                   <FontAwesomeIcon icon={faKey} size="1x" />
                 </div>
@@ -553,7 +564,7 @@ export const ProfilePage: React.FC = () => {
     );
   }, [
     enableRefreshBtn,
-    enableBindhBtn,
+    enableBindBtn,
     refreshTime,
     isAuthenticated,
     isAccountOwner,
@@ -589,7 +600,7 @@ export const ProfilePage: React.FC = () => {
         </div>
       </div>
     );
-  }, [bindSecret, enableBindhBtn, bindTime]);
+  }, [bindSecret, enableBindBtn, bindTime]);
 
   if (responseData.error) {
     return (
@@ -608,6 +619,13 @@ export const ProfilePage: React.FC = () => {
   }
 
   const triggerRefetch = () => setFetchCount((prev) => prev + 1);
+
+  const contentBlockClassNames = [
+    "content-block w-100",
+    responseData.account?.patreon?.active ? "patreon-profile" : "",
+  ]
+    .join(" ")
+    .trim();
 
   return (
     <div style={cssVariables}>
@@ -662,6 +680,9 @@ export const ProfilePage: React.FC = () => {
           </div>
         )}
       </div>
+      {/* <div className="flex">
+        {showAds && <AdsComponent dataAdSlot="6204085735" />}
+      </div> */}
       {displayFloatingButtons}
       <div>
         <div>
@@ -674,12 +695,21 @@ export const ProfilePage: React.FC = () => {
         </div>
       </div>
       <div className="flex">
-        <div className="content-block w-100 " key={fetchCount}>
+        <div className={contentBlockClassNames} key={fetchCount}>
+          {/* <PatreonBorderInside
+            classNames={[responseData.account?.patreon?.active ? "" : "hide"]}
+            style={{
+              transform: "translate(-10px, -10px)",
+              width: "calc(100% - 20px)",
+              height: "calc(100% - 20px)",
+            }}
+            animationSpeedMultiplier={2}
+          /> */}
           <StylizedContentBlock
             variant="gradient"
             revealCondition={responseData.account}
           />
-          <div className="flex gap-10">
+          <div className="flex gap-10 ">
             {displayGenshinCard}
             <div className="profile-highlights">
               {responseData.account && <CalculationResultWidget uid={uid} />}
@@ -700,7 +730,21 @@ export const ProfilePage: React.FC = () => {
         </div>
       </div>
       <div className="flex">
-        <div className="content-block w-100" key={fetchCount}>
+        {showAds && !responseData.account?.patreon?.active && (
+          <AdsComponent dataAdSlot="6204085735" />
+        )}
+      </div>
+      <div className="flex">
+        <div className={contentBlockClassNames} key={fetchCount}>
+          {/* <PatreonBorderInside
+            classNames={[responseData.account?.patreon?.active ? "" : "hide"]}
+            style={{
+              transform: "translate(-10px, -10px)",
+              width: "calc(100% - 20px)",
+              height: "calc(100% - 20px)",
+            }}
+            animationSpeedMultiplier={2}
+          /> */}
           <StylizedContentBlock revealCondition={responseData.account} />
           {responseData.account && (
             <CustomTable
@@ -714,6 +758,12 @@ export const ProfilePage: React.FC = () => {
             />
           )}
         </div>
+      </div>
+
+      <div className="flex">
+        {showAds && !responseData.account?.patreon?.active && (
+          <AdsComponent dataAdSlot="6204085735" />
+        )}
       </div>
     </div>
   );

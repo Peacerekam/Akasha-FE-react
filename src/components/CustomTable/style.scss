@@ -239,47 +239,9 @@ $substats: "flathp", "hp_", "flatatk", "atk_", "flatdef", "def_", "critrate",
       border: 1px solid orange;
       color: white;
     }
-  }
-}
-
-.ar-badge {
-  display: inline-block;
-  white-space: nowrap;
-  // margin: 0 10px;
-  margin-right: 10px;
-  padding: 1px 4px;
-  border-radius: 5px;
-  border: 1px solid transparent;
-  &.ar-0-badge,
-  &.ar-5-badge,
-  &.ar-10-badge,
-  &.ar-15-badge,
-  &.ar-20-badge,
-  &.ar-25-badge,
-  &.ar-30-badge,
-  &.ar-35-badge {
-    background-color: rgb(128, 128, 128);
-    border-color: rgb(128, 128, 128);
-  }
-  &.ar-40-badge {
-    background-color: rgb(75, 121, 71);
-    border-color: rgb(75, 121, 71);
-  }
-  &.ar-45-badge {
-    background-color: rgb(31, 131, 31);
-    border-color: rgb(31, 131, 31);
-  }
-  &.ar-50-badge {
-    background-color: rgb(0, 122, 122);
-    border-color: rgb(0, 122, 122);
-  }
-  &.ar-55-badge {
-    background-color: rgb(128, 45, 136);
-    border-color: rgb(128, 45, 136);
-  }
-  &.ar-60-badge {
-    background-color: rgb(168, 120, 31);
-    border-color: rgb(168, 120, 31);
+    .region-badge {
+      border: 1px solid orange;
+    }
   }
 }
 

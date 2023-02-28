@@ -58,6 +58,7 @@ const geoRvList = {
 
 const electroRvList = {
   Razor: [CRate, CDMG, ATK_],
+  Lisa: [CRate, CDMG, ATK_, EM],
   Fischl: [ATK_, CRate, CDMG],
   Keqing: [CRate, CDMG, ATK_],
   Beidou: [ER, ATK_, CRate, CDMG],

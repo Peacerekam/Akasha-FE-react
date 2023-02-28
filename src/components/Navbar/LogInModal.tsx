@@ -10,10 +10,11 @@ import {
 import { faDiscord, faPatreon } from "@fortawesome/free-brands-svg-icons";
 import { useContext } from "react";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
-import { ARBadge } from "../../pages";
 import { ConfirmTooltip } from "../ConfirmTooltip";
 import { optsParamsSessionID } from "../../utils/helpers";
 import { BASENAME } from "../../App";
+import { ARBadge } from "../ARBadge";
+import { RegionBadge } from "../RegionBadge";
 
 type LogInModalProps = {
   isOpen: boolean;
@@ -134,6 +135,7 @@ export const LogInModal: React.FC<LogInModalProps> = ({
                               src={profilePictureLink}
                             />
                             <div style={{ flex: 1 }}>{nickname}</div>
+                            <RegionBadge region={acc?.playerInfo?.region} />
                             <ARBadge adventureRank={level} />
                           </a>
                         );

@@ -51,7 +51,7 @@ export const CalculationResultWidget: React.FC<
 
       // if no valid rankings at all then retry in 25s
       const getTime = new Date().getTime();
-      const thenTTL = getTime + 25000;
+      const thenTTL = getTime + 59000;
       setRetryTimer(thenTTL);
     };
 
@@ -77,15 +77,25 @@ export const CalculationResultWidget: React.FC<
           const { calculationId, variant } = _calc;
           const calcKey = `${calculationId}${variant?.name || ""}`;
           if (!build.calculations[calcKey]?.ranking) continue;
+          let priority = 1;
+
+          if (build.weapon.name === build.calculations[calcKey]?.weapon?.name) {
+            priority++;
+          }
+
+          // @TODO: another priority++ if weapon main stat matches (not on backend yet)
+
           calcArray.push({
             ...(build.calculations[calcKey] as {}),
             id: calculationId,
             characterName: build.name,
             characterIcon: build.icon,
+            priority,
           });
         }
       }
-      const sorted = calcArray.sort((a: any, b: any) =>
+
+      const sortFn = (a: any, b: any) =>
         // (a.ranking > b.ranking ? 1 : -1)
         {
           const leaveOnlyNumbersRegex = /\D+/g;
@@ -100,17 +110,29 @@ export const CalculationResultWidget: React.FC<
 
           return _rankingA / a.outOf > _rankingB / b.outOf ? 1 : -1;
           // return _rankingA > _rankingB ? 1 : -1;
-        }
-      );
+        };
+
+      const sorted = calcArray.sort(sortFn);
 
       // group by character name instead
       // on hover show other results
-      const finalArr = [];
-      const tmpIncludeCheck: any[] = [];
-      for (const calc of sorted) {
-        if (tmpIncludeCheck.includes(calc.characterName)) continue;
-        tmpIncludeCheck.push(calc.characterName);
-        finalArr.push(calc);
+      const finalArr: any[] = [];
+      const tmpIncludeCheck: { [key: string]: number } = {};
+
+      for (let i = 0; i < sorted.length; i++) {
+        const calc = sorted[i];
+        const index = finalArr.findIndex(
+          (c) => c.characterName === calc.characterName
+        );
+
+        if (index > -1) {
+          if (calc.priority <= tmpIncludeCheck[calc.characterName]) continue;
+          finalArr[index] = calc;
+        } else {
+          finalArr.push(calc);
+        }
+
+        tmpIncludeCheck[calc.characterName] = calc.priority;
       }
 
       return finalArr;
@@ -121,13 +143,17 @@ export const CalculationResultWidget: React.FC<
   const tilesList = useMemo(
     () =>
       resultsArray.map((calc: any, index: number) => {
-        const { name, ranking, outOf, weapon, short, id, variant } = calc;
+        const { name, ranking, outOf, weapon, short, id, variant, priority } =
+          calc;
         const shortName = variant?.displayName || short || "---";
         const leaveOnlyNumbersRegex = /\D+/g;
         const _ranking = +(ranking + "")?.replace(leaveOnlyNumbersRegex, "");
-
+        
         return (
-          <div key={`${name}-${weapon.name}`}>
+          <div
+            key={`${name}-${weapon.name}`}
+            className={priority === 1 ? 'mismatching-weapon' : 'matching-weapon'}
+          >
             <a
               title={`${calc.name} - ${weapon.name} R${
                 weapon?.refinement || 1
@@ -149,14 +175,19 @@ export const CalculationResultWidget: React.FC<
                 <WeaponMiniDisplay
                   icon={weapon.icon}
                   refinement={weapon?.refinement || 1}
+                  // style={{ boxShadow: `0 0 0px 2px ${weaponColor}20` }}
                 />
               </div>
               <div>
-                {ranking ? `top ${Math.ceil((_ranking / outOf) * 100)}%` : ""}
+                {ranking
+                  ? `top ${Math.min(100, Math.ceil((_ranking / outOf) * 100))}%`
+                  : ""}
               </div>
               <span>
                 {ranking ?? "---"}
-                <span className="opacity-5">/{toShortThousands(outOf) ?? "---"}</span>
+                <span className="opacity-5">
+                  /{toShortThousands(outOf) ?? "---"}
+                </span>
               </span>
             </a>
           </div>

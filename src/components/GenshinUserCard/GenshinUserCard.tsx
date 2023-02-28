@@ -3,12 +3,15 @@ import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Spinner } from "../Spinner";
 import "./style.scss";
+import { ARBadge } from "../ARBadge";
+import { RegionBadge } from "../RegionBadge";
 
 export type AccountDataForUserCard = {
   uid: string;
   profilePictureLink?: string;
   nameCardLink?: string;
   playerInfo: {
+    region?: string;
     level?: number;
     nickname?: string;
     signature?: string;
@@ -49,11 +52,6 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
     );
   }
 
-  const arBadgeClassNames = [
-    "float-top-right ar-badge",
-    `ar-${Math.floor((playerInfo?.level ?? 60) / 5) * 5}-badge`,
-  ].join(" ");
-
   const style = {
     backgroundImage: `url(${accountData.account.nameCardLink})`,
   } as React.CSSProperties;
@@ -88,7 +86,10 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
           <div className="card-big-text">{playerInfo.nickname}</div>
           <div className="card-signature">{playerInfo.signature || ""}</div>
         </div>
-        <div className={arBadgeClassNames}>AR{playerInfo.level ?? " ?"}</div>
+        <div className="float-top-right">
+          <RegionBadge region={playerInfo.region} />
+          <ARBadge adventureRank={playerInfo.level} />
+        </div>
       </div>
     </>
   );

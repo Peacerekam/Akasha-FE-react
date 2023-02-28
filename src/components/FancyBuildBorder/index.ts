@@ -1,1 +1,2 @@
-export * from './FancyBuildBorder'
+export * from "./FancyBuildBorder";
+export * from "./PatreonBorderInside";

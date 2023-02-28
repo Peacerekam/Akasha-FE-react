@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { StylizedContentBlock } from "../../components/StylizedContentBlock";
 import {
   AccountDataForUserCard,
+  AdsComponent,
   FetchParams,
   GenshinUserCard,
   Pagination,
@@ -12,7 +13,7 @@ import {
 } from "../../components";
 import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
 import "./style.scss";
-import { BASENAME } from "../../App";
+import { BASENAME, showAds } from "../../App";
 import { FETCH_COLLECTION_SIZE_URL } from "../../utils/helpers";
 
 export const UIDSearchPage: React.FC = () => {
@@ -41,7 +42,7 @@ export const UIDSearchPage: React.FC = () => {
       setIsFetching(true);
 
       // const onlyNumbersUID = providedUID.replace(/[^0-9]+/, "");
-      const isValidUID = true // onlyNumbersUID.length === 9;
+      const isValidUID = true; // onlyNumbersUID.length === 9;
 
       // const typedResult = {
       //   uid: onlyNumbersUID,
@@ -91,7 +92,6 @@ export const UIDSearchPage: React.FC = () => {
     debouncedFetchAccounts(searchUID);
   }, [searchUID, params.page]);
 
-  
   const getSetTotalRows = async (totalRowsHash: string) => {
     const totalRowsOpts = {
       params: {
@@ -110,20 +110,23 @@ export const UIDSearchPage: React.FC = () => {
     if (totalRowsHash) {
       getSetTotalRows(totalRowsHash);
     } else {
-      setTotalRowsCount(0)
+      setTotalRowsCount(0);
     }
   }, [totalRowsHash]);
-
 
   return (
     <div>
       <div className="flex">
+        {showAds && <AdsComponent dataAdSlot="6204085735" />}
         <div className="content-block w-100 ">
           <StylizedContentBlock overrideImage={DomainBackground} />
           <div className="relative">
             <div className="search-input-wrapper" style={{ margin: "50px 0" }}>
               <b>Enter Genshin UID or Enka Network profile name</b>
-              <i>(nickname search works only for people who already imported their accounts)</i>
+              <i>
+                (nickname search works only for people who already imported
+                their accounts)
+              </i>
               {/* / enka profile name */}
               <div className="search-input relative">
                 <input
@@ -169,11 +172,28 @@ export const UIDSearchPage: React.FC = () => {
                     totalRows={totalRowsCount}
                     setParams={setParams}
                   />
+                  
+                  <Pagination
+                    // isLoading={isFetchingPagination}
+                    pageSize={params.size}
+                    pageNumber={params.page}
+                    sort="_id"
+                    order={params.order}
+                    totalRows={totalRowsCount}
+                    setParams={setParams}
+                    rows={results}
+                    // unknownPage={unknownPage}
+                    // setHideIndexColumn={setHideIndexColumn}
+                    // setUnknownPage={setUnknownPage}
+                    // calculationShortName={columns[columns.length - 1].name}
+                    // alwaysShowIndexColumn={alwaysShowIndexColumn}
+                  />
                 </div>
               )}
             </div>
           </div>
         </div>
+        {showAds && results?.length > 0 && <AdsComponent dataAdSlot="6204085735" />}
       </div>
     </div>
   );

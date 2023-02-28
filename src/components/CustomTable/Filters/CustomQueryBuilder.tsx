@@ -11,63 +11,81 @@ type CustomQueryBuilderProps = {
   pills: FilterOption[];
 };
 
+type CustomOptionGroup = {
+  label: string;
+  options: {
+    label: JSX.Element;
+    rawLabel: string;
+    value: string | number;
+    fieldKey: string;
+  }[];
+};
+
 export const CustomQueryBuilder = ({
   optionGroups,
   handleReplaceFilter,
   pills,
 }: CustomQueryBuilderProps) => {
   const [textInput, setTextInput] = useState("");
+
   const fieldKeyOptions = useMemo(
     () =>
-      optionGroups.map((o, i) => {
-        return {
-          // index: i,
-          label: o.fieldName,
-          options: o.options.map((opt) => {
-            const iconName = opt.name?.split(" - ")[0]
-            const isStatIcon = isIcon(iconName);
+      optionGroups
+        .map((o, i) => {
+          return {
+            // index: i,
+            label: o.fieldName,
+            options: o.options.map((opt) => {
+              const iconName = opt.name?.split(" - ")[0];
+              const isStatIcon = isIcon(iconName);
 
-            const prefix =
-              {
-                "artifactSets.$1": "1p ",
-                "artifactSets.$2": "2p ",
-                "artifactSets.$4": "4p ",
-              }[o.fieldKey] ?? "";
+              const prefix =
+                {
+                  "artifactSets.$1": "1p ",
+                  "artifactSets.$2": "2p ",
+                  "artifactSets.$4": "4p ",
+                }[o.fieldKey] ?? "";
 
-            return {
-              label: (
-                <span className="react-select-custom-option">
-                  {opt.icon || isStatIcon ? (
-                    <>
-                      {isStatIcon ? (
-                        <StatIcon name={iconName ?? ""} />
-                      ) : (
-                        <img src={opt.icon} />
-                      )}
+              return {
+                label: (
+                  <span className="react-select-custom-option">
+                    {opt.icon || isStatIcon ? (
+                      <>
+                        {isStatIcon ? (
+                          <StatIcon name={iconName ?? ""} />
+                        ) : (
+                          <img src={opt.icon} />
+                        )}
+                        <Highlighter
+                          highlightClassName="text-highlight-class"
+                          searchWords={[textInput]}
+                          autoEscape={true}
+                          textToHighlight={`${prefix}${opt.name}`}
+                        />
+                      </>
+                    ) : (
                       <Highlighter
                         highlightClassName="text-highlight-class"
                         searchWords={[textInput]}
                         autoEscape={true}
                         textToHighlight={`${prefix}${opt.name}`}
                       />
-                    </>
-                  ) : (
-                    <Highlighter
-                      highlightClassName="text-highlight-class"
-                      searchWords={[textInput]}
-                      autoEscape={true}
-                      textToHighlight={`${prefix}${opt.name}`}
-                    />
-                  )}
-                </span>
-              ),
-              rawLabel: `${prefix}${opt.name}`,
-              value: opt.value,
-              fieldKey: o.fieldKey,
-            };
-          }),
-        };
-      }),
+                    )}
+                  </span>
+                ),
+                rawLabel: `${prefix}${opt.name}`,
+                value: opt.value,
+                fieldKey: o.fieldKey,
+              };
+            }),
+          };
+        })
+        .reduce((acc, val) => {
+          const index = acc.findIndex((x) => x.label === val.label);
+          if (index === -1) return [...acc, val];
+          acc[index].options.push(...val.options);
+          return acc;
+        }, [] as CustomOptionGroup[]),
     [optionGroups, textInput]
   );
 

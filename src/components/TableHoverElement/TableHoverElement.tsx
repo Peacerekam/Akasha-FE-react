@@ -8,17 +8,18 @@ import { ArtifactDetailsResponse } from "../../types/ArtifactDetailsResponse";
 
 import "./style.scss";
 import { FancyBuildBorder } from "../FancyBuildBorder";
+import { StatListSide } from "../StatListSide";
 
 type TableHoverElementProps = {
   row?: any;
   hide?: boolean;
-  currentCategory?: string;
+  strikethrough?: boolean;
 };
 
 export const TableHoverElement: React.FC<TableHoverElementProps> = ({
   row,
   hide,
-  currentCategory,
+  strikethrough = false,
 }) => {
   const [hiddenTimer, setHiddenTimer] = useState<any>();
   const [hidden, setHidden] = useState<boolean>(false);
@@ -100,11 +101,13 @@ export const TableHoverElement: React.FC<TableHoverElementProps> = ({
       >
         <StatList
           row={rowData}
-          currentCategory={currentCategory}
+          // currentCategory={currentCategory}
+          strikethrough={strikethrough}
           showCharacter
           showWeapon
         />
       </FancyBuildBorder>
+      {true && <StatListSide row={rowData} strikethrough={strikethrough} />}
     </FollowCursor>
   );
 };

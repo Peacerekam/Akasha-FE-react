@@ -1,0 +1,77 @@
+.genshin-user-card,
+.modal-content {
+  .region-badge {
+    margin-right: 0;
+    &:hover {
+      border-color: transparent;
+    }
+  }
+}
+.genshin-user-card {
+  .region-badge {
+    float: left;
+    margin-right: 10px;
+    width: auto;
+  }
+}
+.region-badge {
+  display: inline-block;
+  white-space: nowrap;
+  // margin: 0 10px;
+  margin-right: 10px;
+  padding: 1px 4px;
+  border-radius: 5px;
+  border: 1px solid transparent;
+
+  // { name: "America (NA)", value: "NA" },
+  // { name: "Europe (EU)", value: "EU" },
+  // { name: "Asia (Asia, Australia)", value: "ASIA" },
+  // { name: "TW, HK, MO (SAR)", value: "TW" },
+  // { name: "China (CN, Celestia)", value: "CN" },
+  // { name: "Bilibili China (CN, Irminsul)", value: "B" },
+
+  width: 35px;
+  text-align: center;
+  font-family: "GenshinFont";
+
+  &.na-badge {
+    background-color: orange;
+    border-color: orange;
+    color: rgb(37, 37, 37);
+  }
+  &.eu-badge {
+    background-color: rgb(80, 98, 255);
+    border-color: rgb(80, 98, 255);
+    color: white;
+  }
+  &.asia-badge {
+    background-color: rgb(255, 255, 127);
+    border-color: rgb(255, 255, 127);
+    color: rgb(37, 37, 37);
+  }
+  &.tw-badge {
+    background-color: rgb(37, 37, 37);
+    border-color: rgb(131, 131, 131);
+    &:hover {
+      border-color: rgb(131, 131, 131);
+    }
+    color: white
+  }
+  &.cn-badge {
+    background-color: rgb(255, 58, 58);
+    border-color: rgb(255, 58, 58);
+    color: rgb(37, 37, 37);
+  }
+  &.b-badge {
+    background-color: #ff6799;
+    border-color: #ff6799;
+    color: rgb(37, 37, 37);
+  }
+  &.unknown-badge {
+    background-color: gray;
+    border-color: gray;
+  }
+  &:hover {
+    border-color: orange;
+  }
+}

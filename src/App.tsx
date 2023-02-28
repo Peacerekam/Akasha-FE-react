@@ -1,11 +1,18 @@
 import axios from "axios";
 import React, { useEffect } from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
+import CookieConsent from "react-cookie-consent";
+// import { QueryClient, QueryClientProvider } from "react-query";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { LastProfilesContextProvider } from "./context/LastProfiles/LastProfilesContext";
 import { HoverElementContextProvider } from "./context/HoverElement/HoverElementContext";
 import { SessionDataContextProvider } from "./context/SessionData/SessionDataContext";
-import { Footer, Navbar, NavbarTabs, NotificationBar } from "./components";
+import {
+  Footer,
+  Navbar,
+  NavbarTabs,
+  NotificationBar,
+  PageMessage,
+} from "./components";
 
 import {
   ArtifactsPage,
@@ -28,18 +35,21 @@ const urls = {
   heroku: "https://akasha-backend.herokuapp.com",
 };
 
-const isProduction = false;
+export const showAds = true;
+export const isProduction = false;
+export const BASENAME = "/akasha";
+const MAINTENANCE_MODE = false;
 
 axios.defaults.baseURL = urls[isProduction ? "prod" : "localhost80"];
 axios.defaults.withCredentials = true;
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 30, // 30s
-    },
-  },
-});
+// const queryClient = new QueryClient({
+//   defaultOptions: {
+//     queries: {
+//       staleTime: 1000 * 30, // 30s
+//     },
+//   },
+// });
 
 const domainRedirect = () => {
   const _from = "peacerekam.github.io";
@@ -53,65 +63,92 @@ const domainRedirect = () => {
   }
 };
 
-export const BASENAME = "/akasha";
-
 const App = () => {
   useEffect(() => {
     domainRedirect();
   }, []);
 
-  return (
-    <QueryClientProvider client={queryClient}>
+  if (MAINTENANCE_MODE) {
+    return (
       <LastProfilesContextProvider>
-        <SessionDataContextProvider>
-          <BrowserRouter basename={BASENAME}>
-            <NotificationBar />
-            <Navbar />
-            <NavbarTabs />
-            <div
-              className={`content-wrapper ${
-                isProduction ? "" : "dev-indicator"
-              }`}
-            >
-              <HoverElementContextProvider>
-                <Routes>
-                  {/* @TODO: later use dashboard page instead */}
-                  {/* <Route path="/" element={<DashboardPage />} /> */}
-                  <Route path="/" element={<UIDSearchPage />} />
-                  <Route path="/artifacts" element={<ArtifactsPage />} />
-                  <Route path="/builds" element={<BuildsPage />} />
-                  <Route path="/profile" element={<UIDSearchPage />} />
-                  <Route path="/profile/:uid" element={<ProfilePage />} />
-
-                  <Route
-                    path="/leaderboards"
-                    element={<CategorySelectionPage />}
-                  />
-
-                  <Route
-                    path="/leaderboards/:calculationId"
-                    element={<LeaderboardsPage />}
-                  />
-
-                  <Route
-                    path="/leaderboards/:calculationId/:variant"
-                    element={<LeaderboardsPage />}
-                  />
-
-                  <Route
-                    path="*"
-                    element={
-                      "404. Looks like there are things that even Akasha does not know about"
-                    }
-                  />
-                </Routes>
-              </HoverElementContextProvider>
-              <Footer />
-            </div>
-          </BrowserRouter>
-        </SessionDataContextProvider>
+        <BrowserRouter basename={BASENAME}>
+          {/* <NotificationBar /> */}
+          <Navbar />
+          <NavbarTabs />
+          <div
+            className={`content-wrapper ${isProduction ? "" : "dev-indicator"}`}
+          >
+            <HoverElementContextProvider>
+              <Routes>
+                <Route
+                  path="*"
+                  element={
+                    <PageMessage message="Akasha is under maintenance right now.\nThis might take few hours." />
+                  }
+                />
+              </Routes>
+            </HoverElementContextProvider>
+            <Footer />
+          </div>
+        </BrowserRouter>
       </LastProfilesContextProvider>
-    </QueryClientProvider>
+    );
+  }
+
+  return (
+    // <QueryClientProvider client={queryClient}>
+    <LastProfilesContextProvider>
+      <CookieConsent>
+        This website uses cookies to enhance the user experience.
+      </CookieConsent>
+      <SessionDataContextProvider>
+        <BrowserRouter basename={BASENAME}>
+          <NotificationBar />
+          <Navbar />
+          <NavbarTabs />
+          <div
+            className={`content-wrapper ${isProduction ? "" : "dev-indicator"}`}
+          >
+            <HoverElementContextProvider>
+              <Routes>
+                {/* @TODO: later use dashboard page instead */}
+                {/* <Route path="/" element={<DashboardPage />} /> */}
+                <Route path="/" element={<UIDSearchPage />} />
+                <Route path="/artifacts" element={<ArtifactsPage />} />
+                <Route path="/builds" element={<BuildsPage />} />
+                <Route path="/profile" element={<UIDSearchPage />} />
+                <Route path="/profile/:uid" element={<ProfilePage />} />
+
+                {/* <Route path="/builds/ads" element={<BuildsPage />} />
+                  <Route path="/profile/:uid/ads" element={<ProfilePage />} /> */}
+
+                <Route
+                  path="/leaderboards"
+                  element={<CategorySelectionPage />}
+                />
+
+                <Route
+                  path="/leaderboards/:calculationId"
+                  element={<LeaderboardsPage />}
+                />
+
+                <Route
+                  path="/leaderboards/:calculationId/:variant"
+                  element={<LeaderboardsPage />}
+                />
+
+                <Route
+                  path="*"
+                  element={<PageMessage message="404. Page not found." />}
+                />
+              </Routes>
+            </HoverElementContextProvider>
+            <Footer />
+          </div>
+        </BrowserRouter>
+      </SessionDataContextProvider>
+    </LastProfilesContextProvider>
+    // </QueryClientProvider>
   );
 };
 

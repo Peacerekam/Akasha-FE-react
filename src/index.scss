@@ -30,8 +30,8 @@ body {
   margin: 10px auto 0;
   // padding: 0 10px;
   &.dev-indicator {
-    &::after{
-      content: '';
+    &::after {
+      content: "";
       // background-color: red;
       pointer-events: none;
       position: fixed;
@@ -644,6 +644,13 @@ body {
   }
 }
 
+.CookieConsent {
+  background-color: #395b64 !important;
+  #rcc-confirm-button {
+    background-color: orange !important;
+  }
+}
+
 @keyframes gradientMove {
   0% {
     background-position: 0% 82%;
@@ -659,14 +666,14 @@ body {
 @keyframes filterGlowRed {
   0% {
     opacity: 0.8;
-    filter: drop-shadow(0 0 5px transparent)
+    filter: drop-shadow(0 0 5px transparent);
   }
   50% {
     opacity: 1;
-    filter: drop-shadow(0 0 5px red)
+    filter: drop-shadow(0 0 5px red);
   }
   100% {
     opacity: 0.8;
-    filter: drop-shadow(0 0 5px transparent)
+    filter: drop-shadow(0 0 5px transparent);
   }
 }

@@ -10,9 +10,11 @@ import {
   ReplaceRowDataOnHover,
   StylizedContentBlock,
   HelpBox,
+  AdsComponent,
+  ARBadge,
+  RegionBadge,
 } from "../../components";
 import { TableColumn } from "../../types/TableColumn";
-import { ARBadge } from "../LeaderboardsPage";
 
 import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
 import {
@@ -20,7 +22,7 @@ import {
   FETCH_CHARACTER_FILTERS_URL,
 } from "../../utils/helpers";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
-import { BASENAME } from "../../App";
+import { BASENAME, showAds } from "../../App";
 
 export type BuildsColumns = {
   _id: string;
@@ -51,7 +53,7 @@ export const BuildsPage: React.FC = () => {
         name: "Owner",
         sortField: "owner.nickname",
         width: "180px",
-        sortable: true,
+        sortable: false,
         cell: (row) => {
           if (!row.owner?.adventureRank) return <></>;
 
@@ -64,7 +66,8 @@ export const BuildsPage: React.FC = () => {
               }}
               href={`${BASENAME}/profile/${row.uid}`}
             >
-              <ARBadge adventureRank={row.owner.adventureRank} />
+              {/* <ARBadge adventureRank={row.owner.adventureRank} /> */}
+              <RegionBadge region={row.owner.region} />
               {row.owner.nickname}
             </a>
           );
@@ -72,7 +75,7 @@ export const BuildsPage: React.FC = () => {
       },
       {
         name: "Name",
-        sortable: true,
+        sortable: false,
         sortField: "name",
         cell: (row) => {
           return (
@@ -89,7 +92,7 @@ export const BuildsPage: React.FC = () => {
       },
       {
         name: "Constellation",
-        sortable: true,
+        sortable: false,
         sortField: "constellation",
         cell: (row) => {
           const constellation = row.constellation ?? 0;
@@ -106,7 +109,7 @@ export const BuildsPage: React.FC = () => {
         name: "Weapon",
         // grow: 0,
         width: "60px",
-        sortable: true,
+        sortable: false,
         sortField: "weapon.name",
         cell: (row) => {
           const refinement =
@@ -118,7 +121,7 @@ export const BuildsPage: React.FC = () => {
       },
       {
         name: "Sets",
-        sortable: true,
+        sortable: false,
         sortField: "artifactSetsFlat",
         cell: (row) => {
           return <DisplaySets artifactSets={row.artifactSets} />;
@@ -127,7 +130,11 @@ export const BuildsPage: React.FC = () => {
       {
         name: "Crit Ratio",
         sortable: true,
-        sortFields: ["critValue", "stats.critRate", "stats.critDamage"],
+        sortFields: [
+          "critValue",
+          "stats.critRate.value",
+          "stats.critDamage.value",
+        ],
         cell: (row) => {
           return <CritRatio stats={row.stats} overrideCV={row.critValue} />;
         },
@@ -210,6 +217,7 @@ export const BuildsPage: React.FC = () => {
 
   return (
     <div className="flex">
+      {showAds && <AdsComponent dataAdSlot="6204085735" />}
       {hoverElement}
       <div className="content-block w-100">
         <StylizedContentBlock overrideImage={DomainBackground} />
@@ -223,6 +231,7 @@ export const BuildsPage: React.FC = () => {
           projectParamsToPath
         />
       </div>
+      {showAds && <AdsComponent dataAdSlot="6204085735" />}
     </div>
   );
 };

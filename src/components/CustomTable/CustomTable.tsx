@@ -40,11 +40,13 @@ type CustomTableProps = {
   fetchURL?: string;
   fetchParams?: any;
   defaultSort?: string;
-  calculationColumn?: string;
+  // calculationColumn?: string;
+  strikethrough?: boolean;
   expandableRows?: boolean;
   hidePagination?: boolean;
   projectParamsToPath?: boolean;
   ignoreEmptyUidsArray?: boolean;
+  alwaysShowIndexColumn?: boolean;
 };
 
 export type FetchParams = {
@@ -54,6 +56,8 @@ export type FetchParams = {
   page: number;
   filter?: string;
   uids?: string;
+  p?: string;
+  fromId?: string;
 };
 
 const getCollectionName = (fetchURL: string = "") => {
@@ -76,11 +80,13 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   columns = [],
   filtersURL,
   defaultSort = null,
-  calculationColumn = "",
+  // calculationColumn = "",
+  strikethrough = false,
   expandableRows = false,
   hidePagination = false,
   projectParamsToPath = false,
   ignoreEmptyUidsArray = false,
+  alwaysShowIndexColumn = false,
 }) => {
   const [isFetchingPagination, setIsFetchingPagination] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -88,6 +94,8 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   const [rows, setRows] = useState<any[]>([]);
   const [totalRowsHash, setTotalRowsHash] = useState<string>("");
   const [totalRowsCount, setTotalRowsCount] = useState<number>(0);
+  const [hideIndexColumn, setHideIndexColumn] = useState(false);
+  const [unknownPage, setUnknownPage] = useState(false);
   const { updateTableHoverElement } = useContext(HoverElementContext);
   const location = useLocation();
 
@@ -98,6 +106,8 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     page: 1,
     filter: "",
     uids: "",
+    p: "",
+    fromId: "",
   };
   const [params, setParams] = useState<FetchParams>(defaultParams);
 
@@ -122,7 +132,9 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
   const appendParamsToURL = () => {
     const tmp: string[] = [];
+    const ignoredParams = ["fromId", "page"];
     for (const key of Object.keys(params)) {
+      if (ignoredParams.includes(key)) continue;
       const value = (params as any)[key];
       if ((defaultParams as any)[key] === value) continue;
       tmp.push(`${key}=${value}`);
@@ -142,6 +154,15 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     const tmp: any = {};
     query.forEach((value, key) => {
       const actualValue = isNaN(+value) ? value : +value;
+      if (key === "p") {
+        const _arr = value.split("|");
+        if (_arr.length !== 2) return;
+        const invalidKey = !!(_arr[0] !== "lt" && _arr[0] !== "gt");
+        const invalidValue = _arr[1] === "";
+        if (invalidKey || invalidValue) return;
+        if (!fetchParams.calculationId) setHideIndexColumn(true);
+        setUnknownPage(true);
+      }
       if ((defaultParams as any)?.[key]?.toString() !== actualValue) {
         tmp[key] = actualValue;
       }
@@ -272,6 +293,8 @@ export const CustomTable: React.FC<CustomTableProps> = ({
         ...prev,
         sort: sortField,
         order: sortField === prev.sort ? prev.order * -1 : -1,
+        page: 1,
+        p: "",
       }));
     };
 
@@ -303,7 +326,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     };
 
     const renderSortField = (key: string, index: number) => {
-      const displayKey = key.split(".").pop(); // get last
+      const displayKey = key.replace(".value", "").split(".").pop(); // get last
       if (!displayKey) return null;
       const isHighlighted = params.sort && key === params.sort;
       const classNames = [
@@ -350,7 +373,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
       let columnName = name;
 
       if (sortFields?.includes(params.sort)) {
-        const key = params.sort.split(".").pop();
+        const key = params.sort.replace(".value", "").split(".").pop(); //
         if (!key) return null;
 
         const fixKey =
@@ -376,7 +399,11 @@ export const CustomTable: React.FC<CustomTableProps> = ({
           colSpan={isHighlighted ? colSpan ?? 0 : 1}
           style={{
             width: column.width,
-            display: isHighlighted && colSpan === 0 ? "none" : "",
+            display:
+              (hideIndexColumn && name === "#") ||
+              (isHighlighted && colSpan === 0)
+                ? "none"
+                : "",
           }}
         >
           <span className="header-wrapper">
@@ -391,7 +418,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
         </th>
       );
     });
-  }, [columns, params.order, params.sort]);
+  }, [columns, params.order, params.sort, hideIndexColumn]);
 
   const renderExpandRow = useCallback(
     (row: any) => (
@@ -448,12 +475,17 @@ export const CustomTable: React.FC<CustomTableProps> = ({
           key={row._id}
           className={rowClassNames}
           onMouseEnter={() =>
-            updateTableHoverElement({ row, currentCategory: calculationColumn })
+            updateTableHoverElement({
+              row,
+              strikethrough,
+              // currentCategory: calculationColumn
+            })
           }
           onMouseLeave={() =>
             updateTableHoverElement({
               hide: true,
-              currentCategory: calculationColumn,
+              strikethrough,
+              // currentCategory: calculationColumn,
             })
           }
           onClick={() => handleClickRow(row)}
@@ -467,13 +499,18 @@ export const CustomTable: React.FC<CustomTableProps> = ({
             const tdClassNames = [
               isHighlighted ? "highlight-cell" : "",
               getDynamicTdClassName ? getDynamicTdClassName(row) : "",
+              !hideIndexColumn && column.name === "#" ? "first-column" : "",
+              hideIndexColumn && index === 1 ? "first-column" : "",
             ]
               .join(" ")
               .trim();
 
             return (
               <td
-                style={{ width: column.width }}
+                style={{
+                  width: column.width,
+                  display: hideIndexColumn && column.name === "#" ? "none" : "",
+                }}
                 className={tdClassNames}
                 key={`${sortField}-${index}`}
               >
@@ -488,8 +525,9 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     // JSON.stringify(expandedRows),
     // params.sort,
     JSON.stringify(rows),
-    calculationColumn,
+    // calculationColumn,
     columns.length,
+    hideIndexColumn,
   ]);
 
   const noDataRow = useMemo(
@@ -536,6 +574,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     setParams((prev) => ({
       ...prev,
       page: 1,
+      p: "",
       filter: stringified,
     }));
   };
@@ -573,8 +612,16 @@ export const CustomTable: React.FC<CustomTableProps> = ({
           isLoading={isFetchingPagination}
           pageSize={params.size}
           pageNumber={params.page}
+          sort={params.sort}
+          order={params.order}
           totalRows={totalRowsCount}
           setParams={setParams}
+          rows={rows}
+          unknownPage={unknownPage}
+          setHideIndexColumn={setHideIndexColumn}
+          setUnknownPage={setUnknownPage}
+          calculationShortName={columns[columns.length - 1].name}
+          alwaysShowIndexColumn={alwaysShowIndexColumn}
         />
       )}
     </div>

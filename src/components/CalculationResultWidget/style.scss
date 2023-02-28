@@ -3,6 +3,22 @@
   flex-wrap: nowrap;
   gap: 5px;
   padding: 5px;
+  .mismatching-weapon {
+    // opacity: 0.85;
+    background-color: #ff000020;
+    box-shadow: inset 0 0 0px 1px #ff000020;
+    .highlight-tile:hover {
+      box-shadow: inset 0 0 0 1px #ff000040;
+    }
+  }
+  .matching-weapon {
+    background-color: #00ff0020;
+    box-shadow: inset 0 0 0px 1px #00ff0020;
+
+    .highlight-tile:hover {
+      box-shadow: inset 0 0 0 1px #00ff0040;
+    }
+  }
   .highlight-tile {
     font-size: 13px;
     width: 75px;

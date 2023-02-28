@@ -2,9 +2,14 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
-import { HelpBox, Spinner, StylizedContentBlock } from "../../components";
+import {
+  AdsComponent,
+  HelpBox,
+  Spinner,
+  StylizedContentBlock,
+} from "../../components";
 import { FETCH_CATEGORIES_URL } from "../../utils/helpers";
-import { BASENAME } from "../../App";
+import { BASENAME, showAds } from "../../App";
 
 export type TransformedCategories = {
   characterName: string;
@@ -45,6 +50,7 @@ export const CategorySelectionPage: React.FC = () => {
 
   return (
     <div className="flex">
+      {showAds && <AdsComponent dataAdSlot="6204085735" />}
       <div className="content-block w-100">
         <StylizedContentBlock
           // variant="gradient"
@@ -167,6 +173,7 @@ export const CategorySelectionPage: React.FC = () => {
           )}
         </div>
       </div>
+      {showAds && <AdsComponent dataAdSlot="6204085735" />}
     </div>
   );
 };

@@ -9,10 +9,12 @@ $patreon-colors: cyan, lime, red, white, orange, fuchsia, gold, silver, brown;
         $patreon-color: $color;
 
         &:hover {
+          td.first-column,
           td:first-child {
             box-shadow: inset 2px 0 0 0 darken($patreon-color, 10);
           }
         }
+        td.first-column,
         td:first-child {
           box-shadow: inset 2px 0 0 0 $patreon-color;
           &::after {
@@ -29,7 +31,8 @@ $patreon-colors: cyan, lime, red, white, orange, fuchsia, gold, silver, brown;
     }
 
     tr.decorate-row {
-      td:first-child {
+      td:first-child,
+      td.first-column {
         position: relative;
         &::after {
           position: absolute;
@@ -49,6 +52,22 @@ $patreon-colors: cyan, lime, red, white, orange, fuchsia, gold, silver, brown;
 .patreon-stat-list {
   &.row-hover-build-preview {
     border-color: cyan !important;
+  }
+}
+
+// @keyframes fancyShowUp {
+//   0% {
+//     filter:saturate(0)
+//   }
+//   100% {
+//     filter:saturate(1)
+//   }
+// }
+
+.content-block {
+  &.patreon-profile {
+    border: 1px solid #00ffff57;
+    // animation: fancyShowUp 2s ease-in-out;
   }
 }
 
@@ -115,7 +134,7 @@ $patreon-colors: cyan, lime, red, white, orange, fuchsia, gold, silver, brown;
     background-color: transparent;
     position: absolute;
     background-size: 200% 200% !important;
-    border-radius: 100px;
+    // border-radius: 100px;
     overflow: hidden;
 
     filter: drop-shadow(0 0 5px cyan);

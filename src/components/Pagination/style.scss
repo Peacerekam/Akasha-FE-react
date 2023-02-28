@@ -33,10 +33,10 @@
     align-items: center;
     transition: opacity 0.3s;
 
-    &.is-loading {
-      pointer-events: none;
-      opacity: 0.2;
-    }
+    // &.is-loading {
+    //   pointer-events: none;
+    //   opacity: 0.2;
+    // }
 
     .pagination-details {
       position: absolute;

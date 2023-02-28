@@ -59,3 +59,10 @@
     width: 30%;
   }
 }
+
+.lb-chart-wrapper {
+  width: 500px;
+  canvas {
+    width: 100% !important;
+  }
+}

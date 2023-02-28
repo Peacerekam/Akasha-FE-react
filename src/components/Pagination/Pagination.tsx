@@ -3,11 +3,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
   faChevronRight,
+  faAnglesRight,
+  faAnglesLeft,
+  faForwardStep,
+  faBackwardStep,
 } from "@fortawesome/free-solid-svg-icons";
-
 import { FetchParams } from "../CustomTable";
+import { ConfirmInput } from "../ConfirmInput";
 import "./style.scss";
-import { Spinner } from "../Spinner";
+// import { Spinner } from "../Spinner";
 
 type PaginationProps = {
   totalRows?: number;
@@ -15,6 +19,29 @@ type PaginationProps = {
   pageNumber?: number;
   setParams?: React.Dispatch<React.SetStateAction<FetchParams>> | null;
   isLoading?: boolean;
+  rows?: any[];
+  sort?: string;
+  order?: number;
+  showPageNumbers?: boolean;
+  unknownPage?: boolean;
+  setHideIndexColumn?: React.Dispatch<React.SetStateAction<boolean>> | null;
+  setUnknownPage?: React.Dispatch<React.SetStateAction<boolean>> | null;
+  calculationShortName?: any[];
+  alwaysShowIndexColumn?: boolean;
+};
+
+export const accessFieldByString = (item: any, sort: string | null) => {
+  if (!sort) sort = "critValue";
+  if (!item) return "";
+
+  let _output = item;
+  let _tmpSortField = sort.split(".");
+
+  while (_tmpSortField.length > 0) {
+    _output = _output[_tmpSortField[0]];
+    _tmpSortField.shift();
+  }
+  return _output as number | string;
 };
 
 export const Pagination: React.FC<PaginationProps> = ({
@@ -23,24 +50,98 @@ export const Pagination: React.FC<PaginationProps> = ({
   pageNumber = 0,
   setParams = null,
   isLoading = false,
+  rows = [],
+  sort = null,
+  order = null,
+  showPageNumbers = false,
+  unknownPage = false,
+  setHideIndexColumn = null,
+  setUnknownPage = null,
+  calculationShortName = null,
+  alwaysShowIndexColumn = false,
 }) => {
   const lastPage = Math.ceil(totalRows / pageSize);
-  const disableNext = pageNumber === lastPage;
-  const disablePrevious = pageNumber === 1;
+  const disableNext = unknownPage ? false : pageNumber === lastPage;
+  const disablePrevious = unknownPage ? false : pageNumber === 1;
+
+  const firstItem = rows.length > 0 ? rows[0] : null;
+  const lastItem = rows.length > 0 ? rows[rows.length - 1] : null;
 
   const handleNextPage = () => {
     if (!setParams) return;
+
+    const nextValue = accessFieldByString(lastItem, sort);
+    // const smallerNextValue = isNaN(+nextValue) ? nextValue : (+nextValue).toFixed(2);
+
+    const p =
+      nextValue !== "" ? `${order === -1 ? "lt" : "gt"}|${nextValue || 0}` : "";
+
+    if (!p && setHideIndexColumn && setUnknownPage) {
+      setHideIndexColumn(false);
+      setUnknownPage(false);
+    }
+
     setParams((prev: FetchParams) => ({
       ...prev,
-      page: prev.page + 1,
+      page: p ? prev.page + 1 : 1,
+      p,
+      fromId: lastItem?._id,
     }));
   };
 
   const handlePreviousPage = () => {
     if (!setParams) return;
+
+    const nextValue = accessFieldByString(firstItem, sort);
+    // const smallerNextValue = isNaN(+nextValue) ? nextValue : (+nextValue).toFixed(2);
+
+    const p =
+      nextValue !== "" ? `${order === -1 ? "gt" : "lt"}|${nextValue}` : "";
+
+    if (!p && setHideIndexColumn && setUnknownPage) {
+      setHideIndexColumn(false);
+      setUnknownPage(false);
+    }
+
     setParams((prev: FetchParams) => ({
       ...prev,
-      page: prev.page - 1,
+      page: Math.max(1, prev.page - 1),
+      p,
+      fromId: firstItem?._id,
+    }));
+  };
+
+  const handleFirstPage = () => {
+    if (!setParams) return;
+
+    if (setHideIndexColumn && setUnknownPage) {
+      setHideIndexColumn(false);
+      setUnknownPage(false);
+    }
+
+    setParams((prev: FetchParams) => ({
+      ...prev,
+      page: 1,
+      p: "",
+      fromId: "",
+    }));
+  };
+  
+  const handleLastPage = () => {
+    if (!setParams) return;
+
+    if (setHideIndexColumn && setUnknownPage) {
+      setHideIndexColumn(false);
+      setUnknownPage(false);
+    }
+
+    const p = `${order === -1 ? "gt|-" : "lt|"}${100_000_000}`
+
+    setParams((prev: FetchParams) => ({
+      ...prev,
+      page: lastPage,
+      p,
+      fromId: "",
     }));
   };
 
@@ -124,51 +225,171 @@ export const Pagination: React.FC<PaginationProps> = ({
     [pageNumber, lastPage, getVisiblePages]
   );
 
-  if (totalRows === 0) return null;
+  // if (totalRows === 0) return null;
 
   const to = Math.min(pageNumber * pageSize, totalRows);
   const from = Math.max(to - pageSize + 1, 1);
 
-  const classNames = ["pagination", isLoading ? "is-loading" : ""]
-    .join(" ")
-    .trim();
+  // const classNames = ["pagination", isLoading ? "is-loading" : ""]
+  //   .join(" ")
+  //   .trim();
 
+  const handleSkipToValue = (value: number, dir?: "<" | ">") => {
+    if (!setParams || !setHideIndexColumn || !setUnknownPage) return;
+
+    const p =
+      dir === "<"
+        ? `${order === -1 ? "lt" : "gt"}|${value}`
+        : `${order === -1 ? "gt" : "lt"}|${value}`;
+
+    setHideIndexColumn(!alwaysShowIndexColumn);
+    setUnknownPage(true);
+    setParams((prev: FetchParams) => ({
+      ...prev,
+      page: 0,
+      p,
+    }));
+  };
+
+  const sortToText: any = {
+    // character columns
+    critValue: "Crit Value",
+    "stats.critRate.value": "Crit RATE",
+    "stats.critDamage.value": "Crit DMG",
+    "stats.maxHp.value": "Max HP",
+    "stats.atk.value": "ATK",
+    "stats.def.value": "DEF",
+    "stats.elementalMastery.value": "EM",
+    "stats.energyRecharge.value": "ER%",
+    // artifact columns
+    "substats.Crit RATE": "Crit RATE",
+    "substats.Crit DMG": "Crit DMG",
+    "substats.ATK%": "ATK%",
+    "substats.HP%": "HP%",
+    "substats.DEF%": "DEF%",
+    "substats.Elemental Mastery": "EM",
+    "substats.Energy Recharge": "ER%",
+    "substats.Flat ATK": "Flat ATK",
+    "substats.Flat HP": "Flat HP",
+    "substats.Flat DEF": "Flat DEF",
+    // leaderboard columns
+    "calculation.result": [calculationShortName, "result"].join(" "),
+    "_id": "_id"
+    // crappy columns
+    // "weapon.name": false,
+    // constellation: "Constellation",
+    // name: false,
+    // "owner.nickname": false,
+  };
+
+  const disableSkip = !!sort && !sortToText[sort];
+  const highlightedSort = (
+    <span style={{ color: "orange", fontWeight: 600 }}>
+      {sort ? (sortToText as any)[sort] || "?" : "?"}
+    </span>
+  );
+  
   return (
     <div className="pagination-wrapper">
-      {isLoading ? (
+      {/* {isLoading ? (
         <div className="pagination-spinner-wrapper">
           <Spinner />
         </div>
-      ) : null}
-      <div className={classNames}>
-        {totalRows > pageSize && (
+      ) : null} */}
+      <div className="pagination">
+        {(disableNext && disablePrevious) || rows.length === 0 ? (
+          ""
+        ) : (
           <div className="pagination-buttons">
+            <span className="relative button-wrapper">
+              <button disabled={disablePrevious || disableSkip} onClick={handleFirstPage}>
+                <FontAwesomeIcon icon={faBackwardStep} size="1x" />
+              </button>
+              <span onClick={handleFirstPage} className="button-label">
+                first
+              </span>
+            </span>
+            <ConfirmInput
+              sort={sort}
+              defaultValue=""
+              text={
+                <>
+                  Skip to {highlightedSort} values{" "}
+                  {order === 1 ? "lower" : "greater"} than:
+                </>
+              } // if on leaderboards page then shortcut values from context
+              onConfirm={(value: number) => handleSkipToValue(value, ">")}
+              className={`relative button-wrapper ${
+                disablePrevious || disableSkip ? "pointer-events-none" : ""
+              }`}
+            >
+              <>
+                <button disabled={disablePrevious || disableSkip}>
+                  <FontAwesomeIcon icon={faAnglesLeft} size="1x" />
+                </button>
+                <span className="button-label">skip</span>
+              </>
+            </ConfirmInput>
             <span className="relative button-wrapper">
               <button disabled={disablePrevious} onClick={handlePreviousPage}>
                 <FontAwesomeIcon icon={faChevronLeft} size="1x" />
               </button>
-              <span onClick={() => handleSetPage(1)} className="button-label">
+              <span onClick={handlePreviousPage} className="button-label">
                 back
               </span>
             </span>
 
-            {displayPageRange}
+            {showPageNumbers ? (
+              displayPageRange
+            ) : (
+              <span className="relative button-wrapper default-cursor">
+                <button>{unknownPage ? "??" : pageNumber}</button>
+              </span>
+            )}
 
             <span className="relative button-wrapper">
               <button disabled={disableNext} onClick={handleNextPage}>
                 <FontAwesomeIcon icon={faChevronRight} size="1x" />
               </button>
-              <span
-                onClick={() => handleSetPage(lastPage)}
-                className="button-label"
-              >
+              <span onClick={handleNextPage} className="button-label">
                 next
+              </span>
+            </span>
+
+            <ConfirmInput
+              sort={sort}
+              defaultValue=""
+              text={
+                <>
+                  Skip to {highlightedSort} values{" "}
+                  {order === -1 ? "lower" : "greater"} than:
+                </>
+              } // if on leaderboards page then shortcut values from context
+              onConfirm={(value: number) => handleSkipToValue(value, "<")}
+              className={`relative button-wrapper ${
+                disableNext || disableSkip ? "pointer-events-none" : ""
+              }`}
+            >
+              <>
+                <button disabled={disableNext || disableSkip}>
+                  <FontAwesomeIcon icon={faAnglesRight} size="1x" />
+                </button>
+                <span className="button-label">skip</span>
+              </>
+            </ConfirmInput>
+            <span className="relative button-wrapper">
+              <button disabled={disableNext || disableSkip} onClick={handleLastPage}>
+                <FontAwesomeIcon icon={faForwardStep} size="1x" />
+              </button>
+              <span onClick={handleLastPage} className="button-label">
+                last
               </span>
             </span>
           </div>
         )}
         <div className="pagination-details">
-          {from}-{to} of {totalRows}
+          {unknownPage ? `unknown page` : `${from}-${to}`} of{" "}
+          {isLoading ? "---" : totalRows}
         </div>
       </div>
     </div>

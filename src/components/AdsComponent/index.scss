@@ -1,0 +1,18 @@
+.adsbygoogle {
+  overflow: hidden;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  background-color: #2c3333;
+  z-index: 5 !important;
+  &.horizontal {
+    width: 100%;
+    margin: 20px 0;
+    justify-content: center;
+    display: flex;
+  }
+  // &[data-ad-status="unfilled"] {
+  //   display: none;
+  // }
+}

@@ -11,12 +11,14 @@ import {
 } from "../../utils/helpers";
 import { useNavigate } from "react-router-dom";
 import {
+  AdsComponent,
+  ARBadge,
   CustomTable,
   HelpBox,
+  RegionBadge,
   StatIcon,
   StylizedContentBlock,
 } from "../../components";
-import { ARBadge } from "../LeaderboardsPage";
 import { TableColumn } from "../../types/TableColumn";
 
 import DomainBackground from "../../assets/images/domain-background.jpg";
@@ -25,7 +27,7 @@ import {
   getRainbowTextStyle,
 } from "../../utils/helpers";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
-import { BASENAME } from "../../App";
+import { BASENAME, showAds } from "../../App";
 
 export type ArtifactColumns = {
   _id: string;
@@ -61,7 +63,7 @@ export const ArtifactsPage: React.FC = () => {
       },
       {
         name: "Owner",
-        sortable: true,
+        sortable: false,
         sortField: "owner.nickname",
         width: "180px",
         cell: (row) => {
@@ -75,7 +77,8 @@ export const ArtifactsPage: React.FC = () => {
               }}
               href={`${BASENAME}/profile/${row.uid}`}
             >
-              <ARBadge adventureRank={row.owner.adventureRank} />
+              {/* <ARBadge adventureRank={row.owner.adventureRank} /> */}
+              <RegionBadge region={row.owner?.region} />
               {row.owner.nickname}
             </a>
           );
@@ -83,7 +86,7 @@ export const ArtifactsPage: React.FC = () => {
       },
       {
         name: "Name",
-        sortable: true,
+        sortable: false,
         sortField: "name",
         width: "300px",
         cell: (row) => {
@@ -113,17 +116,22 @@ export const ArtifactsPage: React.FC = () => {
       },
       {
         name: "Main stat",
-        sortable: true,
+        sortable: false,
         sortField: "mainStatKey",
         cell: (row) => {
           const key = row.mainStatKey.replace("Flat ", "").replace("%", "");
           const isPercenrage =
             row.mainStatKey.endsWith("%") ||
             row.mainStatKey?.endsWith("Bonus") ||
-            ["Energy Recharge"].includes(row.mainStatKey);
+            ["Energy Recharge", "Crit RATE", "Crit DMG"].includes(row.mainStatKey);
+
+          const mainStatValue = isPercenrage
+            ? Math.round(row.mainStatValue * 10) / 10
+            : Math.round(row.mainStatValue);
+
           return (
             <div className="nowrap">
-              {row.mainStatValue}
+              {mainStatValue}
               {isPercenrage ? "%" : ""} {key}
             </div>
           );
@@ -190,6 +198,7 @@ export const ArtifactsPage: React.FC = () => {
 
   return (
     <div className="flex">
+      {showAds && <AdsComponent dataAdSlot="6204085735" />}
       {hoverElement}
       <div className="content-block w-100">
         <StylizedContentBlock overrideImage={DomainBackground} />
@@ -202,6 +211,7 @@ export const ArtifactsPage: React.FC = () => {
           projectParamsToPath
         />
       </div>
+      {showAds && <AdsComponent dataAdSlot="6204085735" />}
     </div>
   );
 };

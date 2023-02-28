@@ -4,9 +4,10 @@ import "./style.scss";
 
 type StatListProps = {
   row: any;
-  currentCategory?: string;
+  // currentCategory?: string;
   showCharacter: boolean;
   showWeapon: boolean;
+  strikethrough?: boolean;
 };
 
 const getStatsFromCalculation = (row: any, currentCategory: string) => {
@@ -49,17 +50,17 @@ const getStatsFromRow = (row: any) => {
   const def = stats.def.value.toFixed(0);
   const cr = (stats.critRate?.value * 100).toFixed(1);
   const cd = (stats.critDamage?.value * 100).toFixed(1);
-  const er = (stats.energyRecharge.value * 100).toFixed(1);
-  const em = +stats.elementalMastery.value.toFixed(0) || 0;
+  const er = (stats.energyRecharge?.value * 100).toFixed(1);
+  const em = +stats.elementalMastery?.value.toFixed(0) || 0;
 
-  const pyroDMG = (stats.pyroDamageBonus.value * 100).toFixed(1);
-  const hydroDMG = (stats.hydroDamageBonus.value * 100).toFixed(1);
-  const cryoDMG = (stats.cryoDamageBonus.value * 100).toFixed(1);
+  const pyroDMG = (stats.pyroDamageBonus?.value * 100).toFixed(1);
+  const hydroDMG = (stats.hydroDamageBonus?.value * 100).toFixed(1);
+  const cryoDMG = (stats.cryoDamageBonus?.value * 100).toFixed(1);
   const dendroDMG = (stats.dendroDamageBonus?.value * 100).toFixed(1); // partially missing data
-  const electroDMG = (stats.electroDamageBonus.value * 100).toFixed(1);
-  const anemoDMG = (stats.anemoDamageBonus.value * 100).toFixed(1);
-  const geoDMG = (stats.geoDamageBonus.value * 100).toFixed(1);
-  const physicalDMG = (stats.physicalDamageBonus.value * 100).toFixed(1);
+  const electroDMG = (stats.electroDamageBonus?.value * 100).toFixed(1);
+  const anemoDMG = (stats.anemoDamageBonus?.value * 100).toFixed(1);
+  const geoDMG = (stats.geoDamageBonus?.value * 100).toFixed(1);
+  const physicalDMG = (stats.physicalDamageBonus?.value * 100).toFixed(1);
 
   return {
     hp,
@@ -82,13 +83,15 @@ const getStatsFromRow = (row: any) => {
 
 export const StatList: React.FC<StatListProps> = ({
   row,
-  currentCategory,
+  // currentCategory,
   showCharacter,
   showWeapon,
+  strikethrough = false,
 }) => {
-  const stats = currentCategory
-    ? getStatsFromCalculation(row, currentCategory)
-    : getStatsFromRow(row);
+  // const stats = currentCategory
+  //   ? getStatsFromCalculation(row, currentCategory)
+  //   : getStatsFromRow(row);
+  const stats = getStatsFromRow(row);
 
   if (!stats) return <></>;
 
@@ -215,21 +218,21 @@ export const StatList: React.FC<StatListProps> = ({
     <div className="table-stat-row">
       <div className="flex gap-5">
         <img
-          className={`stat-icon ${currentCategory ? "strike-through" : ""}`}
+          className={`stat-icon ${strikethrough ? "strike-through" : ""}`}
           src={row.weapon.icon}
         />
-        <span className={currentCategory ? "strike-through opacity-5" : ""}>
+        <span className={strikethrough ? "strike-through opacity-5" : ""}>
           {row.weapon.name}
         </span>
         <div className="relative">
           <span className="refinement-display">
-            <span className={currentCategory ? "strike-through" : ""}>
+            <span className={strikethrough ? "strike-through" : ""}>
               R{(row.weapon.weaponInfo?.refinementLevel?.value ?? 0) + 1}
             </span>
           </span>
         </div>
       </div>
-      <div className={currentCategory ? "strike-through opacity-5" : ""}>
+      <div className={strikethrough ? "strike-through opacity-5" : ""}>
         <span>Level {row.weapon.weaponInfo.level}</span>
         <span className="opacity-5">
           /{ascensionToLevel(row.weapon.weaponInfo?.promoteLevel)}
@@ -245,13 +248,13 @@ export const StatList: React.FC<StatListProps> = ({
         <span>{row.name}</span>
         <div className="relative">
           <span className="refinement-display">
-            <span className={currentCategory ? "strike-through" : ""}>
+            <span className={strikethrough ? "strike-through" : ""}>
               C{row.constellation ?? 0}
             </span>
           </span>
         </div>
       </div>
-      <div className={currentCategory ? "strike-through opacity-5" : ""}>
+      <div className={strikethrough ? "strike-through opacity-5" : ""}>
         Level {row.propMap.level.val}
         <span className="opacity-5">
           /{ascensionToLevel(row.propMap.ascension.val)}

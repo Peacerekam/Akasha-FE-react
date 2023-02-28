@@ -103,7 +103,9 @@ export const CalculationList: React.FC<CalculationListProps> = ({ row }) => {
                 <span className="opacity-5">/{outOf || "???"}</span>
               </td>
               <td>
-                {ranking ? `top ${Math.ceil((_ranking / outOf) * 100)}%` : ""}
+                {ranking
+                  ? `top ${Math.min(100, Math.ceil((_ranking / outOf) * 100))}%`
+                  : ""}
               </td>
               <td>
                 <WeaponMiniDisplay

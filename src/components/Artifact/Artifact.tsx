@@ -55,7 +55,7 @@ export const Artifact: React.FC<ArtifactProps> = ({
   const isPercenrage =
     artifact.mainStatKey?.endsWith("%") ||
     artifact.mainStatKey?.endsWith("Bonus") ||
-    ["Energy Recharge"].includes(artifact.mainStatKey);
+    ["Energy Recharge", "Crit RATE", "Crit DMG"].includes(artifact.mainStatKey);
 
   const summedArtifactRolls: {
     [key: string]: { count: number; sum: number; rv: number };
@@ -74,6 +74,10 @@ export const Artifact: React.FC<ArtifactProps> = ({
     };
   }, {});
 
+  const mainStatValue = isPercenrage
+    ? Math.round(artifact.mainStatValue * 10) / 10
+    : Math.round(artifact.mainStatValue);
+
   return (
     <div
       style={style}
@@ -87,7 +91,7 @@ export const Artifact: React.FC<ArtifactProps> = ({
       </div>
       <div className="artifact-stat-name">{mainStatKey}</div>
       <div className="artifact-stat-value">
-        {artifact.mainStatValue}
+        {mainStatValue}
         {isPercenrage ? "%" : ""}
       </div>
       <div className="artifact-level">+{artifact.level - 1}</div>

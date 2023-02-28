@@ -69,6 +69,10 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
             };
           }, {});
 
+          const mainStatValue = isPercent(artifact.mainStatKey)
+            ? Math.round(artifact.mainStatValue * 10) / 10
+            : Math.round(artifact.mainStatValue);
+
           return (
             <div
               key={artifact._id}
@@ -81,7 +85,7 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
                 </span>
                 <span className="compact-artifact-main-stat">
                   <StatIcon name={artifact.mainStatKey} />
-                  {artifact.mainStatValue}
+                  {mainStatValue}
                   {isPercent(artifact.mainStatKey) ? "%" : ""}
                 </span>
               </div>

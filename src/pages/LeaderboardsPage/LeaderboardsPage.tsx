@@ -8,20 +8,23 @@ import React, {
 import axios from "axios";
 import { debounce } from "lodash";
 import { useNavigate, useParams } from "react-router-dom";
+import { Chart as ChartJS, registerables } from "chart.js";
+import { Line } from "react-chartjs-2";
+
 import { BuildsColumns } from "../BuildsPage";
 import {
   CritRatio,
   StatIcon,
   DisplaySets,
   CustomTable,
-  Spinner,
   WeaponMiniDisplay,
   StylizedContentBlock,
+  AdsComponent,
+  RegionBadge,
 } from "../../components";
 import {
   FETCH_CATEGORIES_URL,
   FETCH_LEADERBOARDS_URL,
-  getCharacterCvColor,
   FETCH_CHARACTER_FILTERS_URL,
   uidsToQuery,
 } from "../../utils/helpers";
@@ -34,9 +37,11 @@ import {
 import { TableColumn } from "../../types/TableColumn";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
-import { BASENAME } from "../../App";
-import "./style.scss";
+import { BASENAME, showAds } from "../../App";
 import { getIconElement } from "../../components/HelpBox/helpContentBuilds";
+import "./style.scss";
+
+ChartJS.register(...registerables);
 
 type CategoriesById = {
   [key: string]: {
@@ -83,15 +88,6 @@ type Category = {
   }[];
 };
 
-export const ARBadge = ({ adventureRank }: any) => {
-  const className = adventureRank
-    ? `ar-${Math.floor(adventureRank / 5) * 5}-badge`
-    : "ar-60-badge";
-  return (
-    <span className={`ar-badge ${className}`}>AR{adventureRank ?? " ?"}</span>
-  );
-};
-
 export const LeaderboardsPage: React.FC = () => {
   // state
   const [categories, setCategories] = useState<Category[]>();
@@ -113,7 +109,8 @@ export const LeaderboardsPage: React.FC = () => {
 
   const currentCategory = calculationId ?? "";
   const calculationSortKey = currentCategory
-    ? `calculations.${currentCategory}.result`
+    ? // ? `calculations.${currentCategory}.result`
+      "calculation.result"
     : "";
 
   const categoriesById = useMemo(() => {
@@ -152,6 +149,7 @@ export const LeaderboardsPage: React.FC = () => {
         size: 3,
         page: 1,
         variant,
+        calculationId,
       },
     };
 
@@ -173,6 +171,10 @@ export const LeaderboardsPage: React.FC = () => {
   useEffect(() => {
     fetchCategories();
   }, [calculationId]);
+
+  useEffect(() => {
+    fetchChartData();
+  }, [calculationId, variant]);
 
   const debouncedSetLookupUID = useCallback(debounce(setLookupUID, 350), []);
 
@@ -205,7 +207,8 @@ export const LeaderboardsPage: React.FC = () => {
               }}
               href={`${BASENAME}/profile/${row.uid}`}
             >
-              <ARBadge adventureRank={row.owner?.adventureRank} />
+              {/* <ARBadge adventureRank={row.owner?.adventureRank} /> */}
+              <RegionBadge region={row.owner?.region} />
               {row.owner?.nickname}
             </a>
           );
@@ -229,7 +232,7 @@ export const LeaderboardsPage: React.FC = () => {
       },
       {
         name: "Sets",
-        sortable: true,
+        sortable: false,
         sortField: `calculations.${currentCategory}.stats.artifactSetsFlat`,
         width: "75px",
         cell: (row) => {
@@ -239,22 +242,30 @@ export const LeaderboardsPage: React.FC = () => {
       {
         name: "Crit Ratio",
         sortable: true,
-        sortFields: ["stats.critValue", "stats.critRate", "stats.critDMG"].map(
-          (x) => `calculations.${currentCategory}.${x}`
-        ),
+        // sortFields: ["stats.critValue", "stats.critRate", "stats.critDMG"].map(
+        //   (x) => `calculations.${currentCategory}.${x}`
+        // ),
+        sortFields: [
+          "critValue",
+          "stats.critRate.value",
+          "stats.critDamage.value",
+        ],
         cell: (row) => {
-          const build = row.calculations[currentCategory]?.stats;
-          return build ? <CritRatio stats={build} /> : <></>;
+          // const build = row.calculations[currentCategory]?.stats;
+          // return build ? <CritRatio stats={build} /> : <></>;
+          return <CritRatio stats={row.stats} overrideCV={row.critValue} />;
         },
       },
       {
         name: "Max HP",
         sortable: true,
-        sortField: `calculations.${currentCategory}.stats.maxHP`,
+        // sortField: `calculations.${currentCategory}.stats.maxHP`,
+        sortField: "stats.maxHp.value",
         cell: (row) => {
-          const build = row.calculations[currentCategory]?.stats;
-          if (!build) return <></>;
-          const hp = build.maxHP.toFixed(0);
+          // const build = row.calculations[currentCategory]?.stats;
+          // if (!build) return <></>;
+          // const hp = build.maxHP.toFixed(0);
+          const hp = row.stats.maxHp.value.toFixed(0);
           return (
             <div className="flex gap-3 nowrap">
               <StatIcon name="HP" />
@@ -266,11 +277,13 @@ export const LeaderboardsPage: React.FC = () => {
       {
         name: "ATK",
         sortable: true,
-        sortField: `calculations.${currentCategory}.stats.maxATK`,
+        // sortField: `calculations.${currentCategory}.stats.maxATK`,
+        sortField: "stats.atk.value",
         cell: (row) => {
-          const build = row.calculations[currentCategory]?.stats;
-          if (!build) return <></>;
-          const atk = build.maxATK.toFixed(0);
+          // const build = row.calculations[currentCategory]?.stats;
+          // if (!build) return <></>;
+          // const atk = build.maxATK.toFixed(0);
+          const atk = row.stats.atk.value.toFixed(0);
           return (
             <div className="flex gap-3 nowrap">
               <StatIcon name="ATK" />
@@ -282,11 +295,13 @@ export const LeaderboardsPage: React.FC = () => {
       {
         name: "DEF",
         sortable: true,
-        sortField: `calculations.${currentCategory}.stats.maxDEF`,
+        // sortField: `calculations.${currentCategory}.stats.maxDEF`,
+        sortField: "stats.def.value",
         cell: (row) => {
-          const build = row.calculations[currentCategory]?.stats;
-          if (!build) return <></>;
-          const def = build.maxDEF.toFixed(0);
+          // const build = row.calculations[currentCategory]?.stats;
+          // if (!build) return <></>;
+          // const def = build.maxDEF.toFixed(0);
+          const def = row.stats.def.value.toFixed(0);
           return (
             <div className="flex gap-3 nowrap">
               <StatIcon name="DEF" />
@@ -298,11 +313,13 @@ export const LeaderboardsPage: React.FC = () => {
       {
         name: "EM",
         sortable: true,
-        sortField: `calculations.${currentCategory}.stats.elementalMastery`,
+        // sortField: `calculations.${currentCategory}.stats.elementalMastery`,
+        sortField: "stats.elementalMastery.value",
         cell: (row) => {
-          const build = row.calculations[currentCategory]?.stats;
-          if (!build) return <></>;
-          const em = build.elementalMastery.toFixed(0);
+          // const build = row.calculations[currentCategory]?.stats;
+          // if (!build) return <></>;
+          // const em = build.elementalMastery.toFixed(0);
+          const em = +row.stats.elementalMastery.value.toFixed(0) || 0;
           return (
             <div className="flex gap-3 nowrap">
               <StatIcon name="Elemental Mastery" />
@@ -314,12 +331,13 @@ export const LeaderboardsPage: React.FC = () => {
       {
         name: "ER%",
         sortable: true,
-        sortField: `calculations.${currentCategory}.stats.energyRecharge`,
+        // sortField: `calculations.${currentCategory}.stats.energyRecharge`,
+        sortField: "stats.energyRecharge.value",
         cell: (row) => {
-          const build = row.calculations[currentCategory]?.stats;
-          if (!build) return <></>;
+          // const build = row.calculations[currentCategory]?.stats;
+          // if (!build) return <></>;
           // const er = (100 + build.energyRecharge).toFixed(1);
-          const er = (100 + build.energyRecharge).toFixed(1);
+          const er = (row.stats.energyRecharge.value * 100).toFixed(1);
           return (
             <div className="flex gap-3 nowrap">
               <StatIcon name="Energy Recharge" />
@@ -334,10 +352,10 @@ export const LeaderboardsPage: React.FC = () => {
         sortable: true,
         sortField: calculationSortKey,
         cell: (row: any) => {
+          // const calcResult = row.calculations[currentCategory]?.result?.toFixed(0)
+          const calcResult = row.calculation.result?.toFixed(0);
           return (
-            <div style={{ color: "orange", fontWeight: 600 }}>
-              {row.calculations[currentCategory]?.result?.toFixed(0)}
-            </div>
+            <div style={{ color: "orange", fontWeight: 600 }}>{calcResult}</div>
           );
         },
       },
@@ -357,6 +375,21 @@ export const LeaderboardsPage: React.FC = () => {
     setCategories(data);
   };
 
+  const [chartData, setChartData] = useState<any[]>([]);
+
+  const fetchChartData = async () => {
+    let chartURL = `/api/charts/calculations/${calculationId}`;
+    const response = await axios.get(chartURL, {
+      params: {
+        variant,
+        uids: uidsToQuery(lastProfiles.map((a) => a.uid)),
+      },
+    });
+    const { data } = response.data;
+
+    setChartData(data);
+  };
+
   const iconUrlToNamecardUrl = (url: string) => {
     return url
       .replace("UI_AvatarIcon", "UI_NameCardPic")
@@ -368,97 +401,97 @@ export const LeaderboardsPage: React.FC = () => {
       ? iconUrlToNamecardUrl(podiumData.rows[0].icon)
       : "";
 
-  const renderRung = useCallback(
-    (position: 1 | 2 | 3) => {
-      const player = podiumData.rows[position - 1] ?? null;
-      if (!player) return null;
+  // const renderRung = useCallback(
+  //   (position: 1 | 2 | 3) => {
+  //     const player = podiumData.rows[position - 1] ?? null;
+  //     if (!player) return null;
 
-      const wrapperClassNames = [
-        "pointer rung-wrapper",
-        position === 1 ? "gold" : "",
-        position === 2 ? "silver" : "",
-        position === 3 ? "bronze" : "",
-      ]
-        .join(" ")
-        .trim();
+  //     const wrapperClassNames = [
+  //       "pointer rung-wrapper",
+  //       position === 1 ? "gold" : "",
+  //       position === 2 ? "silver" : "",
+  //       position === 3 ? "bronze" : "",
+  //     ]
+  //       .join(" ")
+  //       .trim();
 
-      const squishNameFactor = {
-        transform: `scaleX(${
-          player?.owner?.nickname?.length > 8
-            ? 8 / player?.owner?.nickname?.length
-            : 1
-        })`,
-      };
+  //     const squishNameFactor = {
+  //       transform: `scaleX(${
+  //         player?.owner?.nickname?.length > 8
+  //           ? 8 / player?.owner?.nickname?.length
+  //           : 1
+  //       })`,
+  //     };
 
-      const result = player.calculations[currentCategory]?.result.toFixed(0);
+  //     const result = player.calculations[currentCategory]?.result.toFixed(0);
 
-      const cv = player?.critValue || 0;
-      const borderColor = getCharacterCvColor(cv);
-      const imageStyle = {
-        boxShadow: `0 0 0 2px ${borderColor}`,
-        backgroundImage: `url(${player.nameCardLink})`,
-        backgroundPosition: "center",
-      } as React.CSSProperties;
+  //     const cv = player?.critValue || 0;
+  //     const borderColor = getCharacterCvColor(cv);
+  //     const imageStyle = {
+  //       boxShadow: `0 0 0 2px ${borderColor}`,
+  //       backgroundImage: `url(${player.nameCardLink})`,
+  //       backgroundPosition: "center",
+  //     } as React.CSSProperties;
 
-      return (
-        <a
-          onMouseEnter={() =>
-            updateTableHoverElement({ row: player, currentCategory })
-          }
-          onMouseLeave={() =>
-            updateTableHoverElement({ hide: true, currentCategory })
-          }
-          className={wrapperClassNames}
-          onClick={(event) => {
-            event.preventDefault();
-            navigate(`/profile/${player.uid}`);
-          }}
-          href={`${BASENAME}/profile/${player.uid}`}
-        >
-          <img
-            style={imageStyle}
-            src={player.profilePictureLink}
-            className="podium-player-icon"
-          />
-          <div className="rung-player-score">{result || "---"}</div>
-          <div className="rung-player-name">
-            <div style={squishNameFactor}>{player?.owner?.nickname}</div>
-          </div>
-          <div className="rung-geometry">
-            <div>{position}</div>
-          </div>
-        </a>
-      );
-    },
-    [JSON.stringify(podiumData.rows), currentCategory]
-  );
+  //     return (
+  //       <a
+  //         onMouseEnter={() =>
+  //           updateTableHoverElement({ row: player, currentCategory })
+  //         }
+  //         onMouseLeave={() =>
+  //           updateTableHoverElement({ hide: true, currentCategory })
+  //         }
+  //         className={wrapperClassNames}
+  //         onClick={(event) => {
+  //           event.preventDefault();
+  //           navigate(`/profile/${player.uid}`);
+  //         }}
+  //         href={`${BASENAME}/profile/${player.uid}`}
+  //       >
+  //         <img
+  //           style={imageStyle}
+  //           src={player.profilePictureLink}
+  //           className="podium-player-icon"
+  //         />
+  //         <div className="rung-player-score">{result || "---"}</div>
+  //         <div className="rung-player-name">
+  //           <div style={squishNameFactor}>{player?.owner?.nickname}</div>
+  //         </div>
+  //         <div className="rung-geometry">
+  //           <div>{position}</div>
+  //         </div>
+  //       </a>
+  //     );
+  //   },
+  //   [JSON.stringify(podiumData.rows), currentCategory]
+  // );
 
-  const displayPodium = useMemo(() => {
-    return (
-      <div className="podium-wrapper">
-        {podiumData.rows.length === 0 ? (
-          <div
-            style={{ display: "flex", alignItems: "center", height: "100%" }}
-          >
-            <Spinner />
-          </div>
-        ) : (
-          <>
-            {renderRung(2)}
-            {renderRung(1)}
-            {renderRung(3)}
-          </>
-        )}
-        {/* <div style={{ color: "brown" }}>#3 {initialData.rows[3].nickname}</div>
-        <div style={{ color: "gold", transform: "translateY(-40px)" }}>
-          #1 {initialData.rows[0].nickname}
-        </div>
-        <div style={{ color: "silver", transform: "translateY(-20px)" }}>
-          #2 {initialData.rows[1].nickname}
-        </div> */}
-      </div>
-    );
-  }, [JSON.stringify(podiumData.rows)]);
+  // const displayPodium = useMemo(() => {
+  //   return (
+  //     <div className="podium-wrapper">
+  //       {podiumData.rows.length === 0 ? (
+  //         <div
+  //           style={{ display: "flex", alignItems: "center", height: "100%" }}
+  //         >
+  //           <Spinner />
+  //         </div>
+  //       ) : (
+  //         <>
+  //           {renderRung(2)}
+  //           {renderRung(1)}
+  //           {renderRung(3)}
+  //         </>
+  //       )}
+  //       {/* <div style={{ color: "brown" }}>#3 {initialData.rows[3].nickname}</div>
+  //       <div style={{ color: "gold", transform: "translateY(-40px)" }}>
+  //         #1 {initialData.rows[0].nickname}
+  //       </div>
+  //       <div style={{ color: "silver", transform: "translateY(-20px)" }}>
+  //         #2 {initialData.rows[1].nickname}
+  //       </div> */}
+  //     </div>
+  //   );
+  // }, [JSON.stringify(podiumData.rows)]);
 
   const relatedCategories = Object.values(categoriesById)
     .filter((c: any) => c.character.name === displayCategory?.character.name)
@@ -499,6 +532,7 @@ export const LeaderboardsPage: React.FC = () => {
           const isActive = variant === val.name;
           return (
             <a
+              key={val.name}
               className={isActive ? "current-selection" : ""}
               onClick={(event) => {
                 event.preventDefault();
@@ -561,15 +595,107 @@ export const LeaderboardsPage: React.FC = () => {
     </>
   );
 
-  const testSetupObject = {
-    character: {},
-    weapon: {},
-    team: {},
-    enemy: {},
+  // @TODO CALC INFO DISPLAY
+  // const testSetupObject = {
+  //   character: {},
+  //   weapon: {},
+  //   team: {},
+  //   enemy: {},
+  // };
+
+  const options = {
+    maintainAspectRatio: true,
+    responsive: true,
+    plugins: {
+      tooltip: {
+        callbacks: {
+          title: function (a: any[]) {
+            return a[0] ? `top ${a[0].label}%` : "";
+          },
+        },
+      },
+      legend: {
+        display: false,
+        // labels: {
+        //   color: "#ebecee",
+        // }
+      },
+    },
+    type: "scatter",
+    scales: {
+      x: {
+        grid: {
+          color: "#acaeb333",
+          borderDash: [2, 2],
+        },
+        ticks: {
+          color: "#ebecee",
+          callback: function (value: any) {
+            return `top ${value}%`;
+          },
+        },
+      },
+      y: {
+        grid: {
+          color: "#acaeb333",
+          borderDash: [2, 2],
+        },
+        ticks: {
+          color: "#ebecee",
+          callback: function (value: any) {
+            return `${value}`; // ... avg dmg?
+          },
+        },
+      },
+    },
+    interaction: {
+      intersect: false,
+    },
+    animation: {
+      duration: 0,
+    },
   };
+
+  const displayChart = useMemo(() => {
+    const formattedData = chartData.map((el, i) => ({
+      y: el.avg,
+      x: i + 1,
+    }));
+
+    const datasets = [
+      {
+        data: formattedData,
+      },
+    ];
+
+    // @TODO:
+    // @FIX:
+
+    // make context around Podium + Chart + Tables
+    //
+    // mainTable = provide data for podium if page = 0
+    // miniTable = provide data for chart searched player points
+    // podium = take data from mainTable if page = 0, otherwise ask for first 3 elements
+
+    // @TODO:
+    // @FIX:
+
+    return (
+      <div className="lb-chart-wrapper">
+        <Line
+          data={{
+            labels: formattedData.map((_, i) => i + 1),
+            datasets,
+          }}
+          options={options}
+        />
+      </div>
+    );
+  }, [chartData]);
 
   return (
     <div className="flex" key={calculationId}>
+      {showAds && <AdsComponent dataAdSlot="6204085735" />}
       {hoverElement}
       <div className="content-block w-100" key={currentCategory}>
         <StylizedContentBlock
@@ -584,7 +710,7 @@ export const LeaderboardsPage: React.FC = () => {
             margin: "10px",
           }}
         >
-          <div>
+          <div style={{ marginBottom: 20 }}>
             <button
               className="pointer back-btn"
               onClick={() => navigate("/leaderboards")}
@@ -593,11 +719,12 @@ export const LeaderboardsPage: React.FC = () => {
             </button>
           </div>
           <div className="flex">
-            {displayPodium}
+            {displayChart}
+            {/* {displayPodium} */}
             {displayCategory && (
               <div
                 style={{
-                  width: "calc(100% - 400px)",
+                  width: "calc(100% - 500px)",
                   minWidth: 300,
                   flexGrow: 1,
                 }}
@@ -625,7 +752,11 @@ export const LeaderboardsPage: React.FC = () => {
                     </div>
                   </div>
                   <div>{displayCategory.calculation.details}</div>
-                  <div style={{display: 'none'}} className="calc-setup-info-wrapper">
+                  {/* @TODO CALC INFO DISPLAY */}
+                  <div
+                    style={{ display: "none" }}
+                    className="calc-setup-info-wrapper"
+                  >
                     <table>
                       <thead>
                         <tr>
@@ -805,7 +936,7 @@ export const LeaderboardsPage: React.FC = () => {
           </div>
         </div>
         {displayCategory && (
-          <div key={currentCategory}>
+          <div key={`${currentCategory}${variant}`}>
             <CustomTable
               fetchURL={FETCH_LEADERBOARDS_URL}
               fetchParams={{
@@ -813,31 +944,38 @@ export const LeaderboardsPage: React.FC = () => {
                 uid: lookupUID,
                 variant,
                 filter: "[all]1",
+                calculationId: currentCategory,
               }}
               columns={LEADERBOARDS_COLUMNS}
               defaultSort={calculationSortKey}
-              calculationColumn={currentCategory}
+              // calculationColumn={currentCategory}
+              strikethrough={true}
               expandableRows
               ignoreEmptyUidsArray
+              alwaysShowIndexColumn
               // hidePagination
             />
 
             {/* spacer */}
             <div style={{ marginTop: "30px" }} />
-
+            
             <CustomTable
               fetchURL={FETCH_LEADERBOARDS_URL}
-              fetchParams={{ variant }}
+              fetchParams={{ variant, calculationId: currentCategory }}
               filtersURL={`${FETCH_CHARACTER_FILTERS_URL}?type=leaderboards`}
               columns={LEADERBOARDS_COLUMNS}
               defaultSort={calculationSortKey}
-              calculationColumn={currentCategory}
+              // calculationColumn={currentCategory}
+              strikethrough={true}
               expandableRows
               projectParamsToPath
+              alwaysShowIndexColumn
             />
           </div>
         )}
       </div>
+
+      {showAds && <AdsComponent dataAdSlot="6204085735" />}
     </div>
   );
 };
