@@ -77,20 +77,13 @@ export const CalculationResultWidget: React.FC<
           const { calculationId, variant } = _calc;
           const calcKey = `${calculationId}${variant?.name || ""}`;
           if (!build.calculations[calcKey]?.ranking) continue;
-          let priority = 1;
-
-          if (build.weapon.name === build.calculations[calcKey]?.weapon?.name) {
-            priority++;
-          }
-
-          // @TODO: another priority++ if weapon main stat matches (not on backend yet)
 
           calcArray.push({
             ...(build.calculations[calcKey] as {}),
             id: calculationId,
             characterName: build.name,
             characterIcon: build.icon,
-            priority,
+            priority: build.calculations[calcKey]?.priority,
           });
         }
       }
@@ -148,11 +141,26 @@ export const CalculationResultWidget: React.FC<
         const shortName = variant?.displayName || short || "---";
         const leaveOnlyNumbersRegex = /\D+/g;
         const _ranking = +(ranking + "")?.replace(leaveOnlyNumbersRegex, "");
-        
+
+        let weaponMatchClass = "";
+
+        switch (priority) {
+          case 2:
+            weaponMatchClass = "matching-weapon";
+            break;
+          case 1:
+            weaponMatchClass = "almost-matching-weapon";
+            break;
+          case 0:
+            weaponMatchClass = "mismatching-weapon";
+            break;
+        }
+
+        console.log('calc', calc)
         return (
           <div
             key={`${name}-${weapon.name}`}
-            className={priority === 1 ? 'mismatching-weapon' : 'matching-weapon'}
+            className={weaponMatchClass}
           >
             <a
               title={`${calc.name} - ${weapon.name} R${

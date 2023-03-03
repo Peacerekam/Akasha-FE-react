@@ -91,8 +91,10 @@ export const LogInModal: React.FC<LogInModalProps> = ({
                             className="filter-icon hoverable-icon"
                             icon={faRightFromBracket}
                             size="1x"
+                            title="Logout?"
                           />
                         </ConfirmTooltip>
+                        {/* @TODO: unbind account here? */}
                       </div>
                     </td>
                   </tr>
