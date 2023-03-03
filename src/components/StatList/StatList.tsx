@@ -48,19 +48,21 @@ const getStatsFromRow = (row: any) => {
   const hp = stats.maxHp.value.toFixed(0);
   const atk = stats.atk.value.toFixed(0);
   const def = stats.def.value.toFixed(0);
-  const cr = (stats.critRate?.value * 100).toFixed(1);
-  const cd = (stats.critDamage?.value * 100).toFixed(1);
-  const er = (stats.energyRecharge?.value * 100).toFixed(1);
+  const cr = ((stats.critRate?.value || 0) * 100).toFixed(1);
+  const cd = ((stats.critDamage?.value || 0) * 100).toFixed(1);
+  const er = ((stats.energyRecharge?.value || 0) * 100).toFixed(1);
   const em = +stats.elementalMastery?.value.toFixed(0) || 0;
 
-  const pyroDMG = (stats.pyroDamageBonus?.value * 100).toFixed(1);
-  const hydroDMG = (stats.hydroDamageBonus?.value * 100).toFixed(1);
-  const cryoDMG = (stats.cryoDamageBonus?.value * 100).toFixed(1);
-  const dendroDMG = (stats.dendroDamageBonus?.value * 100).toFixed(1); // partially missing data
-  const electroDMG = (stats.electroDamageBonus?.value * 100).toFixed(1);
-  const anemoDMG = (stats.anemoDamageBonus?.value * 100).toFixed(1);
-  const geoDMG = (stats.geoDamageBonus?.value * 100).toFixed(1);
-  const physicalDMG = (stats.physicalDamageBonus?.value * 100).toFixed(1);
+  const pyroDMG = ((stats.pyroDamageBonus?.value || 0) * 100).toFixed(1);
+  const hydroDMG = ((stats.hydroDamageBonus?.value || 0) * 100).toFixed(1);
+  const cryoDMG = ((stats.cryoDamageBonus?.value || 0) * 100).toFixed(1);
+  const dendroDMG = ((stats.dendroDamageBonus?.value || 0) * 100).toFixed(1); // partially missing data
+  const electroDMG = ((stats.electroDamageBonus?.value || 0) * 100).toFixed(1);
+  const anemoDMG = ((stats.anemoDamageBonus?.value || 0) * 100).toFixed(1);
+  const geoDMG = ((stats.geoDamageBonus?.value || 0) * 100).toFixed(1);
+  const physicalDMG = ((stats.physicalDamageBonus?.value || 0) * 100).toFixed(
+    1
+  );
 
   return {
     hp,
