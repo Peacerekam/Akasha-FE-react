@@ -609,7 +609,8 @@ export const CustomTable: React.FC<CustomTableProps> = ({
       </PerfectScrollbar>
       {!hidePagination && (
         <Pagination
-          isLoading={isFetchingPagination}
+          isDataLoading={isLoading}
+          isFetchingPagination={isFetchingPagination}
           pageSize={params.size}
           pageNumber={params.page}
           sort={params.sort}

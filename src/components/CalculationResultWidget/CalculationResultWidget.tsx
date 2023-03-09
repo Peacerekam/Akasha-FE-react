@@ -143,27 +143,30 @@ export const CalculationResultWidget: React.FC<
         const _ranking = +(ranking + "")?.replace(leaveOnlyNumbersRegex, "");
 
         let weaponMatchClass = "";
+        let weaponMatchString = "";
 
         switch (priority) {
           case 2:
             weaponMatchClass = "matching-weapon";
+            weaponMatchString = "Leaderboard weapon matches equipped weapon"
             break;
           case 1:
             weaponMatchClass = "almost-matching-weapon";
+            weaponMatchString = "Leaderboard weapon has the same substat as equipped weapon"
             break;
           case 0:
             weaponMatchClass = "mismatching-weapon";
+            weaponMatchString = "Leaderboard weapon does not match equipped weapon"
             break;
         }
 
-        console.log('calc', calc)
         return (
           <div
             key={`${name}-${weapon.name}`}
             className={weaponMatchClass}
           >
             <a
-              title={`${calc.name} - ${weapon.name} R${
+              title={`${weaponMatchString}\n${calc.name} - ${weapon.name} R${
                 weapon?.refinement || 1
               }`}
               className="highlight-tile"

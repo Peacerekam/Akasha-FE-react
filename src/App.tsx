@@ -31,16 +31,17 @@ const urls = {
   localhost80: "http://localhost:80",
   virmach: "http://149.57.165.73:5033",
   ovh: "http://146.59.86.233:5033",
+  ovh80: "http://146.59.86.233",
   proxy: "http://localhost:3100/akasha",
   heroku: "https://akasha-backend.herokuapp.com",
 };
 
 export const showAds = true;
-export const isProduction = false;
+export const isProduction = true;
 export const BASENAME = "/akasha";
 const MAINTENANCE_MODE = false;
 
-axios.defaults.baseURL = urls[isProduction ? "prod" : "localhost80"];
+axios.defaults.baseURL = urls[isProduction ? "ovh80" : "localhost80"]; // prod
 axios.defaults.withCredentials = true;
 
 // const queryClient = new QueryClient({

@@ -18,7 +18,8 @@ type PaginationProps = {
   pageSize?: number;
   pageNumber?: number;
   setParams?: React.Dispatch<React.SetStateAction<FetchParams>> | null;
-  isLoading?: boolean;
+  isFetchingPagination?: boolean;
+  isDataLoading?: boolean;
   rows?: any[];
   sort?: string;
   order?: number;
@@ -49,7 +50,8 @@ export const Pagination: React.FC<PaginationProps> = ({
   pageSize = 0,
   pageNumber = 0,
   setParams = null,
-  isLoading = false,
+  isFetchingPagination = false,
+  isDataLoading = false,
   rows = [],
   sort = null,
   order = null,
@@ -68,7 +70,7 @@ export const Pagination: React.FC<PaginationProps> = ({
   const lastItem = rows.length > 0 ? rows[rows.length - 1] : null;
 
   const handleNextPage = () => {
-    if (!setParams) return;
+    if (!setParams || !isDataLoading) return;
 
     const nextValue = accessFieldByString(lastItem, sort);
     // const smallerNextValue = isNaN(+nextValue) ? nextValue : (+nextValue).toFixed(2);
@@ -90,7 +92,7 @@ export const Pagination: React.FC<PaginationProps> = ({
   };
 
   const handlePreviousPage = () => {
-    if (!setParams) return;
+    if (!setParams || !isDataLoading) return;
 
     const nextValue = accessFieldByString(firstItem, sort);
     // const smallerNextValue = isNaN(+nextValue) ? nextValue : (+nextValue).toFixed(2);
@@ -389,7 +391,7 @@ export const Pagination: React.FC<PaginationProps> = ({
         )}
         <div className="pagination-details">
           {unknownPage ? `unknown page` : `${from}-${to}`} of{" "}
-          {isLoading ? "---" : totalRows}
+          {isFetchingPagination ? "---" : totalRows}
         </div>
       </div>
     </div>

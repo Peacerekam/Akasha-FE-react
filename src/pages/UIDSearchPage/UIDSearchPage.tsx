@@ -166,12 +166,12 @@ export const UIDSearchPage: React.FC = () => {
               </div>
               {results.length > 0 && (
                 <div style={{ width: "100%", maxWidth: 950 }}>
-                  <Pagination
+                  {/* <Pagination
                     pageSize={params.size}
                     pageNumber={params.page}
                     totalRows={totalRowsCount}
                     setParams={setParams}
-                  />
+                  /> */}
                   
                   <Pagination
                     // isLoading={isFetchingPagination}

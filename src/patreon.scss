@@ -66,8 +66,10 @@ $patreon-colors: cyan, lime, red, white, orange, fuchsia, gold, silver, brown;
 
 .content-block {
   &.patreon-profile {
-    border: 1px solid #00ffff57;
+    // border: 1px solid #00ffff57;
     // animation: fancyShowUp 2s ease-in-out;
+    box-shadow: rgba(0, 255, 255, 0.341) 0 0 0 1px,
+      rgba(0, 0, 0, 0.24) 0px 3px 8px;
   }
 }
 
