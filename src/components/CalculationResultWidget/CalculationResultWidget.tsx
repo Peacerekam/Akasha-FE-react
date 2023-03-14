@@ -2,7 +2,6 @@ import axios from "axios";
 import React, { useMemo, useState, useEffect } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { useNavigate } from "react-router-dom";
-import { BASENAME } from "../../App";
 import { abortSignalCatcher, toShortThousands } from "../../utils/helpers";
 import { Spinner } from "../Spinner";
 import { Timer } from "../Timer";
@@ -174,7 +173,7 @@ export const CalculationResultWidget: React.FC<
                 event.preventDefault();
                 navigate(`/leaderboards/${id}/${variant?.name || ""}`);
               }}
-              href={`${BASENAME}/leaderboards/${id}/${variant?.name || ""}`}
+              href={`/leaderboards/${id}/${variant?.name || ""}`}
             >
               <div className="highlight-tile-pill">{shortName}</div>
               <div className="flex">

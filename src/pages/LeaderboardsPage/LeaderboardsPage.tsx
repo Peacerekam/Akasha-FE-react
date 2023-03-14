@@ -37,7 +37,7 @@ import {
 import { TableColumn } from "../../types/TableColumn";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
-import { BASENAME, showAds } from "../../App";
+import { showAds } from "../../App";
 import { getIconElement } from "../../components/HelpBox/helpContentBuilds";
 import "./style.scss";
 
@@ -205,7 +205,7 @@ export const LeaderboardsPage: React.FC = () => {
                 event.preventDefault();
                 navigate(`/profile/${row.uid}`);
               }}
-              href={`${BASENAME}/profile/${row.uid}`}
+              href={`/profile/${row.uid}`}
             >
               {/* <ARBadge adventureRank={row.owner?.adventureRank} /> */}
               <RegionBadge region={row.owner?.region} />
@@ -523,7 +523,7 @@ export const LeaderboardsPage: React.FC = () => {
             event.preventDefault();
             navigate(`/leaderboards/${calculationId}/`);
           }}
-          href={`${BASENAME}/leaderboards/${calculationId}/`}
+          href={`/leaderboards/${calculationId}/`}
         >
           NONE
         </a>
@@ -538,7 +538,7 @@ export const LeaderboardsPage: React.FC = () => {
                 event.preventDefault();
                 navigate(`/leaderboards/${calculationId}/${val.name}`);
               }}
-              href={`${BASENAME}/leaderboards/${calculationId}/${val.name}`}
+              href={`/leaderboards/${calculationId}/${val.name}`}
             >
               {val.displayName}
             </a>
@@ -576,7 +576,7 @@ export const LeaderboardsPage: React.FC = () => {
                         event.preventDefault();
                         navigate(`/${leaderboardPath}`);
                       }}
-                      href={`${BASENAME}/${leaderboardPath}`}
+                      href={`/${leaderboardPath}`}
                     >
                       <WeaponMiniDisplay
                         icon={weaponicon}

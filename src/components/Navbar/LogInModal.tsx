@@ -12,7 +12,6 @@ import { useContext } from "react";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
 import { ConfirmTooltip } from "../ConfirmTooltip";
 import { optsParamsSessionID } from "../../utils/helpers";
-import { BASENAME } from "../../App";
 import { ARBadge } from "../ARBadge";
 import { RegionBadge } from "../RegionBadge";
 
@@ -130,7 +129,7 @@ export const LogInModal: React.FC<LogInModalProps> = ({
                               handleCloseModal(event, true);
                               navigate(`/profile/${uid}`);
                             }}
-                            href={`${BASENAME}/profile/${uid}`}
+                            href={`/profile/${uid}`}
                           >
                             <img
                               className="table-icon"

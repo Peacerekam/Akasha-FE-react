@@ -67,7 +67,7 @@ const getCollectionName = (fetchURL: string = "") => {
 
   const collectionName = {
     [FETCH_ARTIFACTS_URL]: "artifacts",
-    [FETCH_LEADERBOARDS_URL]: "characters",
+    [FETCH_LEADERBOARDS_URL]: "charactersLb",
     [FETCH_BUILDS_URL]: "characters",
   }[fetchURL];
 

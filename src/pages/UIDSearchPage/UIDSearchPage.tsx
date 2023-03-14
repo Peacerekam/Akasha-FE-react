@@ -13,7 +13,7 @@ import {
 } from "../../components";
 import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
 import "./style.scss";
-import { BASENAME, showAds } from "../../App";
+import { showAds } from "../../App";
 import { FETCH_COLLECTION_SIZE_URL } from "../../utils/helpers";
 
 export const UIDSearchPage: React.FC = () => {
@@ -149,7 +149,7 @@ export const UIDSearchPage: React.FC = () => {
                     <a
                       key={`${result.uid}-${i}`}
                       className="uid-result"
-                      href={`${BASENAME}/profile/${result.uid}`}
+                      href={`/profile/${result.uid}`}
                       onClick={(event) => {
                         event.preventDefault();
                         navigate(`/profile/${result.uid}`);

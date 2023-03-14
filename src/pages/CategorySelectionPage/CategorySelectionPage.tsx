@@ -9,7 +9,7 @@ import {
   StylizedContentBlock,
 } from "../../components";
 import { FETCH_CATEGORIES_URL } from "../../utils/helpers";
-import { BASENAME, showAds } from "../../App";
+import { showAds } from "../../App";
 
 export type TransformedCategories = {
   characterName: string;
@@ -137,7 +137,7 @@ export const CategorySelectionPage: React.FC = () => {
                                         event.preventDefault();
                                         navigate(`/${leaderboardPath}`);
                                       }}
-                                      href={`${BASENAME}/${leaderboardPath}`}
+                                      href={`/${leaderboardPath}`}
                                     >
                                       {calc.weapon && (
                                         <span>

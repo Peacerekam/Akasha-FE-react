@@ -27,7 +27,7 @@ import {
   getRainbowTextStyle,
 } from "../../utils/helpers";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
-import { BASENAME, showAds } from "../../App";
+import { showAds } from "../../App";
 
 export type ArtifactColumns = {
   _id: string;
@@ -75,7 +75,7 @@ export const ArtifactsPage: React.FC = () => {
                 event.preventDefault();
                 navigate(`/profile/${row.uid}`);
               }}
-              href={`${BASENAME}/profile/${row.uid}`}
+              href={`/profile/${row.uid}`}
             >
               {/* <ARBadge adventureRank={row.owner.adventureRank} /> */}
               <RegionBadge region={row.owner?.region} />
@@ -123,7 +123,9 @@ export const ArtifactsPage: React.FC = () => {
           const isPercenrage =
             row.mainStatKey.endsWith("%") ||
             row.mainStatKey?.endsWith("Bonus") ||
-            ["Energy Recharge", "Crit RATE", "Crit DMG"].includes(row.mainStatKey);
+            ["Energy Recharge", "Crit RATE", "Crit DMG"].includes(
+              row.mainStatKey
+            );
 
           const mainStatValue = isPercenrage
             ? Math.round(row.mainStatValue * 10) / 10

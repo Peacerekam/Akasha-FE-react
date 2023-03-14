@@ -9,7 +9,6 @@ import { LogInModal } from "./LogInModal";
 import "./style.scss";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
 import { Spinner } from "../Spinner";
-import { BASENAME } from "../../App";
 import AkashaLogo from "../../assets/images/favicon.svg";
 
 type NavElement = {
@@ -104,7 +103,7 @@ export const Navbar: React.FC = () => {
         }
         target={nav.external ? "_blank" : undefined}
         rel="noreferrer"
-        href={nav.external ? nav.path : `${BASENAME}${nav.path}`}
+        href={nav.external ? nav.path : `${nav.path}`}
         onClick={(event) => {
           if (nav.external) return;
           event.preventDefault();

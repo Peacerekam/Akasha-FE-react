@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { BASENAME } from "../../App";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import "./style.scss";
 
@@ -117,7 +116,7 @@ export const CalculationList: React.FC<CalculationListProps> = ({ row }) => {
               <td>{variant?.displayName}</td>
               <td>
                 <a
-                  href={`${BASENAME}/${leaderboardPath}`}
+                  href={`/${leaderboardPath}`}
                   onClick={(event) => {
                     event.preventDefault();
                     navigate(`/${leaderboardPath}`);

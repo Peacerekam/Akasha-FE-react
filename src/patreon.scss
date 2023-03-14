@@ -64,12 +64,23 @@ $patreon-colors: cyan, lime, red, white, orange, fuchsia, gold, silver, brown;
 //   }
 // }
 
+@keyframes patreonBoxShadowFadeIn {
+  0% {
+    box-shadow: rgba(0, 255, 255, 0) 0 0 0 1px,
+      rgba(0, 0, 0, 0) 0px 3px 8px;
+  }
+  100% {
+    box-shadow: rgba(0, 255, 255, 0.341) 0 0 0 1px,
+      rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  }
+}
+
 .content-block {
   &.patreon-profile {
     // border: 1px solid #00ffff57;
-    // animation: fancyShowUp 2s ease-in-out;
-    box-shadow: rgba(0, 255, 255, 0.341) 0 0 0 1px,
-      rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    animation: patreonBoxShadowFadeIn 1.5s ease-out;
+    animation-fill-mode: forwards;
+
   }
 }
 

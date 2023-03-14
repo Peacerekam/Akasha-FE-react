@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { BASENAME } from "../../App";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
 import "./style.scss";
 
@@ -32,7 +31,7 @@ export const NavbarTabs: React.FC = () => {
             style={style}
           >
             <a
-              href={`${BASENAME}/profile/${uid}`}
+              href={`/profile/${uid}`}
               onClick={(event) => {
                 event.preventDefault();
                 navigate(`/profile/${uid}`);

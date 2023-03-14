@@ -11,7 +11,6 @@ import {
   StylizedContentBlock,
   HelpBox,
   AdsComponent,
-  ARBadge,
   RegionBadge,
 } from "../../components";
 import { TableColumn } from "../../types/TableColumn";
@@ -22,7 +21,7 @@ import {
   FETCH_CHARACTER_FILTERS_URL,
 } from "../../utils/helpers";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
-import { BASENAME, showAds } from "../../App";
+import { showAds } from "../../App";
 
 export type BuildsColumns = {
   _id: string;
@@ -64,7 +63,7 @@ export const BuildsPage: React.FC = () => {
                 event.preventDefault();
                 navigate(`/profile/${row.uid}`);
               }}
-              href={`${BASENAME}/profile/${row.uid}`}
+              href={`/profile/${row.uid}`}
             >
               {/* <ARBadge adventureRank={row.owner.adventureRank} /> */}
               <RegionBadge region={row.owner.region} />

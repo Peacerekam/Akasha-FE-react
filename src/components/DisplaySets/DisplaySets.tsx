@@ -6,9 +6,9 @@ type DisplaySetsProps = {
 
 export const DisplaySets: React.FC<DisplaySetsProps> = ({ artifactSets }) => {
   const setNames = Object.keys(artifactSets);
-  const activeSets = setNames.filter(
-    (name: any) => artifactSets[name].count > 1
-  );
+  const activeSets = setNames
+    .filter((name: any) => artifactSets[name].count > 1)
+    .sort((a, b) => (a > b ? 1 : -1));
   return (
     <div>
       <div className="table-set-display">

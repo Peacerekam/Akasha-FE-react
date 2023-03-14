@@ -70,7 +70,7 @@ export const Pagination: React.FC<PaginationProps> = ({
   const lastItem = rows.length > 0 ? rows[rows.length - 1] : null;
 
   const handleNextPage = () => {
-    if (!setParams || !isDataLoading) return;
+    if (!setParams || isDataLoading) return;
 
     const nextValue = accessFieldByString(lastItem, sort);
     // const smallerNextValue = isNaN(+nextValue) ? nextValue : (+nextValue).toFixed(2);
@@ -92,7 +92,7 @@ export const Pagination: React.FC<PaginationProps> = ({
   };
 
   const handlePreviousPage = () => {
-    if (!setParams || !isDataLoading) return;
+    if (!setParams || isDataLoading) return;
 
     const nextValue = accessFieldByString(firstItem, sort);
     // const smallerNextValue = isNaN(+nextValue) ? nextValue : (+nextValue).toFixed(2);

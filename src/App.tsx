@@ -26,7 +26,8 @@ import {
 
 // @TODO: env variables later on...
 const urls = {
-  prod: "https://www.mimee.ovh",
+  prod: "https://mimee.ovh",
+  "prod-akasha-cv": "https://akasha.cv",
   localhost: "http://localhost:5033",
   localhost80: "http://localhost:80",
   virmach: "http://149.57.165.73:5033",
@@ -37,11 +38,11 @@ const urls = {
 };
 
 export const showAds = true;
-export const isProduction = true;
-export const BASENAME = "/akasha";
+export const isProduction = false;
+export const BASENAME = "/";
 const MAINTENANCE_MODE = false;
 
-axios.defaults.baseURL = urls[isProduction ? "ovh80" : "localhost80"]; // prod
+axios.defaults.baseURL = urls[isProduction ? "prod-akasha-cv" : "localhost80"]; // prod
 axios.defaults.withCredentials = true;
 
 // const queryClient = new QueryClient({
@@ -53,10 +54,21 @@ axios.defaults.withCredentials = true;
 // });
 
 const domainRedirect = () => {
-  const _from = "peacerekam.github.io";
-  const _to = "mimee.ovh";
   const currentHref = window.location.href;
+
+  let _from = "mimee.ovh";
+
+  switch (currentHref) {
+    case "peacerekam.github.io":
+      _from = "peacerekam.github.io";
+      break;
+    case "146.59.86.233":
+      _from = "146.59.86.233";
+      break;
+  }
+
   if (currentHref.includes(_from)) {
+    const _to = "akasha.cv";
     const newHref = currentHref
       .replace(_from, _to) // change domain
       .replace("/#/", "/"); // HashRouter to BrowserRouter
