@@ -127,7 +127,7 @@ export const CalculationResultWidget: React.FC<
         tmpIncludeCheck[calc.characterName] = calc.priority;
       }
 
-      return finalArr;
+      return finalArr.sort(sortFn);
     }
     return [];
   }, [data]);
