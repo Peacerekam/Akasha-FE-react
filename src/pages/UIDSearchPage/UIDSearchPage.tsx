@@ -172,7 +172,7 @@ export const UIDSearchPage: React.FC = () => {
                     totalRows={totalRowsCount}
                     setParams={setParams}
                   /> */}
-                  
+
                   <Pagination
                     // isLoading={isFetchingPagination}
                     pageSize={params.size}
@@ -193,7 +193,12 @@ export const UIDSearchPage: React.FC = () => {
             </div>
           </div>
         </div>
-        {showAds && results?.length > 0 && <AdsComponent dataAdSlot="6204085735" />}
+        {showAds && results?.length > 0 && (
+          <AdsComponent provider="google" dataAdSlot="6204085735" />
+        )}
+        {/* {showAds && results?.length > 0 && (
+          <AdsComponent provider="ezoic" ezoicId="103" />
+        )} */}
       </div>
     </div>
   );

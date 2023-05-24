@@ -15,13 +15,15 @@ import {
   Spinner,
   Pagination,
   ArtifactListCompact,
+  GenshinUserCard,
 } from "../../components";
 import {
   abortSignalCatcher,
   arrayPushOrSplice,
-  FETCH_ACCOUNTS_URL,
+  FETCH_SEARCH_USERS_URL,
   FETCH_COLLECTION_SIZE_URL,
   normalizeText,
+  FETCH_ACCOUNTS_URL,
 } from "../../utils/helpers";
 import { FiltersContainer, FilterOption } from "./Filters";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -61,7 +63,7 @@ export type FetchParams = {
 };
 
 const getCollectionName = (fetchURL: string = "") => {
-  if (fetchURL?.startsWith(FETCH_ACCOUNTS_URL)) {
+  if (fetchURL?.startsWith(FETCH_SEARCH_USERS_URL)) {
     return "accounts";
   }
 
@@ -69,6 +71,7 @@ const getCollectionName = (fetchURL: string = "") => {
     [FETCH_ARTIFACTS_URL]: "artifacts",
     [FETCH_LEADERBOARDS_URL]: "charactersLb",
     [FETCH_BUILDS_URL]: "characters",
+    [FETCH_ACCOUNTS_URL]: "accounts",
   }[fetchURL];
 
   return collectionName;
@@ -142,7 +145,10 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     // const toAppend = encodeURI(tmp.join("&"));
     const toAppend = tmp.join("&");
     const newURL = `?${toAppend}`;
-    navigate(newURL, { replace: true });
+    navigate(
+      newURL,
+      { replace: true } // @TODO: see if this is better UX
+    );
   };
 
   const readParamsFromURL = () => {
@@ -420,15 +426,40 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     });
   }, [columns, params.order, params.sort, hideIndexColumn]);
 
-  const renderExpandRow = useCallback(
-    (row: any) => (
+  const renderExpandRow = useCallback((row: any) => {
+    const isProfileRow = !!row.achievements;
+
+    if (isProfileRow) {
+      return (
+        <>
+          <div className="flex expanded-row">
+            <div style={{ overflow: "hidden" }}>
+              <a
+                className="uid-result"
+                href={`/profile/${row.uid}`}
+                onClick={(event) => {
+                  event.preventDefault();
+                  navigate(`/profile/${row.uid}`);
+                }}
+              >
+                <GenshinUserCard
+                  accountData={{ account: row }}
+                  isAccountOwner
+                  showBackgroundImage
+                />
+              </a>
+            </div>
+          </div>
+        </>
+      );
+    }
+    return (
       <>
         <ArtifactListCompact row={row} />
         <CalculationList row={row} />
       </>
-    ),
-    []
-  );
+    );
+  }, []);
 
   const hasOwnerColumn = useMemo(
     () => columns.findIndex((c) => c.name === "Owner") > -1,

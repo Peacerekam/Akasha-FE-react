@@ -33,6 +33,10 @@
     align-items: center;
     transition: opacity 0.3s;
 
+    @media (max-width: 500px) {
+      margin-top: 18px;
+    }
+
     // &.is-loading {
     //   pointer-events: none;
     //   opacity: 0.2;

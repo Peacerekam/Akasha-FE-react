@@ -100,9 +100,9 @@ export const StatList: React.FC<StatListProps> = ({
   const displayArtifactSets = () => {
     const { artifactSets } = row;
     const setNames = Object.keys(artifactSets);
-    const activeSets = setNames.filter(
-      (name: any) => artifactSets[name].count > 1
-    );
+    const activeSets = setNames
+      .filter((name: any) => artifactSets[name].count > 1)
+      .sort((a, b) => (a > b ? 1 : -1));
 
     return activeSets.map((name) => {
       const { icon, count } = artifactSets[name];

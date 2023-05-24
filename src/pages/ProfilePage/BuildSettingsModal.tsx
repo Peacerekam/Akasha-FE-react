@@ -22,7 +22,7 @@ import {
 import { BuildNameInput } from "./BuildNameInput";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
 
-type ProfileSettingsModalProps = {
+export type ProfileSettingsModalProps = {
   isOpen: boolean;
   toggleModal: (event: React.MouseEvent<HTMLElement>) => void;
   accountData: {
@@ -32,7 +32,7 @@ type ProfileSettingsModalProps = {
   parentRefetchData: () => void;
 };
 
-export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
+export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
   isOpen,
   toggleModal,
   accountData,
@@ -44,7 +44,8 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
   const [builds, setBuilds] = useState<any[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [isDirty, setIsDirty] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
+  const [isPending, setIsPending] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const uploadInput = useRef<HTMLInputElement>(null);
 
   // @TODO: .....................
@@ -66,18 +67,26 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       const { data } = response.data;
       setBuilds(data);
     };
-
+    setIsLoading(true);
     await abortSignalCatcher(getSetData);
+    setIsLoading(false);
   };
 
   const getBuildId = (build: any) => `${build.characterId}${build.type}`;
 
   const selectedBuild = useMemo(
-    () => builds.find((b) => getBuildId(b) === selectedBuildId) || {},
+    () => builds?.find((b) => getBuildId(b) === selectedBuildId) || {},
     [selectedBuildId, builds]
   );
 
   useEffect(() => {
+    setBuilds([]);
+  }, [accountData?.uid]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    if (builds.length > 0) return;
+
     if (accountData?.uid) {
       const abortController = new AbortController();
       fetchBuildsData(accountData?.uid, abortController);
@@ -85,7 +94,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
         abortController.abort();
       };
     }
-  }, [accountData?.uid]);
+  }, [isOpen, accountData?.uid]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -113,7 +122,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
 
   const modalHeader = (
     <div className="modal-header">
-      <span className="modal-title">Profile settings</span>
+      <span className="modal-title">Builds settings</span>
       <button
         className="close-btn"
         onClick={(event) => handleCloseModal(event, true)}
@@ -148,7 +157,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     const handleSubmitNamecard = async () => {
       const file = uploadInput?.current?.files?.[0];
       if (!file || !selectedBuild) return;
-      setIsUploading(true);
+      setIsPending(true);
 
       const formData = new FormData();
       formData.append("file", file);
@@ -169,7 +178,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
         },
       });
 
-      setIsUploading(false);
+      setIsPending(false);
       clearBgImage();
       fetchBuildsData(accountData?.uid);
       setIsDirty(true);
@@ -185,7 +194,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
 
     const handleDeleteBackground = async () => {
       setIsDirty(true);
-      setIsUploading(true);
+      setIsPending(true);
       const { uid, characterId, type } = selectedBuild;
       const _uid = encodeURIComponent(uid);
       const postNamecardURL = `/api/user/namecard/${_uid}/${characterId}`;
@@ -196,14 +205,14 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
         },
       };
       await axios.post(postNamecardURL, null, opts); // no formData attached
-      setIsUploading(false);
+      setIsPending(false);
       clearBgImage();
       fetchBuildsData(accountData?.uid);
     };
 
     const handleToggleBuildVisibility = async (char: any) => {
       setIsDirty(true);
-      setIsUploading(true);
+      setIsPending(true);
       const { uid, characterId, type } = char;
       const _uid = encodeURIComponent(uid);
       const toggleVisibilityURL = `/api/user/toggleBuildVisibility/${_uid}/${characterId}`;
@@ -214,13 +223,13 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
         },
       };
       await axios.post(toggleVisibilityURL, null, opts);
-      setIsUploading(false);
+      setIsPending(false);
       fetchBuildsData(accountData?.uid);
     };
 
     const handleDeleteBuild = async (char: any) => {
       setIsDirty(true);
-      setIsUploading(true);
+      setIsPending(true);
       const { uid, characterId, type } = char;
       const _uid = encodeURIComponent(uid);
       const deleteBuildURL = `/api/user/deleteBuild/${_uid}/${characterId}`;
@@ -231,7 +240,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
         },
       };
       await axios.post(deleteBuildURL, null, opts);
-      setIsUploading(false);
+      setIsPending(false);
       fetchBuildsData(accountData?.uid);
     };
 
@@ -246,7 +255,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       }
 
       setIsDirty(true);
-      setIsUploading(true);
+      setIsPending(true);
 
       const { uid, characterId, type } = selectedBuild;
       const _uid = encodeURIComponent(uid);
@@ -264,7 +273,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
 
       await fetchBuildsData(accountData?.uid);
       const newBuildId = `${selectedBuild.characterId}${newBuildName}`;
-      setIsUploading(false);
+      setIsPending(false);
       setSelectedBuildId(newBuildId);
     };
 
@@ -377,7 +386,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
               </div>
             ) : (
               <div className="custom-namecard-upload">
-                {isUploading ? (
+                {isPending ? (
                   <Spinner />
                 ) : (
                   <>
@@ -460,7 +469,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     selectedBuild,
     searchText,
     selectedBuildId,
-    isUploading,
+    isPending,
   ]);
 
   // const modalButtons = (
@@ -484,7 +493,13 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
         <div className="modal settings-modal" style={{ width: 800 }}>
           {modalHeader}
           <div className="modal-content">
-            {modalContent}
+            {isLoading ? (
+              <div className="spinner-wrapper">
+                <Spinner />
+              </div>
+            ) : (
+              modalContent
+            )}
             {/* {modalButtons} */}
           </div>
         </div>

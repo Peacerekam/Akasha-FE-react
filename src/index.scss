@@ -463,14 +463,14 @@ body {
 @keyframes modalReveal {
   0% {
     opacity: 0; // untransformed at the start for react-select portal
-    transform: translate(0, -150px) scale(1);
+    transform: translate(0, -50px) scale(1);
   }
   1% {
     opacity: 1;
     transform: translate(var(--modal-offset-x), var(--modal-offset-y)) scale(0);
   }
   100% {
-    transform: translate(0, -150px) scale(1);
+    transform: translate(0, -50px) scale(1);
   }
 }
 

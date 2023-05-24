@@ -1,4 +1,4 @@
-.adsbygoogle {
+.ads-container {
   overflow: hidden;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   display: flex;
@@ -15,4 +15,12 @@
   // &[data-ad-status="unfilled"] {
   //   display: none;
   // }
+  .ads-by-google {
+    width: 100%;
+    @media (max-width: 800px) {
+      &.hide-on-mobile {
+        display: none;
+      }
+    }
+  }
 }

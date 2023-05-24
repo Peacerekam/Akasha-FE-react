@@ -1,4 +1,5 @@
 import { getSubstatPercentageEfficiency } from "./helpers";
+
 export const STAT_NAMES: {
   [id: string]: string;
 } = {

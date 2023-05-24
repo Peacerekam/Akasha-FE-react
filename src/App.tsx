@@ -8,6 +8,7 @@ import { HoverElementContextProvider } from "./context/HoverElement/HoverElement
 import { SessionDataContextProvider } from "./context/SessionData/SessionDataContext";
 import {
   Footer,
+  MobileStickyBar,
   Navbar,
   NavbarTabs,
   NotificationBar,
@@ -22,7 +23,9 @@ import {
   CategorySelectionPage,
   // DashboardPage,
   UIDSearchPage,
+  AccountsPage,
 } from "./pages";
+import { PrivacyPolicyPage } from "./pages/PrivacyPolicy";
 
 // @TODO: env variables later on...
 const urls = {
@@ -67,9 +70,10 @@ const domainRedirect = () => {
       break;
   }
 
-  if (currentHref.includes(_from)) {
+  if (currentHref.includes(_from) || currentHref.startsWith("www.")) { // startsWith ?? includes ??
     const _to = "akasha.cv";
     const newHref = currentHref
+      .replace("www.", "")
       .replace(_from, _to) // change domain
       .replace("/#/", "/"); // HashRouter to BrowserRouter
     window.location.href = newHref;
@@ -116,6 +120,7 @@ const App = () => {
       </CookieConsent>
       <SessionDataContextProvider>
         <BrowserRouter basename={BASENAME}>
+          {/* <MobileStickyBar /> */}
           <NotificationBar />
           <Navbar />
           <NavbarTabs />
@@ -126,10 +131,14 @@ const App = () => {
               <Routes>
                 {/* @TODO: later use dashboard page instead */}
                 {/* <Route path="/" element={<DashboardPage />} /> */}
-                <Route path="/" element={<UIDSearchPage />} />
+                <Route path="/" element={<AccountsPage />} />
                 <Route path="/artifacts" element={<ArtifactsPage />} />
                 <Route path="/builds" element={<BuildsPage />} />
-                <Route path="/profile" element={<UIDSearchPage />} />
+                <Route path="/profiles" element={<AccountsPage />} />
+
+                {/* @TODO: insert UIDSearchPage into AccountsPage */}
+                {/* <Route path="/profile" element={<UIDSearchPage />} /> */}
+
                 <Route path="/profile/:uid" element={<ProfilePage />} />
 
                 {/* <Route path="/builds/ads" element={<BuildsPage />} />
@@ -149,6 +158,8 @@ const App = () => {
                   path="/leaderboards/:calculationId/:variant"
                   element={<LeaderboardsPage />}
                 />
+
+                <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
 
                 <Route
                   path="*"

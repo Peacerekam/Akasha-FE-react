@@ -12,7 +12,16 @@
     left: 0px;
   }
 }
-  
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .navbar-tabs {
   background-color: transparent;
   color: #e7f6f2;
@@ -26,7 +35,8 @@
     display: flex;
     position: relative;
     opacity: 0;
-    animation: slideIn 0.7s ease-in-out;
+    // animation: slideIn 0.7s ease-in-out;
+    animation: fadeIn 0.7s ease-in-out;
     animation-delay: var(--slideDelay);
     animation-fill-mode: forwards;
     background-color: #395b64;

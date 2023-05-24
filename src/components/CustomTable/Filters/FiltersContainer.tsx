@@ -39,7 +39,7 @@ export const getRelativeCoords = (event: React.MouseEvent<HTMLElement>) => {
 
 export const applyModalBodyStyle = ({ offsetX, offsetY }: any) => {
   const _body = document.querySelector("body");
-  if (!_body) return;
+  if (!_body) return; // lol
   _body.style.setProperty("--modal-offset-x", `${offsetX}px`);
   _body.style.setProperty("--modal-offset-y", `${offsetY}px`);
   _body?.classList.add("overflow-hidden");

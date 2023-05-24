@@ -5,15 +5,17 @@ import { helpContentArtifacts } from "./helpContentArtifacts";
 import { helpContentBuilds } from "./helpContentBuilds";
 import { helpContentLeaderboards } from "./helpContentLeaderboards";
 import "./style.scss";
+import { helpContentAccounts } from "./helpContentAccounts";
 
 type HelpBoxProps = {
-  page: "builds" | "leaderboards" | "artifacts";
+  page: "builds" | "leaderboards" | "artifacts" | "accounts";
 };
 
 const helpBoxContents = {
   builds: helpContentBuilds,
   leaderboards: helpContentLeaderboards,
-  artifacts: helpContentArtifacts
+  artifacts: helpContentArtifacts,
+  accounts: helpContentAccounts
 };
 
 export const HelpBox: React.FC<HelpBoxProps> = ({ page }) => {

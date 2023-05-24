@@ -39,8 +39,12 @@ const SessionDataContextProvider: React.FC<{ children: any }> = ({
   const isBound = useCallback(
     (uid?: string) => {
       if (!uid) return false;
-      const isBound = boundAccounts.findIndex((acc) => acc.uid === uid) > -1;
-      return isBound;
+      const index = boundAccounts.findIndex((acc) => {
+        const compare_A = (acc?.uid + "").toLowerCase();
+        const compare_B = (uid + "")?.toLowerCase();
+        return compare_A === compare_B;
+      });
+      return index > -1;
     },
     [boundAccounts]
   );

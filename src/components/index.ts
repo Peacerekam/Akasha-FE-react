@@ -29,3 +29,4 @@ export * from "./ARBadge";
 export * from "./RegionBadge";
 export * from "./StatListSide";
 export * from "./FancyBuildBorder";
+export * from "./MobileStickyBar";

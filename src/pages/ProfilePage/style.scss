@@ -88,17 +88,59 @@
 }
 
 @media (max-width: 800px) {
+  .perfect-scroll-wrapper {
+    width: 100%;
+    &.for-artifacts {
+      height: calc(100vh - 210px) !important;
+    }
+  }
   .settings-modal {
-    top: 150px;
+    top: 50px;
     .modal-content {
       height: calc(100vh - 61px);
       max-height: 100vh !important;
       .compact-table-wrapper {
         align-items: center;
-        .perfect-scroll-wrapper {
-          width: 100%;
-        }
       }
+    }
+  }
+}
+
+.perfect-scroll-wrapper {
+  flex-grow: 1;
+  &.for-artifacts {
+    position: relative;
+    height: 500px;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0; left: 0;
+      background: linear-gradient(0deg, #2c3333 1%,  transparent 10%);
+      height: 100%;
+      width: 100%;
+      pointer-events: none;
+    }
+  }
+
+  .build-search-input {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    input {
+      width: calc(100% - 45px);
+      background-color: rgba(0, 0, 0, 0.4);
+      color: white;
+      border: none;
+      padding: 7px 15px;
+      outline: none;
+    }
+    .fake-placeholder {
+      position: absolute;
+      top: 0;
+      left: 0;
+      color: hsl(0, 0%, 50%);
+      padding: 6px 15px;
+      pointer-events: none;
     }
   }
 }
@@ -115,29 +157,6 @@
     flex-direction: column;
   }
 
-  .perfect-scroll-wrapper {
-    flex-grow: 1;
-    .build-search-input {
-      margin-top: 10px;
-      margin-bottom: 5px;
-      input {
-        width: calc(100% - 45px);
-        background-color: rgba(0, 0, 0, 0.4);
-        color: white;
-        border: none;
-        padding: 7px 15px;
-        outline: none;
-      }
-      .fake-placeholder {
-        position: absolute;
-        top: 0;
-        left: 0;
-        color: hsl(0, 0%, 50%);
-        padding: 6px 15px;
-        pointer-events: none;
-      }
-    }
-  }
   .compact-table {
     // overflow-y: scroll;
     // overflow: hidden;
@@ -178,6 +197,13 @@
       }
       .compact-table-name {
         flex-grow: 1;
+
+        &.artifacts-table {
+          display: flex;
+          > span {
+            width: 200px;
+          }
+        }
       }
     }
   }
@@ -299,4 +325,17 @@
       }
     }
   }
+}
+
+.artifacts-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.artifact-error {
+  color: orange;
+  font-weight: 600;
+  text-align: center;
+  margin: 10px 0;
 }

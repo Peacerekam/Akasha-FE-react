@@ -1,27 +1,36 @@
 .footer {
-  position: relative;
-  margin-bottom: 20px;
-  text-align: center;
-  color: white;
-  font-family: "GenshinFont";
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  > span {
-    transition: opacity 0.3s;
-    opacity: 0.5;
-    &:hover {
-      opacity: 1;
-    }
-    .annotation {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
-        "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
-        "Helvetica Neue", sans-serif;
+  .footer-main {
+    text-align: center;
+    font-family: "GenshinFont";
+    position: relative;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    > span, a {
+      color: white;
+      transition: opacity 0.3s;
       opacity: 0.5;
-      position: absolute;
-      font-size: 10px;
-      top: 3px;
+      text-decoration: none;
+      &:hover {
+        opacity: 1;
+      }
+      .annotation {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+          "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+          "Helvetica Neue", sans-serif;
+        opacity: 0.5;
+        position: absolute;
+        font-size: 10px;
+        top: 3px;
+      }
+    }
+    @media (max-width: 800px) {
+      margin-top: 10px;
+      margin-bottom: 30px;
+      gap: 30px;
+      flex-direction: column;
     }
   }
 }

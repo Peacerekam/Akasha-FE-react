@@ -50,7 +50,7 @@ const cryoRvList = {
 
 const geoRvList = {
   Albedo: [CRate, CDMG, DEF_],
-  Noelle: [CRate, CDMG, DEF_, ATK_],
+  Noelle: [CRate, CDMG, DEF_, ATK_, ER],
   Zhongli: [CRate, CDMG, ATK_, HP_],
   "Yun Jin": [CRate, ER, DEF, DEF_],
   "Arataki Itto": [CRate, CDMG, DEF_, ATK_],
@@ -64,6 +64,7 @@ const electroRvList = {
   Beidou: [ER, ATK_, CRate, CDMG],
   "Yae Miko": [ER, ATK_, CRate, CDMG, EM],
   "Raiden Shogun": [CRate, CDMG, ATK_, ER],
+  "Kuki Shinobu": [CRate, CDMG, ATK_, EM, ER],
 };
 
 const dendroRvList = {

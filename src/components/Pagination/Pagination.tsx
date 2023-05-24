@@ -31,7 +31,7 @@ type PaginationProps = {
   alwaysShowIndexColumn?: boolean;
 };
 
-export const accessFieldByString = (item: any, sort: string | null) => {
+const accessFieldByString = (item: any, sort: string | null) => {
   if (!sort) sort = "critValue";
   if (!item) return "";
 
@@ -128,16 +128,16 @@ export const Pagination: React.FC<PaginationProps> = ({
       fromId: "",
     }));
   };
-  
+
   const handleLastPage = () => {
     if (!setParams) return;
 
     if (setHideIndexColumn && setUnknownPage) {
       setHideIndexColumn(false);
-      setUnknownPage(false);
+      setUnknownPage(lastPage === 0);
     }
 
-    const p = `${order === -1 ? "gt|-" : "lt|"}${100_000_000}`
+    const p = `${order === -1 ? "gt|-" : "lt|"}${100_000_000}`;
 
     setParams((prev: FetchParams) => ({
       ...prev,
@@ -253,7 +253,7 @@ export const Pagination: React.FC<PaginationProps> = ({
     }));
   };
 
-  const sortToText: any = {
+  const sortToText: { [key: string]: string | boolean } = {
     // character columns
     critValue: "Crit Value",
     "stats.critRate.value": "Crit RATE",
@@ -276,7 +276,9 @@ export const Pagination: React.FC<PaginationProps> = ({
     "substats.Flat DEF": "Flat DEF",
     // leaderboard columns
     "calculation.result": [calculationShortName, "result"].join(" "),
-    "_id": "_id"
+    "playerInfo.finishAchievementNum": "Achievements",
+    "playerInfo.level": "Adventure Rank",
+    _id: "_id",
     // crappy columns
     // "weapon.name": false,
     // constellation: "Constellation",
@@ -287,10 +289,10 @@ export const Pagination: React.FC<PaginationProps> = ({
   const disableSkip = !!sort && !sortToText[sort];
   const highlightedSort = (
     <span style={{ color: "orange", fontWeight: 600 }}>
-      {sort ? (sortToText as any)[sort] || "?" : "?"}
+      {sort ? sortToText[sort] || "?" : "?"}
     </span>
   );
-  
+
   return (
     <div className="pagination-wrapper">
       {/* {isLoading ? (
@@ -304,7 +306,10 @@ export const Pagination: React.FC<PaginationProps> = ({
         ) : (
           <div className="pagination-buttons">
             <span className="relative button-wrapper">
-              <button disabled={disablePrevious || disableSkip} onClick={handleFirstPage}>
+              <button
+                disabled={disablePrevious || disableSkip}
+                onClick={handleFirstPage}
+              >
                 <FontAwesomeIcon icon={faBackwardStep} size="1x" />
               </button>
               <span onClick={handleFirstPage} className="button-label">
@@ -380,7 +385,10 @@ export const Pagination: React.FC<PaginationProps> = ({
               </>
             </ConfirmInput>
             <span className="relative button-wrapper">
-              <button disabled={disableNext || disableSkip} onClick={handleLastPage}>
+              <button
+                disabled={disableNext || disableSkip}
+                onClick={handleLastPage}
+              >
                 <FontAwesomeIcon icon={faForwardStep} size="1x" />
               </button>
               <span onClick={handleLastPage} className="button-label">

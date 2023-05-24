@@ -1,5 +1,11 @@
 import axios from "axios";
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -42,7 +48,7 @@ import {
   PatreonBorderInside,
 } from "../../components";
 import { TableColumn } from "../../types/TableColumn";
-import { ProfileSettingsModal } from "./ProfileSettingsModal";
+import { BuildSettingsModal } from "./BuildSettingsModal";
 import {
   applyModalBodyStyle,
   getRelativeCoords,
@@ -53,9 +59,12 @@ import { SessionDataContext } from "../../context/SessionData/SessionDataContext
 import "./style.scss";
 import { getSessionIdFromCookie } from "../../utils/helpers";
 import { showAds } from "../../App";
+import { ArtifactSettingsModal } from "./ArtifactSettingsModal";
 
 export const ProfilePage: React.FC = () => {
-  const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [showArtifactSettingsModal, setShowArtifactSettingsModal] =
+    useState(false);
+  const [showBuildSettingsModal, setShowBuildSettingsModal] = useState(false);
   const [enableRefreshBtn, setEnableRefreshBtn] = useState(false);
   const [enableBindBtn, setEnableBindBtn] = useState(false);
   const [bindSecret, setBindSecret] = useState("");
@@ -443,9 +452,16 @@ export const ProfilePage: React.FC = () => {
     fetchSessionData();
   };
 
-  const handleToggleModal = (event: React.MouseEvent<HTMLElement>) => {
+  const handleToggleBuildsModal = (event: React.MouseEvent<HTMLElement>) => {
     if (!isAccountOwner) return;
-    setShowSettingsModal((prev) => !prev);
+    setShowBuildSettingsModal((prev) => !prev);
+    const offsets = getRelativeCoords(event);
+    applyModalBodyStyle(offsets);
+  };
+
+  const handleToggleArtifactsModal = (event: React.MouseEvent<HTMLElement>) => {
+    if (!isAccountOwner) return;
+    setShowArtifactSettingsModal((prev) => !prev);
     const offsets = getRelativeCoords(event);
     applyModalBodyStyle(offsets);
   };
@@ -455,10 +471,14 @@ export const ProfilePage: React.FC = () => {
       <GenshinUserCard
         accountData={responseData}
         isAccountOwner={isAccountOwner}
-        handleToggleModal={handleToggleModal}
+        handleToggleModal={handleToggleBuildsModal}
       />
     ),
-    [JSON.stringify(responseData.account), isAccountOwner, handleToggleModal]
+    [
+      JSON.stringify(responseData.account),
+      isAccountOwner,
+      handleToggleBuildsModal,
+    ]
   );
 
   const handleTimerFinish = () => {
@@ -469,47 +489,57 @@ export const ProfilePage: React.FC = () => {
     setEnableBindBtn(true);
   };
 
-  const displayFloatingButtons = useMemo(() => {
-    const DISABLE_REFRESH_FLOATING_BUTTONS = false;
-    const defaultBtnClassName = DISABLE_REFRESH_FLOATING_BUTTONS
-      ? "disable-btn"
-      : "";
+  const displayFloatingButtons = useCallback(
+    ({
+      refresh = false,
+      bind = false,
+      buildSettings = false,
+      artifactSettings = false,
+    }: {
+      refresh?: boolean;
+      bind?: boolean;
+      buildSettings?: boolean;
+      artifactSettings?: boolean;
+    }) => {
+      const DISABLE_REFRESH_FLOATING_BUTTONS = false;
+      const defaultBtnClassName = DISABLE_REFRESH_FLOATING_BUTTONS
+        ? "disable-btn"
+        : "";
 
-    const refreshBtnClassName = [
-      "floating-button",
-      defaultBtnClassName,
-      enableRefreshBtn ? "" : "disable-btn",
-    ]
-      .join(" ")
-      .trim();
+      const refreshBtnClassName = [
+        "floating-button",
+        defaultBtnClassName,
+        enableRefreshBtn ? "" : "disable-btn",
+      ]
+        .join(" ")
+        .trim();
 
-    const bindBtnClassName = [
-      "floating-button",
-      defaultBtnClassName,
-      enableBindBtn ? "" : "disable-btn",
-    ]
-      .join(" ")
-      .trim();
+      const bindBtnClassName = [
+        "floating-button",
+        defaultBtnClassName,
+        enableBindBtn ? "" : "disable-btn",
+      ]
+        .join(" ")
+        .trim();
 
-    const bindAccount = async (uid?: string) => {
-      if (!uid) return;
-      setEnableBindBtn(false);
-      const _uid = encodeURIComponent(uid);
-      const bindAccountURL = `/api/user/bind/${_uid}`;
-      const { data } = await axios.post(
-        bindAccountURL,
-        null,
-        optsParamsSessionID()
-      );
-      setBindSecret(data.secret);
-      await fetchProfile(uid);
-    };
+      const bindAccount = async (uid?: string) => {
+        if (!uid) return;
+        setEnableBindBtn(false);
+        const _uid = encodeURIComponent(uid);
+        const bindAccountURL = `/api/user/bind/${_uid}`;
+        const { data } = await axios.post(
+          bindAccountURL,
+          null,
+          optsParamsSessionID()
+        );
+        setBindSecret(data.secret);
+        await fetchProfile(uid);
+      };
 
-    const showBindAccBtn = isAuthenticated && !isAccountOwner;
+      const showBindAccBtn = isAuthenticated && !isAccountOwner;
 
-    return (
-      <div className="floating-profile-buttons-wrapper">
-        <div className="floating-profile-buttons">
+      const refreshButton = refresh ? (
+        <>
           {refreshTime ? (
             <Timer
               until={refreshTime}
@@ -525,6 +555,11 @@ export const ProfilePage: React.FC = () => {
           >
             <FontAwesomeIcon icon={faRotateRight} size="1x" />
           </div>
+        </>
+      ) : null;
+
+      const bindingButton = bind ? (
+        <>
           {showBindAccBtn && (
             <>
               {bindTime ? (
@@ -549,27 +584,59 @@ export const ProfilePage: React.FC = () => {
               </ConfirmTooltip>
             </>
           )}
+        </>
+      ) : null;
+
+      const buildSettingsButton = buildSettings ? (
+        <>
           {isAccountOwner ? (
             <div
-              title="Profile settings"
+              title="Build settings"
               className="floating-button"
-              onClick={handleToggleModal}
-              key={`settings-${uid}`}
+              onClick={handleToggleBuildsModal}
+              key={`settings-builds-${uid}`}
             >
               <FontAwesomeIcon icon={faGear} size="1x" />
             </div>
           ) : null}
+        </>
+      ) : null;
+
+      const artifactSettingsButton = artifactSettings ? (
+        <>
+          {isAccountOwner ? (
+            <div
+              title="Artifact settings"
+              className="floating-button"
+              onClick={handleToggleArtifactsModal}
+              key={`settings-artifacts-${uid}`}
+            >
+              <FontAwesomeIcon icon={faGear} size="1x" />
+            </div>
+          ) : null}
+        </>
+      ) : null;
+
+      return (
+        <div className="floating-profile-buttons-wrapper">
+          <div className="floating-profile-buttons">
+            {refreshButton}
+            {bindingButton}
+            {buildSettingsButton}
+            {artifactSettingsButton}
+          </div>
         </div>
-      </div>
-    );
-  }, [
-    enableRefreshBtn,
-    enableBindBtn,
-    refreshTime,
-    isAuthenticated,
-    isAccountOwner,
-    uid,
-  ]);
+      );
+    },
+    [
+      enableRefreshBtn,
+      enableBindBtn,
+      refreshTime,
+      isAuthenticated,
+      isAccountOwner,
+      uid,
+    ]
+  );
 
   const displayBindMessage = useMemo(() => {
     if (!bindTime || !bindSecret) return <></>;
@@ -680,19 +747,24 @@ export const ProfilePage: React.FC = () => {
           </div>
         )}
       </div>
-      {/* <div className="flex">
-        {showAds && <AdsComponent dataAdSlot="6204085735" />}
-      </div> */}
-      {displayFloatingButtons}
+      {/* @TODO: is this ok???? */}
+      <div className="flex">
+        {showAds && !responseData.account?.patreon?.active && <AdsComponent dataAdSlot="6204085735" />}
+      </div>
+      {displayFloatingButtons({
+        bind: true,
+        refresh: true,
+        buildSettings: true,
+      })}
       <div>
-        <div>
-          <ProfileSettingsModal
-            isOpen={showSettingsModal}
-            toggleModal={handleToggleModal}
+        {isAccountOwner && (
+          <BuildSettingsModal
+            isOpen={showBuildSettingsModal}
+            toggleModal={handleToggleBuildsModal}
             accountData={responseData?.account}
             parentRefetchData={triggerRefetch}
           />
-        </div>
+        )}
       </div>
       <div className="flex">
         <div className={contentBlockClassNames} key={fetchCount}>
@@ -732,6 +804,17 @@ export const ProfilePage: React.FC = () => {
       <div className="flex">
         {showAds && !responseData.account?.patreon?.active && (
           <AdsComponent dataAdSlot="6204085735" />
+        )}
+      </div>
+      {displayFloatingButtons({ artifactSettings: true })}
+      <div>
+        {isAccountOwner && (
+          <ArtifactSettingsModal
+            isOpen={showArtifactSettingsModal}
+            toggleModal={handleToggleArtifactsModal}
+            accountData={responseData?.account}
+            parentRefetchData={triggerRefetch}
+          />
         )}
       </div>
       <div className="flex">

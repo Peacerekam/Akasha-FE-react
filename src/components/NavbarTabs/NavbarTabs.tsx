@@ -4,7 +4,7 @@ import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesCont
 import "./style.scss";
 
 export const NavbarTabs: React.FC = () => {
-  const [animationStagger, setAnimationStagger] = useState(200);
+  const [animationStagger, setAnimationStagger] = useState(150);
   const { lastProfiles, removeTab } = useContext(LastProfilesContext);
   const navigate = useNavigate();
   const location = useLocation();

@@ -9,6 +9,7 @@ import { ArtifactDetailsResponse } from "../../types/ArtifactDetailsResponse";
 import "./style.scss";
 import { FancyBuildBorder } from "../FancyBuildBorder";
 import { StatListSide } from "../StatListSide";
+import { GenshinUserCard } from "../GenshinUserCard";
 
 type TableHoverElementProps = {
   row?: any;
@@ -38,6 +39,7 @@ export const TableHoverElement: React.FC<TableHoverElementProps> = ({
   };
 
   const isArtifact = !!rowData.mainStatKey;
+  const isAccount = !!rowData.playerInfo;
 
   useEffect(() => {
     if (!isArtifact || artifactDetails?.[rowData._id]) return;
@@ -79,6 +81,37 @@ export const TableHoverElement: React.FC<TableHoverElementProps> = ({
       >
         <div className={wrapperClassNames}>
           <Artifact artifact={rowData} width={275} equipped={equippedOn} />
+        </div>
+      </FollowCursor>
+    );
+  }
+
+  if (isAccount) {
+    const roundedAR = Math.round(rowData?.playerInfo?.level || 0);
+
+    const borderColorClass = roundedAR
+      ? `ar-${Math.floor(roundedAR / 5) * 5}-badge`
+      : "ar-60-badge";
+
+    const wrapperClassNames = [
+      "row-hover-artifact-preview account-hover-wrapper",
+      hide ? "fade-out" : "fade-in",
+      borderColorClass
+    ].join(" ");
+
+    return (
+      <FollowCursor
+        data={{
+          offsetX: 170,
+          offsetY: 50,
+        }}
+      >
+        <div className={wrapperClassNames}>
+          <GenshinUserCard
+            accountData={{ account: rowData }}
+            isAccountOwner
+            showBackgroundImage
+          />
         </div>
       </FollowCursor>
     );

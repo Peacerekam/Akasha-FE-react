@@ -45,7 +45,7 @@ export const Navbar: React.FC = () => {
     () => [
       {
         name: "Profiles",
-        path: "/profile",
+        path: "/profiles",
       },
       {
         name: "Artifacts",
