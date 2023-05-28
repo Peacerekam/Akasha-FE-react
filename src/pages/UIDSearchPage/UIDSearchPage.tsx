@@ -194,7 +194,7 @@ export const UIDSearchPage: React.FC = () => {
           </div>
         </div>
         {showAds && results?.length > 0 && (
-          <AdsComponent provider="google" dataAdSlot="6204085735" />
+          <AdsComponent dataAdSlot="6204085735" />
         )}
         {/* {showAds && results?.length > 0 && (
           <AdsComponent provider="ezoic" ezoicId="103" />
