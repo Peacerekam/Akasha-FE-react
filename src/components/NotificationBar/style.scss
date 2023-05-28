@@ -1,5 +1,6 @@
 .notification-bar {
-  position: sticky;
+  // position: sticky;
+  position: inherit;
   top: 0;
   z-index: 19;
   overflow: hidden;

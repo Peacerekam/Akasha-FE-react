@@ -48,7 +48,7 @@ export const CalculationResultWidget: React.FC<
         }
       }
 
-      // if no valid rankings at all then retry in 25s
+      // if no valid rankings at all then retry in 60s
       const getTime = new Date().getTime();
       const thenTTL = getTime + 59000;
       setRetryTimer(thenTTL);
@@ -134,75 +134,79 @@ export const CalculationResultWidget: React.FC<
 
   const tilesList = useMemo(
     () =>
-      resultsArray.map((calc: any, index: number) => {
-        const { name, ranking, outOf, weapon, short, id, variant, priority } =
-          calc;
-        const shortName = variant?.displayName || short || "---";
-        const leaveOnlyNumbersRegex = /\D+/g;
-        const _ranking = +(ranking + "")?.replace(leaveOnlyNumbersRegex, "");
+      resultsArray
+        .filter((c) => !!c.outOf)
+        .map((calc: any, index: number) => {
+          const { name, ranking, outOf, weapon, short, id, variant, priority } =
+            calc;
+          const shortName = variant?.displayName || short || "---";
+          const leaveOnlyNumbersRegex = /\D+/g;
+          const _ranking = +(ranking + "")?.replace(leaveOnlyNumbersRegex, "");
 
-        let weaponMatchClass = "";
-        let weaponMatchString = "";
+          let weaponMatchClass = "";
+          let weaponMatchString = "";
 
-        switch (priority) {
-          case 2:
-            weaponMatchClass = "matching-weapon";
-            weaponMatchString = "Leaderboard weapon matches equipped weapon"
-            break;
-          case 1:
-            weaponMatchClass = "almost-matching-weapon";
-            weaponMatchString = "Leaderboard weapon has the same substat as equipped weapon"
-            break;
-          case 0:
-            weaponMatchClass = "mismatching-weapon";
-            weaponMatchString = "Leaderboard weapon does not match equipped weapon"
-            break;
-        }
+          switch (priority) {
+            case 2:
+              weaponMatchClass = "matching-weapon";
+              weaponMatchString = "Leaderboard weapon matches equipped weapon";
+              break;
+            case 1:
+              weaponMatchClass = "almost-matching-weapon";
+              weaponMatchString =
+                "Leaderboard weapon has the same substat as equipped weapon";
+              break;
+            case 0:
+              weaponMatchClass = "mismatching-weapon";
+              weaponMatchString =
+                "Leaderboard weapon does not match equipped weapon";
+              break;
+          }
 
-        return (
-          <div
-            key={`${name}-${weapon.name}`}
-            className={weaponMatchClass}
-          >
-            <a
-              title={`${weaponMatchString}\n${calc.name} - ${weapon.name} R${
-                weapon?.refinement || 1
-              }`}
-              className="highlight-tile"
-              onClick={(event) => {
-                event.preventDefault();
-                navigate(`/leaderboards/${id}/${variant?.name || ""}`);
-              }}
-              href={`/leaderboards/${id}/${variant?.name || ""}`}
-            >
-              <div className="highlight-tile-pill">{shortName}</div>
-              <div className="flex">
-                <img
-                  alt="Icon"
-                  className="table-icon"
-                  src={calc.characterIcon}
-                />
-                <WeaponMiniDisplay
-                  icon={weapon.icon}
-                  refinement={weapon?.refinement || 1}
-                  // style={{ boxShadow: `0 0 0px 2px ${weaponColor}20` }}
-                />
-              </div>
-              <div>
-                {ranking
-                  ? `top ${Math.min(100, Math.ceil((_ranking / outOf) * 100))}%`
-                  : ""}
-              </div>
-              <span>
-                {ranking ?? "---"}
-                <span className="opacity-5">
-                  /{toShortThousands(outOf) ?? "---"}
+          return (
+            <div key={`${name}-${weapon.name}`} className={weaponMatchClass}>
+              <a
+                title={`${weaponMatchString}\n${calc.name} - ${weapon.name} R${
+                  weapon?.refinement || 1
+                }`}
+                className="highlight-tile"
+                onClick={(event) => {
+                  event.preventDefault();
+                  navigate(`/leaderboards/${id}/${variant?.name || ""}`);
+                }}
+                href={`/leaderboards/${id}/${variant?.name || ""}`}
+              >
+                <div className="highlight-tile-pill">{shortName}</div>
+                <div className="flex">
+                  <img
+                    alt="Icon"
+                    className="table-icon"
+                    src={calc.characterIcon}
+                  />
+                  <WeaponMiniDisplay
+                    icon={weapon.icon}
+                    refinement={weapon?.refinement || 1}
+                    // style={{ boxShadow: `0 0 0px 2px ${weaponColor}20` }}
+                  />
+                </div>
+                <div>
+                  {ranking
+                    ? `top ${
+                        Math.min(100, Math.ceil((_ranking / outOf) * 100)) ||
+                        "?"
+                      }%`
+                    : ""}
+                </div>
+                <span>
+                  {ranking ?? "---"}
+                  <span className="opacity-5">
+                    /{toShortThousands(outOf) ?? "---"}
+                  </span>
                 </span>
-              </span>
-            </a>
-          </div>
-        );
-      }),
+              </a>
+            </div>
+          );
+        }),
     [resultsArray]
   );
 

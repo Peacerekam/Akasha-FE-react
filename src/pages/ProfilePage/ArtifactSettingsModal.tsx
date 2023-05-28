@@ -39,16 +39,18 @@ export const ArtifactSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     const getSetData = async () => {
       const response = await axios.get(fetchURL, opts);
       const { data } = response.data;
-      setArtifacts(data);
+      const cvSort = (a: any, b: any) => (a.critValue > b.critValue ? -1 : 1);
+      const sortedArtifacts = data.sort(cvSort);
+      setArtifacts(sortedArtifacts);
     };
 
-    setIsLoading(true)
+    setIsLoading(true);
     await abortSignalCatcher(getSetData);
-    setIsLoading(false)
+    setIsLoading(false);
   };
 
   useEffect(() => {
-    setArtifacts([])
+    setArtifacts([]);
   }, [accountData?.uid]);
 
   useEffect(() => {

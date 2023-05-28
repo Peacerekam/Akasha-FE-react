@@ -79,9 +79,9 @@ export const CategorySelectionPage: React.FC = () => {
         />
         <HelpBox page="leaderboards" />
 
-        <div className="relative">Newest: LIST OF 4 NEWEST + tiemstamp?</div>
+        {/* <div className="relative">Newest: LIST OF 4 NEWEST + tiemstamp?</div>
         <div className="relative">filter by name, weapon, element, leaderboard name etc</div>
-        <div className="relative">sort by rarity, element, weapon, categorySize</div>
+        <div className="relative">sort by rarity, element, weapon, categorySize</div> */}
         <div
           style={{
             display: "flex",
@@ -137,18 +137,23 @@ export const CategorySelectionPage: React.FC = () => {
                         alignItems: "center",
                         justifyContent: "center",
                         marginBottom: 30,
+                        gap: 5,
                       }}
                     >
                       <img
                         style={{ width: 90, height: 90 }}
                         src={category.icon}
                       />
-                      <span>
-                        {category.characterName}
-                      </span>
-                    </div>
+                      <div>
 
-                    <div>count: {categorySize}</div>
+                      <div>
+                        {category.characterName}
+                      </div>
+                      <div style={{fontSize: 14, opacity: 0.5}}>
+                        {categorySize} entries
+                      </div>
+                      </div>
+                    </div>
 
                     <div
                       style={{ marginTop: 10, fontWeight: 400, fontSize: 16 }}
@@ -166,7 +171,9 @@ export const CategorySelectionPage: React.FC = () => {
                             >
                               {calcName}
                             </div>
-                            <div>
+                            <div style={{
+                              display: 'flex', justifyContent: "center", gap: 10
+                            }}>
                               {calcs.map((calc, index) => {
                                 const leaderboardPath = `leaderboards/${
                                   calc.calculationId
@@ -210,7 +217,7 @@ export const CategorySelectionPage: React.FC = () => {
                                               calc.weapon?.refinement || 1
                                             }
                                           />
-                                          <span>{calc.weapon.name}</span>
+                                          {/* <span>{calc.weapon.name}</span> */}
                                           {/* ({calc.categorySize}) */}
                                         </span>
                                       )}

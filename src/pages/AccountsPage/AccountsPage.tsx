@@ -124,7 +124,7 @@ export const AccountsPage: React.FC = () => {
         },
       },
       {
-        name: "Owned Characters",
+        name: "Unique Characters",
         sortable: false,
         sortField: "ownedCharacters",
         cell: (row) => {
@@ -132,30 +132,30 @@ export const AccountsPage: React.FC = () => {
           return <div>{ownedCharacters?.length}</div>;
         },
       },
-      {
-        name: "Badges",
-        sortable: false,
-        sortField: "---",
-        cell: (row) => {
-          const achievements = row.achievements ?? [];
-          const badges = achievements
-            // .map((a: any) => `${a.count}× "${a.name}"`)
-            .map((a: any) => `${a.count}× ...`)
-            .join(", ");
+      // {
+      //   name: "Badges",
+      //   sortable: false,
+      //   sortField: "---",
+      //   cell: (row) => {
+      //     const achievements = row.achievements ?? [];
+      //     const badges = achievements
+      //       // .map((a: any) => `${a.count}× "${a.name}"`)
+      //       .map((a: any) => `${a.count}× ...`)
+      //       .join(", ");
 
-          return <div style={{ whiteSpace: "nowrap" }}>{badges}</div>;
-        },
-      },
-      {
-        name: "Akasha Score",
-        sortable: true,
-        sortField: "---",
-        cell: (row) => {
-          console.log(row);
-          const score = "" + Math.random();
-          return <div>{score.slice(2, 8)}</div>;
-        },
-      },
+      //     return <div style={{ whiteSpace: "nowrap" }}>{badges}</div>;
+      //   },
+      // },
+      // {
+      //   name: "Akasha Score",
+      //   sortable: true,
+      //   sortField: "---",
+      //   cell: (row) => {
+      //     console.log(row);
+      //     const score = "" + Math.random();
+      //     return <div>{score.slice(2, 8)}</div>;
+      //   },
+      // },
     ],
     [lookupUID]
   );
