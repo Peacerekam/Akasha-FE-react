@@ -460,7 +460,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     if (isCategoriesRow) {
       return (
         <>
-          <div className="flex expanded-row">
+          <div className="flex expanded-row categories-exanded-row clickable-icons">
             <div style={{ overflow: "hidden" }}>
               {row.weapons.map((weapon: any) => {
                 const leaderboardPath = `leaderboards/${weapon.calculationId}/${
@@ -469,7 +469,6 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
                 return (
                   <a
-                    style={{ color: "white" }}
                     title={`${weapon?.name} R${weapon.refinement}`}
                     onClick={(event) => {
                       event.preventDefault();
@@ -489,9 +488,9 @@ export const CustomTable: React.FC<CustomTableProps> = ({
               })}
             </div>
 
-            <div style={{ overflow: "hidden" }}>
+            {/* <div style={{ overflow: "hidden" }}>
               show top 1 build for each category?
-            </div>
+            </div> */}
           </div>
         </>
       );

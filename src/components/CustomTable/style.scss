@@ -135,11 +135,44 @@ $substats: "flathp", "hp_", "flatatk", "atk_", "flatdef", "def_", "critrate",
       animation: fadeInRow 0.6s ease-in-out;
       margin-top: 5px;
       margin-bottom: 20px;
-      justify-content: center;
       gap: 20px;
       margin-top: 5px;
       margin-bottom: 20px;
       font-size: 16px;
+      justify-content: center;
+    }
+
+    .categories-exanded-row {
+      @media (max-width: 800px) {
+        justify-content: flex-start;
+      }
+      > div {
+        margin: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      a {
+        text-decoration: none;
+        color: white;
+        &:hover {
+          color: orange;
+        }
+      }
+    }
+
+    .clickable-icons {
+      a {
+        &:hover {
+          color: orange !important;
+          .table-icon {
+            filter: drop-shadow(0 0 2px orange);
+          }
+          span {
+            filter: drop-shadow(0 0 2px black);
+          }
+        }
+      }
     }
 
     .sort-direction-icon {

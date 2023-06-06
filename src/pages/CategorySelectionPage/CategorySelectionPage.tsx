@@ -141,7 +141,7 @@ export const CategorySelectionPage: React.FC = () => {
         sortField: "weaponsCount",
         cell: (row) => {
           return (
-            <div className="table-icon-text-pair">
+            <div className="table-icon-text-pair clickable-icons">
               {row.weapons.map((weapon: any) => {
                 const leaderboardPath = `leaderboards/${weapon.calculationId}/${
                   weapon.defaultVariant || ""
