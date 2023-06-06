@@ -31,7 +31,7 @@ const pyroRvList = {
 };
 
 const hydroRvList = {
-  Nilou: [CRate, CDMG, HP_, HP],
+  Nilou: [CRate, EM, ER, CDMG, HP_, HP],
   Xingqiu: [CRate, CDMG, ATK_, ER],
   Mona: [CRate, CDMG, ER, EM, ATK_],
   Tartaglia: [CRate, CDMG, ATK_, EM],

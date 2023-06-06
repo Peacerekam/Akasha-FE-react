@@ -71,6 +71,7 @@ export const ProfilePage: React.FC = () => {
   const [fetchCount, setFetchCount] = useState(0);
   const [bindTime, setBindTime] = useState<number>();
   const [refreshTime, setRefreshTime] = useState<number>();
+  const [showAds_2, setShowAds_2] = useState<boolean>(false);
   const [responseData, setResponseData] = useState<{
     account: any;
     error?: {
@@ -89,6 +90,13 @@ export const ProfilePage: React.FC = () => {
     () => isBound(uid),
     [uid, isAuthenticated, boundAccounts]
   );
+
+  const toggleAds = () => {
+    setShowAds_2(false)
+    setTimeout(()=>{
+      setShowAds_2(true)
+    }, 200)
+  }
 
   const fetchProfile = async (
     uid: string,
@@ -140,6 +148,8 @@ export const ProfilePage: React.FC = () => {
   useEffect(() => {
     const abortController = new AbortController();
     if (uid) fetchProfile(uid, abortController);
+
+    toggleAds();
 
     return () => {
       abortController.abort();
@@ -749,7 +759,7 @@ export const ProfilePage: React.FC = () => {
       </div>
       {/* @TODO: is this ok???? */}
       <div className="flex">
-        {showAds && !responseData.account?.patreon?.active && <AdsComponent dataAdSlot="6204085735" />}
+        {showAds_2 && showAds && !responseData.account?.patreon?.active && <AdsComponent dataAdSlot="6204085735" />}
       </div>
       {displayFloatingButtons({
         bind: true,
@@ -802,7 +812,7 @@ export const ProfilePage: React.FC = () => {
         </div>
       </div>
       <div className="flex">
-        {showAds && !responseData.account?.patreon?.active && (
+        {showAds_2 && showAds && !responseData.account?.patreon?.active && (
           <AdsComponent dataAdSlot="6204085735" />
         )}
       </div>
@@ -844,7 +854,7 @@ export const ProfilePage: React.FC = () => {
       </div>
 
       <div className="flex">
-        {showAds && !responseData.account?.patreon?.active && (
+        {showAds_2 && showAds && !responseData.account?.patreon?.active && (
           <AdsComponent dataAdSlot="6204085735" />
         )}
       </div>

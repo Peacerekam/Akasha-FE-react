@@ -1,16 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
 import {
   AdsComponent,
+  CustomTable,
   HelpBox,
   Spinner,
+  StatIcon,
   StylizedContentBlock,
   WeaponMiniDisplay,
 } from "../../components";
-import { FETCH_CATEGORIES_URL } from "../../utils/helpers";
+import {
+  FETCH_CATEGORIES_FILTERS_URL,
+  FETCH_CATEGORIES_URL,
+  FETCH_CATEGORIES_URL_V2,
+} from "../../utils/helpers";
 import { showAds } from "../../App";
+import { TableColumn } from "../../types/TableColumn";
 
 export type TransformedCategories = {
   characterName: string;
@@ -47,6 +54,28 @@ export type TransformedCategories = {
   };
 };
 
+export type CategoriesColumns = {
+  _id: string;
+  calculationId: string;
+  characterName: string;
+  name: string;
+  details: string;
+  rarity: string;
+  version: string;
+  addDate: number;
+  weapontype: string;
+  short: string;
+  filters: any[];
+  element: string;
+  weapon: {
+    name: string;
+    icon: string;
+    rarity: string;
+    refinement: number;
+  };
+  [key: string]: any;
+};
+
 export const CategorySelectionPage: React.FC = () => {
   // const [categories, setCategories] = useState<Category[]>();
   const [categoriesTransformed, setCategoriesTransformed] = useState<
@@ -66,6 +95,160 @@ export const CategorySelectionPage: React.FC = () => {
     setCategoriesTransformed(dataTransformed);
   };
 
+  const CATEGORIES_COLUMNS: TableColumn<CategoriesColumns>[] = useMemo(
+    () => [
+      {
+        name: "#",
+        width: "0px",
+        cell: (row) => {
+          return <div>{row.index}</div>;
+        },
+      },
+      {
+        name: "Character",
+        width: "100px",
+        sortable: true,
+        sortField: "characterName",
+        cell: (row) => {
+          return (
+            <div className="table-icon-text-pair">
+              <img className="table-icon" src={row.characterIcon} />
+              {row.characterName}
+            </div>
+          );
+        },
+      },
+      {
+        name: "",
+        width: "0px",
+        sortable: true,
+        sortField: "c6",
+        cell: (row) => {
+          if (!row.c6) return "";
+          return (
+            <div className="table-icon-text-pair c-badge-wrapper">
+              <div style={{ width: 18 }} className={`c-badge c-6-badge`}>
+                C6
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        name: "Weapons",
+        // width: "100px",
+        sortable: true,
+        sortField: "weaponsCount",
+        cell: (row) => {
+          return (
+            <div className="table-icon-text-pair">
+              {row.weapons.map((weapon: any) => {
+                const leaderboardPath = `leaderboards/${weapon.calculationId}/${
+                  weapon.defaultVariant || ""
+                }`;
+
+                return (
+                  <a
+                    style={{ color: "white" }}
+                    title={`${weapon?.name} R${weapon.refinement}`}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      navigate(`/${leaderboardPath}`);
+                    }}
+                    href={`/${leaderboardPath}`}
+                  >
+                    <WeaponMiniDisplay
+                      icon={weapon.icon}
+                      refinement={weapon.refinement}
+                    />
+                  </a>
+                );
+              })}
+            </div>
+          );
+
+          // const weaponName = row?.weapon?.name || "";
+          // const refinement = row.weapon.refinement ?? 0;
+          //
+          // <div className="table-icon-text-pair">
+          //   <WeaponMiniDisplay
+          //     icon={row.weapon.icon}
+          //     refinement={refinement}
+          //   />
+          //   <span style={{ opacity: 0.5 }}>{weaponName}</span>
+          // </div>
+        },
+      },
+      {
+        name: "Leaderboard",
+        sortable: true,
+        sortField: "name",
+        cell: (row) => {
+          const element = row?.element || "";
+          const lbName = row?.name || "";
+
+          // return <div>{lbName}</div>;
+
+          return (
+            <div className="table-icon-text-pair">
+              <StatIcon name={element} />
+              <div>{lbName}</div>
+            </div>
+          );
+        },
+      },
+      // {
+      //   name: "",
+      //   width: "80px",
+      //   sortable: false,
+      //   sortField: "",
+      //   cell: (row) => {
+      //     const filters = row?.filters;
+      //     return (
+      //       <div>
+      //         {filters ? `${filters.length} filters` : ""}
+      //         {/* {filters?.map((filter) => {
+      //           return <span>{filter.displayName}</span>;
+      //         })} */}
+      //       </div>
+      //     );
+      //   },
+      // },
+      {
+        name: "Count",
+        width: "80px",
+        sortable: true,
+        sortField: "count",
+        cell: (row) => {
+          const element = row?.element || "";
+          const count = row?.count || "";
+
+          return (
+            <div className="table-icon-text-pair">
+              {/* <StatIcon name={`${element} DMG Bonus`} /> */}
+              <div>{count}</div>
+            </div>
+          );
+        },
+      },
+      {
+        name: "Added",
+        sortable: true,
+        sortField: "addDate",
+        cell: (row) => {
+          const addDate = new Date(row?.addDate || "");
+          const strDate = addDate.toLocaleString("en-US", {
+            month: "long",
+            day: "numeric",
+            year: "numeric",
+          });
+          return <div>{strDate}</div>;
+        },
+      },
+    ],
+    []
+  );
+
   return (
     <div className="flex">
       {showAds && <AdsComponent dataAdSlot="6204085735" />}
@@ -79,171 +262,17 @@ export const CategorySelectionPage: React.FC = () => {
         />
         <HelpBox page="leaderboards" />
 
-        {/* <div className="relative">Newest: LIST OF 4 NEWEST + tiemstamp?</div>
-        <div className="relative">filter by name, weapon, element, leaderboard name etc</div>
-        <div className="relative">sort by rarity, element, weapon, categorySize</div> */}
-        <div
-          style={{
-            display: "flex",
-            position: "relative",
-            justifyContent: "space-between",
-            // marginBottom: "15px",
-            fontWeight: 600,
-            fontSize: 24,
-            gap: 20,
-            flexWrap: "wrap",
-          }}
-        >
-          {categoriesTransformed.length > 0 ? (
-            categoriesTransformed
-              ?.filter((category) => {
-                const calcNames = Object.keys(category.calcs);
-                return calcNames.length > 0;
-              })
-              .sort((a, b) => {
-                const a_calcNames = Object.keys(a.calcs);
-                const b_calcNames = Object.keys(b.calcs);
-                const a_categorySize = +(
-                  a.calcs[a_calcNames[0]]?.[0]?.categorySize || 0
-                );
-                const b_categorySize = +(
-                  b.calcs[b_calcNames[0]]?.[0]?.categorySize || 0
-                );
-
-                return a_categorySize < b_categorySize ? 1 : -1;
-              })
-              .map((category, index) => {
-                const calcNames = Object.keys(category.calcs);
-                if (calcNames.length === 0) return <></>;
-
-                const categorySize =
-                  category.calcs[calcNames[0]]?.[0]?.categorySize || "-"
-
-                return (
-                  <div
-                    key={`${category.characterName}-${index}`}
-                    className="block-highlight"
-                    style={{
-                      width: 250,
-                      // flexGrow: 1,
-                      padding: 20,
-                      textAlign: "center",
-                      minWidth: 240,
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        marginBottom: 30,
-                        gap: 5,
-                      }}
-                    >
-                      <img
-                        style={{ width: 90, height: 90 }}
-                        src={category.icon}
-                      />
-                      <div>
-
-                      <div>
-                        {category.characterName}
-                      </div>
-                      <div style={{fontSize: 14, opacity: 0.5}}>
-                        {categorySize} entries
-                      </div>
-                      </div>
-                    </div>
-
-                    <div
-                      style={{ marginTop: 10, fontWeight: 400, fontSize: 16 }}
-                    >
-                      {calcNames.map((calcName, i) => {
-                        const calcs = category.calcs[calcName];
-                        return (
-                          <div key={`${calcName}-${i}`}>
-                            <div
-                              style={{
-                                marginTop: 30,
-                                marginBottom: 10,
-                                fontWeight: 600,
-                              }}
-                            >
-                              {calcName}
-                            </div>
-                            <div style={{
-                              display: 'flex', justifyContent: "center", gap: 10
-                            }}>
-                              {calcs.map((calc, index) => {
-                                const leaderboardPath = `leaderboards/${
-                                  calc.calculationId
-                                }/${calc.defaultFilter || ""}`;
-
-                                console.log(calc);
-
-                                return (
-                                  <span
-                                    key={`${calc.calculationId}-${index}`}
-                                    style={
-                                      {
-                                        // display: "none",
-                                      }
-                                    }
-                                  >
-                                    <a
-                                      title={calc.weapon?.name}
-                                      onClick={(event) => {
-                                        event.preventDefault();
-                                        navigate(`/${leaderboardPath}`);
-                                      }}
-                                      href={`/${leaderboardPath}`}
-                                    >
-                                      {calc.weapon && (
-                                        <span
-                                          style={{
-                                            color: "white",
-                                            display: "flex",
-                                            gap: "10px",
-                                            textAlign: "left",
-                                          }}
-                                        >
-                                          {/* <img
-                                            style={{ width: 45 }}
-                                            src={calc.weapon.icon}
-                                          /> */}
-                                          <WeaponMiniDisplay
-                                            icon={calc.weapon.icon || ""}
-                                            refinement={
-                                              calc.weapon?.refinement || 1
-                                            }
-                                          />
-                                          {/* <span>{calc.weapon.name}</span> */}
-                                          {/* ({calc.categorySize}) */}
-                                        </span>
-                                      )}
-                                    </a>
-                                  </span>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                );
-              })
-          ) : (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                width: "100%",
-              }}
-            >
-              <Spinner />
-            </div>
-          )}
+        <div className="relative">
+          <CustomTable
+            fetchURL={FETCH_CATEGORIES_URL_V2}
+            filtersURL={FETCH_CATEGORIES_FILTERS_URL}
+            columns={CATEGORIES_COLUMNS}
+            defaultSort="addDate"
+            // expandableRows
+            projectParamsToPath
+            expandableRows
+            hidePagination
+          />
         </div>
       </div>
       {showAds && <AdsComponent dataAdSlot="6204085735" />}

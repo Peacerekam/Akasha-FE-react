@@ -8,6 +8,7 @@ export const FETCH_BUILDS_URL = `/api/builds/`;
 export const FETCH_ACCOUNTS_URL = `/api/accounts`;
 export const FETCH_LEADERBOARDS_URL = `/api/leaderboards`;
 export const FETCH_CATEGORIES_URL = `/api/leaderboards/categories`;
+export const FETCH_CATEGORIES_URL_V2 = `/api/v2/leaderboards/categories`;
 export const FETCH_SEARCH_USERS_URL = "/api/search/user/";
 export const FETCH_COLLECTION_SIZE_URL = "/api/getCollectionSize/";
 
@@ -15,6 +16,7 @@ export const FETCH_LEADERBOARD_FILTERS_URL = `/api/filters/leaderboards/`;
 export const FETCH_CHARACTER_FILTERS_URL = `/api/filters/characters/`;
 export const FETCH_ACCOUNTS_FILTERS_URL = `/api/filters/accounts/`;
 export const FETCH_ARTIFACT_FILTERS_URL = `/api/filters/artifacts/`;
+export const FETCH_CATEGORIES_FILTERS_URL = `/api/filters/categories/`;
 
 export const normalizeText = (test: string) => {
   const regex = /[^A-Za-z0-9%]/g;

@@ -16,6 +16,7 @@ import {
   Pagination,
   ArtifactListCompact,
   GenshinUserCard,
+  WeaponMiniDisplay,
 } from "../../components";
 import {
   abortSignalCatcher,
@@ -453,6 +454,49 @@ export const CustomTable: React.FC<CustomTableProps> = ({
         </>
       );
     }
+
+    const isCategoriesRow = !!row.weapons;
+
+    if (isCategoriesRow) {
+      return (
+        <>
+          <div className="flex expanded-row">
+            <div style={{ overflow: "hidden" }}>
+              {row.weapons.map((weapon: any) => {
+                const leaderboardPath = `leaderboards/${weapon.calculationId}/${
+                  weapon.defaultVariant || ""
+                }`;
+
+                return (
+                  <a
+                    style={{ color: "white" }}
+                    title={`${weapon?.name} R${weapon.refinement}`}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      navigate(`/${leaderboardPath}`);
+                    }}
+                    href={`/${leaderboardPath}`}
+                  >
+                    <div className="table-icon-text-pair">
+                      <WeaponMiniDisplay
+                        icon={weapon.icon}
+                        refinement={weapon.refinement}
+                      />
+                      {weapon.name}
+                    </div>
+                  </a>
+                );
+              })}
+            </div>
+
+            <div style={{ overflow: "hidden" }}>
+              show top 1 build for each category?
+            </div>
+          </div>
+        </>
+      );
+    }
+
     return (
       <>
         <ArtifactListCompact row={row} />
