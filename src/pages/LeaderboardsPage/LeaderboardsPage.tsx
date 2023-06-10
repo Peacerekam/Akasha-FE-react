@@ -37,9 +37,9 @@ import {
 import { TableColumn } from "../../types/TableColumn";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
-import { showAds } from "../../App";
 import { getIconElement } from "../../components/HelpBox/helpContentBuilds";
 import "./style.scss";
+import { AdsComponentManager } from "../../components/AdsComponentManager";
 
 ChartJS.register(...registerables);
 
@@ -695,7 +695,8 @@ export const LeaderboardsPage: React.FC = () => {
 
   return (
     <div className="flex" key={calculationId}>
-      {showAds && <AdsComponent dataAdSlot="6204085735" />}
+      <AdsComponentManager adType="LeaderboardATF" dataAdSlot="6204085735" />
+      <AdsComponentManager adType="Video" />
       {hoverElement}
       <div className="content-block w-100" key={currentCategory}>
         <StylizedContentBlock
@@ -958,7 +959,7 @@ export const LeaderboardsPage: React.FC = () => {
 
             {/* spacer */}
             <div style={{ marginTop: "30px" }} />
-            
+
             <CustomTable
               fetchURL={FETCH_LEADERBOARDS_URL}
               fetchParams={{ variant, calculationId: currentCategory }}
@@ -975,7 +976,8 @@ export const LeaderboardsPage: React.FC = () => {
         )}
       </div>
 
-      {showAds && <AdsComponent dataAdSlot="6204085735" />}
+      <AdsComponentManager adType="LeaderboardBTF" dataAdSlot="6204085735" />
+      <AdsComponentManager adType="RichMedia" />
     </div>
   );
 };

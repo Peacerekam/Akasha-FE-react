@@ -12,9 +12,9 @@ import {
   Spinner,
 } from "../../components";
 import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
-import "./style.scss";
-import { showAds } from "../../App";
 import { FETCH_COLLECTION_SIZE_URL } from "../../utils/helpers";
+import { AdsComponentManager } from "../../components/AdsComponentManager";
+import "./style.scss";
 
 export const UIDSearchPage: React.FC = () => {
   const [isFetching, setIsFetching] = useState(false);
@@ -117,7 +117,8 @@ export const UIDSearchPage: React.FC = () => {
   return (
     <div>
       <div className="flex">
-        {showAds && <AdsComponent dataAdSlot="6204085735" />}
+        <AdsComponentManager adType="LeaderboardATF" dataAdSlot="6204085735" />
+        <AdsComponentManager adType="Video" />
         <div className="content-block w-100 ">
           <StylizedContentBlock overrideImage={DomainBackground} />
           <div className="relative">
@@ -193,12 +194,8 @@ export const UIDSearchPage: React.FC = () => {
             </div>
           </div>
         </div>
-        {showAds && results?.length > 0 && (
-          <AdsComponent dataAdSlot="6204085735" />
-        )}
-        {/* {showAds && results?.length > 0 && (
-          <AdsComponent provider="ezoic" ezoicId="103" />
-        )} */}
+        <AdsComponentManager adType="LeaderboardBTF" dataAdSlot="6204085735" />
+        <AdsComponentManager adType="RichMedia" />
       </div>
     </div>
   );

@@ -56,10 +56,10 @@ import {
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
-import "./style.scss";
 import { getSessionIdFromCookie } from "../../utils/helpers";
-import { showAds } from "../../App";
 import { ArtifactSettingsModal } from "./ArtifactSettingsModal";
+import { AdsComponentManager } from "../../components/AdsComponentManager";
+import "./style.scss";
 
 export const ProfilePage: React.FC = () => {
   const [showArtifactSettingsModal, setShowArtifactSettingsModal] =
@@ -71,7 +71,7 @@ export const ProfilePage: React.FC = () => {
   const [fetchCount, setFetchCount] = useState(0);
   const [bindTime, setBindTime] = useState<number>();
   const [refreshTime, setRefreshTime] = useState<number>();
-  const [showAds_2, setShowAds_2] = useState<boolean>(false);
+  const [triggerAds, setTriggerAds] = useState<boolean>(false);
   const [responseData, setResponseData] = useState<{
     account: any;
     error?: {
@@ -92,11 +92,11 @@ export const ProfilePage: React.FC = () => {
   );
 
   const toggleAds = () => {
-    setShowAds_2(false)
-    setTimeout(()=>{
-      setShowAds_2(true)
-    }, 200)
-  }
+    setTriggerAds(false);
+    setTimeout(() => {
+      setTriggerAds(true);
+    }, 200);
+  };
 
   const fetchProfile = async (
     uid: string,
@@ -267,7 +267,7 @@ export const ProfilePage: React.FC = () => {
         sortField: "critValue",
         width: "100px",
         cell: (row) => {
-          const textColor = getArtifactCvColor(row.critValue);
+          const textColor = getArtifactCvColor(row);
           let style = {} as React.CSSProperties;
 
           if (textColor === "rainbow") {
@@ -759,7 +759,15 @@ export const ProfilePage: React.FC = () => {
       </div>
       {/* @TODO: is this ok???? */}
       <div className="flex">
-        {showAds_2 && showAds && !responseData.account?.patreon?.active && <AdsComponent dataAdSlot="6204085735" />}
+        {triggerAds && !responseData.account?.patreon?.active && (
+          <AdsComponentManager
+            adType="LeaderboardATF"
+            dataAdSlot="6204085735"
+          />
+        )}
+        {triggerAds && !responseData.account?.patreon?.active && (
+          <AdsComponentManager adType="Video" />
+        )}
       </div>
       {displayFloatingButtons({
         bind: true,
@@ -811,11 +819,14 @@ export const ProfilePage: React.FC = () => {
           )}
         </div>
       </div>
-      <div className="flex">
-        {showAds_2 && showAds && !responseData.account?.patreon?.active && (
-          <AdsComponent dataAdSlot="6204085735" />
+      {/* <div className="flex">
+        {showAds_2 && !responseData.account?.patreon?.active && (
+          <AdsComponentManager
+            adType="LeaderboardBTF"
+            dataAdSlot="6204085735"
+          />
         )}
-      </div>
+      </div> */}
       {displayFloatingButtons({ artifactSettings: true })}
       <div>
         {isAccountOwner && (
@@ -854,8 +865,14 @@ export const ProfilePage: React.FC = () => {
       </div>
 
       <div className="flex">
-        {showAds_2 && showAds && !responseData.account?.patreon?.active && (
-          <AdsComponent dataAdSlot="6204085735" />
+        {triggerAds && !responseData.account?.patreon?.active && (
+          <AdsComponentManager
+            adType="LeaderboardBTF"
+            dataAdSlot="6204085735"
+          />
+        )}
+        {triggerAds && !responseData.account?.patreon?.active && (
+          <AdsComponentManager adType="RichMedia" />
         )}
       </div>
     </div>

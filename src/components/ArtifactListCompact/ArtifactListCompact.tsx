@@ -53,7 +53,7 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
       <>
         {reordered.map((artifact: any) => {
           const substatKeys = Object.keys(artifact.substats);
-          const className = getArtifactCvClassName(artifact.critValue);
+          const className = getArtifactCvClassName(artifact);
 
           const summedArtifactRolls: {
             [key: string]: { count: number; sum: number };

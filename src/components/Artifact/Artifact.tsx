@@ -81,9 +81,7 @@ export const Artifact: React.FC<ArtifactProps> = ({
   return (
     <div
       style={style}
-      className={`profile-page-artifact ${getArtifactCvClassName(
-        artifact.critValue
-      )}`}
+      className={`profile-page-artifact ${getArtifactCvClassName(artifact)}`}
     >
       <div className="artifact-name">{artifact.name}</div>
       <div className="artifact-crit-value">

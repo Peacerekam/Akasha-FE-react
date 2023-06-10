@@ -30,3 +30,6 @@ export * from "./RegionBadge";
 export * from "./StatListSide";
 export * from "./FancyBuildBorder";
 export * from "./MobileStickyBar";
+export * from "./AdsComponent";
+export * from "./VenatusAdsComponent";
+export * from "./AdsComponentManager";

@@ -10,7 +10,6 @@ import {
   ReplaceRowDataOnHover,
   StylizedContentBlock,
   HelpBox,
-  AdsComponent,
   RegionBadge,
 } from "../../components";
 import { TableColumn } from "../../types/TableColumn";
@@ -21,7 +20,7 @@ import {
   FETCH_CHARACTER_FILTERS_URL,
 } from "../../utils/helpers";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
-import { showAds } from "../../App";
+import { AdsComponentManager } from "../../components/AdsComponentManager";
 
 export type BuildsColumns = {
   _id: string;
@@ -79,7 +78,7 @@ export const BuildsPage: React.FC = () => {
         cell: (row) => {
           return (
             <div className="table-icon-text-pair">
-              <img className="table-icon" src={row.icon} />
+              <img className="table-icon" src={row.icon} title={row?.name} />
               {row.type !== "current" ? (
                 <ReplaceRowDataOnHover data={row.name} onHoverData={row.type} />
               ) : (
@@ -216,7 +215,8 @@ export const BuildsPage: React.FC = () => {
 
   return (
     <div className="flex">
-      {showAds && <AdsComponent dataAdSlot="6204085735" />}
+      <AdsComponentManager adType="LeaderboardATF" dataAdSlot="6204085735" />
+      <AdsComponentManager adType="Video" />
       {hoverElement}
       <div className="content-block w-100">
         <StylizedContentBlock overrideImage={DomainBackground} />
@@ -230,7 +230,8 @@ export const BuildsPage: React.FC = () => {
           projectParamsToPath
         />
       </div>
-      {showAds && <AdsComponent dataAdSlot="6204085735" />}
+      <AdsComponentManager adType="LeaderboardBTF" dataAdSlot="6204085735" />
+      <AdsComponentManager adType="RichMedia" />
     </div>
   );
 };

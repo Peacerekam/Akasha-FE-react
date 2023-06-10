@@ -24,11 +24,11 @@ import {
   uidsToQuery,
 } from "../../utils/helpers";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
-import { showAds } from "../../App";
 import { BuildsColumns } from "../BuildsPage";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
 import { debounce } from "lodash";
 import "./style.scss";
+import { AdsComponentManager } from "../../components/AdsComponentManager";
 
 export const AccountsPage: React.FC = () => {
   const { hoverElement } = useContext(HoverElementContext);
@@ -81,13 +81,13 @@ export const AccountsPage: React.FC = () => {
         name: "Signature",
         sortable: false,
         sortField: "playerInfo.signature",
-        width: "300px",
+        width: "350px",
         cell: (row) => {
           const signature = row?.playerInfo?.signature || "";
           return (
             <div
               style={{
-                width: 300,
+                width: 350,
                 textOverflow: "ellipsis",
                 overflow: "hidden",
                 whiteSpace: "nowrap",
@@ -124,12 +124,61 @@ export const AccountsPage: React.FC = () => {
         },
       },
       {
-        name: "Unique Characters",
+        name: "Saved Characters",
         sortable: false,
         sortField: "ownedCharacters",
+        width: "120px",
         cell: (row) => {
           const ownedCharacters = row?.ownedCharacters || "";
           return <div>{ownedCharacters?.length}</div>;
+        },
+      },
+      {
+        name: "Abyss",
+        sortable: false,
+        sortField: "playerInfo.worldLevel",
+        width: "50px",
+        cell: (row) => {
+          const floor = row?.playerInfo?.towerFloorIndex || "";
+          const chamber = row?.playerInfo?.towerLevelIndex || "";
+
+          const abyssProgress = floor && chamber ? `${floor}-${chamber}` : "";
+          let color = "gray";
+
+          if (floor === 10) {
+            color = "rgb(102, 163, 255)";
+          }
+          if (floor === 11) {
+            color = "rgb(194, 102, 255)";
+          }
+          if (floor === 11 && chamber === 3) {
+            color = "orange";
+          }
+          if (floor === 12) {
+            color = "rgb(255, 217, 0)";
+          }
+          if (floor === 12 && chamber === 3) {
+            color = "cyan";
+          }
+
+          return <div style={{ color }}>{abyssProgress}</div>;
+        },
+      },
+      {
+        name: "Last profile update",
+        sortable: true,
+        sortField: "lastProfileUpdate",
+        cell: (row) => {
+          if (!row?.lastProfileUpdate) return <></>
+
+          const lastProfileUpdate = new Date(row?.lastProfileUpdate || "");
+          const strDate = lastProfileUpdate.toLocaleString("en-US", {
+            month: "long",
+            day: "numeric",
+            year: "numeric",
+          });
+
+          return <div>{strDate}</div>;
         },
       },
       // {
@@ -162,7 +211,8 @@ export const AccountsPage: React.FC = () => {
 
   return (
     <div className="flex">
-      {showAds && <AdsComponent dataAdSlot="6204085735" />}
+      <AdsComponentManager adType="LeaderboardATF" dataAdSlot="6204085735" />
+      <AdsComponentManager adType="Video" />
       {hoverElement}
       <div className="content-block w-100">
         <StylizedContentBlock overrideImage={DomainBackground} />
@@ -230,7 +280,8 @@ export const AccountsPage: React.FC = () => {
           />
         </div>
       </div>
-      {showAds && <AdsComponent dataAdSlot="6204085735" />}
+      <AdsComponentManager adType="LeaderboardBTF" dataAdSlot="6204085735" />
+      <AdsComponentManager adType="RichMedia" />
     </div>
   );
 };

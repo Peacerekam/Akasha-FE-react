@@ -16,8 +16,8 @@ import {
   FETCH_CATEGORIES_URL,
   FETCH_CATEGORIES_URL_V2,
 } from "../../utils/helpers";
-import { showAds } from "../../App";
 import { TableColumn } from "../../types/TableColumn";
+import { AdsComponentManager } from "../../components/AdsComponentManager";
 
 export type TransformedCategories = {
   characterName: string;
@@ -105,15 +105,37 @@ export const CategorySelectionPage: React.FC = () => {
         },
       },
       {
-        name: "Character",
+        name: "Leaderboard",
         width: "100px",
         sortable: true,
-        sortField: "characterName",
+        sortField: "name",
         cell: (row) => {
+          const element = row?.element || "";
+          const lbName = row?.name || "";
+
+          const firstWeapon = row.weapons[0];
+          const leaderboardPath = `leaderboards/${firstWeapon?.calculationId}/${
+            firstWeapon?.defaultVariant || ""
+          }`;
+
           return (
             <div className="table-icon-text-pair">
-              <img className="table-icon" src={row.characterIcon} />
-              {row.characterName}
+              <StatIcon name={element} />
+              <img
+                className="table-icon"
+                src={row.characterIcon}
+                title={row?.characterName}
+              />
+              <a
+                className="row-link-element"
+                onClick={(event) => {
+                  event.preventDefault();
+                  navigate(`/${leaderboardPath}`);
+                }}
+                href={`/${leaderboardPath}`}
+              >
+                {lbName}
+              </a>
             </div>
           );
         },
@@ -180,19 +202,18 @@ export const CategorySelectionPage: React.FC = () => {
         },
       },
       {
-        name: "Leaderboard",
+        name: "Character",
         sortable: true,
-        sortField: "name",
+        sortField: "characterName",
+        width: "0px",
         cell: (row) => {
-          const element = row?.element || "";
-          const lbName = row?.name || "";
-
+          const characterName = row?.characterName || "";
+          // const lbName = row?.name || "";
           // return <div>{lbName}</div>;
 
           return (
-            <div className="table-icon-text-pair">
-              <StatIcon name={element} />
-              <div>{lbName}</div>
+            <div className="table-icon-text-pair" style={{ color: "gray" }}>
+              <div>{characterName}</div>
             </div>
           );
         },
@@ -226,7 +247,7 @@ export const CategorySelectionPage: React.FC = () => {
           return (
             <div className="table-icon-text-pair">
               {/* <StatIcon name={`${element} DMG Bonus`} /> */}
-              <div>{count}</div>
+              <div>{count || "-"}</div>
             </div>
           );
         },
@@ -235,6 +256,7 @@ export const CategorySelectionPage: React.FC = () => {
         name: "Added",
         sortable: true,
         sortField: "addDate",
+        width: "140px",
         cell: (row) => {
           const addDate = new Date(row?.addDate || "");
           const strDate = addDate.toLocaleString("en-US", {
@@ -242,7 +264,7 @@ export const CategorySelectionPage: React.FC = () => {
             day: "numeric",
             year: "numeric",
           });
-          return <div>{strDate}</div>;
+          return <div style={{ whiteSpace: "nowrap" }}>{strDate}</div>;
         },
       },
     ],
@@ -251,7 +273,8 @@ export const CategorySelectionPage: React.FC = () => {
 
   return (
     <div className="flex">
-      {showAds && <AdsComponent dataAdSlot="6204085735" />}
+      <AdsComponentManager adType="LeaderboardATF" dataAdSlot="6204085735" />
+      <AdsComponentManager adType="Video" />
       <div className="content-block w-100">
         <StylizedContentBlock
           // variant="gradient"
@@ -275,7 +298,8 @@ export const CategorySelectionPage: React.FC = () => {
           />
         </div>
       </div>
-      {showAds && <AdsComponent dataAdSlot="6204085735" />}
+      <AdsComponentManager adType="LeaderboardBTF" dataAdSlot="6204085735" />
+      <AdsComponentManager adType="RichMedia" />
     </div>
   );
 };

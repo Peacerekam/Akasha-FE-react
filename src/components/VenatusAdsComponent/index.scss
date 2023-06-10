@@ -1,0 +1,39 @@
+.vm-container {
+  position: relative;
+  overflow: visible;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+  padding: 10px;
+  z-index: 5 !important;
+  margin: 20px 0;
+  // box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  // background-color: #2c3333;
+
+  min-height: 250px;
+
+  &.shrink-ad {
+    min-height: 0px;
+    margin: 0px;
+    padding: 0px;
+  }
+
+  span.ad-debug {
+    opacity: 0.5;
+    font-size: 11px;
+    width: 100%;
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  // .vm-placement {
+  //   transition: max-height 0.75s;
+  //   max-height: 0px;
+  //   &[data-google-query-id] {
+  //     max-height: 300px;
+  //   }
+  // }
+}

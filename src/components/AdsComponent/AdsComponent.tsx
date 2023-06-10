@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import "./index.scss";
 import { isProduction } from "../../App";
 
-type AdsComponentProps = {
+export type AdsComponentProps = {
   dataAdSlot?: string;
 };
 

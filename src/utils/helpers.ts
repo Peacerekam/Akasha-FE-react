@@ -129,8 +129,18 @@ export const getCharacterCvColor = (cv: number) => {
   return "gray";
 };
 
-export const getArtifactCvColor = (cv: number) => {
-  if (cv.toFixed(1) === "54.4") return "rainbow";
+export const getArtifactCvColor = (artifact?: any) => {
+  if (!artifact.critValue) return "gray";
+  let cv = artifact.critValue
+
+  const isCritCirclet =
+    artifact?.equipType === "EQUIP_DRESS" &&
+    artifact?.mainStatKey.startsWith("Crit");
+
+  if (isCritCirclet) cv += 7.77;
+
+  if (+cv.toFixed(1) >= 54.4) return "rainbow";
+
   const _cv = cv + 0.05;
   if (_cv >= 50) return "cyan";
   if (_cv >= 45) return "rgb(255, 217, 0)";
@@ -140,8 +150,18 @@ export const getArtifactCvColor = (cv: number) => {
   return "gray";
 };
 
-export const getArtifactCvClassName = (cv: number) => {
-  if (cv.toFixed(1) === "54.4") return "wtf-artifact";
+export const getArtifactCvClassName = (artifact?: any) => {
+  if (!artifact.critValue) return "poo-artifact";
+  let cv = artifact.critValue
+
+  const isCritCirclet =
+    artifact?.equipType === "EQUIP_DRESS" &&
+    artifact?.mainStatKey.startsWith("Crit");
+
+  if (isCritCirclet) cv += 7.77;
+
+  if (+cv.toFixed(1) >= 54.4) return "wtf-artifact";
+
   const _cv = cv + 0.05;
   if (_cv >= 50) return "unicorn-artifact";
   if (_cv >= 45) return "upper-diamond-artifact";

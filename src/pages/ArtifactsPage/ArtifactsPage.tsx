@@ -27,7 +27,7 @@ import {
   getRainbowTextStyle,
 } from "../../utils/helpers";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
-import { showAds } from "../../App";
+import { AdsComponentManager } from "../../components/AdsComponentManager";
 
 export type ArtifactColumns = {
   _id: string;
@@ -92,7 +92,7 @@ export const ArtifactsPage: React.FC = () => {
         cell: (row) => {
           return (
             <div className="table-icon-text-pair">
-              <img className="table-icon" src={row.icon} />{" "}
+              <img className="table-icon" src={row.icon} title={row.name} />{" "}
               <span
                 style={{
                   color: {
@@ -182,7 +182,7 @@ export const ArtifactsPage: React.FC = () => {
         sortField: "critValue",
         width: "100px",
         cell: (row) => {
-          const textColor = getArtifactCvColor(row.critValue);
+          const textColor = getArtifactCvColor(row);
           let style = {} as React.CSSProperties;
 
           if (textColor === "rainbow") {
@@ -200,7 +200,8 @@ export const ArtifactsPage: React.FC = () => {
 
   return (
     <div className="flex">
-      {showAds && <AdsComponent dataAdSlot="6204085735" />}
+      <AdsComponentManager adType="LeaderboardATF" dataAdSlot="6204085735" />
+      <AdsComponentManager adType="Video" />
       {hoverElement}
       <div className="content-block w-100">
         <StylizedContentBlock overrideImage={DomainBackground} />
@@ -213,7 +214,8 @@ export const ArtifactsPage: React.FC = () => {
           projectParamsToPath
         />
       </div>
-      {showAds && <AdsComponent dataAdSlot="6204085735" />}
+      <AdsComponentManager adType="LeaderboardBTF" dataAdSlot="6204085735" />
+      <AdsComponentManager adType="RichMedia" />
     </div>
   );
 };

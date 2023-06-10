@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect } from "react";
-import CookieConsent from "react-cookie-consent";
+// import CookieConsent from "react-cookie-consent";
 // import { QueryClient, QueryClientProvider } from "react-query";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { LastProfilesContextProvider } from "./context/LastProfiles/LastProfilesContext";
@@ -8,7 +8,7 @@ import { HoverElementContextProvider } from "./context/HoverElement/HoverElement
 import { SessionDataContextProvider } from "./context/SessionData/SessionDataContext";
 import {
   Footer,
-  MobileStickyBar,
+  // MobileStickyBar,
   Navbar,
   NavbarTabs,
   NotificationBar,
@@ -22,10 +22,11 @@ import {
   LeaderboardsPage,
   CategorySelectionPage,
   // DashboardPage,
-  UIDSearchPage,
+  // UIDSearchPage,
   AccountsPage,
 } from "./pages";
 import { PrivacyPolicyPage } from "./pages/PrivacyPolicy";
+import { AdProviderContextProvider } from "./context/AdProviderContext/AdProviderContext";
 
 // @TODO: env variables later on...
 const urls = {
@@ -41,7 +42,7 @@ const urls = {
 };
 
 export const showAds = true;
-export const isProduction = true;
+export const isProduction = false;
 export const BASENAME = "/";
 const MAINTENANCE_MODE = false;
 
@@ -70,7 +71,8 @@ const domainRedirect = () => {
       break;
   }
 
-  if (currentHref.includes(_from) || currentHref.startsWith("www.")) { // startsWith ?? includes ??
+  if (currentHref.includes(_from) || currentHref.startsWith("www.")) {
+    // startsWith ?? includes ??
     const _to = "akasha.cv";
     const newHref = currentHref
       .replace("www.", "")
@@ -115,60 +117,66 @@ const App = () => {
   return (
     // <QueryClientProvider client={queryClient}>
     <LastProfilesContextProvider>
-      <CookieConsent>
+      {/* <CookieConsent>
         This website uses cookies to enhance the user experience.
-      </CookieConsent>
+      </CookieConsent> */}
       <SessionDataContextProvider>
         <BrowserRouter basename={BASENAME}>
-          {/* <MobileStickyBar /> */}
-          <NotificationBar />
-          <Navbar />
-          <NavbarTabs />
-          <div
-            className={`content-wrapper ${isProduction ? "" : "dev-indicator"}`}
-          >
-            <HoverElementContextProvider>
-              <Routes>
-                {/* @TODO: later use dashboard page instead */}
-                {/* <Route path="/" element={<DashboardPage />} /> */}
-                <Route path="/" element={<AccountsPage />} />
-                <Route path="/artifacts" element={<ArtifactsPage />} />
-                <Route path="/builds" element={<BuildsPage />} />
-                <Route path="/profiles" element={<AccountsPage />} />
+          <AdProviderContextProvider>
+            {/* <MobileStickyBar /> */}
+            <NotificationBar />
+            <Navbar />
+            <NavbarTabs />
+            <div
+              className={`content-wrapper ${
+                isProduction ? "" : "dev-indicator"
+              }`}
+            >
+              <HoverElementContextProvider>
+                <Routes>
+                  {/* @TODO: later use dashboard page instead */}
+                  {/* <Route path="/" element={<DashboardPage />} /> */}
+                  <Route path="/" element={<AccountsPage />} />
+                  <Route path="/artifacts" element={<ArtifactsPage />} />
+                  <Route path="/builds" element={<BuildsPage />} />
+                  <Route path="/profiles" element={<AccountsPage />} />
 
-                {/* @TODO: insert UIDSearchPage into AccountsPage */}
-                {/* <Route path="/profile" element={<UIDSearchPage />} /> */}
+                  {/* @TODO: insert UIDSearchPage into AccountsPage */}
+                  {/* <Route path="/profile" element={<UIDSearchPage />} /> */}
 
-                <Route path="/profile/:uid" element={<ProfilePage />} />
+                  <Route path="/profile/:uid" element={<ProfilePage />} />
 
-                {/* <Route path="/builds/ads" element={<BuildsPage />} />
-                  <Route path="/profile/:uid/ads" element={<ProfilePage />} /> */}
+                  {/* <Route path="/profile/:uid/ads" element={<ProfilePage />} /> */}
 
-                <Route
-                  path="/leaderboards"
-                  element={<CategorySelectionPage />}
-                />
+                  <Route
+                    path="/leaderboards"
+                    element={<CategorySelectionPage />}
+                  />
 
-                <Route
-                  path="/leaderboards/:calculationId"
-                  element={<LeaderboardsPage />}
-                />
+                  <Route
+                    path="/leaderboards/:calculationId"
+                    element={<LeaderboardsPage />}
+                  />
 
-                <Route
-                  path="/leaderboards/:calculationId/:variant"
-                  element={<LeaderboardsPage />}
-                />
+                  <Route
+                    path="/leaderboards/:calculationId/:variant"
+                    element={<LeaderboardsPage />}
+                  />
 
-                <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+                  <Route
+                    path="/privacy-policy"
+                    element={<PrivacyPolicyPage />}
+                  />
 
-                <Route
-                  path="*"
-                  element={<PageMessage message="404. Page not found." />}
-                />
-              </Routes>
-            </HoverElementContextProvider>
-            <Footer />
-          </div>
+                  <Route
+                    path="*"
+                    element={<PageMessage message="404. Page not found." />}
+                  />
+                </Routes>
+              </HoverElementContextProvider>
+              <Footer />
+            </div>
+          </AdProviderContextProvider>
         </BrowserRouter>
       </SessionDataContextProvider>
     </LastProfilesContextProvider>

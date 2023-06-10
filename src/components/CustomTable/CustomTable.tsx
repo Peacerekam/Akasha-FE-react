@@ -504,8 +504,10 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     );
   }, []);
 
-  const hasOwnerColumn = useMemo(
-    () => columns.findIndex((c) => c.name === "Owner") > -1,
+  const shouldHighlightRows = useMemo(
+    () =>
+      columns.findIndex((c) => c.name === "Owner") > -1 || // for Artifacts, Builds and Leaderboard pages 
+      columns.findIndex((c) => c.name === "Signature") > -1, // for Profiles page
     [columns]
   );
 
@@ -527,12 +529,12 @@ export const CustomTable: React.FC<CustomTableProps> = ({
       }
 
       // @TODO: patreon
-      const patreonObj = row.owner?.patreon;
+      const patreonObj = row.owner?.patreon || row.patreon;
 
       const rowClassNames = [
         expandableRows ? "pointer" : "",
-        hasOwnerColumn && !!patreonObj?.active ? "decorate-row" : "",
-        hasOwnerColumn && !!patreonObj?.active
+        shouldHighlightRows && !!patreonObj?.active ? "decorate-row" : "",
+        shouldHighlightRows && !!patreonObj?.active
           ? `patreon-${patreonObj?.color}`
           : "",
         // {
