@@ -19,14 +19,13 @@ import {
   CustomTable,
   WeaponMiniDisplay,
   StylizedContentBlock,
-  AdsComponent,
   RegionBadge,
 } from "../../components";
 import {
-  FETCH_CATEGORIES_URL,
-  FETCH_LEADERBOARDS_URL,
   FETCH_CHARACTER_FILTERS_URL,
   uidsToQuery,
+  FETCH_LEADERBOARDS_URL,
+  FETCH_CATEGORIES_URL_V2,
 } from "../../utils/helpers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -43,60 +42,44 @@ import { AdsComponentManager } from "../../components/AdsComponentManager";
 
 ChartJS.register(...registerables);
 
-type CategoriesById = {
-  [key: string]: {
-    character: {
-      name: string;
-      icon: string;
-    };
-    calculation: {
-      id: string;
-      name: string;
-      details: string;
-      short: string;
-      order: number;
-      variants?: any[];
-      defaultVariant?: string;
-    };
-    weapon?: {
-      name: string;
-      icon: string;
-      refinement: number;
-    };
-  };
+type CategoryWeaponInfo = {
+  calculationId: string;
+  defaultVariant?: string;
+  icon: string;
+  name: string;
+  rarity: string;
+  refinement: number;
+  substat: string;
+  type: string;
+  filters?: {
+    displayName: string;
+    name: string;
+    query: any;
+  }[];
 };
 
-type Category = {
-  label: string;
-  icon: string;
-  options: {
-    label: string;
-    value: {
-      calculationId: string;
-      characterId: number;
-      details: string;
-      short: string;
-      order: number;
-      filters: any[];
-      defaultFilter?: string;
-      weapon?: {
-        icon: string;
-        name: string;
-        refinement: number;
-      };
-    };
-  }[];
+type CalculationInfoResponse = {
+  name: string;
+  short: string;
+  details: string;
+  addDate: number;
+  element: string;
+  c6: "c6" | "";
+  rarity: number;
+  count: number;
+  characterId: number;
+  characterName: string;
+  characterIcon: string;
+  weaponsCount: number;
+  weapons: CategoryWeaponInfo[];
 };
 
 export const LeaderboardsPage: React.FC = () => {
   // state
-  const [categories, setCategories] = useState<Category[]>();
+  const [calculationInfo, setCalculationInfo] =
+    useState<CalculationInfoResponse[]>();
   const [inputUID, setInputUID] = useState<string>("");
   const [lookupUID, setLookupUID] = useState<string>("");
-  const [podiumData, setPodiumData] = useState({
-    rows: [] as any,
-    totalRows: 0,
-  });
 
   // context
   const { lastProfiles } = useContext(LastProfilesContext);
@@ -105,6 +88,7 @@ export const LeaderboardsPage: React.FC = () => {
 
   // hooks
   const { calculationId, variant } = useParams();
+  const characterId = calculationId?.slice(0, -2);
   const navigate = useNavigate();
 
   const currentCategory = calculationId ?? "";
@@ -113,64 +97,9 @@ export const LeaderboardsPage: React.FC = () => {
       "calculation.result"
     : "";
 
-  const categoriesById = useMemo(() => {
-    const map: CategoriesById = {};
-    if (!categories) return map;
-    for (const category of categories) {
-      for (const calc of category.options) {
-        map[calc.value.calculationId] = {
-          character: {
-            name: category.label,
-            icon: category.icon,
-          },
-          calculation: {
-            order: calc.value.order,
-            id: calc.value.calculationId,
-            name: calc.label,
-            details: calc.value.details,
-            short: calc.value.short,
-            variants: calc.value.filters,
-            defaultVariant: calc.value.defaultFilter,
-          },
-          weapon: calc.value.weapon,
-        };
-      }
-    }
-    return map;
-  }, [categories]);
-
-  const displayCategory = categoriesById[calculationId ?? ""];
-
-  const handleFetchLeaderboard = async () => {
-    const opts = {
-      params: {
-        sort: calculationSortKey,
-        order: -1,
-        size: 3,
-        page: 1,
-        variant,
-        calculationId,
-      },
-    };
-
-    const response = await axios.get(FETCH_LEADERBOARDS_URL, opts);
-    const { data, totalRows } = response.data;
-
-    setPodiumData({
-      rows: data,
-      totalRows,
-    });
-  };
-
   useEffect(() => {
-    if (categories) {
-      handleFetchLeaderboard();
-    }
-  }, [categories, calculationSortKey, variant]);
-
-  useEffect(() => {
-    fetchCategories();
-  }, [calculationId]);
+    fetchCalculationInfo();
+  }, [characterId]);
 
   useEffect(() => {
     fetchChartData();
@@ -181,6 +110,14 @@ export const LeaderboardsPage: React.FC = () => {
   useEffect(() => {
     debouncedSetLookupUID(inputUID);
   }, [inputUID]);
+
+  const thisCalc = calculationInfo?.find((c) =>
+    c.weapons.find((w) => w.calculationId === calculationId)
+  );
+
+  const thisWeaponCalc = thisCalc?.weapons.find(
+    (w) => w.calculationId === calculationId
+  );
 
   const LEADERBOARDS_COLUMNS: TableColumn<BuildsColumns>[] = useMemo(
     () => [
@@ -347,7 +284,7 @@ export const LeaderboardsPage: React.FC = () => {
         },
       },
       {
-        name: displayCategory?.calculation.short, // currentCategory.split(' - ')[1],
+        name: thisCalc?.short || "???", // currentCategory.split(' - ')[1],
         // width: "100px",
         sortable: true,
         sortField: calculationSortKey,
@@ -362,17 +299,21 @@ export const LeaderboardsPage: React.FC = () => {
     ],
     [
       currentCategory,
-      displayCategory,
+      calculationInfo,
       calculationSortKey,
       // FETCH_LEADERBOARDS_URL, @TODO: not needed?
     ]
   );
 
-  const fetchCategories = async () => {
-    const response = await axios.get(FETCH_CATEGORIES_URL);
+  const fetchCalculationInfo = async () => {
+    if (!characterId) return;
+
+    const response = await axios.get(
+      `${FETCH_CATEGORIES_URL_V2}?characterId=${characterId}`
+    );
     const { data } = response.data;
 
-    setCategories(data);
+    setCalculationInfo(data);
   };
 
   const [chartData, setChartData] = useState<any[]>([]);
@@ -391,175 +332,62 @@ export const LeaderboardsPage: React.FC = () => {
   };
 
   const iconUrlToNamecardUrl = (url: string) => {
+    const iDontFuckingEven = url.includes("Yae") ? 1 : "";
     return url
       .replace("UI_AvatarIcon", "UI_NameCardPic")
-      .replace(".png", "_P.png");
+      .replace(".png", `${iDontFuckingEven}_P.png`);
   };
 
-  const blockBackgroundImage =
-    podiumData.rows.length > 0
-      ? iconUrlToNamecardUrl(podiumData.rows[0].icon)
-      : "";
+  const blockBackgroundImage = thisCalc?.characterIcon
+    ? iconUrlToNamecardUrl(thisCalc?.characterIcon)
+    : "";
 
-  // const renderRung = useCallback(
-  //   (position: 1 | 2 | 3) => {
-  //     const player = podiumData.rows[position - 1] ?? null;
-  //     if (!player) return null;
-
-  //     const wrapperClassNames = [
-  //       "pointer rung-wrapper",
-  //       position === 1 ? "gold" : "",
-  //       position === 2 ? "silver" : "",
-  //       position === 3 ? "bronze" : "",
-  //     ]
-  //       .join(" ")
-  //       .trim();
-
-  //     const squishNameFactor = {
-  //       transform: `scaleX(${
-  //         player?.owner?.nickname?.length > 8
-  //           ? 8 / player?.owner?.nickname?.length
-  //           : 1
-  //       })`,
-  //     };
-
-  //     const result = player.calculations[currentCategory]?.result.toFixed(0);
-
-  //     const cv = player?.critValue || 0;
-  //     const borderColor = getCharacterCvColor(cv);
-  //     const imageStyle = {
-  //       boxShadow: `0 0 0 2px ${borderColor}`,
-  //       backgroundImage: `url(${player.nameCardLink})`,
-  //       backgroundPosition: "center",
-  //     } as React.CSSProperties;
-
-  //     return (
-  //       <a
-  //         onMouseEnter={() =>
-  //           updateTableHoverElement({ row: player, currentCategory })
-  //         }
-  //         onMouseLeave={() =>
-  //           updateTableHoverElement({ hide: true, currentCategory })
-  //         }
-  //         className={wrapperClassNames}
-  //         onClick={(event) => {
-  //           event.preventDefault();
-  //           navigate(`/profile/${player.uid}`);
-  //         }}
-  //         href={`${BASENAME}/profile/${player.uid}`}
-  //       >
-  //         <img
-  //           style={imageStyle}
-  //           src={player.profilePictureLink}
-  //           className="podium-player-icon"
-  //         />
-  //         <div className="rung-player-score">{result || "---"}</div>
-  //         <div className="rung-player-name">
-  //           <div style={squishNameFactor}>{player?.owner?.nickname}</div>
-  //         </div>
-  //         <div className="rung-geometry">
-  //           <div>{position}</div>
-  //         </div>
-  //       </a>
-  //     );
-  //   },
-  //   [JSON.stringify(podiumData.rows), currentCategory]
-  // );
-
-  // const displayPodium = useMemo(() => {
-  //   return (
-  //     <div className="podium-wrapper">
-  //       {podiumData.rows.length === 0 ? (
-  //         <div
-  //           style={{ display: "flex", alignItems: "center", height: "100%" }}
-  //         >
-  //           <Spinner />
-  //         </div>
-  //       ) : (
-  //         <>
-  //           {renderRung(2)}
-  //           {renderRung(1)}
-  //           {renderRung(3)}
-  //         </>
-  //       )}
-  //       {/* <div style={{ color: "brown" }}>#3 {initialData.rows[3].nickname}</div>
-  //       <div style={{ color: "gold", transform: "translateY(-40px)" }}>
-  //         #1 {initialData.rows[0].nickname}
-  //       </div>
-  //       <div style={{ color: "silver", transform: "translateY(-20px)" }}>
-  //         #2 {initialData.rows[1].nickname}
-  //       </div> */}
-  //     </div>
-  //   );
-  // }, [JSON.stringify(podiumData.rows)]);
-
-  const relatedCategories = Object.values(categoriesById)
-    .filter((c: any) => c.character.name === displayCategory?.character.name)
-    .reduce((acc: any, val) => {
-      return {
-        ...acc,
-        [val.calculation.name]: {
-          ...acc[val.calculation.name],
-          ...val.calculation,
-          weapons: {
-            ...acc[val.calculation.name]?.weapons,
-            [val.weapon?.name || ""]: {
-              ...val.weapon,
-              calculationId: val.calculation.id,
-              defaultVariant: val.calculation.defaultVariant,
-            },
-          },
-        },
-      };
-    }, {});
-
-  const displayVariantSelector = displayCategory?.calculation?.variants ? (
-    <div className="variant-selection-wrapper">
-      Available sub-categories:
-      <div className="variant-selection">
-        <a
-          className={!variant ? "current-selection" : ""}
-          onClick={(event) => {
-            event.preventDefault();
-            navigate(`/leaderboards/${calculationId}/`);
-          }}
-          href={`/leaderboards/${calculationId}/`}
-        >
-          NONE
-        </a>
-        {/* get this from API instead */}
-        {displayCategory?.calculation.variants?.map((val) => {
-          const isActive = variant === val.name;
-          return (
-            <a
-              key={val.name}
-              className={isActive ? "current-selection" : ""}
-              onClick={(event) => {
-                event.preventDefault();
-                navigate(`/leaderboards/${calculationId}/${val.name}`);
-              }}
-              href={`/leaderboards/${calculationId}/${val.name}`}
-            >
-              {val.displayName}
-            </a>
-          );
-        })}
+  const displayVariantSelector =
+    thisWeaponCalc?.filters && thisWeaponCalc?.filters?.length > 0 ? (
+      <div className="variant-selection-wrapper">
+        Available sub-categories:
+        <div className="variant-selection">
+          <a
+            className={!variant ? "current-selection" : ""}
+            onClick={(event) => {
+              event.preventDefault();
+              navigate(`/leaderboards/${calculationId}/`);
+            }}
+            href={`/leaderboards/${calculationId}/`}
+          >
+            NONE
+          </a>
+          {/* get this from API instead */}
+          {thisWeaponCalc.filters?.map((val) => {
+            const isActive = variant === val.name;
+            return (
+              <a
+                key={val.name}
+                className={isActive ? "current-selection" : ""}
+                onClick={(event) => {
+                  event.preventDefault();
+                  navigate(`/leaderboards/${calculationId}/${val.name}`);
+                }}
+                href={`/leaderboards/${calculationId}/${val.name}`}
+              >
+                {val.displayName}
+              </a>
+            );
+          })}
+        </div>
       </div>
-    </div>
-  ) : null;
+    ) : null;
 
   const displayRelevantCategories = (
     <>
       <div className="other-calc-container">
-        {Object.keys(relatedCategories).map((cKey) => {
-          const _cat = relatedCategories[cKey];
+        {calculationInfo?.map((_cat) => {
           const categoryName = _cat.name;
           return (
-            <div key={cKey}>
+            <div key={_cat.name}>
               {categoryName}
               <div className="flex">
-                {Object.keys(_cat.weapons).map((wKey: string, index) => {
-                  const _weapon = _cat.weapons[wKey];
+                {_cat.weapons.map((_weapon: any, index) => {
                   const weaponicon = _weapon.icon ?? "";
                   const weaponRefinement = _weapon.refinement ?? 0;
                   const isActive = _weapon.calculationId === calculationId;
@@ -701,7 +529,7 @@ export const LeaderboardsPage: React.FC = () => {
       <div className="content-block w-100" key={currentCategory}>
         <StylizedContentBlock
           variant="gradient"
-          revealCondition={podiumData.rows.length > 0}
+          revealCondition={!!calculationInfo}
           overrideImage={blockBackgroundImage}
         />
         <div
@@ -722,7 +550,7 @@ export const LeaderboardsPage: React.FC = () => {
           <div className="flex">
             {displayChart}
             {/* {displayPodium} */}
-            {displayCategory && (
+            {thisCalc && (
               <div
                 style={{
                   width: "calc(100% - 500px)",
@@ -740,7 +568,7 @@ export const LeaderboardsPage: React.FC = () => {
                   >
                     <img
                       style={{ width: 40, height: 40, marginBottom: 15 }}
-                      src={displayCategory.character.icon}
+                      src={thisCalc.characterIcon}
                     />
                     <div
                       style={{
@@ -748,11 +576,10 @@ export const LeaderboardsPage: React.FC = () => {
                         alignItems: "center",
                       }}
                     >
-                      {displayCategory.character.name} -{" "}
-                      {displayCategory.calculation.name}
+                      {thisCalc.characterName} - {thisCalc.name}
                     </div>
                   </div>
-                  <div>{displayCategory.calculation.details}</div>
+                  <div>{thisCalc.details}</div>
                   {/* @TODO CALC INFO DISPLAY */}
                   <div
                     style={{ display: "none" }}
@@ -768,7 +595,7 @@ export const LeaderboardsPage: React.FC = () => {
                             >
                               <img
                                 className="table-icon"
-                                src={displayCategory.character.icon}
+                                src={thisCalc.characterIcon}
                               />
                               Hu Tao C1 Lv. 90
                             </div>
@@ -808,10 +635,8 @@ export const LeaderboardsPage: React.FC = () => {
                               style={{ justifyContent: "center" }}
                             >
                               <WeaponMiniDisplay
-                                icon={displayCategory.weapon?.icon || ""}
-                                refinement={
-                                  displayCategory.weapon?.refinement || 1
-                                }
+                                icon={thisWeaponCalc?.icon || ""}
+                                refinement={thisWeaponCalc?.refinement || 1}
                               />
                               Staff of Homa R1 Lv. 90
                             </div>
@@ -899,10 +724,10 @@ export const LeaderboardsPage: React.FC = () => {
                     <span className="flex gap-10">
                       Weapon:
                       <WeaponMiniDisplay
-                        icon={displayCategory.weapon?.icon || ""}
-                        refinement={displayCategory.weapon?.refinement || 1}
+                        icon={thisWeaponCalc?.icon || ""}
+                        refinement={thisWeaponCalc?.refinement || 1}
                       />
-                      {displayCategory.weapon?.name}
+                      {thisWeaponCalc?.name}
                     </span>
                   </div>
                 </div>
@@ -917,7 +742,7 @@ export const LeaderboardsPage: React.FC = () => {
 
       <div className="content-block w-100">
         <StylizedContentBlock
-          revealCondition={podiumData.rows.length > 0}
+          revealCondition={!!thisCalc?.characterIcon}
           overrideImage={blockBackgroundImage}
         />
         <div className="relative search-input-wrapper">
@@ -936,7 +761,7 @@ export const LeaderboardsPage: React.FC = () => {
             </div>
           </div>
         </div>
-        {displayCategory && (
+        {calculationInfo && (
           <div key={`${currentCategory}${variant}`}>
             <CustomTable
               fetchURL={FETCH_LEADERBOARDS_URL}

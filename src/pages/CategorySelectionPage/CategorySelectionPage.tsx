@@ -1,19 +1,15 @@
-import React, { useEffect, useMemo, useState } from "react";
-import axios from "axios";
+import React, { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
 import {
-  AdsComponent,
   CustomTable,
   HelpBox,
-  Spinner,
   StatIcon,
   StylizedContentBlock,
   WeaponMiniDisplay,
 } from "../../components";
 import {
   FETCH_CATEGORIES_FILTERS_URL,
-  FETCH_CATEGORIES_URL,
   FETCH_CATEGORIES_URL_V2,
 } from "../../utils/helpers";
 import { TableColumn } from "../../types/TableColumn";
@@ -77,23 +73,8 @@ export type CategoriesColumns = {
 };
 
 export const CategorySelectionPage: React.FC = () => {
-  // const [categories, setCategories] = useState<Category[]>();
-  const [categoriesTransformed, setCategoriesTransformed] = useState<
-    TransformedCategories[]
-  >([]);
-
   const navigate = useNavigate();
-  const pathname = window.location.pathname;
-
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  const fetchCategories = async () => {
-    const response = await axios.get(FETCH_CATEGORIES_URL);
-    const { dataTransformed } = response.data;
-    setCategoriesTransformed(dataTransformed);
-  };
+  // const pathname = window.location.pathname;
 
   const CATEGORIES_COLUMNS: TableColumn<CategoriesColumns>[] = useMemo(
     () => [
@@ -279,9 +260,9 @@ export const CategorySelectionPage: React.FC = () => {
         <StylizedContentBlock
           // variant="gradient"
           overrideImage={DomainBackground}
-          revealCondition={
-            categoriesTransformed && categoriesTransformed?.length > 0
-          }
+          // revealCondition={
+          //   categoriesTransformed && categoriesTransformed?.length > 0
+          // }
         />
         <HelpBox page="leaderboards" />
 

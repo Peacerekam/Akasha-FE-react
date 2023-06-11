@@ -757,7 +757,6 @@ export const ProfilePage: React.FC = () => {
           </div>
         )}
       </div>
-      {/* @TODO: is this ok???? */}
       <div className="flex">
         {triggerAds && !responseData.account?.patreon?.active && (
           <AdsComponentManager
