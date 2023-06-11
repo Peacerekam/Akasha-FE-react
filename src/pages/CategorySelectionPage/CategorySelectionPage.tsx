@@ -76,6 +76,13 @@ export const CategorySelectionPage: React.FC = () => {
   const navigate = useNavigate();
   // const pathname = window.location.pathname;
 
+  const isNew = (row: any) => {
+    const today = +new Date();
+    const then = +row?.addDate;
+    const sevenDays = 14 * 24 * 60 * 60 * 1000;
+    return today - then < sevenDays;
+  };
+
   const CATEGORIES_COLUMNS: TableColumn<CategoriesColumns>[] = useMemo(
     () => [
       {
@@ -99,6 +106,8 @@ export const CategorySelectionPage: React.FC = () => {
             firstWeapon?.defaultVariant || ""
           }`;
 
+          const aClassName = isNew(row) ? "new-lb-badge" : "";
+
           return (
             <div className="table-icon-text-pair">
               <StatIcon name={element} />
@@ -108,7 +117,7 @@ export const CategorySelectionPage: React.FC = () => {
                 title={row?.characterName}
               />
               <a
-                className="row-link-element"
+                className={`row-link-element ${aClassName}`}
                 onClick={(event) => {
                   event.preventDefault();
                   navigate(`/${leaderboardPath}`);
@@ -222,7 +231,7 @@ export const CategorySelectionPage: React.FC = () => {
         sortable: true,
         sortField: "count",
         cell: (row) => {
-          const element = row?.element || "";
+          // const element = row?.element || "";
           const count = row?.count || "";
 
           return (
@@ -245,7 +254,15 @@ export const CategorySelectionPage: React.FC = () => {
             day: "numeric",
             year: "numeric",
           });
-          return <div style={{ whiteSpace: "nowrap" }}>{strDate}</div>;
+          return (
+            <div
+              style={{
+                whiteSpace: "nowrap",
+              }}
+            >
+              {strDate}
+            </div>
+          );
         },
       },
     ],
@@ -266,12 +283,25 @@ export const CategorySelectionPage: React.FC = () => {
         />
         <HelpBox page="leaderboards" />
 
+        {/* <div className="relative">
+          <CustomTable
+            fetchURL={FETCH_CATEGORIES_URL_V2}
+            // filtersURL={FETCH_CATEGORIES_FILTERS_URL}
+            columns={CATEGORIES_COLUMNS}
+            defaultSort="addDate"
+            // expandableRows
+            // projectParamsToPath
+            expandableRows
+            hidePagination
+            fetchParams={{ new: 1 }}
+          />
+        </div> */}
         <div className="relative">
           <CustomTable
             fetchURL={FETCH_CATEGORIES_URL_V2}
             filtersURL={FETCH_CATEGORIES_FILTERS_URL}
             columns={CATEGORIES_COLUMNS}
-            defaultSort="addDate"
+            defaultSort="count"
             // expandableRows
             projectParamsToPath
             expandableRows

@@ -300,6 +300,7 @@ export const LeaderboardsPage: React.FC = () => {
     [
       currentCategory,
       calculationInfo,
+      thisCalc?.short,
       calculationSortKey,
       // FETCH_LEADERBOARDS_URL, @TODO: not needed?
     ]
@@ -333,6 +334,7 @@ export const LeaderboardsPage: React.FC = () => {
 
   const iconUrlToNamecardUrl = (url: string) => {
     const iDontFuckingEven = url.includes("Yae") ? 1 : "";
+
     return url
       .replace("UI_AvatarIcon", "UI_NameCardPic")
       .replace(".png", `${iDontFuckingEven}_P.png`);

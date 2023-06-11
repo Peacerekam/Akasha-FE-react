@@ -277,6 +277,20 @@ $substats: "flathp", "hp_", "flatatk", "atk_", "flatdef", "def_", "critrate",
       border: 1px solid orange;
     }
   }
+
+  &.new-lb-badge {
+    &::before {
+      content: "NEW";
+      background-color: #40839B;
+      margin-right: 5px;
+      white-space: nowrap;
+      padding: 2px 5px;
+      border-radius: 5px;
+      color: white;
+      font-weight: 600;
+      font-size: 11px;
+    }
+  }
 }
 
 .c-badge-wrapper {
