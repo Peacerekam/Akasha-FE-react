@@ -204,6 +204,7 @@ export const StatList: React.FC<StatListProps> = ({
 
     return Object.keys(generalStats).map((key: any) => {
       const value = generalStats[key];
+      if (value === 0) return null;
       return (
         <div className="table-stat-row" key={key}>
           <div className="flex gap-5">

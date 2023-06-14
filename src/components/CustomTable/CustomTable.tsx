@@ -17,6 +17,7 @@ import {
   ArtifactListCompact,
   GenshinUserCard,
   WeaponMiniDisplay,
+  CharacterCard,
 } from "../../components";
 import {
   abortSignalCatcher,
@@ -29,13 +30,13 @@ import {
 import { FiltersContainer, FilterOption } from "./Filters";
 import { useLocation, useNavigate } from "react-router-dom";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
-import "./style.scss";
 import {
   FETCH_ARTIFACTS_URL,
   FETCH_LEADERBOARDS_URL,
   FETCH_BUILDS_URL,
 } from "../../utils/helpers";
-import { useFetchTableData } from "../../hooks";
+import "./style.scss";
+import { ExpandedRowBuilds } from "../ExpandedRowBuilds";
 
 type CustomTableProps = {
   columns: any[];
@@ -498,15 +499,14 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
     return (
       <>
-        <ArtifactListCompact row={row} />
-        <CalculationList row={row} />
+        <ExpandedRowBuilds row={row} isProfile={!!fetchParams.uid} />
       </>
     );
   }, []);
 
   const shouldHighlightRows = useMemo(
     () =>
-      columns.findIndex((c) => c.name === "Owner") > -1 || // for Artifacts, Builds and Leaderboard pages 
+      columns.findIndex((c) => c.name === "Owner") > -1 || // for Artifacts, Builds and Leaderboard pages
       columns.findIndex((c) => c.name === "Signature") > -1, // for Profiles page
     [columns]
   );

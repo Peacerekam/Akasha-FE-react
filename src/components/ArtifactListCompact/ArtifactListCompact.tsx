@@ -17,32 +17,13 @@ import "./style.scss";
 
 type ArtifactListCompactProps = {
   row: any;
+  artifacts: any[];
 };
 
 export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
   row,
+  artifacts,
 }) => {
-  const [isFetching, setIsFetching] = useState(true);
-  const [artifacts, setArtifacts] = useState<any[]>([]);
-
-  const getArtifacts = async () => {
-    setIsFetching(true);
-    const _uid = encodeURIComponent(row.uid);
-    const artDetailsURL = `/api/artifacts/${_uid}/${row.characterId}`;
-    const opts = {
-      params: {
-        type: row.type,
-      },
-    };
-    const { data } = await axios.get(artDetailsURL, opts);
-    setArtifacts(data.data);
-    setIsFetching(false);
-  };
-
-  useEffect(() => {
-    getArtifacts();
-  }, []);
-
   const reordered = useMemo(
     () => getArtifactsInOrder(artifacts),
     [JSON.stringify(artifacts)]
@@ -142,11 +123,9 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
     );
   }, [JSON.stringify(reordered)]);
 
-  const content = reordered.length > 0 ? compactList : "no artifacts equipped";
-
   return (
     <div className="flex expanded-row">
-      {isFetching ? <Spinner /> : content}
+      {reordered.length > 0 ? compactList : "no artifacts equipped"}
     </div>
   );
 };

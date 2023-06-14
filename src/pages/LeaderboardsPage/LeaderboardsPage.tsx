@@ -26,6 +26,7 @@ import {
   uidsToQuery,
   FETCH_LEADERBOARDS_URL,
   FETCH_CATEGORIES_URL_V2,
+  iconUrlToNamecardUrl,
 } from "../../utils/helpers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -332,14 +333,6 @@ export const LeaderboardsPage: React.FC = () => {
     setChartData(data);
   };
 
-  const iconUrlToNamecardUrl = (url: string) => {
-    const iDontFuckingEven = url.includes("Yae") ? 1 : "";
-
-    return url
-      .replace("UI_AvatarIcon", "UI_NameCardPic")
-      .replace(".png", `${iDontFuckingEven}_P.png`);
-  };
-
   const blockBackgroundImage = thisCalc?.characterIcon
     ? iconUrlToNamecardUrl(thisCalc?.characterIcon)
     : "";
@@ -542,12 +535,16 @@ export const LeaderboardsPage: React.FC = () => {
           }}
         >
           <div style={{ marginBottom: 20 }}>
-            <button
+            <a
               className="pointer back-btn"
-              onClick={() => navigate("/leaderboards")}
+              href="/leaderboards"
+              onClick={(e) => {
+                e.preventDefault();
+                navigate("/leaderboards");
+              }}
             >
               <FontAwesomeIcon icon={faChevronLeft} size="1x" /> GO BACK
-            </button>
+            </a>
           </div>
           <div className="flex">
             {displayChart}

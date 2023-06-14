@@ -11,7 +11,7 @@ type CustomQueryBuilderProps = {
   pills: FilterOption[];
 };
 
-type CustomOptionGroup = {
+export type CustomOptionGroup = {
   label: string;
   options: {
     label: JSX.Element;

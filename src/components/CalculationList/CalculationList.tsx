@@ -25,29 +25,13 @@ type CalculationResponse = {
 
 type CalculationListProps = {
   row: any;
+  calculations: any[]
 };
 
-export const CalculationList: React.FC<CalculationListProps> = ({ row }) => {
-  const [calculations, setCalculations] = useState<any[]>([]);
+export const CalculationList: React.FC<CalculationListProps> = ({ row, calculations }) => {
   const [show, setShow] = useState(false);
 
   const navigate = useNavigate();
-
-  const getCalculations = async () => {
-    const _uid = encodeURIComponent(row.uid);
-    const calcDetailsURL = `/api/leaderboards/${_uid}/${row.characterId}`;
-    const opts = {
-      params: {
-        type: row.type,
-      },
-    };
-    const { data } = await axios.get(calcDetailsURL, opts);
-    setCalculations(data.data);
-  };
-
-  useEffect(() => {
-    getCalculations();
-  }, []);
 
   const calculationIds = useMemo(
     () =>

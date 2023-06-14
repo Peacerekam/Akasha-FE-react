@@ -67,7 +67,7 @@ export const TableHoverElement: React.FC<TableHoverElementProps> = ({
 
   if (isArtifact) {
     const wrapperClassNames = [
-      "row-hover-artifact-preview",
+      "hover-element row-hover-artifact-preview",
       hide ? "fade-out" : "fade-in",
     ].join(" ");
 
@@ -94,7 +94,7 @@ export const TableHoverElement: React.FC<TableHoverElementProps> = ({
       : "ar-60-badge";
 
     const wrapperClassNames = [
-      "row-hover-artifact-preview account-hover-wrapper",
+      "hover-element row-hover-artifact-preview account-hover-wrapper",
       hide ? "fade-out" : "fade-in",
       borderColorClass
     ].join(" ");

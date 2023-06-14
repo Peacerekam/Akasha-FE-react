@@ -6,6 +6,7 @@ import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { LastProfilesContextProvider } from "./context/LastProfiles/LastProfilesContext";
 import { HoverElementContextProvider } from "./context/HoverElement/HoverElementContext";
 import { SessionDataContextProvider } from "./context/SessionData/SessionDataContext";
+import { AdProviderContextProvider } from "./context/AdProvider/AdProviderContext";
 import {
   Footer,
   // MobileStickyBar,
@@ -26,7 +27,6 @@ import {
   AccountsPage,
 } from "./pages";
 import { PrivacyPolicyPage } from "./pages/PrivacyPolicy";
-import { AdProviderContextProvider } from "./context/AdProviderContext/AdProviderContext";
 
 // @TODO: env variables later on...
 const urls = {
@@ -42,7 +42,7 @@ const urls = {
 };
 
 export const showAds = true;
-export const isProduction = false;
+export const isProduction = true;
 export const BASENAME = "/";
 const MAINTENANCE_MODE = false;
 
@@ -122,16 +122,14 @@ const App = () => {
       </CookieConsent> */}
       <SessionDataContextProvider>
         <BrowserRouter basename={BASENAME}>
-          <AdProviderContextProvider>
-            {/* <MobileStickyBar /> */}
-            <NotificationBar />
-            <Navbar />
-            <NavbarTabs />
-            <div
-              className={`content-wrapper ${
-                isProduction ? "" : "dev-indicator"
-              }`}
-            >
+          {/* <MobileStickyBar /> */}
+          <NotificationBar />
+          <Navbar />
+          <NavbarTabs />
+          <div
+            className={`content-wrapper ${isProduction ? "" : "dev-indicator"}`}
+          >
+            <AdProviderContextProvider>
               <HoverElementContextProvider>
                 <Routes>
                   {/* @TODO: later use dashboard page instead */}
@@ -174,9 +172,9 @@ const App = () => {
                   />
                 </Routes>
               </HoverElementContextProvider>
-              <Footer />
-            </div>
-          </AdProviderContextProvider>
+            </AdProviderContextProvider>
+            <Footer />
+          </div>
         </BrowserRouter>
       </SessionDataContextProvider>
     </LastProfilesContextProvider>

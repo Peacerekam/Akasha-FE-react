@@ -33,3 +33,5 @@ export * from "./MobileStickyBar";
 export * from "./AdsComponent";
 export * from "./VenatusAdsComponent";
 export * from "./AdsComponentManager";
+export * from "./CharacterCard";
+

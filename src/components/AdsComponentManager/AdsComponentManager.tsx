@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
-import { AdProviderContext } from "../../context/AdProviderContext/AdProviderContext";
+import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 import { AdsComponent, AdsComponentProps } from "../AdsComponent";
 import {
-  VenatusAdsComponent,
+  // VenatusAdsComponent,
   VenatusAdsComponentProps,
 } from "../VenatusAdsComponent";
+import VenatusAdsComponent from "../VenatusAdsComponent/VenatusAdsComponent";
 import { showAds } from "../../App";
 
 type AdsComponentManagerProps = VenatusAdsComponentProps & AdsComponentProps;

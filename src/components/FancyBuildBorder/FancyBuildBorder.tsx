@@ -55,7 +55,7 @@ export const FancyBuildBorder: React.FC<FancyBuildBorderProps> = ({
   } as React.CSSProperties;
 
   return (
-    <div className="relative">
+    <div className="relative hover-element">
       <PatreonBorderInside
         classNames={[hide ? "hide" : "", patreonObj?.active ? "" : "hide"]}
         style={offsetStyle}

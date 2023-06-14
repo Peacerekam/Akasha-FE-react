@@ -36,7 +36,7 @@ const TalentDisplay: React.FC<TalentProps> = ({ talent, strikethrough }) => {
 
 export const StatListSide: React.FC<StatListSideProps> = ({ row, strikethrough }) => {
   return (
-    <div className="stat-list-side">
+    <div className="hover-element stat-list-side">
       <div className="adventure-rank-wrapper">
         <ARBadge adventureRank={row?.owner?.adventureRank} />
       </div>

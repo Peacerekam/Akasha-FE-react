@@ -14,6 +14,7 @@
     align-items: center;
     margin-right: 10px;
     position: relative;
+    mask-image: linear-gradient(to right, black 45%, transparent 100%);
     .compact-artifact-icon {
       width: 180px;
       height: 180px;
@@ -53,8 +54,8 @@
     margin: 15px;
     margin-left: 0;
     z-index: 2;
-    background-color: $bg-color;
-    box-shadow: $bg-color -10px 0px 30px 30px;
+    // background-color: $bg-color;
+    // box-shadow: $bg-color -10px 0px 30px 30px;
     color: white;
     .stat-icon {
       width: 22px;

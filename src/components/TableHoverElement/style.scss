@@ -16,6 +16,12 @@
   }
 }
 
+.hover-element {
+  @media (max-width: 800px) {
+    display: none;
+  }
+}
+
 .row-hover-build-preview {
   background-image: var(--name-card-url);
   background-size: cover;

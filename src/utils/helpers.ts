@@ -131,7 +131,7 @@ export const getCharacterCvColor = (cv: number) => {
 
 export const getArtifactCvColor = (artifact?: any) => {
   if (!artifact.critValue) return "gray";
-  let cv = artifact.critValue
+  let cv = artifact.critValue;
 
   const isCritCirclet =
     artifact?.equipType === "EQUIP_DRESS" &&
@@ -152,7 +152,7 @@ export const getArtifactCvColor = (artifact?: any) => {
 
 export const getArtifactCvClassName = (artifact?: any) => {
   if (!artifact.critValue) return "poo-artifact";
-  let cv = artifact.critValue
+  let cv = artifact.critValue;
 
   const isCritCirclet =
     artifact?.equipType === "EQUIP_DRESS" &&
@@ -228,7 +228,7 @@ export const getSubstatPercentageEfficiency = (key: string, value: number) => {
     }[key] || 1000;
 
   const subEff = value / maxValue;
-  return Math.min(1, Math.max(0.2, subEff * 2.5)).toFixed(2);
+  return Math.min(0.99, Math.max(0.2, subEff * 2.5)).toFixed(2);
 };
 
 export const arrayPushOrSplice = (prev: any[], element: any) => {
@@ -310,4 +310,16 @@ export const toShortThousands = (n: number) => {
     return `${adjusted}k`;
   }
   return n;
+};
+
+export const iconUrlToNamecardUrl = (url: string) => {
+  const iDontFuckingEven = url.includes("Yae") ? 1 : "";
+
+  return url
+    .replace("UI_AvatarIcon", "UI_NameCardPic")
+    .replace(".png", `${iDontFuckingEven}_P.png`);
+};
+
+export const toEnkaUrl = (assetName: string) => {
+  return `https://enka.network/ui/${assetName}.png`;
 };
