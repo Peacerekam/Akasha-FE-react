@@ -76,13 +76,6 @@ export const CategorySelectionPage: React.FC = () => {
   const navigate = useNavigate();
   // const pathname = window.location.pathname;
 
-  const isNew = (row: any) => {
-    const today = +new Date();
-    const then = +row?.addDate;
-    const sevenDays = 14 * 24 * 60 * 60 * 1000;
-    return today - then < sevenDays;
-  };
-
   const CATEGORIES_COLUMNS: TableColumn<CategoriesColumns>[] = useMemo(
     () => [
       {
@@ -106,7 +99,7 @@ export const CategorySelectionPage: React.FC = () => {
             firstWeapon?.defaultVariant || ""
           }`;
 
-          const aClassName = isNew(row) ? "new-lb-badge" : "";
+          const aClassName = row.new ? "new-lb-badge" : "";
 
           return (
             <div className="table-icon-text-pair">

@@ -36,7 +36,6 @@ import {
   StatIcon,
   DisplaySets,
   WeaponMiniDisplay,
-  Spinner,
   CustomTable,
   ReplaceRowDataOnHover,
   Timer,
@@ -44,8 +43,6 @@ import {
   CalculationResultWidget,
   ConfirmTooltip,
   GenshinUserCard,
-  AdsComponent,
-  PatreonBorderInside,
 } from "../../components";
 import { TableColumn } from "../../types/TableColumn";
 import { BuildSettingsModal } from "./BuildSettingsModal";
@@ -505,11 +502,13 @@ export const ProfilePage: React.FC = () => {
       bind = false,
       buildSettings = false,
       artifactSettings = false,
+      enkaLink = false,
     }: {
       refresh?: boolean;
       bind?: boolean;
       buildSettings?: boolean;
       artifactSettings?: boolean;
+      enkaLink?: boolean;
     }) => {
       const DISABLE_REFRESH_FLOATING_BUTTONS = false;
       const defaultBtnClassName = DISABLE_REFRESH_FLOATING_BUTTONS
@@ -597,6 +596,20 @@ export const ProfilePage: React.FC = () => {
         </>
       ) : null;
 
+      const enkaButton = enkaLink ? (
+        <div
+          title="View on enka.network"
+          className="floating-button enka-button"
+          key={`enka-link-${uid}`}
+        >
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href={`https://enka.network/u/${uid}`}
+          />
+        </div>
+      ): null;
+
       const buildSettingsButton = buildSettings ? (
         <>
           {isAccountOwner ? (
@@ -631,6 +644,7 @@ export const ProfilePage: React.FC = () => {
         <div className="floating-profile-buttons-wrapper">
           <div className="floating-profile-buttons">
             {refreshButton}
+            {enkaButton}
             {bindingButton}
             {buildSettingsButton}
             {artifactSettingsButton}
@@ -772,6 +786,7 @@ export const ProfilePage: React.FC = () => {
         bind: true,
         refresh: true,
         buildSettings: true,
+        enkaLink: true,
       })}
       <div>
         {isAccountOwner && (

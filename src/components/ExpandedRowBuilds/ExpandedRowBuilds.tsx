@@ -52,7 +52,7 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
 
   const content = (
     <>
-      {/* {isProfile ? (
+      {isProfile ? (
         <CharacterCard
           row={row}
           artifacts={artifacts}
@@ -60,8 +60,8 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
         />
       ) : (
         <ArtifactListCompact row={row} artifacts={artifacts} />
-      )} */}
-      <ArtifactListCompact row={row} artifacts={artifacts} />
+      )}
+      {/* <ArtifactListCompact row={row} artifacts={artifacts} /> */}
       <CalculationList row={row} calculations={calculations} />
     </>
   );

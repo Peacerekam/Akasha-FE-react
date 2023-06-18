@@ -115,8 +115,9 @@
     &::after {
       content: "";
       position: absolute;
-      bottom: 0; left: 0;
-      background: linear-gradient(0deg, #2c3333 1%,  transparent 10%);
+      bottom: 0;
+      left: 0;
+      background: linear-gradient(0deg, #2c3333 1%, transparent 10%);
       height: 100%;
       width: 100%;
       pointer-events: none;
@@ -322,6 +323,24 @@
       &.disable-btn {
         pointer-events: none;
         opacity: 0.5;
+      }
+    }
+    .enka-button {
+      position: relative;
+      &::after {
+        content: "\e93a";
+        font-family: "shicon";
+        font-size: 17px;
+        position: relative;
+        top: 1px;
+        pointer-events: none;
+      }
+      > a {
+        display: block;
+        padding: 1px;
+        position: absolute;
+        width: 16px;
+        height: 21px;
       }
     }
   }

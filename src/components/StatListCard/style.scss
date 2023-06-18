@@ -1,0 +1,53 @@
+.table-stats-display-card {
+  width: 100%;
+  font-family: "GenshinFont";
+  // text-shadow: 0 0 0.1em black, 0 0.1em 0.3em rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;  
+  height: 270px;
+  .table-stat-row {
+    display: flex;
+    justify-content: space-between;
+    // border-bottom: 1px dashed rgba(150, 150, 150, 0.75);
+    font-size: 16px;
+    > div:first-child {
+      width: 60%;
+      align-items: center;
+      flex-wrap: nowrap;
+      span {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+    }
+    .stat-icon {
+      width: 20px;
+      height: 20px;
+      // filter: drop-shadow(0 0 0.1em black);
+    }
+  }
+}
+
+.refinement-display {
+  opacity: 0.5;
+  font-size: 13px;
+  position: absolute;
+  top: -13px;
+  left: 0;
+}
+
+.strike-through {
+  // text-decoration: line-through;
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    background-color: red;
+    width: 100%;
+    height: 2px;
+    opacity: 1;
+    top: 50%;
+    right: 0;
+  }
+}

@@ -3,6 +3,11 @@
   src: url("./assets/fonts/enka.woff2") format("woff2");
 }
 
+@font-face {
+  font-family: "shicon";
+  src: url("./assets/fonts/shicon.woff");
+}
+
 html,
 body {
   height: 100%;
@@ -307,6 +312,14 @@ body {
   100% {
     opacity: 1;
   }
+}
+
+.mt-0 {
+  margin-top: 0 !important;
+}
+
+.mb-0 {
+  margin-bottom: 0 !important;
 }
 
 .back-btn {

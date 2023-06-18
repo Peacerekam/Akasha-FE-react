@@ -135,7 +135,8 @@ export const reactSelectCustomFilterTheme = {
       opacity,
       transition,
       color: "white",
-      backgroundColor: "#202525",
+      // backgroundColor: "#202525",
+      backgroundColor: "transparent",
     };
   },
 };

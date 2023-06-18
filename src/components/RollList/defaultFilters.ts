@@ -11,7 +11,7 @@ const HP = "Flat HP";
 
 const anemoRvList = {
   Sayu: [EM, ER],
-  Venti: [EM, ER],
+  Venti: [CRate, CDMG, ATK_, EM, ER],
   Xiao: [CRate, CDMG, ATK_, ER],
   Jean: [CRate, CDMG, ATK_, ER, EM],
   Faruzan: [CRate, CDMG, ATK_, ER, EM],
@@ -59,7 +59,7 @@ const geoRvList = {
 const electroRvList = {
   Razor: [CRate, CDMG, ATK_],
   Lisa: [CRate, CDMG, ATK_, EM],
-  Fischl: [ATK_, CRate, CDMG],
+  Fischl: [ATK_, EM, CRate, CDMG],
   Keqing: [CRate, CDMG, ATK_],
   Beidou: [ER, ATK_, CRate, CDMG],
   "Yae Miko": [ER, ATK_, CRate, CDMG, EM],

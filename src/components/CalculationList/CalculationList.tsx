@@ -25,10 +25,13 @@ type CalculationResponse = {
 
 type CalculationListProps = {
   row: any;
-  calculations: any[]
+  calculations: any[];
 };
 
-export const CalculationList: React.FC<CalculationListProps> = ({ row, calculations }) => {
+export const CalculationList: React.FC<CalculationListProps> = ({
+  row,
+  calculations,
+}) => {
   const [show, setShow] = useState(false);
 
   const navigate = useNavigate();
@@ -162,27 +165,25 @@ export const CalculationList: React.FC<CalculationListProps> = ({ row, calculati
     .join(" ")
     .trim();
 
-  return (
+  return calculationIds.length > 0 ? (
     <div className="expanded-row flex">
-      {calculationIds.length > 0 ? (
-        <div className="calculation-list-wrapper">
-          <div className="clickable" onClick={() => setShow((prev) => !prev)}>
-            {show ? "Hide" : "Show"} leaderboards
-            <FontAwesomeIcon
-              className={iconClassNames}
-              // icon={params.order === -1 ? faChevronDown : faChevronUp}
-              icon={faChevronUp}
-              size="1x"
-            />
-          </div>
-          {/* <div className="highlight-tile-container">{tilesList}</div> */}
-          {show && (
-            <table cellSpacing={0} className="calculation-list">
-              <tbody>{compactList}</tbody>
-            </table>
-          )}
+      <div className="calculation-list-wrapper">
+        <div className="clickable" onClick={() => setShow((prev) => !prev)}>
+          {show ? "Hide" : "Show"} leaderboards
+          <FontAwesomeIcon
+            className={iconClassNames}
+            // icon={params.order === -1 ? faChevronDown : faChevronUp}
+            icon={faChevronUp}
+            size="1x"
+          />
         </div>
-      ) : null}
+        {/* <div className="highlight-tile-container">{tilesList}</div> */}
+        {show && (
+          <table cellSpacing={0} className="calculation-list">
+            <tbody>{compactList}</tbody>
+          </table>
+        )}
+      </div>
     </div>
-  );
+  ) : null;
 };
