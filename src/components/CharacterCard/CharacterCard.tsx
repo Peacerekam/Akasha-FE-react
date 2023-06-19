@@ -376,29 +376,24 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         };
       });
 
+      const neutralWhiteColor = "rgba(255, 255, 255, 0.35)";
+      const elementColor = ELEMENT_TO_COLOR[row?.characterMetadata?.element];
+
       const data = {
         labels: relevantStatNames,
         datasets: [
           {
             pointHitRadius: 45,
-            label: `${row.type}`,
+            label: `${row.type === "current" ? row.name : row.type}`,
             data: percentagesArray.map((x) => x._p),
             vals: percentagesArray.map((x) => x.calculatedVal),
             fill: true,
-            backgroundColor: `${
-              ELEMENT_TO_COLOR[row?.characterMetadata?.element]
-            }45`,
-            borderColor: `${
-              ELEMENT_TO_COLOR[row?.characterMetadata?.element]
-            }bb`,
-            pointBackgroundColor: `${
-              ELEMENT_TO_COLOR[row?.characterMetadata?.element]
-            }bb`,
-            pointBorderColor: `${
-              ELEMENT_TO_COLOR[row?.characterMetadata?.element]
-            }bb`,
-            pointHoverBackgroundColor: `red`,
-            pointHoverBorderColor: `white`,
+            backgroundColor: `${elementColor}45`,
+            borderColor: `${elementColor}bb`,
+            pointBackgroundColor: `${elementColor}bb`,
+            pointBorderColor: `${elementColor}bb`,
+            pointHoverBackgroundColor: generating ? neutralWhiteColor : `red`,
+            pointHoverBorderColor: generating ? neutralWhiteColor : `white`,
           },
           {
             pointHitRadius: 45,
@@ -407,11 +402,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             vals: percentagesArray.map((x) => x.avg),
             fill: false,
             backgroundColor: "transparent",
-            borderColor: "rgba(255, 255, 255, 0.35)",
-            pointBackgroundColor: "rgba(255, 255, 255, 0.35)",
-            pointBorderColor: "rgba(255, 255, 255, 0.35)",
-            pointHoverBackgroundColor: `red`,
-            pointHoverBorderColor: `white`,
+            borderColor: neutralWhiteColor,
+            pointBackgroundColor: neutralWhiteColor,
+            pointBorderColor: neutralWhiteColor,
+            pointHoverBackgroundColor: generating ? neutralWhiteColor : `red`,
+            pointHoverBorderColor: generating ? neutralWhiteColor : `white`,
           },
         ],
       };
@@ -424,7 +419,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
               devicePixelRatio: 2,
               plugins: {
                 tooltip: {
-                  enabled: true, // ??
+                  enabled: generating ? false : true,
                   callbacks: {
                     title: (arr: any) => {
                       const obj = arr[0].dataset;
@@ -474,7 +469,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                       size: 9,
                     },
                     callback: (statName, index) => {
-                      return getReadableStatText(statName)
+                      return getReadableStatText(statName);
                     },
                   },
                 },
@@ -493,7 +488,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         </div>
       );
     },
-    [row, calculations, filteredLeaderboards]
+    [row, calculations, filteredLeaderboards, generating]
   );
 
   const leaderboardHighlighs = useMemo(() => {
@@ -569,7 +564,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         })}
       </div>
     );
-  }, [privacyFlag, filteredLeaderboards]);
+  }, [privacyFlag, filteredLeaderboards, generating]);
 
   const reorderedArtifacts = useMemo(
     () => getArtifactsInOrder(artifacts),
@@ -685,7 +680,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           style={{ pointerEvents: "all" }}
           className={`character-showcase-pic-container ${hasCustomBg} ${
             row.name === "Traveler" ? "is-traveler" : ""
-          }`}
+          } ${generating ? "is-generating" : ""}`}
           onClick={() => {
             uploadPictureInputRef?.current?.click();
           }}
@@ -726,7 +721,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         </div>
       </div>
     ),
-    [row, uploadPictureInputRef, backgroundPictureRef, hasCustomBg]
+    [row, uploadPictureInputRef, backgroundPictureRef, hasCustomBg, generating]
   );
 
   const characterStats = useMemo(
@@ -1009,7 +1004,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         </div>
       </div>
     ),
-    [row, namecardBg, simplifyColors, cardStyle]
+    [row, namecardBg, simplifyColors, cardStyle, generating]
   );
 
   const handleSelectChange = (option: any) => {

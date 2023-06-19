@@ -43,15 +43,15 @@ export const helpContentBuilds = (
           {getIconElement("Hutao")} Hu Tao anyone has ever reached?
         </div>
         <div className="list-element">
-          And most importantly, who has the biggest <s>dick size</s>
-          Crit Value build? (<i>smh obviously compensating for something</i>)
+          And most importantly, who has the biggest Crit Value build? (
+          <i>obviously compensating for something :-)</i>)
         </div>
       </div>
     </div>
     <div className="help-box-p">
       <b>RV (Roll Value)</b> is a metric that can be used to rate or sort
-      (soon™) artifact and build substats. 
-      Genshin Optimizer describes RV as follows: "
+      (soon™) artifact and build substats. Genshin Optimizer describes RV as
+      follows: "
       <i>
         The Roll Value (RV) of a substat is a percentage of the current value
         over the highest potential 5 value
@@ -59,8 +59,8 @@ export const helpContentBuilds = (
       ".
     </div>
     <div className="help-box-p">
-      For example a HP% roll of 5.3% equals to 90% RV. That is because maximum roll value
-      of HP% is 5.8%, therefore: 5.3/5.8 ~ 90%.
+      For example a HP% roll of 5.3% equals to 90% RV. That is because maximum
+      roll value of HP% is 5.8%, therefore: 5.3/5.8 ~ 90%.
     </div>
   </>
 );

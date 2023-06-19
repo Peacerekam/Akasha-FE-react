@@ -17,6 +17,8 @@ const getStatsFromRow = (row: any) => {
   const er = ((stats.energyRecharge?.value || 0) * 100).toFixed(1);
   const em = +stats.elementalMastery?.value.toFixed(0) || 0;
 
+  const healBonus = ((stats.healingBonus?.value || 0) * 100).toFixed(1);
+
   const pyroDMG = ((stats.pyroDamageBonus?.value || 0) * 100).toFixed(1);
   const hydroDMG = ((stats.hydroDamageBonus?.value || 0) * 100).toFixed(1);
   const cryoDMG = ((stats.cryoDamageBonus?.value || 0) * 100).toFixed(1);
@@ -36,6 +38,7 @@ const getStatsFromRow = (row: any) => {
     cd,
     er,
     em,
+    healBonus,
     pyroDMG,
     hydroDMG,
     cryoDMG,
@@ -47,9 +50,7 @@ const getStatsFromRow = (row: any) => {
   };
 };
 
-export const StatListCard: React.FC<StatListProps> = ({
-  row,
-}) => {
+export const StatListCard: React.FC<StatListProps> = ({ row }) => {
   const stats = getStatsFromRow(row);
 
   if (!stats) return <></>;
@@ -147,7 +148,7 @@ export const StatListCard: React.FC<StatListProps> = ({
   };
 
   const displayGeneralStats = () => {
-    const { hp, atk, def, em, er, cr, cd } = stats;
+    const { hp, atk, def, em, er, cr, cd, healBonus } = stats;
 
     const generalStats: any = {
       "Max HP": hp,
@@ -156,12 +157,15 @@ export const StatListCard: React.FC<StatListProps> = ({
       "Elemental Mastery": em,
       "Crit Rate": `${cr}%`,
       "Crit DMG": `${cd}%`,
+      "Healing Bonus": `${healBonus}%`,
       "Energy Recharge": `${er}%`,
     };
 
     return Object.keys(generalStats).map((key: any) => {
       const value = generalStats[key];
-      if (value === 0) return null;
+      const rawValue = +("" + value).replace("%", "");
+      if (rawValue === 0) return null;
+
       return (
         <div className="table-stat-row" key={key}>
           <div className="flex gap-5">
