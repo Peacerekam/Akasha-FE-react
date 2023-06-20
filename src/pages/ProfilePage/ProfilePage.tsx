@@ -836,12 +836,14 @@ export const ProfilePage: React.FC = () => {
           </div>
         </div>
         <div className="flex">
-          <AdsComponentManager
-            adType="LeaderboardBTF"
-            dataAdSlot="6204085735"
-            hybrid="mobile"
-            hideOnDesktop
-          />
+          {triggerAds && !responseData.account?.patreon?.active && (
+            <AdsComponentManager
+              adType="LeaderboardBTF"
+              dataAdSlot="6204085735"
+              hybrid="mobile"
+              hideOnDesktop
+            />
+          )}
         </div>
         {displayFloatingButtons({ artifactSettings: true })}
         <div>

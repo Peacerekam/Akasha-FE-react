@@ -91,14 +91,14 @@
   .perfect-scroll-wrapper {
     width: 100%;
     &.for-artifacts {
-      height: calc(100vh - 210px) !important;
+      height: calc(100dvh - 210px) !important;
     }
   }
   .settings-modal {
     top: 50px;
     .modal-content {
-      height: calc(100vh - 61px);
-      max-height: 100vh !important;
+      height: calc(100dvh - 61px);
+      max-height: 100dvh !important;
       .compact-table-wrapper {
         align-items: center;
       }
