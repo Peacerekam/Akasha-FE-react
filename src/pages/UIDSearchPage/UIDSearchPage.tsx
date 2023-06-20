@@ -119,7 +119,7 @@ export const UIDSearchPage: React.FC = () => {
       <div className="flex">
         <AdsComponentManager adType="LeaderboardATF" dataAdSlot="6204085735" />
         <AdsComponentManager adType="Video" />
-        <div className="content-block w-100 ">
+        <div className="content-block w-100"  id="content-container">
           <StylizedContentBlock overrideImage={DomainBackground} />
           <div className="relative">
             <div className="search-input-wrapper" style={{ margin: "50px 0" }}>
@@ -145,6 +145,12 @@ export const UIDSearchPage: React.FC = () => {
                     <Spinner />
                   </div>
                 )}
+                <AdsComponentManager
+                  adType="LeaderboardBTF"
+                  dataAdSlot="6204085735"
+                  hybrid="mobile"
+                  hideOnDesktop
+                />
                 {results.map((result, i) => {
                   return (
                     <a

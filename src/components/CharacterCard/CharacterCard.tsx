@@ -40,6 +40,7 @@ import FriendshipIcon from "../../assets/icons/Item_Companionship_EXP.webp";
 import { PreviewModal } from "./PreviewModal";
 import { applyModalBodyStyle, getRelativeCoords } from "../CustomTable/Filters";
 import "./style.scss";
+import { useLocation } from "react-router-dom";
 
 ChartJS.register(...registerables);
 
@@ -196,6 +197,9 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   // const [iteration, setIteration] = useState<number>(0);
   const uploadPictureInputRef = useRef<HTMLInputElement>(null);
   const backgroundPictureRef = useRef<HTMLImageElement>(null);
+
+  const location = useLocation();
+  const DEBUG_MODE = location.search?.includes('debug');
 
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [imagePreviewBlob, setImagePreviewBlob] = useState<Blob>();
@@ -1097,7 +1101,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         toggleModal={handleToggleModal}
         blob={imagePreviewBlob}
       />
-      <div className="card-wrapper relative" style={wrapperStyle}>
+      <div className={`card-wrapper relative ${DEBUG_MODE ? "debug" : ""}`} style={wrapperStyle}>
         <div id={getBuildId(row)} className="html-to-image-target">
           {cardContainer}
         </div>

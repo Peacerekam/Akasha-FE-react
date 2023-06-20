@@ -92,8 +92,10 @@ const App = () => {
       <LastProfilesContextProvider>
         <BrowserRouter basename={BASENAME}>
           {/* <NotificationBar /> */}
-          <Navbar />
-          <NavbarTabs />
+          <div id="top-of-the-page">
+            <Navbar />
+            <NavbarTabs />
+          </div>
           <div
             className={`content-wrapper ${isProduction ? "" : "dev-indicator"}`}
           >
@@ -123,9 +125,11 @@ const App = () => {
       <SessionDataContextProvider>
         <BrowserRouter basename={BASENAME}>
           {/* <MobileStickyBar /> */}
-          <NotificationBar />
-          <Navbar />
-          <NavbarTabs />
+          <div id="top-of-the-page">
+            <NotificationBar />
+            <Navbar />
+            <NavbarTabs />
+          </div>
           <div
             className={`content-wrapper ${isProduction ? "" : "dev-indicator"}`}
           >

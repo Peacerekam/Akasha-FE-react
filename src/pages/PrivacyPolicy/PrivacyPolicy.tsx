@@ -3,13 +3,22 @@ import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp"
 import { StylizedContentBlock } from "../../components/StylizedContentBlock";
 
 import "./style.scss";
+import { AdsComponentManager } from "../../components";
 
 export const PrivacyPolicyPage: React.FC = () => {
   return (
     <div className="flex">
-      <div className="content-block w-100">
+      <AdsComponentManager adType="LeaderboardATF" dataAdSlot="6204085735" />
+      <AdsComponentManager adType="Video" />
+      <div className="content-block w-100" id="content-container">
         <StylizedContentBlock overrideImage={DomainBackground} />
         <div className="relative">
+          <AdsComponentManager
+            adType="LeaderboardBTF"
+            dataAdSlot="6204085735"
+            hybrid="mobile"
+            hideOnDesktop
+          />
           <div className="privacy-policy">
             <h1>Privacy Policy</h1>
 
@@ -42,6 +51,8 @@ export const PrivacyPolicyPage: React.FC = () => {
           </div>
         </div>
       </div>
+      <AdsComponentManager adType="LeaderboardBTF" dataAdSlot="6204085735" />
+      <AdsComponentManager adType="RichMedia" />
     </div>
   );
 };

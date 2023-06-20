@@ -6,7 +6,8 @@
   justify-content: center;
   text-align: center;
   flex-direction: column;
-  padding: 10px;
+  // padding: 10px;
+  padding: 0px !important;
   z-index: 5 !important;
   margin: 20px 0;
   // box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -21,12 +22,13 @@
   }
 
   span.ad-debug {
-    opacity: 0.5;
+    color: red;
     font-size: 11px;
-    width: 100%;
     position: absolute;
-    top: -10px;
+    top: -17px;
     left: 50%;
+    width: 100%;
+    pointer-events: none;
     transform: translateX(-50%);
   }
   // .vm-placement {

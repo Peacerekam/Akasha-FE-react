@@ -18,7 +18,7 @@ export const AdsComponent: React.FC<AdsComponentProps> = ({ dataAdSlot }) => {
   const adStyle = {} as React.CSSProperties;
 
   if (!isProduction) {
-    adStyle.backgroundColor = "#2c3333";
+    adStyle.boxShadow = "cyan 0px 0px 0 2px";
     adStyle.height = 280;
   }
 

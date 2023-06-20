@@ -3,6 +3,8 @@ import "./index.scss";
 
 export type VenatusAdsComponentProps = {
   adType: VenatusAdTypes;
+  hybrid?: "desktop" | "mobile";
+  hideOnDesktop?: boolean;
 };
 
 type VenatusAdTypes =
@@ -20,48 +22,58 @@ export default class VenatusAdsComponent extends React.Component<
   constructor(props: VenatusAdsComponentProps) {
     super(props);
     this.state = {
-      width: window.innerWidth
-    }
+      width: window.innerWidth,
+    };
   }
 
   componentDidMount() {
-    const { adType } = this.props;
-    console.log(`%c\n\n   > ${this.props.adType}: MOUNT `, 'color: green');
+    const { adType, hideOnDesktop } = this.props;
+    const { width } = this.state;
+    const isMobile = width <= 800; // 768;
+    if (!isMobile && hideOnDesktop) return;
+    
+    console.log(`%c\n\n   > ${this.props.adType}: MOUNT `, "color: green");
     if (adType !== "Video") {
       (window as any).__vm_add = (window as any).__vm_add || [];
       (window as any).__vm_add.push(this.adRef.current);
-      console.log(`%c   > ${adType}: VM_ADD `, 'color: green');
+      console.log(`%c   > ${adType}: VM_ADD `, "color: green");
       console.log(this.adRef.current);
     } else {
-      console.log(`%c   > ${adType}: .........`, 'color: green');
+      console.log(`%c   > ${adType}: .........`, "color: green");
     }
   }
 
   componentWillUnmount() {
-    const { adType } = this.props;
-    console.log(`%c\n\n   > ${this.props.adType}: UNMOUNT `, 'color: red');
+    const { adType, hideOnDesktop } = this.props;
+    const { width } = this.state;
+    const isMobile = width <= 800; // 768;
+    if (!isMobile && hideOnDesktop) return;
+
+    console.log(`%c\n\n   > ${this.props.adType}: UNMOUNT `, "color: red");
 
     if (adType === "RichMedia") {
-      console.log(`%c   > ${adType}: VM_REMOVE_CATEGORY `, 'color: red');
+      console.log(`%c   > ${adType}: VM_REMOVE_CATEGORY `, "color: red");
       console.log(this.adRef.current);
       (window as any).top.__vm_remove_category = ["richmedia_all"];
       return;
     } else if (adType !== "Video") {
       (window as any).top.__vm_remove = (window as any).top.__vm_remove || [];
       (window as any).top.__vm_remove.push(this.adRef.current);
-      console.log(`%c   > ${adType}: VM_REMOVE `, 'color: red');
+      console.log(`%c   > ${adType}: VM_REMOVE `, "color: red");
       console.log(this.adRef.current);
     } else {
-      console.log(`%c   > ${adType}: .........`, 'color: red');
+      console.log(`%c   > ${adType}: .........`, "color: red");
     }
   }
 
   render() {
-    const { adType } = this.props;
+    const { adType, hideOnDesktop } = this.props;
     if (!adType) return null;
 
     const { width } = this.state;
     const isMobile = width <= 800; // 768;
+    if (!isMobile && hideOnDesktop) return null;
+
     const mobileAdType: string = isMobile ? `Mobile${adType}` : adType;
 
     const AD_TYPE_TO_ID: { [key: string]: string } = {
@@ -74,9 +86,13 @@ export default class VenatusAdsComponent extends React.Component<
 
     const adID = AD_TYPE_TO_ID[mobileAdType] || AD_TYPE_TO_ID[adType];
 
-    const isHybridBanner =
-      mobileAdType === "MobileLeaderboardBTF" ||
-      mobileAdType === "LeaderboardATF";
+    // const isHybridBanner =
+    //   mobileAdType === "MobileLeaderboardBTF" ||
+    //   mobileAdType === "LeaderboardATF";
+
+    const isHybridBanner = isMobile
+      ? this.props.hybrid === "mobile"
+      : this.props.hybrid === "desktop";
 
     return (
       <div
@@ -85,7 +101,8 @@ export default class VenatusAdsComponent extends React.Component<
         }`}
       >
         <span className="ad-debug">
-          {AD_TYPE_TO_ID[mobileAdType] ? mobileAdType : adType} - {adID}
+          {AD_TYPE_TO_ID[mobileAdType] ? mobileAdType : adType} - {adID} -{" "}
+          {isHybridBanner ? "hybrid banner" : ""}
         </span>
         <div
           ref={this.adRef}
@@ -129,32 +146,32 @@ export default class VenatusAdsComponent extends React.Component<
 //     setWidth(window.innerWidth);
 //   };
 
-  // useEffect(() => {
-  //   console.log("\n\n!  > MOUNT", adType);
-  //   if (adType !== "Video") {
-  //     (window as any).top.__vm_add = (window as any).top.__vm_add || [];
-  //     (window as any).top.__vm_add.push(adRef.current);
-  //     console.log("   > VM_ADD", adType, adRef.current);
-  //   }
+// useEffect(() => {
+//   console.log("\n\n!  > MOUNT", adType);
+//   if (adType !== "Video") {
+//     (window as any).top.__vm_add = (window as any).top.__vm_add || [];
+//     (window as any).top.__vm_add.push(adRef.current);
+//     console.log("   > VM_ADD", adType, adRef.current);
+//   }
 
-  //   window.addEventListener("resize", handleWindowSizeChange);
+//   window.addEventListener("resize", handleWindowSizeChange);
 
-  //   return () => {
-  //     console.log("\n\n!  > UNMOUNT", adType);
+//   return () => {
+//     console.log("\n\n!  > UNMOUNT", adType);
 
-  //     if (adType === "RichMedia") {
-  //       console.log("    > VM_REMOVE_CATEGORY", adType, adRef.current);
-  //       (window as any).top.__vm_remove_category = ["richmedia_all"];
-  //       return;
-  //     } else if (adType !== "Video") {
-  //       (window as any).top.__vm_remove = (window as any).top.__vm_remove || [];
-  //       (window as any).top.__vm_remove.push(adRef.current);
-  //       console.log("   > VM_REMOVE", adType, adRef.current);
-  //     }
+//     if (adType === "RichMedia") {
+//       console.log("    > VM_REMOVE_CATEGORY", adType, adRef.current);
+//       (window as any).top.__vm_remove_category = ["richmedia_all"];
+//       return;
+//     } else if (adType !== "Video") {
+//       (window as any).top.__vm_remove = (window as any).top.__vm_remove || [];
+//       (window as any).top.__vm_remove.push(adRef.current);
+//       console.log("   > VM_REMOVE", adType, adRef.current);
+//     }
 
-  //     window.removeEventListener("resize", handleWindowSizeChange);
-  //   };
-  // }, []);
+//     window.removeEventListener("resize", handleWindowSizeChange);
+//   };
+// }, []);
 
 //   const isMobile = width <= 800; // 768;
 //   const mobileAdType: string = isMobile ? `Mobile${adType}` : adType;

@@ -521,88 +521,93 @@ export const LeaderboardsPage: React.FC = () => {
       <AdsComponentManager adType="LeaderboardATF" dataAdSlot="6204085735" />
       <AdsComponentManager adType="Video" />
       {hoverElement}
-      <div className="content-block w-100" key={currentCategory}>
-        <StylizedContentBlock
-          variant="gradient"
-          revealCondition={!!calculationInfo}
-          overrideImage={blockBackgroundImage}
-        />
+      <div id="content-container" className=" w-100">
         <div
-          className="relative block-highlight"
-          style={{
-            whiteSpace: "break-spaces",
-            margin: "10px",
-          }}
+          key={currentCategory}
+          className="content-block w-100"
+          style={{ display: "inline-block" }}
         >
-          <div style={{ marginBottom: 20 }}>
-            <a
-              className="pointer back-btn"
-              href="/leaderboards"
-              onClick={(e) => {
-                e.preventDefault();
-                navigate("/leaderboards");
-              }}
-            >
-              <FontAwesomeIcon icon={faChevronLeft} size="1x" /> GO BACK
-            </a>
-          </div>
-          <div className="flex">
-            {displayChart}
-            {/* {displayPodium} */}
-            {thisCalc && (
-              <div
-                style={{
-                  width: "calc(100% - 500px)",
-                  minWidth: 300,
-                  flexGrow: 1,
+          <StylizedContentBlock
+            variant="gradient"
+            revealCondition={!!calculationInfo}
+            overrideImage={blockBackgroundImage}
+          />
+          <div
+            className="relative block-highlight"
+            style={{
+              whiteSpace: "break-spaces",
+              margin: "10px",
+            }}
+          >
+            <div style={{ marginBottom: 20 }}>
+              <a
+                className="pointer back-btn"
+                href="/leaderboards"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate("/leaderboards");
                 }}
               >
-                <div style={{ margin: 10 }}>
-                  <div
-                    className="flex gap-10 flex-wrap-no-wrap"
-                    style={{
-                      fontSize: 30,
-                      // borderBottom: "1px solid white",
-                    }}
-                  >
-                    <img
-                      style={{ width: 40, height: 40, marginBottom: 15 }}
-                      src={thisCalc.characterIcon}
-                    />
+                <FontAwesomeIcon icon={faChevronLeft} size="1x" /> GO BACK
+              </a>
+            </div>
+            <div className="flex">
+              {displayChart}
+              {/* {displayPodium} */}
+              {thisCalc && (
+                <div
+                  style={{
+                    width: "calc(100% - 500px)",
+                    minWidth: 300,
+                    flexGrow: 1,
+                  }}
+                >
+                  <div style={{ margin: 10 }}>
                     <div
+                      className="flex gap-10 flex-wrap-no-wrap"
                       style={{
-                        display: "flex",
-                        alignItems: "center",
+                        fontSize: 30,
+                        // borderBottom: "1px solid white",
                       }}
                     >
-                      {thisCalc.characterName} - {thisCalc.name}
+                      <img
+                        style={{ width: 40, height: 40, marginBottom: 15 }}
+                        src={thisCalc.characterIcon}
+                      />
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        {thisCalc.characterName} - {thisCalc.name}
+                      </div>
                     </div>
-                  </div>
-                  <div>{thisCalc.details}</div>
-                  {/* @TODO CALC INFO DISPLAY */}
-                  <div
-                    style={{ display: "none" }}
-                    className="calc-setup-info-wrapper"
-                  >
-                    <table>
-                      <thead>
-                        <tr>
-                          <th colSpan={2}>
-                            <div
-                              className="flex gap-10"
-                              style={{ justifyContent: "center" }}
-                            >
-                              <img
-                                className="table-icon"
-                                src={thisCalc.characterIcon}
-                              />
-                              Hu Tao C1 Lv. 90
-                            </div>
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {/* <tr>
+                    <div>{thisCalc.details}</div>
+                    {/* @TODO CALC INFO DISPLAY */}
+                    <div
+                      style={{ display: "none" }}
+                      className="calc-setup-info-wrapper"
+                    >
+                      <table>
+                        <thead>
+                          <tr>
+                            <th colSpan={2}>
+                              <div
+                                className="flex gap-10"
+                                style={{ justifyContent: "center" }}
+                              >
+                                <img
+                                  className="table-icon"
+                                  src={thisCalc.characterIcon}
+                                />
+                                Hu Tao C1 Lv. 90
+                              </div>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {/* <tr>
                           <td>Character level</td>
                           <td>90/90</td>
                         </tr>
@@ -610,40 +615,40 @@ export const LeaderboardsPage: React.FC = () => {
                           <td>Constellation</td>
                           <td>C1</td>
                         </tr> */}
-                        <tr>
-                          <td>Talent levels</td>
-                          <td>10/10/10</td>
-                        </tr>
-                        <tr>
-                          <td>HP</td>
-                          <td>below 50%</td>
-                        </tr>
-                        <tr>
-                          <td>Skill (E)</td>
-                          <td>Active</td>
-                        </tr>
-                      </tbody>
-                    </table>
+                          <tr>
+                            <td>Talent levels</td>
+                            <td>10/10/10</td>
+                          </tr>
+                          <tr>
+                            <td>HP</td>
+                            <td>below 50%</td>
+                          </tr>
+                          <tr>
+                            <td>Skill (E)</td>
+                            <td>Active</td>
+                          </tr>
+                        </tbody>
+                      </table>
 
-                    <table>
-                      <thead>
-                        <tr>
-                          <th colSpan={2}>
-                            <div
-                              className="flex gap-10"
-                              style={{ justifyContent: "center" }}
-                            >
-                              <WeaponMiniDisplay
-                                icon={thisWeaponCalc?.icon || ""}
-                                refinement={thisWeaponCalc?.refinement || 1}
-                              />
-                              Staff of Homa R1 Lv. 90
-                            </div>
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {/* <tr>
+                      <table>
+                        <thead>
+                          <tr>
+                            <th colSpan={2}>
+                              <div
+                                className="flex gap-10"
+                                style={{ justifyContent: "center" }}
+                              >
+                                <WeaponMiniDisplay
+                                  icon={thisWeaponCalc?.icon || ""}
+                                  refinement={thisWeaponCalc?.refinement || 1}
+                                />
+                                Staff of Homa R1 Lv. 90
+                              </div>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {/* <tr>
                           <td>Weapon level</td>
                           <td>90/90</td>
                         </tr>
@@ -651,153 +656,166 @@ export const LeaderboardsPage: React.FC = () => {
                           <td>Refinement</td>
                           <td>R1</td>
                         </tr> */}
-                        <tr>
-                          <td>HP</td>
-                          <td>below 50%</td>
-                        </tr>
-                      </tbody>
-                    </table>
+                          <tr>
+                            <td>HP</td>
+                            <td>below 50%</td>
+                          </tr>
+                        </tbody>
+                      </table>
 
-                    <table>
-                      <thead>
-                        <tr>
-                          <th colSpan={2}>
-                            <div
-                              className="flex gap-10"
-                              style={{ justifyContent: "center" }}
-                            >
-                              <FontAwesomeIcon icon={faPeopleGroup} size="1x" />
-                              Team buffs
-                            </div>
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>
-                            <StatIcon name="Hydro DMG Bonus" /> Hydro Resonance
-                          </td>
-                          <td>
-                            <StatIcon name="HP%" /> +25% HP
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>{getIconElement("Zhongli")} Dominus Lapidis</td>
-                          <td>
-                            <StatIcon name="Pyro DMG Bonus" />
-                            Enemy Pyro DMG RES -20%
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                      <table>
+                        <thead>
+                          <tr>
+                            <th colSpan={2}>
+                              <div
+                                className="flex gap-10"
+                                style={{ justifyContent: "center" }}
+                              >
+                                <FontAwesomeIcon
+                                  icon={faPeopleGroup}
+                                  size="1x"
+                                />
+                                Team buffs
+                              </div>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>
+                              <StatIcon name="Hydro DMG Bonus" /> Hydro
+                              Resonance
+                            </td>
+                            <td>
+                              <StatIcon name="HP%" /> +25% HP
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>{getIconElement("Zhongli")} Dominus Lapidis</td>
+                            <td>
+                              <StatIcon name="Pyro DMG Bonus" />
+                              Enemy Pyro DMG RES -20%
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
 
-                    <table>
-                      <thead>
-                        <tr>
-                          <th colSpan={2}>
-                            <div
-                              className="flex gap-10"
-                              style={{ justifyContent: "center" }}
-                            >
-                              <FontAwesomeIcon icon={faSkull} size="1x" />
-                              Enemy Lv. 90
-                            </div>
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {/* <tr>
+                      <table>
+                        <thead>
+                          <tr>
+                            <th colSpan={2}>
+                              <div
+                                className="flex gap-10"
+                                style={{ justifyContent: "center" }}
+                              >
+                                <FontAwesomeIcon icon={faSkull} size="1x" />
+                                Enemy Lv. 90
+                              </div>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {/* <tr>
                           <td>Level</td>
                           <td>90</td>
                         </tr> */}
-                        <tr>
-                          <td>Pyro RES</td>
-                          <td>10%</td>
-                        </tr>
-                      </tbody>
-                    </table>
+                          <tr>
+                            <td>Pyro RES</td>
+                            <td>10%</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div style={{ margin: 10 }}>
+                    <div>
+                      <span className="flex gap-10">
+                        Weapon:
+                        <WeaponMiniDisplay
+                          icon={thisWeaponCalc?.icon || ""}
+                          refinement={thisWeaponCalc?.refinement || 1}
+                        />
+                        {thisWeaponCalc?.name}
+                      </span>
+                    </div>
                   </div>
                 </div>
-                <div style={{ margin: 10 }}>
-                  <div>
-                    <span className="flex gap-10">
-                      Weapon:
-                      <WeaponMiniDisplay
-                        icon={thisWeaponCalc?.icon || ""}
-                        refinement={thisWeaponCalc?.refinement || 1}
-                      />
-                      {thisWeaponCalc?.name}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-        <div className="relative other-calculations-display block-highlight highlight-tile-container">
-          {displayRelevantCategories}
-        </div>
-      </div>
-
-      <div className="content-block w-100">
-        <StylizedContentBlock
-          revealCondition={!!thisCalc?.characterIcon}
-          overrideImage={blockBackgroundImage}
-        />
-        <div className="relative search-input-wrapper">
-          UID / nickname
-          <div>
-            <div className="search-input relative">
-              <input
-                defaultValue={inputUID}
-                onChange={(event) => {
-                  setInputUID(event.target.value);
-                }}
-              />
-              {!inputUID && (
-                <span className="fake-placeholder">type here...</span>
               )}
             </div>
           </div>
-        </div>
-        {calculationInfo && (
-          <div key={`${currentCategory}${variant}`}>
-            <CustomTable
-              fetchURL={FETCH_LEADERBOARDS_URL}
-              fetchParams={{
-                uids: uidsToQuery(lastProfiles.map((a) => a.uid)),
-                uid: lookupUID,
-                variant,
-                filter: "[all]1",
-                calculationId: currentCategory,
-              }}
-              columns={LEADERBOARDS_COLUMNS}
-              defaultSort={calculationSortKey}
-              // calculationColumn={currentCategory}
-              strikethrough={true}
-              expandableRows
-              ignoreEmptyUidsArray
-              alwaysShowIndexColumn
-              // hidePagination
-            />
 
-            {/* spacer */}
-            <div style={{ marginTop: "30px" }} />
+          <AdsComponentManager
+            adType="LeaderboardBTF"
+            dataAdSlot="6204085735"
+            hybrid="mobile"
+            hideOnDesktop
+          />
 
-            <CustomTable
-              fetchURL={FETCH_LEADERBOARDS_URL}
-              fetchParams={{ variant, calculationId: currentCategory }}
-              filtersURL={`${FETCH_CHARACTER_FILTERS_URL}?type=leaderboards`}
-              columns={LEADERBOARDS_COLUMNS}
-              defaultSort={calculationSortKey}
-              // calculationColumn={currentCategory}
-              strikethrough={true}
-              expandableRows
-              projectParamsToPath
-              alwaysShowIndexColumn
-            />
+          <div className="relative other-calculations-display block-highlight highlight-tile-container">
+            {displayRelevantCategories}
           </div>
-        )}
+        </div>
+
+        <div className="content-block w-100">
+          <StylizedContentBlock
+            revealCondition={!!thisCalc?.characterIcon}
+            overrideImage={blockBackgroundImage}
+          />
+          <div className="relative search-input-wrapper">
+            UID / nickname
+            <div>
+              <div className="search-input relative">
+                <input
+                  defaultValue={inputUID}
+                  onChange={(event) => {
+                    setInputUID(event.target.value);
+                  }}
+                />
+                {!inputUID && (
+                  <span className="fake-placeholder">type here...</span>
+                )}
+              </div>
+            </div>
+          </div>
+          {calculationInfo && (
+            <div key={`${currentCategory}${variant}`}>
+              <CustomTable
+                fetchURL={FETCH_LEADERBOARDS_URL}
+                fetchParams={{
+                  uids: uidsToQuery(lastProfiles.map((a) => a.uid)),
+                  uid: lookupUID,
+                  variant,
+                  filter: "[all]1",
+                  calculationId: currentCategory,
+                }}
+                columns={LEADERBOARDS_COLUMNS}
+                defaultSort={calculationSortKey}
+                // calculationColumn={currentCategory}
+                strikethrough={true}
+                expandableRows
+                ignoreEmptyUidsArray
+                alwaysShowIndexColumn
+                // hidePagination
+              />
+
+              {/* spacer */}
+              <div style={{ marginTop: "30px" }} />
+
+              <CustomTable
+                fetchURL={FETCH_LEADERBOARDS_URL}
+                fetchParams={{ variant, calculationId: currentCategory }}
+                filtersURL={`${FETCH_CHARACTER_FILTERS_URL}?type=leaderboards`}
+                columns={LEADERBOARDS_COLUMNS}
+                defaultSort={calculationSortKey}
+                // calculationColumn={currentCategory}
+                strikethrough={true}
+                expandableRows
+                projectParamsToPath
+                alwaysShowIndexColumn
+              />
+            </div>
+          )}
+        </div>
       </div>
 
       <AdsComponentManager adType="LeaderboardBTF" dataAdSlot="6204085735" />

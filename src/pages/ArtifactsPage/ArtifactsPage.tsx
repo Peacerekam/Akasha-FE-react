@@ -203,9 +203,15 @@ export const ArtifactsPage: React.FC = () => {
       <AdsComponentManager adType="LeaderboardATF" dataAdSlot="6204085735" />
       <AdsComponentManager adType="Video" />
       {hoverElement}
-      <div className="content-block w-100">
+      <div className="content-block w-100" id="content-container">
         <StylizedContentBlock overrideImage={DomainBackground} />
         <HelpBox page="artifacts" />
+        <AdsComponentManager
+          adType="LeaderboardBTF"
+          dataAdSlot="6204085735"
+          hybrid="mobile"
+          hideOnDesktop
+        />
         <CustomTable
           fetchURL={FETCH_ARTIFACTS_URL}
           filtersURL={FETCH_ARTIFACT_FILTERS_URL}

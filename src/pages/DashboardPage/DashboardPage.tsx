@@ -12,7 +12,7 @@ export const DashboardPage: React.FC = () => {
 
   return (
     <div className="flex">
-      <div className="content-block w-100">
+      <div className="content-block w-100" id="content-container">
         <StylizedContentBlock overrideImage={DomainBackground} />
         <div className="relative">
           <div style={{ display: "grid", gridTemplateColumns: "3fr 1fr" }}>

@@ -44,6 +44,19 @@
   width: fit-content;
 }
 
+.debug {
+  .elemental-bg {
+    > div {
+      filter: none !important;
+    }
+  }
+  .elemental-bg-wrap .compact-artifact {
+    .compact-artifact-bg {
+      filter: none !important;
+    }
+  }
+}
+
 .card-preview-modal {
   .modal {
     width: 900px !important;

@@ -16,15 +16,22 @@ export const AdsComponentManager: React.FC<AdsComponentManagerProps> = (
   const { adProvider } = useContext(AdProviderContext);
 
   if (!showAds) {
-    return <></>
+    return <></>;
   }
-  
+
   if (adProvider === "google" && props.dataAdSlot) {
+    if (props.hideOnDesktop) return <></>; // dont even bother if its adsense tbh
     return <AdsComponent dataAdSlot={props.dataAdSlot} />;
   }
 
   if (adProvider === "venatus" && props.adType) {
-    return <VenatusAdsComponent adType={props.adType} />;
+    return (
+      <VenatusAdsComponent
+        adType={props.adType}
+        hybrid={props.hybrid}
+        hideOnDesktop={props.hideOnDesktop}
+      />
+    );
   }
 
   return <></>;

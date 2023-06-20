@@ -52,10 +52,6 @@
     flex-direction: column;
     gap: 5px;
     .list-element {
-      display: flex;
-      align-items: center;
-      gap: 3px;
-      flex-wrap: wrap;
       &::before {
         content: "•";
         margin-right: 8px;

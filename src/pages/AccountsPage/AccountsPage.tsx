@@ -214,9 +214,15 @@ export const AccountsPage: React.FC = () => {
       <AdsComponentManager adType="LeaderboardATF" dataAdSlot="6204085735" />
       <AdsComponentManager adType="Video" />
       {hoverElement}
-      <div className="content-block w-100">
+      <div className="content-block w-100" id="content-container">
         <StylizedContentBlock overrideImage={DomainBackground} />
         <HelpBox page="accounts" />
+        <AdsComponentManager
+          adType="LeaderboardBTF"
+          dataAdSlot="6204085735"
+          hybrid="mobile"
+          hideOnDesktop
+        />
         {/* @TODO: different helpbox */}
         {/* <HelpBox page="builds" /> */}
         <div className="relative search-input-wrapper">

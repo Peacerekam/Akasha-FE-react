@@ -266,7 +266,7 @@ export const CategorySelectionPage: React.FC = () => {
     <div className="flex">
       <AdsComponentManager adType="LeaderboardATF" dataAdSlot="6204085735" />
       <AdsComponentManager adType="Video" />
-      <div className="content-block w-100">
+      <div className="content-block w-100" id="content-container">
         <StylizedContentBlock
           // variant="gradient"
           overrideImage={DomainBackground}
@@ -275,6 +275,12 @@ export const CategorySelectionPage: React.FC = () => {
           // }
         />
         <HelpBox page="leaderboards" />
+        <AdsComponentManager
+          adType="LeaderboardBTF"
+          dataAdSlot="6204085735"
+          hybrid="mobile"
+          hideOnDesktop
+        />
 
         {/* <div className="relative">
           <CustomTable

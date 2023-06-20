@@ -608,7 +608,7 @@ export const ProfilePage: React.FC = () => {
             href={`https://enka.network/u/${uid}`}
           />
         </div>
-      ): null;
+      ) : null;
 
       const buildSettingsButton = buildSettings ? (
         <>
@@ -798,83 +798,86 @@ export const ProfilePage: React.FC = () => {
           />
         )}
       </div>
-      <div className="flex">
-        <div className={contentBlockClassNames} key={fetchCount}>
-          {/* <PatreonBorderInside
-            classNames={[responseData.account?.patreon?.active ? "" : "hide"]}
-            style={{
-              transform: "translate(-10px, -10px)",
-              width: "calc(100% - 20px)",
-              height: "calc(100% - 20px)",
-            }}
-            animationSpeedMultiplier={2}
-          /> */}
-          <StylizedContentBlock
-            variant="gradient"
-            revealCondition={responseData.account}
-          />
-          <div className="flex gap-10 ">
-            {displayGenshinCard}
-            <div className="profile-highlights">
-              {responseData.account && <CalculationResultWidget uid={uid} />}
-            </div>
-          </div>
-          {responseData.account && (
-            <CustomTable
-              fetchURL={FETCH_BUILDS_URL}
-              columns={BUILDS_COLUMNS}
-              filtersURL={`${FETCH_CHARACTER_FILTERS_URL}?type=profile`}
-              defaultSort="critValue"
-              expandableRows
-              fetchParams={{
-                uid: uid,
+
+      <div id="content-container">
+        <div className="flex">
+          <div className={contentBlockClassNames} key={fetchCount}>
+            {/* <PatreonBorderInside
+              classNames={[responseData.account?.patreon?.active ? "" : "hide"]}
+              style={{
+                transform: "translate(-10px, -10px)",
+                width: "calc(100% - 20px)",
+                height: "calc(100% - 20px)",
               }}
+              animationSpeedMultiplier={2}
+            /> */}
+            <StylizedContentBlock
+              variant="gradient"
+              revealCondition={responseData.account}
             />
-          )}
+            <div className="flex gap-10 ">
+              {displayGenshinCard}
+              <div className="profile-highlights">
+                {responseData.account && <CalculationResultWidget uid={uid} />}
+              </div>
+            </div>
+            {responseData.account && (
+              <CustomTable
+                fetchURL={FETCH_BUILDS_URL}
+                columns={BUILDS_COLUMNS}
+                filtersURL={`${FETCH_CHARACTER_FILTERS_URL}?type=profile`}
+                defaultSort="critValue"
+                expandableRows
+                fetchParams={{
+                  uid: uid,
+                }}
+              />
+            )}
+          </div>
         </div>
-      </div>
-      {/* <div className="flex">
-        {showAds_2 && !responseData.account?.patreon?.active && (
+        <div className="flex">
           <AdsComponentManager
             adType="LeaderboardBTF"
             dataAdSlot="6204085735"
+            hybrid="mobile"
+            hideOnDesktop
           />
-        )}
-      </div> */}
-      {displayFloatingButtons({ artifactSettings: true })}
-      <div>
-        {isAccountOwner && (
-          <ArtifactSettingsModal
-            isOpen={showArtifactSettingsModal}
-            toggleModal={handleToggleArtifactsModal}
-            accountData={responseData?.account}
-            parentRefetchData={triggerRefetch}
-          />
-        )}
-      </div>
-      <div className="flex">
-        <div className={contentBlockClassNames} key={fetchCount}>
-          {/* <PatreonBorderInside
-            classNames={[responseData.account?.patreon?.active ? "" : "hide"]}
-            style={{
-              transform: "translate(-10px, -10px)",
-              width: "calc(100% - 20px)",
-              height: "calc(100% - 20px)",
-            }}
-            animationSpeedMultiplier={2}
-          /> */}
-          <StylizedContentBlock revealCondition={responseData.account} />
-          {responseData.account && (
-            <CustomTable
-              fetchURL={FETCH_ARTIFACTS_URL}
-              columns={ARTIFACT_COLUMNS}
-              filtersURL={`${FETCH_ARTIFACT_FILTERS_URL}?type=profile`}
-              defaultSort="critValue"
-              fetchParams={{
-                uid: uid,
-              }}
+        </div>
+        {displayFloatingButtons({ artifactSettings: true })}
+        <div>
+          {isAccountOwner && (
+            <ArtifactSettingsModal
+              isOpen={showArtifactSettingsModal}
+              toggleModal={handleToggleArtifactsModal}
+              accountData={responseData?.account}
+              parentRefetchData={triggerRefetch}
             />
           )}
+        </div>
+        <div className="flex">
+          <div className={contentBlockClassNames} key={fetchCount}>
+            {/* <PatreonBorderInside
+              classNames={[responseData.account?.patreon?.active ? "" : "hide"]}
+              style={{
+                transform: "translate(-10px, -10px)",
+                width: "calc(100% - 20px)",
+                height: "calc(100% - 20px)",
+              }}
+              animationSpeedMultiplier={2}
+            /> */}
+            <StylizedContentBlock revealCondition={responseData.account} />
+            {responseData.account && (
+              <CustomTable
+                fetchURL={FETCH_ARTIFACTS_URL}
+                columns={ARTIFACT_COLUMNS}
+                filtersURL={`${FETCH_ARTIFACT_FILTERS_URL}?type=profile`}
+                defaultSort="critValue"
+                fetchParams={{
+                  uid: uid,
+                }}
+              />
+            )}
+          </div>
         </div>
       </div>
 

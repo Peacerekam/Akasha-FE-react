@@ -144,9 +144,15 @@ export const CustomTable: React.FC<CustomTableProps> = ({
       if ((defaultParams as any)[key] === value) continue;
       tmp.push(`${key}=${value}`);
     }
+
     // const toAppend = encodeURI(tmp.join("&"));
     const toAppend = tmp.join("&");
-    const newURL = `?${toAppend}`;
+    const hash = location.hash || "";
+    const suffix = `${toAppend}${hash}`
+    if (!suffix) return;
+
+    const newURL = `?${suffix}`;
+
     navigate(
       newURL,
       { replace: true } // @TODO: see if this is better UX
