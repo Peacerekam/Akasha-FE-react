@@ -155,7 +155,8 @@ export const CategorySelectionPage: React.FC = () => {
                 return (
                   <a
                     style={{ color: "white" }}
-                    title={`${weapon?.name} R${weapon.refinement}`}
+                    key={`${weapon?.name} R${weapon?.refinement}`}
+                    title={`${weapon?.name} R${weapon?.refinement}`}
                     onClick={(event) => {
                       event.preventDefault();
                       navigate(`/${leaderboardPath}`);
@@ -264,7 +265,11 @@ export const CategorySelectionPage: React.FC = () => {
 
   return (
     <div className="flex">
-      <AdsComponentManager adType="LeaderboardATF" dataAdSlot="6204085735" />
+      <AdsComponentManager
+        adType="LeaderboardATF"
+        dataAdSlot="6204085735"
+        hybrid="desktop"
+      />
       <AdsComponentManager adType="Video" />
       <div className="content-block w-100" id="content-container">
         <StylizedContentBlock

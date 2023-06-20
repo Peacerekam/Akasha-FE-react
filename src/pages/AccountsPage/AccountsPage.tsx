@@ -169,7 +169,7 @@ export const AccountsPage: React.FC = () => {
         sortable: true,
         sortField: "lastProfileUpdate",
         cell: (row) => {
-          if (!row?.lastProfileUpdate) return <></>
+          if (!row?.lastProfileUpdate) return <></>;
 
           const lastProfileUpdate = new Date(row?.lastProfileUpdate || "");
           const strDate = lastProfileUpdate.toLocaleString("en-US", {
@@ -211,7 +211,11 @@ export const AccountsPage: React.FC = () => {
 
   return (
     <div className="flex">
-      <AdsComponentManager adType="LeaderboardATF" dataAdSlot="6204085735" />
+      <AdsComponentManager
+        adType="LeaderboardATF"
+        dataAdSlot="6204085735"
+        hybrid="desktop"
+      />
       <AdsComponentManager adType="Video" />
       {hoverElement}
       <div className="content-block w-100" id="content-container">

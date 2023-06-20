@@ -91,7 +91,7 @@
   .perfect-scroll-wrapper {
     width: 100%;
     &.for-artifacts {
-      height: calc(100dvh - 210px) !important;
+      height: 100dvh !important;
     }
   }
   .settings-modal {
@@ -103,6 +103,12 @@
         align-items: center;
       }
     }
+  }
+}
+
+.card-preview-modal {
+  &.modal-wrapper .modal .modal-content {
+    max-height: 100dvh;
   }
 }
 

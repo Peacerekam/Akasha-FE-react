@@ -776,6 +776,7 @@ export const ProfilePage: React.FC = () => {
           <AdsComponentManager
             adType="LeaderboardATF"
             dataAdSlot="6204085735"
+            hybrid="desktop"
           />
         )}
         {triggerAds && !responseData.account?.patreon?.active && (

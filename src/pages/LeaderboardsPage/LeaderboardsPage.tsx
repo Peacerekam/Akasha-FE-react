@@ -518,7 +518,11 @@ export const LeaderboardsPage: React.FC = () => {
 
   return (
     <div className="flex" key={calculationId}>
-      <AdsComponentManager adType="LeaderboardATF" dataAdSlot="6204085735" />
+      <AdsComponentManager
+        adType="LeaderboardATF"
+        dataAdSlot="6204085735"
+        hybrid="desktop"
+      />
       <AdsComponentManager adType="Video" />
       {hoverElement}
       <div id="content-container" className=" w-100">

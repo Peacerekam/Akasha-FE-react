@@ -117,9 +117,13 @@ export const UIDSearchPage: React.FC = () => {
   return (
     <div>
       <div className="flex">
-        <AdsComponentManager adType="LeaderboardATF" dataAdSlot="6204085735" />
+        <AdsComponentManager
+          adType="LeaderboardATF"
+          dataAdSlot="6204085735"
+          hybrid="desktop"
+        />
         <AdsComponentManager adType="Video" />
-        <div className="content-block w-100"  id="content-container">
+        <div className="content-block w-100" id="content-container">
           <StylizedContentBlock overrideImage={DomainBackground} />
           <div className="relative">
             <div className="search-input-wrapper" style={{ margin: "50px 0" }}>
