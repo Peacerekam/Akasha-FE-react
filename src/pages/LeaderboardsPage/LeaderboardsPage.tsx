@@ -52,6 +52,7 @@ type CategoryWeaponInfo = {
   refinement: number;
   substat: string;
   type: string;
+  details: string;
   filters?: {
     displayName: string;
     name: string;
@@ -587,7 +588,7 @@ export const LeaderboardsPage: React.FC = () => {
                         {thisCalc.characterName} - {thisCalc.name}
                       </div>
                     </div>
-                    <div>{thisCalc.details}</div>
+                    <div>{thisWeaponCalc?.details}</div>
                     {/* @TODO CALC INFO DISPLAY */}
                     <div
                       style={{ display: "none" }}

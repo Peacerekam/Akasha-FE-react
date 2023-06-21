@@ -23,6 +23,7 @@ const pyroRvList = {
   Klee: [CRate, CDMG, ATK_],
   Yelan: [CRate, CDMG, HP_, ER],
   Diluc: [CRate, CDMG, ATK_, EM],
+  Dehya: [CRate, CDMG, ATK_, ER, HP_],
   Bennett: [ER, HP_, CRate, CDMG],
   Yanfei: [CRate, CDMG, ATK_, EM],
   Yoimiya: [CRate, CDMG, ATK_, EM],
