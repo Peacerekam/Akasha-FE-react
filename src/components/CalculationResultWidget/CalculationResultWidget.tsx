@@ -41,10 +41,11 @@ export const CalculationResultWidget: React.FC<
 
       // "does it have any valid rankings in it?"
       for (const build of data) {
-        for (const calculationId of Object.keys(build.calculations)) {
-          const calc = build.calculations[calculationId];
-          if (calc.ranking) return;
-          // if there is at least one valid ranking, do not retry
+        if (
+          build.calculations?.fit?.ranking ||
+          build.calculations?.best?.ranking
+        ) {
+          return;
         }
       }
 
@@ -71,18 +72,23 @@ export const CalculationResultWidget: React.FC<
     if (data.length > 0) {
       const calcArray = [];
       for (const build of data) {
-        for (const calc of Object.values(build.calculations)) {
+        const calcsArr = [
+          build.calculations.fit,
+          // build.calculations.best
+        ];
+
+        for (const calc of calcsArr) {
           const _calc = calc as any;
           const { calculationId, variant } = _calc;
-          const calcKey = `${calculationId}${variant?.name || ""}`;
-          if (!build.calculations[calcKey]?.ranking) continue;
+          // const calcKey = `${calculationId}${variant?.name || ""}`;
+          if (!calc?.ranking) continue;
 
           calcArray.push({
-            ...(build.calculations[calcKey] as {}),
+            ...calc,
             id: calculationId,
             characterName: build.name,
             characterIcon: build.icon,
-            priority: build.calculations[calcKey]?.priority,
+            priority: calc?.priority,
           });
         }
       }

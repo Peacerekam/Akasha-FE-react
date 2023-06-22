@@ -318,11 +318,14 @@
     position: absolute;
     bottom: -10px;
     display: flex;
-    gap: 10px;
+    // gap: 10px;
     justify-content: flex-end;
     align-items: flex-end;
     .floating-button {
       cursor: pointer;
+      padding: 0 5px;
+      filter: drop-shadow(0 0 3px #000);
+      
       &:hover {
         color: orange;
       }

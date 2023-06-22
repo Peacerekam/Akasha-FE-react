@@ -1,5 +1,10 @@
 .help-box-btn {
   cursor: pointer;
+  filter: drop-shadow(0 0 3px #000);
+  z-index: 5;
+  @media (max-width: 1300px) {
+    margin-right: 10px;
+  }
   &:hover {
     color: orange;
   }
@@ -13,6 +18,7 @@
     position: absolute;
     top: -29px;
     right: 0px;
+    padding: 0 5px;
   }
 }
 

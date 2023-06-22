@@ -102,7 +102,7 @@ export const TableHoverElement: React.FC<TableHoverElementProps> = ({
     return (
       <FollowCursor
         data={{
-          offsetX: 170,
+          offsetX: 230,
           offsetY: 50,
         }}
       >

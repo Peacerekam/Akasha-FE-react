@@ -28,7 +28,12 @@
   display: flex;
   padding: 0 25px;
   flex-wrap: wrap;
-  min-height: 32px;
+  // min-height: 32px;
+  // min-height: 0;
+  // max-height: 0;
+  // margin-bottom: 35px; // 25 + 10
+  z-index: 5;
+  position: relative;
 
   .navbar-tab {
     height: 32px;
