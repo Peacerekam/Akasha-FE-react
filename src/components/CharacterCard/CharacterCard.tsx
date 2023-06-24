@@ -48,6 +48,7 @@ type CharacterCardProps = {
   row: any;
   artifacts: any[];
   calculations: any;
+  setSelectedCalculationId?: any;
 };
 
 type TalentProps = {
@@ -78,9 +79,6 @@ const ELEMENT_TO_HUE = {
   Dendro: 65,
   Hydro: 180,
 } as any;
-
-export const delay = (time: number) =>
-  new Promise((resolve, reject) => setTimeout(resolve, time));
 
 const getReadableStatText = (_statName: string) => {
   const textMap: any = {
@@ -181,6 +179,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   row,
   artifacts,
   calculations,
+  setSelectedCalculationId,
 }) => {
   const [width, setWidth] = useState<number>(window.innerWidth);
   // const [enkaStyle, setEnkaStyle] = useState(false);
@@ -195,14 +194,16 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     "vertical" | "horizontal" | ""
   >("");
   // const [iteration, setIteration] = useState<number>(0);
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
+  const [imagePreviewBlob, setImagePreviewBlob] = useState<Blob>();
+  const [filteredLeaderboards, setFilteredLeaderboards] = useState<any[]>([]);
+
   const uploadPictureInputRef = useRef<HTMLInputElement>(null);
   const backgroundPictureRef = useRef<HTMLImageElement>(null);
 
   const location = useLocation();
   const DEBUG_MODE = location.search?.includes('debug');
 
-  const [showPreviewModal, setShowPreviewModal] = useState(false);
-  const [imagePreviewBlob, setImagePreviewBlob] = useState<Blob>();
 
   const handleToggleModal = (event: React.MouseEvent<HTMLElement>) => {
     setShowPreviewModal((prev) => !prev);
@@ -250,10 +251,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   );
 
   useEffect(() => {
-    setFilteredLeaderboards(calculationIds.slice(0, 1));
+    const _calculationId = calculationIds.slice(0, 1)
+    setFilteredLeaderboards(_calculationId);
+    setSelectedCalculationId(_calculationId?.[0])
   }, [calculationIds]);
 
-  const [filteredLeaderboards, setFilteredLeaderboards] = useState<any[]>([]);
 
   const displayCharts = useCallback(
     (chartData: any, calculationId: string) => {

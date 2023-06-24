@@ -1,0 +1,127 @@
+.react-select-custom-option {
+  .for-pills {
+    display: none;
+  }
+  .for-dropdown {
+    display: flex;
+    gap: 5px;
+  }
+}
+
+.substat-priority-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+
+  .substat-priority-list {
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .substat-priority-help {
+    font-size: 12px;
+    color: rgb(156, 156, 156);
+    margin-top: 2px;
+    margin-left: 2px;
+    width: 880px;
+  }
+
+  .substat-table {
+    // ...
+    margin-top: 10px;
+    tbody {
+      tr {
+        &:first-child {
+          padding: 6px 12px;
+
+          td {
+            background-color: rgba(0, 0, 0, 0.45);
+            font-weight: 600;
+            &:not(:first-child) {
+              &.substat-clickable {
+                cursor: pointer;
+                &:hover {
+                  color: orange;
+                  background-color: rgba(0, 0, 0, 0.65);
+                }
+              }
+            }
+          }
+        }
+        td {
+          min-width: 65px !important;
+          &:first-child {
+            font-weight: 600;
+            background-color: rgba(0, 0, 0, 0.45);
+            width: 250px;
+          }
+          &:not(:first-child) {
+            text-align: right;
+          }
+        }
+      }
+    }
+  }
+
+  .clickable {
+    cursor: pointer;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .calc-selection {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+
+    .substat-priority-select-wrapper {
+      display: grid;
+      align-items: center;
+      gap: 10px;
+      grid-template-columns: 175px 100%;
+      .substat-priority-select-label {
+        white-space: nowrap;
+        margin-left: 5px;
+      }
+      &.no-calcs {
+        opacity: 0.3;
+        cursor: not-allowed;
+        .substat-priority-select:hover {
+          background-color: rgba(0, 0, 0, 0.4);
+        }
+      }
+    }
+
+    .substat-priority-select {
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+      height: 32px;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      width: fit-content;
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+      .react-select-calcs-wrapper {
+        display: flex;
+        justify-content: flex-end;
+        > div {
+          width: 700px !important;
+        }
+        .react-select-custom-option {
+          .for-pills {
+            display: flex;
+            gap: 5px;
+          }
+          .for-dropdown {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}

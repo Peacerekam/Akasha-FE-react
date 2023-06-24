@@ -42,7 +42,7 @@ const urls = {
 };
 
 export const showAds = true;
-export const isProduction = true;
+export const isProduction = false;
 export const BASENAME = "/";
 const MAINTENANCE_MODE = false;
 
@@ -94,8 +94,8 @@ const App = () => {
           {/* <NotificationBar /> */}
           <div id="top-of-the-page">
             <Navbar />
-            <NavbarTabs />
           </div>
+          <NavbarTabs />
           <div
             className={`content-wrapper ${isProduction ? "" : "dev-indicator"}`}
           >
@@ -128,8 +128,8 @@ const App = () => {
           <div id="top-of-the-page">
             <NotificationBar />
             <Navbar />
-            <NavbarTabs />
           </div>
+          <NavbarTabs />
           <div
             className={`content-wrapper ${isProduction ? "" : "dev-indicator"}`}
           >

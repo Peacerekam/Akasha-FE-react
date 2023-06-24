@@ -399,10 +399,12 @@
 
         &.talent-boosted {
           .talent-display-value {
-            background-color: #44cded; // @TODO: ..
+            // background-color: #44cded; // @TODO: ..
+            background-color: var(--element-color); // @TODO: ..
           }
           img:not(.crown-of-insight) {
-            box-shadow: 0 0 3px 1px rgba(white, 0.4), 0 0 4px 2px #44cded;
+            // box-shadow: 0 0 3px 1px rgba(white, 0.4), 0 0 4px 2px #44cded; 
+            box-shadow: 0 0 3px 1px rgba(white, 0.4), 0 0 4px 2px var(--element-color); 
           }
         }
         &.talent-crowned {

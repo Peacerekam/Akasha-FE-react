@@ -148,7 +148,7 @@ export const CalculationList: React.FC<CalculationListProps> = ({
   //               />
   //             </div>
   //             <div>
-  //               {ranking ? `top ${Math.ceil((ranking / outOf) * 100)}%` : ""}
+  //               {ranking ? `top ${Math.ceil((+ranking / outOf) * 100)}%` : ""}
   //             </div>
   //             <span>
   //               {ranking ?? "---"}
