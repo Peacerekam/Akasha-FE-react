@@ -9,6 +9,7 @@ import ReactSelect from "react-select";
 import { toBlob, toPng } from "html-to-image";
 import { Chart as ChartJS, registerables } from "chart.js";
 import { Radar } from "react-chartjs-2";
+import { useLocation } from "react-router-dom";
 
 import {
   getArtifactsInOrder,
@@ -40,7 +41,6 @@ import FriendshipIcon from "../../assets/icons/Item_Companionship_EXP.webp";
 import { PreviewModal } from "./PreviewModal";
 import { applyModalBodyStyle, getRelativeCoords } from "../CustomTable/Filters";
 import "./style.scss";
-import { useLocation } from "react-router-dom";
 
 ChartJS.register(...registerables);
 

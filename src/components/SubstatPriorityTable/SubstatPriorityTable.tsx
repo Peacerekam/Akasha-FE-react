@@ -13,7 +13,8 @@ type SubstatPriority = {
   calculation: {
     calculationId: string;
     name: string;
-    short: string;
+    short?: string;
+    variant?: string;
     weapon: {
       name: string;
       icon: string;
@@ -28,6 +29,7 @@ type SubstatPriority = {
       result: number;
       newRank: number | string;
       oldRank: number | string;
+      substatValue: number;
     };
   };
 };
@@ -64,8 +66,7 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
 
   useEffect(() => {
     if (selectedCalculationId) {
-      const noVariant = selectedCalculationId.slice(0, 10);
-      setSelectedCalcId(noVariant);
+      setSelectedCalcId(selectedCalculationId);
     }
   }, [selectedCalculationId]);
 
@@ -96,17 +97,22 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
                     >
                       {calc.weapon.name}
                     </div>
+                    {calc.variant ? <div>({calc.variant})</div> : ""}
                     <div>{calc.name}</div>
                   </span>
                   <span className="for-pills">
                     <img src={toEnkaUrl(calc.weapon.icon)} />
-                    {calc.weapon.name} - {calc.name}
+                    {calc.weapon.name} -
+                    {calc.variant ? <div>({calc.variant})</div> : ""}{" "}
+                    {calc.name}
                   </span>
                 </span>
               </>
             );
 
-            const rawLabel = `${_data.calculation.weapon.name} R${_data.calculation.weapon.refinement} ${_data.calculation.name}`;
+            const rawLabel = `${_data.calculation.weapon.name} R${
+              _data.calculation.weapon.refinement
+            } ${_data.calculation.name} ${calc.variant || ""}`;
 
             const thisOpt = {
               label,
@@ -133,7 +139,7 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
           }`}
         >
           <span className="substat-priority-select-label">
-            Select leaderbnoard
+            Select leaderboard
           </span>
           <div className="substat-priority-select">
             <div className="react-select-calcs-wrapper">
@@ -184,14 +190,28 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
           name !== "Crit RATE" &&
           name !== "Base" &&
           value === selectedPriorityData.substats["Base"].result
-        )
+        ) {
           return null;
+        }
+
+        const isP_ = name.endsWith("%") || name.startsWith("Crit");
+        const substatValue =
+          selectedPriorityData.substats?.[name]?.substatValue;
+
+        const _title =
+          name === "Base"
+            ? ""
+            : `${substatValue}${isP_ ? "%" : ""} ${name.replace("%", "")}`;
 
         return (
           <td
             key={name}
-            className={"substat-clickable"}
-            onClick={() => setRelativeTo(name)}
+            title={_title}
+            className="substat-clickable"
+            onClick={() => {
+              if (name === "Substat name") return;
+              setRelativeTo(name);
+            }}
             style={{
               color: name === relativeTo ? "orange" : "",
             }}
@@ -246,67 +266,69 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
     });
   }, [priorityData, selectedPriorityData, selectedOption]);
 
+  const rankToNum = (n: string | number) => {
+    const _n = ("" + n)?.replace("~", "");
+    const _nVal = _n.startsWith("(") ? _n.slice(1, _n.length - 1) : _n;
+
+    return +_nVal;
+  };
+
   //
   //  RANKINGS ROWS
   //
-  // const rankingsTableRows = useMemo(() => {
-  //   if (!selectedPriorityData?.substats) return null;
+  const rankingsTableRows = useMemo(() => {
+    if (!selectedPriorityData?.substats) return null;
 
-  //   const highestGainsNum = Math.max(
-  //     ...Object.values(selectedPriorityData.substats).map((x) => x.result)
-  //   );
+    const highestGainsNum = Math.max(
+      ...Object.values(selectedPriorityData.substats).map((x) => x.result)
+    );
 
-  //   const highestPercentage =
-  //     (highestGainsNum * 100) / selectedPriorityData.substats["Base"].result -
-  //     100;
+    const highestPercentage =
+      (highestGainsNum * 100) / selectedPriorityData.substats["Base"].result -
+      100;
 
-  //   return [
-  //     "New leaderboard ranking",
-  //     ...Object.keys(selectedPriorityData?.substats),
-  //   ].map((name) => {
-  //     const value = selectedPriorityData?.substats?.[name]?.result;
-  //     if (!value) return <td key={name}>{name}</td>;
-  //     if (
-  //       name !== "Crit RATE" &&
-  //       name !== "Base" &&
-  //       value === selectedPriorityData.substats["Base"].result
-  //     )
-  //       return null;
+    const baseNew = selectedPriorityData?.substats?.["Base"]?.newRank;
+    const baseOld = selectedPriorityData?.substats?.["Base"]?.oldRank;
+    const _baseNew = rankToNum(baseNew);
+    const _baseOld = rankToNum(baseOld);
+    const _baseDiff = _baseOld - _baseNew;
+    const hiddenBuildsNum = _baseDiff;
 
-  //     const relativeComparator = selectedPriorityData.substats["Base"].result;
-  //     const relativeValue = (value * 100) / relativeComparator - 100;
+    return [
+      "New leaderboard ranking",
+      ...Object.keys(selectedPriorityData?.substats),
+    ].map((name) => {
+      const value = selectedPriorityData?.substats?.[name]?.result;
+      if (!value) return <td key={name}>{name}</td>;
+      if (
+        name !== "Crit RATE" &&
+        name !== "Base" &&
+        value === selectedPriorityData.substats["Base"].result
+      )
+        return null;
 
-  //     const revRGB = 255 - (relativeValue / highestPercentage) * 255;
-  //     const cellStyle = {
-  //       color: `rgba(${revRGB}, 255,${revRGB}, 1)`,
-  //     };
+      const relativeComparator = selectedPriorityData.substats["Base"].result;
+      const relativeValue = (value * 100) / relativeComparator - 100;
 
-  //     const newRank = selectedPriorityData?.substats?.[name]?.newRank;
-  //     const oldRank = selectedPriorityData?.substats?.[name]?.oldRank;
+      const revRGB = 255 - (relativeValue / highestPercentage) * 255;
+      const cellStyle = {
+        color: `rgba(${revRGB}, 255,${revRGB}, 1)`,
+      };
 
-  //     const _newRank = ("" + newRank)?.replace("~", "");
-  //     const _oldRank = ("" + oldRank)?.replace("~", "");
+      const newRank = selectedPriorityData?.substats?.[name]?.newRank;
+      const oldRank = selectedPriorityData?.substats?.[name]?.oldRank;
+      const _newRank = rankToNum(newRank);
+      const _oldRank = rankToNum(oldRank);
+      const _diff = _oldRank - _newRank - hiddenBuildsNum;
 
-  //     const _newVal = _newRank.startsWith("(")
-  //       ? _newRank.slice(1, _newRank.length - 1)
-  //       : _newRank;
-
-  //     const _oldVal = _oldRank.startsWith("(")
-  //       ? _oldRank.slice(1, _oldRank.length - 1)
-  //       : _oldRank;
-
-  //     const _new = +_newVal;
-  //     const _old = +_oldVal;
-
-  //     const _diff = _old - _new;
-
-  //     return (
-  //       <td style={cellStyle} key={`${name}-val`}>
-  //         {newRank} {_diff === 0 ? "" : `(+${_diff})`}
-  //       </td>
-  //     );
-  //   });
-  // }, [priorityData, selectedPriorityData, selectedOption]);
+      return (
+        <td style={cellStyle} key={`${name}-val`}>
+          {Math.max(1, _newRank + hiddenBuildsNum)}{" "}
+          {_diff === 0 ? "" : `(+${_diff})`}
+        </td>
+      );
+    });
+  }, [priorityData, selectedPriorityData, selectedOption]);
 
   //
   //  DMG GAIN ROWS
@@ -466,7 +488,7 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
     .join(" ")
     .trim();
 
-  return priorityData.length > 0 ? (
+  return priorityData && priorityData.length > 0 ? (
     <div className="expanded-row flex">
       <div className="substat-priority-wrapper">
         <div className="clickable" onClick={() => setShow((prev) => !prev)}>
@@ -484,12 +506,12 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
               <tbody>
                 <tr>{tableHeaders}</tr>
                 <tr>{resultsTableRows}</tr>
-                {/* <tr>{rankingsTableRows}</tr> */}
                 <tr>{dmgGainTableRows}</tr>
                 <tr>{relativeTableRows}</tr>
                 {relativeTo !== "Base" ? (
                   <tr>{relativeRollTableRows}</tr>
                 ) : null}
+                <tr>{rankingsTableRows}</tr>
               </tbody>
             </table>
             <div className="substat-priority-help">
@@ -499,8 +521,8 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
               <br />
               One interesting use is to find if you hit diminishing returns on
               any of your stats. For example, some Ayaka builds with extremely
-              high Crit DMG% might start seeing a better performance with ATK%
-              roll instead. Similarly if any of the % gains is much higher than
+              high Crit DMG might start seeing a better performance from ATK%
+              rolls instead. Similarly if any of the % gains is much higher than
               the rest, chances are your build is unbalanced and needs that
               stat.
             </div>
