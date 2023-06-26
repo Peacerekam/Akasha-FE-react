@@ -6,6 +6,7 @@ import {
   HelpBox,
   StatIcon,
   StylizedContentBlock,
+  TeammatesCompact,
   WeaponMiniDisplay,
 } from "../../components";
 import {
@@ -202,6 +203,16 @@ export const CategorySelectionPage: React.FC = () => {
           );
         },
       },
+      {
+        name: "Team",
+        width: "0px",
+        sortable: false,
+        cell: (row) => {
+          return (
+            <TeammatesCompact teammates={row.weapons[0].teammates} scale={1} />
+          );
+        },
+      },
       // {
       //   name: "",
       //   width: "80px",
@@ -265,12 +276,6 @@ export const CategorySelectionPage: React.FC = () => {
 
   return (
     <div className="flex">
-      <AdsComponentManager
-        adType="LeaderboardATF"
-        dataAdSlot="6204085735"
-        hybrid="desktop"
-      />
-      <AdsComponentManager adType="Video" />
       <div className="content-block w-100" id="content-container">
         <StylizedContentBlock
           // variant="gradient"
@@ -313,8 +318,6 @@ export const CategorySelectionPage: React.FC = () => {
           />
         </div>
       </div>
-      <AdsComponentManager adType="LeaderboardBTF" dataAdSlot="6204085735" />
-      <AdsComponentManager adType="RichMedia" />
     </div>
   );
 };

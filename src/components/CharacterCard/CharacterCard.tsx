@@ -41,6 +41,7 @@ import FriendshipIcon from "../../assets/icons/Item_Companionship_EXP.webp";
 import { PreviewModal } from "./PreviewModal";
 import { applyModalBodyStyle, getRelativeCoords } from "../CustomTable/Filters";
 import "./style.scss";
+import { TeammatesCompact } from "../TeammatesCompact";
 
 ChartJS.register(...registerables);
 
@@ -60,7 +61,7 @@ type TalentProps = {
   };
 };
 
-const ELEMENT_TO_COLOR = {
+export const ELEMENT_TO_COLOR = {
   Pyro: "#f58453",
   Electro: "#ffa1ff",
   Anemo: "#71fdec",
@@ -548,6 +549,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             <div key={id}>
               <div>{displayCharts(chartData, id)}</div>
               <div className="under-chart">
+                <TeammatesCompact teammates={calc.teammates} scale={1.7} />
                 {topBadge}
                 {lbBadge}
                 {/* <div>{shorterName}</div> */}

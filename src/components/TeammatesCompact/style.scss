@@ -1,0 +1,76 @@
+@keyframes omnielement {
+  0% {
+    filter: sepia(0.7) hue-rotate(0deg);
+  }
+  100% {
+    filter: sepia(0.7) hue-rotate(360deg);
+  }
+}
+
+.team-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: calc(var(--teammate-scale) * 3px);
+
+  .teammate-wrapper {
+    position: relative;
+    .no-teammate-fill-img,
+    .span,
+    .flex-fill-img,
+    .table-icon,
+    .stat-icon {
+      z-index: 2;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: calc(var(--teammate-scale) * 25px);
+      height: calc(var(--teammate-scale) * 25px);
+      border-radius: calc(var(--teammate-scale) * 4px);
+      overflow: hidden;
+
+      filter: drop-shadow(
+        0 0 calc(var(--teammate-scale) * 2px) rgba(black, 0.5)
+      );
+
+      $border-size: 0px;
+      border: 1px solid var(--teammate-border);
+      box-sizing: border-box;
+
+      box-shadow: inset 0 0 calc(var(--teammate-scale) * 15px)
+        var(--teammate-inner-shadow);
+
+      // box-shadow: inset $border-size $border-size 1px var(--teammate-border),
+      //   inset $border-size (-($border-size)) 1px var(--teammate-border),
+      //   inset (-($border-size)) $border-size 1px var(--teammate-border),
+      //   inset (-($border-size)) (-($border-size)) 1px var(--teammate-border);
+
+      &.stat-icon {
+        padding: calc(var(--teammate-scale) * 1.5px);
+        filter: drop-shadow(0 0 calc(var(--teammate-scale) * 2px) black)
+          brightness(1.1);
+      }
+      &.no-teammate-fill-img {
+        color: rgb(255, 123, 123);
+        color: rgba(white, 0.7);
+      }
+      &.flex-fill-img {
+        // animation: omnielement 4s infinite ease-in-out;
+        filter: brightness(1.2);
+        background-color: rgb(59, 59, 59);
+      }
+    }
+    .teammate-bg {
+      z-index: 1;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--teammate-background);
+      border-radius: calc(var(--teammate-scale) * 4px);
+    }
+  }
+}

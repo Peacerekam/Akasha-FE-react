@@ -737,7 +737,8 @@
 
   .under-chart {
     position: relative;
-    top: -18px;
+    // top: -18px;
+    top: -32px;
 
     > div {
       text-shadow: 0 0.08em 0.1em black, 0 0.1em 0.3em rgba(0, 0, 0, 0.4);

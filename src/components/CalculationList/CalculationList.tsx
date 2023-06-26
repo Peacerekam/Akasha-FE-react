@@ -1,9 +1,9 @@
+import React, { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios from "axios";
-import React, { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
+import { CalculationTeammate, TeammatesCompact } from "../TeammatesCompact";
 import "./style.scss";
 
 type CalculationResponse = {
@@ -21,6 +21,7 @@ type CalculationResponse = {
   };
   weapon: { name: string; icon: string; refinement?: number };
   stats: any;
+  teammates: CalculationTeammate[];
 };
 
 type CalculationListProps = {
@@ -66,6 +67,7 @@ export const CalculationList: React.FC<CalculationListProps> = ({
             stats,
             variant,
             calculationId,
+            teammates,
           } = calc;
 
           const _id = calculationId || id;
@@ -98,6 +100,9 @@ export const CalculationList: React.FC<CalculationListProps> = ({
                 />
               </td>
               <td>{weapon?.name}</td>
+              <td>
+                <TeammatesCompact teammates={teammates} />
+              </td>
               <td>{variant?.displayName}</td>
               <td>
                 <a

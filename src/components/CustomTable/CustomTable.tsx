@@ -18,6 +18,7 @@ import {
   GenshinUserCard,
   WeaponMiniDisplay,
   CharacterCard,
+  TeammatesCompact,
 } from "../../components";
 import {
   abortSignalCatcher,
@@ -148,7 +149,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     // const toAppend = encodeURI(tmp.join("&"));
     const toAppend = tmp.join("&");
     const hash = location.hash || "";
-    const suffix = `${toAppend}${hash}`
+    const suffix = `${toAppend}${hash}`;
     if (!suffix) return;
 
     const newURL = `?${suffix}`;
@@ -495,6 +496,9 @@ export const CustomTable: React.FC<CustomTableProps> = ({
               })}
             </div>
 
+            <div>
+              <TeammatesCompact teammates={row.weapons[0].teammates} scale={3} />
+            </div>
             {/* <div style={{ overflow: "hidden" }}>
               show top 1 build for each category?
             </div> */}
