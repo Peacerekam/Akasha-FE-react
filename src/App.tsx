@@ -8,6 +8,7 @@ import { HoverElementContextProvider } from "./context/HoverElement/HoverElement
 import { SessionDataContextProvider } from "./context/SessionData/SessionDataContext";
 import { AdProviderContextProvider } from "./context/AdProvider/AdProviderContext";
 import {
+  AdsComponentManager,
   Footer,
   // MobileStickyBar,
   Navbar,
@@ -124,16 +125,28 @@ const App = () => {
       </CookieConsent> */}
       <SessionDataContextProvider>
         <BrowserRouter basename={BASENAME}>
-          {/* <MobileStickyBar /> */}
-          <div id="top-of-the-page">
-            <NotificationBar />
-            <Navbar />
-          </div>
-          <NavbarTabs />
-          <div
-            className={`content-wrapper ${isProduction ? "" : "dev-indicator"}`}
-          >
-            <AdProviderContextProvider>
+          <AdProviderContextProvider>
+            {/* <MobileStickyBar /> */}
+            <div id="top-of-the-page">
+              <NotificationBar />
+              <Navbar />
+            </div>
+            <NavbarTabs />
+
+            <div className="ad-container">
+              <AdsComponentManager
+                adType="LeaderboardATF"
+                dataAdSlot="6204085735"
+                hybrid="desktop"
+              />
+              <AdsComponentManager adType="Video" />
+            </div>
+
+            <div
+              className={`content-wrapper ${
+                isProduction ? "" : "dev-indicator"
+              }`}
+            >
               <HoverElementContextProvider>
                 <Routes>
                   {/* @TODO: later use dashboard page instead */}
@@ -176,9 +189,18 @@ const App = () => {
                   />
                 </Routes>
               </HoverElementContextProvider>
-            </AdProviderContextProvider>
-            <Footer />
-          </div>
+              <Footer />
+            </div>
+
+            <div className="ad-container">
+              <AdsComponentManager
+                adType="LeaderboardBTF"
+                dataAdSlot="6204085735"
+              />
+              <AdsComponentManager adType="RichMedia" />
+            </div>
+            
+          </AdProviderContextProvider>
         </BrowserRouter>
       </SessionDataContextProvider>
     </LastProfilesContextProvider>

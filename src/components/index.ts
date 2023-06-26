@@ -35,3 +35,4 @@ export * from "./VenatusAdsComponent";
 export * from "./AdsComponentManager";
 export * from "./CharacterCard";
 export * from "./StatListCard";
+export * from "./TeammatesCompact";

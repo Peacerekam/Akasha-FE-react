@@ -8,12 +8,6 @@ import { AdsComponentManager } from "../../components";
 export const PrivacyPolicyPage: React.FC = () => {
   return (
     <div className="flex">
-      <AdsComponentManager
-        adType="LeaderboardATF"
-        dataAdSlot="6204085735"
-        hybrid="desktop"
-      />
-      <AdsComponentManager adType="Video" />
       <div className="content-block w-100" id="content-container">
         <StylizedContentBlock overrideImage={DomainBackground} />
         <div className="relative">
@@ -55,8 +49,6 @@ export const PrivacyPolicyPage: React.FC = () => {
           </div>
         </div>
       </div>
-      <AdsComponentManager adType="LeaderboardBTF" dataAdSlot="6204085735" />
-      <AdsComponentManager adType="RichMedia" />
     </div>
   );
 };

@@ -6,11 +6,13 @@ type AdProviders = null | "google" | "venatus";
 type AdProviderContextType = {
   adProvider: AdProviders;
   setAdProvider: (_: AdProviders) => void;
+  reloadAds: boolean;
 };
 
 const defaultValue = {
   adProvider: "google",
   setAdProvider: () => {},
+  reloadAds: false,
 } as AdProviderContextType;
 
 const AdProviderContext = createContext(defaultValue);
@@ -19,6 +21,7 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
   children,
 }) => {
   const [adProvider, setAdProvider] = useState<AdProviders>(null);
+  const [reloadAds, setReloadAds] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -31,9 +34,15 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
     }
   }, [location.search]);
 
+  useEffect(() => {
+    setReloadAds(true)
+    setTimeout(() => setReloadAds(false), 10)
+  }, [location.pathname])
+
   const value = {
     adProvider,
     setAdProvider,
+    reloadAds
   };
 
   return (

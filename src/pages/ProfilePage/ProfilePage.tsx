@@ -57,6 +57,7 @@ import { getSessionIdFromCookie } from "../../utils/helpers";
 import { ArtifactSettingsModal } from "./ArtifactSettingsModal";
 import { AdsComponentManager } from "../../components/AdsComponentManager";
 import "./style.scss";
+import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 
 export const ProfilePage: React.FC = () => {
   const [showArtifactSettingsModal, setShowArtifactSettingsModal] =
@@ -68,7 +69,6 @@ export const ProfilePage: React.FC = () => {
   const [fetchCount, setFetchCount] = useState(0);
   const [bindTime, setBindTime] = useState<number>();
   const [refreshTime, setRefreshTime] = useState<number>();
-  const [triggerAds, setTriggerAds] = useState<boolean>(false);
   const [responseData, setResponseData] = useState<{
     account: any;
     error?: {
@@ -82,18 +82,12 @@ export const ProfilePage: React.FC = () => {
   const { addTab } = useContext(LastProfilesContext);
   const { isAuthenticated, isBound, fetchSessionData, boundAccounts } =
     useContext(SessionDataContext);
+    const { reloadAds } = useContext(AdProviderContext);
 
   const isAccountOwner = useMemo(
     () => isBound(uid),
     [uid, isAuthenticated, boundAccounts]
   );
-
-  const toggleAds = () => {
-    setTriggerAds(false);
-    setTimeout(() => {
-      setTriggerAds(true);
-    }, 200);
-  };
 
   const fetchProfile = async (
     uid: string,
@@ -145,8 +139,6 @@ export const ProfilePage: React.FC = () => {
   useEffect(() => {
     const abortController = new AbortController();
     if (uid) fetchProfile(uid, abortController);
-
-    toggleAds();
 
     return () => {
       abortController.abort();
@@ -771,18 +763,6 @@ export const ProfilePage: React.FC = () => {
           </div>
         )}
       </div>
-      <div className="flex">
-        {triggerAds && !responseData.account?.patreon?.active && (
-          <AdsComponentManager
-            adType="LeaderboardATF"
-            dataAdSlot="6204085735"
-            hybrid="desktop"
-          />
-        )}
-        {triggerAds && !responseData.account?.patreon?.active && (
-          <AdsComponentManager adType="Video" />
-        )}
-      </div>
       {displayFloatingButtons({
         bind: true,
         refresh: true,
@@ -837,13 +817,15 @@ export const ProfilePage: React.FC = () => {
           </div>
         </div>
         <div className="flex">
-          {triggerAds && !responseData.account?.patreon?.active && (
-            <AdsComponentManager
-              adType="LeaderboardBTF"
-              dataAdSlot="6204085735"
-              hybrid="mobile"
-              hideOnDesktop
-            />
+          {!reloadAds && !responseData.account?.patreon?.active && (
+            <div className="ad-container">
+              <AdsComponentManager
+                adType="LeaderboardBTF"
+                dataAdSlot="6204085735"
+                hybrid="mobile"
+                hideOnDesktop
+              />
+            </div>
           )}
         </div>
         {displayFloatingButtons({ artifactSettings: true })}
@@ -882,18 +864,6 @@ export const ProfilePage: React.FC = () => {
             )}
           </div>
         </div>
-      </div>
-
-      <div className="flex">
-        {triggerAds && !responseData.account?.patreon?.active && (
-          <AdsComponentManager
-            adType="LeaderboardBTF"
-            dataAdSlot="6204085735"
-          />
-        )}
-        {triggerAds && !responseData.account?.patreon?.active && (
-          <AdsComponentManager adType="RichMedia" />
-        )}
       </div>
     </div>
   );

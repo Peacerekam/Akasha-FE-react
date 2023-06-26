@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 import { AdsComponent, AdsComponentProps } from "../AdsComponent";
 import {
@@ -13,9 +13,9 @@ type AdsComponentManagerProps = VenatusAdsComponentProps & AdsComponentProps;
 export const AdsComponentManager: React.FC<AdsComponentManagerProps> = (
   props
 ) => {
-  const { adProvider } = useContext(AdProviderContext);
+  const { adProvider, reloadAds } = useContext(AdProviderContext);
 
-  if (!showAds) {
+  if (!showAds || reloadAds) {
     return <></>;
   }
 

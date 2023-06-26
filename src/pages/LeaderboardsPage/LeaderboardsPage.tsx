@@ -20,6 +20,8 @@ import {
   WeaponMiniDisplay,
   StylizedContentBlock,
   RegionBadge,
+  TeammatesCompact,
+  CalculationTeammate,
 } from "../../components";
 import {
   FETCH_CHARACTER_FILTERS_URL,
@@ -53,6 +55,7 @@ type CategoryWeaponInfo = {
   substat: string;
   type: string;
   details: string;
+  teammates: CalculationTeammate[];
   filters?: {
     displayName: string;
     name: string;
@@ -419,14 +422,6 @@ export const LeaderboardsPage: React.FC = () => {
     </>
   );
 
-  // @TODO CALC INFO DISPLAY
-  // const testSetupObject = {
-  //   character: {},
-  //   weapon: {},
-  //   team: {},
-  //   enemy: {},
-  // };
-
   const options = {
     maintainAspectRatio: true,
     responsive: true,
@@ -519,12 +514,6 @@ export const LeaderboardsPage: React.FC = () => {
 
   return (
     <div className="flex" key={calculationId}>
-      <AdsComponentManager
-        adType="LeaderboardATF"
-        dataAdSlot="6204085735"
-        hybrid="desktop"
-      />
-      <AdsComponentManager adType="Video" />
       {hoverElement}
       <div id="content-container" className=" w-100">
         <div
@@ -589,152 +578,13 @@ export const LeaderboardsPage: React.FC = () => {
                       </div>
                     </div>
                     <div>{thisWeaponCalc?.details}</div>
-                    {/* @TODO CALC INFO DISPLAY */}
-                    <div
-                      style={{ display: "none" }}
-                      className="calc-setup-info-wrapper"
-                    >
-                      <table>
-                        <thead>
-                          <tr>
-                            <th colSpan={2}>
-                              <div
-                                className="flex gap-10"
-                                style={{ justifyContent: "center" }}
-                              >
-                                <img
-                                  className="table-icon"
-                                  src={thisCalc.characterIcon}
-                                />
-                                Hu Tao C1 Lv. 90
-                              </div>
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {/* <tr>
-                          <td>Character level</td>
-                          <td>90/90</td>
-                        </tr>
-                        <tr>
-                          <td>Constellation</td>
-                          <td>C1</td>
-                        </tr> */}
-                          <tr>
-                            <td>Talent levels</td>
-                            <td>10/10/10</td>
-                          </tr>
-                          <tr>
-                            <td>HP</td>
-                            <td>below 50%</td>
-                          </tr>
-                          <tr>
-                            <td>Skill (E)</td>
-                            <td>Active</td>
-                          </tr>
-                        </tbody>
-                      </table>
-
-                      <table>
-                        <thead>
-                          <tr>
-                            <th colSpan={2}>
-                              <div
-                                className="flex gap-10"
-                                style={{ justifyContent: "center" }}
-                              >
-                                <WeaponMiniDisplay
-                                  icon={thisWeaponCalc?.icon || ""}
-                                  refinement={thisWeaponCalc?.refinement || 1}
-                                />
-                                Staff of Homa R1 Lv. 90
-                              </div>
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {/* <tr>
-                          <td>Weapon level</td>
-                          <td>90/90</td>
-                        </tr>
-                        <tr>
-                          <td>Refinement</td>
-                          <td>R1</td>
-                        </tr> */}
-                          <tr>
-                            <td>HP</td>
-                            <td>below 50%</td>
-                          </tr>
-                        </tbody>
-                      </table>
-
-                      <table>
-                        <thead>
-                          <tr>
-                            <th colSpan={2}>
-                              <div
-                                className="flex gap-10"
-                                style={{ justifyContent: "center" }}
-                              >
-                                <FontAwesomeIcon
-                                  icon={faPeopleGroup}
-                                  size="1x"
-                                />
-                                Team buffs
-                              </div>
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>
-                              <StatIcon name="Hydro DMG Bonus" /> Hydro
-                              Resonance
-                            </td>
-                            <td>
-                              <StatIcon name="HP%" /> +25% HP
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>{getIconElement("Zhongli")} Dominus Lapidis</td>
-                            <td>
-                              <StatIcon name="Pyro DMG Bonus" />
-                              Enemy Pyro DMG RES -20%
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-
-                      <table>
-                        <thead>
-                          <tr>
-                            <th colSpan={2}>
-                              <div
-                                className="flex gap-10"
-                                style={{ justifyContent: "center" }}
-                              >
-                                <FontAwesomeIcon icon={faSkull} size="1x" />
-                                Enemy Lv. 90
-                              </div>
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {/* <tr>
-                          <td>Level</td>
-                          <td>90</td>
-                        </tr> */}
-                          <tr>
-                            <td>Pyro RES</td>
-                            <td>10%</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
                   </div>
-                  <div style={{ margin: 10 }}>
+                  <div style={{ margin: "20px 10px" }}>
                     <div>
-                      <span className="flex gap-10">
+                      <span
+                        className="flex gap-10"
+                        style={{ flexWrap: "inherit" }}
+                      >
                         Weapon:
                         <WeaponMiniDisplay
                           icon={thisWeaponCalc?.icon || ""}
@@ -743,6 +593,16 @@ export const LeaderboardsPage: React.FC = () => {
                         {thisWeaponCalc?.name}
                       </span>
                     </div>
+                  </div>
+                  <div
+                    className="lb-team-display-wrapper"
+                    style={{ margin: "20px 10px" }}
+                  >
+                    <div>Team:</div>
+                    <TeammatesCompact
+                      teammates={thisWeaponCalc?.teammates}
+                      scale={2}
+                    />
                   </div>
                 </div>
               )}
@@ -823,8 +683,6 @@ export const LeaderboardsPage: React.FC = () => {
         </div>
       </div>
 
-      <AdsComponentManager adType="LeaderboardBTF" dataAdSlot="6204085735" />
-      <AdsComponentManager adType="RichMedia" />
     </div>
   );
 };

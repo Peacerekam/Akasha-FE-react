@@ -200,12 +200,6 @@ export const ArtifactsPage: React.FC = () => {
 
   return (
     <div className="flex">
-      <AdsComponentManager
-        adType="LeaderboardATF"
-        dataAdSlot="6204085735"
-        hybrid="desktop"
-      />
-      <AdsComponentManager adType="Video" />
       {hoverElement}
       <div className="content-block w-100" id="content-container">
         <StylizedContentBlock overrideImage={DomainBackground} />
@@ -224,8 +218,6 @@ export const ArtifactsPage: React.FC = () => {
           projectParamsToPath
         />
       </div>
-      <AdsComponentManager adType="LeaderboardBTF" dataAdSlot="6204085735" />
-      <AdsComponentManager adType="RichMedia" />
     </div>
   );
 };
