@@ -44,17 +44,33 @@
   // }
 }
 
-.ad-container {
-  width: 100%;
+.flex-special-container {
   display: flex;
-  gap: 10px;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
+  
+  // width: 100%;
+  // gap: 35px;
   flex-direction: row-reverse;
-}
 
-.vm-skin-left,
-.vm-skin-right {
-  display: none;
+  gap: 10px;
+  justify-content: center;
+  align-items: flex-start;
+
+  .other-calculations-display,
+  .page-description-wrapper {
+    margin: 0;
+    flex: 1;
+    // width: calc(100% - 450px);
+    min-width: min(450px, 100%);
+  }
+
+  .vm-container  {
+    flex: 0;
+    display: contents;
+    .vm-placement {
+      display: contents;
+    }
+  }
 }

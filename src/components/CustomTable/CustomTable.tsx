@@ -671,7 +671,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
         <FiltersContainer
           fetchURL={filtersURL}
           onFiltersChange={handleChangeFilters}
-          projectParamsToPath
+          projectParamsToPath={projectParamsToPath}
         />
       )}
       <PerfectScrollbar options={{}}>

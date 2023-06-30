@@ -7,12 +7,16 @@ type AdProviderContextType = {
   adProvider: AdProviders;
   setAdProvider: (_: AdProviders) => void;
   reloadAds: boolean;
+  adsDisabled: boolean;
+  disableAdsForThisPage: () => void;
 };
 
 const defaultValue = {
   adProvider: "google",
   setAdProvider: () => {},
   reloadAds: false,
+  adsDisabled: false,
+  disableAdsForThisPage: () => {},
 } as AdProviderContextType;
 
 const AdProviderContext = createContext(defaultValue);
@@ -20,6 +24,7 @@ const AdProviderContext = createContext(defaultValue);
 const AdProviderContextProvider: React.FC<{ children: any }> = ({
   children,
 }) => {
+  const [adsDisabled, setAdsDisabled] = useState(false);
   const [adProvider, setAdProvider] = useState<AdProviders>(null);
   const [reloadAds, setReloadAds] = useState(false);
   const location = useLocation();
@@ -35,14 +40,19 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
   }, [location.search]);
 
   useEffect(() => {
-    setReloadAds(true)
-    setTimeout(() => setReloadAds(false), 10)
-  }, [location.pathname])
+    setReloadAds(true);
+    setAdsDisabled(false);
+    setTimeout(() => setReloadAds(false), 10);
+  }, [location.pathname]);
+
+  const disableAdsForThisPage = () => setAdsDisabled(true);
 
   const value = {
     adProvider,
     setAdProvider,
-    reloadAds
+    reloadAds,
+    adsDisabled,
+    disableAdsForThisPage,
   };
 
   return (

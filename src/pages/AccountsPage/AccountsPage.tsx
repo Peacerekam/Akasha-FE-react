@@ -6,17 +6,16 @@ import React, {
   useState,
 } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { debounce } from "lodash";
 
 import {
   CustomTable,
   StylizedContentBlock,
-  AdsComponent,
   RegionBadge,
   ARBadge,
   HelpBox,
 } from "../../components";
 import { TableColumn } from "../../types/TableColumn";
-
 import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
 import {
   FETCH_ACCOUNTS_FILTERS_URL,
@@ -26,14 +25,12 @@ import {
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { BuildsColumns } from "../BuildsPage";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
-import { debounce } from "lodash";
-import "./style.scss";
 import { AdsComponentManager } from "../../components/AdsComponentManager";
+import "./style.scss";
 
 export const AccountsPage: React.FC = () => {
-  const { hoverElement } = useContext(HoverElementContext);
   const navigate = useNavigate();
-  const pathname = window.location.pathname;
+  const { hoverElement } = useContext(HoverElementContext);
   const { lastProfiles } = useContext(LastProfilesContext);
 
   const [inputUID, setInputUID] = useState<string>("");
@@ -214,15 +211,16 @@ export const AccountsPage: React.FC = () => {
       {hoverElement}
       <div className="content-block w-100" id="content-container">
         <StylizedContentBlock overrideImage={DomainBackground} />
-        <HelpBox page="accounts" />
+        <div className="flex-special-container">
+          <AdsComponentManager adType="Video" />
+          <HelpBox page="accounts" />
+        </div>
         <AdsComponentManager
           adType="LeaderboardBTF"
           dataAdSlot="6204085735"
           hybrid="mobile"
           hideOnDesktop
         />
-        {/* @TODO: different helpbox */}
-        {/* <HelpBox page="builds" /> */}
         <div className="relative search-input-wrapper">
           UID / nickname
           <div>
@@ -255,6 +253,7 @@ export const AccountsPage: React.FC = () => {
         <div>
           <CustomTable
             fetchURL={FETCH_ACCOUNTS_URL}
+            filtersURL={FETCH_ACCOUNTS_FILTERS_URL}
             fetchParams={{
               uids: uidsToQuery(lastProfiles.map((a) => a.uid)),
               uid: lookupUID,

@@ -20,10 +20,11 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
+
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  // dynamically added parts od <body> that arent react app root
+  // dynamically added parts of <body> that arent react app root
   // in this case itis react-select's portalled menu dropdown
   > div:not(#root) {
     z-index: 3;
@@ -167,8 +168,13 @@ body {
 }
 
 .mt-10 {
-  margin-top: 10px;
+  margin-top: 10px !important;
 }
+
+.mt-20 {
+  margin-top: 20px !important;
+}
+
 
 .flex-grow {
   flex-grow: 1;
@@ -269,51 +275,6 @@ body {
   }
 }
 
-// @TODO: export podium to diff component
-@keyframes rungRaise {
-  0% {
-    max-height: 0%;
-  }
-  100% {
-    max-height: 50%;
-  }
-}
-@keyframes rungReveal100 {
-  0% {
-    opacity: 0;
-  }
-  40% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-@keyframes rungReveal65 {
-  0% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 0.65;
-  }
-}
-
-@keyframes rungReveal100-2 {
-  0% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
 .mt-0 {
   margin-top: 0 !important;
 }
@@ -358,96 +319,6 @@ body {
 .logo-text {
   z-index: 2;
   position: relative;
-}
-
-.podium-wrapper {
-  display: flex;
-  justify-content: center;
-  width: 350px;
-  margin: 20px 0;
-  flex-grow: 1;
-  // .rung-player-name {
-  //   > div {
-  //     z-index: 2;
-  //   }
-  // }
-  .podium-player-icon {
-    width: 45px;
-    height: 45px;
-    border-radius: 35px;
-    margin-bottom: 5px;
-    animation: rungReveal100-2 2.2s ease-in-out;
-  }
-  .rung-wrapper {
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: center;
-    height: 220px;
-    position: relative;
-    padding: 0 5px;
-    &:hover {
-      filter: brightness(1.25);
-    }
-    .rung-player-name,
-    .rung-geometry {
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      align-items: center;
-      background-position: center !important;
-    }
-    .rung-player-name {
-      font-size: 22px;
-      margin-bottom: 10px;
-      max-width: 130px;
-      white-space: nowrap;
-      animation: rungReveal100 1.5s ease-in-out;
-      font-weight: 600;
-    }
-    .rung-player-score {
-      animation: rungReveal65 2.2s ease-in-out;
-      opacity: 0.65;
-      font-size: 12px;
-      letter-spacing: 2px;
-    }
-    .rung-player-name {
-      width: 100px;
-    }
-    .rung-geometry {
-      width: 100px;
-      padding-bottom: 5px;
-      font-size: 25px;
-      color: black;
-      animation: rungRaise 1.5s ease-in-out;
-      overflow: hidden;
-      // border-top-left-radius: 5px;
-      // border-top-right-radius: 5px;
-    }
-    &.gold {
-      color: #f6d600;
-      .rung-geometry {
-        height: 50%;
-        background-color: #f6d600;
-      }
-    }
-    &.silver {
-      color: #b9b9b9;
-      .rung-geometry {
-        height: 33%;
-        background-color: #b9b9b9;
-      }
-    }
-    &.bronze {
-      color: #be782b;
-      .rung-geometry {
-        height: 18%;
-        background-color: #be782b;
-      }
-    }
-  }
 }
 
 .text-highlight-class {
@@ -664,18 +535,6 @@ body {
   background-color: #395b64 !important;
   #rcc-confirm-button {
     background-color: orange !important;
-  }
-}
-
-@keyframes gradientMove {
-  0% {
-    background-position: 0% 82%;
-  }
-  50% {
-    background-position: 100% 19%;
-  }
-  100% {
-    background-position: 0% 82%;
   }
 }
 

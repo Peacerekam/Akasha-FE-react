@@ -133,13 +133,12 @@ const App = () => {
             </div>
             <NavbarTabs />
 
-            <div className="ad-container">
+            <div className="flex-special-container mt-20">
               <AdsComponentManager
                 adType="LeaderboardATF"
                 dataAdSlot="6204085735"
                 hybrid="desktop"
               />
-              <AdsComponentManager adType="Video" />
             </div>
 
             <div
@@ -192,7 +191,7 @@ const App = () => {
               <Footer />
             </div>
 
-            <div className="ad-container">
+            <div className="flex-special-container">
               <AdsComponentManager
                 adType="LeaderboardBTF"
                 dataAdSlot="6204085735"

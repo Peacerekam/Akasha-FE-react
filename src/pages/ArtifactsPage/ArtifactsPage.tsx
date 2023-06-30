@@ -203,7 +203,10 @@ export const ArtifactsPage: React.FC = () => {
       {hoverElement}
       <div className="content-block w-100" id="content-container">
         <StylizedContentBlock overrideImage={DomainBackground} />
-        <HelpBox page="artifacts" />
+        <div className="flex-special-container">
+          <AdsComponentManager adType="Video" />
+          <HelpBox page="artifacts" />
+        </div>
         <AdsComponentManager
           adType="LeaderboardBTF"
           dataAdSlot="6204085735"

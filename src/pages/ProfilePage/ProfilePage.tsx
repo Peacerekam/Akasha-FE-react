@@ -82,7 +82,7 @@ export const ProfilePage: React.FC = () => {
   const { addTab } = useContext(LastProfilesContext);
   const { isAuthenticated, isBound, fetchSessionData, boundAccounts } =
     useContext(SessionDataContext);
-    const { reloadAds } = useContext(AdProviderContext);
+  const { reloadAds, disableAdsForThisPage } = useContext(AdProviderContext);
 
   const isAccountOwner = useMemo(
     () => isBound(uid),
@@ -115,6 +115,10 @@ export const ProfilePage: React.FC = () => {
 
       if (!data?.data?.account?.profilePictureLink) {
         await handleRefreshData();
+      }
+
+      if (data.data?.account?.patreon?.active) {
+        disableAdsForThisPage();
       }
 
       const getTime = new Date().getTime();
@@ -796,11 +800,16 @@ export const ProfilePage: React.FC = () => {
               variant="gradient"
               revealCondition={responseData.account}
             />
-            <div className="flex gap-10 ">
-              {displayGenshinCard}
-              <div className="profile-highlights">
-                {responseData.account && <CalculationResultWidget uid={uid} />}
+            <div className="flex gap-10 profile-header-wrapper">
+              <div className="flex gap-10 profile-header">
+                {displayGenshinCard}
+                <div className="profile-highlights">
+                  {responseData.account && (
+                    <CalculationResultWidget uid={uid} />
+                  )}
+                </div>
               </div>
+              <AdsComponentManager adType="Video" />
             </div>
             {responseData.account && (
               <CustomTable
@@ -817,8 +826,8 @@ export const ProfilePage: React.FC = () => {
           </div>
         </div>
         <div className="flex">
-          {!reloadAds && !responseData.account?.patreon?.active && (
-            <div className="ad-container">
+          {!reloadAds && (
+            <div className="flex-special-container">
               <AdsComponentManager
                 adType="LeaderboardBTF"
                 dataAdSlot="6204085735"

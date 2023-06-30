@@ -7,15 +7,17 @@ import {
 } from "../VenatusAdsComponent";
 import VenatusAdsComponent from "../VenatusAdsComponent/VenatusAdsComponent";
 import { showAds } from "../../App";
+import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
 
 type AdsComponentManagerProps = VenatusAdsComponentProps & AdsComponentProps;
 
 export const AdsComponentManager: React.FC<AdsComponentManagerProps> = (
   props
 ) => {
-  const { adProvider, reloadAds } = useContext(AdProviderContext);
+  const { profileObject } = useContext(SessionDataContext);
+  const { adProvider, reloadAds, adsDisabled } = useContext(AdProviderContext);
 
-  if (!showAds || reloadAds) {
+  if (!showAds || reloadAds || adsDisabled || profileObject.isPatreon) {
     return <></>;
   }
 

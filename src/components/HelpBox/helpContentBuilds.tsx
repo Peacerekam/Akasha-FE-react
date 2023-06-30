@@ -23,7 +23,9 @@ export const helpContentBuilds = (
     <div className="help-box-p">
       What is this page for then? Thats up to you, here are some examples:
       <div className="page-description-list">
-        <div className="list-element">What weapons are popular on Ayaka?</div>
+        <div className="list-element">
+          What weapons are popular on {getIconElement("Ayaka")} Ayaka?
+        </div>
         <div className="list-element">
           What artifact sets are most commonly used for {getIconElement("Yae")}{" "}
           Yae Miko ?
@@ -42,13 +44,14 @@ export const helpContentBuilds = (
           Crit DMG on
           {getIconElement("Hutao")} Hu Tao anyone has ever reached?
         </div>
-        <div className="list-element">
+        {/* <div className="list-element">
           And most importantly, who has the biggest Crit Value build? (
           <i>obviously compensating for something :-)</i>)
-        </div>
+        </div> */}
       </div>
     </div>
-    <div className="help-box-p">
+    {/* @TODO: this info should go somewhere else, preferably some kind of dynamic tooltip */}
+    {/* <div className="help-box-p">
       <b>RV (Roll Value)</b> is a metric that can be used to rate or sort
       (soon™) artifact and build substats. Genshin Optimizer describes RV as
       follows: "
@@ -61,6 +64,6 @@ export const helpContentBuilds = (
     <div className="help-box-p">
       For example a HP% roll of 5.3% equals to 90% RV. That is because maximum
       roll value of HP% is 5.8%, therefore: 5.3/5.8 ~ 90%.
-    </div>
+    </div> */}
   </>
 );

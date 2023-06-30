@@ -7,6 +7,15 @@
   }
 }
 
+// .under-chart .team-display {
+//   .teammate-overlay {
+//     &:focus,
+//     &:hover {
+//       transform: scale(1) !important;
+//     }
+//   }
+// }
+
 .team-display {
   display: flex;
   justify-content: center;
@@ -16,6 +25,34 @@
 
   .teammate-wrapper {
     position: relative;
+
+    // &:nth-child(2n) {
+    //   .overlay-weapon-wrapper {
+    //     top: calc(var(--teammate-scale) * -5px) !important;
+    //     bottom: unset !important;
+    //   }
+
+    //   .overlay-artifact-wrapper {
+    //     top: calc(var(--teammate-scale) * -5px) !important;
+    //     bottom: unset !important;
+    //   }
+    // }
+
+    &.no-bg {
+      .teammate-const-overlay,
+      .overlay-icons-container {
+        display: none;
+      }
+      .no-teammate-fill-img,
+      .span,
+      .flex-fill-img,
+      .table-icon,
+      .stat-icon {
+        box-shadow: none;
+        filter: none;
+      }
+    }
+
     .no-teammate-fill-img,
     .span,
     .flex-fill-img,
@@ -30,22 +67,20 @@
       height: calc(var(--teammate-scale) * 25px);
       border-radius: calc(var(--teammate-scale) * 4px);
       overflow: hidden;
-
-      filter: drop-shadow(
-        0 0 calc(var(--teammate-scale) * 2px) rgba(black, 0.5)
-      );
-
-      $border-size: 0px;
       border: 1px solid var(--teammate-border);
       box-sizing: border-box;
-
       box-shadow: inset 0 0 calc(var(--teammate-scale) * 15px)
         var(--teammate-inner-shadow);
 
+      // $border-size: 0px;
       // box-shadow: inset $border-size $border-size 1px var(--teammate-border),
       //   inset $border-size (-($border-size)) 1px var(--teammate-border),
       //   inset (-($border-size)) $border-size 1px var(--teammate-border),
       //   inset (-($border-size)) (-($border-size)) 1px var(--teammate-border);
+
+      filter: drop-shadow(
+        0 0 calc(var(--teammate-scale) * 2px) rgba(black, 0.5)
+      );
 
       &.stat-icon {
         padding: calc(var(--teammate-scale) * 1.5px);
@@ -71,6 +106,84 @@
       height: 100%;
       background-color: var(--teammate-background);
       border-radius: calc(var(--teammate-scale) * 4px);
+    }
+
+    // &:hover {
+    //   .teammate-overlay {
+    //     transform: scale(2.5);
+    //   }
+    // }
+
+    // .overlay-icons-container {
+    //   position: absolute;
+    //   z-index: 4;
+    //   bottom: calc(var(--teammate-scale) * -5px);
+    //   width: 100%;
+    //   display: flex;
+    //   gap: calc(var(--teammate-scale) * 1px);;
+    //   justify-content: center;
+    // }
+
+    .overlay-artifact-wrapper,
+    .overlay-weapon-wrapper {
+      position: absolute;
+      background-color: var(--teammate-background);
+
+      // position: relative;
+      z-index: 4;
+      border-radius: calc(var(--teammate-scale) * 4px);
+
+      background-color: var(--teammate-bg-darker);
+      // border-radius: 100%;
+
+      &.overlay-weapon-wrapper {
+        left: calc(var(--teammate-scale) * -1px);
+        bottom: calc(var(--teammate-scale) * -5px);
+      }
+
+      &.overlay-artifact-wrapper {
+        right: calc(var(--teammate-scale) * -1px);
+        bottom: calc(var(--teammate-scale) * -5px);
+      }
+
+      img.overlay-icon {
+        width: calc(var(--teammate-scale) * 13px);
+        height: calc(var(--teammate-scale) * 13px);
+        background-size: 120%;
+        object-fit: contain;
+        filter: drop-shadow(0 0 2px black);
+
+        // border-radius: 100%;
+        // border-color: var(--teammate-rarity);
+      }
+    }
+    .teammate-const-overlay {
+      z-index: 3;
+      position: absolute;
+      right: 0;
+      top: 1px;
+      margin: 1px;
+      font-size: calc(var(--teammate-scale) * 7px);
+      // background-color: rgba(black, 0.45);
+      width: calc(var(--teammate-scale) * 11px);
+      font-family: "GenshinFont";
+
+      border-top-right-radius: calc(var(--teammate-scale) * 4px);
+      border-bottom-left-radius: calc(var(--teammate-scale) * 4px);
+
+      display: flex;
+      justify-content: center;
+
+      filter: drop-shadow(0 0 3px black) drop-shadow(0 0 2px rgba(black, 0.5)) drop-shadow(0 0 1px black);
+
+      svg {
+        width: 10px;
+      }
+
+      // &:focus,
+      // &:hover {
+      //   transform: scale(2.5);
+      // }
     }
   }
 }

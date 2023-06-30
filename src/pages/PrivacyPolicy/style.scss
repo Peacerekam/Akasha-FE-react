@@ -1,3 +1,13 @@
-.privacy-policy {
-  margin: 0 20px;
+.privacy-policy-content-wrapper {
+  display: flex;
+  flex-direction: row-reverse;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  .privacy-policy {
+    margin: 0 20px;
+    flex: 1;
+    // width: calc(100% - 450px);
+    min-width: min(450px, 100%);
+  }
 }

@@ -284,7 +284,10 @@ export const CategorySelectionPage: React.FC = () => {
           //   categoriesTransformed && categoriesTransformed?.length > 0
           // }
         />
-        <HelpBox page="leaderboards" />
+        <div className="flex-special-container">
+          <AdsComponentManager adType="Video" />
+          <HelpBox page="leaderboards" />
+        </div>
         <AdsComponentManager
           adType="LeaderboardBTF"
           dataAdSlot="6204085735"

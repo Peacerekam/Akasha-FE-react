@@ -218,7 +218,10 @@ export const BuildsPage: React.FC = () => {
       {hoverElement}
       <div className="content-block w-100" id="content-container">
         <StylizedContentBlock overrideImage={DomainBackground} />
-        <HelpBox page="builds" />
+        <div className="flex-special-container">
+          <AdsComponentManager adType="Video" />
+          <HelpBox page="builds" />
+        </div>
         <AdsComponentManager
           adType="LeaderboardBTF"
           dataAdSlot="6204085735"

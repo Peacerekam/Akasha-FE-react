@@ -16,6 +16,27 @@
   height: 100px;
 }
 
+.profile-header-wrapper {
+  justify-content: center;
+
+  .profile-header {
+    flex: 1;
+    width: min(450px, 100% - 15px);
+    height: fit-content;
+    height: min-content;
+
+    .profile-highlights {
+      min-width: min(100%, 340px);
+    }
+  }
+  .vm-container  {
+    display: contents;
+    .vm-placement {
+      display: contents;
+    }
+  }
+}
+
 .custom-namecard-preview-wrapper {
   margin-top: 20px;
   margin-left: 20px;
@@ -325,7 +346,7 @@
       cursor: pointer;
       padding: 0 5px;
       filter: drop-shadow(0 0 3px #000);
-      
+
       &:hover {
         color: orange;
       }

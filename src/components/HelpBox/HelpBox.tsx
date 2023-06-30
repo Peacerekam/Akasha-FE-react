@@ -19,12 +19,15 @@ const helpBoxContents = {
 };
 
 export const HelpBox: React.FC<HelpBoxProps> = ({ page }) => {
-  const [isClosed, setIsClosed] = useState(true);
+  // const [isClosed, setIsClosed] = useState(true);
+  const [isClosed, setIsClosed] = useState(false);
 
   // read from local storage
   useEffect(() => {
-    const obj = JSON.parse(localStorage.getItem("helpBox") ?? "{}");
-    setIsClosed(!!obj[page]);
+    // const obj = JSON.parse(localStorage.getItem("helpBox") ?? "{}");
+    // setIsClosed(!!obj[page]);
+
+    setIsClosed(false)
   }, []);
 
   // save to local storage
@@ -53,13 +56,14 @@ export const HelpBox: React.FC<HelpBoxProps> = ({ page }) => {
   }
   return (
     <div className="relative block-highlight page-description-wrapper">
-      <div
+      {/* @TODO: bring back the funtionality later? */}
+      {/* <div
         className="help-box-btn close-help-box"
         onClick={handleToggleHelpBox}
         title="Close"
       >
         <FontAwesomeIcon icon={faX} size="1x" />
-      </div>
+      </div> */}
       <div className={isClosed ? "hide-help-box" : "open-help-box"}>
         {content}
       </div>

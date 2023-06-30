@@ -4,5 +4,5 @@ export * from "./AccountsPage";
 export * from "./ProfilePage";
 export * from "./LeaderboardsPage";
 export * from "./CategorySelectionPage";
-export * from "./DashboardPage";
-export * from "./UIDSearchPage";
+export * from "./_DashboardPage";
+export * from "./_UIDSearchPage";

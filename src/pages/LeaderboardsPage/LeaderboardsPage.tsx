@@ -616,8 +616,11 @@ export const LeaderboardsPage: React.FC = () => {
             hideOnDesktop
           />
 
-          <div className="relative other-calculations-display block-highlight highlight-tile-container">
-            {displayRelevantCategories}
+          <div  className="flex-special-container">
+            <AdsComponentManager adType="Video" />
+            <div className="relative other-calculations-display block-highlight highlight-tile-container">
+              {displayRelevantCategories}
+            </div>
           </div>
         </div>
 
@@ -646,6 +649,8 @@ export const LeaderboardsPage: React.FC = () => {
             <div key={`${currentCategory}${variant}`}>
               <CustomTable
                 fetchURL={FETCH_LEADERBOARDS_URL}
+                // @TODO: ?? wont work because of how I handle fetchParams.filter
+                // filtersURL={`${FETCH_CHARACTER_FILTERS_URL}?type=leaderboards`}
                 fetchParams={{
                   uids: uidsToQuery(lastProfiles.map((a) => a.uid)),
                   uid: lookupUID,
@@ -682,7 +687,6 @@ export const LeaderboardsPage: React.FC = () => {
           )}
         </div>
       </div>
-
     </div>
   );
 };
