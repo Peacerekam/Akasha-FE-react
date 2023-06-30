@@ -42,6 +42,15 @@ import { PreviewModal } from "./PreviewModal";
 import { applyModalBodyStyle, getRelativeCoords } from "../CustomTable/Filters";
 import "./style.scss";
 import { TeammatesCompact } from "../TeammatesCompact";
+import {
+  ELEMENT_TO_COLOR,
+  ELEMENT_TO_HUE,
+  calcStatVals,
+  handleLabel,
+  handleTitle,
+  scales,
+  toTalentProps,
+} from "./cardHelpers";
 
 ChartJS.register(...registerables);
 
@@ -59,82 +68,6 @@ type TalentProps = {
     rawLevel: number;
     icon?: string;
   };
-};
-
-export const ELEMENT_TO_COLOR = {
-  Pyro: "#f58453",
-  Electro: "#ffa1ff",
-  Anemo: "#71fdec",
-  Geo: "#ffc64a",
-  Cryo: "#98efff",
-  Dendro: "#a5ffab",
-  Hydro: "#56a2ff",
-} as any;
-
-const ELEMENT_TO_HUE = {
-  Pyro: 325,
-  Electro: 230,
-  Anemo: 120,
-  Geo: 375, // @TODO: ??
-  Cryo: 160,
-  Dendro: 65,
-  Hydro: 180,
-} as any;
-
-const getReadableStatText = (_statName: string) => {
-  const textMap: any = {
-    maxHp: "HP",
-    atk: "ATK",
-    def: "DEF",
-    elementalMastery: "EM",
-    energyRecharge: "ER%",
-    critRate: "Crit Rate",
-    critDamage: "Crit DMG",
-  };
-  return (
-    textMap[_statName] ||
-    (_statName.endsWith("DamageBonus")
-      ? `${_statName[0].toUpperCase()}${_statName
-          .slice(1, _statName.length)
-          .replace("DamageBonus", " DMG")}`
-      : _statName)
-  );
-};
-
-const calcStatVals = (_statName: string, reversed = false) => {
-  return (
-    {
-      atk: {
-        key: "maxATK",
-        value: (n: number) => n,
-      },
-      def: { key: "maxDEF", value: (n: number) => n },
-      maxHp: { key: "maxHP", value: (n: number) => n },
-      critDamage: {
-        key: "critDMG",
-        value: (n: number) => (reversed ? (n || 0) * 100 : (n || 0) / 100),
-      },
-      critRate: {
-        key: "critRate",
-        value: (n: number) => (reversed ? (n || 0) * 100 : (n || 0) / 100),
-      },
-      energyRecharge: {
-        key: "energyRecharge",
-        value: (n: number) =>
-          reversed ? (n || 0) * 100 : (100 + (n || 0)) / 100,
-      },
-    }[_statName] || {
-      key: _statName.endsWith("DamageBonus")
-        ? _statName.replace("DamageBonus", "DMG")
-        : _statName,
-      value: (n: number) =>
-        _statName.endsWith("DamageBonus")
-          ? reversed
-            ? (n || 0) * 100
-            : (n || 0) / 100
-          : n || 0,
-    }
-  );
 };
 
 const TalentDisplay: React.FC<TalentProps> = ({ talent }) => {
@@ -160,20 +93,6 @@ const TalentDisplay: React.FC<TalentProps> = ({ talent }) => {
       </div>
     </div>
   );
-};
-
-const toTalentProps = (row: any, keys: string[]) => {
-  const talent = row?.talentsLevelMap?.[keys[0]];
-  if (!talent) return null;
-
-  const assetKey = keys[1] || keys[0];
-  const asset = row.assets.talents[assetKey];
-  const icon = asset ? toEnkaUrl(asset) : talent.icon;
-
-  return {
-    ...talent,
-    icon,
-  };
 };
 
 export const CharacterCard: React.FC<CharacterCardProps> = ({
@@ -203,8 +122,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const backgroundPictureRef = useRef<HTMLImageElement>(null);
 
   const location = useLocation();
-  const DEBUG_MODE = location.search?.includes('debug');
-
+  const DEBUG_MODE = location.search?.includes("debug");
 
   const handleToggleModal = (event: React.MouseEvent<HTMLElement>) => {
     setShowPreviewModal((prev) => !prev);
@@ -252,11 +170,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   );
 
   useEffect(() => {
-    const _calculationId = calculationIds.slice(0, 1)
+    const _calculationId = calculationIds.slice(0, 1);
     setFilteredLeaderboards(_calculationId);
-    setSelectedCalculationId(_calculationId?.[0])
+    setSelectedCalculationId(_calculationId?.[0]);
   }, [calculationIds]);
-
 
   const displayCharts = useCallback(
     (chartData: any, calculationId: string) => {
@@ -315,6 +232,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           return numA > numB ? -1 : 1;
         })
         .slice(0, 5);
+
       const lowestDmg =
         sorted.length > 1 ? +sorted[sorted.length - 1].value : 0;
 
@@ -418,80 +336,37 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         ],
       };
 
+      const plugins = {
+        tooltip: {
+          enabled: generating ? false : true,
+          callbacks: {
+            title: handleTitle,
+            label: handleLabel,
+          },
+        },
+        legend: {
+          display: false,
+        },
+      };
+
+      const radarOptions = {
+        devicePixelRatio: 2,
+        plugins,
+        scales,
+        elements: {
+          point: {
+            hoverRadius: 3,
+            hoverBorderWidth: 1,
+          },
+          line: {
+            borderWidth: 2,
+          },
+        },
+      };
+
       return (
         <div className="chart-radar-wrapper">
-          <Radar
-            data={data}
-            options={{
-              devicePixelRatio: 2,
-              plugins: {
-                tooltip: {
-                  enabled: generating ? false : true,
-                  callbacks: {
-                    title: (arr: any) => {
-                      const obj = arr[0].dataset;
-                      if (!obj) return "";
-                      return `${obj.label}`;
-                    },
-                    label: (obj: any) => {
-                      if (!obj) return "";
-                      if (!obj.dataset) return "";
-
-                      const statName = getReadableStatText(obj.label);
-                      const calcStat = calcStatVals(obj.label, true);
-
-                      const calculatedVal = calcStat
-                        .value(obj.dataset.vals[obj.dataIndex])
-                        .toFixed(1);
-
-                      return `${statName}: ${calculatedVal}`;
-                    },
-                  },
-                },
-                legend: {
-                  display: false,
-                },
-              },
-              scales: {
-                r: {
-                  suggestedMin: 0,
-                  suggestedMax: 100,
-                  max: 120,
-                  ticks: {
-                    stepSize: 20,
-                    textStrokeColor: "transparent",
-                    color: "transparent",
-                    backdropColor: "transparent",
-                  },
-                  angleLines: {
-                    color: "rgba(255, 255, 255, 0.2)",
-                  },
-                  grid: {
-                    color: "rgba(255, 255, 255, 0.2)",
-                  },
-                  pointLabels: {
-                    color: "#e7f6f2",
-                    font: {
-                      family: "GenshinFont",
-                      size: 9,
-                    },
-                    callback: (statName, index) => {
-                      return getReadableStatText(statName);
-                    },
-                  },
-                },
-              },
-              elements: {
-                point: {
-                  hoverRadius: 3,
-                  hoverBorderWidth: 1,
-                },
-                line: {
-                  borderWidth: 2,
-                },
-              },
-            }}
-          />
+          <Radar data={data} options={radarOptions} />
         </div>
       );
     },
@@ -787,100 +662,94 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
   const getBuildId = (build: any) => `${build.characterId}${build.type}`;
 
+  const renderOptions = useCallback(
+    (calcId: any) => {
+      const c = calculations[calcId];
+      if (!c) {
+        return {
+          label: (
+            <span
+              style={{ marginLeft: 5 }}
+              className="react-select-custom-option"
+            >
+              Don't show any ranking
+            </span>
+          ),
+          rawLabel: "Don't show any ranking",
+          value: "hide",
+          fieldKey: "hide",
+          top: -1,
+          priority: -1,
+        };
+      }
+      const leaveOnlyNumbersRegex = /\D+/g;
+      const _ranking = +(c.ranking + "")?.replace(leaveOnlyNumbersRegex, "");
+      const _top = c.ranking
+        ? `${Math.min(100, Math.ceil((_ranking / c.outOf) * 100)) || "?"}%`
+        : "";
+
+      const shorterName =
+        c.name.length > 85 ? `${c.name.slice(0, 82)}...` : c.name;
+
+      const label = (
+        <>
+          <span className="react-select-custom-option">
+            <span className="for-dropdown">
+              <WeaponMiniDisplay
+                icon={c.weapon.icon}
+                refinement={c.weapon.refinement}
+              />
+              <div
+                style={{
+                  width: 150,
+                  whiteSpace: "nowrap",
+                  textOverflow: "ellipsis",
+                  overflow: "hidden",
+                }}
+              >
+                {c.weapon.name}
+              </div>
+              <div style={{ width: 60 }}>top {_top}</div>
+              {c.variant?.displayName
+                ? `(${c.variant?.displayName}) `
+                : ""}{" "}
+              {shorterName}
+            </span>
+            <span className="for-pills">
+              <img src={c.weapon.icon} />
+              {c.weapon.name} - top {_top}{" "}
+              {c.variant?.displayName ? `(${c.variant?.displayName}) ` : " "}
+              {c.short}
+            </span>
+          </span>
+        </>
+      );
+
+      const rawLabel = `top ${_top} ${c.weapon.name} R${c.weapon.refinement} ${
+        c.name
+      }${c.variant?.displayName ? ` ${c.variant?.displayName}` : ""}`;
+
+      const thisOpt = {
+        label,
+        rawLabel,
+        value: calcId,
+        fieldKey: calcId,
+        top: _ranking / c.outOf,
+        priority: c.priority,
+      };
+
+      return thisOpt;
+    },
+    [calculations]
+  );
+
   const calcOptions = useMemo(
     () =>
       calculations && Object.keys(calculations).length > 0
-        ? ["", ...Object.keys(calculations)]
-            .map((calcId: any) => {
-              const c = calculations[calcId];
-              if (!c) {
-                return {
-                  label: (
-                    <span
-                      style={{ marginLeft: 5 }}
-                      className="react-select-custom-option"
-                    >
-                      Don't show any ranking
-                    </span>
-                  ),
-                  rawLabel: "Don't show any ranking",
-                  value: "hide",
-                  fieldKey: "hide",
-                  top: -1,
-                  priority: -1,
-                };
-              }
-              const leaveOnlyNumbersRegex = /\D+/g;
-              const _ranking = +(c.ranking + "")?.replace(
-                leaveOnlyNumbersRegex,
-                ""
-              );
-              const _top = c.ranking
-                ? `${
-                    Math.min(100, Math.ceil((_ranking / c.outOf) * 100)) || "?"
-                  }%`
-                : "";
-
-              const shorterName =
-                c.name.length > 85 ? `${c.name.slice(0, 82)}...` : c.name;
-
-              const label = (
-                <>
-                  <span className="react-select-custom-option">
-                    <span className="for-dropdown">
-                      <WeaponMiniDisplay
-                        icon={c.weapon.icon}
-                        refinement={c.weapon.refinement}
-                      />
-                      <div
-                        style={{
-                          width: 150,
-                          whiteSpace: "nowrap",
-                          textOverflow: "ellipsis",
-                          overflow: "hidden",
-                        }}
-                      >
-                        {c.weapon.name}
-                      </div>
-                      <div style={{ width: 60 }}>top {_top}</div>
-                      {c.variant?.displayName
-                        ? `(${c.variant?.displayName}) `
-                        : ""}{" "}
-                      {shorterName}
-                    </span>
-                    <span className="for-pills">
-                      <img src={c.weapon.icon} />
-                      {c.weapon.name} - top {_top}{" "}
-                      {c.variant?.displayName
-                        ? `(${c.variant?.displayName}) `
-                        : " "}
-                      {c.short}
-                    </span>
-                  </span>
-                </>
-              );
-
-              const rawLabel = `top ${_top} ${c.weapon.name} R${
-                c.weapon.refinement
-              } ${c.name}${
-                c.variant?.displayName ? ` ${c.variant?.displayName}` : ""
-              }`;
-
-              const thisOpt = {
-                label,
-                rawLabel,
-                value: calcId,
-                fieldKey: calcId,
-                top: _ranking / c.outOf,
-                priority: c.priority,
-              };
-
-              return thisOpt;
-            })
-            .sort((a, b) => {
-              // return b.priority - a.priority || a.top - b.top;
-              return a.top > b.top ? 1 : -1;
-            })
+        ? ["", ...Object.keys(calculations)].map(renderOptions).sort((a, b) => {
+            // return b.priority - a.priority || a.top - b.top;
+            return a.top > b.top ? 1 : -1;
+          })
         : [],
     [calculations]
   );
@@ -1105,7 +974,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         toggleModal={handleToggleModal}
         blob={imagePreviewBlob}
       />
-      <div className={`card-wrapper relative ${DEBUG_MODE ? "debug" : ""}`} style={wrapperStyle}>
+      <div
+        className={`card-wrapper relative ${DEBUG_MODE ? "debug" : ""}`}
+        style={wrapperStyle}
+      >
         <div id={getBuildId(row)} className="html-to-image-target">
           {cardContainer}
         </div>

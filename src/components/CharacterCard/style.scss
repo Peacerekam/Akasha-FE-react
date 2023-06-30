@@ -45,6 +45,17 @@
 }
 
 .debug {
+  // svg,
+  img {
+    display: none !important;
+  }
+  * {
+    filter: none !important;
+    box-shadow: none !important;
+    mask-image: none !important;
+    background: transparent !important;
+    background-image: transparent !important;
+  }
   .elemental-bg {
     > div {
       filter: none !important;
