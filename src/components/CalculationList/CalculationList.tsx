@@ -101,7 +101,7 @@ export const CalculationList: React.FC<CalculationListProps> = ({
               </td>
               <td>{weapon?.name}</td>
               <td>
-                <TeammatesCompact teammates={teammates} />
+                <TeammatesCompact teammates={teammates} simplify />
               </td>
               <td>{variant?.displayName}</td>
               <td>

@@ -1,5 +1,4 @@
-import axios from "axios";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useRef, useEffect } from "react";
 
 import {
   getArtifactsInOrder,
@@ -11,13 +10,96 @@ import {
 } from "../../utils/helpers";
 import { REAL_SUBSTAT_VALUES, STAT_NAMES } from "../../utils/substats";
 import { RollList } from "../RollList";
-import { Spinner } from "../Spinner";
 import { StatIcon } from "../StatIcon";
 import "./style.scss";
 
 type ArtifactListCompactProps = {
   row: any;
   artifacts: any[];
+};
+
+export const ArtifactOnCanvas: React.FC<{ icon: string }> = ({ icon }) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  const canvasWidth = 180;
+  const canvasHeight = 180;
+  const canvasPixelDensity = 2;
+
+  useEffect(() => {
+    if (!canvasRef.current) return;
+    const ctx = canvasRef.current.getContext("2d");
+    ctx!.scale(canvasPixelDensity, canvasPixelDensity);
+
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.src = icon;
+
+    img.onload = () => {
+      if (!canvasRef.current) return;
+
+      // Once the image is loaded, we will get the width & height of the image
+      // let loadedImageWidth = img.width;
+      // let loadedImageHeight = img.height;
+
+      // get the scale
+      // it is the min of the 2 ratios
+      const scaleFactor = Math.max(
+        canvasWidth / img.width,
+        canvasHeight / img.height
+      );
+
+      // Finding the new width and height based on the scale factor
+      const newWidth = img.width * scaleFactor;
+      const newHeight = img.height * scaleFactor;
+
+      // get the top left position of the image
+      // in order to center the image within the canvas
+      const x = canvasWidth / 2 - newWidth / 2;
+      const y = canvasHeight / 2 - newHeight / 2;
+
+      // get canvas context
+      const ctx = canvasRef.current.getContext("2d");
+
+      // Create gradient
+      const gradientMask = ctx!.createLinearGradient(
+        canvasWidth - 100,
+        0,
+        canvasWidth - 40,
+        0
+      );
+      gradientMask.addColorStop(0, "black");
+      gradientMask.addColorStop(1, "transparent");
+
+      // mask-image: linear-gradient(to right, black 45%, transparent 100%);
+
+      // clear canvas
+      ctx!.globalCompositeOperation = "source-out";
+      ctx!.clearRect(0, 0, canvasWidth, canvasHeight);
+
+      // Fill with gradient
+      ctx!.fillStyle = gradientMask;
+      ctx!.fillRect(0, 0, canvasWidth, canvasHeight);
+
+      ctx!.globalCompositeOperation = "source-in";
+      ctx!.drawImage(img, x, y, newWidth, newHeight);
+    };
+
+  }, [canvasRef]);
+  
+  // return <img className="compact-artifact-icon" src={icon} />;
+
+  return (
+    <canvas
+      className="compact-artifact-icon"
+      height={canvasHeight * canvasPixelDensity}
+      width={canvasWidth * canvasPixelDensity}
+      style={{
+        width: canvasWidth,
+        height: canvasHeight,
+      }}
+      ref={canvasRef}
+  />
+  )
 };
 
 export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
@@ -60,7 +142,7 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
               className={`flex compact-artifact ${className}`}
             >
               <div className="compact-artifact-icon-container">
-                <img className="compact-artifact-icon" src={artifact.icon} />
+                <ArtifactOnCanvas icon={artifact.icon} />
                 <span className="compact-artifact-crit-value">
                   <span>{Math.round(artifact.critValue * 10) / 10} cv</span>
                 </span>

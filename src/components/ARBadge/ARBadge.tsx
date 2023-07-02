@@ -11,5 +11,12 @@ export const ARBadge: React.FC<ARBadgeProps> = ({ adventureRank }) => {
     ? `ar-${Math.floor(roundedAR / 5) * 5}-badge`
     : "ar-60-badge";
 
-  return <span className={`ar-badge ${className}`}>AR{roundedAR ?? " ?"}</span>;
+  return (
+    <span
+      title={`Adventure Rank: ${roundedAR}`}
+      className={`ar-badge ${className}`}
+    >
+      AR{roundedAR ?? " ?"}
+    </span>
+  );
 };

@@ -209,7 +209,11 @@ export const CategorySelectionPage: React.FC = () => {
         sortable: false,
         cell: (row) => {
           return (
-            <TeammatesCompact teammates={row.weapons[0].teammates} scale={1} />
+            <TeammatesCompact
+              teammates={row.weapons[0].teammates}
+              scale={1}
+              simplify
+            />
           );
         },
       },

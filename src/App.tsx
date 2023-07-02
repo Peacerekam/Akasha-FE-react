@@ -43,7 +43,7 @@ const urls = {
 };
 
 export const showAds = true;
-export const isProduction = false;
+export const isProduction = true;
 export const BASENAME = "/";
 const MAINTENANCE_MODE = false;
 
@@ -92,8 +92,8 @@ const App = () => {
     return (
       <LastProfilesContextProvider>
         <BrowserRouter basename={BASENAME}>
-          {/* <NotificationBar /> */}
           <div id="top-of-the-page">
+            {/* <NotificationBar /> */}
             <Navbar />
           </div>
           <NavbarTabs />
@@ -128,12 +128,12 @@ const App = () => {
           <AdProviderContextProvider>
             {/* <MobileStickyBar /> */}
             <div id="top-of-the-page">
-              <NotificationBar />
+              {/* <NotificationBar /> */}
               <Navbar />
             </div>
             <NavbarTabs />
 
-            <div className="flex-special-container mt-20">
+            <div className="flex-special-container mt-10">
               <AdsComponentManager
                 adType="LeaderboardATF"
                 dataAdSlot="6204085735"
@@ -198,7 +198,6 @@ const App = () => {
               />
               <AdsComponentManager adType="RichMedia" />
             </div>
-            
           </AdProviderContextProvider>
         </BrowserRouter>
       </SessionDataContextProvider>

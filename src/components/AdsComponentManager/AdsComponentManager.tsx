@@ -17,6 +17,14 @@ export const AdsComponentManager: React.FC<AdsComponentManagerProps> = (
   const { profileObject } = useContext(SessionDataContext);
   const { adProvider, reloadAds, adsDisabled } = useContext(AdProviderContext);
 
+  // console.log({
+  //   adProvider,
+  //   reloadAds,
+  //   adsDisabled,
+  //   profileObject,
+  //   "return null?": (!showAds || reloadAds || adsDisabled || profileObject.isPatreon)
+  // });
+
   if (!showAds || reloadAds || adsDisabled || profileObject.isPatreon) {
     return <></>;
   }

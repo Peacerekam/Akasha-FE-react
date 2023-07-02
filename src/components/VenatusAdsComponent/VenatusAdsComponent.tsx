@@ -37,7 +37,7 @@ export default class VenatusAdsComponent extends React.Component<
       (window as any).__vm_add = (window as any).__vm_add || [];
       (window as any).__vm_add.push(this.adRef.current);
       console.log(`%c   > ${adType}: VM_ADD `, "color: green");
-      // console.log(this.adRef.current);
+      console.log(this.adRef.current);
     } else {
       console.log(`%c   > ${adType}: .........`, "color: green");
     }
@@ -53,14 +53,14 @@ export default class VenatusAdsComponent extends React.Component<
 
     if (adType === "RichMedia") {
       console.log(`%c   > ${adType}: VM_REMOVE_CATEGORY `, "color: red");
-      // console.log(this.adRef.current);
+      console.log(this.adRef.current);
       (window as any).top.__vm_remove_category = ["richmedia_all"];
       return;
     } else if (adType !== "Video") {
       (window as any).top.__vm_remove = (window as any).top.__vm_remove || [];
       (window as any).top.__vm_remove.push(this.adRef.current);
       console.log(`%c   > ${adType}: VM_REMOVE `, "color: red");
-      // console.log(this.adRef.current);
+      console.log(this.adRef.current);
     } else {
       console.log(`%c   > ${adType}: .........`, "color: red");
     }

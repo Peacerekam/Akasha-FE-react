@@ -601,7 +601,7 @@ export const LeaderboardsPage: React.FC = () => {
                     <div>Team:</div>
                     <TeammatesCompact
                       teammates={thisWeaponCalc?.teammates}
-                      scale={2}
+                      scale={2.75}
                     />
                   </div>
                 </div>

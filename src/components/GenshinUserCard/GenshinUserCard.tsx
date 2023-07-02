@@ -2,9 +2,19 @@ import React from "react";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Spinner } from "../Spinner";
-import "./style.scss";
 import { ARBadge } from "../ARBadge";
 import { RegionBadge } from "../RegionBadge";
+import { AchievementsBadge } from "../AchievementsBadge";
+import "./style.scss";
+
+type AkashaAchievement = {
+  id: number;
+  score: number;
+  type: string; 
+  name: string;	
+  description: string;	
+  count: number;	
+}
 
 export type AccountDataForUserCard = {
   uid: string;
@@ -15,7 +25,9 @@ export type AccountDataForUserCard = {
     level?: number;
     nickname?: string;
     signature?: string;
+    finishAchievementNum?: number;
   };
+  achievements?: AkashaAchievement[]
 };
 
 type GenshinUserCardProps = {
@@ -88,6 +100,7 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
         </div>
         <div className="float-top-right">
           <RegionBadge region={playerInfo.region} />
+          <AchievementsBadge count={playerInfo.finishAchievementNum} />
           <ARBadge adventureRank={playerInfo.level} />
         </div>
       </div>

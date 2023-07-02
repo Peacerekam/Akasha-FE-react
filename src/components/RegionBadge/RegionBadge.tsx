@@ -10,6 +10,6 @@ export const RegionBadge: React.FC<RegionBadgeProps> = ({ region }) => {
     : "unknown-badge";
 
   return (
-    <span className={`region-badge ${className}`}>{region || "-"}</span>
+    <span title={`Region: ${region}`} className={`region-badge ${className}`}>{region || "-"}</span>
   );
 };

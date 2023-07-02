@@ -138,68 +138,77 @@
   bottom: calc(var(--artifact-width) / 70);
 }
 
-@keyframes cyanGlow {
-  100%,
-  0% {
-    box-shadow: 0 0 0 1px cyan, 0 0 8px 3px cyan;
-    // filter: contrast(1.2);
-    // transform: scale(1.045);
-  }
-  50% {
-    box-shadow: 0 0 0 1px cyan, 0 0 8px 3px rgba(0, 255, 255, 0.247);
-    // filter: contrast(1);
-    // transform: scale(1);
-  }
-}
+// @keyframes cyanGlow {
+//   100%,
+//   0% {
+//     box-shadow: 0 0 0 1px cyan, 0 0 8px 3px cyan;
+//     // filter: contrast(1.2);
+//     // transform: scale(1.045);
+//   }
+//   50% {
+//     box-shadow: 0 0 0 1px cyan, 0 0 8px 3px rgba(0, 255, 255, 0.247);
+//     // filter: contrast(1);
+//     // transform: scale(1);
+//   }
+// }
 
 .unicorn-artifact {
-  // box-shadow: 0 0 0 1px cyan, 0 0 10px 1px cyan;
-  animation: cyanGlow 2s infinite;
+  box-shadow: 0 0 0 1px cyan, 0 0 0px 3px rgba(cyan, 0.5),
+    0 0 0px 5px rgba(cyan, 0.25);
+  // animation: cyanGlow 2s infinite;
   .compact-artifact-crit-value {
     color: cyan;
   }
 }
 
-@keyframes bloodGlow {
-  100%,
-  0% {
-    box-shadow: 0 0 0 1px red, 0 0 8px 3px red;
-  }
-  50% {
-    box-shadow: 0 0 0 1px red, 0 0 8px 3px rgba(red, 0.247);
-  }
-}
+// @keyframes bloodGlow {
+//   100%,
+//   0% {
+//     box-shadow: 0 0 0 1px red, 0 0 8px 3px red;
+//   }
+//   50% {
+//     box-shadow: 0 0 0 1px red, 0 0 8px 3px rgba(red, 0.247);
+//   }
+// }
 
 .wtf-artifact {
-  animation: bloodGlow 2s infinite;
+  // animation: bloodGlow 2s infinite;
+  box-shadow: 0 0 0 1px red, 0 0 0px 3px rgba(red, 0.5),
+    0 0 0px 5px rgba(red, 0.25);
   .compact-artifact-crit-value {
     color: red;
   }
 }
 
 .upper-diamond-artifact {
-  box-shadow: 0 0 0 1px rgb(255, 217, 0), 0 0 8px 3px rgba(255, 217, 0, 0.623);
+  // box-shadow: 0 0 0 1px rgb(255, 217, 0), 0 0 8px 3px rgba(255, 217, 0, 0.623);
+  box-shadow: 0 0 0 1px rgba(255, 217, 0, 1), 0 0 0px 3px rgba(255, 217, 0, 0.5),
+    0 0 0px 5px rgba(255, 217, 0, 0.25);
   .compact-artifact-crit-value {
     color: rgb(255, 217, 0);
   }
 }
 
 .diamond-artifact {
-  box-shadow: 0 0 0 1px orange, 0 0 4px 2px rgba(orange, 0.623);
+  // box-shadow: 0 0 0 1px orange, 0 0 4px 2px rgba(orange, 0.623);
+  box-shadow: 0 0 0 1px rgba(orange, 1), 0 0 0px 3px rgba(orange, 0.5),
+    0 0 0px 5px rgba(orange, 0.25);
   .compact-artifact-crit-value {
     color: orange;
   }
 }
 
 .good-artifact {
-  box-shadow: 0 0 0 1px rgb(194, 102, 255);
+  // box-shadow: 0 0 0 1px rgb(194, 102, 255);
+  box-shadow: 0 0 0 1px rgba(194, 102, 255, 1), 0 0 0px 3px rgba(194, 102, 255, 0.5);
   .compact-artifact-crit-value {
     color: rgb(194, 102, 255);
   }
 }
 
 .ok-artifact {
-  box-shadow: 0 0 0 1px rgb(102, 163, 255);
+  // box-shadow: 0 0 0 1px rgb(102, 163, 255);
+  box-shadow: 0 0 0 1px rgba(102, 163, 255, 1), 0 0 0px 3px rgba(102, 163, 255, 0.5);
   .compact-artifact-crit-value {
     color: rgb(102, 163, 255);
   }

@@ -8,13 +8,13 @@
 
   .compact-artifact-icon-container {
     width: 100px;
-    height: 130px;
+    height: 135px;
     display: flex;
     justify-content: center;
     align-items: center;
     margin-right: 10px;
     position: relative;
-    mask-image: linear-gradient(to right, black 45%, transparent 100%);
+    // mask-image: linear-gradient(to right, black 45%, transparent 100%);
     .compact-artifact-icon {
       width: 180px;
       height: 180px;
@@ -24,7 +24,7 @@
       border-radius: 6px;
       padding: 3px 5px;
       position: absolute;
-      top: 2px;
+      top: 3px;
       left: 3px;
       font-size: 12px;
     }
@@ -39,7 +39,7 @@
       z-index: 3;
       color: white;
       left: -2px;
-      bottom: -2px;
+      bottom: 1px;
       transform: scale(0.85);
       .stat-icon {
         width: 22px;
@@ -104,7 +104,7 @@
         }
       }
       &.active-rv {
-        box-shadow: 0 0 0 1px orange, 0 0 5px 1px rgba(orange, 0.5);
+        box-shadow: 0 0 0 1px orange, 0 0 0px 3px rgba(orange, 0.5);
       }
       span {
         display: flex;

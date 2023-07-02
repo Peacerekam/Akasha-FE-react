@@ -10,14 +10,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import {
-  CalculationList,
   StatIcon,
   Spinner,
   Pagination,
-  ArtifactListCompact,
   GenshinUserCard,
   WeaponMiniDisplay,
-  CharacterCard,
   TeammatesCompact,
 } from "../../components";
 import {
@@ -674,7 +671,9 @@ export const CustomTable: React.FC<CustomTableProps> = ({
           projectParamsToPath={projectParamsToPath}
         />
       )}
-      <PerfectScrollbar options={{}}>
+      <PerfectScrollbar options={{
+        suppressScrollY: true,
+      }}>
         <table className={tableClassNames} cellSpacing={0}>
           <thead>
             <tr>{renderHeaders}</tr>

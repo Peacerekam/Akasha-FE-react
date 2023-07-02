@@ -4,9 +4,18 @@ import "./style.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { SizeProp } from "@fortawesome/fontawesome-svg-core";
-import FlexIcon from "../../assets/icons/world-quest.webp";
 import { shadeColor } from "../../utils/helpers";
 import { ELEMENT_TO_COLOR } from "../CharacterCard/cardHelpers";
+
+import FlexIcon from "../../assets/icons/world-quest.webp";
+
+import AnemoBg from "../../assets/images/teammates/anemo-team-bg.png";
+import CryoBg from "../../assets/images/teammates/cryo-team-bg.png";
+import DendroBg from "../../assets/images/teammates/dendro-team-bg.png";
+import ElectroBg from "../../assets/images/teammates/electro-team-bg.png";
+import GeoBg from "../../assets/images/teammates/geo-team-bg.png";
+import HydroBg from "../../assets/images/teammates/hydro-team-bg.png";
+import PyroBg from "../../assets/images/teammates/pyro-team-bg.png";
 
 export type Elements =
   | "Cryo"
@@ -39,6 +48,7 @@ type TeammatesCompactProps = {
   teammates?: CalculationTeammate[];
   scale?: number;
   coloredBackground?: boolean;
+  simplify?: boolean;
 };
 
 const getCharacterTitle = (teammate: CalculationTeammate) => {
@@ -111,10 +121,28 @@ const getBgColor = (teammate: CalculationTeammate) => {
   return [colorsByRarity, "transparent"];
 };
 
+const getBgImage = (teammate: CalculationTeammate) => {
+  const bgImages = {
+    Anemo: AnemoBg,
+    Cryo: CryoBg,
+    Dendro: DendroBg,
+    Electro: ElectroBg,
+    Geo: GeoBg,
+    Hydro: HydroBg,
+    Pyro: PyroBg,
+    "": "",
+  };
+
+  const element = teammate?.character?.element || "";
+
+  return bgImages[element];
+};
+
 export const TeammatesCompact: React.FC<TeammatesCompactProps> = ({
   teammates,
   scale = 1,
   coloredBackground = true,
+  simplify = false,
 }) => {
   if (!teammates) return null;
 
@@ -141,6 +169,15 @@ export const TeammatesCompact: React.FC<TeammatesCompactProps> = ({
   };
 
   const renderTeammate = (teammate: CalculationTeammate, index: number) => {
+    // @DEBUG
+    // teammate = {
+    //   character: {
+    //     name: "zzz",
+    //     icon: "",
+    //     element: "Anemo"
+    //   }
+    // }
+
     const isEmpty = teammate.character?.name === "x";
     const isFlex = teammate.character?.name === "Flex";
     const isNonFill = teammate.character?.icon;
@@ -160,6 +197,7 @@ export const TeammatesCompact: React.FC<TeammatesCompactProps> = ({
     } else {
       title = `Any ${teammate.character?.element} teammate`;
       innerElement = <StatIcon name={teammate.character?.element || ""} />;
+      // innerElement = <div className="table-icon" />
     }
 
     const teammateStyle = (
@@ -170,6 +208,7 @@ export const TeammatesCompact: React.FC<TeammatesCompactProps> = ({
             "--teammate-inner-shadow": getBgColor(teammate)[2] || "transparent",
             "--teammate-rarity": getBgColor(teammate)[3],
             "--teammate-bg-darker": getBgColor(teammate)[4],
+            "--teammate-bg-image": `url(${getBgImage(teammate)})`,
           }
         : {}
     ) as React.CSSProperties;
@@ -186,7 +225,7 @@ export const TeammatesCompact: React.FC<TeammatesCompactProps> = ({
       >
         {innerElement}
         <div className="teammate-bg" />
-        {isNonFill && constellation ? (
+        {!simplify && isNonFill && constellation ? (
           <div className="teammate-const-overlay">
             {constellation}
             {constellation !== 6 ? <FontAwesomeIcon icon={faPlus} /> : null}
@@ -194,28 +233,30 @@ export const TeammatesCompact: React.FC<TeammatesCompactProps> = ({
         ) : (
           ""
         )}
-        <div className="overlay-icons-container">
-          {isNonFill && teammate.weapon?.icon ? (
-            <div className="overlay-weapon-wrapper">
-              <img
-                className="table-icon overlay-icon"
-                src={teammate.weapon?.icon}
-              />
-            </div>
-          ) : (
-            ""
-          )}
-          {isNonFill && teammate.character?.artifactSet ? (
-            <div className="overlay-artifact-wrapper">
-              <img
-                className="table-icon overlay-icon"
-                src={teammate.character?.artifactSetIcon}
-              />
-            </div>
-          ) : (
-            ""
-          )}
-        </div>
+        {!simplify && (
+          <div className="overlay-icons-container">
+            {isNonFill && teammate.weapon?.icon ? (
+              <div className="overlay-weapon-wrapper">
+                <img
+                  className="table-icon overlay-icon"
+                  src={teammate.weapon?.icon}
+                />
+              </div>
+            ) : (
+              ""
+            )}
+            {isNonFill && teammate.character?.artifactSet ? (
+              <div className="overlay-artifact-wrapper">
+                <img
+                  className="table-icon overlay-icon"
+                  src={teammate.character?.artifactSetIcon}
+                />
+              </div>
+            ) : (
+              ""
+            )}
+          </div>
+        )}
       </div>
     );
   };

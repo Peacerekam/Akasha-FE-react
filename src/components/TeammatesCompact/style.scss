@@ -56,7 +56,7 @@
     .no-teammate-fill-img,
     .span,
     .flex-fill-img,
-    .table-icon,
+    > .table-icon,
     .stat-icon {
       z-index: 2;
       position: relative;
@@ -69,8 +69,6 @@
       overflow: hidden;
       border: 1px solid var(--teammate-border);
       box-sizing: border-box;
-      box-shadow: inset 0 0 calc(var(--teammate-scale) * 15px)
-        var(--teammate-inner-shadow);
 
       // $border-size: 0px;
       // box-shadow: inset $border-size $border-size 1px var(--teammate-border),
@@ -78,14 +76,18 @@
       //   inset (-($border-size)) $border-size 1px var(--teammate-border),
       //   inset (-($border-size)) (-($border-size)) 1px var(--teammate-border);
 
-      filter: drop-shadow(
-        0 0 calc(var(--teammate-scale) * 2px) rgba(black, 0.5)
-      );
+      // filter: drop-shadow(
+      //   0 0 calc(var(--teammate-scale) * 2px) rgba(black, 0.5)
+      // );
 
       &.stat-icon {
         padding: calc(var(--teammate-scale) * 1.5px);
-        filter: drop-shadow(0 0 calc(var(--teammate-scale) * 2px) black)
-          brightness(1.1);
+        box-shadow: inset 0 0 calc(var(--teammate-scale) * 15px)
+          var(--teammate-inner-shadow);
+        // filter: drop-shadow(0 0 calc(var(--teammate-scale) * 2px) black)
+        //   brightness(1.1);
+        background-image: var(--teammate-bg-image);
+        background-size: cover;
       }
       &.no-teammate-fill-img {
         color: rgb(255, 123, 123);
@@ -146,15 +148,24 @@
         bottom: calc(var(--teammate-scale) * -5px);
       }
 
+      overflow: hidden;
+      border: 1px solid var(--teammate-border);
+      height: calc(var(--teammate-scale) * 13px - 1.5px);
+      width: calc(var(--teammate-scale) * 13px - 1.5px);
+
       img.overlay-icon {
-        width: calc(var(--teammate-scale) * 13px);
-        height: calc(var(--teammate-scale) * 13px);
+        position: relative;
+        top: calc(-4px + var(--teammate-scale) * 2px);
+        width: calc(var(--teammate-scale) * 12px);
+        height: calc(var(--teammate-scale) * 12px);
         background-size: 120%;
         object-fit: contain;
-        filter: drop-shadow(0 0 2px black);
-
+        
+        // filter: drop-shadow(0 0 2px black);
         // border-radius: 100%;
         // border-color: var(--teammate-rarity);
+        $blackish: rgba(black, 0.45);
+        filter: drop-shadow(1px 1px 0 $blackish) drop-shadow(-1px -1px 0 $blackish);
       }
     }
     .teammate-const-overlay {
@@ -174,7 +185,12 @@
       display: flex;
       justify-content: center;
 
-      filter: drop-shadow(0 0 3px black) drop-shadow(0 0 2px rgba(black, 0.5)) drop-shadow(0 0 1px black);
+      text-shadow: 0 0 calc(var(--teammate-scale) * 2px) black,
+        0 0 calc(var(--teammate-scale) * 5px) black,
+        0 0 calc(var(--teammate-scale) * 5px) black,
+        0 0 calc(var(--teammate-scale) * 5px) black;
+      // filter: drop-shadow(0 0 3px black) drop-shadow(0 0 2px rgba(black, 0.5))
+      //   drop-shadow(0 0 1px black);
 
       svg {
         width: 10px;

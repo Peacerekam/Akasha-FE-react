@@ -14,8 +14,10 @@ import {
   RegionBadge,
   ARBadge,
   HelpBox,
+  AchievementsBadge,
 } from "../../components";
 import { TableColumn } from "../../types/TableColumn";
+import Achievevement from "../../assets/icons/Achievement.webp";
 import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
 import {
   FETCH_ACCOUNTS_FILTERS_URL,
@@ -117,7 +119,19 @@ export const AccountsPage: React.FC = () => {
           const finishAchievementNum =
             Math.round(row.playerInfo?.finishAchievementNum) ?? 0;
 
-          return <div>{finishAchievementNum}</div>;
+          return (
+            // <div>
+            //   <AchievementsBadge count={finishAchievementNum} />
+            // </div>
+            <div style={{ display: "flex", gap: 3 }}>
+              <img
+                style={{ width: 20 }}
+                alt="Achievements"
+                src={Achievevement}
+              />
+              {finishAchievementNum}
+            </div>
+          );
         },
       },
       {
@@ -127,7 +141,11 @@ export const AccountsPage: React.FC = () => {
         width: "120px",
         cell: (row) => {
           const ownedCharacters = row?.ownedCharacters || "";
-          return <div>{ownedCharacters?.length}</div>;
+          return (
+            <div style={{ color: ownedCharacters?.length === 0 ? "gray" : "" }}>
+              {ownedCharacters?.length || "-"}
+            </div>
+          );
         },
       },
       {

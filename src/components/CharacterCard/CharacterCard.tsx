@@ -40,7 +40,6 @@ import RarityStar from "../../assets/images/star.png";
 import FriendshipIcon from "../../assets/icons/Item_Companionship_EXP.webp";
 import { PreviewModal } from "./PreviewModal";
 import { applyModalBodyStyle, getRelativeCoords } from "../CustomTable/Filters";
-import "./style.scss";
 import { TeammatesCompact } from "../TeammatesCompact";
 import {
   ELEMENT_TO_COLOR,
@@ -51,6 +50,8 @@ import {
   scales,
   toTalentProps,
 } from "./cardHelpers";
+import "./style.scss";
+import { ArtifactOnCanvas } from "../ArtifactListCompact";
 
 ChartJS.register(...registerables);
 
@@ -120,6 +121,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
   const uploadPictureInputRef = useRef<HTMLInputElement>(null);
   const backgroundPictureRef = useRef<HTMLImageElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  const canvasWidth = 500;
+  const canvasHeight = 485;
+  const canvasPixelDensity = 2;
 
   const location = useLocation();
   const DEBUG_MODE = location.search?.includes("debug");
@@ -142,6 +148,13 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       window.removeEventListener("resize", handleWindowSizeChange);
     };
   }, []);
+
+  useEffect(() => {
+    if (!canvasRef.current || !backgroundPictureRef.current) return;
+    const ctx = canvasRef.current.getContext("2d");
+    ctx!.scale(canvasPixelDensity, canvasPixelDensity);
+    paintImageToCanvas(backgroundPictureRef.current.src, "gacha");
+  }, [canvasRef, backgroundPictureRef]);
 
   const calculationIds = useMemo(
     () =>
@@ -486,7 +499,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             >
               <div className="compact-artifact-bg" />
               <div className="compact-artifact-icon-container">
-                <img className="compact-artifact-icon" src={artifact.icon} />
+                <ArtifactOnCanvas icon={artifact.icon} />
                 <span className="compact-artifact-crit-value">
                   <span>{Math.round(artifact.critValue * 10) / 10} cv</span>
                 </span>
@@ -552,6 +565,72 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const artifactsDiv =
     reorderedArtifacts.length > 0 ? compactList : "no artifacts equipped";
 
+  const paintImageToCanvas = (result: string, mode?: string) => {
+    const img = backgroundPictureRef?.current;
+    if (!img) return;
+
+    img.crossOrigin = "anonymous";
+    img.src = result + "";
+
+    img.onload = () => {
+      if (!canvasRef.current) return;
+
+      // Once the image is loaded, we will get the width & height of the image
+
+      const imageWidth = img.width;
+      const imageHeight = img.height;
+
+      // width    2048
+      // height   1024
+
+      const _canvasWidth = mode === "gacha" ? canvasWidth * 1.55 : canvasWidth;
+      const _canvasHeight =
+        mode === "gacha" ? canvasHeight * 1.55 : canvasHeight;
+
+      // get the scale
+      // it is the min of the 2 ratios
+      const scaleFactor = Math.max(
+        _canvasWidth / imageWidth,
+        _canvasHeight / imageHeight
+      );
+
+      // Finding the new width and height based on the scale factor
+      const newWidth = imageWidth * scaleFactor;
+      const newHeight = imageHeight * scaleFactor;
+
+      // get canvas context
+      const ctx = canvasRef.current.getContext("2d");
+
+      // Create gradient
+      const gradientMask = ctx!.createLinearGradient(
+        canvasWidth - 101,
+        0,
+        canvasWidth - 1,
+        0
+      );
+      gradientMask.addColorStop(0, "black");
+      gradientMask.addColorStop(1, "transparent");
+
+      // clear canvas
+      ctx!.globalCompositeOperation = "source-out";
+      ctx!.clearRect(0, 0, canvasWidth, canvasHeight);
+
+      // Fill with gradient
+      ctx!.fillStyle = gradientMask;
+      ctx!.fillRect(0, 0, canvasWidth, canvasHeight);
+
+      // get the top left position of the image
+      // in order to center the image within the canvas
+      const x = _canvasWidth / 2 - newWidth / 2;
+      const y = _canvasHeight / 2 - newHeight / 2;
+      const _x = mode === "gacha" ? x - 130 : x;
+      const _y = mode === "gacha" ? y - 82 : y;
+
+      ctx!.globalCompositeOperation = "source-in";
+      ctx!.drawImage(img, _x, _y, newWidth, newHeight);
+    };
+  };
+
   const characterShowcase = useMemo(
     () => (
       <div>
@@ -580,14 +659,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
               reader.addEventListener(
                 "load",
                 async (a) => {
-                  // convert image file to base64 string
-                  const img = backgroundPictureRef?.current;
-                  if (img) {
-                    img.src = reader.result + "";
-
-                    // const orientation = img.naturalWidth > img.naturalHeight ? "horizontal" : "vertical"
-                    setHasCustomBg("horizontal"); // irrelevant
-                  }
+                  paintImageToCanvas(reader.result + "");
+                  setHasCustomBg("horizontal"); // irrelevant
                 },
                 false
               );
@@ -597,14 +670,31 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             type="file"
             name="filename"
           />
+          <canvas
+            height={canvasHeight * canvasPixelDensity}
+            width={canvasWidth * canvasPixelDensity}
+            style={{
+              width: canvasWidth,
+              height: canvasHeight,
+            }}
+            ref={canvasRef}
+          />
           <img
+            style={{ display: "none" }}
             ref={backgroundPictureRef}
             src={toEnkaUrl(row.assets.gachaIcon)}
           />
         </div>
       </div>
     ),
-    [row, uploadPictureInputRef, backgroundPictureRef, hasCustomBg, generating]
+    [
+      row,
+      uploadPictureInputRef,
+      backgroundPictureRef,
+      canvasRef,
+      hasCustomBg,
+      generating,
+    ]
   );
 
   const characterStats = useMemo(
@@ -658,6 +748,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       ? `url(/elementalBackgrounds/Enka-bg.jpg)`
       : `url(${toEnkaUrl(row.characterMetadata.namecard)})`,
     "--element-color": ELEMENT_TO_COLOR[row.characterMetadata.element],
+    "--element-color-2": `${ELEMENT_TO_COLOR[row.characterMetadata.element]}70`,
   } as React.CSSProperties;
 
   const getBuildId = (build: any) => `${build.characterId}${build.type}`;

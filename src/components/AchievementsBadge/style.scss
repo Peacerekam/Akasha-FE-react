@@ -1,4 +1,4 @@
-.ar-badge {
+.achievement-badge {
   font-family: "GenshinFont";
   display: inline-block;
   white-space: nowrap;
@@ -8,36 +8,43 @@
   border-radius: 5px;
   border: 1px solid transparent;
   box-shadow: 0 0 3px rgba(black, 0.5);
-  
-  &.ar-0-badge,
-  &.ar-5-badge,
-  &.ar-10-badge,
-  &.ar-15-badge,
-  &.ar-20-badge,
-  &.ar-25-badge,
-  &.ar-30-badge,
-  &.ar-35-badge {
+
+  &.achievement-0-badge,
+  &.achievement-100-badge,
+  &.achievement-200-badge,
+  &.achievement-300-badge,
+  &.achievement-400-badge {
     background-color: rgb(128, 128, 128);
     border-color: rgb(128, 128, 128);
   }
-  &.ar-40-badge {
+  &.achievement-500-badge {
     background-color: rgb(75, 121, 71);
     border-color: rgb(75, 121, 71);
   }
-  &.ar-45-badge {
+  &.achievement-600-badge {
     background-color: rgb(31, 131, 31);
     border-color: rgb(31, 131, 31);
   }
-  &.ar-50-badge {
+  &.achievement-700-badge {
     background-color: rgb(0, 122, 122);
     border-color: rgb(0, 122, 122);
   }
-  &.ar-55-badge {
+  &.achievement-800-badge {
     background-color: rgb(128, 45, 136);
     border-color: rgb(128, 45, 136);
   }
-  &.ar-60-badge {
+  &.achievement-900-badge,
+  &.achievement-1000-badge {
     background-color: rgb(168, 120, 31);
     border-color: rgb(168, 120, 31);
+  }
+
+  display: flex;
+  justify-content: center;
+  gap: 3px;
+
+  img {
+    width: 16px;
+    filter: drop-shadow(0 0 2px rgba(black, 0.7))
   }
 }

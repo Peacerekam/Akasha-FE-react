@@ -45,13 +45,13 @@
 }
 
 .debug {
-  // svg,
+  svg,
   img {
     display: none !important;
   }
   * {
-    filter: none !important;
     box-shadow: none !important;
+    filter: none !important;
     mask-image: none !important;
     background: transparent !important;
     background-image: transparent !important;
@@ -253,6 +253,15 @@
     border-radius: 4px;
   }
 
+  .teammate-bg {
+    filter: drop-shadow(0 0 calc(var(--teammate-scale) * 2px) black);
+  }
+
+  .overlay-artifact-wrapper,
+  .overlay-weapon-wrapper {
+    filter: drop-shadow(0 0 calc(var(--teammate-scale) * 1px) black);
+  }
+
   &.no-leaderboards {
     // @TODO: ...
     grid-template-columns: 500px 1fr;
@@ -268,15 +277,16 @@
   &.simplify-colors {
     // $simplified-color: #5f5f5f;
     $simplified-color: var(--element-color);
+    $simplified-color-2: var(--element-color-2);
     // .character-card-background {
     //   box-shadow: 0 0 0 1px $simplified-color !important; // @TODO: ...
     // }
     .compact-artifact {
-      box-shadow: 0 0 0 1px $simplified-color, 0 0 4px 1px $simplified-color !important; // @TODO: ...
+      box-shadow: 0 0 0 1px $simplified-color, 0 0 0px 3px $simplified-color-2 !important; // @TODO: ...
     }
     .character-artifacts-rv {
       .active-rv {
-        box-shadow: 0 0 0 1px $simplified-color, 0 0 3px 1px $simplified-color !important;
+        box-shadow: 0 0 0 1px $simplified-color, 0 0 0px 3px $simplified-color-2 !important;
       }
       // .total-roll-list-wrapper
       //   .total-roll-list
@@ -387,12 +397,12 @@
         height: $const-square-size;
         &.activated {
           // ...
-          box-shadow: 0 0 2px 3px rgba(white, 0.6),
-            0 0 1px 1px var(--element-color), 0 0 8px 3px var(--element-color);
+          box-shadow: 0 0 0px 1px rgba(white, 0.6),
+            0 0 0px 2px var(--element-color), 0 0 0px 4px var(--element-color-2);
         }
         &:not(.activated) {
           // opacity: 0.45;
-          box-shadow: 0 0 1px 1px var(--element-color);
+          box-shadow: 0 0 0px 1px var(--element-color);
         }
       }
     }
@@ -415,7 +425,9 @@
           }
           img:not(.crown-of-insight) {
             // box-shadow: 0 0 3px 1px rgba(white, 0.4), 0 0 4px 2px #44cded; 
-            box-shadow: 0 0 3px 1px rgba(white, 0.4), 0 0 4px 2px var(--element-color); 
+            // box-shadow: 0 0 3px 1px rgba(white, 0.4), 0 0 4px 2px var(--element-color); 
+            box-shadow: 0 0 0px 1px rgba(white, 0.6),
+              0 0 0px 2px var(--element-color), 0 0 0px 4px var(--element-color-2);
           }
         }
         &.talent-crowned {
@@ -506,16 +518,24 @@
       height: 485px;
       border-radius: 5px;
       pointer-events: none;
+      position: relative;
+
+      canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
       &.is-traveler {
         img {
           top: -40px;
           left: -7%;
-          mask-image: linear-gradient(
-            to left,
-            transparent 0%,
-            transparent 50px,
-            black 70px
-          );
+          // mask-image: linear-gradient(
+          //   to left,
+          //   transparent 0%,
+          //   transparent 50px,
+          //   black 70px
+          // );
         }
       }
       &.horizontal {
@@ -526,12 +546,12 @@
           height: 100%;
           object-fit: cover;
           // object-position: 10% 0;
-          mask-image: linear-gradient(
-            to left,
-            transparent 0%,
-            transparent 1px,
-            black 100px
-          );
+          // mask-image: linear-gradient(
+          //   to left,
+          //   transparent 0%,
+          //   transparent 1px,
+          //   black 100px
+          // );
         }
       }
       img {
@@ -547,14 +567,15 @@
         //     $blackish 50px,
         //     transparent 50px,
         //   ),
-        mask-image: linear-gradient(
-          to right,
-          transparent 0px,
-          transparent 455px,
-          black 550px,
-          black 800px,
-          transparent 950px
-        );
+        // ...
+        // mask-image: linear-gradient(
+        //   to right,
+        //   transparent 0px,
+        //   transparent 455px,
+        //   black 550px,
+        //   black 800px,
+        //   transparent 950px
+        // );
       }
     }
     > div {
@@ -739,7 +760,8 @@
   .chart-radar-wrapper {
     // ...
     // z-index: 5;
-    mask-image: radial-gradient(black 65%, transparent 75%);
+    // @TODO: see this one later
+    // mask-image: radial-gradient(black 65%, transparent 75%);
     canvas {
       height: 320px !important;
       width: 320px !important;
