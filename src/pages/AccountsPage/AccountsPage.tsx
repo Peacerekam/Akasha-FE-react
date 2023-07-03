@@ -15,6 +15,7 @@ import {
   ARBadge,
   HelpBox,
   AchievementsBadge,
+  NotificationBar,
 } from "../../components";
 import { TableColumn } from "../../types/TableColumn";
 import Achievevement from "../../assets/icons/Achievement.webp";
@@ -228,6 +229,7 @@ export const AccountsPage: React.FC = () => {
     <div className="flex">
       {hoverElement}
       <div className="content-block w-100" id="content-container">
+        <NotificationBar />
         <StylizedContentBlock overrideImage={DomainBackground} />
         <div className="flex-special-container">
           <AdsComponentManager adType="Video" />

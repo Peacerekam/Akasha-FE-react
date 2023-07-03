@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import "./style.scss";
+import { Spinner } from "../Spinner";
 
 type Notification = {
   color: string;
@@ -44,19 +45,31 @@ export const NotificationBar: React.FC = () => {
     };
   }, []);
 
+  // const isHidden = hide || !notification;
   const isHidden = hide || !notification;
+  // const isLoading = !notification && !isHidden;
+
   const classNames = [
     notification?.color ? `notification-color-${notification?.color}` : "",
     "notification-bar",
     isHidden ? "hide" : "reveal",
+    // isLoading ? "is-loading" : ""
   ]
     .join(" ")
     .trim();
 
   return (
     <div className={classNames} onClick={handleClose}>
-      <span className="notification-text">{notification?.message}</span>
-      <span className="close-notification">×</span>
+      {/* {isLoading ? (
+        <>
+          <Spinner />
+        </>
+      ) : ( */}
+      <>
+        <span className="notification-text">{notification?.message}</span>
+        <span className="close-notification">×</span>
+      </>
+      {/* )} */}
     </div>
   );
 };

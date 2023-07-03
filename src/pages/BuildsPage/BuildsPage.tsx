@@ -11,6 +11,7 @@ import {
   StylizedContentBlock,
   HelpBox,
   RegionBadge,
+  NotificationBar,
 } from "../../components";
 import { TableColumn } from "../../types/TableColumn";
 
@@ -217,6 +218,7 @@ export const BuildsPage: React.FC = () => {
     <div className="flex">
       {hoverElement}
       <div className="content-block w-100" id="content-container">
+        <NotificationBar />
         <StylizedContentBlock overrideImage={DomainBackground} />
         <div className="flex-special-container">
           <AdsComponentManager adType="Video" />

@@ -56,8 +56,8 @@ import { SessionDataContext } from "../../context/SessionData/SessionDataContext
 import { getSessionIdFromCookie } from "../../utils/helpers";
 import { ArtifactSettingsModal } from "./ArtifactSettingsModal";
 import { AdsComponentManager } from "../../components/AdsComponentManager";
-import "./style.scss";
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
+import "./style.scss";
 
 export const ProfilePage: React.FC = () => {
   const [showArtifactSettingsModal, setShowArtifactSettingsModal] =

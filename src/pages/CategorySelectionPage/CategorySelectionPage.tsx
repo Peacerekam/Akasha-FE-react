@@ -4,6 +4,7 @@ import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp"
 import {
   CustomTable,
   HelpBox,
+  NotificationBar,
   StatIcon,
   StylizedContentBlock,
   TeammatesCompact,
@@ -187,6 +188,20 @@ export const CategorySelectionPage: React.FC = () => {
         },
       },
       {
+        name: "Team",
+        width: "0px",
+        sortable: false,
+        cell: (row) => {
+          return (
+            <TeammatesCompact
+              teammates={row.weapons[0].teammates}
+              scale={1}
+              simplify
+            />
+          );
+        },
+      },
+      {
         name: "Character",
         sortable: true,
         sortField: "characterName",
@@ -200,20 +215,6 @@ export const CategorySelectionPage: React.FC = () => {
             <div className="table-icon-text-pair" style={{ color: "gray" }}>
               <div>{characterName}</div>
             </div>
-          );
-        },
-      },
-      {
-        name: "Team",
-        width: "0px",
-        sortable: false,
-        cell: (row) => {
-          return (
-            <TeammatesCompact
-              teammates={row.weapons[0].teammates}
-              scale={1}
-              simplify
-            />
           );
         },
       },
@@ -281,6 +282,7 @@ export const CategorySelectionPage: React.FC = () => {
   return (
     <div className="flex">
       <div className="content-block w-100" id="content-container">
+        <NotificationBar />
         <StylizedContentBlock
           // variant="gradient"
           overrideImage={DomainBackground}

@@ -25,7 +25,7 @@
   }
 
   span.ad-debug {
-    display: none;  
+    display: none;
     color: red;
     font-size: 11px;
     position: absolute;
@@ -49,7 +49,7 @@
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  
+
   // width: 100%;
   // gap: 35px;
   flex-direction: row-reverse;
@@ -66,7 +66,7 @@
     min-width: min(450px, 100%);
   }
 
-  .vm-container  {
+  .vm-container {
     flex: 0;
     display: contents;
     .vm-placement {
@@ -75,6 +75,6 @@
   }
 }
 
-.vm-skin {
-  box-shadow: 0 0 2px 2px red;
-}
+// .vm-skin {
+//   box-shadow: 0 0 2px 2px red;
+// }

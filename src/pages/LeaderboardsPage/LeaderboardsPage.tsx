@@ -22,6 +22,7 @@ import {
   RegionBadge,
   TeammatesCompact,
   CalculationTeammate,
+  NotificationBar,
 } from "../../components";
 import {
   FETCH_CHARACTER_FILTERS_URL,
@@ -521,6 +522,7 @@ export const LeaderboardsPage: React.FC = () => {
           className="content-block w-100"
           style={{ display: "inline-block" }}
         >
+          <NotificationBar />
           <StylizedContentBlock
             variant="gradient"
             revealCondition={!!calculationInfo}

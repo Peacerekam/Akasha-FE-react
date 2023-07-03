@@ -15,6 +15,7 @@ import {
   ARBadge,
   CustomTable,
   HelpBox,
+  NotificationBar,
   RegionBadge,
   StatIcon,
   StylizedContentBlock,
@@ -202,6 +203,7 @@ export const ArtifactsPage: React.FC = () => {
     <div className="flex">
       {hoverElement}
       <div className="content-block w-100" id="content-container">
+        <NotificationBar />
         <StylizedContentBlock overrideImage={DomainBackground} />
         <div className="flex-special-container">
           <AdsComponentManager adType="Video" />
