@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { StylizedContentBlock } from "../../components/StylizedContentBlock";
 import {
   AccountDataForUserCard,
-  AdsComponent,
   FetchParams,
   GenshinUserCard,
   Pagination,

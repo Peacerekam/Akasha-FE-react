@@ -31,12 +31,13 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
 
   useEffect(() => {
     if (adProvider) return;
+    setAdProvider("venatus");
 
-    if (location.search.includes("venatus-test")) {
-      setAdProvider("venatus");
-    } else {
-      setAdProvider("google");
-    }
+    // if (location.search.includes("venatus-test")) {
+    //   setAdProvider("venatus");
+    // } else {
+    //   setAdProvider("google");
+    // }
   }, [location.search]);
 
   useEffect(() => {
