@@ -12,8 +12,8 @@
   // background-repeat: no-repeat;
   overflow: hidden;
   min-height: 100px;
-  width: min(450px, calc(100% - 15px)); 
-  
+  width: min(450px, calc(100% - 15px));
+
   flex-shrink: 0;
   // flex-grow: 1;
   display: flex;
@@ -29,7 +29,7 @@
   .profile-picture {
     margin: 2px;
     width: 96px;
-    // height: 96px;  
+    // height: 96px;
     height: calc(100% - 4px);
     object-fit: cover;
   }
@@ -46,7 +46,7 @@
     width: 100%;
     .genshin-card-top-row {
       display: flex;
-      justify-content: space-between;  
+      justify-content: space-between;
       flex-wrap: wrap-reverse;
     }
     .card-big-text {
@@ -92,8 +92,13 @@
     padding-right: 0;
     width: $card-width;
   }
+  .profile-picture {
+    height: auto;
+    display: block;
+  }
   .card-background {
     width: $card-width;
+    height: 100%;
   }
 
   &.ar-0-badge,
@@ -129,16 +134,22 @@
   }
 }
 .expanded-row {
+  $card-width: 530px;
   .uid-result {
     color: white;
     text-decoration: none;
-  }
-  $card-width: 465px;
-  .genshin-user-card {
-    padding-right: 0;
-    width: $card-width;
-  }
-  .card-background {
-    width: $card-width;
+    position: relative;
+    display: block;
+    .card-background {
+      width: $card-width;
+      height: 100%;
+    }
+    .genshin-user-card {
+      padding-right: 0;
+      width: $card-width;
+      .profile-picture {
+        height: auto;
+      }
+    }
   }
 }
