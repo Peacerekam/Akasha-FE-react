@@ -195,6 +195,20 @@ export const REAL_SUBSTAT_VALUES: {
   501242: { value: 18.649999618530273, type: "FIGHT_PROP_ELEMENT_MASTERY" },
   501243: { value: 20.979999542236328, type: "FIGHT_PROP_ELEMENT_MASTERY" },
   501244: { value: 23.309999465942383, type: "FIGHT_PROP_ELEMENT_MASTERY" },
+  //
+  // KQM
+  // 900000 - 900009
+  //
+  900000: { value: 253.94, type: "FIGHT_PROP_HP" },
+  900001: { value: 16.54, type: "FIGHT_PROP_ATTACK" },
+  900002: { value: 19.68, type: "FIGHT_PROP_DEFENSE" },
+  900003: { value: 4.96, type: "FIGHT_PROP_HP_PERCENT" },
+  900004: { value: 4.96, type: "FIGHT_PROP_ATTACK_PERCENT" },
+  900005: { value: 6.2, type: "FIGHT_PROP_DEFENSE_PERCENT" },
+  900006: { value: 3.31, type: "FIGHT_PROP_CRITICAL" },
+  900007: { value: 6.62, type: "FIGHT_PROP_CRITICAL_HURT" },
+  900008: { value: 5.51, type: "FIGHT_PROP_CHARGE_EFFICIENCY" },
+  900009: { value: 19.82, type: "FIGHT_PROP_ELEMENT_MASTERY" },
 };
 
 export const MAX_ROLLS = Object.keys(STAT_NAMES).reduce((acc: any, val) => {

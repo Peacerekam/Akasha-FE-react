@@ -16,7 +16,7 @@ const anemoRvList = {
   Jean: [CRate, CDMG, ATK_, ER, EM],
   Faruzan: [CRate, CDMG, ATK_, ER, EM],
   Wanderer: [CRate, CDMG, ATK_, ER, EM],
-  "Kaedehara Kazuha": [EM, ER],
+  "Kaedehara Kazuha": [CRate, EM, ER],
 };
 
 const pyroRvList = {
