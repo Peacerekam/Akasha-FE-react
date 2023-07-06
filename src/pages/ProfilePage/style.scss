@@ -10,10 +10,12 @@
   overflow: hidden;
   // box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   max-width: 100%;
-  width: calc(100% - 475px);
+  // width: calc(100% - 475px); 
+  width: calc(100% - 620px); 
   min-width: 200px;
   flex-grow: 1;
-  height: 100px;
+  // height: 100px;
+  height: auto;
 }
 
 .profile-header-wrapper {
@@ -26,7 +28,7 @@
     height: min-content;
 
     .profile-highlights {
-      min-width: min(100%, 340px);
+      min-width: min(100%, 370px);
     }
   }
   .vm-container  {

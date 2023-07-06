@@ -44,7 +44,7 @@ const urls = {
 };
 
 export const showAds = true;
-export const isProduction = false;
+export const isProduction = true;
 export const BASENAME = "/";
 const MAINTENANCE_MODE = false;
 

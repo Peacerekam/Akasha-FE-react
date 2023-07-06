@@ -3,13 +3,18 @@
   flex-wrap: nowrap;
   gap: 5px;
   padding: 5px;
+  height: 100%;
+  box-sizing: border-box;
+  align-items: center;
   $circle-size: 4px;
+  $tile-height: 90px;
 
   .mismatching-weapon {
     // opacity: 0.85;
     // background-color: #ff000020;
     box-shadow: inset 0 0 0px 1px #ff000020;
     position: relative;
+    height: $tile-height;
     &::before {
       pointer-events: none;
       position: absolute;
@@ -55,6 +60,7 @@
     box-shadow: inset 0 0 0px 1px #ffee0020;
 
     position: relative;
+    height: $tile-height;
     &::before {
       pointer-events: none;
       position: absolute;
@@ -85,6 +91,7 @@
     // background-color: #00ff0020;
     box-shadow: inset 0 0 0px 1px #00ff0020;
     position: relative;
+    height: $tile-height;
     a::before {
       pointer-events: none;
       position: absolute;

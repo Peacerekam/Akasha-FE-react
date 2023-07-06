@@ -11,9 +11,9 @@
   // background-position: center;
   // background-repeat: no-repeat;
   overflow: hidden;
-  height: 100px;
-  width: min(450px, calc(100% - 15px));
-  padding-right: 15px;
+  min-height: 100px;
+  width: min(450px, calc(100% - 15px)); 
+  
   flex-shrink: 0;
   // flex-grow: 1;
   display: flex;
@@ -29,7 +29,9 @@
   .profile-picture {
     margin: 2px;
     width: 96px;
-    height: 96px;
+    // height: 96px;  
+    height: calc(100% - 4px);
+    object-fit: cover;
   }
   .default-picture {
     margin: 12px;
@@ -40,21 +42,39 @@
     margin: 10px;
     text-shadow: 0px 0px 5px #000;
     text-align: left;
-    min-width: 200px;
+    // min-width: 200px;
+    width: 100%;
+    .genshin-card-top-row {
+      display: flex;
+      justify-content: space-between;  
+      flex-wrap: wrap-reverse;
+    }
     .card-big-text {
       font-size: 25px;
       margin-bottom: 3px;
+      white-space: break-spaces;
+      word-break: break-all;
     }
     .card-signature {
       white-space: break-spaces;
+      word-break: break-all;
     }
   }
-  .float-top-right {
-    position: absolute;
-    top: 10px;
-    right: 0;
+  .badges-container {
     display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    > span {
+      text-shadow: none;
+      margin: 0;
+    }
   }
+  // .float-top-right {
+  //   position: absolute;
+  //   top: 10px;
+  //   right: 0;
+  //   display: flex;
+  // }
 }
 
 .card-background {

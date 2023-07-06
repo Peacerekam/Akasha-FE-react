@@ -10,11 +10,11 @@ import "./style.scss";
 type AkashaAchievement = {
   id: number;
   score: number;
-  type: string; 
-  name: string;	
-  description: string;	
-  count: number;	
-}
+  type: string;
+  name: string;
+  description: string;
+  count: number;
+};
 
 export type AccountDataForUserCard = {
   uid: string;
@@ -27,7 +27,7 @@ export type AccountDataForUserCard = {
     signature?: string;
     finishAchievementNum?: number;
   };
-  achievements?: AkashaAchievement[]
+  achievements?: AkashaAchievement[];
 };
 
 type GenshinUserCardProps = {
@@ -95,13 +95,15 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
         )}
 
         <div className="genshin-card-content">
-          <div className="card-big-text">{playerInfo.nickname}</div>
+          <div className="genshin-card-top-row">
+            <div className="card-big-text">{playerInfo.nickname}</div>
+            <div className="badges-container">
+              <RegionBadge region={playerInfo.region} />
+              <AchievementsBadge count={playerInfo.finishAchievementNum} />
+              <ARBadge adventureRank={playerInfo.level} />
+            </div>
+          </div>
           <div className="card-signature">{playerInfo.signature || ""}</div>
-        </div>
-        <div className="float-top-right">
-          <RegionBadge region={playerInfo.region} />
-          <AchievementsBadge count={playerInfo.finishAchievementNum} />
-          <ARBadge adventureRank={playerInfo.level} />
         </div>
       </div>
     </>

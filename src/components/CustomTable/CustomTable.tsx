@@ -221,8 +221,12 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
   const getSetTotalRows = async (totalRowsHash: string) => {
     if (!fetchURL) return;
-    setIsFetchingPagination(true);
+    
     const collectionName = getCollectionName(fetchURL);
+    if (!collectionName) return;
+
+    setIsFetchingPagination(true);
+    
     const totalRowsOpts = {
       params: {
         variant: collectionName,
