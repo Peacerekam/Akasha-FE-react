@@ -126,12 +126,12 @@ export const scales = {
   },
 };
 
-export const toTalentProps = (row: any, keys: string[]) => {
+export const toTalentProps = (row: any, keys: string[], chartsData: any) => {
   const talent = row?.talentsLevelMap?.[keys[0]];
   if (!talent) return null;
 
   const assetKey = keys[1] || keys[0];
-  const asset = row.assets.talents[assetKey];
+  const asset = chartsData?.assets?.talents?.[assetKey];
   const icon = asset ? toEnkaUrl(asset) : talent.icon;
 
   return {

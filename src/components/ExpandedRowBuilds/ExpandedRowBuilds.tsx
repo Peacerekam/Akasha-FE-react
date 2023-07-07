@@ -37,7 +37,10 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
     const _uid = encodeURIComponent(row.uid);
     const calcDetailsURL = `/api/leaderboards/${_uid}/${row.characterId}`;
     const opts = {
-      params: { type: row.type },
+      params: {
+        type: row.type,
+        variant: isProfile ? "profilePage" : "",
+      },
     };
     const { data } = await axios.get(calcDetailsURL, opts);
     setCalculations(data.data);
@@ -55,7 +58,7 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
           <CharacterCard
             row={row}
             artifacts={artifacts}
-            calculations={calculations}
+            _calculations={calculations}
             setSelectedCalculationId={setSelectedCalculationId}
           />
           <div>

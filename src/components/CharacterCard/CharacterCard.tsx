@@ -58,7 +58,7 @@ ChartJS.register(...registerables);
 type CharacterCardProps = {
   row: any;
   artifacts: any[];
-  calculations: any;
+  _calculations: any;
   setSelectedCalculationId?: any;
 };
 
@@ -99,7 +99,7 @@ const TalentDisplay: React.FC<TalentProps> = ({ talent }) => {
 export const CharacterCard: React.FC<CharacterCardProps> = ({
   row,
   artifacts,
-  calculations,
+  _calculations,
   setSelectedCalculationId,
 }) => {
   const [width, setWidth] = useState<number>(window.innerWidth);
@@ -114,7 +114,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const [hasCustomBg, setHasCustomBg] = useState<
     "vertical" | "horizontal" | ""
   >("");
-  // const [iteration, setIteration] = useState<number>(0);
+  const [isLoadingImage, setIsLoadingImage] = useState(false);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [imagePreviewBlob, setImagePreviewBlob] = useState<Blob>();
   const [filteredLeaderboards, setFilteredLeaderboards] = useState<any[]>([]);
@@ -122,6 +122,9 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const uploadPictureInputRef = useRef<HTMLInputElement>(null);
   const backgroundPictureRef = useRef<HTMLImageElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  const calculations = _calculations.calculations;
+  const chartsData = _calculations.chartsData;
 
   const canvasWidth = 500;
   const canvasHeight = 485;
@@ -154,6 +157,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     const ctx = canvasRef.current.getContext("2d");
     ctx!.scale(canvasPixelDensity, canvasPixelDensity);
     paintImageToCanvas(backgroundPictureRef.current.src, "gacha");
+
+    setIsLoadingImage(true);
+    backgroundPictureRef.current.addEventListener("load", () => {
+      setIsLoadingImage(false);
+    });
   }, [canvasRef, backgroundPictureRef]);
 
   const calculationIds = useMemo(
@@ -315,7 +323,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       });
 
       const neutralWhiteColor = "rgba(255, 255, 255, 0.35)";
-      const elementColor = ELEMENT_TO_COLOR[row?.characterMetadata?.element];
+      const elementColor =
+        ELEMENT_TO_COLOR[chartsData?.characterMetadata?.element];
 
       const data = {
         labels: relevantStatNames,
@@ -429,13 +438,13 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             </span>
           );
 
-          const chartData = row.charts1pMetadata?.find(
+          const thisChartData = chartsData?.charts1pMetadata?.find(
             (x: any) => x.calculationId === id
           );
 
           return (
             <div key={id}>
-              <div>{displayCharts(chartData, id)}</div>
+              <div>{displayCharts(thisChartData, id)}</div>
               <div className="under-chart">
                 <TeammatesCompact teammates={calc.teammates} scale={1.7} />
                 {topBadge}
@@ -679,10 +688,15 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             }}
             ref={canvasRef}
           />
+          {isLoadingImage && (
+            <div className="image-loading-wrapper">
+              <Spinner />
+            </div>
+          )}
           <img
             style={{ display: "none" }}
             ref={backgroundPictureRef}
-            src={toEnkaUrl(row.assets.gachaIcon)}
+            src={toEnkaUrl(chartsData?.assets?.gachaIcon)}
           />
         </div>
       </div>
@@ -694,6 +708,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       canvasRef,
       hasCustomBg,
       generating,
+      isLoadingImage,
     ]
   );
 
@@ -713,7 +728,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           <div className="weapon-icon">
             <img src={row.weapon.icon} />
             <div className="weapon-rarity">
-              {[...Array(row?.weaponMetadata?.rarity)].map((e, i) => (
+              {[...Array(chartsData?.weaponMetadata?.rarity)].map((e, i) => (
                 <img key={`star-${i}`} src={RarityStar} />
               ))}
             </div>
@@ -743,12 +758,16 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   // ? `url(/elementalBackgrounds/${row.characterMetadata.element}-bg.jpg)`
 
   const cardStyle = {
-    "--hue-rotate": `${ELEMENT_TO_HUE[row.characterMetadata.element]}deg`,
+    "--hue-rotate": `${
+      ELEMENT_TO_HUE[chartsData?.characterMetadata?.element]
+    }deg`,
     "--character-namecard-url": !namecardBg
       ? `url(/elementalBackgrounds/Enka-bg.jpg)`
-      : `url(${toEnkaUrl(row.characterMetadata.namecard)})`,
-    "--element-color": ELEMENT_TO_COLOR[row.characterMetadata.element],
-    "--element-color-2": `${ELEMENT_TO_COLOR[row.characterMetadata.element]}70`,
+      : `url(${toEnkaUrl(chartsData?.characterMetadata?.namecard)})`,
+    "--element-color": ELEMENT_TO_COLOR[chartsData?.characterMetadata?.element],
+    "--element-color-2": `${
+      ELEMENT_TO_COLOR[chartsData?.characterMetadata?.element]
+    }70`,
   } as React.CSSProperties;
 
   const getBuildId = (build: any) => `${build.characterId}${build.type}`;
@@ -848,9 +867,13 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const hasLeaderboardsColumn =
     filteredLeaderboards.length > 0 && filteredLeaderboards[0] !== "hide";
 
-  const talentNAProps = toTalentProps(row, ["normalAttacks", "normalAttack"]);
-  const talentSkillProps = toTalentProps(row, ["elementalSkill"]);
-  const talentBurstProps = toTalentProps(row, ["elementalBurst"]);
+  const talentNAProps = toTalentProps(
+    row,
+    ["normalAttacks", "normalAttack"],
+    chartsData
+  );
+  const talentSkillProps = toTalentProps(row, ["elementalSkill"], chartsData);
+  const talentBurstProps = toTalentProps(row, ["elementalBurst"], chartsData);
 
   // const cvTextColor = getCharacterCvColor(row.critValue);
   // let cvTextStyle = {} as React.CSSProperties;
@@ -871,8 +894,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           )}
         </div>
         {/* 
-        <div className="character-title">{row.characterMetadata.title}</div>
-        <div className="character-title">{row.characterMetadata.constellation}</div> 
+        <div className="character-title">{chartsData?.characterMetadata.title}</div>
+        <div className="character-title">{chartsData?.characterMetadata.constellation}</div> 
       */}
         <div className="character-level">
           Lv. {row.propMap.level.val}
@@ -892,7 +915,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         {!privacyFlag && <div className="character-uid">{row.uid}</div>}
         <div className="character-constellations">
           {[0, 1, 2, 3, 4, 5].map((i) => {
-            const constImg = row.assets.constellations[i];
+            const constImg = chartsData?.assets.constellations[i];
             const isActivated = row.constellation >= i + 1;
             return (
               <div key={constImg}>

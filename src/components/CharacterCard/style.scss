@@ -236,6 +236,18 @@
   transform: scale($sf) translate(calc($invSf * -745px), calc($invSf * -260px));
 }
 
+.image-loading-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 525px;
+  height: 430px;
+  .lds-ellipsis {
+    transform: scale(1.5);
+  }
+}
+
 .character-card-container {
   position: relative;
   width: 1200px;
