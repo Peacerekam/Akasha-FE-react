@@ -320,7 +320,8 @@ export const iconUrlToNamecardUrl = (url: string) => {
     .replace(".png", `${iDontFuckingEven}_P.png`);
 };
 
-export const toEnkaUrl = (assetName: string) => {
+export const toEnkaUrl = (assetName?: string) => {
+  if (!assetName) return "";
   return `https://enka.network/ui/${assetName}.png`;
 };
 

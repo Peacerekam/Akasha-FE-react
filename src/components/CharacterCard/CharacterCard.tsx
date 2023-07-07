@@ -392,7 +392,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         </div>
       );
     },
-    [row, calculations, filteredLeaderboards, generating]
+    [row, calculations, chartsData, filteredLeaderboards, generating]
   );
 
   const leaderboardHighlighs = useMemo(() => {
@@ -469,7 +469,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         })}
       </div>
     );
-  }, [privacyFlag, filteredLeaderboards, generating]);
+  }, [privacyFlag, chartsData, filteredLeaderboards, generating]);
 
   const reorderedArtifacts = useMemo(
     () => getArtifactsInOrder(artifacts),
@@ -709,6 +709,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       hasCustomBg,
       generating,
       isLoadingImage,
+      chartsData,
     ]
   );
 
@@ -752,10 +753,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         {/* <div className="card-leaderboards relative">{leaderboardHighlighs}</div> */}
       </div>
     ),
-    [row]
+    [row, chartsData]
   );
-
-  // ? `url(/elementalBackgrounds/${row.characterMetadata.element}-bg.jpg)`
 
   const cardStyle = {
     "--hue-rotate": `${
@@ -894,8 +893,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           )}
         </div>
         {/* 
-        <div className="character-title">{chartsData?.characterMetadata.title}</div>
-        <div className="character-title">{chartsData?.characterMetadata.constellation}</div> 
+        <div className="character-title">{chartsData?.characterMetadata?.title}</div>
+        <div className="character-title">{chartsData?.characterMetadata?.constellation}</div> 
       */}
         <div className="character-level">
           Lv. {row.propMap.level.val}
@@ -915,7 +914,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         {!privacyFlag && <div className="character-uid">{row.uid}</div>}
         <div className="character-constellations">
           {[0, 1, 2, 3, 4, 5].map((i) => {
-            const constImg = chartsData?.assets.constellations[i];
+            const constImg = chartsData?.assets?.constellations?.[i];
             const isActivated = row.constellation >= i + 1;
             return (
               <div key={constImg}>

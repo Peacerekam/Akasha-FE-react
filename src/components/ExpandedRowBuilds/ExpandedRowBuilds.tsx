@@ -18,7 +18,13 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
 }) => {
   const [isFetching, setIsFetching] = useState(true);
   const [artifacts, setArtifacts] = useState<any[]>([]);
-  const [calculations, setCalculations] = useState<any[]>([]);
+  const [_calculations, setCalculations] = useState<{
+    calculations: any[];
+    chartsData: any;
+  }>({
+    calculations: [],
+    chartsData: {}
+  });
   const [selectedCalculationId, setSelectedCalculationId] = useState<string>();
 
   const getArtifacts = async () => {
@@ -58,7 +64,7 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
           <CharacterCard
             row={row}
             artifacts={artifacts}
-            _calculations={calculations}
+            _calculations={_calculations}
             setSelectedCalculationId={setSelectedCalculationId}
           />
           <div>
@@ -66,13 +72,16 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
               row={row}
               selectedCalculationId={selectedCalculationId}
             />
-            <CalculationList row={row} calculations={calculations} />
+            <CalculationList row={row} calculations={_calculations.calculations} />
           </div>
         </>
       ) : (
         <>
           <ArtifactListCompact row={row} artifacts={artifacts} />
-          <CalculationList row={row} calculations={calculations} />
+          <CalculationList
+            row={row}
+            calculations={_calculations.calculations}
+          />
         </>
       )}
     </>
