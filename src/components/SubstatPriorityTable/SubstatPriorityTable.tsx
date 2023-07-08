@@ -287,13 +287,6 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
       (highestGainsNum * 100) / selectedPriorityData.substats["Base"].result -
       100;
 
-    const baseNew = selectedPriorityData?.substats?.["Base"]?.newRank;
-    const baseOld = selectedPriorityData?.substats?.["Base"]?.oldRank;
-    const _baseNew = rankToNum(baseNew);
-    const _baseOld = rankToNum(baseOld);
-    const _baseDiff = _baseOld - _baseNew;
-    const hiddenBuildsNum = _baseDiff;
-
     return [
       "New leaderboard ranking",
       ...Object.keys(selectedPriorityData?.substats),
@@ -319,12 +312,21 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
       const oldRank = selectedPriorityData?.substats?.[name]?.oldRank;
       const _newRank = rankToNum(newRank);
       const _oldRank = rankToNum(oldRank);
-      const _diff = _oldRank - _newRank - hiddenBuildsNum;
+      const _diff = _oldRank - _newRank;
+
+      if (relativeComparator === value) {
+        return (
+          <td style={cellStyle} key={`${name}-val`}>
+            {oldRank}
+          </td>
+        );
+      }
 
       return (
         <td style={cellStyle} key={`${name}-val`}>
-          {Math.max(1, _newRank + hiddenBuildsNum)}{" "}
-          {_diff === 0 ? "" : `(+${_diff})`}
+          {name === "Base" ? oldRank : ""}
+          {name !== "Base" ? Math.max(1, _newRank) : ""}{" "}
+          {name === "Base" || _diff === 0 ? "" : `(+${_diff})`}
         </td>
       );
     });
