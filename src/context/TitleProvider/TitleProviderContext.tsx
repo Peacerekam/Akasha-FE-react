@@ -35,16 +35,12 @@ const checkIfPageIsIgnored = (pathname: string) => {
   const _split = pathname.split("/");
   const mainSlug = _split[1];
 
-  console.log(_split, mainSlug)
-
   for (const page of IGNORED_PAGES) {
     if (mainSlug === page.mainSlug && _split.length >= page.minDepth) {
       output = true;
       break;
     }
   }
-
-  console.log(output)
 
   return output;
 };

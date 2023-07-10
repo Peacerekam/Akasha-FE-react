@@ -26,8 +26,28 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
 }) => {
   const [adsDisabled, setAdsDisabled] = useState(false);
   const [adProvider, setAdProvider] = useState<AdProviders>(null);
+  const [width, setWidth] = useState<number>(window.innerWidth);
   const [reloadAds, setReloadAds] = useState(false);
   const location = useLocation();
+
+  const isMobile = width <= 800; // 768;
+
+  const handleWindowSizeChange = () => {
+    setWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleWindowSizeChange);
+
+    return () => {
+      window.removeEventListener("resize", handleWindowSizeChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    setReloadAds(true);
+    setTimeout(() => setReloadAds(false), 100);
+  }, [isMobile])
 
   useEffect(() => {
     if (adProvider) return;
