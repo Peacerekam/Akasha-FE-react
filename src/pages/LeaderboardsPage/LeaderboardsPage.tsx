@@ -32,17 +32,13 @@ import {
   iconUrlToNamecardUrl,
 } from "../../utils/helpers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faChevronLeft,
-  faPeopleGroup,
-  faSkull,
-} from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { TableColumn } from "../../types/TableColumn";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
-import { getIconElement } from "../../components/HelpBox/helpContentBuilds";
-import "./style.scss";
 import { AdsComponentManager } from "../../components/AdsComponentManager";
+import { TitleContext } from "../../context/TitleProvider/TitleProviderContext";
+import "./style.scss";
 
 ChartJS.register(...registerables);
 
@@ -88,9 +84,9 @@ export const LeaderboardsPage: React.FC = () => {
   const [lookupUID, setLookupUID] = useState<string>("");
 
   // context
+  const { setTitle } = useContext(TitleContext);
   const { lastProfiles } = useContext(LastProfilesContext);
-  const { hoverElement, updateTableHoverElement } =
-    useContext(HoverElementContext);
+  const { hoverElement } = useContext(HoverElementContext);
 
   // hooks
   const { calculationId, variant } = useParams();
@@ -124,6 +120,10 @@ export const LeaderboardsPage: React.FC = () => {
   const thisWeaponCalc = thisCalc?.weapons.find(
     (w) => w.calculationId === calculationId
   );
+
+  useEffect(() => {
+    setTitle(`${thisCalc?.name} | Akasha System`);
+  }, [thisCalc]);
 
   const LEADERBOARDS_COLUMNS: TableColumn<BuildsColumns>[] = useMemo(
     () => [
@@ -618,7 +618,7 @@ export const LeaderboardsPage: React.FC = () => {
             hideOnDesktop
           /> */}
 
-          <div  className="flex-special-container">
+          <div className="flex-special-container">
             <AdsComponentManager adType="Video" />
             <div className="relative other-calculations-display block-highlight highlight-tile-container">
               {displayRelevantCategories}

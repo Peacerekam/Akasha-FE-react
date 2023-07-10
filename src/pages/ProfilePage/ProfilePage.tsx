@@ -57,6 +57,7 @@ import { getSessionIdFromCookie } from "../../utils/helpers";
 import { ArtifactSettingsModal } from "./ArtifactSettingsModal";
 import { AdsComponentManager } from "../../components/AdsComponentManager";
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
+import { TitleContext } from "../../context/TitleProvider/TitleProviderContext";
 import "./style.scss";
 
 export const ProfilePage: React.FC = () => {
@@ -79,10 +80,11 @@ export const ProfilePage: React.FC = () => {
 
   const { uid } = useParams();
   const { hoverElement } = useContext(HoverElementContext);
+  const { disableAdsForThisPage } = useContext(AdProviderContext);
   const { addTab } = useContext(LastProfilesContext);
+  const { setTitle } = useContext(TitleContext);
   const { isAuthenticated, isBound, fetchSessionData, boundAccounts } =
     useContext(SessionDataContext);
-  const { reloadAds, disableAdsForThisPage } = useContext(AdProviderContext);
 
   const isAccountOwner = useMemo(
     () => isBound(uid),
@@ -137,7 +139,9 @@ export const ProfilePage: React.FC = () => {
 
   const handleAddNewTab = ({ account }: any) => {
     if (!uid) return;
-    addTab(uid, account?.playerInfo?.nickname ?? "???");
+    const nickname = account?.playerInfo?.nickname || "???";
+    addTab(uid, nickname);
+    setTitle(`${nickname}'s Profile | Akasha System`);
   };
 
   useEffect(() => {
