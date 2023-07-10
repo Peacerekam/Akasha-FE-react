@@ -36,6 +36,11 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
     setWidth(window.innerWidth);
   };
 
+  const handleReloadAds = () => {
+    setReloadAds(true);
+    setTimeout(() => setReloadAds(false), 100);
+  }
+
   useEffect(() => {
     window.addEventListener("resize", handleWindowSizeChange);
 
@@ -45,8 +50,7 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
   }, []);
 
   useEffect(() => {
-    setReloadAds(true);
-    setTimeout(() => setReloadAds(false), 100);
+    handleReloadAds();
   }, [isMobile])
 
   useEffect(() => {
@@ -61,11 +65,8 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
   }, [location.search]);
 
   useEffect(() => {
-    // reset disable state -> used on patreon profiles for now
-    setAdsDisabled(false);
-    // reload ads -> used all pages
-    setReloadAds(true);
-    setTimeout(() => setReloadAds(false), 100);
+    setAdsDisabled(false); // reset disable state -> used on patreon profiles for now
+    handleReloadAds(); // reload ads -> used all pages
   }, [location.pathname]);
 
   const disableAdsForThisPage = () => setAdsDisabled(true);
