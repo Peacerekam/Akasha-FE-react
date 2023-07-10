@@ -180,6 +180,9 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
   //
   //  HEADERS
   //
+
+  const alwaysIncludeHeaders = ["Base", "Crit RATE", "Crit DMG"];
+
   const tableHeaders = useMemo(() => {
     if (!selectedPriorityData?.substats) return null;
 
@@ -187,8 +190,7 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
       (name) => {
         const value = selectedPriorityData.substats?.[name]?.result;
         if (
-          name !== "Crit RATE" &&
-          name !== "Base" &&
+          !alwaysIncludeHeaders.includes(name) &&
           value === selectedPriorityData.substats["Base"].result
         ) {
           return null;
@@ -244,8 +246,7 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
       const value = selectedPriorityData?.substats?.[name]?.result;
       if (!value) return <td key={name}>{name}</td>;
       if (
-        name !== "Crit RATE" &&
-        name !== "Base" &&
+        !alwaysIncludeHeaders.includes(name) &&
         value === selectedPriorityData.substats["Base"].result
       )
         return null;
@@ -294,8 +295,7 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
       const value = selectedPriorityData?.substats?.[name]?.result;
       if (!value) return <td key={name}>{name}</td>;
       if (
-        name !== "Crit RATE" &&
-        name !== "Base" &&
+        !alwaysIncludeHeaders.includes(name) &&
         value === selectedPriorityData.substats["Base"].result
       )
         return null;
@@ -353,8 +353,7 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
       const value = selectedPriorityData?.substats?.[name]?.result;
       if (!value) return <td key={name}>{name}</td>;
       if (
-        name !== "Crit RATE" &&
-        name !== "Base" &&
+        !alwaysIncludeHeaders.includes(name) &&
         value === selectedPriorityData.substats["Base"].result
       )
         return null;
@@ -405,8 +404,7 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
       const value = selectedPriorityData?.substats?.[name]?.result;
       if (!value) return <td key={name}>{name}</td>;
       if (
-        name !== "Crit RATE" &&
-        name !== "Base" &&
+        !alwaysIncludeHeaders.includes(name) &&
         value === selectedPriorityData.substats["Base"].result
       )
         return null;
@@ -448,8 +446,7 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
       const value = selectedPriorityData?.substats?.[name]?.result;
       if (!value) return <td key={name}>{name}</td>;
       if (
-        name !== "Crit RATE" &&
-        name !== "Base" &&
+        !alwaysIncludeHeaders.includes(name) &&
         value === selectedPriorityData.substats["Base"].result
       )
         return null;

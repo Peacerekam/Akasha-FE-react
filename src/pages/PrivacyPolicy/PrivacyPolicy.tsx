@@ -31,11 +31,11 @@ export const PrivacyPolicyPage: React.FC = () => {
               </li>
               <li>
                 akasha.cv will store your public Genshin account, character and
-                artifact information. You can contact Mimee#1111 on Discord if
+                artifact information. You can contact @mimee (previously Mimee#1111) on Discord if
                 you wish to delete your profile.
               </li>
               <li>
-                When binding profile page to an UID, akasha.cv will save your
+                When binding profile page to n UID, akasha.cv will save your
                 Patreon and/or Discord ID required for confirming your identity.
               </li>
             </ul>

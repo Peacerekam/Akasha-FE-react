@@ -64,6 +64,10 @@ export const NotificationBar: React.FC = () => {
     .join(" ")
     .trim();
 
+  const messageContent = notification?.message
+    ?.split("\n")
+    .map((x) => <div key={x}>{x}</div>);
+
   return (
     <div className={classNames} onClick={handleClose}>
       {/* {isLoading ? (
@@ -71,10 +75,10 @@ export const NotificationBar: React.FC = () => {
           <Spinner />
         </>
       ) : ( */}
-      <>
-        <span className="notification-text">{notification?.message}</span>
+      <div className="grid-inner">
+        <span className="notification-text">{messageContent}</span>
         <span className="close-notification">×</span>
-      </>
+      </div>
       {/* )} */}
     </div>
   );
