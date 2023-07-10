@@ -5,6 +5,7 @@ export type VenatusAdsComponentProps = {
   adType: VenatusAdTypes;
   hybrid?: "desktop" | "mobile";
   hideOnDesktop?: boolean;
+  hideOnMobile?: boolean;
 };
 
 type VenatusAdTypes =
@@ -27,10 +28,11 @@ export default class VenatusAdsComponent extends React.Component<
   }
 
   componentDidMount() {
-    const { adType, hideOnDesktop } = this.props;
+    const { adType, hideOnDesktop, hideOnMobile } = this.props;
     const { width } = this.state;
     const isMobile = width <= 800; // 768;
     if (!isMobile && hideOnDesktop) return;
+    if (isMobile && hideOnMobile) return;
 
     console.log(`%c\n\n   > ${this.props.adType}: MOUNT `, "color: green");
     if (adType !== "Video") {
@@ -44,10 +46,11 @@ export default class VenatusAdsComponent extends React.Component<
   }
 
   componentWillUnmount() {
-    const { adType, hideOnDesktop } = this.props;
+    const { adType, hideOnDesktop, hideOnMobile } = this.props;
     const { width } = this.state;
     const isMobile = width <= 800; // 768;
     if (!isMobile && hideOnDesktop) return;
+    if (isMobile && hideOnMobile) return;
 
     console.log(`%c\n\n   > ${this.props.adType}: UNMOUNT `, "color: red");
 
@@ -67,12 +70,13 @@ export default class VenatusAdsComponent extends React.Component<
   }
 
   render() {
-    const { adType, hideOnDesktop } = this.props;
+    const { adType, hideOnDesktop, hideOnMobile } = this.props;
     if (!adType) return null;
 
     const { width } = this.state;
     const isMobile = width <= 800; // 768;
     if (!isMobile && hideOnDesktop) return null;
+    if (isMobile && hideOnMobile) return;
 
     const mobileAdType: string = isMobile ? `Mobile${adType}` : adType;
 

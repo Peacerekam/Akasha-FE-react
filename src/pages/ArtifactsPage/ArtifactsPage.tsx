@@ -209,12 +209,12 @@ export const ArtifactsPage: React.FC = () => {
           <AdsComponentManager adType="Video" />
           <HelpBox page="artifacts" />
         </div>
-        <AdsComponentManager
+        {/* <AdsComponentManager
           adType="LeaderboardBTF"
           dataAdSlot="6204085735"
           hybrid="mobile"
           hideOnDesktop
-        />
+        /> */}
         <CustomTable
           fetchURL={FETCH_ARTIFACTS_URL}
           filtersURL={FETCH_ARTIFACT_FILTERS_URL}

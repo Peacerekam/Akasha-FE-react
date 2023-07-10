@@ -611,12 +611,12 @@ export const LeaderboardsPage: React.FC = () => {
             </div>
           </div>
 
-          <AdsComponentManager
+          {/* <AdsComponentManager
             adType="LeaderboardBTF"
             dataAdSlot="6204085735"
             hybrid="mobile"
             hideOnDesktop
-          />
+          /> */}
 
           <div  className="flex-special-container">
             <AdsComponentManager adType="Video" />

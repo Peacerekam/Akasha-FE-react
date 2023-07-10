@@ -294,12 +294,12 @@ export const CategorySelectionPage: React.FC = () => {
           <AdsComponentManager adType="Video" />
           <HelpBox page="leaderboards" />
         </div>
-        <AdsComponentManager
+        {/* <AdsComponentManager
           adType="LeaderboardBTF"
           dataAdSlot="6204085735"
           hybrid="mobile"
           hideOnDesktop
-        />
+        /> */}
 
         {/* <div className="relative">
           <CustomTable

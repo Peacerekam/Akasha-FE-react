@@ -11,12 +11,12 @@ export const PrivacyPolicyPage: React.FC = () => {
       <div className="content-block w-100" id="content-container">
         <StylizedContentBlock overrideImage={DomainBackground} />
         <div className="relative privacy-policy-content-wrapper">
-          <AdsComponentManager
+          {/* <AdsComponentManager
             adType="LeaderboardBTF"
             dataAdSlot="6204085735"
             hybrid="mobile"
             hideOnDesktop
-          />
+          /> */}
           <AdsComponentManager adType="Video" />
           <div className="privacy-policy">
             <h1>Privacy Policy</h1>

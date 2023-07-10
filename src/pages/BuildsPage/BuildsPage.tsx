@@ -224,12 +224,12 @@ export const BuildsPage: React.FC = () => {
           <AdsComponentManager adType="Video" />
           <HelpBox page="builds" />
         </div>
-        <AdsComponentManager
+        {/* <AdsComponentManager
           adType="LeaderboardBTF"
           dataAdSlot="6204085735"
           hybrid="mobile"
           hideOnDesktop
-        />
+        /> */}
         <CustomTable
           fetchURL={FETCH_BUILDS_URL}
           filtersURL={FETCH_CHARACTER_FILTERS_URL}

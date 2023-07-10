@@ -825,7 +825,7 @@ export const ProfilePage: React.FC = () => {
             )}
           </div>
         </div>
-        <div className="flex">
+        {/* <div className="flex">
           {!reloadAds && (
             <div className="flex-special-container">
               <AdsComponentManager
@@ -836,7 +836,7 @@ export const ProfilePage: React.FC = () => {
               />
             </div>
           )}
-        </div>
+        </div> */}
         {displayFloatingButtons({ artifactSettings: true })}
         <div>
           {isAccountOwner && (

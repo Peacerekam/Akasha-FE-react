@@ -235,12 +235,12 @@ export const AccountsPage: React.FC = () => {
           <AdsComponentManager adType="Video" />
           <HelpBox page="accounts" />
         </div>
-        <AdsComponentManager
+        {/* <AdsComponentManager
           adType="LeaderboardBTF"
           dataAdSlot="6204085735"
           hybrid="mobile"
           hideOnDesktop
-        />
+        /> */}
         <div className="relative search-input-wrapper">
           UID / nickname
           <div>

@@ -142,12 +142,12 @@ export const UIDSearchPage: React.FC = () => {
                     <Spinner />
                   </div>
                 )}
-                <AdsComponentManager
+                {/* <AdsComponentManager
                   adType="LeaderboardBTF"
                   dataAdSlot="6204085735"
                   hybrid="mobile"
                   hideOnDesktop
-                />
+                /> */}
                 {results.map((result, i) => {
                   return (
                     <a

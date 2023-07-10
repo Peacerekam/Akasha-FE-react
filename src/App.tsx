@@ -196,6 +196,7 @@ const App = () => {
                 <AdsComponentManager
                   adType="LeaderboardBTF"
                   dataAdSlot="6204085735"
+                  hybrid="mobile"
                 />
                 <AdsComponentManager adType="RichMedia" />
               </div>

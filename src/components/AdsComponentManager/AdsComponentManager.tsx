@@ -40,6 +40,7 @@ export const AdsComponentManager: React.FC<AdsComponentManagerProps> = (
         adType={props.adType}
         hybrid={props.hybrid}
         hideOnDesktop={props.hideOnDesktop}
+        hideOnMobile={props.hideOnMobile}
       />
     );
   }
