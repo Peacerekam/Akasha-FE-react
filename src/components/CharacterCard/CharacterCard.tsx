@@ -37,7 +37,7 @@ import { StatListCard } from "../StatListCard";
 import { RollList } from "../RollList";
 import CrownOfInsight from "../../assets/images/Crown_of_Insight.webp";
 import RarityStar from "../../assets/images/star.png";
-import FriendshipIcon from "../../assets/icons/Item_Companionship_EXP.webp";
+import FriendshipIcon from "../../assets/icons/Item_Companionship_EXP.png";
 import { PreviewModal } from "./PreviewModal";
 import { applyModalBodyStyle, getRelativeCoords } from "../CustomTable/Filters";
 import { TeammatesCompact } from "../TeammatesCompact";

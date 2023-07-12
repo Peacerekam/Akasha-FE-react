@@ -78,3 +78,22 @@
 // .vm-skin {
 //   box-shadow: 0 0 2px 2px red;
 // }
+
+// @TODO: temporary?
+.vm-footer {
+  // display: none !important;
+  background-color: rgba(57, 91, 100, 0.6) !important;
+  polygon {
+    fill: white !important;
+  }
+  .vm-footer-close {
+    &:hover {
+      polygon {
+        fill: orange !important;
+      }
+    }
+  }
+  @media (min-width: 600px) {
+    padding-top: 0px !important;
+  }
+}

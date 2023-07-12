@@ -35,7 +35,7 @@ export const PrivacyPolicyPage: React.FC = () => {
                 you wish to delete your profile.
               </li>
               <li>
-                When binding profile page to n UID, akasha.cv will save your
+                When binding profile page to a UID, akasha.cv will save your
                 Patreon and/or Discord ID required for confirming your identity.
               </li>
             </ul>
@@ -43,7 +43,7 @@ export const PrivacyPolicyPage: React.FC = () => {
             <h2>What akasha.cv does NOT collect</h2>
             <p>akasha.cv will never save passwords, usernames, emails.</p>
             <h2>Advertisements</h2>
-            <p>akasha.cv uses ads from Google Adsense to support the site.</p>
+            <p>akasha.cv uses ads from Venatus Media to support the site.</p>
 
             <h2>What cookies does akasha.cv use</h2>
             <p>akasha.cv can use cookies to store session IDs.</p>

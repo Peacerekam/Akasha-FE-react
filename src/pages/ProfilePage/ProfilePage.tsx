@@ -43,6 +43,7 @@ import {
   CalculationResultWidget,
   ConfirmTooltip,
   GenshinUserCard,
+  NotificationBar,
 } from "../../components";
 import { TableColumn } from "../../types/TableColumn";
 import { BuildSettingsModal } from "./BuildSettingsModal";
@@ -791,6 +792,7 @@ export const ProfilePage: React.FC = () => {
       <div id="content-container">
         <div className="flex">
           <div className={contentBlockClassNames} key={fetchCount}>
+            <NotificationBar />
             {/* <PatreonBorderInside
               classNames={[responseData.account?.patreon?.active ? "" : "hide"]}
               style={{
