@@ -36,8 +36,8 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { TableColumn } from "../../types/TableColumn";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
-import { AdsComponentManager } from "../../components/AdsComponentManager";
 import { TitleContext } from "../../context/TitleProvider/TitleProviderContext";
+import { AdsComponentManager } from "../../components/AdsComponentManager";
 import "./style.scss";
 
 ChartJS.register(...registerables);

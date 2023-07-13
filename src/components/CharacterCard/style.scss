@@ -669,6 +669,9 @@
 
     .character-stats-inside {
       margin-left: 20px;
+      .table-stat-row {
+        white-space: nowrap;
+      }
     }
     .character-weapon {
       margin-top: 15px;

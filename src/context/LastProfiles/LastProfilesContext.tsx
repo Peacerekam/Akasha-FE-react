@@ -49,7 +49,11 @@ const LastProfilesContextProvider: React.FC<{ children: any }> = ({
   // add tab to state
   const addTab = (uid: string, nickname: string) => {
     setLastProfiles((prev) => {
-      const index = prev.findIndex((a) => a.uid === uid);
+      const index = prev.findIndex((a) => {
+        const newUID = ("" + uid).trim().toLowerCase();
+        const comparedUID = ("" + a.uid).trim().toLowerCase();
+        return newUID === comparedUID;
+      });
       if (index > -1) return prev;
       const newProfile = { uid, nickname };
       return [...prev, newProfile].slice(-10);

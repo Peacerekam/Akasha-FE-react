@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
+import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
 import { AdsComponent, AdsComponentProps } from "../AdsComponent";
 import {
   // VenatusAdsComponent,
@@ -7,7 +8,6 @@ import {
 } from "../VenatusAdsComponent";
 import VenatusAdsComponent from "../VenatusAdsComponent/VenatusAdsComponent";
 import { showAds } from "../../App";
-import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
 
 type AdsComponentManagerProps = VenatusAdsComponentProps & AdsComponentProps;
 

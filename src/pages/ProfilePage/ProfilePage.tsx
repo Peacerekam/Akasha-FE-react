@@ -54,11 +54,11 @@ import {
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
+import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
+import { TitleContext } from "../../context/TitleProvider/TitleProviderContext";
 import { getSessionIdFromCookie } from "../../utils/helpers";
 import { ArtifactSettingsModal } from "./ArtifactSettingsModal";
 import { AdsComponentManager } from "../../components/AdsComponentManager";
-import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
-import { TitleContext } from "../../context/TitleProvider/TitleProviderContext";
 import "./style.scss";
 
 export const ProfilePage: React.FC = () => {
