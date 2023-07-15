@@ -630,13 +630,21 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
       // get the top left position of the image
       // in order to center the image within the canvas
-      const x = _canvasWidth / 2 - newWidth / 2;
-      const y = _canvasHeight / 2 - newHeight / 2;
-      const _x = mode === "gacha" ? x - 130 : x;
-      const _y = mode === "gacha" ? y - 82 : y;
+      let x = _canvasWidth / 2 - newWidth / 2;
+      let y = _canvasHeight / 2 - newHeight / 2;
+
+      if (mode === "gacha") {
+        if (row.name === "Traveler") {
+          x = x - 100;
+          y = y + 30;
+        } else {
+          x = x - 130;
+          y = y - 82;
+        }
+      }
 
       ctx!.globalCompositeOperation = "source-in";
-      ctx!.drawImage(img, _x, _y, newWidth, newHeight);
+      ctx!.drawImage(img, x, y, newWidth, newHeight);
     };
   };
 

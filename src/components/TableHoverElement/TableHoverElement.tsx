@@ -140,7 +140,8 @@ export const TableHoverElement: React.FC<TableHoverElementProps> = ({
           showWeapon
         />
       </FancyBuildBorder>
-      {true && <StatListSide row={rowData} strikethrough={strikethrough} />}
+      {/* @TODO: fix this later */}
+      {/* {true && <StatListSide row={rowData} strikethrough={strikethrough} />} */}
     </FollowCursor>
   );
 };
