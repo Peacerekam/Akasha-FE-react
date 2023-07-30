@@ -5,4 +5,3 @@ export * from "./ProfilePage";
 export * from "./LeaderboardsPage";
 export * from "./CategorySelectionPage";
 export * from "./_DashboardPage";
-export * from "./_UIDSearchPage";
