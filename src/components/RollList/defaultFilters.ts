@@ -25,7 +25,7 @@ const pyroRvList = {
   Diluc: [CRate, CDMG, ATK_, EM],
   Dehya: [CRate, CDMG, ATK_, ER, HP_],
   Bennett: [ER, HP_, CRate, CDMG],
-  Yanfei: [CRate, CDMG, ATK_, EM],
+  Yanfei: [CRate, CDMG, ATK_, EM, ER],
   Yoimiya: [CRate, CDMG, ATK_, EM],
   Xiangling: [CRate, CDMG, ATK_, EM, ER],
   "Hu Tao": [CRate, CDMG, HP_, EM],

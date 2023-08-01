@@ -276,8 +276,10 @@ export const Pagination: React.FC<PaginationProps> = ({
     "substats.Flat DEF": "Flat DEF",
     // leaderboard columns
     "calculation.result": [calculationShortName, "result"].join(" "),
+    // accounts columns
     "playerInfo.finishAchievementNum": "Achievements",
     "playerInfo.level": "Adventure Rank",
+    "lastProfileUpdate": "Last profile update",
     _id: "_id",
     // crappy columns
     // "weapon.name": false,

@@ -27,7 +27,6 @@ import {
   LeaderboardsPage,
   CategorySelectionPage,
   // DashboardPage,
-  // UIDSearchPage,
   AccountsPage,
 } from "./pages";
 import { PrivacyPolicyPage } from "./pages/PrivacyPolicy";
@@ -46,7 +45,7 @@ const urls = {
 };
 
 export const showAds = true;
-export const isProduction = false;
+export const isProduction = true;
 export const BASENAME = "/";
 const MAINTENANCE_MODE = false;
 
@@ -163,7 +162,6 @@ const App = () => {
                       <Route path="/profile/:uid" element={<ProfilePage />} />
 
                       {/* DEPRECATED */}
-                      {/* <Route path="/profile" element={<UIDSearchPage />} /> */}
                       {/* <Route path="/profile/:uid/ads" element={<ProfilePage />} /> */}
 
                       <Route
