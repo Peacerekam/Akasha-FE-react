@@ -269,7 +269,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           )
       );
 
-      const percentagesArray = relevantStatNames.map((statName: string) => {
+      let percentagesArray = relevantStatNames.map((statName: string) => {
         const calcStat = calcStatVals(statName);
 
         const calculatedVal = calcStat.value(
@@ -286,6 +286,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                 calculatedVal > chartData.avgStats[statName]
                   ? calculatedVal + 150
                   : calculatedVal,
+              critRate:
+                chartData.avgStats[statName] < 0
+                  ? Math.abs(chartData.avgStats[statName]) * 2
+                  : calculatedVal,
             }[calcStat.key] || calculatedVal;
 
           const _b =
@@ -294,6 +298,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
               elementalMastery:
                 calculatedVal > chartData.avgStats[statName]
                   ? chartData.avgStats[statName] + 150
+                  : chartData.avgStats[statName],
+              critRate:
+                chartData.avgStats[statName] < 0
+                  ? Math.abs(chartData.avgStats[statName] + calculatedVal)
                   : chartData.avgStats[statName],
             }[calcStat.key] || chartData.avgStats[statName];
 
@@ -319,6 +327,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           _p: Math.max(10, Math.min(170, _percent)),
           calculatedVal,
           avg: chartData.avgStats[statName],
+          statName,
         };
       });
 
@@ -326,8 +335,13 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       const elementColor =
         ELEMENT_TO_COLOR[chartsData?.characterMetadata?.element];
 
+      percentagesArray = percentagesArray.filter((x) => {
+        const isZero = 0 === x.calculatedVal && 0 === x.avg;
+        return !isZero;
+      });
+
       const data = {
-        labels: relevantStatNames,
+        labels: percentagesArray.map((x) => x.statName),
         datasets: [
           {
             pointHitRadius: 45,
@@ -345,7 +359,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           {
             pointHitRadius: 45,
             label: "TOP 1% AVG",
-            data: relevantStatNames.map((_) => 100),
+            data: percentagesArray.map((_) => 100),
             vals: percentagesArray.map((x) => x.avg),
             fill: false,
             backgroundColor: "transparent",

@@ -28,6 +28,7 @@ export const getReadableStatText = (_statName: string) => {
     elementalMastery: "EM",
     energyRecharge: "ER%",
     critRate: "Crit Rate",
+    healingBonus: "Healing Bonus",
     critDamage: "Crit DMG",
   };
   return (
@@ -56,6 +57,10 @@ export const calcStatVals = (_statName: string, reversed = false) => {
       critRate: {
         key: "critRate",
         value: (n: number) => (reversed ? (n || 0) * 100 : (n || 0) / 100),
+      },
+      healingBonus: {
+        key: "healingBonus",
+        value: (n: number) => (reversed ?  (n || 0) * 100 : (n || 0) / 100),
       },
       energyRecharge: {
         key: "energyRecharge",
