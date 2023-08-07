@@ -153,9 +153,34 @@
 // }
 
 .unicorn-artifact {
-  box-shadow: 0 0 0 1px cyan, 0 0 0px 3px rgba(cyan, 0.5),
-    0 0 0px 5px rgba(cyan, 0.25);
+  // box-shadow: 0 0 0 1px cyan, 0 0 0px 3px rgba(cyan, 0.5),
+  //   0 0 0px 5px rgba(cyan, 0.25);
   // animation: cyanGlow 2s infinite;
+
+  position: relative;
+  border: 1px solid cyan;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    width: 100%;
+    height: 100%;
+    border: 3px solid rgba(cyan, 0.5);
+    z-index: 1;
+  }
+  &::before {
+    content: "";
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    width: 100%;
+    height: 100%;
+    border: 5px solid rgba(cyan, 0.25);
+    z-index: 1;
+  }
+
   .compact-artifact-crit-value {
     color: cyan;
   }
@@ -173,8 +198,33 @@
 
 .wtf-artifact {
   // animation: bloodGlow 2s infinite;
-  box-shadow: 0 0 0 1px red, 0 0 0px 3px rgba(red, 0.5),
-    0 0 0px 5px rgba(red, 0.25);
+  // box-shadow: 0 0 0 1px red, 0 0 0px 3px rgba(red, 0.5),
+  //   0 0 0px 5px rgba(red, 0.25);
+
+  position: relative;
+  border: 1px solid red;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    width: 100%;
+    height: 100%;
+    border: 3px solid rgba(red, 0.5);
+    z-index: 1;
+  }
+  &::before {
+    content: "";
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    width: 100%;
+    height: 100%;
+    border: 5px solid rgba(red, 0.25);
+    z-index: 1;
+  }
+
   .compact-artifact-crit-value {
     color: red;
   }
@@ -182,8 +232,33 @@
 
 .upper-diamond-artifact {
   // box-shadow: 0 0 0 1px rgb(255, 217, 0), 0 0 8px 3px rgba(255, 217, 0, 0.623);
-  box-shadow: 0 0 0 1px rgba(255, 217, 0, 1), 0 0 0px 3px rgba(255, 217, 0, 0.5),
-    0 0 0px 5px rgba(255, 217, 0, 0.25);
+  // box-shadow: 0 0 0 1px rgba(255, 217, 0, 1), 0 0 0px 3px rgba(255, 217, 0, 0.5),
+  //   0 0 0px 5px rgba(255, 217, 0, 0.25);
+
+  position: relative;
+  border: 1px solid rgba(255, 217, 0, 1);
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    width: 100%;
+    height: 100%;
+    border: 3px solid rgba(255, 217, 0, 0.5);
+    z-index: 1;
+  }
+  &::before {
+    content: "";
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    width: 100%;
+    height: 100%;
+    border: 5px solid rgba(255, 217, 0, 0.25);
+    z-index: 1;
+  }
+
   .compact-artifact-crit-value {
     color: rgb(255, 217, 0);
   }
@@ -191,8 +266,33 @@
 
 .diamond-artifact {
   // box-shadow: 0 0 0 1px orange, 0 0 4px 2px rgba(orange, 0.623);
-  box-shadow: 0 0 0 1px rgba(orange, 1), 0 0 0px 3px rgba(orange, 0.5),
-    0 0 0px 5px rgba(orange, 0.25);
+  // box-shadow: 0 0 0 1px rgba(orange, 1), 0 0 0px 3px rgba(orange, 0.5),
+  //   0 0 0px 5px rgba(orange, 0.25);
+
+  position: relative;
+  border: 1px solid rgba(orange, 1);
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    width: 100%;
+    height: 100%;
+    border: 3px solid rgba(orange, 0.5);
+    z-index: 1;
+  }
+  &::before {
+    content: "";
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    width: 100%;
+    height: 100%;
+    border: 5px solid rgba(orange, 0.25);
+    z-index: 1;
+  }
+
   .compact-artifact-crit-value {
     color: orange;
   }
@@ -200,7 +300,23 @@
 
 .good-artifact {
   // box-shadow: 0 0 0 1px rgb(194, 102, 255);
-  box-shadow: 0 0 0 1px rgba(194, 102, 255, 1), 0 0 0px 3px rgba(194, 102, 255, 0.5);
+  // box-shadow: 0 0 0 1px rgba(194, 102, 255, 1),
+  //   0 0 0px 3px rgba(194, 102, 255, 0.5);
+
+  position: relative;
+  border: 1px solid rgba(194, 102, 255, 1);
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    width: 100%;
+    height: 100%;
+    border: 3px solid rgba(194, 102, 255, 0.5);
+    z-index: 1;
+  }
+
   .compact-artifact-crit-value {
     color: rgb(194, 102, 255);
   }
@@ -208,14 +324,31 @@
 
 .ok-artifact {
   // box-shadow: 0 0 0 1px rgb(102, 163, 255);
-  box-shadow: 0 0 0 1px rgba(102, 163, 255, 1), 0 0 0px 3px rgba(102, 163, 255, 0.5);
+  // box-shadow: 0 0 0 1px rgba(102, 163, 255, 1),
+  //   0 0 0px 3px rgba(102, 163, 255, 0.5);
+
+  position: relative;
+  border: 1px solid rgba(102, 163, 255, 1);
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    width: 100%;
+    height: 100%;
+    border: 3px solid rgba(102, 163, 255, 0.5);
+    z-index: 1;
+  }
+
   .compact-artifact-crit-value {
     color: rgb(102, 163, 255);
   }
 }
 
 .poo-artifact {
-  box-shadow: 0 0 0 1px gray;
+  // box-shadow: 0 0 0 1px gray;
+  border: 1px solid gray;
   .compact-artifact-crit-value {
     color: gray;
   }

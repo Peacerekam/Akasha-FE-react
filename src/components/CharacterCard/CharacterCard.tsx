@@ -6,7 +6,10 @@ import React, {
   useRef,
 } from "react";
 import ReactSelect from "react-select";
-import { toBlob, toPng } from "html-to-image";
+
+import html2canvas, { Options } from "html2canvas";
+// import { toBlob, toPng } from "html-to-image";
+
 import { Chart as ChartJS, registerables } from "chart.js";
 import { Radar } from "react-chartjs-2";
 import { useLocation } from "react-router-dom";
@@ -84,12 +87,12 @@ const TalentDisplay: React.FC<TalentProps> = ({ talent }) => {
       }`}
     >
       {talent?.icon ? (
-        <img src={talent?.icon} />
+        <span><img src={talent?.icon} /></span>
       ) : (
         <div className="talent-icon-placeholder opacity-5">?</div>
       )}
       <div className={"talent-display-value"}>
-        {talent?.level}
+        <span>{talent?.level}</span>
         {isCrowned && <img className="crown-of-insight" src={CrownOfInsight} />}
       </div>
     </div>
@@ -336,8 +339,13 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         ELEMENT_TO_COLOR[chartsData?.characterMetadata?.element];
 
       percentagesArray = percentagesArray.filter((x) => {
-        const isZero = 0 === x.calculatedVal && 0 === x.avg;
-        return !isZero;
+        // const isZero = 0 === x.calculatedVal && 0 === x.avg;
+        const isNearZero =
+          x.avg >= 0 &&
+          x.avg <= 0.001 &&
+          x.calculatedVal >= 0 &&
+          x.calculatedVal <= 0.001;
+        return !isNearZero;
       });
 
       const data = {
@@ -528,8 +536,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                 </span>
                 <span className="compact-artifact-main-stat">
                   <StatIcon name={artifact.mainStatKey} />
-                  {mainStatValue}
-                  {isPercent(artifact.mainStatKey) ? "%" : ""}
+                  <span>
+                    {mainStatValue}
+                    {isPercent(artifact.mainStatKey) ? "%" : ""}
+                  </span>
                 </span>
               </div>
               <div className="compact-artifact-subs">
@@ -668,7 +678,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         <div className="column-shadow-gradient-top" />
         <div className="column-shadow-gradient-left" />
         <div className="column-shadow-gradient-bottom" />
-        <div className="column-shadow-gradient" />
+        {/* <div className="column-shadow-gradient" /> */}
         <div
           style={{ pointerEvents: "all" }}
           className={`character-showcase-pic-container ${hasCustomBg} ${
@@ -779,11 +789,12 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   );
 
   const cardStyle = {
-    "--hue-rotate": `${
-      ELEMENT_TO_HUE[chartsData?.characterMetadata?.element]
-    }deg`,
+    // "--hue-rotate": `${
+    //   ELEMENT_TO_HUE[chartsData?.characterMetadata?.element]
+    // }deg`,
+    "--elemental-bg": `url(/elementalBackgrounds/${chartsData?.characterMetadata?.element}-bg.png)`,
     "--character-namecard-url": !namecardBg
-      ? `url(/elementalBackgrounds/Enka-bg.jpg)`
+      ? `url(/elementalBackgrounds/${chartsData?.characterMetadata?.element}-bg.png)`
       : `url(${toEnkaUrl(chartsData?.characterMetadata?.namecard)})`,
     "--element-color": ELEMENT_TO_COLOR[chartsData?.characterMetadata?.element],
     "--element-color-2": `${
@@ -939,7 +950,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             const constImg = chartsData?.assets?.constellations?.[i];
             const isActivated = row.constellation >= i + 1;
             return (
-              <div key={constImg}>
+              <div key={constImg} className={isActivated ? "activated" : ""}>
                 {!isActivated ? (
                   <span className="const-locked">
                     <FontAwesomeIcon
@@ -1005,7 +1016,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         <div className="character-artifacts-rv">
           <RollList artifacts={reorderedArtifacts} character={row.name} />
         </div>
-        <div className="wide-bg-shadow" />
+        {/* <div className="wide-bg-shadow" /> */}
         <div
           className={`character-card-background ${
             !namecardBg ? "elemental-bg" : ""
@@ -1049,21 +1060,72 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     const cardNode = document.getElementById(getBuildId(row));
     if (!cardNode) return;
 
+    const _opts: Partial<Options> = {
+      scale: 1.5,
+      // width: 1806,
+      // height: 853,
+      backgroundColor: null,
+      allowTaint: true,
+      useCORS: true,
+      onclone: (document, element) => {
+        const offsetElementBy = (
+          selector: string,
+          transform: number | string
+          // transform?: string
+        ) => {
+          element.querySelectorAll(selector).forEach((el: any) => {
+            el.style.transform = isNaN(+transform)
+              ? transform
+              : `translateY(${transform}px)`;
+          });
+        };
+
+        // un-scale
+        (element.style as any)["--scale-factor"] = "1";
+
+        offsetElementBy(".character-talents .talent-display-value", 0); // ???
+        offsetElementBy(".character-talents .talent-display-value > span", -1);
+        offsetElementBy(".roll-list-member > span > span", -1);
+        offsetElementBy(".roll-list-member > span > span > img", 1); // offset img
+        offsetElementBy(
+          ".character-artifacts .compact-artifact-main-stat > span",
+          -1
+        );
+        offsetElementBy(".lb-badge > span", -1);
+        offsetElementBy(".compact-artifact-crit-value > span", -2);
+        offsetElementBy(".table-stat-row span", -1);
+        offsetElementBy(".table-stat-row > div:not(.flex)", -1);
+
+        offsetElementBy(
+          ".compact-artifact-subs .substat > span:last-child",
+          -1
+        );
+
+        offsetElementBy(
+          ".roll-dots",
+          `translateX(calc(-100% - 3px)) translateY(-1px)`
+        );
+      },
+    };
+
     try {
       if (mode === "download") {
         setGenerating("downloading");
-        const dataUrl = await toPng(cardNode, {
-          pixelRatio: 1.5,
-          fetchRequestInit: {
-            mode: "cors",
-            credentials: "same-origin", // include, *same-origin, omit
-          },
-          // filter: (node: HTMLElement) => {
-          //   const exclusionClasses = ['remove-me', 'secret-div'];
-          //   return !exclusionClasses.some((classname) => node.classList?.contains(classname));
-          // }
-          // cacheBust: true,
-        });
+        // const dataUrl = await toPng(cardNode, {
+        //   pixelRatio: 1.5,
+        //   fetchRequestInit: {
+        //     mode: "cors",
+        //     credentials: "same-origin", // include, *same-origin, omit
+        //   },
+        //   // filter: (node: HTMLElement) => {
+        //   //   const exclusionClasses = ['remove-me', 'secret-div'];
+        //   //   return !exclusionClasses.some((classname) => node.classList?.contains(classname));
+        //   // }
+        //   // cacheBust: true,
+        // });
+
+        const canvas = await html2canvas(cardNode, _opts);
+        const dataUrl = canvas.toDataURL("image/png", 1.0);
 
         if (!dataUrl) return;
 
@@ -1075,18 +1137,27 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
       if (mode === "open") {
         setGenerating("opening");
-        const dataUrl = await toBlob(cardNode, {
-          pixelRatio: 1.5,
-          fetchRequestInit: {
-            mode: "cors",
-            credentials: "same-origin", // include, *same-origin, omit
-          },
+
+        // const dataUrl = await toBlob(cardNode, {
+        //   pixelRatio: 1.5,
+        //   fetchRequestInit: {
+        //     mode: "cors",
+        //     credentials: "same-origin", // include, *same-origin, omit
+        //   },
+        // });
+        // if (!dataUrl) return;
+        // setImagePreviewBlob(dataUrl);
+        // handleToggleModal(event);
+
+        const canvas = await html2canvas(cardNode, _opts);
+
+        canvas.toBlob((blob) => {
+          if (!blob) return;
+          setImagePreviewBlob(blob);
+          handleToggleModal(event);
         });
 
-        if (!dataUrl) return;
-
-        setImagePreviewBlob(dataUrl);
-        handleToggleModal(event);
+        // if (!dataUrl) return;
 
         // const url = URL.createObjectURL(dataUrl);
         // window.open(url, '_blank');
@@ -1103,18 +1174,19 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   };
 
   return (
-    <div className="flex expanded-row relative mb-0">
+    <div className="flex expanded-row relative mb-0 scale-factor-source" style={wrapperStyle}>
       <PreviewModal
         isOpen={showPreviewModal}
         toggleModal={handleToggleModal}
         blob={imagePreviewBlob}
+        // dataURL={imagePreviewBlob}
       />
-      <div
-        className={`card-wrapper relative ${DEBUG_MODE ? "debug" : ""}`}
-        style={wrapperStyle}
-      >
-        <div id={getBuildId(row)} className="html-to-image-target">
-          {cardContainer}
+      <div className="card-wrapper-height-fix">
+        <div
+          id={getBuildId(row)}
+          className={`card-wrapper relative ${DEBUG_MODE ? "debug" : ""}`}
+        >
+          <div className="html-to-image-target">{cardContainer}</div>
         </div>
       </div>
       <div className="card-buttons-wrapper">

@@ -5,12 +5,14 @@ type PreviewModalProps = {
   isOpen: boolean;
   toggleModal: (event: React.MouseEvent<HTMLElement>) => void;
   blob?: Blob;
+  dataURL?: string;
 };
 
 export const PreviewModal: React.FC<PreviewModalProps> = ({
   isOpen,
   toggleModal,
-  blob
+  blob,
+  dataURL,
 }) => {
   const handleCloseModal = (
     event: React.MouseEvent<HTMLElement>,
@@ -24,11 +26,14 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
 
   if (!isOpen) return null;
 
-  const imageData = blob ? URL.createObjectURL(blob) : ''
+  const imageData = blob ? URL.createObjectURL(blob) : dataURL || "";
 
   return (
-    <div className="modal-wrapper card-preview-modal" onClick={handleCloseModal}>
-      <div className="modal" >
+    <div
+      className="modal-wrapper card-preview-modal"
+      onClick={handleCloseModal}
+    >
+      <div className="modal">
         <div className="modal-header">
           <span className="modal-title">Character showcase card preview</span>
           <button

@@ -32,7 +32,7 @@ export const helpContentBuilds = (
         </div>
         <div className="list-element">
           How popular is
-          {getIconElement("Shougun")} Raiden Shogun in comparison to
+          {getIconElement("Shougun")} Raiden Shogun in comparison to{" "}
           {getIconElement("Keqing")}
           Keqing ?
         </div>

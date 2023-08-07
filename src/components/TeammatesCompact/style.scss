@@ -82,8 +82,8 @@
 
       &.stat-icon {
         padding: calc(var(--teammate-scale) * 1.5px);
-        box-shadow: inset 0 0 calc(var(--teammate-scale) * 15px)
-          var(--teammate-inner-shadow);
+        // box-shadow: inset 0 0 calc(var(--teammate-scale) * 15px)
+        //   var(--teammate-inner-shadow);
         // filter: drop-shadow(0 0 calc(var(--teammate-scale) * 2px) black)
         //   brightness(1.1);
         background-image: var(--teammate-bg-image);

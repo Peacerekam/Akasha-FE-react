@@ -144,7 +144,7 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
               <div className="compact-artifact-icon-container">
                 <ArtifactOnCanvas icon={artifact.icon} />
                 <span className="compact-artifact-crit-value">
-                  <span>{Math.round(artifact.critValue * 10) / 10} cv</span>
+                  {Math.round(artifact.critValue * 10) / 10} cv
                 </span>
                 <span className="compact-artifact-main-stat">
                   <StatIcon name={artifact.mainStatKey} />
