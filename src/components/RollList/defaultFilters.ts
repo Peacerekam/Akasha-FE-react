@@ -54,7 +54,7 @@ const geoRvList = {
   Noelle: [CRate, CDMG, DEF_, ATK_, ER],
   Zhongli: [CRate, CDMG, ATK_, HP_],
   "Yun Jin": [CRate, ER, DEF, DEF_],
-  "Arataki Itto": [CRate, CDMG, DEF_, ATK_],
+  "Arataki Itto": [CRate, CDMG, ER, DEF_, ATK_],
 };
 
 const electroRvList = {
