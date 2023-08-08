@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import Highlighter from "react-highlight-words";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX, faTrash } from "@fortawesome/free-solid-svg-icons";
 

@@ -63,7 +63,7 @@
     // box-shadow: $bg-color -10px 0px 30px 30px;
     color: white;
     // text-shadow: 0 0 0.3em rgba(0, 0, 0, 0.6), 0 0 1em rgba(0, 0, 0, 1);
-    
+
     .stat-icon {
       width: 22px;
       height: 22px;
@@ -76,13 +76,13 @@
         position: absolute;
         transform: translateX(calc(-100% - 3px));
         // filter: drop-shadow(0px 0px 3px black);
-        letter-spacing: 0px; 
+        letter-spacing: 0px;
       }
     }
   }
 }
 
-.total-roll-list-wrapper{
+.total-roll-list-wrapper {
   width: 100%;
   display: flex;
   justify-content: center;
@@ -101,6 +101,8 @@
       background-color: rgba(black, 0.5);
       height: fit-content;
       cursor: pointer;
+      border: 1px solid transparent;
+
       &.x-prefix {
         span {
           :first-child {
@@ -110,6 +112,14 @@
           }
         }
       }
+
+      &:not(.total-roll-rv):hover {
+        border: 1px solid rgba(orange, 0.5);
+        &::after {
+          border: 3px solid rgba(orange, 0.25);
+        }
+      }
+
       &.active-rv {
         // box-shadow: 0 0 0 1px orange, 0 0 0px 3px rgba(orange, 0.5);
         border: 1px solid orange;

@@ -638,7 +638,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       const gradientMask = ctx!.createLinearGradient(
         canvasWidth - 101,
         0,
-        canvasWidth - 1,
+        canvasWidth - 3,
         0
       );
       gradientMask.addColorStop(0, "black");
