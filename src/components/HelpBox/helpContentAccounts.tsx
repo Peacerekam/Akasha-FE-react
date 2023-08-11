@@ -2,7 +2,7 @@ export const helpContentAccounts = (
   <>
     <div className="help-box-header">Profiles lookup</div>
     <div className="help-box-p">
-      If you want to add your account into Akasha then you need to do is make
+      If you want to add your account into Akasha then all you need to do is make
       sure to go to your profile settings in-game and turn on "Show character
       details", otherwise the website won't be able to see it.
     </div>

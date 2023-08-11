@@ -23,6 +23,7 @@ import {
   TeammatesCompact,
   CalculationTeammate,
   NotificationBar,
+  EnkaBadge,
 } from "../../components";
 import {
   FETCH_CHARACTER_FILTERS_URL,
@@ -141,9 +142,12 @@ export const LeaderboardsPage: React.FC = () => {
         // sortField: "owner.nickname",
         width: "180px",
         cell: (row) => {
+          const isEnkaProfile = isNaN(+row.uid);
           return (
             <a
-              className="row-link-element"
+              className={`row-link-element ${
+                isEnkaProfile ? "enka-profile" : ""
+              }`}
               onClick={(event) => {
                 event.preventDefault();
                 navigate(`/profile/${row.uid}`);
@@ -152,6 +156,7 @@ export const LeaderboardsPage: React.FC = () => {
             >
               {/* <ARBadge adventureRank={row.owner?.adventureRank} /> */}
               <RegionBadge region={row.owner?.region} />
+              {/* {isEnkaProfile ? <EnkaBadge /> : ""} */}
               {row.owner?.nickname}
             </a>
           );

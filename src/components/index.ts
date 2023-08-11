@@ -27,6 +27,7 @@ export * from "./AdsComponent";
 export * from "./PageMessage";
 export * from "./ARBadge";
 export * from "./RegionBadge";
+export * from "./EnkaBadge";
 export * from "./StatListSide";
 export * from "./FancyBuildBorder";
 export * from "./MobileStickyBar";

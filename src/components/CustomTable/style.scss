@@ -268,11 +268,30 @@ $substats: "flathp", "hp_", "flatatk", "atk_", "flatdef", "def_", "critrate",
   &:hover {
     color: orange;
     .ar-badge {
-      border: 1px solid orange;
       color: white;
     }
+    .enka-badge,
+    .ar-badge,
     .region-badge {
       border: 1px solid orange;
+    }
+  }
+
+  &.enka-profile {
+    &:hover {
+      &::after {
+        color: rgba(orange, 0.5);
+      }
+    }
+    &::after {
+      content: "- Enka";
+      position: relative;
+      top: -1px;
+      margin-left: 5px;
+      white-space: nowrap;
+      font-size: 10px;
+      color: rgba(white, 0.5);
+      color: #719bd4;
     }
   }
 

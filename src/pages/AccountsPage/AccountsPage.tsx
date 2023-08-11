@@ -16,6 +16,7 @@ import {
   HelpBox,
   AchievementsBadge,
   NotificationBar,
+  EnkaBadge,
 } from "../../components";
 import { TableColumn } from "../../types/TableColumn";
 import Achievevement from "../../assets/icons/Achievement.webp";
@@ -60,10 +61,13 @@ export const AccountsPage: React.FC = () => {
         sortable: false,
         cell: (row) => {
           // if (!row.playerInfo?.level) return <></>;
+          const isEnkaProfile = isNaN(+row.uid);
 
           return (
             <a
-              className="row-link-element"
+              className={`row-link-element ${
+                isEnkaProfile ? "enka-profile" : ""
+              }`}
               onClick={(event) => {
                 event.preventDefault();
                 navigate(`/profile/${row.uid}`);
@@ -72,6 +76,7 @@ export const AccountsPage: React.FC = () => {
             >
               {/* <ARBadge adventureRank={row.owner.adventureRank} /> */}
               <RegionBadge region={row.playerInfo.region} />
+              {/* {isEnkaProfile ? <EnkaBadge /> : ""} */}
               {row.playerInfo.nickname}
             </a>
           );

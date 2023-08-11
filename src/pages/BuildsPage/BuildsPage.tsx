@@ -55,10 +55,11 @@ export const BuildsPage: React.FC = () => {
         sortable: false,
         cell: (row) => {
           if (!row.owner?.adventureRank) return <></>;
+          const isEnkaProfile = isNaN(+row.uid);
 
           return (
             <a
-              className="row-link-element"
+              className={`row-link-element ${isEnkaProfile ? "enka-profile" : ""}`}
               onClick={(event) => {
                 event.preventDefault();
                 navigate(`/profile/${row.uid}`);
