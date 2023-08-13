@@ -1,13 +1,18 @@
 .privacy-policy-content-wrapper {
-  display: flex;
-  flex-direction: row-reverse;
-  flex-wrap: wrap;
-  justify-content: center;
+  > .vm-container.shrink-ad { // video ad
+    float: right;
+    margin-left: 15px;
+    margin-bottom: 15px;
+  }
 
   .privacy-policy {
-    margin: 0 20px;
     flex: 1;
+    margin-left: 20px;
+
+    @media (max-width: 800px) {
+      margin-left: 0px;
+    }
     // width: calc(100% - 450px);
-    min-width: min(450px, 100%);
+    // min-width: min(450px, 100%);
   }
 }

@@ -358,7 +358,7 @@ export const ProfilePage: React.FC = () => {
           "stats.critDamage.value",
         ],
         cell: (row) => {
-          return <CritRatio stats={row.stats} overrideCV={row.critValue} />;
+          return <CritRatio row={row} overrideCV={row.critValue} />;
         },
       },
       {

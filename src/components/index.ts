@@ -38,3 +38,4 @@ export * from "./CharacterCard";
 export * from "./StatListCard";
 export * from "./TeammatesCompact";
 export * from "./AchievementsBadge";
+export * from "./FAQBrowser";

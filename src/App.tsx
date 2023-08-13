@@ -28,6 +28,7 @@ import {
   CategorySelectionPage,
   // DashboardPage,
   AccountsPage,
+  FAQPage,
 } from "./pages";
 import { PrivacyPolicyPage } from "./pages/PrivacyPolicy";
 
@@ -42,14 +43,30 @@ const urls = {
   ovh80: "http://146.59.86.233",
   proxy: "http://localhost:3100/akasha",
   heroku: "https://akasha-backend.herokuapp.com",
+  gameRiseOVH: "http://54.39.29.82",
 };
 
-export const showAds = true;
-export const isProduction = true;
 export const BASENAME = "/";
+export const showAds = true;
+export const isProduction = true; // set to true for akasha.cv domain
+const GAME_RISE_OVH = false; // @TODO: temporary - use new server's IP address, remove after moving servers ... 
 const MAINTENANCE_MODE = false;
 
-axios.defaults.baseURL = urls[isProduction ? "prod-akasha-cv" : "localhost80"]; // prod
+const getApiBaseURL = () => {
+  if (GAME_RISE_OVH) {
+    // @TODO: remove after moving servers ... 
+    return urls["gameRiseOVH"];
+  }
+
+  if (isProduction) {
+    return urls["prod-akasha-cv"];
+  }
+
+  return urls["localhost80"];
+};
+
+axios.defaults.baseURL = getApiBaseURL();
+
 axios.defaults.withCredentials = true;
 
 // const queryClient = new QueryClient({
@@ -177,6 +194,11 @@ const App = () => {
                       <Route
                         path="/leaderboards/:calculationId/:variant"
                         element={<LeaderboardsPage />}
+                      />
+
+                      <Route
+                        path="/faq"
+                        element={<FAQPage />}
                       />
 
                       <Route

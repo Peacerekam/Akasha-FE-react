@@ -201,7 +201,7 @@ export const LeaderboardsPage: React.FC = () => {
         cell: (row) => {
           // const build = row.calculations[currentCategory]?.stats;
           // return build ? <CritRatio stats={build} /> : <></>;
-          return <CritRatio stats={row.stats} overrideCV={row.critValue} />;
+          return <CritRatio row={row} overrideCV={row.critValue} />;
         },
       },
       {
@@ -437,6 +437,12 @@ export const LeaderboardsPage: React.FC = () => {
           title: function (a: any[]) {
             return a[0] ? `top ${a[0].label}%` : "";
           },
+          // label: (a: any) => {
+          //   if (!a || !a.dataset) return "";
+          //   const max = a.dataset.data[a.dataIndex].max
+          //   const min = a.dataset.data[a.dataIndex].min
+          //   return [`${a.formattedValue}`, '', `max: ${max.toFixed(3)}`, `min: ${min.toFixed(3)}`]
+          // },
         },
       },
       legend: {
@@ -485,6 +491,8 @@ export const LeaderboardsPage: React.FC = () => {
     const formattedData = chartData.map((el, i) => ({
       y: el.avg,
       x: i + 1,
+      // min: el.min,
+      // max: el.max
     }));
 
     const datasets = [

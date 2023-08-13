@@ -2,11 +2,12 @@ import { getCharacterCvColor, getRainbowTextStyle } from "../../utils/helpers";
 import "./style.scss";
 
 type CritRatioProps = {
-  stats: any;
+  row: any;
   overrideCV?: number;
 };
 
-export const CritRatio: React.FC<CritRatioProps> = ({ stats, overrideCV }) => {
+export const CritRatio: React.FC<CritRatioProps> = ({ row, overrideCV }) => {
+  const stats = row.stats;
   const offset = 0.000001;
 
   const cr = stats.critRate?.value
@@ -35,6 +36,7 @@ export const CritRatio: React.FC<CritRatioProps> = ({ stats, overrideCV }) => {
         {cr.toFixed(1)} : {cd.toFixed(1)}{" "}
       </div>
       {cv ? <div style={style}>{cv.toFixed(1)} cv</div> : ""}
+      {/* <div onClick={() => console.log("test")} className="cv-details"></div> */}
     </div>
   );
 };

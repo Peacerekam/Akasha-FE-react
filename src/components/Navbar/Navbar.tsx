@@ -59,6 +59,10 @@ export const Navbar: React.FC = () => {
         name: "Leaderboards",
         path: "/leaderboards",
       },
+      // {
+      //   name: "FAQ",
+      //   path: "/faq",
+      // },
       {
         name: "spacer",
         path: "spacer",
