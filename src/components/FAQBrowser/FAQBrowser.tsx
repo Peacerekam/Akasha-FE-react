@@ -3,13 +3,20 @@ import { useMemo, useState } from "react";
 import "./style.scss";
 
 type FAQBrowserProps = {
+  wordHits: {
+    [id: number]: { [text: string]: number };
+  };
   contents: {
+    id: number;
     question: string;
     answer: any;
   }[];
 };
 
-export const FAQBrowser: React.FC<FAQBrowserProps> = ({ contents }) => {
+export const FAQBrowser: React.FC<FAQBrowserProps> = ({
+  contents,
+  wordHits,
+}) => {
   const [searchText, setSearchTest] = useState("");
 
   const memoizedContents = useMemo(() => {
@@ -33,14 +40,21 @@ export const FAQBrowser: React.FC<FAQBrowserProps> = ({ contents }) => {
         </h2>
       );
 
+      const _count = wordHits[entry.id]
+        ? Object.values(wordHits[entry.id]).reduce((acc, val) => acc + val, 0)
+        : 0;
+
+        console.log('wordHits', wordHits)
+
       return (
         <div key={entry.question}>
           {_question}
           {_answer}
+          hits: {_count}
         </div>
       );
     });
-  }, [searchText, contents]);
+  }, [searchText, contents, wordHits]);
 
   return (
     <div className={`faq-browser`}>
