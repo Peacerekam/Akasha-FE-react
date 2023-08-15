@@ -548,9 +548,16 @@ export const ProfilePage: React.FC = () => {
 
       const showBindAccBtn = isAuthenticated && !isAccountOwner;
 
+      const getTimestamp = () => {
+        if (!refreshTime) return 0;
+        const now = new Date().getTime();
+        const then = refreshTime - now;
+        return then;
+      };
+
       const refreshButton = refresh ? (
         <>
-          {refreshTime ? (
+          {refreshTime && getTimestamp() > 0 ? (
             <Timer
               until={refreshTime}
               label={"refresh in:"}
