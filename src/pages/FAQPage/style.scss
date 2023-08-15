@@ -16,7 +16,7 @@
     }
 
     .faq-main-header {
-      margin-bottom: 100px;
+      margin-bottom: 75px;
       text-align: center;
       h1 {
         // display: inline;
@@ -64,11 +64,98 @@
 
     img.expandable-img {
       transition: transform 0.15s;
-      &:hover {
-        transform: translate(-25%, 25%) scale(1.5);
-        @media (max-width: 800px) {
-          transform: translateY(20%) scale(1.5);
+      // &:hover {
+      //   transform: translate(-25%, 25%) scale(1.5);
+      //   @media (max-width: 800px) {
+      //     transform: translateY(20%) scale(1.5);
+      //   }
+      // }
+    }
+
+    .faq-browser {
+      a {
+        outline: none;
+        text-decoration: none;
+        h2 {
+          color: rgb(231, 246, 242);
         }
+      }
+      .faq-grid {
+        // display: grid;
+        // overflow: hidden;
+        // grid-template-rows: 0fr;
+        // transition: 0.3s;
+        // > * {
+        //   overflow: hidden !important;
+        // }
+      }
+
+      > div:not(.faq-input) {
+        position: relative;
+        padding-bottom: 20px;
+
+        &:focus {
+          .faq-grid {
+            // grid-template-rows: 1fr;
+            // padding-bottom: 20px;
+          }
+        }
+        &:not(:last-child)::after {
+          content: "";
+          position: absolute;
+          border-top: 1px dashed rgba(231, 246, 242, 0.25);
+          bottom: -3px;
+          left: 5%;
+          width: 90%;
+        }
+      }
+
+      h2 {
+        // cursor: pointer;
+        // &:hover {
+        //   text-decoration: underline;
+        // }
+        > span:not(:first-child) {
+          &::before {
+            content: "•";
+            margin: 0 15px;
+            color: orange;
+          }
+        }
+      }
+      .faq-input {
+        text-align: center;
+        position: relative;
+        > input {
+          width: 70%;
+          background-color: rgba(0, 0, 0, 0.4);
+          margin-bottom: 10px;
+          height: 32px;
+          color: white;
+          border: none;
+          outline: none;
+          padding: 2px 12px;
+        }
+        // > label {
+        //   pointer-events: none;
+        //   position: absolute;
+        //   top: -30px;
+        //   left: calc(15% - 8px);
+        // }
+      }
+      .desc-formula {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        border-radius: 100px;
+        padding: 5px 10px;
+        margin: 5px;
+        width: fit-content;
+      }
+      .faq-header-highlight-class {
+        background-color: transparent;
+        text-decoration: underline;
+        color: orange;
       }
     }
   }
