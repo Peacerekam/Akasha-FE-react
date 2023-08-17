@@ -7,7 +7,7 @@ import {
 } from "../../components";
 import { FAQHighlighter } from "./FAQHighlighter";
 import { FAQBrowser } from "./FAQBrowser";
-import { debounce } from "lodash";
+import debounce from "lodash/debounce";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { FAQHighlighter } from "./FAQHighlighter";
 import "./style.scss";
 import { useLocation, useNavigate } from "react-router-dom";
-import { debounce } from "lodash";
+import debounce from "lodash/debounce";
 
 type FAQBrowserProps = {
   textCallback: (id: number, count: number) => void;

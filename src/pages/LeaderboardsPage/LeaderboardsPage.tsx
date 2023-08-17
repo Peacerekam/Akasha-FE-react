@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import axios from "axios";
-import { debounce } from "lodash";
+import debounce from "lodash/debounce";
 import { useNavigate, useParams } from "react-router-dom";
 import { Chart as ChartJS, registerables } from "chart.js";
 import { Line } from "react-chartjs-2";

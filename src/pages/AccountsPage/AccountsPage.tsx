@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { debounce } from "lodash";
+import debounce from "lodash/debounce";
 
 import {
   CustomTable,
