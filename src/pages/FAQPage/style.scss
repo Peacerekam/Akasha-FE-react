@@ -40,7 +40,7 @@
 
     .faq-split {
       display: flex;
-      gap: 20px;
+      gap: 30px;
       justify-content: space-between;
       flex-wrap: wrap;
       justify-content: center;
@@ -59,6 +59,9 @@
         flex-shrink: 0;
         object-fit: contain;
         width: min(440px, 100% - 15px);
+        border-radius: 5px;
+        overflow: hidden;
+        height: fit-content;
       }
     }
 
@@ -88,6 +91,13 @@
         // > * {
         //   overflow: hidden !important;
         // }
+      }
+
+      i > a {
+        color: rgb(255, 216, 144);
+        &:hover {
+          text-decoration: underline;
+        }
       }
 
       > div:not(.faq-input) {

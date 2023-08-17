@@ -25,8 +25,7 @@ export const FAQBrowser: React.FC<FAQBrowserProps> = ({
   const _garbo = "!@#$%!@#$";
   const navigate = useNavigate();
   const location = useLocation();
-  const [searchText, setSearchTest] = useState<string>(_garbo);
-  const [defaultText, setDefaultText] = useState<string>('');
+  const [searchText, setSearchText] = useState<string>(_garbo);
 
   // project text to url params e.g. :  ?q=crit%20value
   // read text from url params and fill it as default
@@ -34,13 +33,17 @@ export const FAQBrowser: React.FC<FAQBrowserProps> = ({
   useEffect(() => {
     if (location.search) {
       const query = new URLSearchParams(location.search);
-      const aaa = query.forEach((val,key) => {
+      const _ = query.forEach((val, key) => {
         if (key !== "q") return;
-        setSearchTest(val);
-        setDefaultText(val)
-      })
+        clearWordHits();
+        setSearchText(val);
+
+        document
+          .querySelector(".faq-browser")
+          ?.scrollIntoView({ behavior: "smooth" });
+      });
     }
-  }, []);
+  }, [location.search]);
 
   useEffect(() => {
     if (searchText === _garbo) return;
@@ -68,7 +71,7 @@ export const FAQBrowser: React.FC<FAQBrowserProps> = ({
           : 1;
       })
       .map((entry) => {
-        const _answer = entry.answer(searchText);
+        const _answer = entry.answer(searchText); // @TODO ?
 
         const _question = (
           // <a id={"" + entry.id} href={"#" + entry.id}>
@@ -109,10 +112,10 @@ export const FAQBrowser: React.FC<FAQBrowserProps> = ({
         <input
           type="text"
           placeholder="what are you looking for?"
-          defaultValue={defaultText}
+          value={searchText === _garbo ? "" : searchText}
           onChange={(e) => {
             clearWordHits();
-            setSearchTest(e.currentTarget.value);
+            setSearchText(e.currentTarget.value);
           }}
         />
       </div>

@@ -97,3 +97,75 @@
     padding-top: 0px !important;
   }
 }
+
+// @keyframes aaaa {
+//   0% {
+//     max-height: 0px;
+//   }
+//   70% {
+//     max-height: 0px;
+//   }
+//   75% {
+//     max-height: 400px;
+//   }
+//   100% {
+//     max-height: 400px;
+//   }
+// }
+
+// @keyframes bbbb {
+//   0% {
+//     top: 64px;
+//   }
+//   70% {
+//     top: 64px;
+//   }
+//   75% {
+//     top: 0px;
+//   }
+//   100% {
+//     top: 0px;
+//   }
+// }
+
+// // @FIX: quick fix for desktop
+// @media (min-width: 800px) {
+//   #top-of-the-page {
+//     &.anim {
+//       position: relative;
+//       max-height: 0px;
+//       animation: aaaa 7s linear;
+//       animation-fill-mode: forwards;
+//     }
+//   }
+
+//   .navbar-tabs {
+//     &.anim {
+//       top: 64px;
+//       animation: bbbb 7s linear;
+//       animation-fill-mode: forwards;
+//     }
+//   }
+
+//   body:not(.overflow-hidden) {
+//     .anim {
+//       &#top-of-the-page,
+//       &.navbar-tabs {
+//         z-index: 1001;
+//       }
+//     }
+//   }
+// }
+
+body:not(.overflow-hidden) {
+  &#top-of-the-page,
+  &.navbar-tabs {
+    z-index: 1001;
+  }
+}
+
+body:not(.a-h-0) {
+  #root > .flex-special-container {
+    min-height: 250px;
+  }
+}

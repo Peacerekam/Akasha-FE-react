@@ -181,7 +181,7 @@ export const LeaderboardsPage: React.FC = () => {
       {
         name: "Sets",
         sortable: false,
-        sortField: `calculations.${currentCategory}.stats.artifactSetsFlat`,
+        // sortField: `calculations.${currentCategory}.stats.artifactSetsFlat`,
         width: "75px",
         cell: (row) => {
           return <DisplaySets artifactSets={row.artifactSets} />;

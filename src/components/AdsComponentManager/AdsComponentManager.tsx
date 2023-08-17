@@ -25,6 +25,12 @@ export const AdsComponentManager: React.FC<AdsComponentManagerProps> = (
   //   "return null?": (!showAds || reloadAds || adsDisabled || profileObject.isPatreon)
   // });
 
+  if (profileObject.isPatreon || adsDisabled) {
+    document.querySelector("body")?.classList.add("a-h-0");
+  } else {
+    document.querySelector("body")?.classList.remove("a-h-0");
+  }
+
   if (!showAds || reloadAds || adsDisabled || profileObject.isPatreon) {
     return <></>;
   }

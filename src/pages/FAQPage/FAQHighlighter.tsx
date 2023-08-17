@@ -7,6 +7,7 @@ type FAQHighlighterProps = {
   textToHighlight: string;
   textCallback: (id: number, count: number) => void;
   wordWeight?: number;
+  splitWords?: boolean;
 };
 
 export const FAQHighlighter: React.FC<FAQHighlighterProps> = ({
@@ -15,12 +16,24 @@ export const FAQHighlighter: React.FC<FAQHighlighterProps> = ({
   textToHighlight,
   textCallback,
   wordWeight = 1,
+  splitWords = true,
 }) => {
   useEffect(() => {
     if (searchText === "") return;
 
-    const count =
-      textToHighlight.toLowerCase().split(searchText.toLowerCase()).length - 1;
+    let count = 0;
+    const a = textToHighlight.toLowerCase();
+
+    if (splitWords) {
+      const split = searchText.split(" ");
+      for (const word of split) {
+        const b = word.toLowerCase();
+        count += a.split(b).length - 1;
+      }
+    } else {
+      const b = searchText.toLowerCase();
+      count = a.split(b).length - 1;
+    }
 
     textCallback(id, count * wordWeight);
   }, [searchText, textToHighlight]);
@@ -28,7 +41,7 @@ export const FAQHighlighter: React.FC<FAQHighlighterProps> = ({
   return (
     <Highlighter
       highlightClassName="faq-header-highlight-class"
-      searchWords={[searchText]}
+      searchWords={searchText.split(" ")}
       autoEscape={true}
       textToHighlight={textToHighlight}
     />

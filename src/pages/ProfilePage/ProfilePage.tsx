@@ -342,7 +342,7 @@ export const ProfilePage: React.FC = () => {
       },
       {
         name: "Sets",
-        sortField: "artifactSetsFlat",
+        // sortField: "artifactSetsFlat",
         sortable: false,
         width: "80px",
         cell: (row) => {

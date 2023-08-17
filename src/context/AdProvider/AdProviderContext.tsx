@@ -38,8 +38,25 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
 
   const handleReloadAds = () => {
     setReloadAds(true);
-    setTimeout(() => setReloadAds(false), 100);
-  }
+
+    // if (location.pathname.startsWith("/leaderboards/1000000603")) { 
+    //   console.log(`%c\n\n [!] DISABLED AD-TAKEOVER WORKAROUND`, "color: red; font-size: 20px;");
+    // } else {
+    //   document.querySelector("#top-of-the-page")?.classList.remove("anim");
+    //   document.querySelector(".navbar-tabs")?.classList.remove("anim");
+    // }
+
+    setTimeout(() => {
+      setReloadAds(false);
+
+      // if (location.pathname.startsWith("/leaderboards/1000000603")) {
+      //   // ... lisa
+      // } else {
+      //   document.querySelector("#top-of-the-page")?.classList.add("anim");
+      //   document.querySelector(".navbar-tabs")?.classList.add("anim");
+      // }
+    }, 100);
+  };
 
   useEffect(() => {
     window.addEventListener("resize", handleWindowSizeChange);
@@ -51,7 +68,7 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
 
   useEffect(() => {
     handleReloadAds();
-  }, [isMobile])
+  }, [isMobile]);
 
   useEffect(() => {
     if (adProvider) return;
