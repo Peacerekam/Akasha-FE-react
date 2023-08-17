@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo, useState } from "react";
-import Highlighter from "react-highlight-words";
 import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
 import {
   StylizedContentBlock,
@@ -8,11 +7,11 @@ import {
 } from "../../components";
 import { FAQHighlighter } from "./FAQHighlighter";
 import { FAQBrowser } from "./FAQBrowser";
-import "./style.scss";
 import { debounce } from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import "./style.scss";
 
 export const FAQPage: React.FC = () => {
   const [_wordHits, _setWordHits] = useState<{

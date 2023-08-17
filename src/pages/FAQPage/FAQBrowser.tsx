@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { FAQHighlighter } from "./FAQHighlighter";
 import "./style.scss";
 import { useLocation, useNavigate } from "react-router-dom";
+import { debounce } from "lodash";
 
 type FAQBrowserProps = {
   textCallback: (id: number, count: number) => void;
@@ -30,6 +31,15 @@ export const FAQBrowser: React.FC<FAQBrowserProps> = ({
   // project text to url params e.g. :  ?q=crit%20value
   // read text from url params and fill it as default
 
+  const debouncedNavigate = useCallback(
+    debounce((text: string) => {
+      if (text === _garbo) return;
+      const newURL = text ? `?${new URLSearchParams([["q", text]])}` : "";
+      navigate(newURL, { replace: true });
+    }, 300),
+    []
+  );
+
   useEffect(() => {
     if (location.search) {
       const query = new URLSearchParams(location.search);
@@ -46,11 +56,7 @@ export const FAQBrowser: React.FC<FAQBrowserProps> = ({
   }, [location.search]);
 
   useEffect(() => {
-    if (searchText === _garbo) return;
-    const newURL = searchText
-      ? `?${new URLSearchParams([["q", searchText]])}`
-      : "";
-    navigate(newURL, { replace: true });
+    debouncedNavigate(searchText);
   }, [searchText]);
 
   const memoizedContents = useMemo(() => {
