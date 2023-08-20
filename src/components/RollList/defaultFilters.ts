@@ -29,6 +29,7 @@ const pyroRvList = {
   Yoimiya: [CRate, CDMG, ATK_, EM],
   Xiangling: [CRate, CDMG, ATK_, EM, ER],
   "Hu Tao": [CRate, CDMG, HP_, EM],
+  Lyney: [CRate, CDMG, ATK_, ER],
 };
 
 const hydroRvList = {
