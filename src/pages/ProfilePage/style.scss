@@ -385,6 +385,13 @@
   flex-wrap: wrap;
   justify-content: center;
 
+  .remove-btn-container {
+    position: absolute;
+    z-index: 999;
+    top: 11px;
+    right: 10px;
+  }
+
   .remove-btn {
     background: rgba(0, 0, 0, 0.5) !important;
     border-bottom-left-radius: 10px !important;

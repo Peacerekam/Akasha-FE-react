@@ -20,7 +20,7 @@ const anemoRvList = {
 };
 
 const pyroRvList = {
-  Klee: [CRate, CDMG, ATK_],
+  Klee: [CRate, CDMG, ATK_, EM],
   Yelan: [CRate, CDMG, HP_, ER],
   Diluc: [CRate, CDMG, ATK_, EM],
   Dehya: [CRate, CDMG, ATK_, ER, HP_],

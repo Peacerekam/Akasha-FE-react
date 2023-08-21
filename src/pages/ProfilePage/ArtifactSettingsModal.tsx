@@ -174,7 +174,7 @@ export const ArtifactSettingsModal: React.FC<ProfileSettingsModalProps> = ({
           </div> */}
 
           <Artifact artifact={artifact} width={210} />
-          <div style={{ position: "absolute", top: 11, right: 10 }}>
+          <div className="remove-btn-container">
             <ConfirmTooltip
               text={`Delete "${artifact.name}"?`}
               onConfirm={() => handleDeleteArtifact(artifact)}

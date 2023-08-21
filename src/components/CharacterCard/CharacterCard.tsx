@@ -87,7 +87,9 @@ const TalentDisplay: React.FC<TalentProps> = ({ talent }) => {
       }`}
     >
       {talent?.icon ? (
-        <span><img src={talent?.icon} /></span>
+        <span>
+          <img src={talent?.icon} />
+        </span>
       ) : (
         <div className="talent-icon-placeholder opacity-5">?</div>
       )}
@@ -184,9 +186,15 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         const _a = calculations[a];
         const _b = calculations[b];
 
-        return (
-          _b.priority - _a.priority || +_aVal / _a.outOf - +_bVal / _b.outOf
-        );
+        const topA_ = +_aVal / _a.outOf;
+        const topB_ = +_bVal / _b.outOf;
+
+        const isTop1_a = Math.min(100, Math.ceil(topA_ * 100)) === 1;
+        const isTop1_b = Math.min(100, Math.ceil(topB_ * 100)) === 1;
+
+        return _b.priority - _a.priority || (isTop1_a && isTop1_b)
+          ? +_aVal - +_bVal
+          : topA_ - topB_;
 
         // return +valA < +valB ? -1 : 1;
       }),
@@ -455,7 +463,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             <span className="lb-badge">
               <img className="weapon-icon" src={calc.weapon.icon} />
               <span>
-                {short} {variant?.displayName}
+                {short} {variant?.displayName?.replace("C6 ", "")}
               </span>
             </span>
           );
@@ -1174,7 +1182,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   };
 
   return (
-    <div className="flex expanded-row relative mb-0 scale-factor-source" style={wrapperStyle}>
+    <div
+      className="flex expanded-row relative mb-0 scale-factor-source"
+      style={wrapperStyle}
+    >
       <PreviewModal
         isOpen={showPreviewModal}
         toggleModal={handleToggleModal}

@@ -106,7 +106,18 @@ export const CalculationResultWidget: React.FC<
             ""
           );
 
-          return _rankingA / a.outOf > _rankingB / b.outOf ? 1 : -1;
+          const topA_ = _rankingA / a.outOf;
+          const topB_ = _rankingB / b.outOf;
+
+          const isTop1_a = Math.min(100, Math.ceil(topA_ * 100)) === 1;
+          const isTop1_b = Math.min(100, Math.ceil(topB_ * 100)) === 1;
+
+          return isTop1_a && isTop1_b
+            ? _rankingA - _rankingB
+            : topA_ > topB_
+            ? 1
+            : -1;
+            
           // return _rankingA > _rankingB ? 1 : -1;
         };
 
@@ -169,6 +180,8 @@ export const CalculationResultWidget: React.FC<
               break;
           }
 
+          const _top = Math.min(100, Math.ceil((_ranking / outOf) * 100));
+
           return (
             <div key={`${name}-${weapon.name}`} className={weaponMatchClass}>
               <a
@@ -195,14 +208,7 @@ export const CalculationResultWidget: React.FC<
                     // style={{ boxShadow: `0 0 0px 2px ${weaponColor}20` }}
                   />
                 </div>
-                <div>
-                  {ranking
-                    ? `top ${
-                        Math.min(100, Math.ceil((_ranking / outOf) * 100)) ||
-                        "?"
-                      }%`
-                    : ""}
-                </div>
+                <div>{ranking ? `top ${_top || "?"}%` : ""}</div>
                 <span>
                   {ranking ?? "---"}
                   <span className="opacity-5">
