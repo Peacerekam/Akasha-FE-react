@@ -192,9 +192,22 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         const isTop1_a = Math.min(100, Math.ceil(topA_ * 100)) === 1;
         const isTop1_b = Math.min(100, Math.ceil(topB_ * 100)) === 1;
 
-        return _b.priority - _a.priority || (isTop1_a && isTop1_b)
-          ? +_aVal - +_bVal
-          : topA_ - topB_;
+        const _priority = _b.priority - _a.priority;
+
+        if (_priority !== 0) {
+          return _priority;
+        }
+
+        if (isTop1_a && isTop1_b) {
+          return +_aVal - +_bVal;
+        }
+
+        return topA_ - topB_;
+
+        // return (
+        //   _b.priority - _a.priority ||
+        //   (isTop1_a && isTop1_b ? +_aVal - +_bVal : topA_ - topB_)
+        // );
 
         // return +valA < +valB ? -1 : 1;
       }),

@@ -57,7 +57,7 @@ export const FAQPage: React.FC = () => {
                     textToHighlight={`
                   CV (Crit Value) is a very basic 
                   investment metric that assumes crits are infinitely more important
-                  than any other stat. Using CV in vaccum with no other context is
+                  than any other stat. Using CV in vaccum with no other context is a 
                   very naive approach. Due to its popularity, as well as lack of any
                   better alternatives, it was chosen as default sort for most Akasha
                   tables.`}
@@ -95,7 +95,7 @@ export const FAQPage: React.FC = () => {
                     textCallback={handleTextCallback}
                     textToHighlight={`Crit Value on Akasha counts crit stats gained from artifacts only,
                     meaning crits gained from character's ascension stats or crit
-                    weapons are ignored. This approach in consistent with the
+                    weapons are ignored. This behaviour in consistent with the
                     "Artifact Details" screen in-game.`}
                   />
                 </p>

@@ -112,12 +112,18 @@ export const CalculationResultWidget: React.FC<
           const isTop1_a = Math.min(100, Math.ceil(topA_ * 100)) === 1;
           const isTop1_b = Math.min(100, Math.ceil(topB_ * 100)) === 1;
 
-          return isTop1_a && isTop1_b
-            ? _rankingA - _rankingB
-            : topA_ > topB_
-            ? 1
-            : -1;
-            
+          if (isTop1_a && isTop1_b) {
+            return _rankingA - _rankingB
+          }
+
+          return topA_ > topB_ ? 1 : -1
+          
+          // return isTop1_a && isTop1_b
+          //   ? _rankingA - _rankingB
+          //   : topA_ > topB_
+          //   ? 1
+          //   : -1;
+
           // return _rankingA > _rankingB ? 1 : -1;
         };
 
