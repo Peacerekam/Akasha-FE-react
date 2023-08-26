@@ -34,7 +34,7 @@ import { PrivacyPolicyPage } from "./pages/PrivacyPolicy";
 
 // @TODO: env variables later on...
 const urls = {
-  prod: "https://mimee.ovh",
+  "prod-mimee-ovh": "https://mimee.ovh",
   "prod-akasha-cv": "https://akasha.cv",
   localhost: "http://localhost:5033",
   localhost80: "http://localhost:80",
@@ -43,19 +43,20 @@ const urls = {
   ovh80: "http://146.59.86.233",
   proxy: "http://localhost:3100/akasha",
   heroku: "https://akasha-backend.herokuapp.com",
-  gameRiseOVH: "http://54.39.29.82",
+  "game-rise-ovh": "http://54.39.29.82",
 };
 
 export const BASENAME = "/";
 export const showAds = true;
 export const isProduction = true; // set to true for akasha.cv domain
-const GAME_RISE_OVH = false; // @TODO: temporary - use new server's IP address, remove after moving servers ... 
+const GAME_RISE_OVH = true; // @TODO: temporary - use new server's IP address, remove after moving servers ...
 const MAINTENANCE_MODE = false;
 
 const getApiBaseURL = () => {
   if (GAME_RISE_OVH) {
-    // @TODO: remove after moving servers ... 
-    return urls["gameRiseOVH"];
+    // @TODO: remove after moving servers ...
+    // return urls["game-rise-ovh"];
+    return urls["prod-mimee-ovh"];
   }
 
   if (isProduction) {
@@ -80,6 +81,7 @@ axios.defaults.withCredentials = true;
 const domainRedirect = () => {
   const currentHref = window.location.href;
 
+  // let _from = "!@#$%!@#$";
   let _from = "mimee.ovh";
 
   switch (currentHref) {
@@ -88,6 +90,9 @@ const domainRedirect = () => {
       break;
     case "146.59.86.233":
       _from = "146.59.86.233";
+      break;
+    case "54.39.29.82":
+      _from = "54.39.29.82";
       break;
   }
 
@@ -196,10 +201,7 @@ const App = () => {
                         element={<LeaderboardsPage />}
                       />
 
-                      <Route
-                        path="/faq"
-                        element={<FAQPage />}
-                      />
+                      <Route path="/faq" element={<FAQPage />} />
 
                       <Route
                         path="/privacy-policy"

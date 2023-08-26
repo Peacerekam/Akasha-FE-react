@@ -511,10 +511,12 @@ export const ProfilePage: React.FC = () => {
       artifactSettings?: boolean;
       enkaLink?: boolean;
     }) => {
-      const DISABLE_REFRESH_FLOATING_BUTTONS = false;
-      const defaultBtnClassName = DISABLE_REFRESH_FLOATING_BUTTONS
-        ? "disable-btn"
-        : "";
+      const DISABLE_FLOATING_BUTTONS = false;
+      const defaultBtnClassName = DISABLE_FLOATING_BUTTONS ? "disable-btn" : "";
+
+      const settingsBtnClassName = ["floating-button", defaultBtnClassName]
+        .join(" ")
+        .trim();
 
       const refreshBtnClassName = [
         "floating-button",
@@ -586,7 +588,7 @@ export const ProfilePage: React.FC = () => {
                 text="Do you want to bind this account?"
                 onConfirm={() => bindAccount(uid)}
                 className={
-                  !enableBindBtn || DISABLE_REFRESH_FLOATING_BUTTONS
+                  !enableBindBtn || DISABLE_FLOATING_BUTTONS
                     ? "pointer-events-none"
                     : ""
                 }
@@ -623,7 +625,7 @@ export const ProfilePage: React.FC = () => {
           {isAccountOwner ? (
             <div
               title="Build settings"
-              className="floating-button"
+              className={settingsBtnClassName}
               onClick={handleToggleBuildsModal}
               key={`settings-builds-${uid}`}
             >
