@@ -50,6 +50,7 @@ const urls = {
 export const BASENAME = "/";
 export const showAds = true;
 export const isProduction = true; // set to true for akasha.cv domain
+export const TRANSLATION_VERSION = 0.27;
 const MAINTENANCE_MODE = false;
 
 const getApiBaseURL = () => {

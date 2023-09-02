@@ -5,6 +5,7 @@ import { reactSelectCustomFilterTheme } from "../../../utils/reactSelectCustomFi
 import { isIcon, StatIcon } from "../../StatIcon";
 import { OptionsResponse, FilterOption } from "./FiltersContainer";
 import { TranslationContext } from "../../../context/TranslationProvider/TranslationProviderContext";
+import { getGenderFromIcon } from "../../../utils/helpers";
 
 type CustomQueryBuilderProps = {
   optionGroups: OptionsResponse;
@@ -48,9 +49,10 @@ export const CustomQueryBuilder = ({
                   "artifactSets.$4": "4p ",
                 }[o.fieldKey] ?? "";
 
+              const gender = getGenderFromIcon(opt.icon);
               const translatedName = opt.name
                 .split(" - ")
-                .map((x) => translate(x))
+                .map((x) => translate(x, gender))
                 .join(" - ");
 
               return {

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,6 +8,7 @@ import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import { toEnkaUrl } from "../../utils/helpers";
 import ReactSelect from "react-select";
 import "./style.scss";
+import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 
 type SubstatPriority = {
   calculation: {
@@ -49,6 +50,8 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
   const [priorityData, setPriorityData] = useState<SubstatPriority[]>([]);
   const [show, setShow] = useState(false);
   const [relativeTo, setRelativeTo] = useState<string>("Base");
+  
+  const { translate } = useContext(TranslationContext);
 
   const getSubstatPriority = async () => {
     const _uid = encodeURIComponent(row.uid);
@@ -95,14 +98,14 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
                         overflow: "hidden",
                       }}
                     >
-                      {calc.weapon.name}
+                      {translate(calc.weapon.name)}
                     </div>
                     {calc.variant ? <div>({calc.variant})</div> : ""}
                     <div>{calc.name}</div>
                   </span>
                   <span className="for-pills">
                     <img src={toEnkaUrl(calc.weapon.icon)} />
-                    {calc.weapon.name} -
+                    {translate(calc.weapon.name)} -
                     {calc.variant ? <div>({calc.variant})</div> : ""}{" "}
                     {calc.name}
                   </span>
@@ -218,12 +221,12 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
               color: name === relativeTo ? "orange" : "",
             }}
           >
-            {name}
+            {translate(name)}
           </td>
         );
       }
     );
-  }, [priorityData, selectedPriorityData, selectedOption, relativeTo]);
+  }, [priorityData, selectedPriorityData, selectedOption, relativeTo, translate]);
 
   //
   //  RESULTS ROWS

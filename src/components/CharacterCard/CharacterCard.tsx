@@ -24,6 +24,7 @@ import {
   getSubstatPercentageEfficiency,
   toEnkaUrl,
   ascensionToLevel,
+  getGenderFromIcon,
 } from "../../utils/helpers";
 import { REAL_SUBSTAT_VALUES, STAT_NAMES } from "../../utils/substats";
 import { StatIcon } from "../StatIcon";
@@ -1011,7 +1012,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     () => (
       <>
         <div key="character-name" className="character-name">
-          <div>{translate(row.name)}</div>
+          <div>{translate(row.name, getGenderFromIcon(row.icon))}</div>
           {!privacyFlag && (
             <div className="character-nickname">{row.owner.nickname}</div>
           )}

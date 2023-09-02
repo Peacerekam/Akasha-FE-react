@@ -348,3 +348,15 @@ export const shadeColor = (color: string, percent: number) => {
 
   return "#" + RR + GG + BB;
 };
+
+export const getGenderFromIcon = (icon?: string) => {
+  if (!icon) return undefined;
+
+  const gender = icon.includes("PlayerGirl")
+    ? "F"
+    : icon.includes("PlayerBoy")
+    ? "M"
+    : undefined;
+
+  return gender;
+};

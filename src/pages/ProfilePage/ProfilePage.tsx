@@ -28,6 +28,7 @@ import {
   isPercent,
   normalizeText,
   optsParamsSessionID,
+  getGenderFromIcon,
 } from "../../utils/helpers";
 import { ArtifactColumns } from "../ArtifactsPage";
 import { BuildsColumns } from "../BuildsPage";
@@ -299,13 +300,14 @@ export const ProfilePage: React.FC = () => {
         sortField: "name",
         width: "180px",
         cell: (row) => {
+          const gender = getGenderFromIcon(row.icon);
           return (
             <div className="table-icon-text-pair">
               <img className="table-icon" src={row.icon} />
               {row.type !== "current" ? (
                 <ReplaceRowDataOnHover data={row.name} onHoverData={row.type} />
               ) : (
-                translate(row.name)
+                translate(row.name, gender)
               )}
             </div>
           );

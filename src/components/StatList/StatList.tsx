@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { ascensionToLevel } from "../../utils/helpers";
+import { ascensionToLevel, getGenderFromIcon } from "../../utils/helpers";
 import { StatIcon } from "../StatIcon";
 import "./style.scss";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
@@ -254,11 +254,13 @@ export const StatList: React.FC<StatListProps> = ({
     </div>
   );
 
+  const gender = getGenderFromIcon(row.icon);
+  
   const displayCharacter = showCharacter && (
     <div className="table-stat-row">
       <div className="flex gap-5">
         <img className="stat-icon" src={row.icon} />
-        <span>{translate(row.name)}</span>
+        <span>{translate(row.name, gender)}</span>
         <div className="relative">
           <span className="refinement-display">
             <span className={strikethrough ? "strike-through" : ""}>

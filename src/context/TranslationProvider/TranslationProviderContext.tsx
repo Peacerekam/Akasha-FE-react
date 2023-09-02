@@ -1,5 +1,6 @@
 import React, { useState, createContext, useEffect, useCallback } from "react";
 import axios from "axios";
+import { TRANSLATION_VERSION } from "../../App";
 
 export type Language =
   | "en"
@@ -36,29 +37,11 @@ export const languages: Language[] = [
   "tr",
 ];
 
-export const KEY_TO_FULL: Record<Language, string> = {
-  en: "English",
-  de: "Deutsch",
-  es: "Español",
-  fr: "Français",
-  id: "Bahasa Indonesia",
-  it: "Italiano",
-  ja: "日本語",
-  pt: "Português",
-  ru: "Русский",
-  th: "ภาษาไทย",
-  tr: "Türkçe",
-  vi: "Tiếng Việt",
-  ko: "한국어",
-  "zh-CN": "한국어",
-  "zh-TW": "繁體中文",
-};
-
 type Hashmap = { [key: string]: string };
 type TextMap = Record<Language, Hashmap>;
 
 type TranslationProviderContextType = {
-  translate: (word: string) => string;
+  translate: (word: string, gender?: "M" | "F") => string;
   setLanguage: (title: Language) => void;
   language: Language;
 };
@@ -76,6 +59,8 @@ const TranslationContextProvider: React.FC<{ children: any }> = ({
 }) => {
   const [language, setLanguage] = useState<Language>("en");
   const [textMap, setTextMap] = useState<Partial<TextMap>>({});
+
+  const NO_TRANSLATION_STRING = `NO_TRANSLATION_${TRANSLATION_VERSION}`;
 
   const hasNewKeys = (oldObj: Hashmap = {}, newObj: Hashmap = {}) => {
     for (const key of Object.keys(newObj)) {
@@ -116,9 +101,10 @@ const TranslationContextProvider: React.FC<{ children: any }> = ({
               ...data.translation,
             },
           }));
+
           console.log(
             `[Akasha-${language}] Fetched ${
-              Object.keys(data.translation).length
+              Object.keys(data?.translation || {}).length
             } new translation(s)`
           );
         }
@@ -134,7 +120,27 @@ const TranslationContextProvider: React.FC<{ children: any }> = ({
 
   useEffect(() => {
     const textMapFromLS = JSON.parse(localStorage.getItem("textMap") ?? "{}");
-    setTextMap(textMapFromLS);
+
+    let outdated = false;
+    for (const language of Object.keys(textMapFromLS)) {
+      for (const key of Object.keys(textMapFromLS[language])) {
+        outdated =
+          textMapFromLS[language][key].startsWith("NO_TRANSLATION") &&
+          textMapFromLS[language][key] !== NO_TRANSLATION_STRING;
+        if (outdated) break;
+      }
+      if (outdated) break;
+    }
+
+    if (outdated) {
+      console.log(`[Akasha-${language}] New translation version detected`);
+      setTextMap({});
+    } else {
+      console.log(
+        `[Akasha-${language}] Loading translation from local storage`
+      );
+      setTextMap(textMapFromLS);
+    }
 
     const detectedLanguage = languages.includes(navigator?.language as any)
       ? navigator?.language
@@ -165,11 +171,11 @@ const TranslationContextProvider: React.FC<{ children: any }> = ({
 
   const addToQueue = useCallback((word: string) => {
     if (!(window as any).tnQueue) (window as any).tnQueue = {};
-    (window as any).tnQueue[word] = "NO_TRANSLATION";
+    (window as any).tnQueue[word] = NO_TRANSLATION_STRING;
   }, []);
 
   const translate = useCallback(
-    (word: string) => {
+    (word: string, gender?: "M" | "F") => {
       if (language === "en") return word;
 
       if (!textMap[language]) {
@@ -178,8 +184,16 @@ const TranslationContextProvider: React.FC<{ children: any }> = ({
 
       const matchedTranslation = textMap[language]?.[word.toLowerCase()];
       if (matchedTranslation) {
-        if (matchedTranslation === "NO_TRANSLATION") {
+        if (matchedTranslation === NO_TRANSLATION_STRING) {
           return word;
+        }
+
+        if (gender) {
+          return matchedTranslation
+            .replace(/^#/, "")
+            .replace(/\{([^#]+)#([^\}]+)\}/g, (_, $1, $2) =>
+              $1 === gender ? $2 : ""
+            );
         }
         return matchedTranslation || "";
       }

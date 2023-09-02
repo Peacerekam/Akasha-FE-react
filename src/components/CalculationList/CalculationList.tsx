@@ -1,10 +1,11 @@
-import React, { useMemo, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import { CalculationTeammate, TeammatesCompact } from "../TeammatesCompact";
 import "./style.scss";
+import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 
 type CalculationResponse = {
   calculationId: number;
@@ -33,6 +34,7 @@ export const CalculationList: React.FC<CalculationListProps> = ({
   row,
   calculations,
 }) => {
+  const { translate } = useContext(TranslationContext);
   const [show, setShow] = useState(false);
 
   const navigate = useNavigate();
@@ -99,7 +101,7 @@ export const CalculationList: React.FC<CalculationListProps> = ({
                   refinement={weapon?.refinement || 1}
                 />
               </td>
-              <td>{weapon?.name}</td>
+              <td>{translate(weapon?.name)}</td>
               <td>
                 <TeammatesCompact teammates={teammates} simplify />
               </td>
@@ -119,7 +121,7 @@ export const CalculationList: React.FC<CalculationListProps> = ({
             </tr>
           );
         }),
-    [JSON.stringify(calculationIds)]
+    [JSON.stringify(calculationIds), translate]
   );
 
   // const tilesList = useMemo(

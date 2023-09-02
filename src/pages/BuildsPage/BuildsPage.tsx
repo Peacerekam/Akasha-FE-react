@@ -19,6 +19,7 @@ import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp"
 import {
   FETCH_BUILDS_URL,
   FETCH_CHARACTER_FILTERS_URL,
+  getGenderFromIcon,
 } from "../../utils/helpers";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { AdsComponentManager } from "../../components/AdsComponentManager";
@@ -60,7 +61,9 @@ export const BuildsPage: React.FC = () => {
 
           return (
             <a
-              className={`row-link-element ${isEnkaProfile ? "enka-profile" : ""}`}
+              className={`row-link-element ${
+                isEnkaProfile ? "enka-profile" : ""
+              }`}
               onClick={(event) => {
                 event.preventDefault();
                 navigate(`/profile/${row.uid}`);
@@ -79,13 +82,15 @@ export const BuildsPage: React.FC = () => {
         sortable: false,
         sortField: "name",
         cell: (row) => {
+          const gender = getGenderFromIcon(row.icon);
+
           return (
             <div className="table-icon-text-pair">
               <img className="table-icon" src={row.icon} title={row?.name} />
               {row.type !== "current" ? (
                 <ReplaceRowDataOnHover data={row.name} onHoverData={row.type} />
               ) : (
-                translate(row.name)
+                translate(row.name, gender)
               )}
             </div>
           );
