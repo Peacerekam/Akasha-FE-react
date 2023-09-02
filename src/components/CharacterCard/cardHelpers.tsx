@@ -20,27 +20,6 @@ export const ELEMENT_TO_HUE = {
   Hydro: 180,
 } as any;
 
-export const getReadableStatText = (_statName: string) => {
-  const textMap: any = {
-    maxHp: "HP",
-    atk: "ATK",
-    def: "DEF",
-    elementalMastery: "EM",
-    energyRecharge: "ER%",
-    critRate: "Crit Rate",
-    healingBonus: "Healing Bonus",
-    critDamage: "Crit DMG",
-  };
-  return (
-    textMap[_statName] ||
-    (_statName.endsWith("DamageBonus")
-      ? `${_statName[0].toUpperCase()}${_statName
-          .slice(1, _statName.length)
-          .replace("DamageBonus", " DMG")}`
-      : _statName)
-  );
-};
-
 export const calcStatVals = (_statName: string, reversed = false) => {
   return (
     {
@@ -60,7 +39,7 @@ export const calcStatVals = (_statName: string, reversed = false) => {
       },
       healingBonus: {
         key: "healingBonus",
-        value: (n: number) => (reversed ?  (n || 0) * 100 : (n || 0) / 100),
+        value: (n: number) => (reversed ? (n || 0) * 100 : (n || 0) / 100),
       },
       energyRecharge: {
         key: "energyRecharge",
@@ -87,20 +66,6 @@ export const handleTitle = (arr: any) => {
   return `${obj.label}`;
 };
 
-export const handleLabel = (obj: any) => {
-  if (!obj) return "";
-  if (!obj.dataset) return "";
-
-  const statName = getReadableStatText(obj.label);
-  const calcStat = calcStatVals(obj.label, true);
-
-  const calculatedVal = calcStat
-    .value(obj.dataset.vals[obj.dataIndex])
-    .toFixed(1);
-
-  return `${statName}: ${calculatedVal}`;
-};
-
 export const scales = {
   r: {
     suggestedMin: 0,
@@ -125,7 +90,7 @@ export const scales = {
         size: 9,
       },
       callback: (statName: string, index: number) => {
-        return getReadableStatText(statName);
+        return statName as string | string[];
       },
     },
   },

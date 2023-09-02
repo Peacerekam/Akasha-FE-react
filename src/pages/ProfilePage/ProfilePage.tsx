@@ -60,6 +60,7 @@ import { getSessionIdFromCookie } from "../../utils/helpers";
 import { ArtifactSettingsModal } from "./ArtifactSettingsModal";
 import { AdsComponentManager } from "../../components/AdsComponentManager";
 import "./style.scss";
+import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 
 export const ProfilePage: React.FC = () => {
   const [showArtifactSettingsModal, setShowArtifactSettingsModal] =
@@ -84,6 +85,7 @@ export const ProfilePage: React.FC = () => {
   const { disableAdsForThisPage } = useContext(AdProviderContext);
   const { addTab } = useContext(LastProfilesContext);
   const { setTitle } = useContext(TitleContext);
+  const { translate } = useContext(TranslationContext);
   const { isAuthenticated, isBound, fetchSessionData, boundAccounts } =
     useContext(SessionDataContext);
 
@@ -189,7 +191,7 @@ export const ProfilePage: React.FC = () => {
               >
                 {/* <div style={{ marginBottom: '5px'}}>{"⭐".repeat(row.stars)}</div> */}
                 <div>
-                  {row.name}
+                  {translate(row.name)}
                   {/* {row.level ? `+${row.level - 1}` : ""} */}
                 </div>
               </span>
@@ -217,7 +219,7 @@ export const ProfilePage: React.FC = () => {
           return (
             <div className="nowrap">
               {mainStatValue}
-              {isPercenrage ? "%" : ""} {key}
+              {isPercenrage ? "%" : ""} {translate(key)}
             </div>
           );
         },
@@ -278,7 +280,7 @@ export const ProfilePage: React.FC = () => {
         },
       },
     ],
-    []
+    [translate]
   );
 
   // move this somewhere else i think
@@ -303,7 +305,7 @@ export const ProfilePage: React.FC = () => {
               {row.type !== "current" ? (
                 <ReplaceRowDataOnHover data={row.name} onHoverData={row.type} />
               ) : (
-                row.name
+                translate(row.name)
               )}
             </div>
           );
@@ -428,7 +430,7 @@ export const ProfilePage: React.FC = () => {
         },
       },
     ],
-    []
+    [translate]
   );
 
   // @TODO: sum them on server side so we can sort by that?

@@ -1,6 +1,8 @@
+import { useContext } from "react";
 import { ascensionToLevel } from "../../utils/helpers";
 import { StatIcon } from "../StatIcon";
 import "./style.scss";
+import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 
 type StatListProps = {
   row: any;
@@ -96,6 +98,8 @@ export const StatList: React.FC<StatListProps> = ({
   // const stats = currentCategory
   //   ? getStatsFromCalculation(row, currentCategory)
   //   : getStatsFromRow(row);
+
+  const { translate } = useContext(TranslationContext);
   const stats = getStatsFromRow(row);
 
   if (!stats) return <></>;
@@ -113,7 +117,7 @@ export const StatList: React.FC<StatListProps> = ({
         <div key={name} className="table-stat-row">
           <div className="flex gap-5 w-100">
             <img className="stat-icon" src={icon} />
-            <span style={{ color: "#90ee90" }}> {name}</span>
+            <span style={{ color: "#90ee90" }}> {translate(name)}</span>
           </div>
           <div style={{ color: "#90ee90" }}>×{Math.floor(count / 2) * 2}</div>
         </div>
@@ -185,7 +189,7 @@ export const StatList: React.FC<StatListProps> = ({
       <div className="table-stat-row" key={dmgStat.name}>
         <div className="flex gap-5">
           <StatIcon name={dmgStat.name} />
-          <span>{dmgStat.name}</span>
+          <span>{translate(dmgStat.name)}</span>
         </div>
         <div>{(+dmgStat.value).toFixed(1)}%</div>
       </div>
@@ -215,7 +219,7 @@ export const StatList: React.FC<StatListProps> = ({
         <div className="table-stat-row" key={key}>
           <div className="flex gap-5">
             <StatIcon name={key} />
-            <span>{key}</span>
+            <span>{translate(key)}</span>
           </div>
           <div>{value}</div>
         </div>
@@ -231,7 +235,7 @@ export const StatList: React.FC<StatListProps> = ({
           src={row.weapon.icon}
         />
         <span className={strikethrough ? "strike-through opacity-5" : ""}>
-          {row.weapon.name}
+          {translate(row.weapon.name)}
         </span>
         <div className="relative">
           <span className="refinement-display">
@@ -242,7 +246,7 @@ export const StatList: React.FC<StatListProps> = ({
         </div>
       </div>
       <div className={strikethrough ? "strike-through opacity-5" : ""}>
-        <span>Level {row.weapon.weaponInfo.level}</span>
+        <span>{translate("Lv.")} {row.weapon.weaponInfo.level}</span>
         <span className="opacity-5">
           /{ascensionToLevel(row.weapon.weaponInfo?.promoteLevel)}
         </span>
@@ -254,7 +258,7 @@ export const StatList: React.FC<StatListProps> = ({
     <div className="table-stat-row">
       <div className="flex gap-5">
         <img className="stat-icon" src={row.icon} />
-        <span>{row.name}</span>
+        <span>{translate(row.name)}</span>
         <div className="relative">
           <span className="refinement-display">
             <span className={strikethrough ? "strike-through" : ""}>
@@ -264,7 +268,7 @@ export const StatList: React.FC<StatListProps> = ({
         </div>
       </div>
       <div className={strikethrough ? "strike-through opacity-5" : ""}>
-        Level {row.propMap.level.val}
+        {translate("Lv.")} {row.propMap.level.val}
         <span className="opacity-5">
           /{ascensionToLevel(row.propMap.ascension.val)}
         </span>

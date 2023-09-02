@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useCallback,
   useRef,
+  useContext,
 } from "react";
 import ReactSelect from "react-select";
 
@@ -48,13 +49,13 @@ import {
   ELEMENT_TO_COLOR,
   ELEMENT_TO_HUE,
   calcStatVals,
-  handleLabel,
   handleTitle,
   scales,
   toTalentProps,
 } from "./cardHelpers";
 import "./style.scss";
 import { ArtifactOnCanvas } from "../ArtifactListCompact";
+import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 
 ChartJS.register(...registerables);
 
@@ -128,6 +129,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const backgroundPictureRef = useRef<HTMLImageElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  const { translate } = useContext(TranslationContext);
+
   const calculations = _calculations.calculations;
   const chartsData = _calculations.chartsData;
 
@@ -147,6 +150,29 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
   const handleWindowSizeChange = () => {
     setWidth(window.innerWidth);
+  };
+
+  const getReadableStatText = (_statName: string) => {
+    const textMap: any = {
+      maxHp: "HP",
+      atk: "ATK",
+      def: "DEF",
+      elementalMastery: "EM",
+      energyRecharge: "ER%",
+      critRate: "Crit Rate",
+      healingBonus: "Healing Bonus",
+      critDamage: "Crit DMG",
+    };
+
+    const output =
+      textMap[_statName] ||
+      (_statName.endsWith("DamageBonus")
+        ? `${_statName[0].toUpperCase()}${_statName
+            .slice(1, _statName.length)
+            .replace("DamageBonus", " DMG")}`
+        : _statName);
+
+    return translate(output);
   };
 
   useEffect(() => {
@@ -406,12 +432,54 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           enabled: generating ? false : true,
           callbacks: {
             title: handleTitle,
-            label: handleLabel,
+            label: (obj: any) => {
+              if (!obj) return "";
+              if (!obj.dataset) return "";
+
+              const statName = getReadableStatText(obj.label);
+              const calcStat = calcStatVals(obj.label, true);
+
+              const calculatedVal = calcStat
+                .value(obj.dataset.vals[obj.dataIndex])
+                .toFixed(1);
+
+              return `${statName}: ${calculatedVal}`;
+            },
           },
         },
         legend: {
           display: false,
         },
+      };
+
+      scales.r.pointLabels.callback = (statName: string, index: number) => {
+        const translatedWord = getReadableStatText(statName);
+
+        if (translatedWord.length > 13) {
+          const _split = translatedWord.split(" ");
+
+          if (_split.length > 2) {
+            return _split.reduce(
+              (acc, val, index) => {
+                const mid = Math.floor(_split.length / 2);
+                const lineNum = index >= mid ? 1 : 0;
+
+                if (!acc[lineNum]) {
+                  acc[lineNum] = val;
+                } else {
+                  acc[lineNum] += ` ${val}`;
+                }
+
+                return acc;
+              },
+              ["", ""]
+            );
+          }
+
+          return _split;
+        }
+
+        return translatedWord;
       };
 
       const radarOptions = {
@@ -435,7 +503,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         </div>
       );
     },
-    [row, calculations, chartsData, filteredLeaderboards, generating]
+    [row, calculations, chartsData, filteredLeaderboards, generating, translate]
   );
 
   const leaderboardHighlighs = useMemo(() => {
@@ -512,7 +580,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         })}
       </div>
     );
-  }, [privacyFlag, chartsData, filteredLeaderboards, generating]);
+  }, [privacyFlag, chartsData, filteredLeaderboards, generating, translate]);
 
   const reorderedArtifacts = useMemo(
     () => getArtifactsInOrder(artifacts),
@@ -788,13 +856,15 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             </div>
           </div>
           <div className="weapon-data">
-            <div className="weapon-name">{row.weapon.name}</div>
+            <div className="weapon-name">{translate(row.weapon.name)}</div>
             <div className="weapon-stats">
               <div className="weapon-refinement">
                 R{row.weapon.weaponInfo.refinementLevel.value + 1}
               </div>
               <div>
-                <span>Lv. {row.weapon.weaponInfo.level}</span>
+                <span>
+                  {translate("Lv.")} {row.weapon.weaponInfo.level}
+                </span>
                 <span className="opacity-5">
                   /{ascensionToLevel(row.weapon.weaponInfo?.promoteLevel)}
                 </span>
@@ -806,7 +876,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         {/* <div className="card-leaderboards relative">{leaderboardHighlighs}</div> */}
       </div>
     ),
-    [row, chartsData]
+    [row, chartsData, translate]
   );
 
   const cardStyle = {
@@ -940,8 +1010,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const cardOverlay = useMemo(
     () => (
       <>
-        <div className="character-name">
-          <div>{row.name}</div>
+        <div key="character-name" className="character-name">
+          <div>{translate(row.name)}</div>
           {!privacyFlag && (
             <div className="character-nickname">{row.owner.nickname}</div>
           )}
@@ -951,7 +1021,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         <div className="character-title">{chartsData?.characterMetadata?.constellation}</div> 
       */}
         <div className="character-level">
-          Lv. {row.propMap.level.val}
+          {translate("Lv.")} {row.propMap.level.val}
           <span className="opacity-5">
             /{ascensionToLevel(row.propMap.ascension.val)}
           </span>
@@ -965,13 +1035,17 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         >
           {row.critValue.toFixed(1)} cv
         </div>
-        {!privacyFlag && <div className="character-uid">{row.uid}</div>}
+        {!privacyFlag && (
+          <div key="character-uid" className="character-uid">
+            {row.uid}
+          </div>
+        )}
         <div className="character-constellations">
           {[0, 1, 2, 3, 4, 5].map((i) => {
             const constImg = chartsData?.assets?.constellations?.[i];
             const isActivated = row.constellation >= i + 1;
             return (
-              <div key={constImg} className={isActivated ? "activated" : ""}>
+              <div key={`${constImg}-${i}`} className={isActivated ? "activated" : ""}>
                 {!isActivated ? (
                   <span className="const-locked">
                     <FontAwesomeIcon
@@ -1048,7 +1122,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         </div>
       </div>
     ),
-    [row, namecardBg, simplifyColors, cardStyle, generating]
+    [row, namecardBg, simplifyColors, cardStyle, generating, translate]
   );
 
   const handleSelectChange = (option: any) => {

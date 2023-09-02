@@ -118,7 +118,7 @@ export const AccountsPage: React.FC = () => {
         },
       },
       {
-        name: "Achievements",
+        name: "Total Achievements",
         sortable: true,
         sortField: "playerInfo.finishAchievementNum",
         cell: (row) => {
@@ -155,7 +155,7 @@ export const AccountsPage: React.FC = () => {
         },
       },
       {
-        name: "Abyss",
+        name: "Spiral Abyss",
         sortable: false,
         sortField: "playerInfo.worldLevel",
         width: "50px",

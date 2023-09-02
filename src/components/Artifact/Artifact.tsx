@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   getArtifactCvClassName,
   getCharacterCvColor,
@@ -19,6 +19,7 @@ import {
   REAL_SUBSTAT_VALUES,
   STAT_NAMES,
 } from "../../utils/substats";
+import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 
 type ArtifactProps = {
   artifact: {
@@ -34,6 +35,8 @@ export const Artifact: React.FC<ArtifactProps> = ({
   width = 270,
   equipped,
 }) => {
+  const { translate } = useContext(TranslationContext);
+  
   const artifactBg = {
     5: ArtifactBackground,
     // @TODO: add more background to artifacts
@@ -83,11 +86,11 @@ export const Artifact: React.FC<ArtifactProps> = ({
       style={style}
       className={`profile-page-artifact ${getArtifactCvClassName(artifact)}`}
     >
-      <div className="artifact-name">{artifact.name}</div>
+      <div className="artifact-name">{translate(artifact.name)}</div>
       <div className="artifact-crit-value">
         {artifact.critValue > 0 ? `${artifact.critValue.toFixed(1)} cv` : ""}
       </div>
-      <div className="artifact-stat-name">{mainStatKey}</div>
+      <div className="artifact-stat-name">{translate(mainStatKey)}</div>
       <div className="artifact-stat-value">
         {mainStatValue}
         {isPercenrage ? "%" : ""}
@@ -119,14 +122,14 @@ export const Artifact: React.FC<ArtifactProps> = ({
               key={normSubName}
               className={`substat ${normSubName} ${isCV ? "critvalue" : ""}`}
             >
-              {substatName.replace("Flat ", "")}+{substatValue}
-              {isPercent(key) ? "%" : ""}
+              <span className="substat-name">{translate(substatName.replace("Flat ", ""))}</span>
+              <span className="substat-value">+{substatValue}{isPercent(key) ? "%" : ""}</span>
               <span className="rv-display">{summedArtifactRolls[key].rv}%</span>
             </div>
           );
         })}
       </div>
-      <div className="artifact-set-name">{artifact.setName}</div>
+      <div className="artifact-set-name">{translate(artifact.setName)}</div>
       {equipped && equipped.length > 0 && (
         <div className="artifact-equipped-char">
           {equipped.map((build: any, index: number) => {

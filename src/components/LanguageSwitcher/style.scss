@@ -1,0 +1,44 @@
+.language-switcher {
+  position: relative;
+
+  &:focus,
+  &:focus-within {
+    .language-dropdown {
+      display: block;
+    }
+  }
+
+  .language-dropdown {
+    display: none;
+    position: absolute;
+    z-index: 999999;
+    background-color: #395b64;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.24);
+    top: 64px;
+    > div {
+      padding: 12px 20px;
+      position: relative;
+      
+      &:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 5%;
+        width: 90%;
+        border-bottom: 1px dashed rgba(white, 0.25);
+      }
+
+      &:hover {
+        background-color: #426a74;
+      }
+
+      &.current-langauge {
+        background-color: #426a74;  
+        box-shadow: #e7f6f2 2px 0 0 inset !important;
+        &:hover {
+          background-color: lighten(#426a74, 2) !important;
+        }
+      }
+    }
+  }
+}

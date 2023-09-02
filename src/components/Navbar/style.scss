@@ -51,6 +51,9 @@
       transition: 0.2s !important;
       background-color: lighten(#395b64, 5);
     }
+    svg {
+      margin-top: 1px;
+    }
   }
   .active-tab {
     transition: 0.2s !important;

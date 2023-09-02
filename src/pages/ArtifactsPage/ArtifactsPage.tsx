@@ -29,6 +29,7 @@ import {
 } from "../../utils/helpers";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { AdsComponentManager } from "../../components/AdsComponentManager";
+import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 
 export type ArtifactColumns = {
   _id: string;
@@ -45,9 +46,8 @@ export type ArtifactColumns = {
 
 export const ArtifactsPage: React.FC = () => {
   const { hoverElement } = useContext(HoverElementContext);
+  const { translate } = useContext(TranslationContext);
   const navigate = useNavigate();
-
-  const pathname = window.location.pathname;
 
   const ARTIFACT_COLUMNS: TableColumn<ArtifactColumns>[] = useMemo(
     () => [
@@ -110,7 +110,7 @@ export const ArtifactsPage: React.FC = () => {
               >
                 {/* <div style={{ marginBottom: '5px'}}>{"⭐".repeat(row.stars)}</div> */}
                 <div>
-                  {row.name}
+                  {translate(row.name)}
                   {/* {row.level ? `+${row.level - 1}` : ""} */}
                 </div>
               </span>
@@ -138,7 +138,7 @@ export const ArtifactsPage: React.FC = () => {
           return (
             <div className="nowrap">
               {mainStatValue}
-              {isPercenrage ? "%" : ""} {key}
+              {isPercenrage ? "%" : ""} {translate(key)}
             </div>
           );
         },
@@ -199,7 +199,7 @@ export const ArtifactsPage: React.FC = () => {
         },
       },
     ],
-    []
+    [translate]
   );
 
   return (

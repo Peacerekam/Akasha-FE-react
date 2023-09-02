@@ -1,5 +1,7 @@
+import { useContext } from "react";
 import { StatIcon } from "../StatIcon";
 import "./style.scss";
+import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 
 type StatListProps = {
   row: any;
@@ -51,6 +53,8 @@ const getStatsFromRow = (row: any) => {
 };
 
 export const StatListCard: React.FC<StatListProps> = ({ row }) => {
+  const { translate } = useContext(TranslationContext);
+  
   const stats = getStatsFromRow(row);
 
   if (!stats) return <></>;
@@ -68,7 +72,10 @@ export const StatListCard: React.FC<StatListProps> = ({ row }) => {
         <div key={name} className="table-stat-row">
           <div className="flex gap-5 w-100">
             <img className="stat-icon" src={icon} />
-            <span style={{ color: "#90ee90" }}> {name}</span>
+            <span style={{ color: "#90ee90" }}>
+              {" "}
+              {translate(name)}
+            </span>
           </div>
           <div style={{ color: "#90ee90" }}>×{Math.floor(count / 2) * 2}</div>
         </div>
@@ -140,7 +147,7 @@ export const StatListCard: React.FC<StatListProps> = ({ row }) => {
       <div className="table-stat-row" key={dmgStat.name}>
         <div className="flex gap-5">
           <StatIcon name={dmgStat.name} />
-          <span>{dmgStat.name}</span>
+          <span>{translate(dmgStat.name)}</span>
         </div>
         <div>{(+dmgStat.value).toFixed(1)}%</div>
       </div>
@@ -170,7 +177,7 @@ export const StatListCard: React.FC<StatListProps> = ({ row }) => {
         <div className="table-stat-row" key={key}>
           <div className="flex gap-5">
             <StatIcon name={key} />
-            <span>{key}</span>
+            <span>{translate(key)}</span>
           </div>
           <div>{value}</div>
         </div>

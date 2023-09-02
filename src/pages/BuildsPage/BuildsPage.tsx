@@ -22,6 +22,7 @@ import {
 } from "../../utils/helpers";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { AdsComponentManager } from "../../components/AdsComponentManager";
+import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 
 export type BuildsColumns = {
   _id: string;
@@ -36,8 +37,8 @@ export type BuildsColumns = {
 
 export const BuildsPage: React.FC = () => {
   const { hoverElement } = useContext(HoverElementContext);
+  const { translate } = useContext(TranslationContext);
   const navigate = useNavigate();
-  const pathname = window.location.pathname;
 
   const BUILDS_COLUMNS: TableColumn<BuildsColumns>[] = useMemo(
     () => [
@@ -84,7 +85,7 @@ export const BuildsPage: React.FC = () => {
               {row.type !== "current" ? (
                 <ReplaceRowDataOnHover data={row.name} onHoverData={row.type} />
               ) : (
-                row.name
+                translate(row.name)
               )}
             </div>
           );
@@ -212,7 +213,7 @@ export const BuildsPage: React.FC = () => {
         },
       },
     ],
-    []
+    [translate]
   );
 
   return (

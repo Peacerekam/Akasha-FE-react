@@ -6,10 +6,12 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { DISCORD_URL, PATREON_URL } from "../../utils/helpers";
 import { applyModalBodyStyle, getRelativeCoords } from "../CustomTable/Filters";
 import { LogInModal } from "./LogInModal";
-import "./style.scss";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
 import { Spinner } from "../Spinner";
+import { LanguageSwitcher } from "../LanguageSwitcher";
 import AkashaLogo from "../../assets/images/favicon.svg";
+import "./style.scss";
+import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 
 type NavElement = {
   name: string;
@@ -68,6 +70,10 @@ export const Navbar: React.FC = () => {
         path: "spacer",
       },
       {
+        name: "language",
+        path: "language",
+      },
+      {
         icon: <FontAwesomeIcon icon={faPatreon} size="1x" />,
         name: "Patreon",
         path: PATREON_URL,
@@ -120,6 +126,15 @@ export const Navbar: React.FC = () => {
     );
   };
 
+  const getNavElement = (nav: any, i: number) => {
+    return (
+      {
+        spacer: <div key={nav.name} className="navbar-spacer" />,
+        language: <LanguageSwitcher key={nav.name} />,
+      }[nav.name as string] || displayNavElement(nav, i)
+    );
+  };
+
   return (
     <div className="navbar">
       <a
@@ -139,13 +154,7 @@ export const Navbar: React.FC = () => {
 
       <LogInModal isOpen={showLoginModal} toggleModal={handleToggleModal} />
 
-      {NAVIGATION.map((nav, i) =>
-        nav.name === "spacer" ? (
-          <div key={nav.name} className="navbar-spacer" />
-        ) : (
-          displayNavElement(nav, i)
-        )
-      )}
+      {NAVIGATION.map((nav, i) => getNavElement(nav, i))}
     </div>
   );
 };

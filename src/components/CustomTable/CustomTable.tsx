@@ -35,6 +35,7 @@ import {
 } from "../../utils/helpers";
 import "./style.scss";
 import { ExpandedRowBuilds } from "../ExpandedRowBuilds";
+import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 
 type CustomTableProps = {
   columns: any[];
@@ -100,6 +101,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   const [hideIndexColumn, setHideIndexColumn] = useState(false);
   const [unknownPage, setUnknownPage] = useState(false);
   const { updateTableHoverElement } = useContext(HoverElementContext);
+  const { translate } = useContext(TranslationContext);
   const location = useLocation();
 
   const defaultParams = {
@@ -221,12 +223,12 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
   const getSetTotalRows = async (totalRowsHash: string) => {
     if (!fetchURL) return;
-    
+
     const collectionName = getCollectionName(fetchURL);
     if (!collectionName) return;
 
     setIsFetchingPagination(true);
-    
+
     const totalRowsOpts = {
       params: {
         variant: collectionName,
@@ -367,7 +369,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
           onClick={() => handleSetSort(key)}
         >
           <StatIcon name={fixKey} />
-          {fixKey}
+          {translate(fixKey)}
           {isHighlighted ? displaySortIcon(params.order) : null}
         </div>
       );
@@ -386,7 +388,8 @@ export const CustomTable: React.FC<CustomTableProps> = ({
         .join(" ")
         .trim();
 
-      let columnName = name;
+      let columnName: string | JSX.Element =
+        typeof name === "string" ? translate(name) : name;
 
       if (sortFields?.includes(params.sort)) {
         const key = params.sort.replace(".value", "").split(".").pop(); //
@@ -402,7 +405,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
         columnName = (
           <>
-            <StatIcon name={fixKey} /> {fixKey}
+            <StatIcon name={fixKey} /> {translate(fixKey)}
           </>
         );
       }
@@ -434,7 +437,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
         </th>
       );
     });
-  }, [columns, params.order, params.sort, hideIndexColumn]);
+  }, [columns, params.order, params.sort, hideIndexColumn, translate]);
 
   const renderExpandRow = useCallback((row: any) => {
     const isProfileRow = !!row.achievements;
@@ -490,7 +493,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
                         icon={weapon.icon}
                         refinement={weapon.refinement}
                       />
-                      {weapon.name}
+                      {translate(weapon.name)}
                     </div>
                   </a>
                 );
@@ -498,7 +501,10 @@ export const CustomTable: React.FC<CustomTableProps> = ({
             </div>
 
             <div>
-              <TeammatesCompact teammates={row.weapons[0].teammates} scale={3} />
+              <TeammatesCompact
+                teammates={row.weapons[0].teammates}
+                scale={3}
+              />
             </div>
             {/* <div style={{ overflow: "hidden" }}>
               show top 1 build for each category?
@@ -513,7 +519,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
         <ExpandedRowBuilds row={row} isProfile={!!fetchParams.uid} />
       </>
     );
-  }, []);
+  }, [translate]);
 
   const shouldHighlightRows = useMemo(
     () =>
@@ -615,6 +621,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     // calculationColumn,
     columns.length,
     hideIndexColumn,
+    translate
   ]);
 
   const noDataRow = useMemo(
@@ -675,9 +682,11 @@ export const CustomTable: React.FC<CustomTableProps> = ({
           projectParamsToPath={projectParamsToPath}
         />
       )}
-      <PerfectScrollbar options={{
-        suppressScrollY: true,
-      }}>
+      <PerfectScrollbar
+        options={{
+          suppressScrollY: true,
+        }}
+      >
         <table className={tableClassNames} cellSpacing={0}>
           <thead>
             <tr>{renderHeaders}</tr>

@@ -1,9 +1,10 @@
-import { useMemo, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import ReactSelect, { MultiValue } from "react-select";
 import Highlighter from "react-highlight-words";
 import { reactSelectCustomFilterTheme } from "../../../utils/reactSelectCustomFilterTheme";
 import { isIcon, StatIcon } from "../../StatIcon";
 import { OptionsResponse, FilterOption } from "./FiltersContainer";
+import { TranslationContext } from "../../../context/TranslationProvider/TranslationProviderContext";
 
 type CustomQueryBuilderProps = {
   optionGroups: OptionsResponse;
@@ -27,6 +28,7 @@ export const CustomQueryBuilder = ({
   pills,
 }: CustomQueryBuilderProps) => {
   const [textInput, setTextInput] = useState("");
+  const { translate } = useContext(TranslationContext);
 
   const fieldKeyOptions = useMemo(
     () =>
@@ -46,6 +48,11 @@ export const CustomQueryBuilder = ({
                   "artifactSets.$4": "4p ",
                 }[o.fieldKey] ?? "";
 
+              const translatedName = opt.name
+                .split(" - ")
+                .map((x) => translate(x))
+                .join(" - ");
+
               return {
                 label: (
                   <span className="react-select-custom-option">
@@ -60,7 +67,7 @@ export const CustomQueryBuilder = ({
                           highlightClassName="text-highlight-class"
                           searchWords={[textInput]}
                           autoEscape={true}
-                          textToHighlight={`${prefix}${opt.name}`}
+                          textToHighlight={`${prefix}${translatedName}`}
                         />
                       </>
                     ) : (
@@ -68,12 +75,12 @@ export const CustomQueryBuilder = ({
                         highlightClassName="text-highlight-class"
                         searchWords={[textInput]}
                         autoEscape={true}
-                        textToHighlight={`${prefix}${opt.name}`}
+                        textToHighlight={`${prefix}${translatedName}`}
                       />
                     )}
                   </span>
                 ),
-                rawLabel: `${prefix}${opt.name}`,
+                rawLabel: `${prefix}${translatedName}`,
                 value: opt.value,
                 fieldKey: o.fieldKey,
               };
@@ -86,7 +93,7 @@ export const CustomQueryBuilder = ({
           acc[index].options.push(...val.options);
           return acc;
         }, [] as CustomOptionGroup[]),
-    [optionGroups, textInput]
+    [optionGroups, textInput, translate]
   );
 
   const selectedOptions = useMemo(() => {

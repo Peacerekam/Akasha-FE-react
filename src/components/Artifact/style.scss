@@ -72,6 +72,10 @@
     margin-left: calc(var(--artifact-width) / 14.3);
     margin-top: calc(var(--artifact-width) / 5.5);
     font-size: calc(var(--artifact-width) / 20);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: calc(var(--artifact-width) / 1.85);
+    white-space: nowrap;
   }
   .artifact-stat-value {
     color: white;
@@ -106,6 +110,13 @@
     > .substat {
       width: calc(var(--artifact-width) / 1.11);
       display: flex;
+      > .substat-name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      > .substat-value {
+        margin-right: 5px;
+      }
       &::before {
         content: "·";
         margin-right: calc(var(--artifact-width) / 200);
@@ -136,6 +147,10 @@
   font-size: calc(var(--artifact-width) / 19);
   margin-left: calc(var(--artifact-width) / 14.3);
   bottom: calc(var(--artifact-width) / 70);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: calc(100% - var(--artifact-width) / 9.5);
+  white-space: nowrap;
 }
 
 // @keyframes cyanGlow {

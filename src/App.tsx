@@ -31,6 +31,7 @@ import {
   FAQPage,
 } from "./pages";
 import { PrivacyPolicyPage } from "./pages/PrivacyPolicy";
+import { TranslationContextProvider } from "./context/TranslationProvider/TranslationProviderContext";
 
 // @TODO: env variables later on...
 const urls = {
@@ -49,16 +50,9 @@ const urls = {
 export const BASENAME = "/";
 export const showAds = true;
 export const isProduction = true; // set to true for akasha.cv domain
-const GAME_RISE_OVH = true; // @TODO: temporary - use new server's IP address, remove after moving servers ...
 const MAINTENANCE_MODE = false;
 
 const getApiBaseURL = () => {
-  if (GAME_RISE_OVH) {
-    // @TODO: remove after moving servers ...
-    // return urls["game-rise-ovh"];
-    return urls["prod-mimee-ovh"];
-  }
-
   if (isProduction) {
     return urls["prod-akasha-cv"];
   }
@@ -152,79 +146,83 @@ const App = () => {
           <NotificationsContextProvider>
             <AdProviderContextProvider>
               <TitleContextProvider>
-                {/* <MobileStickyBar /> */}
-                <div id="top-of-the-page">
-                  {/* <NotificationBar /> */}
-                  <Navbar />
-                </div>
-                <NavbarTabs />
+                <TranslationContextProvider>
+                  {/* <MobileStickyBar /> */}
+                  <div id="top-of-the-page">
+                    {/* <NotificationBar /> */}
+                    <Navbar />
+                  </div>
+                  <NavbarTabs />
 
-                <div className="flex-special-container mt-10">
-                  <AdsComponentManager
-                    adType="LeaderboardATF"
-                    dataAdSlot="6204085735"
-                    hybrid="desktop"
-                  />
-                </div>
+                  <div className="flex-special-container mt-10">
+                    <AdsComponentManager
+                      adType="LeaderboardATF"
+                      dataAdSlot="6204085735"
+                      hybrid="desktop"
+                    />
+                  </div>
 
-                <div
-                  className={`content-wrapper ${
-                    isProduction ? "" : "dev-indicator"
-                  }`}
-                >
-                  <HoverElementContextProvider>
-                    <Routes>
-                      {/* @TODO: later use dashboard page instead */}
-                      {/* <Route path="/" element={<DashboardPage />} /> */}
-                      <Route path="/" element={<AccountsPage />} />
-                      <Route path="/artifacts" element={<ArtifactsPage />} />
-                      <Route path="/builds" element={<BuildsPage />} />
-                      <Route path="/profiles" element={<AccountsPage />} />
+                  <div
+                    className={`content-wrapper ${
+                      isProduction ? "" : "dev-indicator"
+                    }`}
+                  >
+                    <HoverElementContextProvider>
+                      <Routes>
+                        {/* @TODO: later use dashboard page instead */}
+                        {/* <Route path="/" element={<DashboardPage />} /> */}
+                        <Route path="/" element={<AccountsPage />} />
+                        <Route path="/artifacts" element={<ArtifactsPage />} />
+                        <Route path="/builds" element={<BuildsPage />} />
+                        <Route path="/profiles" element={<AccountsPage />} />
 
-                      <Route path="/profile/:uid" element={<ProfilePage />} />
+                        <Route path="/profile/:uid" element={<ProfilePage />} />
 
-                      {/* DEPRECATED */}
-                      {/* <Route path="/profile/:uid/ads" element={<ProfilePage />} /> */}
+                        {/* DEPRECATED */}
+                        {/* <Route path="/profile/:uid/ads" element={<ProfilePage />} /> */}
 
-                      <Route
-                        path="/leaderboards"
-                        element={<CategorySelectionPage />}
-                      />
+                        <Route
+                          path="/leaderboards"
+                          element={<CategorySelectionPage />}
+                        />
 
-                      <Route
-                        path="/leaderboards/:calculationId"
-                        element={<LeaderboardsPage />}
-                      />
+                        <Route
+                          path="/leaderboards/:calculationId"
+                          element={<LeaderboardsPage />}
+                        />
 
-                      <Route
-                        path="/leaderboards/:calculationId/:variant"
-                        element={<LeaderboardsPage />}
-                      />
+                        <Route
+                          path="/leaderboards/:calculationId/:variant"
+                          element={<LeaderboardsPage />}
+                        />
 
-                      <Route path="/faq" element={<FAQPage />} />
+                        <Route path="/faq" element={<FAQPage />} />
 
-                      <Route
-                        path="/privacy-policy"
-                        element={<PrivacyPolicyPage />}
-                      />
+                        <Route
+                          path="/privacy-policy"
+                          element={<PrivacyPolicyPage />}
+                        />
 
-                      <Route
-                        path="*"
-                        element={<PageMessage message="404. Page not found." />}
-                      />
-                    </Routes>
-                  </HoverElementContextProvider>
-                  <Footer />
-                </div>
+                        <Route
+                          path="*"
+                          element={
+                            <PageMessage message="404. Page not found." />
+                          }
+                        />
+                      </Routes>
+                    </HoverElementContextProvider>
+                    <Footer />
+                  </div>
 
-                <div className="flex-special-container">
-                  <AdsComponentManager
-                    adType="LeaderboardBTF"
-                    dataAdSlot="6204085735"
-                    hybrid="mobile"
-                  />
-                  <AdsComponentManager adType="RichMedia" />
-                </div>
+                  <div className="flex-special-container">
+                    <AdsComponentManager
+                      adType="LeaderboardBTF"
+                      dataAdSlot="6204085735"
+                      hybrid="mobile"
+                    />
+                    <AdsComponentManager adType="RichMedia" />
+                  </div>
+                </TranslationContextProvider>
               </TitleContextProvider>
             </AdProviderContextProvider>
           </NotificationsContextProvider>

@@ -40,6 +40,7 @@ import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesCont
 import { TitleContext } from "../../context/TitleProvider/TitleProviderContext";
 import { AdsComponentManager } from "../../components/AdsComponentManager";
 import "./style.scss";
+import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 
 ChartJS.register(...registerables);
 
@@ -88,6 +89,7 @@ export const LeaderboardsPage: React.FC = () => {
   const { setTitle } = useContext(TitleContext);
   const { lastProfiles } = useContext(LastProfilesContext);
   const { hoverElement } = useContext(HoverElementContext);
+  const { translate } = useContext(TranslationContext);
 
   // hooks
   const { calculationId, variant } = useParams();
@@ -172,7 +174,7 @@ export const LeaderboardsPage: React.FC = () => {
               {row.type !== "current" ? (
                 row.type
               ) : (
-                <span style={{ opacity: 0.25 }}>{row.name}</span>
+                <span style={{ opacity: 0.25 }}>{translate(row.name)}</span>
               )}
             </div>
           );
@@ -313,6 +315,7 @@ export const LeaderboardsPage: React.FC = () => {
       calculationInfo,
       thisCalc?.short,
       calculationSortKey,
+      translate,
       // FETCH_LEADERBOARDS_URL, @TODO: not needed?
     ]
   );
@@ -589,7 +592,7 @@ export const LeaderboardsPage: React.FC = () => {
                           alignItems: "center",
                         }}
                       >
-                        {thisCalc.characterName} - {thisCalc.name}
+                        {translate(thisCalc.characterName)} - {thisCalc.name}
                       </div>
                     </div>
                     <div>{thisWeaponCalc?.details}</div>
@@ -605,7 +608,7 @@ export const LeaderboardsPage: React.FC = () => {
                           icon={thisWeaponCalc?.icon || ""}
                           refinement={thisWeaponCalc?.refinement || 1}
                         />
-                        {thisWeaponCalc?.name}
+                        {translate(thisWeaponCalc?.name || "")}
                       </span>
                     </div>
                   </div>

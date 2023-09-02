@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useContext, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
 import {
@@ -16,6 +16,7 @@ import {
 } from "../../utils/helpers";
 import { TableColumn } from "../../types/TableColumn";
 import { AdsComponentManager } from "../../components/AdsComponentManager";
+import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 
 export type TransformedCategories = {
   characterName: string;
@@ -76,7 +77,7 @@ export type CategoriesColumns = {
 
 export const CategorySelectionPage: React.FC = () => {
   const navigate = useNavigate();
-  // const pathname = window.location.pathname;
+  const { translate } = useContext(TranslationContext);
 
   const CATEGORIES_COLUMNS: TableColumn<CategoriesColumns>[] = useMemo(
     () => [
@@ -213,7 +214,7 @@ export const CategorySelectionPage: React.FC = () => {
 
           return (
             <div className="table-icon-text-pair" style={{ color: "gray" }}>
-              <div>{characterName}</div>
+              <div>{translate(characterName)}</div>
             </div>
           );
         },
@@ -276,7 +277,7 @@ export const CategorySelectionPage: React.FC = () => {
         },
       },
     ],
-    []
+    [translate]
   );
 
   return (
