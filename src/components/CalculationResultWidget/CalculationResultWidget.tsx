@@ -113,11 +113,11 @@ export const CalculationResultWidget: React.FC<
           const isTop1_b = Math.min(100, Math.ceil(topB_ * 100)) === 1;
 
           if (isTop1_a && isTop1_b) {
-            return _rankingA - _rankingB
+            return _rankingA - _rankingB;
           }
 
-          return topA_ > topB_ ? 1 : -1
-          
+          return topA_ > topB_ ? 1 : -1;
+
           // return isTop1_a && isTop1_b
           //   ? _rankingA - _rankingB
           //   : topA_ > topB_
@@ -201,7 +201,15 @@ export const CalculationResultWidget: React.FC<
                 }}
                 href={`/leaderboards/${id}/${variant?.name || ""}`}
               >
-                <div className="highlight-tile-pill">{shortName}</div>
+                {/* <div className="highlight-tile-pill">{shortName}</div> */}
+                {variant?.displayName ? (
+                  <div className="highlight-tile-pill stacked">
+                    <div className="stacked-top">{short}</div>
+                    <div className="stacked-bottom">{variant?.displayName}</div>
+                  </div>
+                ) : (
+                  <div className="highlight-tile-pill">{shortName}</div>
+                )}
                 <div className="flex">
                   <img
                     alt="Icon"

@@ -141,7 +141,26 @@
       border-radius: 50px;
       font-weight: 800;
       white-space: nowrap;
-      // font-family: "GenshinFont";
+      // font-family: "GenshinFont"; 
+
+      &.stacked {
+        width: 100%;
+        text-align: center;
+        height: 22px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        .stacked-top {
+          position: relative;
+          top: -4px;
+          transform: scale(0.9);
+        }
+        .stacked-bottom {
+          position: relative;
+          top: -7px;
+          font-size: 10px;
+        }
+      }
     }
   }
 }

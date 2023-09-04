@@ -68,6 +68,7 @@ export const CalculationList: React.FC<CalculationListProps> = ({
             result,
             stats,
             variant,
+            short,
             calculationId,
             teammates,
           } = calc;
@@ -105,7 +106,13 @@ export const CalculationList: React.FC<CalculationListProps> = ({
               <td>
                 <TeammatesCompact teammates={teammates} simplify />
               </td>
-              <td>{variant?.displayName}</td>
+              <td>
+                {/* <div className="stacked">
+                    <div className="stacked-top">{short}</div>
+                    <div className="stacked-bottom">{variant?.displayName}</div>
+                  </div> */}
+                {variant?.displayName}
+              </td>
               <td>
                 <a
                   href={`/${leaderboardPath}`}
