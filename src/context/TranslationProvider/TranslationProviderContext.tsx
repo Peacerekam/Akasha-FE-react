@@ -142,9 +142,23 @@ const TranslationContextProvider: React.FC<{ children: any }> = ({
       setTextMap(textMapFromLS);
     }
 
-    const detectedLanguage = languages.includes(navigator?.language as any)
-      ? navigator?.language
+    let navigatorLanguage: any = navigator?.language;
+
+    const isNonChina =
+      !navigatorLanguage?.startsWith("zh") && navigatorLanguage?.includes("-");
+
+    if (isNonChina) {
+      navigatorLanguage = navigatorLanguage.split("-")[0];
+    }
+
+    const languageNotDefined = !languages.includes(navigatorLanguage);
+    const defaultLangauge = navigatorLanguage?.startsWith("zh")
+      ? "zh-CN"
       : "en";
+
+    const detectedLanguage = languageNotDefined
+      ? defaultLangauge
+      : navigatorLanguage;
 
     const languageFromLS = localStorage.getItem("language") ?? detectedLanguage;
     setLanguage(languageFromLS as Language);
