@@ -517,6 +517,7 @@ body {
       }
     }
     .modal-content {
+      min-height: 250px;
       max-height: calc(100dvh - 300px);
       overflow: auto;
       padding: 10px;

@@ -44,6 +44,12 @@
   margin-top: 20px;
   margin-left: 20px;
   font-size: 16px;
+  @media (max-width: 800px) {
+    margin-left: 0px;
+    .hover-element {
+      display: block;
+    }
+  }
   .patreons-only {
     width: 310px;
     margin-top: 10px;
@@ -111,20 +117,67 @@
   }
 }
 
-@media (max-width: 800px) {
+@media (max-height: 750px) {
   .perfect-scroll-wrapper {
     width: 100%;
     &.for-artifacts {
       height: 100dvh !important;
     }
   }
-  .settings-modal {
+  .modal {
     top: 50px;
-    .modal-content {
-      height: calc(100dvh - 61px);
-      max-height: 100dvh !important;
-      .compact-table-wrapper {
-        align-items: center;
+    .log-in-container,
+    .modal-spacer {
+      margin-top: 20px;
+    }
+    .log-in-container {
+      margin-bottom: 0;
+    }
+    .log-in-methods-container {
+      margin-top: 15px;
+      > a {
+        padding: 0px !important;
+        svg {
+          width: 30px;
+        }
+      }
+    }
+    &.settings-modal {
+      .modal-content {
+        height: fit-content;
+        max-height: calc(100dvh - 61px) !important;
+        .compact-table-wrapper {
+          align-items: center;
+        }
+        .perfect-scroll-wrapper {
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1100px) {
+  @media (orientation: portrait) {
+    .perfect-scroll-wrapper {
+      width: 100%;
+      &.for-artifacts {
+        height: 100dvh !important;
+      }
+    }
+    .modal {
+      top: 50px;
+      &.settings-modal {
+        .modal-content {
+          height: fit-content;
+          max-height: calc(100dvh - 61px) !important;
+          .compact-table-wrapper {
+            align-items: center;
+          }
+          .perfect-scroll-wrapper {
+            margin-bottom: 10px;
+          }
+        }
       }
     }
   }
@@ -196,9 +249,17 @@
     width: 100%;
     .compact-table-row {
       display: flex;
-      gap: 10px;
-      align-items: center;
-      cursor: pointer;
+      justify-content: space-between;
+      .compact-table-row-left {
+        cursor: pointer;
+        width: 100%;
+      }
+      .compact-table-row-right,
+      .compact-table-row-left {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
       margin-right: 15px;
       padding-left: 4px;
       &.has-custom-namecard {

@@ -72,6 +72,14 @@
     background-color: gray;
     border-color: gray;
   }
+  &.dev-badge {
+    background-color:#6cff6c;
+    border-color: #6cff6c;
+    color: rgb(37, 37, 37);
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 600;
+    font-size: 18px;
+  }
   &:hover {
     border-color: orange;
   }

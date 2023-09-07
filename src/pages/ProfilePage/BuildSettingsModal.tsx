@@ -291,62 +291,65 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
         .trim();
 
       return (
-        <div
-          key={buildId}
-          className={rowClassnames}
-          onClick={() => {
-            clearBgImage();
-            setSelectedBuildId(buildId);
-          }}
-        >
-          <img className="table-icon" src={char.icon} alt={char.icon} />
-          <div className="compact-table-name">
-            {selectedBuildId === buildId ? (
-              <BuildNameInput
-                defaultValue={displayName}
-                onBlur={handleChangeBuildName}
-              />
-            ) : (
-              <Highlighter
-                highlightClassName="text-highlight-class"
-                searchWords={[searchText]}
-                autoEscape={true}
-                textToHighlight={displayName}
-              />
-            )}
-          </div>
-          {char?.customNamecard && !isHidden && <div>🖼️</div>}
-          {isHidden ? (
-            <>
-              <div>HIDDEN</div>
-              <button
-                className="regular-btn"
-                title="Toggle build visibility"
-                onClick={() => handleToggleBuildVisibility(char)}
-              >
-                <FontAwesomeIcon icon={faEyeSlash} size="1x" />
-              </button>
-            </>
-          ) : (
-            <>
-              <div>VISIBLE</div>
-              <button
-                className="regular-btn"
-                title="Toggle build visibility"
-                onClick={() => handleToggleBuildVisibility(char)}
-              >
-                <FontAwesomeIcon icon={faEye} size="1x" />
-              </button>
-            </>
-          )}
-          <ConfirmTooltip
-            text={`Delete "${displayName}"?`}
-            onConfirm={() => handleDeleteBuild(char)}
+        <div key={buildId} className={rowClassnames}>
+          <div
+            className="compact-table-row-left"
+            onClick={() => {
+              clearBgImage();
+              setSelectedBuildId(buildId);
+            }}
           >
-            <button className="remove-btn" title="Delete build">
-              <FontAwesomeIcon icon={faTrash} size="1x" />
-            </button>
-          </ConfirmTooltip>
+            <img className="table-icon" src={char.icon} alt={char.icon} />
+            <div className="compact-table-name">
+              {selectedBuildId === buildId ? (
+                <BuildNameInput
+                  defaultValue={displayName}
+                  onBlur={handleChangeBuildName}
+                />
+              ) : (
+                <Highlighter
+                  highlightClassName="text-highlight-class"
+                  searchWords={[searchText]}
+                  autoEscape={true}
+                  textToHighlight={displayName}
+                />
+              )}
+            </div>
+          </div>
+          <div className="compact-table-row-right">
+            {/* {char?.customNamecard && !isHidden && <div>🖼️</div>} */}
+            {isHidden ? (
+              <>
+                <div>HIDDEN</div>
+                <button
+                  className="regular-btn"
+                  title="Toggle build visibility"
+                  onClick={() => handleToggleBuildVisibility(char)}
+                >
+                  <FontAwesomeIcon icon={faEyeSlash} size="1x" />
+                </button>
+              </>
+            ) : (
+              <>
+                {/* <div>VISIBLE</div> */}
+                <button
+                  className="regular-btn"
+                  title="Toggle build visibility"
+                  onClick={() => handleToggleBuildVisibility(char)}
+                >
+                  <FontAwesomeIcon icon={faEye} size="1x" />
+                </button>
+              </>
+            )}
+            <ConfirmTooltip
+              text={`Delete "${displayName}"?`}
+              onConfirm={() => handleDeleteBuild(char)}
+            >
+              <button className="remove-btn" title="Delete build">
+                <FontAwesomeIcon icon={faTrash} size="1x" />
+              </button>
+            </ConfirmTooltip>
+          </div>
         </div>
       );
     };

@@ -37,14 +37,9 @@ import { TranslationContextProvider } from "./context/TranslationProvider/Transl
 const urls = {
   "prod-mimee-ovh": "https://mimee.ovh",
   "prod-akasha-cv": "https://akasha.cv",
-  localhost: "http://localhost:5033",
+  localhost5033: "http://localhost:5033",
   localhost80: "http://localhost:80",
-  virmach: "http://149.57.165.73:5033",
-  ovh: "http://146.59.86.233:5033",
-  ovh80: "http://146.59.86.233",
-  proxy: "http://localhost:3100/akasha",
-  heroku: "https://akasha-backend.herokuapp.com",
-  "game-rise-ovh": "http://54.39.29.82",
+  // "game-rise-ovh": "http://54.39.29.82",
 };
 
 export const BASENAME = "/";
