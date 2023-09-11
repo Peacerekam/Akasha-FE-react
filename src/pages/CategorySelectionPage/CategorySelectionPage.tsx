@@ -1,6 +1,6 @@
 import React, { useContext, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
+import DomainBackground from "../../assets/images/Depths_of_Mt._Yougou_Concept_Art.webp";
 import {
   CustomTable,
   HelpBox,

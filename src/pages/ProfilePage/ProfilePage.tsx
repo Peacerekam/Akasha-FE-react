@@ -60,8 +60,8 @@ import { TitleContext } from "../../context/TitleProvider/TitleProviderContext";
 import { getSessionIdFromCookie } from "../../utils/helpers";
 import { ArtifactSettingsModal } from "./ArtifactSettingsModal";
 import { AdsComponentManager } from "../../components/AdsComponentManager";
-import "./style.scss";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import "./style.scss";
 
 export const ProfilePage: React.FC = () => {
   const [showArtifactSettingsModal, setShowArtifactSettingsModal] =

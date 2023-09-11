@@ -147,9 +147,7 @@ const TranslationContextProvider: React.FC<{ children: any }> = ({
     const isNonChina =
       !navigatorLanguage?.startsWith("zh") && navigatorLanguage?.includes("-");
 
-    if (isNonChina) {
-      navigatorLanguage = navigatorLanguage.split("-")[0];
-    }
+    if (isNonChina) navigatorLanguage = navigatorLanguage.split("-")[0];
 
     const languageNotDefined = !languages.includes(navigatorLanguage);
     const defaultLangauge = navigatorLanguage?.startsWith("zh")

@@ -40,15 +40,28 @@ export const Artifact: React.FC<ArtifactProps> = ({
   const artifactBg = {
     5: ArtifactBackground,
     // @TODO: add more background to artifacts
+    // 4: ArtifactBackground,
+    // 3: ArtifactBackground,
+    // 2: ArtifactBackground,
+    // 1: ArtifactBackground,
     4: NoArtifact,
     3: NoArtifact,
     2: NoArtifact,
     1: NoArtifact,
   }[artifact?.stars];
 
+  // const artifactHue = {
+  //   5: '0deg',
+  //   4: '-120deg',
+  //   3: '-200deg',
+  //   2: '0deg',
+  //   1: '0deg',
+  // }[artifact?.stars]
+
   const style = {
     "--artifact-bg": `url(${artifactBg})`,
     "--artifact-width": `${width}px`,
+    // "filter": `hue-rotate(${artifactHue})`
   } as React.CSSProperties;
 
   const mainStatKey = artifact.mainStatKey

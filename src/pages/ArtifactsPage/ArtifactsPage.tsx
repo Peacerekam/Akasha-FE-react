@@ -22,7 +22,7 @@ import {
 } from "../../components";
 import { TableColumn } from "../../types/TableColumn";
 
-import DomainBackground from "../../assets/images/domain-background.jpg";
+import DomainBackground from "../../assets/images/Tenshukaku_Concept_Art.webp";
 import {
   FETCH_ARTIFACT_FILTERS_URL,
   getRainbowTextStyle,

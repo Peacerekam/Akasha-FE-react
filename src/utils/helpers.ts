@@ -360,3 +360,6 @@ export const getGenderFromIcon = (icon?: string) => {
 
   return gender;
 };
+
+export const delay = async (ms: number) =>
+  new Promise((resolve, reject) => setTimeout(resolve, ms));

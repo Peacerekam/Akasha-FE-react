@@ -23,7 +23,6 @@ import {
   TeammatesCompact,
   CalculationTeammate,
   NotificationBar,
-  EnkaBadge,
 } from "../../components";
 import {
   FETCH_CHARACTER_FILTERS_URL,

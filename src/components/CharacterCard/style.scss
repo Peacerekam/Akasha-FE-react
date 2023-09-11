@@ -364,6 +364,12 @@
       gap: 30px;
       // width: fit-content;
       position: relative;
+      > div {
+        max-width: 400px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
       .character-nickname {
         font-size: 14px;
         z-index: 2;
@@ -882,16 +888,17 @@
       }
       .compact-artifact-bg {
         position: absolute;
-        content: "";
+        // content: "";
         height: 100%;
         width: 100%;
-        background-image: var(--elemental-bg);
+        // background-image: var(--elemental-bg);
         background-image: var(--character-namecard-url);
         background-position-y: bottom;
         background-repeat: repeat;
         // filter: brightness(0.55) blur(15px);
         opacity: 0.35;
-        background-size: 10000%;
+        // background-size: 10000%;
+        background-size: initial !important;
       }
     }
   }

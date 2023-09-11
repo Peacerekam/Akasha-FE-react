@@ -14,13 +14,11 @@ import {
   RegionBadge,
   ARBadge,
   HelpBox,
-  AchievementsBadge,
   NotificationBar,
-  EnkaBadge,
 } from "../../components";
 import { TableColumn } from "../../types/TableColumn";
 import Achievevement from "../../assets/icons/Achievement.webp";
-import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
+import DomainBackground from "../../assets/images/Grand_Narukami_Shrine_Concept_Art.webp";
 import {
   FETCH_ACCOUNTS_FILTERS_URL,
   FETCH_ACCOUNTS_URL,

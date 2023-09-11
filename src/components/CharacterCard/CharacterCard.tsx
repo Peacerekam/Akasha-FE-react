@@ -25,6 +25,7 @@ import {
   toEnkaUrl,
   ascensionToLevel,
   getGenderFromIcon,
+  delay,
 } from "../../utils/helpers";
 import { REAL_SUBSTAT_VALUES, STAT_NAMES } from "../../utils/substats";
 import { StatIcon } from "../StatIcon";
@@ -113,6 +114,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   // const [enkaStyle, setEnkaStyle] = useState(false);
   const [namecardBg, setNamecardBg] = useState(false);
   const [simplifyColors, setSimplifyColors] = useState(false);
+  const [displayBuildName, setDisplayBuildName] = useState(true);
   const [privacyFlag, setPrivacyFlag] = useState(false);
   const [toggleConfigure, setToggleConfigure] = useState(false);
   const [generating, setGenerating] = useState<
@@ -141,6 +143,51 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
   const location = useLocation();
   const DEBUG_MODE = location.search?.includes("debug");
+
+  // load from local storage
+  useEffect(() => {
+    const savedObj = JSON.parse(localStorage.getItem("cardSettings") ?? "{}");
+
+    if (savedObj.displayBuildName !== displayBuildName) {
+      setDisplayBuildName(savedObj.displayBuildName || displayBuildName);
+    }
+
+    if (savedObj.simplifyColors !== simplifyColors) {
+      setSimplifyColors(savedObj.simplifyColors || simplifyColors);
+    }
+
+    if (savedObj.namecardBg !== namecardBg) {
+      setNamecardBg(savedObj.namecardBg || namecardBg);
+    }
+
+    if (savedObj.privacyFlag !== privacyFlag) {
+      setPrivacyFlag(savedObj.privacyFlag || privacyFlag);
+    }
+  }, []);
+
+  // save to local storage
+  useEffect(() => {
+    const oldObj = JSON.parse(localStorage.getItem("cardSettings") ?? "{}");
+
+    if (oldObj.displayBuildName !== displayBuildName) {
+      oldObj.displayBuildName = displayBuildName;
+    }
+
+    if (oldObj.simplifyColors !== simplifyColors) {
+      oldObj.simplifyColors = simplifyColors;
+    }
+
+    if (oldObj.namecardBg !== namecardBg) {
+      oldObj.namecardBg = namecardBg;
+    }
+
+    if (oldObj.privacyFlag !== privacyFlag) {
+      oldObj.privacyFlag = privacyFlag;
+    }
+
+    const newObj = { ...oldObj };
+    localStorage.setItem("cardSettings", JSON.stringify(newObj));
+  }, [displayBuildName, simplifyColors, namecardBg, privacyFlag]);
 
   const handleToggleModal = (event: React.MouseEvent<HTMLElement>) => {
     setShowPreviewModal((prev) => !prev);
@@ -1012,7 +1059,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     () => (
       <>
         <div key="character-name" className="character-name">
-          <div>{translate(row.name, getGenderFromIcon(row.icon))}</div>
+          <div>
+            {displayBuildName
+              ? row.type || row.name
+              : translate(row.name, getGenderFromIcon(row.icon))}
+          </div>
           {!privacyFlag && (
             <div className="character-nickname">{row.owner.nickname}</div>
           )}
@@ -1046,7 +1097,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             const constImg = chartsData?.assets?.constellations?.[i];
             const isActivated = row.constellation >= i + 1;
             return (
-              <div key={`${constImg}-${i}`} className={isActivated ? "activated" : ""}>
+              <div
+                key={`${constImg}-${i}`}
+                className={isActivated ? "activated" : ""}
+              >
                 {!isActivated ? (
                   <span className="const-locked">
                     <FontAwesomeIcon
@@ -1074,7 +1128,14 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         </div>
       </>
     ),
-    [row, privacyFlag, talentNAProps, talentSkillProps, talentBurstProps]
+    [
+      row,
+      privacyFlag,
+      talentNAProps,
+      talentSkillProps,
+      talentBurstProps,
+      displayBuildName,
+    ]
   );
 
   // const handleEffectsIteration = () => {
@@ -1204,6 +1265,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       },
     };
 
+    const genDelay = 100; // 100ms
+
     try {
       if (mode === "download") {
         setGenerating("downloading");
@@ -1220,6 +1283,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         //   // cacheBust: true,
         // });
 
+        await delay(genDelay);
         const canvas = await html2canvas(cardNode, _opts);
         const dataUrl = canvas.toDataURL("image/png", 1.0);
 
@@ -1245,6 +1309,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         // setImagePreviewBlob(dataUrl);
         // handleToggleModal(event);
 
+        await delay(genDelay);
         const canvas = await html2canvas(cardNode, _opts);
 
         canvas.toBlob((blob) => {
@@ -1382,14 +1447,19 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                   </div>
                 </div>
                 <div className="card-checkboxes ">
-                  {/* <div style={{ color: "gray" }}>
-                Enka style
-                <input
-                  type="checkbox"
-                  onChange={(e: any) => setEnkaStyle(!!e.target.checked)}
-                  disabled
-                />
-              </div> */}
+                  <div>
+                    <label htmlFor={`${getBuildId(row)}-bname`}>
+                      Display build name
+                    </label>
+                    <input
+                      id={`${getBuildId(row)}-bname`}
+                      type="checkbox"
+                      checked={displayBuildName}
+                      onChange={(e: any) =>
+                        setDisplayBuildName(!!e.target.checked)
+                      }
+                    />
+                  </div>
                   <div>
                     <label htmlFor={`${getBuildId(row)}-sc`}>
                       Simplify colors

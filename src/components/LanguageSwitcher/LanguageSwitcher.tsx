@@ -35,13 +35,18 @@ export const LanguageSwitcher: React.FC = () => {
   const { setLanguage, language } = useContext(TranslationContext);
   const dropdownRef = useRef<HTMLAnchorElement>(null);
 
+  const delayedBlur = () => setTimeout(() => dropdownRef?.current?.blur(), 1);
+
   const languageList = reorderedLanguages.map((name) => (
     <div
       className={language === name ? "current-langauge" : ""}
       key={name}
       onMouseDown={() => {
         setLanguage(name);
-        dropdownRef?.current?.blur();
+        delayedBlur();
+      }}
+      onClick={() => {
+        delayedBlur();
       }}
     >
       {KEY_TO_FULL[name]}
@@ -52,7 +57,7 @@ export const LanguageSwitcher: React.FC = () => {
     <div className="language-switcher">
       <a
         ref={dropdownRef}
-        href=""
+        href="#language"
         onMouseDown={(e) => {
           const isMain =
             dropdownRef?.current === e.target ||
@@ -62,7 +67,7 @@ export const LanguageSwitcher: React.FC = () => {
           const isActive = dropdownRef?.current === document.activeElement;
           if (!isActive) return;
 
-          setTimeout(() => dropdownRef?.current?.blur(), 0);
+          delayedBlur();
         }}
         onClick={(e) => {
           e.preventDefault();
