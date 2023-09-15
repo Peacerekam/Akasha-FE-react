@@ -55,7 +55,7 @@ export const AccountsPage: React.FC = () => {
       {
         name: "Nickname",
         sortField: "playerInfo.nickname",
-        width: "180px",
+        // width: "180px",
         sortable: false,
         cell: (row) => {
           // if (!row.playerInfo?.level) return <></>;
@@ -192,7 +192,7 @@ export const AccountsPage: React.FC = () => {
 
           const lastProfileUpdate = new Date(row?.lastProfileUpdate || "");
           const strDate = lastProfileUpdate.toLocaleString("en-US", {
-            month: "long",
+            month: "short",
             day: "numeric",
             year: "numeric",
           });

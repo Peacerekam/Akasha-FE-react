@@ -261,7 +261,7 @@ export const CategorySelectionPage: React.FC = () => {
         cell: (row) => {
           const addDate = new Date(row?.addDate || "");
           const strDate = addDate.toLocaleString("en-US", {
-            month: "long",
+            month: "short",
             day: "numeric",
             year: "numeric",
           });
