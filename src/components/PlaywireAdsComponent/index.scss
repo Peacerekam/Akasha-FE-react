@@ -1,0 +1,83 @@
+.pw-container {
+  position: relative;
+  text-align: center;
+  // overflow: visible;
+  // z-index: 5 !important;
+  margin: 0;
+
+  &.video-ad-container {
+    .playwire-ad-unit {
+      min-width: 430px;
+      min-height: 210px;
+    }
+  }
+
+  span.ad-debug {
+    // display: none;
+    color: red;
+    font-size: 10px;
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    width: 100%;
+    pointer-events: none;
+    transform: translateX(-50%);
+  }
+
+  .playwire-ad-unit {
+    position: relative;
+    min-width: 350px;
+    min-height: 100px;
+    background-color: rgba(red, 0.2);
+    outline: 2px dashed rgba(red, 0.6);
+  }
+}
+
+.flex-special-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+
+  // width: 100%;
+  // gap: 35px;
+  flex-direction: row-reverse;
+
+  gap: 10px;
+  justify-content: center;
+  align-items: flex-start;
+
+  .other-calculations-display,
+  .page-description-wrapper {
+    margin: 0;
+    flex: 1;
+    // width: calc(100% - 450px);
+    min-width: min(450px, 100%);
+  }
+}
+
+// @TODO: temporary?
+.pw-footer {
+  // display: none !important;
+  background-color: rgba(57, 91, 100, 0.6) !important;
+  polygon {
+    fill: white !important;
+  }
+  .pw-footer-close {
+    &:hover {
+      polygon {
+        fill: orange !important;
+      }
+    }
+  }
+  @media (min-width: 600px) {
+    padding-top: 0px !important;
+  }
+}
+
+body:not(.overflow-hidden) {
+  &#top-of-the-page,
+  &.navbar-tabs {
+    z-index: 1001;
+  }
+}

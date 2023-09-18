@@ -1,15 +1,17 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
 import { AdsComponent, AdsComponentProps } from "../AdsComponent";
-import {
-  // VenatusAdsComponent,
-  VenatusAdsComponentProps,
-} from "../VenatusAdsComponent";
+import { VenatusAdsComponentProps } from "../VenatusAdsComponent";
 import VenatusAdsComponent from "../VenatusAdsComponent/VenatusAdsComponent";
+import PlaywireAdsComponent, {
+  PlaywireAdsComponentProps,
+} from "../PlaywireAdsComponent/PlaywireAdsComponent";
 import { showAds } from "../../App";
 
-type AdsComponentManagerProps = VenatusAdsComponentProps & AdsComponentProps;
+type AdsComponentManagerProps = VenatusAdsComponentProps &
+  AdsComponentProps &
+  PlaywireAdsComponentProps;
 
 export const AdsComponentManager: React.FC<AdsComponentManagerProps> = (
   props
@@ -26,9 +28,9 @@ export const AdsComponentManager: React.FC<AdsComponentManagerProps> = (
   // });
 
   if (profileObject.isPatreon || adsDisabled) {
-    document.querySelector("body")?.classList.add("a-h-0");
+    document.querySelector("body")?.classList.add("ads-disabled");
   } else {
-    document.querySelector("body")?.classList.remove("a-h-0");
+    document.querySelector("body")?.classList.remove("ads-disabled");
   }
 
   if (!showAds || reloadAds || adsDisabled || profileObject.isPatreon) {
@@ -43,6 +45,17 @@ export const AdsComponentManager: React.FC<AdsComponentManagerProps> = (
   if (adProvider === "venatus" && props.adType) {
     return (
       <VenatusAdsComponent
+        adType={props.adType}
+        hybrid={props.hybrid}
+        hideOnDesktop={props.hideOnDesktop}
+        hideOnMobile={props.hideOnMobile}
+      />
+    );
+  }
+
+  if (adProvider === "playwire") {
+    return (
+      <PlaywireAdsComponent
         adType={props.adType}
         hybrid={props.hybrid}
         hideOnDesktop={props.hideOnDesktop}

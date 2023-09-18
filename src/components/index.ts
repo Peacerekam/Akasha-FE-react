@@ -33,6 +33,7 @@ export * from "./FancyBuildBorder";
 export * from "./MobileStickyBar";
 export * from "./AdsComponent";
 export * from "./VenatusAdsComponent";
+export * from "./PlaywireAdsComponent";
 export * from "./AdsComponentManager";
 export * from "./CharacterCard";
 export * from "./StatListCard";

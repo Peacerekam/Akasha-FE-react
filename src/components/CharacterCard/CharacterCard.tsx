@@ -988,7 +988,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                   overflow: "hidden",
                 }}
               >
-                {c.weapon.name}
+                {translate(c.weapon.name)}
               </div>
               <div style={{ width: 60 }}>top {_top}</div>
               {c.variant?.displayName
@@ -998,7 +998,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             </span>
             <span className="for-pills">
               <img src={c.weapon.icon} />
-              {c.weapon.name} - top {_top}{" "}
+              {translate(c.weapon.name)} - top {_top}{" "}
               {c.variant?.displayName ? `(${c.variant?.displayName}) ` : " "}
               {c.short}
             </span>

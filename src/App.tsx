@@ -45,7 +45,7 @@ const urls = {
 export const BASENAME = "/";
 export const showAds = true;
 export const isProduction = true; // set to true for akasha.cv domain
-export const TRANSLATION_VERSION = 0.27;
+export const TRANSLATION_VERSION = 0.27; // increment this when translation keys are outdated
 const MAINTENANCE_MODE = false;
 
 const getApiBaseURL = () => {
@@ -207,16 +207,17 @@ const App = () => {
                         />
                       </Routes>
                     </HoverElementContextProvider>
-                    <Footer />
-                  </div>
 
-                  <div className="flex-special-container">
-                    <AdsComponentManager
-                      adType="LeaderboardBTF"
-                      dataAdSlot="6204085735"
-                      hybrid="mobile"
-                    />
-                    <AdsComponentManager adType="RichMedia" />
+                    <div className="flex-special-container">
+                      <AdsComponentManager
+                        adType="LeaderboardBTF"
+                        dataAdSlot="6204085735"
+                        hybrid="mobile"
+                      />
+                      <AdsComponentManager adType="RichMedia" />
+                    </div>
+
+                    <Footer />
                   </div>
                 </TranslationContextProvider>
               </TitleContextProvider>

@@ -4,7 +4,7 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import { useNavigate } from "react-router-dom";
 import { abortSignalCatcher, toShortThousands } from "../../utils/helpers";
 import { Spinner } from "../Spinner";
-import { Timer } from "../Timer";
+// import { Timer } from "../Timer";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import "./style.scss";
 
@@ -16,7 +16,7 @@ export const CalculationResultWidget: React.FC<
   CalculationResultWidgetProps
 > = ({ uid }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [retryTimer, setRetryTimer] = useState<number | null>(null);
+  // const [retryTimer, setRetryTimer] = useState<number | null>(null);
   const [data, setData] = useState<any[]>([]);
   const navigate = useNavigate();
 
@@ -50,9 +50,9 @@ export const CalculationResultWidget: React.FC<
       }
 
       // if no valid rankings at all then retry in 60s
-      const getTime = new Date().getTime();
-      const thenTTL = getTime + 59000;
-      setRetryTimer(thenTTL);
+      // const getTime = new Date().getTime();
+      // const thenTTL = getTime + 59000;
+      // setRetryTimer(thenTTL);
     };
 
     await abortSignalCatcher(getSetData);
@@ -253,10 +253,10 @@ export const CalculationResultWidget: React.FC<
     );
   }
 
-  const handleFinishTimer = async () => {
-    if (uid) await fetchCalcData(uid);
-    setRetryTimer(0);
-  };
+  // const handleFinishTimer = async () => {
+  //   if (uid) await fetchCalcData(uid);
+  //   setRetryTimer(0);
+  // };
 
   return (
     <>
@@ -269,9 +269,13 @@ export const CalculationResultWidget: React.FC<
             {tilesList}
           </div>
         </PerfectScrollbar>
-      ) : null}
+      ) : (
+        <div className="retrying-timer">
+          <div className="retrying-timer-label">no highlights available</div>
+        </div>
+      )}
 
-      {retryTimer ? (
+      {/* {retryTimer ? (
         <div className="retrying-timer">
           <div className="retrying-timer-label">Reloading highlights in:</div>
           <Timer until={retryTimer} onFinish={handleFinishTimer} />
@@ -280,7 +284,7 @@ export const CalculationResultWidget: React.FC<
         <div className="retrying-timer">
           <div className="retrying-timer-label">no highlights available</div>
         </div>
-      ) : null}
+      ) : null} */}
     </>
   );
 };

@@ -1,11 +1,51 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
 import { StylizedContentBlock } from "../../components/StylizedContentBlock";
-
-import "./style.scss";
 import { AdsComponentManager } from "../../components";
+import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
+import "./style.scss";
 
 export const PrivacyPolicyPage: React.FC = () => {
+  const { adProvider } = useContext(AdProviderContext);
+
+  const advertismentsText =
+    adProvider === "playwire" ? (
+      <>
+        <p>
+          All or partial advertising on this Website or App is managed by
+          Playwire LLC. If Playwire publisher advertising services are used,
+          Playwire LLC may collect and use certain aggregated and anonymized
+          data for advertising purposes. To learn more about the types of data
+          collected, how data is used and your choices as a user, please visit{" "}
+          <a href="https://www.playwire.com/privacy-policy">
+            https://www.playwire.com/privacy-policy
+          </a>
+          .
+        </p>
+        <p>
+          <strong>For EU Users only:</strong> If you are located in countries
+          that are part of the European Economic Area, in the United Kingdom or
+          Switzerland, and publisher advertising services are being provided by
+          Playwire LLC, you were presented with messaging from our Consent
+          Management Platform (CMP) around your privacy choices as a user in
+          regards to digital advertising, applicable vendors, cookie usage and
+          more. If you’d like to revisit the choices you have made previously on
+          this Website or App, please{" "}
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              (window as any).ramp.showCmpModal();
+            }}
+          >
+            click here
+          </a>
+          .
+        </p>
+      </>
+    ) : (
+      <p>akasha.cv uses ads from Venatus Media to support the site</p>
+    );
   return (
     <div className="flex ">
       <div className="content-block w-100" id="content-container">
@@ -17,7 +57,7 @@ export const PrivacyPolicyPage: React.FC = () => {
             hybrid="mobile"
             hideOnDesktop
           /> */}
-          <AdsComponentManager adType="Video" />
+          {/* <AdsComponentManager adType="Video" /> */}
           <div className="privacy-policy">
             <h1>Privacy Policy</h1>
 
@@ -31,8 +71,8 @@ export const PrivacyPolicyPage: React.FC = () => {
               </li>
               <li>
                 akasha.cv will store your public Genshin account, character and
-                artifact information. You can contact @mimee (previously Mimee#1111) on Discord if
-                you wish to delete your profile.
+                artifact information. You can contact @mimee (previously
+                Mimee#1111) on Discord if you wish to delete your profile.
               </li>
               <li>
                 When binding profile page to a UID, akasha.cv will save your
@@ -42,11 +82,12 @@ export const PrivacyPolicyPage: React.FC = () => {
 
             <h2>What akasha.cv does NOT collect</h2>
             <p>akasha.cv will never save passwords, usernames, emails.</p>
-            <h2>Advertisements</h2>
-            <p>akasha.cv uses ads from Venatus Media to support the site.</p>
 
             <h2>What cookies does akasha.cv use</h2>
             <p>akasha.cv can use cookies to store session IDs.</p>
+
+            <h2>Advertisements</h2>
+            {advertismentsText}
           </div>
         </div>
       </div>

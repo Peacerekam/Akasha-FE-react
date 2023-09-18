@@ -1,7 +1,10 @@
 import React, { useState, createContext, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-type AdProviders = null | "google" | "venatus";
+// import { Ramp } from "@playwire/pw-react-component";
+const { Ramp } = require("@playwire/pw-react-component");
+
+type AdProviders = null | "google" | "venatus" | "playwire";
 
 type AdProviderContextType = {
   adProvider: AdProviders;
@@ -21,6 +24,9 @@ const defaultValue = {
 
 const AdProviderContext = createContext(defaultValue);
 
+const PLAYWIRE_PUBLISHER_ID = "1025066";
+const PLAYWIRE_WEBSITE_ID = "74554";
+
 const AdProviderContextProvider: React.FC<{ children: any }> = ({
   children,
 }) => {
@@ -39,7 +45,7 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
   const handleReloadAds = () => {
     setReloadAds(true);
 
-    // if (location.pathname.startsWith("/leaderboards/1000000603")) { 
+    // if (location.pathname.startsWith("/leaderboards/1000000603")) {
     //   console.log(`%c\n\n [!] DISABLED AD-TAKEOVER WORKAROUND`, "color: red; font-size: 20px;");
     // } else {
     //   document.querySelector("#top-of-the-page")?.classList.remove("anim");
@@ -72,14 +78,12 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
 
   useEffect(() => {
     if (adProvider) return;
-    setAdProvider("venatus");
 
-    // @TODO: 
-    // if (location.search.includes("venatus-test")) {
-    //   setAdProvider("venatus");
-    // } else {
-    //   setAdProvider("google");
-    // }
+    if (location.search.includes("playwire-test")) {
+      setAdProvider("playwire");
+    } else {
+      setAdProvider("venatus");
+    }
   }, [location.search]);
 
   useEffect(() => {
@@ -99,6 +103,27 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
 
   return (
     <AdProviderContext.Provider value={value}>
+      {/* Only load this component once, at the top most level of your app */}
+      {adProvider === "playwire" && (
+        <>
+          <div
+            style={{
+              position: "absolute",
+              textAlign: "center",
+              width: "calc(100% - 25px)",
+              padding: 5,
+              color: "red",
+              fontSize: 12,
+              pointerEvents: "none",
+            }}
+          >
+            <div>PLAYWIRE RAMP COMPONENT</div>
+            <div>PLAYWIRE_PUBLISHER_ID: {PLAYWIRE_PUBLISHER_ID}</div>
+            <div>PLAYWIRE_WEBSITE_ID: {PLAYWIRE_WEBSITE_ID}</div>
+          </div>
+          <Ramp publisherId={PLAYWIRE_PUBLISHER_ID} id={PLAYWIRE_WEBSITE_ID} />
+        </>
+      )}
       {children}
     </AdProviderContext.Provider>
   );
