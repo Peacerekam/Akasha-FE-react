@@ -606,8 +606,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
               <div>{displayCharts(thisChartData, id)}</div>
               <div className="under-chart">
                 <TeammatesCompact teammates={calc.teammates} scale={1.7} />
-                {topBadge}
-                {lbBadge}
+                <span className="under-chart-badges">
+                  {topBadge}
+                  {lbBadge}
+                </span>
                 {/* <div>{shorterName}</div> */}
                 {privacyFlag ? (
                   ""

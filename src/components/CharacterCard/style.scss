@@ -630,7 +630,7 @@
       filter: drop-shadow(0 0 2px rgba(black, 0.3));
       .weapon-icon {
         position: relative;
-        top: 7px;
+        // top: 7px;
         left: -3px;
         width: 30px;
         height: 30px;
@@ -835,7 +835,9 @@
         }
         .weapon-rarity {
           position: absolute;
-          bottom: -8px;
+          display: flex;
+          flex-direction: row;
+          bottom: -4px;
           img {
             width: 13px;
             height: 13px;
@@ -923,16 +925,30 @@
       text-shadow: 0 0.08em 0.1em black, 0 0.1em 0.3em rgba(0, 0, 0, 0.4);
     }
 
+    .under-chart-badges {
+      justify-content: center;
+      display: flex;
+      height: 25px;
+      margin-top: 12px;
+    }
+
     .lb-badge {
       background-color: var(--element-color);
+      position: relative;
+      display: flex;
+
       > span {
         font-weight: 700;
         color: rgba(white, 0.9);
         text-shadow: 0 0 0.3em rgba(0, 0, 0, 0.6), 0 0 1em rgba(0, 0, 0, 1);
       }
+      > img {
+        bottom: 8px;
+        position: relative;
+      }
     }
     > div {
-      margin-top: 10px;
+      margin-top: 8px;
       font-family: "GenshinFont";
       font-size: 15px;
     }
