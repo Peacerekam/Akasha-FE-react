@@ -18,6 +18,15 @@ type PlaywireAdTypes =
   | "RichMedia"
   | "Video";
 
+const AD_TYPE_TO_KEY: { [key: string]: string } = {
+  LeaderboardATF: "leaderboard_atf",
+  LeaderboardBTF: "leaderboard_btf",
+  // MobileLeaderboardATF: "647dac8af97ba856bd4b7f5d",
+  // MobileLeaderboardBTF: "647dac98cf4d572f0c0f54f7",
+  Video: "med_rect_atf", // not video?
+  // RichMedia: "richmedia??", // display: none; ??
+};
+
 export default class PlaywireAdsComponent extends React.Component<
   PlaywireAdsComponentProps,
   { width: number }
@@ -36,7 +45,8 @@ export default class PlaywireAdsComponent extends React.Component<
     if (!isMobile && hideOnDesktop) return;
     if (isMobile && hideOnMobile) return;
 
-    console.log(`%c\n\n > ${adType}: MOUNT `, "color: green; font-size: 16px;");
+    const adID = AD_TYPE_TO_KEY[adType];
+    console.log(`%c\n\n > ${adID}: MOUNT `, "color: green; font-size: 16px;");
   }
 
   componentWillUnmount() {
@@ -46,7 +56,8 @@ export default class PlaywireAdsComponent extends React.Component<
     if (!isMobile && hideOnDesktop) return;
     if (isMobile && hideOnMobile) return;
 
-    console.log(`%c\n\n > ${adType}: UNMOUNT `, "color: red; font-size: 16px;");
+    const adID = AD_TYPE_TO_KEY[adType];
+    console.log(`%c\n\n > ${adID}: UNMOUNT `, "color: red; font-size: 16px;");
   }
 
   render() {
@@ -56,21 +67,14 @@ export default class PlaywireAdsComponent extends React.Component<
     const { width } = this.state;
     const isMobile = width <= 800; // 768;
     if (!isMobile && hideOnDesktop) return null;
-    if (isMobile && hideOnMobile) return;
+    if (isMobile && hideOnMobile) return null;
 
     // const mobileAdType: string = isMobile ? `Mobile${adType}` : adType;
 
-    const AD_TYPE_TO_KEY: { [key: string]: string } = {
-      LeaderboardATF: "leaderboard_atf",
-      LeaderboardBTF: "leaderboard_btf",
-      // MobileLeaderboardATF: "647dac8af97ba856bd4b7f5d",
-      // MobileLeaderboardBTF: "647dac98cf4d572f0c0f54f7",
-      // Video: "video??",
-      // RichMedia: "richmedia??", // display: none; ??
-    };
-
     // const adID = AD_TYPE_TO_KEY[mobileAdType] || AD_TYPE_TO_KEY[adType];
     const adID = AD_TYPE_TO_KEY[adType];
+
+    if (!adID) return null;
 
     // const isHybridBanner =
     //   mobileAdType === "MobileLeaderboardBTF" ||

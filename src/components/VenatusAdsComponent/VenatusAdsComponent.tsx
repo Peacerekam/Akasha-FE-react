@@ -76,7 +76,7 @@ export default class VenatusAdsComponent extends React.Component<
     const { width } = this.state;
     const isMobile = width <= 800; // 768;
     if (!isMobile && hideOnDesktop) return null;
-    if (isMobile && hideOnMobile) return;
+    if (isMobile && hideOnMobile) return null;
 
     const mobileAdType: string = isMobile ? `Mobile${adType}` : adType;
 

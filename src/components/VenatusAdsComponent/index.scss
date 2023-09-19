@@ -169,3 +169,11 @@ body:not(.overflow-hidden) {
 //     min-height: 250px;
 //   }
 // }
+
+body.ads-disabled {
+  .flex-special-container {
+    // display: none !important;
+    min-height: 0px !important;
+    height: 0px !important;
+  }
+}

@@ -1,5 +1,16 @@
 .privacy-policy-content-wrapper {
-  > .vm-container.shrink-ad { // video ad
+
+  h2 {
+    margin-top: 30px;
+    margin-bottom: 5px;
+  }
+
+  h2 + * {
+    margin-top: 0px;
+  }
+
+  > .vm-container.shrink-ad {
+    // video ad
     float: right;
     margin-left: 15px;
     margin-bottom: 15px;
