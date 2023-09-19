@@ -262,6 +262,18 @@ $substats: "flathp", "hp_", "flatatk", "atk_", "flatdef", "def_", "critrate",
   overflow: hidden;
   white-space: nowrap;
   padding: 5px 0px;
+
+  display: flex;
+  align-items: center;
+
+  > * {
+    flex-grow: 0;
+  }
+
+  .table-icon-text-pair {
+    margin-right: 10px;
+  }
+
   &:before {
     content: "";
   }

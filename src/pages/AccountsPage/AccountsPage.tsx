@@ -75,6 +75,15 @@ export const AccountsPage: React.FC = () => {
               {/* <ARBadge adventureRank={row.owner.adventureRank} /> */}
               <RegionBadge region={row.playerInfo.region} />
               {/* {isEnkaProfile ? <EnkaBadge /> : ""} */}
+              
+              <div className="table-icon-text-pair">
+                <img
+                  className="table-icon"
+                  src={row.profilePictureLink}
+                  title={row.playerInfo.nickname}
+                />
+              </div>
+
               {row.playerInfo.nickname}
             </a>
           );
