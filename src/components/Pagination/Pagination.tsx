@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useContext, useMemo } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
@@ -11,6 +11,7 @@ import {
 import { FetchParams } from "../CustomTable";
 import { ConfirmInput } from "../ConfirmInput";
 import "./style.scss";
+import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 // import { Spinner } from "../Spinner";
 
 type PaginationProps = {
@@ -62,6 +63,7 @@ export const Pagination: React.FC<PaginationProps> = ({
   calculationShortName = null,
   alwaysShowIndexColumn = false,
 }) => {
+  const { translate } = useContext(TranslationContext);
   const lastPage = Math.ceil(totalRows / pageSize);
   const disableNext = unknownPage ? false : pageNumber === lastPage;
   const disablePrevious = unknownPage ? false : pageNumber === 1;
@@ -253,7 +255,7 @@ export const Pagination: React.FC<PaginationProps> = ({
     }));
   };
 
-  const sortToText: { [key: string]: string | boolean } = {
+  const sortToText: { [key: string]: string } = {
     // character columns
     critValue: "Crit Value",
     "stats.critRate.value": "Crit RATE",
@@ -263,6 +265,15 @@ export const Pagination: React.FC<PaginationProps> = ({
     "stats.def.value": "DEF",
     "stats.elementalMastery.value": "EM",
     "stats.energyRecharge.value": "ER%",
+    "stats.hydroDamageBonus.value": "Hydro DMG Bonus",
+    "stats.geoDamageBonus.value": "Geo DMG Bonus",
+    "stats.pyroDamageBonus.value": "Pyro DMG Bonus",
+    "stats.cryoDamageBonus.value": "Cryo DMG Bonus",
+    "stats.electroDamageBonus.value": "Electro DMG Bonus",
+    "stats.anemoDamageBonus.value": "Anemo DMG Bonus",
+    "stats.dendroDamageBonus.value": "Dendro DMG Bonus",
+    "stats.physicalDamageBonus.value": "Physical DMG Bonus",
+    "stats.healingBonus.value": "Healing Bonus",
     // artifact columns
     "substats.Crit RATE": "Crit RATE",
     "substats.Crit DMG": "Crit DMG",
@@ -291,7 +302,7 @@ export const Pagination: React.FC<PaginationProps> = ({
   const disableSkip = !!sort && !sortToText[sort];
   const highlightedSort = (
     <span style={{ color: "orange", fontWeight: 600 }}>
-      {sort ? sortToText[sort] || "?" : "?"}
+      {sort ? translate(sortToText[sort]) || "?" : "?"}
     </span>
   );
 
