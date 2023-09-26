@@ -16,7 +16,7 @@ const anemoRvList = {
   Jean: [CRate, CDMG, ATK_, ER, EM],
   Faruzan: [CRate, CDMG, ATK_, ER, EM],
   Wanderer: [CRate, CDMG, ATK_, ER, EM],
-  "Kaedehara Kazuha": [CRate, EM, ER],
+  "Kaedehara Kazuha": [CRate, CDMG, ATK_, EM, ER],
 };
 
 const pyroRvList = {
@@ -67,10 +67,12 @@ const electroRvList = {
   "Yae Miko": [ER, ATK_, CRate, CDMG, EM],
   "Raiden Shogun": [CRate, CDMG, ATK_, ER],
   "Kuki Shinobu": [CRate, CDMG, ATK_, EM, ER],
+  Cyno: [CRate, CDMG, ATK_, EM, ER]
 };
 
 const dendroRvList = {
   Nahida: [CRate, CDMG, ATK_, EM],
+  Alhaitham: [CRate, CDMG, ATK_, EM, ER]
 };
 
 const defaultRvFilter = [CRate, CDMG];

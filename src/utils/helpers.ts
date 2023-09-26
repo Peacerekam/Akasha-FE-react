@@ -1,4 +1,5 @@
 import { getStatsFromRow } from "../components";
+import { getDefaultRvFilters } from "../components/RollList/defaultFilters";
 import { IHash } from "../types/IHash";
 
 export const PATREON_URL = "https://www.patreon.com/mimee";
@@ -540,6 +541,61 @@ export const getRelevantEmErHb = (row: any) => {
   return relevantExtraStats;
 };
 
+// export const getRelevantHpOrAtkOrDef = (row: any) => {
+//   const relevantExtraStats = [];
+
+//   const hpThreshold = 21000;
+//   const atkThreshold = 1100;
+//   const defThreshold = 1350;
+
+//   if (row.stats.maxHp?.value >= hpThreshold) {
+//     relevantExtraStats.push({
+//       name: "HP",
+//       value: row.stats.maxHp.value,
+//     });
+//   } else if (row.stats.atk?.value >= atkThreshold) {
+//     relevantExtraStats.push({
+//       name: "ATK",
+//       value: row.stats.atk.value,
+//     });
+//   } else if (row.stats.def?.value >= defThreshold) {
+//     relevantExtraStats.push({
+//       name: "DEF",
+//       value: row.stats.def.value,
+//     });
+//   }
+
+//   return relevantExtraStats;
+// };
+
+export const getRelevantStatFromRvFilter = (row: any) => {
+  const rvFilter = getDefaultRvFilters(row.name);
+  const formattedRvFilter = rvFilter
+    .filter((x) => !(x.startsWith("Crit") || x.startsWith("Flat"))) // no crits, no flats
+    .map((x) => x.replace("%", "")); // format properly
+
+  const relevantExtraStats = [];
+
+  for (const filter of formattedRvFilter) {
+    const statKey = {
+      ATK: "atk",
+      DEF: "def",
+      HP: "maxHp",
+      "Energy Recharge": "energyRecharge",
+      "Elemental Mastery": "elementalMastery",
+    }[filter];
+
+    if (!statKey) continue;
+
+    relevantExtraStats.push({
+      name: filter,
+      value: row.stats[statKey].value,
+    });
+  }
+
+  return relevantExtraStats;
+};
+
 export const fillUpToFourStats = (stats: any[], row: any) => {
   while (stats.length < 4) {
     const hasER = stats.findIndex((x: any) =>
@@ -606,7 +662,9 @@ export const getRelevantCharacterStats = (row: any) => {
   const prepStats = [
     mainDmgBonus, // only get 1st?
     ...getRelevantMainStats(row),
+    ...getRelevantStatFromRvFilter(row),
     ...getRelevantEmErHb(row),
+    // ...getRelevantHpOrAtkOrDef(row),
     // get relevant from substats ?? (hp?)
     // ...otherDmgBonuses,
   ].filter((x) => x);
