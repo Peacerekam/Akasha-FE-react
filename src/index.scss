@@ -30,12 +30,12 @@ body {
     z-index: 3;
   }
 
-  > #root {
-    min-height: 100%;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-  }
+  // > #root {
+  //   min-height: 100%;
+  //   position: relative;
+  //   display: flex;
+  //   flex-direction: column;
+  // }
 }
 
 .content-wrapper {
@@ -63,9 +63,9 @@ body {
     }
   }
 
-  > .flex-special-container {
-    margin-bottom: 20px;
-  }
+  // > .flex-special-container {
+  //   margin-bottom: 20px;
+  // }
 }
 
 .overflow-hidden {
