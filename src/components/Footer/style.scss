@@ -2,15 +2,15 @@
   margin-top: 20px;
   background-color: #2c3333;
   position: relative;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px -3px 8px;
-  
+  box-shadow: rgba(0, 0, 0, 0.24) 0px -3px 8px, rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
   @media (max-width: 800px) {
     padding-top: 40px;
   }
 
   .footer-main {
     padding-top: 20px;
-    padding-bottom: 20px;  
+    padding-bottom: 20px;
 
     text-align: center;
     font-family: "GenshinFont";
@@ -23,7 +23,7 @@
     @media (max-width: 800px) {
       gap: 30px;
       flex-direction: column;
-      padding-bottom: 60px;  
+      padding-bottom: 60px;
     }
 
     > span,

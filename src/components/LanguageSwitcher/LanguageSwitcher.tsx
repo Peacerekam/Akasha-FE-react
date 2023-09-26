@@ -2,7 +2,6 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useRef,
   useState,
 } from "react";
 import {
@@ -12,8 +11,8 @@ import {
 } from "../../context/TranslationProvider/TranslationProviderContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGlobe } from "@fortawesome/free-solid-svg-icons";
-import "./style.scss";
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
+import "./style.scss";
 
 const KEY_TO_FULL: Record<Language, string> = {
   en: "English",
