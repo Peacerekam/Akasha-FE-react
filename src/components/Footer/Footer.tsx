@@ -2,10 +2,10 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import PoweredByEnka from "../../assets/images/enka.png";
 import AkashaLogo from "../../assets/images/favicon.svg";
-import "./style.scss";
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 import { StylizedContentBlock } from "../StylizedContentBlock";
 import DomainBackground from "../../assets/images/Grand_Narukami_Shrine_Concept_Art.webp";
+import "./style.scss";
 
 export const Footer: React.FC = () => {
   const { adProvider } = useContext(AdProviderContext);
@@ -38,21 +38,23 @@ export const Footer: React.FC = () => {
     ) : null;
 
   return (
-    <div className="footer">
-      <StylizedContentBlock overrideImage={DomainBackground} />
-      <div className="footer-main">
-        <span style={{ cursor: "default", paddingLeft: 30 }}>
-          <img src={AkashaLogo} className="tilted-logo" />
-          <span className="logo-text">
-            Akasha System
-            <span className="annotation">Work in progress</span>
+    <div className="footer-wrapper">
+      <div className="footer">
+        <StylizedContentBlock overrideImage={DomainBackground} />
+        <div className="footer-main">
+          <span style={{ cursor: "default", paddingLeft: 30 }}>
+            <img src={AkashaLogo} className="tilted-logo" />
+            <span className="logo-text">
+              Akasha System
+              <span className="annotation">Work in progress</span>
+            </span>
           </span>
-        </span>
-        <a target="_blank" rel="noreferrer" href="https://enka.network/">
-          <img src={PoweredByEnka} />
-        </a>
-        <Link to="/privacy-policy">Privacy Policy</Link>
-        {playwireBadge}
+          <a target="_blank" rel="noreferrer" href="https://enka.network/">
+            <img src={PoweredByEnka} />
+          </a>
+          <Link to="/privacy-policy">Privacy Policy</Link>
+          {playwireBadge}
+        </div>
       </div>
     </div>
   );

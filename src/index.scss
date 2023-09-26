@@ -29,6 +29,13 @@ body {
   > div:not(#root) {
     z-index: 3;
   }
+
+  > #root {
+    min-height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 .content-wrapper {
@@ -54,6 +61,10 @@ body {
       width: 100%;
       z-index: 9999;
     }
+  }
+
+  > .flex-special-container {
+    margin-bottom: 20px;
   }
 }
 
