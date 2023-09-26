@@ -4,6 +4,8 @@ import PoweredByEnka from "../../assets/images/enka.png";
 import AkashaLogo from "../../assets/images/favicon.svg";
 import "./style.scss";
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
+import { StylizedContentBlock } from "../StylizedContentBlock";
+import DomainBackground from "../../assets/images/Grand_Narukami_Shrine_Concept_Art.webp";
 
 export const Footer: React.FC = () => {
   const { adProvider } = useContext(AdProviderContext);
@@ -37,6 +39,7 @@ export const Footer: React.FC = () => {
 
   return (
     <div className="footer">
+      <StylizedContentBlock overrideImage={DomainBackground} />
       <div className="footer-main">
         <span style={{ cursor: "default", paddingLeft: 30 }}>
           <img src={AkashaLogo} className="tilted-logo" />

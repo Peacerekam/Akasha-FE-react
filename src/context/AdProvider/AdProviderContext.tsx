@@ -125,7 +125,7 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
       {/* Only load this component once, at the top most level of your app */}
       {adProvider === "playwire" && (
         <>
-          <div
+          {/* <div
             style={{
               position: "absolute",
               textAlign: "center",
@@ -139,7 +139,7 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
             <div>PLAYWIRE RAMP COMPONENT</div>
             <div>PLAYWIRE_PUBLISHER_ID: {PLAYWIRE_PUBLISHER_ID}</div>
             <div>PLAYWIRE_WEBSITE_ID: {PLAYWIRE_WEBSITE_ID}</div>
-          </div>
+          </div> */}
           <Ramp publisherId={PLAYWIRE_PUBLISHER_ID} id={PLAYWIRE_WEBSITE_ID} />
         </>
       )}

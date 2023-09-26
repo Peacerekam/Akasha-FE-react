@@ -1,12 +1,12 @@
 .stylized-content-block-wrapper {
-
   position: absolute;
+  top: 0;
   height: 100%;
   width: 100%;
   overflow: hidden;
-
   padding: 0 !important;
   opacity: 0;
+
   &.gradient {
     &::after {
       background: linear-gradient(transparent 5%, #2c3333dd 15%, #2c3333 40%);

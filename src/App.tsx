@@ -110,6 +110,7 @@ const App = () => {
             <Navbar />
           </div>
           <NavbarTabs />
+
           <div
             className={`content-wrapper ${isProduction ? "" : "dev-indicator"}`}
           >
@@ -123,8 +124,9 @@ const App = () => {
                 />
               </Routes>
             </HoverElementContextProvider>
-            <Footer />
           </div>
+
+          <Footer />
         </BrowserRouter>
       </LastProfilesContextProvider>
     );
@@ -216,8 +218,9 @@ const App = () => {
                       <AdsComponentManager adType="RichMedia" />
                     </div>
 
-                    <Footer />
                   </div>
+
+                  <Footer />
                 </TranslationContextProvider>
               </TitleContextProvider>
             </AdProviderContextProvider>

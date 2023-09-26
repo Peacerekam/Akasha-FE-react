@@ -1,6 +1,5 @@
 .last-profile-update {
   text-transform: uppercase;
-  opacity: 0.5;
   font-family: "GenshinFont";
   font-size: 12px;
   display: flex;
@@ -10,6 +9,14 @@
   align-items: center;
   height: 21px;
   gap: 5px;
+  filter: drop-shadow(0 0 3px #000);
+  color: rgba(white, 0.5);
+
+  @at-root .flex-skin-active &,
+    .flex-skin-docked & {
+    color: #e7f6f2;
+  }
+
   .value {
     font-size: 15px;
   }
