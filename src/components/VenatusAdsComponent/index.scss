@@ -71,6 +71,9 @@
     display: contents;
     .vm-placement {
       display: contents;
+      > * > * {
+        margin-left: 10px;
+      }
     }
   }
 }
