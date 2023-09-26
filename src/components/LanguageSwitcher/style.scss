@@ -20,6 +20,7 @@
       animation: 0.5s languageSlide ease-in-out forwards;
       > div {
         text-align: center;
+        padding: 8px 20px;
         &:not(:last-child)::after {
           width: 80%;
           left: 10%;

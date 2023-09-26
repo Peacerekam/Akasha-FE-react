@@ -21,13 +21,23 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
   const navigate = useNavigate();
   const location = useLocation();
 
+  const loginBtn = useMemo(
+    () => navigation[navigation.length - 1],
+    [navigation]
+  );
+
+  const languageBtn = {
+    name: "language",
+    path: "language",
+  };
+
   const spacerIndex = useMemo(
     () => navigation.findIndex((x) => x.name === "spacer"),
     [navigation]
   );
 
-  const loginAuthNav = useMemo(
-    () => navigation.slice(spacerIndex, navigation.length).reverse(),
+  const socialsNav = useMemo(
+    () => navigation.slice(spacerIndex + 2, navigation.length - 1),
     [spacerIndex, navigation]
   );
 
@@ -118,14 +128,17 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
         </div>
         <div className="hamburger-list">
           <div className="login-auth-nav">
-            {loginAuthNav.map((nav, i) => getNavElement(nav, i))}
+            {getNavElement(loginBtn, 0)}
+            {getNavElement(languageBtn, 0)}
           </div>
+
+          <div className="navbar-spacer with-label" data-label="navigation" />
 
           <div className="page-nav">
             {pageNav.map((nav, i) => getNavElement(nav, i, true))}
           </div>
 
-          <div className="navbar-spacer" />
+          <div className="navbar-spacer with-label" data-label="recently viewed" />
 
           <div className="player-tabs-nav">
             {lastProfiles.map((profile) => {
@@ -165,6 +178,12 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
                 </div>
               );
             })}
+          </div>
+
+          <div className="navbar-spacer with-label" data-label="other" />
+
+          <div className="login-auth-nav">
+            {socialsNav.map((nav, i) => getNavElement(nav, i))}
           </div>
         </div>
       </div>

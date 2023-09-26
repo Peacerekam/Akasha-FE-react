@@ -209,7 +209,7 @@
     }
 
     a {
-      height: 45px;  
+      height: 42px;  
       justify-content: start;
       padding-left: 25px;
       overflow: hidden;
@@ -224,7 +224,7 @@
     .player-tabs-nav {
       font-size: 12px;
       a {
-        height: 35px;
+        height: 32px;
         &:hover {
           background-color: transparent;
         }
@@ -235,11 +235,28 @@
     }
 
     .navbar-spacer {
-      margin: 10px 20px;
+      margin: 25px 20px 15px;
       position: relative;
       width: calc(100% - 40px);
       height: 0;
       border-bottom: 1px dashed rgba(255, 255, 255, 0.25);
+
+      &.with-label {
+        position: relative;
+        &::after {
+          content: attr(data-label);
+          position: absolute;
+          top: -8px;
+          text-align: center;
+          background-color: #395b64;
+          transform: translateX(-50%);
+          left: 50%;
+          padding: 0 6px;
+          font-size: 10px;
+          white-space: nowrap;
+          color: rgba(255, 255, 255, 0.75);
+        }
+      }
     }
   }
 
