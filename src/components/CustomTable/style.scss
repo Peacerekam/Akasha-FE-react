@@ -17,6 +17,25 @@ $substats: "flathp", "hp_", "flatatk", "atk_", "flatdef", "def_", "critrate",
   }
 }
 
+$characterStats: "hp", "atk", "def", "hydrodmgbonus", "geodmgbonus",
+  "pyrodmgbonus", "cryodmgbonus", "electrodmgbonus", "anemodmgbonus",
+  "dendrodmgbonus", "physicaldmgbonus", "healingbonus", "elementalmastery",
+  "energyrecharge";
+
+@each $stat in $characterStats {
+  .highlight-#{$stat} {
+    .character-stat {
+      opacity: 0.5;
+    }
+    .#{$stat} {
+      opacity: 1;
+    }
+    td.#{$stat} {
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+  }
+}
+
 @keyframes fadeInRow {
   0% {
     opacity: 0;
@@ -132,12 +151,29 @@ $substats: "flathp", "hp_", "flatatk", "atk_", "flatdef", "def_", "critrate",
     background-color: rgba(black, 0.1);
 
     .expanded-row {
+      width: 100%;
       animation: fadeInRow 0.6s ease-in-out;
-      margin-top: 5px;
       margin-bottom: 20px;
-      gap: 20px;
+      margin-top: 5px;
+      gap: 15px;
       font-size: 16px;
       justify-content: center;
+      
+      @at-root .ad-provider-playwire & {
+        > .character-preview {
+          bottom: -5px;
+          position: relative;
+          width: 990px;
+        }
+        > .artifacts-row {
+          transform: scale(0.95);
+        }
+        > .total-roll-list-wrapper {  
+          top: -5px;
+          position: relative;
+          transform: scale(0.95);
+        }
+      }
     }
 
     .categories-exanded-row {
@@ -227,6 +263,9 @@ $substats: "flathp", "hp_", "flatatk", "atk_", "flatdef", "def_", "critrate",
       th,
       td {
         padding: 0 12px;
+        @at-root .ad-provider-playwire & {
+          padding: 0 10px;
+        }
         min-width: 17px;
       }
       td {
@@ -310,7 +349,7 @@ $substats: "flathp", "hp_", "flatatk", "atk_", "flatdef", "def_", "critrate",
   &.new-lb-badge {
     &::before {
       content: "NEW";
-      background-color: #40839B;
+      background-color: #40839b;
       margin-right: 5px;
       white-space: nowrap;
       padding: 2px 5px;
@@ -328,36 +367,71 @@ $substats: "flathp", "hp_", "flatatk", "atk_", "flatdef", "def_", "critrate",
     // margin: 0 10px;
     padding: 2px 5px;
     border-radius: 5px;
+
+    @at-root .ad-provider-playwire & {
+      // width: 18px !important;
+    }
+
     &.c-0-badge {
       background-color: rgb(128, 128, 128);
       width: 18px;
     }
     &.c-1-badge {
       background-color: rgb(64, 131, 155);
-      width: 25px;
+      width: 20px;
     }
     &.c-2-badge {
       background-color: rgb(64, 131, 155);
-      width: 35px;
+      width: 22px;
     }
     &.c-3-badge {
       background-color: rgb(64, 131, 155);
-      width: 45px;
+      width: 24px;
     }
     &.c-4-badge {
       background-color: rgb(64, 131, 155);
-      width: 55px;
+      width: 26px;
     }
     &.c-5-badge {
       background-color: rgb(64, 131, 155);
-      width: 65px;
+      width: 28px;
     }
     &.c-6-badge {
       background-color: rgb(168, 120, 31);
-      width: 75px;
+      width: 30px;
     }
+
+    // &.c-0-badge {
+    //   background-color: rgb(128, 128, 128);
+    //   width: 18px;
+    // }
+    // &.c-1-badge {
+    //   background-color: rgb(64, 131, 155);
+    //   width: 25px;
+    // }
+    // &.c-2-badge {
+    //   background-color: rgb(64, 131, 155);
+    //   width: 35px;
+    // }
+    // &.c-3-badge {
+    //   background-color: rgb(64, 131, 155);
+    //   width: 45px;
+    // }
+    // &.c-4-badge {
+    //   background-color: rgb(64, 131, 155);
+    //   width: 55px;
+    // }
+    // &.c-5-badge {
+    //   background-color: rgb(64, 131, 155);
+    //   width: 65px;
+    // }
+    // &.c-6-badge {
+    //   background-color: rgb(168, 120, 31);
+    //   width: 75px;
+    // }
   }
 }
+
 .sortable-column {
   &:hover {
     .sort-fields-picker-wrapper {
@@ -366,13 +440,21 @@ $substats: "flathp", "hp_", "flatatk", "atk_", "flatdef", "def_", "critrate",
   }
 }
 
+.sortable-column:last-child {
+  .sort-fields-picker-wrapper {
+    right: -1px;
+    left: auto;
+  }
+}
+
 .sort-fields-picker-wrapper {
   position: absolute;
-  left: 0;
+  // right: -1px;
+  left: -1px;
   top: 31px;
   display: none;
   background-color: #141717;
-  z-index: 3;
+  z-index: 4;
   color: white;
   min-width: 180px;
   box-shadow: inset 1px 0px 0px 0px #515151, inset -1px 0px 0px 0px #515151,
@@ -399,4 +481,8 @@ $substats: "flathp", "hp_", "flatatk", "atk_", "flatdef", "def_", "critrate",
       box-shadow: inset 1px 0px 0px 0px orange;
     }
   }
+}
+
+.stat-icon-wrapper {
+  margin-right: 3px;
 }

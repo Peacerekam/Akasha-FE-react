@@ -15,6 +15,7 @@ import {
   ARBadge,
   HelpBox,
   NotificationBar,
+  LastUpdated,
 } from "../../components";
 import { TableColumn } from "../../types/TableColumn";
 import Achievevement from "../../assets/icons/Achievement.webp";
@@ -75,7 +76,7 @@ export const AccountsPage: React.FC = () => {
               {/* <ARBadge adventureRank={row.owner.adventureRank} /> */}
               <RegionBadge region={row.playerInfo.region} />
               {/* {isEnkaProfile ? <EnkaBadge /> : ""} */}
-              
+
               <div className="table-icon-text-pair">
                 <img
                   className="table-icon"
@@ -93,13 +94,13 @@ export const AccountsPage: React.FC = () => {
         name: "Signature",
         sortable: false,
         sortField: "playerInfo.signature",
-        width: "350px",
+        width: "285px",
         cell: (row) => {
           const signature = row?.playerInfo?.signature || "";
           return (
             <div
               style={{
-                width: 350,
+                width: 285,
                 textOverflow: "ellipsis",
                 overflow: "hidden",
                 whiteSpace: "nowrap",
@@ -125,7 +126,7 @@ export const AccountsPage: React.FC = () => {
         },
       },
       {
-        name: "Total Achievements",
+        name: "Achievements",
         sortable: true,
         sortField: "playerInfo.finishAchievementNum",
         cell: (row) => {
@@ -148,10 +149,10 @@ export const AccountsPage: React.FC = () => {
         },
       },
       {
-        name: "Saved Characters",
+        name: "Characters",
         sortable: false,
         sortField: "ownedCharacters",
-        width: "120px",
+        width: "80px",
         cell: (row) => {
           const ownedCharacters = row?.ownedCharacters || "";
           return (
@@ -162,10 +163,10 @@ export const AccountsPage: React.FC = () => {
         },
       },
       {
-        name: "Spiral Abyss",
+        name: "Abyss",
         sortable: false,
         sortField: "playerInfo.worldLevel",
-        width: "50px",
+        width: "70px",
         cell: (row) => {
           const floor = row?.playerInfo?.towerFloorIndex || "";
           const chamber = row?.playerInfo?.towerLevelIndex || "";
@@ -193,11 +194,18 @@ export const AccountsPage: React.FC = () => {
         },
       },
       {
-        name: "Last profile update",
+        name: "Last update",
         sortable: true,
         sortField: "lastProfileUpdate",
         cell: (row) => {
           if (!row?.lastProfileUpdate) return <></>;
+
+          return (
+            <LastUpdated
+              lastProfileUpdate={row.lastProfileUpdate}
+              format="rawText"
+            />
+          );
 
           const lastProfileUpdate = new Date(row?.lastProfileUpdate || "");
           const strDate = lastProfileUpdate.toLocaleString("en-US", {
@@ -206,7 +214,7 @@ export const AccountsPage: React.FC = () => {
             year: "numeric",
           });
 
-          return <div>{strDate}</div>;
+          return <div style={{ whiteSpace: "nowrap" }}>{strDate}</div>;
         },
       },
       // {

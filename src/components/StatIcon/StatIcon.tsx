@@ -86,6 +86,9 @@ const statKeys: {
   "Crit Value": {
     type: "empty",
   },
+  "x": {
+    type: "x",
+  }
 };
 
 export const isIcon = (name: string) => !!statKeys[name];
@@ -100,6 +103,10 @@ export const StatIcon: React.FC<StatIconProps> = ({ name }) => {
 
   if (asset.type === "empty") {
     return <span className="empty-stat-icon"/>;
+  }
+
+  if (asset.type === "x") {
+    return <span>×</span>
   }
 
   return <img className="stat-icon" src={asset} />;

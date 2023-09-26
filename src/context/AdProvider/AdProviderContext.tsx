@@ -12,6 +12,8 @@ type AdProviderContextType = {
   reloadAds: boolean;
   adsDisabled: boolean;
   disableAdsForThisPage: () => void;
+  isMobile: boolean;
+  screenWidth: number;
 };
 
 const defaultValue = {
@@ -20,6 +22,8 @@ const defaultValue = {
   reloadAds: false,
   adsDisabled: false,
   disableAdsForThisPage: () => {},
+  isMobile: false,
+  screenWidth: 1024,
 } as AdProviderContextType;
 
 const AdProviderContext = createContext(defaultValue);
@@ -67,7 +71,7 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
       //   document.querySelector("#top-of-the-page")?.classList.add("anim");
       //   document.querySelector(".navbar-tabs")?.classList.add("anim");
       // }
-    }, 100); 
+    }, 100);
   };
 
   useEffect(() => {
@@ -93,6 +97,13 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
   }, [location.search]);
 
   useEffect(() => {
+    const _body = document.querySelector("body");
+    if (!adProvider) return;
+    
+    _body?.classList.add(`ad-provider-${adProvider}`);
+  }, [adProvider]);
+
+  useEffect(() => {
     setAdsDisabled(false); // reset disable state -> used on patreon profiles for now
     handleReloadAds(); // reload ads -> used all pages
   }, [location.pathname]);
@@ -105,6 +116,8 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
     reloadAds,
     adsDisabled,
     disableAdsForThisPage,
+    screenWidth: width,
+    isMobile,
   };
 
   return (

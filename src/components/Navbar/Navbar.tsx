@@ -1,7 +1,7 @@
 import React, { useContext, useMemo, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord, faPatreon } from "@fortawesome/free-brands-svg-icons";
-import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate, useLocation } from "react-router-dom";
 import { DISCORD_URL, PATREON_URL } from "../../utils/helpers";
 import { applyModalBodyStyle, getRelativeCoords } from "../CustomTable/Filters";
@@ -9,11 +9,12 @@ import { LogInModal } from "./LogInModal";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
 import { Spinner } from "../Spinner";
 import { LanguageSwitcher } from "../LanguageSwitcher";
+import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 import AkashaLogo from "../../assets/images/favicon.svg";
+import { HamburgerMenu } from "./HamburgerMenu";
 import "./style.scss";
-import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 
-type NavElement = {
+export type NavElement = {
   name: string;
   path?: string;
   icon?: JSX.Element;
@@ -22,9 +23,12 @@ type NavElement = {
 };
 
 export const Navbar: React.FC = () => {
+  const { screenWidth } = useContext(AdProviderContext);
   const { profileObject, isAuthenticated, isFetching } =
     useContext(SessionDataContext);
+
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showHamburger, setShowHamburger] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -34,6 +38,13 @@ export const Navbar: React.FC = () => {
 
     const offsets = getRelativeCoords(event);
     applyModalBodyStyle(offsets);
+  };
+
+  const handleToggleHamburger = () => {
+    setShowHamburger((prev) => !prev);
+
+    const _body = document.querySelector("body");
+    _body?.classList.add("overflow-hidden");
   };
 
   // BrowserRouter
@@ -126,17 +137,20 @@ export const Navbar: React.FC = () => {
     );
   };
 
-  const getNavElement = (nav: any, i: number) => {
-    return (
-      {
-        spacer: <div key={nav.name} className="navbar-spacer" />,
-        language: <LanguageSwitcher key={nav.name} />,
-      }[nav.name as string] || displayNavElement(nav, i)
-    );
+  const getNavElement = (nav: NavElement, i: number) => {
+    if (nav.name === "spacer") {
+      return <div key={nav.name} className="navbar-spacer" />;
+    }
+
+    if (nav.name === "language") {
+      return <LanguageSwitcher key={nav.name} />;
+    }
+
+    return displayNavElement(nav, i);
   };
 
-  return (
-    <div className="navbar">
+  const desktopNav = (
+    <>
       <a
         href="/"
         className="logo-wrapper"
@@ -155,6 +169,50 @@ export const Navbar: React.FC = () => {
       <LogInModal isOpen={showLoginModal} toggleModal={handleToggleModal} />
 
       {NAVIGATION.map((nav, i) => getNavElement(nav, i))}
-    </div>
+    </>
   );
+
+  const mobileNav = (
+    <>
+      <a
+        href="/"
+        className="logo-wrapper"
+        onClick={(event) => {
+          event.preventDefault();
+          navigate("/");
+        }}
+      >
+        <span className="logo">
+          <span className="annotation">Work in progress</span>
+          <img src={AkashaLogo} className="tilted-logo" />
+          <span className="logo-text">Akasha System</span>
+        </span>
+      </a>
+
+      <div className="navbar-spacer" />
+
+      <LogInModal isOpen={showLoginModal} toggleModal={handleToggleModal} />
+      <HamburgerMenu isOpen={showHamburger} toggleHamburger={handleToggleHamburger} navigation={NAVIGATION} />
+
+      <a
+        className="hamburger-wrapper"
+        onClick={(event) => {
+          event.preventDefault();
+          handleToggleHamburger();
+        }}
+      >
+        <FontAwesomeIcon
+          className="hamburger-icon"
+          icon={faBars}
+          size="1x"
+          title="Menu"
+        />
+      </a>
+
+    </>
+  );
+
+  const isTablet = screenWidth < 1000;
+
+  return <div className="navbar">{isTablet ? mobileNav : desktopNav}</div>;
 };

@@ -46,7 +46,9 @@ export default class PlaywireAdsComponent extends React.Component<
     if (isMobile && hideOnMobile) return;
 
     const adID = AD_TYPE_TO_KEY[adType];
-    console.log(`%c\n\n > ${adID}: MOUNT `, "color: green; font-size: 16px;");
+    if (!adID) return;
+
+    console.log(`%c\n > ${adID}: MOUNT `, "color: green; font-size: 16px;");
   }
 
   componentWillUnmount() {
@@ -57,7 +59,9 @@ export default class PlaywireAdsComponent extends React.Component<
     if (isMobile && hideOnMobile) return;
 
     const adID = AD_TYPE_TO_KEY[adType];
-    console.log(`%c\n\n > ${adID}: UNMOUNT `, "color: red; font-size: 16px;");
+    if (!adID) return;
+
+    console.log(`%c\n > ${adID}: UNMOUNT `, "color: red; font-size: 16px;");
   }
 
   render() {
@@ -73,7 +77,6 @@ export default class PlaywireAdsComponent extends React.Component<
 
     // const adID = AD_TYPE_TO_KEY[mobileAdType] || AD_TYPE_TO_KEY[adType];
     const adID = AD_TYPE_TO_KEY[adType];
-
     if (!adID) return null;
 
     // const isHybridBanner =
@@ -91,7 +94,7 @@ export default class PlaywireAdsComponent extends React.Component<
 
     return (
       <div className={classNamesContainer}>
-        <span className="ad-debug">Playwire - {adID || adType}</span>
+        <span className="ad-debug">{adID || adType}</span>
         <RampUnit type={adID} cssClass={classNamesAd} />
       </div>
     );

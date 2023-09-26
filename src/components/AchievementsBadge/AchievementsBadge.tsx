@@ -1,4 +1,6 @@
+import { useContext } from "react";
 import Achievevement from "../../assets/icons/Achievement.webp";
+import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import "./style.scss";
 
 type AchievementsBadgeProps = {
@@ -8,6 +10,7 @@ type AchievementsBadgeProps = {
 export const AchievementsBadge: React.FC<AchievementsBadgeProps> = ({
   count,
 }) => {
+  const { translate } = useContext(TranslationContext);
   const roundedCount = Math.round(count || 0);
 
   const className = roundedCount
@@ -16,7 +19,7 @@ export const AchievementsBadge: React.FC<AchievementsBadgeProps> = ({
 
   return (
     <span
-      title={`Achievements: ${roundedCount}`}
+      title={`${translate("Total Achievements")}: ${roundedCount}`}
       className={`achievement-badge ${className}`}
     >
       <img alt="Achievements" src={Achievevement} />

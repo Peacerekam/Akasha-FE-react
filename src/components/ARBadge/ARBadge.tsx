@@ -1,4 +1,6 @@
+import { useContext } from "react";
 import "./style.scss";
+import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 
 type ARBadgeProps = {
   adventureRank?: number;
@@ -6,6 +8,7 @@ type ARBadgeProps = {
 
 export const ARBadge: React.FC<ARBadgeProps> = ({ adventureRank }) => {
   const roundedAR = Math.round(adventureRank || 0);
+  const { translate } = useContext(TranslationContext);
 
   const className = roundedAR
     ? `ar-${Math.floor(roundedAR / 5) * 5}-badge`
@@ -13,7 +16,7 @@ export const ARBadge: React.FC<ARBadgeProps> = ({ adventureRank }) => {
 
   return (
     <span
-      title={`Adventure Rank: ${roundedAR}`}
+      title={`${translate("Adventure Rank")}: ${roundedAR}`}
       className={`ar-badge ${className}`}
     >
       AR{roundedAR ?? " ?"}

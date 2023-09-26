@@ -104,12 +104,12 @@
         position: relative;
         padding-bottom: 20px;
 
-        &:focus {
-          .faq-grid {
-            // grid-template-rows: 1fr;
-            // padding-bottom: 20px;
-          }
-        }
+        // &:focus {
+        //   .faq-grid {
+        //     // grid-template-rows: 1fr;
+        //     // padding-bottom: 20px;
+        //   }
+        // }
         &:not(:last-child)::after {
           content: "";
           position: absolute;

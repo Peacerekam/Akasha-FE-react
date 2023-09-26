@@ -49,15 +49,15 @@ import { applyModalBodyStyle, getRelativeCoords } from "../CustomTable/Filters";
 import { TeammatesCompact } from "../TeammatesCompact";
 import {
   ELEMENT_TO_COLOR,
-  ELEMENT_TO_HUE,
   calcStatVals,
   handleTitle,
   scales,
   toTalentProps,
 } from "./cardHelpers";
-import "./style.scss";
 import { ArtifactOnCanvas } from "../ArtifactListCompact";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
+import "./style.scss";
 
 ChartJS.register(...registerables);
 
@@ -81,7 +81,7 @@ const TalentDisplay: React.FC<TalentProps> = ({ talent }) => {
   const isBoosted = !!talent?.boosted;
   const isCrowned = talent?.rawLevel
     ? talent?.rawLevel === 10
-    : talent?.level === (talent?.boosted ? 13 : 10);
+    : talent?.level === (isBoosted ? 13 : 10);
 
   return (
     <div
@@ -133,12 +133,15 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const { translate } = useContext(TranslationContext);
+  // const { adProvider } = useContext(AdProviderContext);
 
   const calculations = _calculations.calculations;
   const chartsData = _calculations.chartsData;
 
-  const canvasWidth = 500;
-  const canvasHeight = 485;
+  // const hardcodedScale = adProvider === "playwire" ? 0.85 : 1;
+  const hardcodedScale = 0.87; // same as in css
+  const canvasWidth = 500 * hardcodedScale;
+  const canvasHeight = 485 * hardcodedScale;
   const canvasPixelDensity = 2;
 
   const location = useLocation();
@@ -447,7 +450,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         labels: percentagesArray.map((x) => x.statName),
         datasets: [
           {
-            pointHitRadius: 45,
+            pointHitRadius: 45 * hardcodedScale,
             label: `${row.type === "current" ? row.name : row.type}`,
             data: percentagesArray.map((x) => x._p),
             vals: percentagesArray.map((x) => x.calculatedVal),
@@ -460,7 +463,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             pointHoverBorderColor: generating ? neutralWhiteColor : `white`,
           },
           {
-            pointHitRadius: 45,
+            pointHitRadius: 45 * hardcodedScale,
             label: "TOP 1% AVG",
             data: percentagesArray.map((_) => 100),
             vals: percentagesArray.map((x) => x.avg),
@@ -530,17 +533,20 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         return translatedWord;
       };
 
+      scales.r.pointLabels.font.size = 9 * hardcodedScale;
+
       const radarOptions = {
         devicePixelRatio: 2,
         plugins,
         scales,
         elements: {
           point: {
-            hoverRadius: 3,
-            hoverBorderWidth: 1,
+            radius: 3 * hardcodedScale,
+            hoverRadius: 3 * hardcodedScale,
+            hoverBorderWidth: 1 * hardcodedScale,
           },
           line: {
-            borderWidth: 2,
+            borderWidth: 2 * hardcodedScale,
           },
         },
       };
@@ -605,7 +611,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             <div key={id}>
               <div>{displayCharts(thisChartData, id)}</div>
               <div className="under-chart">
-                <TeammatesCompact teammates={calc.teammates} scale={1.7} />
+                <TeammatesCompact
+                  teammates={calc.teammates}
+                  scale={1.7 * hardcodedScale}
+                />
                 <span className="under-chart-badges">
                   {topBadge}
                   {lbBadge}
@@ -669,7 +678,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             >
               <div className="compact-artifact-bg" />
               <div className="compact-artifact-icon-container">
-                <ArtifactOnCanvas icon={artifact.icon} />
+                <ArtifactOnCanvas icon={artifact.icon} hardcodedScale={hardcodedScale} />
                 <span className="compact-artifact-crit-value">
                   <span>{Math.round(artifact.critValue * 10) / 10} cv</span>
                 </span>
@@ -775,9 +784,9 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
       // Create gradient
       const gradientMask = ctx!.createLinearGradient(
-        canvasWidth - 101,
+        canvasWidth - 101 * hardcodedScale,
         0,
-        canvasWidth - 3,
+        canvasWidth - 3 * hardcodedScale,
         0
       );
       gradientMask.addColorStop(0, "black");
@@ -798,11 +807,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
       if (mode === "gacha") {
         if (row.name === "Traveler") {
-          x = x - 100;
-          y = y + 30;
+          x = x - 100 * hardcodedScale;
+          y = y + 30 * hardcodedScale;
         } else {
-          x = x - 130;
-          y = y - 82;
+          x = x - 130 * hardcodedScale;
+          y = y - 82 * hardcodedScale;
         }
       }
 
@@ -1209,10 +1218,12 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   //   });
   // }, [filteredLeaderboards, calcOptions]);
 
-  const windowSizeT = 1200 + 95;
+  const windowSizeT = 1100;
   const maxCardWidth = Math.min(windowSizeT, width);
-  const scaleFactor = Math.max(0.83, +(maxCardWidth / windowSizeT).toFixed(3));
-  const wrapperStyle = { "--scale-factor": scaleFactor } as React.CSSProperties;
+  const scaleFactor = Math.max(0.75, +(maxCardWidth / windowSizeT));
+  // const formattedSF = (adProvider === "playwire" ? Math.min(0.88, scaleFactor) : scaleFactor).toFixed(3)
+  const formattedSF = scaleFactor.toFixed(3);
+  const wrapperStyle = { "--scale-factor": formattedSF } as React.CSSProperties;
 
   const handleGenerateAndDownload = async (
     mode: "download" | "open",
@@ -1222,7 +1233,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     if (!cardNode) return;
 
     const _opts: Partial<Options> = {
-      scale: 1.5,
+      scale: 1.75,
       // width: 1806,
       // height: 853,
       backgroundColor: null,

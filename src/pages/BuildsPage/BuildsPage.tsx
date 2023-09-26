@@ -20,10 +20,13 @@ import {
   FETCH_BUILDS_URL,
   FETCH_CHARACTER_FILTERS_URL,
   getGenderFromIcon,
+  getRelevantCharacterStats,
+  normalizeText,
 } from "../../utils/helpers";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { AdsComponentManager } from "../../components/AdsComponentManager";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 
 export type BuildsColumns = {
   _id: string;
@@ -37,6 +40,7 @@ export type BuildsColumns = {
 };
 
 export const BuildsPage: React.FC = () => {
+  const { adProvider } = useContext(AdProviderContext);
   const { hoverElement } = useContext(HoverElementContext);
   const { translate } = useContext(TranslationContext);
   const navigate = useNavigate();
@@ -83,10 +87,17 @@ export const BuildsPage: React.FC = () => {
         sortField: "name",
         cell: (row) => {
           const gender = getGenderFromIcon(row.icon);
+          // const constellation = row.constellation ?? 0;
 
           return (
             <div className="table-icon-text-pair">
               <img className="table-icon" src={row.icon} title={row?.name} />
+              {/* <div className="table-icon-text-pair relative">
+                <img src={row.icon} className="table-icon" title={row?.name} />
+                <span className="bottom-right-absolute">
+                  {`C${constellation}`}
+                </span>
+              </div> */}
               {row.type !== "current" ? (
                 <ReplaceRowDataOnHover data={row.name} onHoverData={row.type} />
               ) : (
@@ -97,7 +108,7 @@ export const BuildsPage: React.FC = () => {
         },
       },
       {
-        name: "Constellation",
+        name: adProvider === "playwire" ? "" : "Constellation",
         sortable: false,
         sortField: "constellation",
         cell: (row) => {
@@ -112,7 +123,7 @@ export const BuildsPage: React.FC = () => {
         },
       },
       {
-        name: "Weapon",
+        name: adProvider === "playwire" ? "" : "Weapon",
         // grow: 0,
         width: "60px",
         sortable: false,
@@ -145,78 +156,138 @@ export const BuildsPage: React.FC = () => {
           return <CritRatio row={row} overrideCV={row.critValue} />;
         },
       },
-      {
-        name: "Max HP",
-        // selector: (row) => row.stats.maxHp.value.toFixed(0),
+      ...[0, 1, 2, 3].map((i) => ({
+        name: <span className="weak-filler-line" />,
         sortable: true,
-        sortField: "stats.maxHp.value",
-        cell: (row) => {
+        // sortFields: allSubstatsInOrder.map((key) => `stats.${key}.value`),
+        sortFields: [
+          "stats.maxHp.value",
+          "stats.atk.value",
+          "stats.def.value",
+          "stats.elementalMastery.value",
+          "stats.energyRecharge.value",
+          "stats.hydroDamageBonus.value",
+          "stats.geoDamageBonus.value",
+          "stats.pyroDamageBonus.value",
+          "stats.cryoDamageBonus.value",
+          "stats.electroDamageBonus.value",
+          "stats.anemoDamageBonus.value",
+          "stats.dendroDamageBonus.value",
+          "stats.physicalDamageBonus.value",
+          "stats.healingBonus.value",
+        ],
+        colSpan: i === 0 ? 4 : 0,
+        width: "70px",
+        // getDynamicTdClassName: (row: any) => {
+        //   const reordered = getSubstatsInOrder(row);
+        //   const key = reordered?.[i];
+        //   if (!key) return "";
+        //   return normalizeText(key);
+        // },
+        cell: (row: any) => {
+          const relevantStats = getRelevantCharacterStats(row);
+
+          const _stat = relevantStats?.[i];
+          if (!_stat) return <></>;
+
+          const isPercent =
+            _stat.name.includes("Bonus") || _stat.name === "Energy Recharge";
+
+          let _value = _stat.value !== null ? +_stat.value : _stat.value;
+
+          if (["Healing Bonus", "Energy Recharge"].includes(_stat.name)) {
+            _value *= 100;
+          }
+
           return (
-            <div className="flex gap-3 nowrap">
-              <StatIcon name="HP" />
-              {row.stats.maxHp.value.toFixed(0)}
+            <div
+              key={normalizeText(_stat.name)}
+              className={`character-stat flex nowrap ${normalizeText(
+                _stat.name.replace("%", "")
+              )}`}
+            >
+              <span style={{ marginRight: "5px" }}>
+                <StatIcon name={_stat.name.replace("%", "")} />
+              </span>
+              {_value?.toFixed(isPercent ? 1 : 0)}
+              {isPercent ? "%" : ""}
+              {/* {_stat.name} */}
             </div>
           );
         },
-      },
-      {
-        name: "ATK",
-        // selector: (row) => row.stats.atk.value.toFixed(0),
-        sortable: true,
-        sortField: "stats.atk.value",
-        cell: (row) => {
-          return (
-            <div className="flex gap-3 nowrap">
-              <StatIcon name="ATK" />
-              {row.stats.atk.value.toFixed(0)}
-            </div>
-          );
-        },
-      },
-      {
-        name: "DEF",
-        // selector: (row) => row.stats.def.value.toFixed(0),
-        sortable: true,
-        sortField: "stats.def.value",
-        cell: (row) => {
-          return (
-            <div className="flex gap-3 nowrap">
-              <StatIcon name="DEF" />
-              {row.stats.def.value.toFixed(0)}
-            </div>
-          );
-        },
-      },
-      {
-        name: "EM",
-        // selector: (row) => row.stats.elementalMastery.value.toFixed(0),
-        sortable: true,
-        sortField: "stats.elementalMastery.value",
-        cell: (row) => {
-          return (
-            <div className="flex gap-3 nowrap">
-              <StatIcon name="Elemental Mastery" />
-              {+row.stats.elementalMastery.value.toFixed(0) || 0}
-            </div>
-          );
-        },
-      },
-      {
-        name: "ER%",
-        // selector: (row) =>
-        //   `${(row.stats.energyRecharge.value * 100).toFixed(1)}%`,
-        sortable: true,
-        sortField: "stats.energyRecharge.value",
-        cell: (row) => {
-          return (
-            <div className="flex gap-3 nowrap">
-              <StatIcon name="Energy Recharge" />
-              {(row.stats.energyRecharge.value * 100).toFixed(1)}%
-              {/* {(row.stats.energyRecharge.value * 100).toFixed(1)}% */}
-            </div>
-          );
-        },
-      },
+      })),
+      // {
+      //   name: "Max HP",
+      //   // selector: (row) => row.stats.maxHp.value.toFixed(0),
+      //   sortable: true,
+      //   sortField: "stats.maxHp.value",
+      //   cell: (row) => {
+      //     return (
+      //       <div className="flex gap-3 nowrap">
+      //         <StatIcon name="HP" />
+      //         {row.stats.maxHp.value.toFixed(0)}
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   name: "ATK",
+      //   // selector: (row) => row.stats.atk.value.toFixed(0),
+      //   sortable: true,
+      //   sortField: "stats.atk.value",
+      //   cell: (row) => {
+      //     return (
+      //       <div className="flex gap-3 nowrap">
+      //         <StatIcon name="ATK" />
+      //         {row.stats.atk.value.toFixed(0)}
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   name: "DEF",
+      //   // selector: (row) => row.stats.def.value.toFixed(0),
+      //   sortable: true,
+      //   sortField: "stats.def.value",
+      //   cell: (row) => {
+      //     return (
+      //       <div className="flex gap-3 nowrap">
+      //         <StatIcon name="DEF" />
+      //         {row.stats.def.value.toFixed(0)}
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   name: "EM",
+      //   // selector: (row) => row.stats.elementalMastery.value.toFixed(0),
+      //   sortable: true,
+      //   sortField: "stats.elementalMastery.value",
+      //   cell: (row) => {
+      //     return (
+      //       <div className="flex gap-3 nowrap">
+      //         <StatIcon name="Elemental Mastery" />
+      //         {+row.stats.elementalMastery.value.toFixed(0) || 0}
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   name: "ER%",
+      //   // selector: (row) =>
+      //   //   `${(row.stats.energyRecharge.value * 100).toFixed(1)}%`,
+      //   sortable: true,
+      //   sortField: "stats.energyRecharge.value",
+      //   cell: (row) => {
+      //     return (
+      //       <div className="flex gap-3 nowrap">
+      //         <StatIcon name="Energy Recharge" />
+      //         {(row.stats.energyRecharge.value * 100).toFixed(1)}%
+      //         {/* {(row.stats.energyRecharge.value * 100).toFixed(1)}% */}
+      //       </div>
+      //     );
+      //   },
+      // },
     ],
     [translate]
   );

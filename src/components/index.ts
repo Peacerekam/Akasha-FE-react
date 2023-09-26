@@ -40,3 +40,4 @@ export * from "./StatListCard";
 export * from "./TeammatesCompact";
 export * from "./AchievementsBadge";
 export * from "./LanguageSwitcher";
+export * from "./LastUpdated";

@@ -1,3 +1,7 @@
+.profile-header-wrapper.profile-header-wrapper {
+  gap: 0px;
+}
+
 .pw-container {
   position: relative;
   text-align: center;
@@ -7,15 +11,23 @@
 
   &.video-ad-container {
     .playwire-ad-unit {
-      min-width: 430px;
-      min-height: 210px;
+      // min-width: 430px;
+      // min-height: 210px;
       background-color: rgba(0, 0, 0, 0.3);
       box-shadow: inset 0 0 15px 15px rgba(0, 0, 0, 0.1);
+
+      &,
+      .pw-tag,
+      .pw-tag > div {
+        display: contents !important;
+      }
+      .pw-tag > div > * {
+        margin-left: 10px;
+      }
     }
   }
 
   span.ad-debug {
-    // @TODO: debug.
     // display: none;
     color: red;
     font-size: 10px;
@@ -29,15 +41,15 @@
 
   .playwire-ad-unit {
     position: relative;
-    min-width: 350px;
-    min-height: 200px;
+    // min-width: 350px;
+    // min-height: 200px;
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: contents;
 
-    // @TODO: debug.
-    outline: 1px dashed rgba(red, 0.6);  
+    // outline: 1px dashed rgba(red, 0.6);
   }
 }
 
@@ -46,13 +58,15 @@
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  min-height: 200px;
-  
+  // min-height: 200px;
+  min-height: 90px;
+  gap: 0px;
+
   // width: 100%;
   // gap: 35px;
   flex-direction: row-reverse;
 
-  gap: 10px;
+  // gap: 10px;
   justify-content: center;
   align-items: flex-start;
 
@@ -65,7 +79,7 @@
   }
 }
 
-// @TODO: might not use pw-footer (pw-tag) at all? 
+// @TODO: might not use pw-footer (pw-tag) at all?
 .pw-footer {
   // display: none !important;
   background-color: rgba(57, 91, 100, 0.6) !important;
@@ -85,8 +99,12 @@
 }
 
 body:not(.overflow-hidden) {
-  &#top-of-the-page,
-  &.navbar-tabs {
+  #top-of-the-page {
+    position: relative;
+    z-index: 1002;
+  }
+  .navbar-tabs {
+    position: relative;
     z-index: 1001;
   }
 }

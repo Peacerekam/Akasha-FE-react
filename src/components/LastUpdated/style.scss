@@ -1,18 +1,15 @@
-.refresh-timer {
+.last-profile-update {
   text-transform: uppercase;
   opacity: 0.5;
   font-family: "GenshinFont";
   font-size: 12px;
-  // width: 125px;
-  width: 193px;
   display: flex;
   justify-content: space-between;
   pointer-events: none;
-  align-items: center;  
   margin-right: 5px;
-  &.no-label {
-    width: 41px;
-  }
+  align-items: center;
+  height: 21px;
+  gap: 5px;
   .value {
     font-size: 15px;
   }

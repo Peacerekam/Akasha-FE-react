@@ -1,5 +1,9 @@
 import { useContext } from "react";
-import { ascensionToLevel, getGenderFromIcon } from "../../utils/helpers";
+import {
+  ascensionToLevel,
+  getGenderFromIcon,
+  getRelevantDmgBonuses,
+} from "../../utils/helpers";
 import { StatIcon } from "../StatIcon";
 import "./style.scss";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
@@ -43,7 +47,7 @@ const getStatsFromCalculation = (row: any, currentCategory: string) => {
   };
 };
 
-const getStatsFromRow = (row: any) => {
+export const getStatsFromRow = (row: any) => {
   const stats = row.stats;
   if (!stats) return null;
 
@@ -126,64 +130,7 @@ export const StatList: React.FC<StatListProps> = ({
   };
 
   const displayDamageValues = () => {
-    const {
-      pyroDMG,
-      hydroDMG,
-      cryoDMG,
-      dendroDMG,
-      electroDMG,
-      anemoDMG,
-      geoDMG,
-      physicalDMG,
-    } = stats;
-
-    const dmgStats: any[] = [
-      {
-        name: "Pyro DMG Bonus",
-        value: pyroDMG,
-      },
-      {
-        name: "Electro DMG Bonus",
-        value: electroDMG,
-      },
-      {
-        name: "Cryo DMG Bonus",
-        value: cryoDMG,
-      },
-      {
-        name: "Geo DMG Bonus",
-        value: geoDMG,
-      },
-      {
-        name: "Dendro DMG Bonus",
-        value: dendroDMG,
-      },
-      {
-        name: "Anemo DMG Bonus",
-        value: anemoDMG,
-      },
-      {
-        name: "Hydro DMG Bonus",
-        value: hydroDMG,
-      },
-      {
-        name: "Physical DMG Bonus",
-        value: physicalDMG,
-      },
-    ];
-
-    const sorted = dmgStats
-      .sort((a, b) => {
-        const numA = +(a.value || 0);
-        const numB = +(b.value || 0);
-        return numA > numB ? -1 : 1;
-      })
-      .slice(0, 5);
-    const lowestDmg = sorted.length > 1 ? +sorted[sorted.length - 1].value : 0;
-
-    const relevantDamageTypes = sorted.filter(
-      (a: any) => +a.value !== lowestDmg && +a.value !== 0 && !isNaN(a.value)
-    );
+    const relevantDamageTypes = getRelevantDmgBonuses(row);
 
     return relevantDamageTypes.map((dmgStat: any) => (
       <div className="table-stat-row" key={dmgStat.name}>
@@ -246,7 +193,9 @@ export const StatList: React.FC<StatListProps> = ({
         </div>
       </div>
       <div className={strikethrough ? "strike-through opacity-5" : ""}>
-        <span>{translate("Lv.")} {row.weapon.weaponInfo.level}</span>
+        <span>
+          {translate("Lv.")} {row.weapon.weaponInfo.level}
+        </span>
         <span className="opacity-5">
           /{ascensionToLevel(row.weapon.weaponInfo?.promoteLevel)}
         </span>
@@ -255,7 +204,7 @@ export const StatList: React.FC<StatListProps> = ({
   );
 
   const gender = getGenderFromIcon(row.icon);
-  
+
   const displayCharacter = showCharacter && (
     <div className="table-stat-row">
       <div className="flex gap-5">

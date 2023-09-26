@@ -157,13 +157,6 @@
 //   }
 // }
 
-body:not(.overflow-hidden) {
-  &#top-of-the-page,
-  &.navbar-tabs {
-    z-index: 1001;
-  }
-}
-
 // body:not(.ads-disabled) {
 //   #root > .flex-special-container {
 //     min-height: 250px;

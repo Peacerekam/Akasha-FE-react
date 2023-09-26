@@ -30,6 +30,8 @@ import {
   FETCH_LEADERBOARDS_URL,
   FETCH_CATEGORIES_URL_V2,
   iconUrlToNamecardUrl,
+  normalizeText,
+  getRelevantCharacterStats,
 } from "../../utils/helpers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
@@ -38,8 +40,8 @@ import { HoverElementContext } from "../../context/HoverElement/HoverElementCont
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
 import { TitleContext } from "../../context/TitleProvider/TitleProviderContext";
 import { AdsComponentManager } from "../../components/AdsComponentManager";
-import "./style.scss";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import "./style.scss";
 
 ChartJS.register(...registerables);
 
@@ -183,7 +185,6 @@ export const LeaderboardsPage: React.FC = () => {
         name: "Sets",
         sortable: false,
         // sortField: `calculations.${currentCategory}.stats.artifactSetsFlat`,
-        width: "75px",
         cell: (row) => {
           return <DisplaySets artifactSets={row.artifactSets} />;
         },
@@ -205,96 +206,156 @@ export const LeaderboardsPage: React.FC = () => {
           return <CritRatio row={row} overrideCV={row.critValue} />;
         },
       },
-      {
-        name: "Max HP",
+      ...[0, 1, 2, 3].map((i) => ({
+        name: <span className="weak-filler-line" />,
         sortable: true,
-        // sortField: `calculations.${currentCategory}.stats.maxHP`,
-        sortField: "stats.maxHp.value",
-        cell: (row) => {
-          // const build = row.calculations[currentCategory]?.stats;
-          // if (!build) return <></>;
-          // const hp = build.maxHP.toFixed(0);
-          const hp = row.stats.maxHp.value.toFixed(0);
+        // sortFields: allSubstatsInOrder.map((key) => `stats.${key}.value`),
+        sortFields: [
+          "stats.maxHp.value",
+          "stats.atk.value",
+          "stats.def.value",
+          "stats.elementalMastery.value",
+          "stats.energyRecharge.value",
+          // "stats.hydroDamageBonus.value",
+          // "stats.geoDamageBonus.value",
+          // "stats.pyroDamageBonus.value",
+          // "stats.cryoDamageBonus.value",
+          // "stats.electroDamageBonus.value",
+          // "stats.anemoDamageBonus.value",
+          // "stats.dendroDamageBonus.value",
+          // "stats.physicalDamageBonus.value",
+          // "stats.healingBonus.value",
+        ],
+        colSpan: i === 0 ? 4 : 0,
+        width: "70px",
+        // getDynamicTdClassName: (row: any) => {
+        //   const reordered = getSubstatsInOrder(row);
+        //   const key = reordered?.[i];
+        //   if (!key) return "";
+        //   return normalizeText(key);
+        // },
+        cell: (row: any) => {
+          const relevantStats = getRelevantCharacterStats(row);
+
+          const _stat = relevantStats?.[i];
+          if (!_stat) return <></>;
+
+          const isPercent =
+            _stat.name.includes("Bonus") || _stat.name === "Energy Recharge";
+
+          let _value = _stat.value !== null ? +_stat.value : _stat.value;
+
+          if (["Healing Bonus", "Energy Recharge"].includes(_stat.name)) {
+            _value *= 100;
+          }
+
           return (
-            <div className="flex gap-3 nowrap">
-              <StatIcon name="HP" />
-              {hp}
+            <div
+              key={normalizeText(_stat.name)}
+              className={`character-stat flex nowrap ${normalizeText(
+                _stat.name.replace("%", "")
+              )}`}
+            >
+              <span style={{ marginRight: "3px" }}>
+                <StatIcon name={_stat.name.replace("%", "")} />
+              </span>
+              {_value?.toFixed(isPercent ? 1 : 0)}
+              {isPercent ? "%" : ""}
+              {/* {_stat.name} */}
             </div>
           );
         },
-      },
-      {
-        name: "ATK",
-        sortable: true,
-        // sortField: `calculations.${currentCategory}.stats.maxATK`,
-        sortField: "stats.atk.value",
-        cell: (row) => {
-          // const build = row.calculations[currentCategory]?.stats;
-          // if (!build) return <></>;
-          // const atk = build.maxATK.toFixed(0);
-          const atk = row.stats.atk.value.toFixed(0);
-          return (
-            <div className="flex gap-3 nowrap">
-              <StatIcon name="ATK" />
-              {atk}
-            </div>
-          );
-        },
-      },
-      {
-        name: "DEF",
-        sortable: true,
-        // sortField: `calculations.${currentCategory}.stats.maxDEF`,
-        sortField: "stats.def.value",
-        cell: (row) => {
-          // const build = row.calculations[currentCategory]?.stats;
-          // if (!build) return <></>;
-          // const def = build.maxDEF.toFixed(0);
-          const def = row.stats.def.value.toFixed(0);
-          return (
-            <div className="flex gap-3 nowrap">
-              <StatIcon name="DEF" />
-              {def}
-            </div>
-          );
-        },
-      },
-      {
-        name: "EM",
-        sortable: true,
-        // sortField: `calculations.${currentCategory}.stats.elementalMastery`,
-        sortField: "stats.elementalMastery.value",
-        cell: (row) => {
-          // const build = row.calculations[currentCategory]?.stats;
-          // if (!build) return <></>;
-          // const em = build.elementalMastery.toFixed(0);
-          const em = +row.stats.elementalMastery.value.toFixed(0) || 0;
-          return (
-            <div className="flex gap-3 nowrap">
-              <StatIcon name="Elemental Mastery" />
-              {em}
-            </div>
-          );
-        },
-      },
-      {
-        name: "ER%",
-        sortable: true,
-        // sortField: `calculations.${currentCategory}.stats.energyRecharge`,
-        sortField: "stats.energyRecharge.value",
-        cell: (row) => {
-          // const build = row.calculations[currentCategory]?.stats;
-          // if (!build) return <></>;
-          // const er = (100 + build.energyRecharge).toFixed(1);
-          const er = (row.stats.energyRecharge.value * 100).toFixed(1);
-          return (
-            <div className="flex gap-3 nowrap">
-              <StatIcon name="Energy Recharge" />
-              {er}%
-            </div>
-          );
-        },
-      },
+      })),
+      // {
+      //   name: "Max HP",
+      //   sortable: true,
+      //   // sortField: `calculations.${currentCategory}.stats.maxHP`,
+      //   sortField: "stats.maxHp.value",
+      //   cell: (row) => {
+      //     // const build = row.calculations[currentCategory]?.stats;
+      //     // if (!build) return <></>;
+      //     // const hp = build.maxHP.toFixed(0);
+      //     const hp = row.stats.maxHp.value.toFixed(0);
+      //     return (
+      //       <div className="flex gap-3 nowrap">
+      //         <StatIcon name="HP" />
+      //         {hp}
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   name: "ATK",
+      //   sortable: true,
+      //   // sortField: `calculations.${currentCategory}.stats.maxATK`,
+      //   sortField: "stats.atk.value",
+      //   cell: (row) => {
+      //     // const build = row.calculations[currentCategory]?.stats;
+      //     // if (!build) return <></>;
+      //     // const atk = build.maxATK.toFixed(0);
+      //     const atk = row.stats.atk.value.toFixed(0);
+      //     return (
+      //       <div className="flex gap-3 nowrap">
+      //         <StatIcon name="ATK" />
+      //         {atk}
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   name: "DEF",
+      //   sortable: true,
+      //   // sortField: `calculations.${currentCategory}.stats.maxDEF`,
+      //   sortField: "stats.def.value",
+      //   cell: (row) => {
+      //     // const build = row.calculations[currentCategory]?.stats;
+      //     // if (!build) return <></>;
+      //     // const def = build.maxDEF.toFixed(0);
+      //     const def = row.stats.def.value.toFixed(0);
+      //     return (
+      //       <div className="flex gap-3 nowrap">
+      //         <StatIcon name="DEF" />
+      //         {def}
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   name: "EM",
+      //   sortable: true,
+      //   // sortField: `calculations.${currentCategory}.stats.elementalMastery`,
+      //   sortField: "stats.elementalMastery.value",
+      //   cell: (row) => {
+      //     // const build = row.calculations[currentCategory]?.stats;
+      //     // if (!build) return <></>;
+      //     // const em = build.elementalMastery.toFixed(0);
+      //     const em = +row.stats.elementalMastery.value.toFixed(0) || 0;
+      //     return (
+      //       <div className="flex gap-3 nowrap">
+      //         <StatIcon name="Elemental Mastery" />
+      //         {em}
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   name: "ER%",
+      //   sortable: true,
+      //   // sortField: `calculations.${currentCategory}.stats.energyRecharge`,
+      //   sortField: "stats.energyRecharge.value",
+      //   cell: (row) => {
+      //     // const build = row.calculations[currentCategory]?.stats;
+      //     // if (!build) return <></>;
+      //     // const er = (100 + build.energyRecharge).toFixed(1);
+      //     const er = (row.stats.energyRecharge.value * 100).toFixed(1);
+      //     return (
+      //       <div className="flex gap-3 nowrap">
+      //         <StatIcon name="Energy Recharge" />
+      //         {er}%
+      //       </div>
+      //     );
+      //   },
+      // },
       {
         name: thisCalc?.short || "???", // currentCategory.split(' - ')[1],
         // width: "100px",

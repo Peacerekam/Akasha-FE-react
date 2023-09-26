@@ -2,9 +2,10 @@
   // padding: 10px 20px;
   $bg-color: #1f2323;
   background-color: $bg-color;
-  margin-top: 10px;
+  // margin-top: 10px;
   // overflow: hidden;
   min-width: 180px;
+  flex-wrap: nowrap !important;
 
   .compact-artifact-icon-container {
     width: 100px;
@@ -153,4 +154,35 @@
       width: 80px;
     }
   }
+}
+
+.expanded-row > .character-preview {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  // margin: 5px 65px 0px;
+  width: 1040px;
+  font-size: 13px;
+
+  .character-owner-preview {
+    display: flex;
+    align-items: center;
+    > span {
+      margin-left: 10px;
+      margin-right: 0px;
+      pointer-events: none;
+    }
+  }
+
+  .character-type-preview {
+    gap: 5px;
+    align-items: center;
+    display: flex;
+  }
+}
+
+.artifacts-row {
+  display: flex;
+  gap: 15px;
+  margin: 0 10px;
 }

@@ -35,6 +35,11 @@ body {
   max-width: 1280px;
   margin: 10px auto 0;
   // padding: 0 10px;
+
+  @at-root .ad-provider-playwire & {
+    max-width: 1100px;
+  }
+
   &.dev-indicator {
     &::after {
       content: "";
@@ -180,7 +185,6 @@ body {
 .mt-20 {
   margin-top: 20px !important;
 }
-
 
 .flex-grow {
   flex-grow: 1;
@@ -405,6 +409,11 @@ body {
   justify-content: center;
   align-items: center;
   animation: 0.3s modalBgReveal ease-in-out forwards;
+
+  &.justify-flex-end {
+    justify-content: flex-end;
+  }
+
   .modal {
     height: fit-content;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;

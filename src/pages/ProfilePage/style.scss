@@ -21,6 +21,7 @@
 
 .profile-header-wrapper {
   justify-content: center;
+  gap: 10px;
 
   .profile-header {
     flex: 1;
@@ -29,7 +30,8 @@
     height: min-content;
 
     .profile-highlights {
-      min-width: min(100%, 370px);
+      // min-width: min(100%, 370px);
+      min-width: min(100%, 500px);
     }
   }
   .vm-container {
@@ -185,7 +187,7 @@
 
 .card-preview-modal {
   &.modal-wrapper .modal .modal-content {
-    max-height: 100dvh;
+    max-height: calc(100dvh - 60px);
   }
 }
 
@@ -367,7 +369,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: rgba(#a8781f, 0.2);
+    // background-color: rgba(#a8781f, 0.2);
+    background-color: #3C3624;
     border: 2px dashed rgb(255, 217, 0);
     color: rgba(255, 217, 0, 0.9);
     padding: 15px 0px;

@@ -29,6 +29,7 @@ import {
   normalizeText,
   optsParamsSessionID,
   getGenderFromIcon,
+  getRelevantCharacterStats,
 } from "../../utils/helpers";
 import { ArtifactColumns } from "../ArtifactsPage";
 import { BuildsColumns } from "../BuildsPage";
@@ -45,6 +46,7 @@ import {
   ConfirmTooltip,
   GenshinUserCard,
   NotificationBar,
+  LastUpdated,
 } from "../../components";
 import { TableColumn } from "../../types/TableColumn";
 import { BuildSettingsModal } from "./BuildSettingsModal";
@@ -83,7 +85,7 @@ export const ProfilePage: React.FC = () => {
 
   const { uid } = useParams();
   const { hoverElement } = useContext(HoverElementContext);
-  const { disableAdsForThisPage } = useContext(AdProviderContext);
+  const { disableAdsForThisPage, adProvider } = useContext(AdProviderContext);
   const { addTab } = useContext(LastProfilesContext);
   const { setTitle } = useContext(TitleContext);
   const { translate } = useContext(TranslationContext);
@@ -249,11 +251,11 @@ export const ProfilePage: React.FC = () => {
           return (
             <div
               key={normalizeText(key)}
-              className={`substat flex nowrap ${normalizeText(key)} ${
+              className={`character-stat flex nowrap ${normalizeText(key)} ${
                 isCV ? "critvalue" : ""
               }`}
             >
-              <span style={{ marginRight: "5px" }}>
+              <span style={{ marginRight: "3px" }}>
                 <StatIcon name={key} />
               </span>
               {substatValue}
@@ -314,8 +316,8 @@ export const ProfilePage: React.FC = () => {
         },
       },
       {
-        name: "Constellation",
-        width: "100px",
+        name: adProvider === "playwire" ? "" : "Constellation",
+        width: adProvider === "playwire" ? "" : "100px",
         sortable: true,
         sortField: "constellation",
         cell: (row) => {
@@ -331,8 +333,8 @@ export const ProfilePage: React.FC = () => {
         },
       },
       {
-        name: "Weapon",
-        width: "60px",
+        name: adProvider === "playwire" ? "" : "Weapon",
+        width: adProvider === "playwire" ? "" : "60px",
         sortable: true,
         sortField: "weapon.name",
         cell: (row) => {
@@ -346,9 +348,8 @@ export const ProfilePage: React.FC = () => {
       },
       {
         name: "Sets",
-        // sortField: "artifactSetsFlat",
         sortable: false,
-        width: "80px",
+        // sortField: "artifactSetsFlat",
         cell: (row) => {
           return <DisplaySets artifactSets={row.artifactSets} />;
         },
@@ -365,74 +366,134 @@ export const ProfilePage: React.FC = () => {
           return <CritRatio row={row} overrideCV={row.critValue} />;
         },
       },
-      {
-        name: "Max HP",
+      ...[0, 1, 2, 3].map((i) => ({
+        name: <span className="weak-filler-line" />,
         sortable: true,
-        sortField: "stats.maxHp.value",
-        cell: (row) => {
+        // sortFields: allSubstatsInOrder.map((key) => `stats.${key}.value`),
+        sortFields: [
+          "stats.maxHp.value",
+          "stats.atk.value",
+          "stats.def.value",
+          "stats.elementalMastery.value",
+          "stats.energyRecharge.value",
+          "stats.hydroDamageBonus.value",
+          "stats.geoDamageBonus.value",
+          "stats.pyroDamageBonus.value",
+          "stats.cryoDamageBonus.value",
+          "stats.electroDamageBonus.value",
+          "stats.anemoDamageBonus.value",
+          "stats.dendroDamageBonus.value",
+          "stats.physicalDamageBonus.value",
+          "stats.healingBonus.value",
+        ],
+        colSpan: i === 0 ? 4 : 0,
+        width: "80px",
+        // getDynamicTdClassName: (row: any) => {
+        //   const reordered = getSubstatsInOrder(row);
+        //   const key = reordered?.[i];
+        //   if (!key) return "";
+        //   return normalizeText(key);
+        // },
+        cell: (row: any) => {
+          const relevantStats = getRelevantCharacterStats(row);
+
+          const _stat = relevantStats?.[i];
+          if (!_stat) return <></>;
+
+          const isPercent =
+            _stat.name.includes("Bonus") || _stat.name === "Energy Recharge";
+
+          let _value = _stat.value !== null ? +_stat.value : _stat.value;
+
+          if (["Healing Bonus", "Energy Recharge"].includes(_stat.name)) {
+            _value *= 100;
+          }
+
           return (
-            <div className="flex gap-3 nowrap">
-              <StatIcon name="HP" />
-              {row.stats.maxHp.value.toFixed(0)}
+            <div
+              key={normalizeText(_stat.name)}
+              className={`character-stat flex nowrap ${normalizeText(
+                _stat.name.replace("%", "")
+              )}`}
+            >
+              <span style={{ marginRight: "3px" }}>
+                <StatIcon name={_stat.name.replace("%", "")} />
+              </span>
+              {_value?.toFixed(isPercent ? 1 : 0)}
+              {isPercent ? "%" : ""}
+              {/* {_stat.name} */}
             </div>
           );
         },
-      },
-      {
-        name: "ATK",
-        sortable: true,
-        sortField: "stats.atk.value",
-        cell: (row) => {
-          return (
-            <div className="flex gap-3 nowrap">
-              <StatIcon name="ATK" />
-              {row.stats.atk.value.toFixed(0)}
-            </div>
-          );
-        },
-      },
-      {
-        name: "DEF",
-        sortable: true,
-        sortField: "stats.def.value",
-        cell: (row) => {
-          return (
-            <div className="flex gap-3 nowrap">
-              <StatIcon name="DEF" />
-              {row.stats.def.value.toFixed(0)}
-            </div>
-          );
-        },
-      },
-      {
-        name: "EM",
-        sortable: true,
-        sortField: "stats.elementalMastery.value",
-        cell: (row) => {
-          return (
-            <div className="flex gap-3 nowrap">
-              <StatIcon name="Elemental Mastery" />
-              {+row.stats.elementalMastery.value.toFixed(0) || 0}
-            </div>
-          );
-        },
-      },
-      {
-        name: "ER%",
-        sortable: true,
-        sortField: "stats.energyRecharge.value",
-        cell: (row) => {
-          return (
-            <div className="flex gap-3 nowrap">
-              <StatIcon name="Energy Recharge" />
-              {(row.stats.energyRecharge.value * 100).toFixed(1)}%
-              {/* {(row.stats.energyRecharge.value * 100).toFixed(1)}% */}
-            </div>
-          );
-        },
-      },
+      })),
+      // {
+      //   name: "Max HP",
+      //   sortable: true,
+      //   sortField: "stats.maxHp.value",
+      //   cell: (row) => {
+      //     return (
+      //       <div className="flex gap-3 nowrap">
+      //         <StatIcon name="HP" />
+      //         {row.stats.maxHp.value.toFixed(0)}
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   name: "ATK",
+      //   sortable: true,
+      //   sortField: "stats.atk.value",
+      //   cell: (row) => {
+      //     return (
+      //       <div className="flex gap-3 nowrap">
+      //         <StatIcon name="ATK" />
+      //         {row.stats.atk.value.toFixed(0)}
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   name: "DEF",
+      //   sortable: true,
+      //   sortField: "stats.def.value",
+      //   cell: (row) => {
+      //     return (
+      //       <div className="flex gap-3 nowrap">
+      //         <StatIcon name="DEF" />
+      //         {row.stats.def.value.toFixed(0)}
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   name: "EM",
+      //   sortable: true,
+      //   sortField: "stats.elementalMastery.value",
+      //   cell: (row) => {
+      //     return (
+      //       <div className="flex gap-3 nowrap">
+      //         <StatIcon name="Elemental Mastery" />
+      //         {+row.stats.elementalMastery.value.toFixed(0) || 0}
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   name: "ER%",
+      //   sortable: true,
+      //   sortField: "stats.energyRecharge.value",
+      //   cell: (row) => {
+      //     return (
+      //       <div className="flex gap-3 nowrap">
+      //         <StatIcon name="Energy Recharge" />
+      //         {(row.stats.energyRecharge.value * 100).toFixed(1)}%
+      //         {/* {(row.stats.energyRecharge.value * 100).toFixed(1)}% */}
+      //       </div>
+      //     );
+      //   },
+      // },
     ],
-    [translate]
+    [translate, adProvider]
   );
 
   // @TODO: sum them on server side so we can sort by that?
@@ -566,10 +627,12 @@ export const ProfilePage: React.FC = () => {
           {refreshTime && getTimestamp() > 0 ? (
             <Timer
               until={refreshTime}
-              label={"refresh in:"}
+              label={"refresh cooldown:"}
               onFinish={handleTimerFinish}
             />
-          ) : null}
+          ) : (
+            <LastUpdated label="last update" lastProfileUpdate={responseData.account?.lastProfileUpdate} />
+          )}
           <div
             title="Refresh builds"
             className={refreshBtnClassName}
@@ -667,6 +730,7 @@ export const ProfilePage: React.FC = () => {
       );
     },
     [
+      responseData,
       enableRefreshBtn,
       enableBindBtn,
       refreshTime,
@@ -819,7 +883,7 @@ export const ProfilePage: React.FC = () => {
               variant="gradient"
               revealCondition={responseData.account}
             />
-            <div className="flex gap-10 profile-header-wrapper">
+            <div className="flex profile-header-wrapper">
               <div className="flex gap-10 profile-header">
                 {displayGenshinCard}
                 <div className="profile-highlights">

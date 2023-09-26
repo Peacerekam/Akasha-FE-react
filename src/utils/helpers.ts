@@ -1,3 +1,4 @@
+import { getStatsFromRow } from "../components";
 import { IHash } from "../types/IHash";
 
 export const PATREON_URL = "https://www.patreon.com/mimee";
@@ -363,3 +364,273 @@ export const getGenderFromIcon = (icon?: string) => {
 
 export const delay = async (ms: number) =>
   new Promise((resolve, reject) => setTimeout(resolve, ms));
+
+export const getCharacterStatsInOrder = (
+  stats: { name: string; value: number }[]
+) => {
+  const reordered: any[] = [];
+  const damageBonusStat = stats.find((x) => x.name.endsWith("DMG Bonus"));
+
+  // elemental damage first
+  if (damageBonusStat) {
+    reordered.push(damageBonusStat);
+  } else {
+    // reordered.push({
+    //   name: "x",
+    //   value: null,
+    // });
+  }
+
+  const customOrder = [
+    "HP",
+    "ATK",
+    "DEF",
+    "Healing Bonus",
+    "Elemental Mastery",
+    "Energy Recharge",
+  ];
+
+  customOrder.forEach((key) => {
+    Object.values(stats).forEach((stat) => {
+      if (stat.name !== key) return;
+      reordered.push(stat);
+    });
+  });
+
+  return reordered;
+};
+
+export const getRelevantMainStats = (row: any) => {
+  const relevantMainStats = [];
+
+  // first pass, check by artifact main stats
+  for (const artifactSlot of Object.keys(row.artifactObjects)) {
+    const mainStatKey: string = row.artifactObjects[artifactSlot].mainStatKey;
+    if (mainStatKey.includes("Crit") || mainStatKey.includes("DMG Bonus"))
+      continue;
+
+    const keyValue =
+      {
+        "HP%": "maxHp",
+        "DEF%": "def",
+        "ATK%": "atk",
+        "Healing Bonus": "healingBonus",
+        "Elemental Mastery": "elementalMastery",
+        "Energy Recharge": "energyRecharge",
+      }[mainStatKey] || "";
+
+    relevantMainStats.push({
+      name: mainStatKey.replace("%", ""),
+      value: row.stats[keyValue]?.value,
+    });
+  }
+  return relevantMainStats;
+};
+
+export const getRelevantDmgBonuses = (row: any) => {
+  const stats: any = getStatsFromRow(row);
+
+  const {
+    pyroDMG,
+    hydroDMG,
+    cryoDMG,
+    dendroDMG,
+    electroDMG,
+    anemoDMG,
+    geoDMG,
+    physicalDMG,
+  } = stats;
+
+  const dmgStats: any[] = [
+    {
+      name: "Pyro DMG Bonus",
+      value: pyroDMG,
+    },
+    {
+      name: "Electro DMG Bonus",
+      value: electroDMG,
+    },
+    {
+      name: "Cryo DMG Bonus",
+      value: cryoDMG,
+    },
+    {
+      name: "Geo DMG Bonus",
+      value: geoDMG,
+    },
+    {
+      name: "Dendro DMG Bonus",
+      value: dendroDMG,
+    },
+    {
+      name: "Anemo DMG Bonus",
+      value: anemoDMG,
+    },
+    {
+      name: "Hydro DMG Bonus",
+      value: hydroDMG,
+    },
+    {
+      name: "Physical DMG Bonus",
+      value: physicalDMG,
+    },
+  ];
+
+  const chElement = row.characterMetadata?.element;
+
+  const sorted = dmgStats
+    .sort((a, b) => {
+      const numA = +(a.value || 0);
+      const numB = +(b.value || 0);
+
+      // prioritize character's element on TIE.
+      if (numA === numB && chElement && a.name.includes(chElement)) {
+        return -1;
+      }
+
+      return numA > numB ? -1 : 1;
+    })
+    .slice(0, 5);
+
+  const lowestDmg = sorted.length > 1 ? +sorted[sorted.length - 1].value : 0;
+  const allLowestDmgs = sorted.filter(
+    (a) => +a.value === lowestDmg && +a.value !== 0 && !isNaN(a.value)
+  );
+
+  if (allLowestDmgs.length === sorted.length && lowestDmg !== 0) {
+    if (chElement) {
+      const chElementDmg = sorted.find((a) => a.name.includes(chElement));
+      return [chElementDmg];
+    }
+  }
+
+  const relevantDamageTypes = sorted.filter(
+    (a: any) => +a.value !== lowestDmg && +a.value !== 0 && !isNaN(a.value)
+  );
+
+  return relevantDamageTypes;
+};
+
+export const getRelevantEmErHb = (row: any) => {
+  const relevantExtraStats = [];
+
+  const hvThreshold = 0.2495; // 25% Healing Bonus
+  const emThreshold = 74.95; // 75 EM ~~ around 4 EM subs or set effect.
+  const erThreshold = 1.0495; // higher than 105% ?
+
+  if (row.stats.healingBonus?.value >= hvThreshold) {
+    relevantExtraStats.push({
+      name: "Healing Bonus",
+      value: row.stats.healingBonus.value,
+    });
+  }
+  if (row.stats.elementalMastery?.value >= emThreshold) {
+    relevantExtraStats.push({
+      name: "Elemental Mastery",
+      value: row.stats.elementalMastery.value,
+    });
+  }
+  if (row.stats.energyRecharge?.value >= erThreshold) {
+    relevantExtraStats.push({
+      name: "Energy Recharge",
+      value: row.stats.energyRecharge.value,
+    });
+  }
+
+  return relevantExtraStats;
+};
+
+export const fillUpToFourStats = (stats: any[], row: any) => {
+  while (stats.length < 4) {
+    const hasER = stats.findIndex((x: any) =>
+      x.name.includes("Energy Recharge")
+    );
+    if (hasER === -1) {
+      stats.push({
+        name: "Energy Recharge",
+        value: row.stats.energyRecharge?.value,
+      });
+      continue;
+    }
+
+    const hasHP = stats.findIndex((x: any) => x.name.includes("HP"));
+    if (hasHP === -1) {
+      stats.push({
+        name: "HP",
+        value: row.stats.maxHp?.value,
+      });
+      continue;
+    }
+
+    const hasATK = stats.findIndex((x: any) => x.name.includes("ATK"));
+    if (hasATK === -1) {
+      stats.push({
+        name: "ATK",
+        value: row.stats.atk?.value,
+      });
+      continue;
+    }
+
+    const hasDEF = stats.findIndex((x: any) => x.name.includes("DEF"));
+    if (hasDEF === -1) {
+      stats.push({
+        name: "DEF",
+        value: row.stats.def?.value,
+      });
+      continue;
+    }
+
+    const hasEM = stats.findIndex((x: any) =>
+      x.name.includes("Elemental Mastery")
+    );
+    if (hasEM === -1) {
+      stats.push({
+        name: "Elemental Mastery",
+        value: row.stats.elementalMastery?.value,
+      });
+      continue;
+    }
+
+    // to be safe
+    stats.push({
+      name: "x",
+      value: null,
+    });
+  }
+  return stats;
+};
+
+export const getRelevantCharacterStats = (row: any) => {
+  const [mainDmgBonus, ...otherDmgBonuses] = getRelevantDmgBonuses(row);
+
+  const prepStats = [
+    mainDmgBonus, // only get 1st?
+    ...getRelevantMainStats(row),
+    ...getRelevantEmErHb(row),
+    // get relevant from substats ?? (hp?)
+    // ...otherDmgBonuses,
+  ].filter((x) => x);
+
+  // remove dupes part 1
+  const _noDupesObj = prepStats.reduce((acc, val) => {
+    acc[val.name] = val.value;
+    return acc;
+  }, {});
+
+  // remove dupes part 2
+  let relevantStats = Object.keys(_noDupesObj).reduce((acc: any, key: any) => {
+    acc.push({
+      name: key,
+      value: _noDupesObj[key],
+    });
+    return acc;
+  }, []);
+
+  // fill remaining columns if needed
+  relevantStats = fillUpToFourStats(relevantStats, row);
+
+  // reorder stats
+  relevantStats = getCharacterStatsInOrder(relevantStats);
+
+  return relevantStats;
+};

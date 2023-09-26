@@ -57,7 +57,7 @@ export const Timer: React.FC<TimerProps> = ({
 
   return (
     <span className={classNames}>
-      {label && <span>{label}</span>} <span>{getFormattedText(timestamp)}</span>
+      {label && <span>{label}</span>} <span className="value">{getFormattedText(timestamp)}</span>
     </span>
   );
 };

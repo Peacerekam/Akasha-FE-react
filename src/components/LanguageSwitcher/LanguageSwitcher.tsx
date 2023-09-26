@@ -1,4 +1,10 @@
-import React, { useContext, useRef } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   Language,
   TranslationContext,
@@ -7,6 +13,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGlobe } from "@fortawesome/free-solid-svg-icons";
 import "./style.scss";
+import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 
 const KEY_TO_FULL: Record<Language, string> = {
   en: "English",
@@ -32,21 +39,37 @@ const reorderedLanguages = [
 ];
 
 export const LanguageSwitcher: React.FC = () => {
+  const { screenWidth } = useContext(AdProviderContext);
   const { setLanguage, language } = useContext(TranslationContext);
-  const dropdownRef = useRef<HTMLAnchorElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
 
-  const delayedBlur = () => setTimeout(() => dropdownRef?.current?.blur(), 1);
+  const handleClose = useCallback(() => {
+    setIsOpen(false);
+  }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      setTimeout(() => {
+        window.addEventListener("click", handleClose);
+      }, 0);
+    } else {
+      window.removeEventListener("click", handleClose);
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    return () => {
+      window.removeEventListener("click", handleClose);
+    };
+  }, []);
 
   const languageList = reorderedLanguages.map((name) => (
     <div
       className={language === name ? "current-langauge" : ""}
       key={name}
-      onMouseDown={() => {
-        setLanguage(name);
-        delayedBlur();
-      }}
       onClick={() => {
-        delayedBlur();
+        setLanguage(name);
+        setIsOpen(false);
       }}
     >
       {KEY_TO_FULL[name]}
@@ -56,26 +79,14 @@ export const LanguageSwitcher: React.FC = () => {
   return (
     <div className="language-switcher">
       <a
-        ref={dropdownRef}
-        href="#language"
-        onMouseDown={(e) => {
-          const isMain =
-            dropdownRef?.current === e.target ||
-            dropdownRef?.current?.contains(e.target as Node);
-          if (!isMain) return;
-
-          const isActive = dropdownRef?.current === document.activeElement;
-          if (!isActive) return;
-
-          delayedBlur();
-        }}
         onClick={(e) => {
           e.preventDefault();
+          setIsOpen(true);
         }}
       >
         <FontAwesomeIcon icon={faGlobe} size="1x" /> {language.toUpperCase()}
-        <div className="language-dropdown">{languageList}</div>
       </a>
+      {isOpen && <div className="language-dropdown">{languageList}</div>}
     </div>
   );
 };

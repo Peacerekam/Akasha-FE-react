@@ -120,7 +120,8 @@ export const CategorySelectionPage: React.FC = () => {
                 }}
                 href={`/${leaderboardPath}`}
               >
-                {lbName}
+                {lbName}{" "}
+                <span style={{color: "gray", fontSize: 11, marginLeft: 10}}>{translate(row?.characterName)}</span>
               </a>
             </div>
           );
@@ -202,23 +203,23 @@ export const CategorySelectionPage: React.FC = () => {
           );
         },
       },
-      {
-        name: "Character",
-        sortable: true,
-        sortField: "characterName",
-        width: "0px",
-        cell: (row) => {
-          const characterName = row?.characterName || "";
-          // const lbName = row?.name || "";
-          // return <div>{lbName}</div>;
+      // {
+      //   name: "Character",
+      //   sortable: true,
+      //   sortField: "characterName",
+      //   width: "0px",
+      //   cell: (row) => {
+      //     const characterName = row?.characterName || "";
+      //     // const lbName = row?.name || "";
+      //     // return <div>{lbName}</div>;
 
-          return (
-            <div className="table-icon-text-pair" style={{ color: "gray" }}>
-              <div>{translate(characterName)}</div>
-            </div>
-          );
-        },
-      },
+      //     return (
+      //       <div className="table-icon-text-pair" style={{ color: "gray" }}>
+      //         <div>{translate(characterName)}</div>
+      //       </div>
+      //     );
+      //   },
+      // },
       // {
       //   name: "",
       //   width: "80px",

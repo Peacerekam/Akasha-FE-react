@@ -23,7 +23,7 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
     chartsData: any;
   }>({
     calculations: [],
-    chartsData: {}
+    chartsData: {},
   });
   const [selectedCalculationId, setSelectedCalculationId] = useState<string>();
 
@@ -72,7 +72,10 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
               row={row}
               selectedCalculationId={selectedCalculationId}
             />
-            <CalculationList row={row} calculations={_calculations.calculations} />
+            <CalculationList
+              row={row}
+              calculations={_calculations.calculations}
+            />
           </div>
         </>
       ) : (

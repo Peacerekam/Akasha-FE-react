@@ -35,6 +35,12 @@
   z-index: 5;
   position: relative;
 
+  @media (max-width: 1000px) {
+    & {
+      padding: 0 15px;
+    }
+  }
+
   .navbar-tab {
     height: 32px;
     display: flex;

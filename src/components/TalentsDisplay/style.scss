@@ -1,0 +1,45 @@
+.talents-display {
+  position: relative;
+
+  .talent-list-container {
+    text-align: center;
+    display: flex;
+    gap: 15px;
+
+    .talent-display {
+      position: relative;
+      font-weight: 600;
+      display: flex;
+      gap: 2px;
+      justify-content: center;
+      align-items: center;
+
+      .talent-display-value {
+        display: flex;
+        gap: 2px;
+        background-color: rgba(black, 0.5);
+        border-radius: 30px;
+        font-size: 12px;  
+        padding: 2px 5px;
+        min-width: 15px;
+        justify-content: center;
+
+        &.talent-boosted {
+          border: 1px solid #a8781f;
+        }
+        > img {
+          width: 15px;
+          height: 15px;
+        }
+      }
+      .talent-icon-placeholder {
+        height: 34px;
+      }
+      img {
+        width: 30px;
+        height: 30px;
+        border-radius: 30px;
+      }
+    }
+  }
+}

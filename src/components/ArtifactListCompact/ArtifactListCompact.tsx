@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useEffect } from "react";
+import React, { useMemo, useRef, useEffect, useContext } from "react";
 
 import {
   getArtifactsInOrder,
@@ -12,17 +12,24 @@ import { REAL_SUBSTAT_VALUES, STAT_NAMES } from "../../utils/substats";
 import { RollList } from "../RollList";
 import { StatIcon } from "../StatIcon";
 import "./style.scss";
+import { ARBadge } from "../ARBadge";
+import { RegionBadge } from "../RegionBadge";
+import { TalentsDisplay } from "../TalentsDisplay";
+import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 
 type ArtifactListCompactProps = {
   row: any;
   artifacts: any[];
 };
 
-export const ArtifactOnCanvas: React.FC<{ icon: string }> = ({ icon }) => {
+export const ArtifactOnCanvas: React.FC<{
+  icon: string;
+  hardcodedScale?: number;
+}> = ({ icon, hardcodedScale = 1 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const canvasWidth = 180;
-  const canvasHeight = 180;
+  const canvasWidth = 180 * hardcodedScale;
+  const canvasHeight = 180 * hardcodedScale;
   const canvasPixelDensity = 2;
 
   useEffect(() => {
@@ -62,9 +69,9 @@ export const ArtifactOnCanvas: React.FC<{ icon: string }> = ({ icon }) => {
 
       // Create gradient
       const gradientMask = ctx!.createLinearGradient(
-        canvasWidth - 100,
+        canvasWidth - (100 * hardcodedScale),
         0,
-        canvasWidth - 40,
+        canvasWidth - (40 * hardcodedScale),
         0
       );
       gradientMask.addColorStop(0, "black");
@@ -83,9 +90,8 @@ export const ArtifactOnCanvas: React.FC<{ icon: string }> = ({ icon }) => {
       ctx!.globalCompositeOperation = "source-in";
       ctx!.drawImage(img, x, y, newWidth, newHeight);
     };
-
   }, [canvasRef]);
-  
+
   // return <img className="compact-artifact-icon" src={icon} />;
 
   return (
@@ -98,14 +104,16 @@ export const ArtifactOnCanvas: React.FC<{ icon: string }> = ({ icon }) => {
         height: canvasHeight,
       }}
       ref={canvasRef}
-  />
-  )
+    />
+  );
 };
 
 export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
   row,
   artifacts,
 }) => {
+  const { translate } = useContext(TranslationContext);
+
   const reordered = useMemo(
     () => getArtifactsInOrder(artifacts),
     [JSON.stringify(artifacts)]
@@ -114,92 +122,94 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
   const compactList = useMemo(() => {
     return (
       <>
-        {reordered.map((artifact: any) => {
-          const substatKeys = Object.keys(artifact.substats);
-          const className = getArtifactCvClassName(artifact);
+        <div className="artifacts-row">
+          {reordered.map((artifact: any) => {
+            const substatKeys = Object.keys(artifact.substats);
+            const className = getArtifactCvClassName(artifact);
 
-          const summedArtifactRolls: {
-            [key: string]: { count: number; sum: number };
-          } = artifact.substatsIdList.reduce((acc: any, id: number) => {
-            const { value, type } = REAL_SUBSTAT_VALUES[id];
-            const realStatName = STAT_NAMES[type];
-            return {
-              ...acc,
-              [realStatName]: {
-                count: (acc[realStatName]?.count ?? 0) + 1,
-                sum: (acc[realStatName]?.sum ?? 0) + value,
-              },
-            };
-          }, {});
+            const summedArtifactRolls: {
+              [key: string]: { count: number; sum: number };
+            } = artifact.substatsIdList.reduce((acc: any, id: number) => {
+              const { value, type } = REAL_SUBSTAT_VALUES[id];
+              const realStatName = STAT_NAMES[type];
+              return {
+                ...acc,
+                [realStatName]: {
+                  count: (acc[realStatName]?.count ?? 0) + 1,
+                  sum: (acc[realStatName]?.sum ?? 0) + value,
+                },
+              };
+            }, {});
 
-          const mainStatValue = isPercent(artifact.mainStatKey)
-            ? Math.round(artifact.mainStatValue * 10) / 10
-            : Math.round(artifact.mainStatValue);
+            const mainStatValue = isPercent(artifact.mainStatKey)
+              ? Math.round(artifact.mainStatValue * 10) / 10
+              : Math.round(artifact.mainStatValue);
 
-          return (
-            <div
-              key={artifact._id}
-              className={`flex compact-artifact ${className}`}
-            >
-              <div className="compact-artifact-icon-container">
-                <ArtifactOnCanvas icon={artifact.icon} />
-                <span className="compact-artifact-crit-value">
-                  {Math.round(artifact.critValue * 10) / 10} cv
-                </span>
-                <span className="compact-artifact-main-stat">
-                  <StatIcon name={artifact.mainStatKey} />
-                  {mainStatValue}
-                  {isPercent(artifact.mainStatKey) ? "%" : ""}
-                </span>
+            return (
+              <div
+                key={artifact._id}
+                className={`flex compact-artifact ${className}`}
+              >
+                <div className="compact-artifact-icon-container">
+                  <ArtifactOnCanvas icon={artifact.icon} />
+                  <span className="compact-artifact-crit-value">
+                    {Math.round(artifact.critValue * 10) / 10} cv
+                  </span>
+                  <span className="compact-artifact-main-stat">
+                    <StatIcon name={artifact.mainStatKey} />
+                    {mainStatValue}
+                    {isPercent(artifact.mainStatKey) ? "%" : ""}
+                  </span>
+                </div>
+                <div className="compact-artifact-subs">
+                  {substatKeys.map((key: any) => {
+                    if (!key) return <></>;
+
+                    const substatValue = getInGameSubstatValue(
+                      artifact.substats[key],
+                      key
+                    );
+                    const isCV = key.includes("Crit");
+
+                    const normSubName = normalizeText(
+                      key.replace("substats", "")
+                    );
+                    const classNames = [
+                      "substat flex nowrap gap-5",
+                      normalizeText(normSubName),
+                      isCV ? "critvalue" : "",
+                    ]
+                      .join(" ")
+                      .trim();
+
+                    const opacity = getSubstatPercentageEfficiency(
+                      normSubName,
+                      artifact.substats[key]
+                    );
+
+                    const rollDots = "•".repeat(summedArtifactRolls[key].count);
+
+                    return (
+                      <div
+                        key={normalizeText(key)}
+                        className={classNames}
+                        style={{ opacity: opacity }}
+                      >
+                        <span className="roll-dots">{rollDots}</span>
+                        <span>
+                          <StatIcon name={key} />
+                        </span>
+                        {substatValue}
+                        {isPercent(key) ? "%" : ""}
+                      </div>
+                    );
+                  })}
+                </div>
+                {/* <Artifact key={art._id} artifact={art} width={200} /> */}
               </div>
-              <div className="compact-artifact-subs">
-                {substatKeys.map((key: any) => {
-                  if (!key) return <></>;
-
-                  const substatValue = getInGameSubstatValue(
-                    artifact.substats[key],
-                    key
-                  );
-                  const isCV = key.includes("Crit");
-
-                  const normSubName = normalizeText(
-                    key.replace("substats", "")
-                  );
-                  const classNames = [
-                    "substat flex nowrap gap-5",
-                    normalizeText(normSubName),
-                    isCV ? "critvalue" : "",
-                  ]
-                    .join(" ")
-                    .trim();
-
-                  const opacity = getSubstatPercentageEfficiency(
-                    normSubName,
-                    artifact.substats[key]
-                  );
-
-                  const rollDots = "•".repeat(summedArtifactRolls[key].count);
-
-                  return (
-                    <div
-                      key={normalizeText(key)}
-                      className={classNames}
-                      style={{ opacity: opacity }}
-                    >
-                      <span className="roll-dots">{rollDots}</span>
-                      <span>
-                        <StatIcon name={key} />
-                      </span>
-                      {substatValue}
-                      {isPercent(key) ? "%" : ""}
-                    </div>
-                  );
-                })}
-              </div>
-              {/* <Artifact key={art._id} artifact={art} width={200} /> */}
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
         <RollList artifacts={reordered} character={row.name} />
       </>
     );
@@ -207,6 +217,20 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
 
   return (
     <div className="flex expanded-row">
+      <div className="character-preview">
+        <div className="character-type-preview">
+          <img className="table-icon" src={row.icon} title={row?.name} />
+          {translate("Lv.")} {row?.propMap?.level?.val || "??"}
+          {" - "}
+          {row.type === "current" ? row.name : row.type}
+        </div>
+        <TalentsDisplay row={row} strikethrough={false} />
+        <div className="character-owner-preview">
+          {row.owner.nickname}
+          <ARBadge adventureRank={row.owner.adventureRank} />
+          <RegionBadge region={row.owner.region} />
+        </div>
+      </div>
       {reordered.length > 0 ? compactList : "no artifacts equipped"}
     </div>
   );

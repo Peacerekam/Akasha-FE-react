@@ -63,6 +63,27 @@ export type FetchParams = {
   fromId?: string;
 };
 
+const fixKeyMap: { [key: string]: string } = {
+  critValue: "Crit Value",
+  critRate: "Crit Rate",
+  critDamage: "Crit DMG",
+  critDMG: "Crit DMG",
+  maxHp: "Max HP",
+  atk: "ATK",
+  def: "DEF",
+  elementalMastery: "Elemental Mastery",
+  energyRecharge: "Energy Recharge",
+  hydroDamageBonus: "Hydro DMG Bonus",
+  geoDamageBonus: "Geo DMG Bonus",
+  pyroDamageBonus: "Pyro DMG Bonus",
+  cryoDamageBonus: "Cryo DMG Bonus",
+  electroDamageBonus: "Electro DMG Bonus",
+  anemoDamageBonus: "Anemo DMG Bonus",
+  dendroDamageBonus: "Dendro DMG Bonus",
+  physicalDamageBonus: "Physical DMG Bonus",
+  healingBonus: "Healing Bonus",
+};
+
 const getCollectionName = (fetchURL: string = "") => {
   if (fetchURL?.startsWith(FETCH_SEARCH_USERS_URL)) {
     return "accounts";
@@ -299,6 +320,15 @@ export const CustomTable: React.FC<CustomTableProps> = ({
         params.sort?.startsWith("substats") // || params.sort === "critValue"
           ? `highlight-${normalizeText(params.sort?.replace("substats", ""))}`
           : "",
+        params.sort?.startsWith("stats") // || params.sort === "critValue"
+          ? `highlight-${normalizeText(
+              params.sort
+                ?.replace("stats", "")
+                .replace("value", "")
+                .replace("max", "")
+                .replace("Damage", "DMG")
+            )}`
+          : "",
       ]
         .join(" ")
         .trim(),
@@ -354,13 +384,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
         .join(" ")
         .trim();
 
-      const fixKey =
-        {
-          critValue: "Crit Value",
-          critRate: "Crit Rate",
-          critDamage: "Crit DMG",
-          critDMG: "Crit DMG",
-        }[displayKey] || displayKey;
+      const fixKey = fixKeyMap[displayKey] || displayKey;
 
       return (
         <div
@@ -395,13 +419,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
         const key = params.sort.replace(".value", "").split(".").pop(); //
         if (!key) return null;
 
-        const fixKey =
-          {
-            critValue: "Crit Value",
-            critRate: "Crit Rate",
-            critDamage: "Crit DMG",
-            critDMG: "Crit DMG",
-          }[key] || key;
+        const fixKey = fixKeyMap[key] || key;
 
         columnName = (
           <>
@@ -439,87 +457,90 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     });
   }, [columns, params.order, params.sort, hideIndexColumn, translate]);
 
-  const renderExpandRow = useCallback((row: any) => {
-    const isProfileRow = !!row.achievements;
+  const renderExpandRow = useCallback(
+    (row: any) => {
+      const isProfileRow = !!row.achievements;
 
-    if (isProfileRow) {
-      return (
-        <>
-          <div className="flex expanded-row">
-            <div style={{ overflow: "hidden" }}>
-              <a
-                className="uid-result"
-                href={`/profile/${row.uid}`}
-                onClick={(event) => {
-                  event.preventDefault();
-                  navigate(`/profile/${row.uid}`);
-                }}
-              >
-                <GenshinUserCard
-                  accountData={{ account: row }}
-                  isAccountOwner
-                  showBackgroundImage
+      if (isProfileRow) {
+        return (
+          <>
+            <div className="flex expanded-row">
+              <div style={{ overflow: "hidden" }}>
+                <a
+                  className="uid-result"
+                  href={`/profile/${row.uid}`}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    navigate(`/profile/${row.uid}`);
+                  }}
+                >
+                  <GenshinUserCard
+                    accountData={{ account: row }}
+                    isAccountOwner
+                    showBackgroundImage
+                  />
+                </a>
+              </div>
+            </div>
+          </>
+        );
+      }
+
+      const isCategoriesRow = !!row.weapons;
+
+      if (isCategoriesRow) {
+        return (
+          <>
+            <div className="flex expanded-row categories-exanded-row clickable-icons">
+              <div style={{ overflow: "hidden" }}>
+                {row.weapons.map((weapon: any) => {
+                  const leaderboardPath = `leaderboards/${
+                    weapon.calculationId
+                  }/${weapon.defaultVariant || ""}`;
+
+                  return (
+                    <a
+                      title={`${weapon?.name} R${weapon.refinement}`}
+                      onClick={(event) => {
+                        event.preventDefault();
+                        navigate(`/${leaderboardPath}`);
+                      }}
+                      href={`/${leaderboardPath}`}
+                    >
+                      <div className="table-icon-text-pair">
+                        <WeaponMiniDisplay
+                          icon={weapon.icon}
+                          refinement={weapon.refinement}
+                        />
+                        {translate(weapon.name)}
+                      </div>
+                    </a>
+                  );
+                })}
+              </div>
+
+              <div>
+                <TeammatesCompact
+                  teammates={row.weapons[0].teammates}
+                  scale={3}
                 />
-              </a>
-            </div>
-          </div>
-        </>
-      );
-    }
-
-    const isCategoriesRow = !!row.weapons;
-
-    if (isCategoriesRow) {
-      return (
-        <>
-          <div className="flex expanded-row categories-exanded-row clickable-icons">
-            <div style={{ overflow: "hidden" }}>
-              {row.weapons.map((weapon: any) => {
-                const leaderboardPath = `leaderboards/${weapon.calculationId}/${
-                  weapon.defaultVariant || ""
-                }`;
-
-                return (
-                  <a
-                    title={`${weapon?.name} R${weapon.refinement}`}
-                    onClick={(event) => {
-                      event.preventDefault();
-                      navigate(`/${leaderboardPath}`);
-                    }}
-                    href={`/${leaderboardPath}`}
-                  >
-                    <div className="table-icon-text-pair">
-                      <WeaponMiniDisplay
-                        icon={weapon.icon}
-                        refinement={weapon.refinement}
-                      />
-                      {translate(weapon.name)}
-                    </div>
-                  </a>
-                );
-              })}
-            </div>
-
-            <div>
-              <TeammatesCompact
-                teammates={row.weapons[0].teammates}
-                scale={3}
-              />
-            </div>
-            {/* <div style={{ overflow: "hidden" }}>
+              </div>
+              {/* <div style={{ overflow: "hidden" }}>
               show top 1 build for each category?
             </div> */}
-          </div>
+            </div>
+          </>
+        );
+      }
+
+      return (
+        <>
+          <ExpandedRowBuilds row={row} isProfile={!!fetchParams.uid} />
         </>
       );
-    }
-
-    return (
-      <>
-        <ExpandedRowBuilds row={row} isProfile={!!fetchParams.uid} />
-      </>
-    );
-  }, [translate]);
+    },
+    [translate]
+  );
 
   const shouldHighlightRows = useMemo(
     () =>
@@ -621,7 +642,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     // calculationColumn,
     columns.length,
     hideIndexColumn,
-    translate
+    translate,
   ]);
 
   const noDataRow = useMemo(

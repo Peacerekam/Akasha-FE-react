@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { StatIcon } from "../StatIcon";
 import "./style.scss";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import { getRelevantDmgBonuses } from "../../utils/helpers";
 
 type StatListProps = {
   row: any;
@@ -84,64 +85,7 @@ export const StatListCard: React.FC<StatListProps> = ({ row }) => {
   };
 
   const displayDamageValues = () => {
-    const {
-      pyroDMG,
-      hydroDMG,
-      cryoDMG,
-      dendroDMG,
-      electroDMG,
-      anemoDMG,
-      geoDMG,
-      physicalDMG,
-    } = stats;
-
-    const dmgStats: any[] = [
-      {
-        name: "Pyro DMG Bonus",
-        value: pyroDMG,
-      },
-      {
-        name: "Electro DMG Bonus",
-        value: electroDMG,
-      },
-      {
-        name: "Cryo DMG Bonus",
-        value: cryoDMG,
-      },
-      {
-        name: "Geo DMG Bonus",
-        value: geoDMG,
-      },
-      {
-        name: "Dendro DMG Bonus",
-        value: dendroDMG,
-      },
-      {
-        name: "Anemo DMG Bonus",
-        value: anemoDMG,
-      },
-      {
-        name: "Hydro DMG Bonus",
-        value: hydroDMG,
-      },
-      {
-        name: "Physical DMG Bonus",
-        value: physicalDMG,
-      },
-    ];
-
-    const sorted = dmgStats
-      .sort((a, b) => {
-        const numA = +(a.value || 0);
-        const numB = +(b.value || 0);
-        return numA > numB ? -1 : 1;
-      })
-      .slice(0, 5);
-    const lowestDmg = sorted.length > 1 ? +sorted[sorted.length - 1].value : 0;
-
-    const relevantDamageTypes = sorted.filter(
-      (a: any) => +a.value !== lowestDmg && +a.value !== 0 && !isNaN(a.value)
-    );
+    const relevantDamageTypes = getRelevantDmgBonuses(row)
 
     return relevantDamageTypes.map((dmgStat: any) => (
       <div className="table-stat-row" key={dmgStat.name}>

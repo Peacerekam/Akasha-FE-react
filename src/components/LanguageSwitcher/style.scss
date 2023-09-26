@@ -1,24 +1,45 @@
+@keyframes languageSlide {
+  0% {
+    max-height: 0;
+  }
+  100% {
+    max-height: 1000px;
+  }
+}
+
 .language-switcher {
   position: relative;
 
-  &:focus,
-  &:focus-within {
-    .language-dropdown {
-      display: block;
+  @media (max-width: 1000px) {
+    .language-dropdown.language-dropdown {
+      top: 0;
+      position: relative;
+      display: grid;
+      box-shadow: none;
+      overflow: hidden;
+      animation: 0.5s languageSlide ease-in-out forwards;
+      > div {
+        text-align: center;
+        &:not(:last-child)::after {
+          width: 80%;
+          left: 10%;
+        }
+      }
     }
   }
 
   .language-dropdown {
-    display: none;
     position: absolute;
     z-index: 999999;
     background-color: #395b64;
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.24);
     top: 64px;
+    
     > div {
+      cursor: pointer;
       padding: 12px 20px;
       position: relative;
-      
+
       &:not(:last-child)::after {
         content: "";
         position: absolute;
@@ -33,7 +54,7 @@
       }
 
       &.current-langauge {
-        background-color: #426a74;  
+        background-color: #426a74;
         box-shadow: #e7f6f2 2px 0 0 inset !important;
         &:hover {
           background-color: lighten(#426a74, 2) !important;
