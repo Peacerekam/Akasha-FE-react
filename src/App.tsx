@@ -32,6 +32,7 @@ import {
 } from "./pages";
 import { PrivacyPolicyPage } from "./pages/PrivacyPolicy";
 import { TranslationContextProvider } from "./context/TranslationProvider/TranslationProviderContext";
+import { ContentWrapper } from "./components/ContentWrapper";
 
 // @TODO: env variables later on...
 const urls = {
@@ -111,9 +112,7 @@ const App = () => {
           </div>
           <NavbarTabs />
 
-          <div
-            className={`content-wrapper ${isProduction ? "" : "dev-indicator"}`}
-          >
+          <ContentWrapper>
             <HoverElementContextProvider>
               <Routes>
                 <Route
@@ -124,7 +123,7 @@ const App = () => {
                 />
               </Routes>
             </HoverElementContextProvider>
-          </div>
+          </ContentWrapper>
 
           <Footer />
         </BrowserRouter>
@@ -159,11 +158,7 @@ const App = () => {
                     />
                   </div>
 
-                  <div
-                    className={`content-wrapper ${
-                      isProduction ? "" : "dev-indicator"
-                    }`}
-                  >
+                  <ContentWrapper>
                     <HoverElementContextProvider>
                       <Routes>
                         {/* @TODO: later use dashboard page instead */}
@@ -217,8 +212,7 @@ const App = () => {
                       />
                       <AdsComponentManager adType="RichMedia" />
                     </div>
-
-                  </div>
+                  </ContentWrapper>
 
                   <Footer />
                 </TranslationContextProvider>

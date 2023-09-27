@@ -133,19 +133,28 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const { translate } = useContext(TranslationContext);
-  // const { adProvider } = useContext(AdProviderContext);
+  const { contentWidth } = useContext(AdProviderContext);
 
   const calculations = _calculations.calculations;
   const chartsData = _calculations.chartsData;
 
   // const hardcodedScale = adProvider === "playwire" ? 0.85 : 1;
-  const hardcodedScale = 0.87; // same as in css
+  // const hardcodedScale = 0.87; // same as in css
+  const hardcodedScale = +Math.max(
+    0.87,
+    contentWidth ? contentWidth / 1280 : 1
+  ).toFixed(3);
   const canvasWidth = 500 * hardcodedScale;
   const canvasHeight = 485 * hardcodedScale;
   const canvasPixelDensity = 2;
 
   const location = useLocation();
   const DEBUG_MODE = location.search?.includes("debug");
+
+  useEffect(() => {
+    // (document.body as any).style = `--hardcoded-card-scale: ${hardcodedScale}px`;
+    // console.log('\n\n\n\n\n\n\n\n', hardcodedScale)
+  }, [contentWidth]);
 
   // load from local storage
   useEffect(() => {
@@ -639,7 +648,13 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         })}
       </div>
     );
-  }, [privacyFlag, chartsData, filteredLeaderboards, generating, translate]);
+  }, [
+    privacyFlag,
+    chartsData,
+    filteredLeaderboards,
+    generating,
+    translate,
+  ]);
 
   const reorderedArtifacts = useMemo(
     () => getArtifactsInOrder(artifacts),
@@ -678,7 +693,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             >
               <div className="compact-artifact-bg" />
               <div className="compact-artifact-icon-container">
-                <ArtifactOnCanvas icon={artifact.icon} hardcodedScale={hardcodedScale} />
+                <ArtifactOnCanvas
+                  icon={artifact.icon}
+                  hardcodedScale={hardcodedScale}
+                />
                 <span className="compact-artifact-crit-value">
                   <span>{Math.round(artifact.critValue * 10) / 10} cv</span>
                 </span>
@@ -770,14 +788,14 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
       // get the scale
       // it is the min of the 2 ratios
-      const scaleFactor = Math.max(
+      const canvasScale = Math.max(
         _canvasWidth / imageWidth,
         _canvasHeight / imageHeight
       );
 
       // Finding the new width and height based on the scale factor
-      const newWidth = imageWidth * scaleFactor;
-      const newHeight = imageHeight * scaleFactor;
+      const newWidth = imageWidth * canvasScale;
+      const newHeight = imageHeight * canvasScale;
 
       // get canvas context
       const ctx = canvasRef.current.getContext("2d");
@@ -890,6 +908,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       generating,
       isLoadingImage,
       chartsData,
+      hardcodedScale,
     ]
   );
 
@@ -1218,12 +1237,15 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   //   });
   // }, [filteredLeaderboards, calcOptions]);
 
-  const windowSizeT = 1100;
+  const windowSizeT = 1280 - 10;
   const maxCardWidth = Math.min(windowSizeT, width);
   const scaleFactor = Math.max(0.75, +(maxCardWidth / windowSizeT));
   // const formattedSF = (adProvider === "playwire" ? Math.min(0.88, scaleFactor) : scaleFactor).toFixed(3)
   const formattedSF = scaleFactor.toFixed(3);
-  const wrapperStyle = { "--scale-factor": formattedSF } as React.CSSProperties;
+  const wrapperStyle = {
+    "--hardcoded-card-scale": hardcodedScale,
+    "--scale-factor": formattedSF,
+  } as React.CSSProperties;
 
   const handleGenerateAndDownload = async (
     mode: "download" | "open",

@@ -633,7 +633,10 @@ export const ProfilePage: React.FC = () => {
               onFinish={handleTimerFinish}
             />
           ) : (
-            <LastUpdated label="last update" lastProfileUpdate={responseData.account?.lastProfileUpdate} />
+            <LastUpdated
+              label="last update"
+              lastProfileUpdate={responseData.account?.lastProfileUpdate}
+            />
           )}
           <div
             title="Refresh builds"
@@ -898,6 +901,7 @@ export const ProfilePage: React.FC = () => {
             </div>
             {responseData.account && (
               <CustomTable
+                growContentOnExpandedRow
                 fetchURL={FETCH_BUILDS_URL}
                 columns={BUILDS_COLUMNS}
                 filtersURL={`${FETCH_CHARACTER_FILTERS_URL}?type=profile`}

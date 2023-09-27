@@ -1,5 +1,6 @@
 $character-card-width: 1200px;
-$hardcoded-scale: 0.87;
+$hardcoded-scale: 1;
+// $hardcoded-scale: 0.87;
 
 .character-card-container {
   font-size: 16px * $hardcoded-scale;

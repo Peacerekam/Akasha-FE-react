@@ -36,6 +36,7 @@ import {
 import "./style.scss";
 import { ExpandedRowBuilds } from "../ExpandedRowBuilds";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 
 type CustomTableProps = {
   columns: any[];
@@ -50,6 +51,7 @@ type CustomTableProps = {
   projectParamsToPath?: boolean;
   ignoreEmptyUidsArray?: boolean;
   alwaysShowIndexColumn?: boolean;
+  growContentOnExpandedRow?: boolean;
 };
 
 export type FetchParams = {
@@ -112,6 +114,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   projectParamsToPath = false,
   ignoreEmptyUidsArray = false,
   alwaysShowIndexColumn = false,
+  growContentOnExpandedRow = false,
 }) => {
   const [isFetchingPagination, setIsFetchingPagination] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -122,6 +125,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   const [hideIndexColumn, setHideIndexColumn] = useState(false);
   const [unknownPage, setUnknownPage] = useState(false);
   const { updateTableHoverElement } = useContext(HoverElementContext);
+  const { adProvider, setContentWidth } = useContext(AdProviderContext);
   const { translate } = useContext(TranslationContext);
   const location = useLocation();
 
@@ -285,7 +289,21 @@ export const CustomTable: React.FC<CustomTableProps> = ({
       }
       return newRows;
     });
-  }, [JSON.stringify(expandedRows)]);
+
+    const isFlexibleContent =
+      growContentOnExpandedRow && adProvider === "playwire";
+
+    if (isFlexibleContent) {
+      const newContentWidth = expandedRows.length > 0 ? 1280 : 1100;
+      setContentWidth(newContentWidth);
+    }
+
+    return () => {
+      if (isFlexibleContent) {
+        setContentWidth(1100);
+      }
+    };
+  }, [JSON.stringify(expandedRows), growContentOnExpandedRow, adProvider]);
 
   const handleFetch = async (abortController: AbortController) => {
     if (!fetchURL) return;
@@ -557,7 +575,6 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
     return rows.map((row) => {
       const { isExpandRow } = row;
-
       if (isExpandRow) {
         return (
           <tr key={`${row._id}-expanded`} className="expanded-tr">

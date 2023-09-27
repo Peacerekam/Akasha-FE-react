@@ -14,6 +14,8 @@ type AdProviderContextType = {
   disableAdsForThisPage: () => void;
   isMobile: boolean;
   screenWidth: number;
+  contentWidth: number;
+  setContentWidth: (_: number) => void;
 };
 
 const defaultValue = {
@@ -24,6 +26,8 @@ const defaultValue = {
   disableAdsForThisPage: () => {},
   isMobile: false,
   screenWidth: 1024,
+  contentWidth: 1100,
+  setContentWidth: () => {},
 } as AdProviderContextType;
 
 const AdProviderContext = createContext(defaultValue);
@@ -37,6 +41,7 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
   const [adsDisabled, setAdsDisabled] = useState(false);
   const [adProvider, setAdProvider] = useState<AdProviders>(null);
   const [width, setWidth] = useState<number>(window.innerWidth);
+  const [contentWidth, setContentWidth] = useState<number>(1100);
   const [reloadAds, setReloadAds] = useState(false);
   const location = useLocation();
 
@@ -91,15 +96,17 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
 
     if (location.search.includes("playwire-test")) {
       setAdProvider("playwire");
+      setContentWidth(1100);
     } else {
       setAdProvider("venatus");
+      setContentWidth(1280);
     }
   }, [location.search]);
 
   useEffect(() => {
     const _body = document.querySelector("body");
     if (!adProvider) return;
-    
+
     _body?.classList.add(`ad-provider-${adProvider}`);
   }, [adProvider]);
 
@@ -118,6 +125,8 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
     disableAdsForThisPage,
     screenWidth: width,
     isMobile,
+    contentWidth,
+    setContentWidth,
   };
 
   return (
