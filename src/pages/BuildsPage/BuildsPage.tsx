@@ -138,6 +138,7 @@ export const BuildsPage: React.FC = () => {
       },
       {
         name: "Sets",
+        width: "80px",
         sortable: false,
         // sortField: "artifactSetsFlat",
         cell: (row) => {

@@ -317,7 +317,7 @@ export const ProfilePage: React.FC = () => {
       },
       {
         name: adProvider === "playwire" ? "" : "Constellation",
-        width: adProvider === "playwire" ? "" : "100px",
+        width: adProvider === "playwire" ? "70px" : "100px",
         sortable: true,
         sortField: "constellation",
         cell: (row) => {
@@ -334,7 +334,7 @@ export const ProfilePage: React.FC = () => {
       },
       {
         name: adProvider === "playwire" ? "" : "Weapon",
-        width: adProvider === "playwire" ? "" : "60px",
+        width: "60px",
         sortable: true,
         sortField: "weapon.name",
         cell: (row) => {
@@ -348,6 +348,7 @@ export const ProfilePage: React.FC = () => {
       },
       {
         name: "Sets",
+        width: "90px",
         sortable: false,
         // sortField: "artifactSetsFlat",
         cell: (row) => {
@@ -356,6 +357,7 @@ export const ProfilePage: React.FC = () => {
       },
       {
         name: "Crit Ratio",
+        width: adProvider === "playwire" ? "150px" : "170px",
         sortable: true,
         sortFields: [
           "critValue",
