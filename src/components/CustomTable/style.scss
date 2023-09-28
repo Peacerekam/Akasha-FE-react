@@ -89,6 +89,13 @@ $characterStats: "hp", "atk", "def", "hydrodmgbonus", "geodmgbonus",
   // filter: drop-shadow(0px 0px 3px rgba(black, 0.5));
 }
 
+.default-pfp-icon {
+  opacity: 0.33;
+  padding: 2.5px;
+  width: 20px;
+  height: 20px;
+}
+
 .fade-in {
   animation: fadeIn 0.3s ease-in-out;
 }

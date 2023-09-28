@@ -30,6 +30,8 @@ import { BuildsColumns } from "../BuildsPage";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
 import { AdsComponentManager } from "../../components/AdsComponentManager";
 import "./style.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 export const AccountsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -78,11 +80,19 @@ export const AccountsPage: React.FC = () => {
               {/* {isEnkaProfile ? <EnkaBadge /> : ""} */}
 
               <div className="table-icon-text-pair">
-                <img
-                  className="table-icon"
-                  src={row.profilePictureLink}
-                  title={row.playerInfo.nickname}
-                />
+                {row.profilePictureLink ? (
+                  <img
+                    className="table-icon"
+                    src={row.profilePictureLink}
+                    title={row.playerInfo.nickname}
+                  />
+                ) : (
+                  <FontAwesomeIcon
+                    className="default-pfp-icon"
+                    icon={faUser}
+                    size="1x"
+                  />
+                )}
               </div>
 
               {row.playerInfo.nickname}

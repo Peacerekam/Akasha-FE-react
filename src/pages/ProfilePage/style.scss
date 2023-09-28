@@ -31,7 +31,8 @@
 
     .profile-highlights {
       // min-width: min(100%, 370px);
-      min-width: min(100%, 500px);
+      // min-width: min(100%, 500px);
+      min-width: min(100%, 600px);
     }
   }
   .vm-container {
@@ -40,6 +41,10 @@
       display: contents;
       > * > * {
         margin-left: 10px;
+        @media (max-width: 800px) {
+          margin-left: 0;
+          margin-bottom: 10px;
+        }
       }
     }
   }

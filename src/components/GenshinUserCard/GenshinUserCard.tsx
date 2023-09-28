@@ -87,7 +87,6 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
           />
         ) : (
           <FontAwesomeIcon
-            style={{ opacity: 0.33 }}
             className="default-picture"
             icon={faUser}
             size="1x"

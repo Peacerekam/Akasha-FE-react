@@ -21,7 +21,6 @@ const anemoRvList = {
 
 const pyroRvList = {
   Klee: [CRate, CDMG, ATK_, EM],
-  Yelan: [CRate, CDMG, HP_, ER],
   Diluc: [CRate, CDMG, ATK_, EM],
   Dehya: [CRate, CDMG, ATK_, ER, HP_],
   Bennett: [ER, HP_, CRate, CDMG],
@@ -39,6 +38,8 @@ const hydroRvList = {
   Tartaglia: [CRate, CDMG, ATK_, EM],
   "Sangonomiya Kokomi": [HP, HP_, ER],
   "Kamisato Ayato": [CRate, CDMG, ER, ATK_],
+  Yelan: [CRate, CDMG, HP_, ER],
+  Neuvillette: [CRate, CDMG, HP_, ER],
 };
 
 const cryoRvList = {
@@ -67,12 +68,12 @@ const electroRvList = {
   "Yae Miko": [ER, ATK_, CRate, CDMG, EM],
   "Raiden Shogun": [CRate, CDMG, ATK_, ER],
   "Kuki Shinobu": [CRate, CDMG, ATK_, EM, ER],
-  Cyno: [CRate, CDMG, ATK_, EM, ER]
+  Cyno: [CRate, CDMG, ATK_, EM, ER],
 };
 
 const dendroRvList = {
   Nahida: [CRate, CDMG, ATK_, EM],
-  Alhaitham: [CRate, CDMG, ATK_, EM, ER]
+  Alhaitham: [CRate, CDMG, ATK_, EM, ER],
 };
 
 const defaultRvFilter = [CRate, CDMG];

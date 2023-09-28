@@ -8,10 +8,6 @@
   position: relative;
   box-shadow: rgba(0, 0, 0, 0.24) 0px -3px 8px, rgba(0, 0, 0, 0.24) 0px 3px 8px;
 
-  @media (max-width: 800px) {
-    padding-top: 40px;
-  }
-
   .footer-main {
     padding-top: 20px;
     padding-bottom: 20px;
@@ -28,6 +24,7 @@
       gap: 30px;
       flex-direction: column;
       padding-bottom: 60px;
+      padding-top: 40px;
     }
 
     > span,
