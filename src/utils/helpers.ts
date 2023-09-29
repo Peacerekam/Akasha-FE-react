@@ -58,7 +58,25 @@ export const ascensionToLevel = (ascension = 0) => {
   );
 };
 
-export const getArtifactsInOrder = (artifacts: { equipType: string }[]) => {
+const dummyArtifact = {
+  name: null,
+  setName: null,
+  stars: null,
+  mainStatKey: null,
+  mainStatValue: null,
+  equipType: null,
+  level: null,
+  critValue: null,
+  icon: null,
+  substats: {},
+  substatsIdList: [],
+  _id: null,
+};
+
+export const getArtifactsInOrder = (
+  artifacts: { equipType: string }[],
+  fillEmpty?: boolean
+) => {
   if (!artifacts) return [];
 
   const reordered: any[] = [];
@@ -70,14 +88,22 @@ export const getArtifactsInOrder = (artifacts: { equipType: string }[]) => {
     "EQUIP_DRESS", // circlet
   ];
 
+  const artifactsMapped = Object.values(artifacts).reduce(
+    (acc: any, val: any) => {
+      acc[val.equipType] = val;
+      return acc;
+    },
+    {}
+  );
+
   customOrder.forEach((key) => {
-    Object.values(artifacts).forEach((artifact) => {
-      if (artifact.equipType !== key) return;
-      const desiredArtifact = Object.values(artifacts).find(
-        (a) => a.equipType === key
-      );
-      if (desiredArtifact) reordered.push(desiredArtifact);
-    });
+    const desiredArtifact = artifactsMapped[key];
+
+    if (desiredArtifact) {
+      reordered.push(desiredArtifact);
+    } else if (fillEmpty) {
+      reordered.push(dummyArtifact);
+    }
   });
 
   return reordered;

@@ -645,6 +645,7 @@ $hardcoded-scale: 1;
             color: rgb(255, 185, 56); // orange-ish
           }
         }
+
         > span {
           height: 39px * $hardcoded-scale;
           position: relative;
@@ -652,6 +653,13 @@ $hardcoded-scale: 1;
           border: 1px * $hardcoded-scale solid rgba(white, 0.3);
           border-radius: 100px * $hardcoded-scale;
         }
+        .talent-icon-placeholder {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 20px;
+        }
+        .talent-icon-placeholder,
         img:not(.crown-of-insight) {
           background-color: rgba(rgb(34, 34, 34), 0.7); // @TODO: ..
           border-radius: 100%;

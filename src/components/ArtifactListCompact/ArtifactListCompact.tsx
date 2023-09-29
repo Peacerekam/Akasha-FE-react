@@ -69,9 +69,9 @@ export const ArtifactOnCanvas: React.FC<{
 
       // Create gradient
       const gradientMask = ctx!.createLinearGradient(
-        canvasWidth - (100 * hardcodedScale),
+        canvasWidth - 100 * hardcodedScale,
         0,
-        canvasWidth - (40 * hardcodedScale),
+        canvasWidth - 40 * hardcodedScale,
         0
       );
       gradientMask.addColorStop(0, "black");
@@ -115,7 +115,7 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
   const { translate } = useContext(TranslationContext);
 
   const reordered = useMemo(
-    () => getArtifactsInOrder(artifacts),
+    () => getArtifactsInOrder(artifacts, true),
     [JSON.stringify(artifacts)]
   );
 
@@ -150,17 +150,21 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
                 key={artifact._id}
                 className={`flex compact-artifact ${className}`}
               >
-                <div className="compact-artifact-icon-container">
-                  <ArtifactOnCanvas icon={artifact.icon} />
-                  <span className="compact-artifact-crit-value">
-                    {Math.round(artifact.critValue * 10) / 10} cv
-                  </span>
-                  <span className="compact-artifact-main-stat">
-                    <StatIcon name={artifact.mainStatKey} />
-                    {mainStatValue}
-                    {isPercent(artifact.mainStatKey) ? "%" : ""}
-                  </span>
-                </div>
+                {artifact.icon !== null ? (
+                  <div className="compact-artifact-icon-container">
+                    <ArtifactOnCanvas icon={artifact.icon} />
+                    <span className="compact-artifact-crit-value">
+                      {Math.round(artifact.critValue * 10) / 10} cv
+                    </span>
+                    <span className="compact-artifact-main-stat">
+                      <StatIcon name={artifact.mainStatKey} />
+                      {mainStatValue}
+                      {isPercent(artifact.mainStatKey) ? "%" : ""}
+                    </span>
+                  </div>
+                ) : (
+                  <div className="no-artifact">×</div>
+                )}
                 <div className="compact-artifact-subs">
                   {substatKeys.map((key: any) => {
                     if (!key) return <></>;

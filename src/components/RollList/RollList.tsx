@@ -38,17 +38,21 @@ export const RollList: React.FC<RollListProps> = ({ artifacts, character }) => {
     return acc;
   }, {});
 
-  const highestCount = useMemo(
-    () =>
-      Math.max(...Object.values(summedTotalArtifactRolls).map((o) => o.count)),
-    [summedTotalArtifactRolls]
-  );
+  const highestCount = useMemo(() => {
+    const _arr = Object.values(summedTotalArtifactRolls);
+    if (_arr.length === 0) return null;
+    return Math.max(
+      ...Object.values(summedTotalArtifactRolls).map((o) => o.count)
+    );
+  }, [summedTotalArtifactRolls]);
 
   const displayRolls = useMemo(
     () =>
       allSubstatsInOrder
         .filter((key) => Object.keys(summedTotalArtifactRolls).includes(key))
         .map((key) => {
+          if (!highestCount) return null;
+          
           const readableValue = getInGameSubstatValue(
             summedTotalArtifactRolls[key].sum,
             key
@@ -115,12 +119,14 @@ export const RollList: React.FC<RollListProps> = ({ artifacts, character }) => {
     <div className="total-roll-list-wrapper">
       <div className="total-roll-list">
         {displayRolls}
-        <div className="roll-list-member total-roll-rv">
-          <span>
-            <span>RV</span>
-            <span>{getTotalRV()}%</span>
-          </span>
-        </div>
+        {highestCount !== null && (
+          <div className="roll-list-member total-roll-rv">
+            <span>
+              <span>RV</span>
+              <span>{getTotalRV()}%</span>
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );

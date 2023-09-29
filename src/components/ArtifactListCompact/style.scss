@@ -7,6 +7,21 @@
   min-width: 180px;
   flex-wrap: nowrap !important;
 
+  .no-artifact {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    font-size: 75px;
+    top: 10px;
+    position: relative;
+    opacity: 0.33;
+    height: 135px;
+
+    + div {
+      margin-right: 0 !important;
+    }
+  }
+
   .compact-artifact-icon-container {
     width: 100px;
     height: 135px;

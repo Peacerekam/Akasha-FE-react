@@ -165,22 +165,22 @@ $characterStats: "hp", "atk", "def", "hydrodmgbonus", "geodmgbonus",
       gap: 15px;
       font-size: 16px;
       justify-content: center;
-      
-      @at-root .ad-provider-playwire & {
-        > .character-preview {
-          bottom: -5px;
-          position: relative;
-          width: 990px;
-        }
-        > .artifacts-row {
-          transform: scale(0.95);
-        }
-        > .total-roll-list-wrapper {  
-          top: -5px;
-          position: relative;
-          transform: scale(0.95);
-        }
+
+      // @at-root .ad-provider-playwire & {
+      > .character-preview {
+        bottom: -5px;
+        position: relative;
+        width: 990px;
       }
+      > .artifacts-row {
+        transform: scale(0.95);
+      }
+      > .total-roll-list-wrapper {
+        top: -5px;
+        position: relative;
+        transform: scale(0.95);
+      }
+      // }
     }
 
     .categories-exanded-row {
@@ -269,10 +269,10 @@ $characterStats: "hp", "atk", "def", "hydrodmgbonus", "geodmgbonus",
       }
       th,
       td {
-        padding: 0 12px;
-        @at-root .ad-provider-playwire & {
-          padding: 0 10px;
-        }
+        // padding: 0 12px;
+        // @at-root .ad-provider-playwire & {
+        padding: 0 10px;
+        // }
         min-width: 17px;
       }
       td {
@@ -379,7 +379,7 @@ $characterStats: "hp", "atk", "def", "hydrodmgbonus", "geodmgbonus",
     height: 17px;
     display: flex;
     align-items: center;
-    
+
     font-weight: 600;
     text-shadow: 0 0.08em 0.1em black, 0 0.1em 0.3em rgba(0, 0, 0, 0.4);
 

@@ -94,10 +94,12 @@ const TalentDisplay: React.FC<TalentProps> = ({ talent }) => {
           <img src={talent?.icon} />
         </span>
       ) : (
-        <div className="talent-icon-placeholder opacity-5">?</div>
+        <span>
+          <div className="talent-icon-placeholder opacity-5">×</div>
+        </span>
       )}
       <div className={"talent-display-value"}>
-        <span>{talent?.level}</span>
+        <span>{talent?.level || "-"}</span>
         {isCrowned && <img className="crown-of-insight" src={CrownOfInsight} />}
       </div>
     </div>
@@ -648,18 +650,14 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         })}
       </div>
     );
-  }, [
-    privacyFlag,
-    chartsData,
-    filteredLeaderboards,
-    generating,
-    translate,
-  ]);
+  }, [privacyFlag, chartsData, filteredLeaderboards, generating, translate]);
 
   const reorderedArtifacts = useMemo(
-    () => getArtifactsInOrder(artifacts),
+    () => getArtifactsInOrder(artifacts, true),
     [JSON.stringify(artifacts)]
   );
+
+  console.log("reorderedArtifacts", reorderedArtifacts);
 
   const compactList = useMemo(() => {
     return (
@@ -692,22 +690,26 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
               className={`flex compact-artifact ${className}`}
             >
               <div className="compact-artifact-bg" />
-              <div className="compact-artifact-icon-container">
-                <ArtifactOnCanvas
-                  icon={artifact.icon}
-                  hardcodedScale={hardcodedScale}
-                />
-                <span className="compact-artifact-crit-value">
-                  <span>{Math.round(artifact.critValue * 10) / 10} cv</span>
-                </span>
-                <span className="compact-artifact-main-stat">
-                  <StatIcon name={artifact.mainStatKey} />
-                  <span>
-                    {mainStatValue}
-                    {isPercent(artifact.mainStatKey) ? "%" : ""}
+              {artifact.icon !== null ? (
+                <div className="compact-artifact-icon-container">
+                  <ArtifactOnCanvas
+                    icon={artifact.icon}
+                    hardcodedScale={hardcodedScale}
+                  />
+                  <span className="compact-artifact-crit-value">
+                    <span>{Math.round(artifact.critValue * 10) / 10} cv</span>
                   </span>
-                </span>
-              </div>
+                  <span className="compact-artifact-main-stat">
+                    <StatIcon name={artifact.mainStatKey} />
+                    <span>
+                      {mainStatValue}
+                      {isPercent(artifact.mainStatKey) ? "%" : ""}
+                    </span>
+                  </span>
+                </div>
+              ) : (
+                <div className="no-artifact">×</div>
+              )}
               <div className="compact-artifact-subs">
                 {substatKeys.map((key: any) => {
                   if (!key) return <></>;
@@ -957,6 +959,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     [row, chartsData, translate]
   );
 
+  const noElementColor = "#ffffff";
+
   const cardStyle = {
     // "--hue-rotate": `${
     //   ELEMENT_TO_HUE[chartsData?.characterMetadata?.element]
@@ -965,9 +969,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     "--character-namecard-url": !namecardBg
       ? `url(/elementalBackgrounds/${chartsData?.characterMetadata?.element}-bg.png)`
       : `url(${toEnkaUrl(chartsData?.characterMetadata?.namecard)})`,
-    "--element-color": ELEMENT_TO_COLOR[chartsData?.characterMetadata?.element],
+    "--element-color":
+      ELEMENT_TO_COLOR[chartsData?.characterMetadata?.element] ||
+      noElementColor,
     "--element-color-2": `${
-      ELEMENT_TO_COLOR[chartsData?.characterMetadata?.element]
+      ELEMENT_TO_COLOR[chartsData?.characterMetadata?.element] || noElementColor
     }70`,
   } as React.CSSProperties;
 

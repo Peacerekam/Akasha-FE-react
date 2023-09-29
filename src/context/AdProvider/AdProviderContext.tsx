@@ -99,7 +99,8 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
       setContentWidth(1100);
     } else {
       setAdProvider("venatus");
-      setContentWidth(1280);
+      setContentWidth(1100); // embrace new site width early
+      // setContentWidth(1280);
     }
   }, [location.search]);
 

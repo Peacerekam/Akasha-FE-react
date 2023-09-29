@@ -12,11 +12,11 @@
   // background-repeat: no-repeat;
   overflow: hidden;
   min-height: 100px;
-  width: min(450px, calc(100% - 15px));
-  
-  @at-root .ad-provider-playwire & {
-    width: min(350px, calc(100% - 15px));
-  }
+  // width: min(450px, calc(100% - 15px));
+
+  // @at-root .ad-provider-playwire & {
+  width: min(350px, calc(100% - 15px));
+  // }
 
   flex-shrink: 0;
   // flex-grow: 1;

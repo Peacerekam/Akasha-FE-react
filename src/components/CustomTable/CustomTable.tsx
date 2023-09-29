@@ -290,8 +290,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
       return newRows;
     });
 
-    const isFlexibleContent =
-      growContentOnExpandedRow && adProvider === "playwire";
+    const isFlexibleContent = growContentOnExpandedRow; // && adProvider === "playwire";
 
     if (isFlexibleContent) {
       const newContentWidth = expandedRows.length > 0 ? 1280 : 1100;

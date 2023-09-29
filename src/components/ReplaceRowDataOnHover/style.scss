@@ -1,20 +1,20 @@
 tr {
   .show-on-hover {
     display: none;
-    max-width: 170px;
-    @at-root .ad-provider-playwire & {
+    // max-width: 170px;
+    // @at-root .ad-provider-playwire & {
       max-width: 145px;
-    }
+    // }
   }
   &:hover .show-on-hover {
     display: inline-block;
   }
   .hide-on-hover {
     display: inline-block;
-    max-width: 170px;
-    @at-root .ad-provider-playwire & {
+    // max-width: 170px;
+    // @at-root .ad-provider-playwire & {
       max-width: 145px;
-    }
+    // }
   }
   &:hover .hide-on-hover {
     display: none;
