@@ -207,6 +207,11 @@
     .active-tab {
       box-shadow: #e7f6f2 2px 0 0 inset !important;
     }
+    
+    .navbar-tab:hover {
+      background-color: #426a74;
+      transition: .2s !important;
+    }
 
     a {
       height: 42px;  

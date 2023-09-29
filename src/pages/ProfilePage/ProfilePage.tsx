@@ -121,7 +121,7 @@ export const ProfilePage: React.FC = () => {
         handleAddNewTab(data.data);
       }
 
-      if (!data?.data?.account?.profilePictureLink) {
+      if (!data?.data?.account?.playerInfo?.nickname) {
         await handleRefreshData();
       }
 
