@@ -126,12 +126,12 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
             return thisOpt;
           })
         : [],
-    [priorityData]
+    [priorityData, translate]
   );
 
   const selectedOption = useMemo(() => {
     return calcOptions.find((d) => d.value === selectedCalcId);
-  }, [selectedCalcId, priorityData, selectedCalcId]);
+  }, [selectedCalcId, priorityData, selectedCalcId, translate]);
 
   const calcsSelection = useMemo(() => {
     return (

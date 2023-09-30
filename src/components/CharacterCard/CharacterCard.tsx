@@ -657,8 +657,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     [JSON.stringify(artifacts)]
   );
 
-  console.log("reorderedArtifacts", reorderedArtifacts);
-
   const compactList = useMemo(() => {
     return (
       <>
@@ -1057,7 +1055,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
       return thisOpt;
     },
-    [calculations]
+    [calculations, translate]
   );
 
   const calcOptions = useMemo(
@@ -1068,7 +1066,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             return a.top > b.top ? 1 : -1;
           })
         : [],
-    [calculations]
+    [calculations, translate]
   );
 
   const hasLeaderboardsColumn =

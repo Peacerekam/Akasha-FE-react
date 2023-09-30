@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { StatIcon } from "../StatIcon";
 import "./style.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -16,6 +16,7 @@ import ElectroBg from "../../assets/images/teammates/electro-team-bg.png";
 import GeoBg from "../../assets/images/teammates/geo-team-bg.png";
 import HydroBg from "../../assets/images/teammates/hydro-team-bg.png";
 import PyroBg from "../../assets/images/teammates/pyro-team-bg.png";
+import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 
 export type Elements =
   | "Cryo"
@@ -49,26 +50,6 @@ type TeammatesCompactProps = {
   scale?: number;
   coloredBackground?: boolean;
   simplify?: boolean;
-};
-
-const getCharacterTitle = (teammate: CalculationTeammate) => {
-  const constellation =
-    (teammate?.character?.constellation || -1) >= 0
-      ? ` C${teammate?.character?.constellation}`
-      : "";
-
-  const weaponName = teammate.weapon?.name ? ` - ${teammate.weapon?.name}` : "";
-
-  const weaponRefinement =
-    (teammate?.weapon?.refinement || 0) >= 1
-      ? ` R${teammate?.weapon?.refinement}`
-      : "";
-
-  const artifactSet = teammate.character?.artifactSet
-    ? ` - ${teammate.character?.artifactSet}`
-    : "";
-
-  return `${teammate.character?.name}${constellation}${weaponName}${weaponRefinement}${artifactSet}`;
 };
 
 const getBgColor = (teammate: CalculationTeammate) => {
@@ -144,7 +125,36 @@ export const TeammatesCompact: React.FC<TeammatesCompactProps> = ({
   coloredBackground = true,
   simplify = false,
 }) => {
+  const { translate } = useContext(TranslationContext);
+
   if (!teammates) return null;
+
+  const getCharacterTitle = (teammate: CalculationTeammate) => {
+    const translatedCharName = translate(teammate.character?.name || "");
+    const translatedWeaponName = translate(teammate.weapon?.name || "");
+
+    const rawSetNum = teammate.character?.artifactSet?.slice(0, 3);
+    const rawSetName = teammate.character?.artifactSet?.slice(3);
+    const translatedArtifactSet = translate(rawSetName || "");
+
+    const constellation =
+      (teammate?.character?.constellation || -1) >= 0
+        ? ` C${teammate?.character?.constellation}`
+        : "";
+
+    const weaponName = translatedWeaponName ? ` - ${translatedWeaponName}` : "";
+
+    const weaponRefinement =
+      (teammate?.weapon?.refinement || 0) >= 1
+        ? ` R${teammate?.weapon?.refinement}`
+        : "";
+
+    const artifactSet = translatedArtifactSet
+      ? ` - ${rawSetNum}${translatedArtifactSet}`
+      : "";
+
+    return `${translatedCharName}${constellation}${weaponName}${weaponRefinement}${artifactSet}`;
+  };
 
   const noTeammateIcon = () => {
     // return <></>
