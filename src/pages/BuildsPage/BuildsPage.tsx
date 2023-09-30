@@ -108,7 +108,8 @@ export const BuildsPage: React.FC = () => {
         },
       },
       {
-        name: adProvider === "playwire" ? "" : "Constellation",
+        // name: adProvider === "playwire" ? "" : "Constellation",
+        name: "",
         sortable: false,
         sortField: "constellation",
         cell: (row) => {
@@ -123,7 +124,8 @@ export const BuildsPage: React.FC = () => {
         },
       },
       {
-        name: adProvider === "playwire" ? "" : "Weapon",
+        // name: adProvider === "playwire" ? "" : "Weapon",
+        name: "",
         // grow: 0,
         width: "60px",
         sortable: false,
