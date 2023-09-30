@@ -318,7 +318,7 @@ export const ProfilePage: React.FC = () => {
       {
         // name: adProvider === "playwire" ? "" : "Constellation",
         // width: adProvider === "playwire" ? "70px" : "100px",
-        name: "",
+        name: "Constellation",
         width: "70px",
         sortable: true,
         sortField: "constellation",
@@ -336,7 +336,7 @@ export const ProfilePage: React.FC = () => {
       },
       {
         // name: adProvider === "playwire" ? "" : "Weapon",
-        name: "",
+        name: "Weapon",
         width: "60px",
         sortable: true,
         sortField: "weapon.name",
