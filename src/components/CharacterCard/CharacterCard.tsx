@@ -958,21 +958,22 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   );
 
   const noElementColor = "#ffffff";
+  const elementKey = chartsData?.characterMetadata?.element;
+  const elementalColor = ELEMENT_TO_COLOR[elementKey];
+  const namecardBgUrl = toEnkaUrl(chartsData?.characterMetadata?.namecard);
+  const elementalBg = `url(/elementalBackgrounds/${chartsData?.characterMetadata?.element}-bg.jpg)`;
+  // const elementalBg = `url(/elementalBackgrounds/${chartsData?.characterMetadata?.element}-bg.png)`
 
   const cardStyle = {
     // "--hue-rotate": `${
     //   ELEMENT_TO_HUE[chartsData?.characterMetadata?.element]
     // }deg`,
-    "--elemental-bg": `url(/elementalBackgrounds/${chartsData?.characterMetadata?.element}-bg.png)`,
+    "--element-color": elementalColor || noElementColor,
+    "--element-color-2": `${elementalColor || noElementColor}70`,
+    "--elemental-bg": elementalBg,
     "--character-namecard-url": !namecardBg
-      ? `url(/elementalBackgrounds/${chartsData?.characterMetadata?.element}-bg.png)`
-      : `url(${toEnkaUrl(chartsData?.characterMetadata?.namecard)})`,
-    "--element-color":
-      ELEMENT_TO_COLOR[chartsData?.characterMetadata?.element] ||
-      noElementColor,
-    "--element-color-2": `${
-      ELEMENT_TO_COLOR[chartsData?.characterMetadata?.element] || noElementColor
-    }70`,
+      ? elementalBg
+      : `url(${namecardBgUrl})`,
   } as React.CSSProperties;
 
   const getBuildId = (build: any) => `${build.characterId}${build.type}`;

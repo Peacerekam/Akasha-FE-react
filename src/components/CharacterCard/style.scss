@@ -1115,6 +1115,7 @@ $hardcoded-scale: 1;
     }
 
     > div {
+      background-color: var(--element-color-2); // this fallback until image is loaded
       background-image: var(--character-namecard-url);
       background-size: cover;
       background-position-y: bottom;
