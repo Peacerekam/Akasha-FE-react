@@ -179,7 +179,7 @@ export const ArtifactSettingsModal: React.FC<ProfileSettingsModalProps> = ({
               text={`Delete "${artifact.name}"?`}
               onConfirm={() => handleDeleteArtifact(artifact)}
             >
-              <button className="remove-btn" title="Delete build">
+              <button className="remove-btn" title="Delete artifact">
                 <FontAwesomeIcon icon={faTrash} size="1x" />
               </button>
             </ConfirmTooltip>
@@ -219,7 +219,7 @@ export const ArtifactSettingsModal: React.FC<ProfileSettingsModalProps> = ({
                   text={`Delete all unequipped aritfacts?`}
                   onConfirm={() => handleDeleteAllArtifacts()}
                 >
-                  <button className="remove-btn" title="Delete build">
+                  <button className="remove-btn" title="Delete all unequipped artifacts">
                     <FontAwesomeIcon icon={faTrash} size="1x" />
                   </button>
                 </ConfirmTooltip>

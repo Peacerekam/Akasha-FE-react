@@ -969,14 +969,14 @@ $hardcoded-scale: 1;
       min-width: 190px * $hardcoded-scale;
       background-color: black;
 
-      .substat {
-        span:not(.roll-dots) {
-          // font-family: "GenshinFont";
-          // font-size: 15px * $hardcoded-scale;
-          // line-height: 1.4;
-          // filter: drop-shadow(0px * $hardcoded-scale 0px * $hardcoded-scale 3px * $hardcoded-scale black);
-        }
-      }
+      // .substat {
+      //   span:not(.roll-dots) {
+      //     // font-family: "GenshinFont";
+      //     // font-size: 15px * $hardcoded-scale;
+      //     // line-height: 1.4;
+      //     // filter: drop-shadow(0px * $hardcoded-scale 0px * $hardcoded-scale 3px * $hardcoded-scale black);
+      //   }
+      // }
       .compact-artifact-bg {
         position: absolute;
         // content: "";
