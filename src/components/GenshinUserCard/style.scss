@@ -1,67 +1,84 @@
-.fav-btn {
-  position: absolute;
-  top: 10px; 
-  left: 10px;
-  cursor: pointer;
-  z-index: 2;
-  padding: 5px 6px;
-  filter: drop-shadow(0 0 3px black);
-  color: white;
-  opacity: 0.75;
+.genshin-user-card-wrapper {
+  display: flex;
+  position: relative;
+  overflow: hidden;
 
-  &:hover {
-    color: orange;
-  }
+  background: rgba(black, 0.3);
+  box-shadow: inset 0 0 15px 15px rgba(black, 0.1); //, inset 0 0 0 1px rgba(black, 0.4);
 
-  svg {
-    $size: 25px;
-    width: $size;
-    height: $size;
-  }
+  min-height: 100px;
+  width: min(350px, calc(100% - 15px));
+  flex-grow: 1;
+  flex-shrink: 0;
+  margin-left: 0;
 
-  &.favourited {
-    color: orange;
-    opacity: 0.8;
+  .fav-btn {
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+    z-index: 2;
+    padding: 5px 6px;
+    filter: drop-shadow(0 0 3px black);
+    color: white;
+    opacity: 0.75;
+
     &:hover {
-      opacity: 1;
+      color: orange;
     }
-  }
-  &.disabled {
-    cursor: not-allowed;
-    &:hover {
-      color: red;
+
+    svg {
+      $size: 25px;
+      width: $size;
+      height: $size;
+    }
+
+    &.favourited {
+      color: orange;
       opacity: 0.8;
+      &:hover {
+        opacity: 1;
+      }
+    }
+    &.disabled {
+      cursor: not-allowed;
+      &:hover {
+        color: red;
+        opacity: 0.8;
+      }
     }
   }
 }
 
 .genshin-user-card {
-  background: rgba(black, 0.3);
-  box-shadow: inset 0 0 15px 15px rgba(black, 0.1); //, inset 0 0 0 1px rgba(black, 0.4);
+  display: flex;
+  position: relative;
+  overflow: hidden;
 
-  // margin: 20px;
-  margin-left: 0;
+  // background: rgba(black, 0.3);
+  // box-shadow: inset 0 0 15px 15px rgba(black, 0.1); //, inset 0 0 0 1px rgba(black, 0.4);
+  // min-height: 100px;
+
+  width: min(350px, calc(100% - 15px));
   flex-grow: 1;
+  flex-shrink: 0;
+  // margin-left: 0;
 
+  // width: min(450px, calc(100% - 15px));
   // background-image: var(--name-card-url);
   // background-size: cover;
   // background-position: center;
   // background-repeat: no-repeat;
-  overflow: hidden;
-  min-height: 100px;
-  // width: min(450px, calc(100% - 15px));
-
-  // @at-root .ad-provider-playwire & {
-  width: min(350px, calc(100% - 15px));
-  // }
-
-  flex-shrink: 0;
+  // margin: 20px;
   // flex-grow: 1;
-  display: flex;
-  position: relative;
   // margin: 10px;
   // box-shadow: rgb  a(0, 0, 0, 0.24) 0px 3px 8px;
   // background: #00000066;
+
+  // @at-root .ad-provider-playwire & {
+  // width: min(350px, calc(100% - 15px));
+  // }
+
   &.clickable-card {
     &:hover {
       background-color: rgba(black, 0.5) !important;
@@ -126,10 +143,15 @@
   height: 100px;
   z-index: 0;
   width: min(465px, 100% - 35px);
+  box-shadow: inset 0 0 15px 15px rgba(0, 0, 0, 0.1),
+    inset 0 100px 0 0 rgba(0, 0, 0, 0.3);
 }
 
 .account-hover-wrapper {
   $card-width: 465px;
+  display: flex;
+  pointer-events: none;
+
   .genshin-user-card {
     padding-right: 0;
     width: $card-width;
@@ -181,11 +203,13 @@
     color: white;
     text-decoration: none;
     position: relative;
-    display: block;
+    display: flex;
+
     .card-background {
       width: $card-width;
       height: 100%;
     }
+
     .genshin-user-card {
       padding-right: 0;
       width: $card-width;

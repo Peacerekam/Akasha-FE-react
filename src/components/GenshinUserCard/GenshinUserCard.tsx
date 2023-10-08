@@ -53,16 +53,18 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
 
   if (!playerInfo) {
     return (
-      <div className="genshin-user-card">
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-          }}
-        >
-          <Spinner />
+      <div className="genshin-user-card-wrapper">
+        <div className="genshin-user-card">
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <Spinner />
+          </div>
         </div>
       </div>
     );
@@ -78,30 +80,44 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
   const disableNewFavs = favourites.length >= 10;
   const favourited = (relatedProfile?.priority || 1) > 1;
 
-  const handleMarkAdFavourite = () => {
+  const handleMarkAsFavourite = (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
     favouriteTab(uid, playerInfo?.nickname || uid);
   };
 
+  const displayPfp = accountData.account.profilePictureLink ? (
+    <img
+      className="profile-picture"
+      src={accountData.account.profilePictureLink}
+    />
+  ) : (
+    <FontAwesomeIcon className="default-picture" icon={faUser} size="1x" />
+  );
+
+  const displayFavBtn = (
+    <div
+      className={`fav-btn ${favourited ? "favourited" : ""} ${
+        disableNewFavs && !favourited ? "disabled" : ""
+      }`}
+      title={
+        favourited
+          ? "Unmark as favourite"
+          : disableNewFavs
+          ? "Favourites tab limit (10) reached"
+          : "Mark as favourite"
+      }
+      onClick={handleMarkAsFavourite}
+    >
+      <FontAwesomeIcon
+        icon={favourited ? faStar : (faStarRegular as IconProp)}
+        size="2x"
+      />
+    </div>
+  );
+
   return (
-    <>
-      <div
-        className={`fav-btn ${favourited ? "favourited" : ""} ${
-          disableNewFavs && !favourited ? "disabled" : ""
-        }`}
-        title={
-          favourited
-            ? "Unmark as favourite"
-            : disableNewFavs
-            ? "Favourites tab limit (10) reached"
-            : "Mark as favourite"
-        }
-        onClick={handleMarkAdFavourite}
-      >
-        <FontAwesomeIcon
-          icon={favourited ? faStar : (faStarRegular as IconProp)}
-          size="2x"
-        />
-      </div>
+    <div className="genshin-user-card-wrapper">
+      {displayFavBtn}
       {showBackgroundImage && <div className="card-background" style={style} />}
       <div
         className={[
@@ -113,18 +129,7 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
         onClick={handleToggleModal}
         title={isAccountOwner ? "Open build settings" : ""}
       >
-        {accountData.account.profilePictureLink ? (
-          <img
-            className="profile-picture"
-            src={accountData.account.profilePictureLink}
-          />
-        ) : (
-          <FontAwesomeIcon
-            className="default-picture"
-            icon={faUser}
-            size="1x"
-          />
-        )}
+        {displayPfp}
 
         <div className="genshin-card-content">
           <div className="genshin-card-top-row">
@@ -138,6 +143,6 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
           <div className="card-signature">{playerInfo.signature || ""}</div>
         </div>
       </div>
-    </>
+    </div>
   );
 };

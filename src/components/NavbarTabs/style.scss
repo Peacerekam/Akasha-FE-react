@@ -50,7 +50,8 @@
     animation-fill-mode: forwards;
     background-color: #395b64;
     box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
-  
+    transition: margin-left 0.3s ease-in-out;
+
     &:not(:first-child) {
       border-left: 1px solid darken(#395b64, 15);
     }

@@ -97,8 +97,13 @@ const LastProfilesContextProvider: React.FC<{ children: any }> = ({
 
       if (favourites.length >= tabLimit) return prev;
 
+      const rest = prev.filter((a) => (a.priority || 1) === 1);
+      const sliceFrom = -tabLimit + favourites.length;
       const newProfile = { uid, nickname, priority };
-      return [...prev, newProfile].slice(-tabLimit).sort(sortByPriority);
+
+      return favourites
+        .concat([...rest, newProfile].slice(sliceFrom))
+        .sort(sortByPriority);
     });
   };
 

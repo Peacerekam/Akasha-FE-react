@@ -486,15 +486,16 @@ export const CustomTable: React.FC<CustomTableProps> = ({
                 <a
                   className="uid-result"
                   href={`/profile/${row.uid}`}
-                  onClick={(event) => {
-                    event.preventDefault();
-                    navigate(`/profile/${row.uid}`);
-                  }}
+                  onClick={(event) => event.preventDefault()}
                 >
                   <GenshinUserCard
                     accountData={{ account: row }}
                     isAccountOwner
                     showBackgroundImage
+                    handleToggleModal={(event: any) => {
+                      event.preventDefault();
+                      navigate(`/profile/${row.uid}`);
+                    }}
                   />
                 </a>
               </div>
