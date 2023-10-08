@@ -116,16 +116,18 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
   );
 
   return (
-    <div className="genshin-user-card-wrapper">
+    <div
+      className={[
+        "genshin-user-card-wrapper",
+        isAccountOwner ? "pointer clickable-card" : "",
+      ]
+        .join(" ")
+        .trim()}
+    >
       {displayFavBtn}
       {showBackgroundImage && <div className="card-background" style={style} />}
       <div
-        className={[
-          "genshin-user-card",
-          isAccountOwner ? "pointer clickable-card" : "",
-        ]
-          .join(" ")
-          .trim()}
+        className="genshin-user-card"
         onClick={handleToggleModal}
         title={isAccountOwner ? "Open build settings" : ""}
       >
