@@ -1,11 +1,14 @@
-import React from "react";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
+import React, { useContext } from "react";
+import { faStar, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faStar as faStarRegular } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Spinner } from "../Spinner";
 import { ARBadge } from "../ARBadge";
 import { RegionBadge } from "../RegionBadge";
 import { AchievementsBadge } from "../AchievementsBadge";
 import "./style.scss";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
 
 type AkashaAchievement = {
   id: number;
@@ -45,6 +48,7 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
   handleToggleModal,
   accountData,
 }) => {
+  const { favouriteTab, lastProfiles } = useContext(LastProfilesContext);
   const playerInfo = accountData.account?.playerInfo;
 
   if (!playerInfo) {
@@ -68,8 +72,36 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
     backgroundImage: `url(${accountData.account.nameCardLink})`,
   } as React.CSSProperties;
 
+  const uid = accountData.account.uid;
+  const relatedProfile = lastProfiles.find((a) => a.uid === uid);
+  const favourites = lastProfiles.filter((a) => (a.priority || 1) > 1);
+  const disableNewFavs = favourites.length >= 10;
+  const favourited = (relatedProfile?.priority || 1) > 1;
+
+  const handleMarkAdFavourite = () => {
+    favouriteTab(uid, playerInfo?.nickname || uid);
+  };
+
   return (
     <>
+      <div
+        className={`fav-btn ${favourited ? "favourited" : ""} ${
+          disableNewFavs && !favourited ? "disabled" : ""
+        }`}
+        title={
+          favourited
+            ? "Unmark as favourite"
+            : disableNewFavs
+            ? "Favourites tab limit (10) reached"
+            : "Mark as favourite"
+        }
+        onClick={handleMarkAdFavourite}
+      >
+        <FontAwesomeIcon
+          icon={favourited ? faStar : (faStarRegular as IconProp)}
+          size="2x"
+        />
+      </div>
       {showBackgroundImage && <div className="card-background" style={style} />}
       <div
         className={[
@@ -79,6 +111,7 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
           .join(" ")
           .trim()}
         onClick={handleToggleModal}
+        title={isAccountOwner ? "Open build settings" : ""}
       >
         {accountData.account.profilePictureLink ? (
           <img

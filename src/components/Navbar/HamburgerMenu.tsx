@@ -1,7 +1,7 @@
 import { useContext, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faX } from "@fortawesome/free-solid-svg-icons";
+import { faStar, faX } from "@fortawesome/free-solid-svg-icons";
 import { NavElement } from "./Navbar";
 import { LanguageSwitcher } from "../LanguageSwitcher";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
@@ -142,14 +142,21 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
 
           <div className="player-tabs-nav">
             {lastProfiles.map((profile) => {
-              const { uid, nickname } = profile;
+              const { uid, nickname, priority } = profile;
+              const isFav = priority === 2;
+               
+              const classNames = [
+                "navbar-tab",
+                location.pathname.endsWith(uid) ? "active-tab" : "",
+                isFav ? "is-favourited" : "",
+              ]
+                .join(" ")
+                .trim();
 
               return (
                 <div
                   key={`hamburger-tab-${uid}-${nickname}`}
-                  className={`navbar-tab ${
-                    location.pathname.endsWith(uid) ? "active-tab" : ""
-                  }`}
+                  className={classNames}
                 >
                   <a
                     href={`/profile/${uid}`}
@@ -164,6 +171,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
                       }, closeDelay);
                     }}
                   >
+                    {isFav && <FontAwesomeIcon icon={faStar} size="1x" />}
                     {nickname ?? uid}
                   </a>
                   {/* <span

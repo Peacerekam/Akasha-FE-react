@@ -208,6 +208,15 @@
       box-shadow: #e7f6f2 2px 0 0 inset !important;
     }
     
+    .is-favourited {
+      svg {
+        color: orange;
+        margin-right: 2px;
+        width: 13px;
+        height: 13px;
+      }
+    }
+
     .navbar-tab:hover {
       background-color: #426a74;
       transition: .2s !important;

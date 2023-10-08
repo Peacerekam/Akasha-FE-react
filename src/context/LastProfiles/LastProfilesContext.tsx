@@ -3,17 +3,20 @@ import React, { createContext, useState, useEffect } from "react";
 export type NicknameUidPair = {
   uid: string;
   nickname: string;
+  priority?: number;
 };
 
 type LastProfilesContextType = {
   lastProfiles: NicknameUidPair[];
   addTab: (uid: string, nickname: string) => void;
+  favouriteTab: (uid: string, nickname: string) => void;
   removeTab: (uid: string) => void;
 };
 
 const defaultValue = {
   lastProfiles: [],
   addTab: () => {},
+  favouriteTab: () => {},
   removeTab: () => {},
 } as LastProfilesContextType;
 
@@ -23,6 +26,8 @@ const LastProfilesContextProvider: React.FC<{ children: any }> = ({
   children,
 }) => {
   const [lastProfiles, setLastProfiles] = useState<NicknameUidPair[]>([]);
+
+  const tabLimit = 10;
 
   // read from local storage
   useEffect(() => {
@@ -46,17 +51,54 @@ const LastProfilesContextProvider: React.FC<{ children: any }> = ({
     localStorage.setItem("navbarTabs", JSON.stringify(obj));
   }, [lastProfiles]);
 
+  const findUID = (elements: NicknameUidPair[], uid: string) => {
+    return elements.findIndex((a) => {
+      const newUID = ("" + uid).trim().toLowerCase();
+      const comparedUID = ("" + a.uid).trim().toLowerCase();
+      return newUID === comparedUID;
+    });
+  };
+
+  const sortByPriority = (a: NicknameUidPair, b: NicknameUidPair) =>
+    (a?.priority || 1) < (b?.priority || 1) ? 1 : -1;
+
   // add tab to state
   const addTab = (uid: string, nickname: string) => {
     setLastProfiles((prev) => {
-      const index = prev.findIndex((a) => {
-        const newUID = ("" + uid).trim().toLowerCase();
-        const comparedUID = ("" + a.uid).trim().toLowerCase();
-        return newUID === comparedUID;
-      });
+      const index = findUID(prev, uid);
       if (index > -1) return prev;
-      const newProfile = { uid, nickname };
-      return [...prev, newProfile].slice(-10);
+
+      const favourites = prev.filter((a) => (a.priority || 1) > 1);
+      if (favourites.length >= 10) return prev;
+
+      const rest = prev.filter((a) => (a.priority || 1) === 1);
+      const sliceFrom = -tabLimit + favourites.length;
+      const newProfile = { uid, nickname, priority: 1 };
+      return favourites.concat([...rest, newProfile].slice(sliceFrom));
+    });
+  };
+
+  // favourite tab
+  const favouriteTab = (uid: string, nickname: string) => {
+    setLastProfiles((prev) => {
+      const priority = 2;
+      const index = findUID(prev, uid);
+
+      if (index > -1) {
+        const newPriority = prev[index].priority === priority ? 1 : priority;
+        prev[index] = {
+          ...prev[index],
+          priority: newPriority,
+        };
+        return [...prev].sort(sortByPriority);
+      }
+
+      const favourites = prev.filter((a) => (a.priority || 1) > 1);
+
+      if (favourites.length >= tabLimit) return prev;
+
+      const newProfile = { uid, nickname, priority };
+      return [...prev, newProfile].slice(-tabLimit).sort(sortByPriority);
     });
   };
 
@@ -73,6 +115,7 @@ const LastProfilesContextProvider: React.FC<{ children: any }> = ({
   const value = {
     lastProfiles,
     addTab,
+    favouriteTab,
     removeTab,
   };
 

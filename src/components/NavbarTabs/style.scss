@@ -36,9 +36,7 @@
   position: relative;
 
   @media (max-width: 1000px) {
-    & {
-      padding: 0 15px;
-    }
+    padding: 0 15px;
   }
 
   .navbar-tab {
@@ -99,6 +97,30 @@
       padding-left: 15px;
       padding-right: 7px;
       padding-bottom: 5px;
+    }
+
+    @media (min-width: 1000px) {
+      &.is-favourited {
+        + :not(.is-favourited) {
+          margin-left: 10px;
+        }
+      }
+    }
+
+    &.is-favourited {
+      a {
+        padding-left: 10px;
+        padding-right: 15px;
+      }
+
+      svg {
+        position: relative;
+        top: 1px;
+        color: orange;
+        margin-right: 7px;
+        width: 13px;
+        height: 13px;
+      }
     }
     .close-tab {
       padding-left: 7px;

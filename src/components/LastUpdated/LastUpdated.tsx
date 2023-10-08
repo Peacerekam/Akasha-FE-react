@@ -62,7 +62,7 @@ export const LastUpdated: React.FC<LastUpdatedProps> = ({
 
   if (!timestamp[0]) return null;
 
-  if (format == "rawText") {
+  if (format === "rawText") {
     const text = [label, ...timestamp].join(" ");
     return <span className="white-space-nowrap">{text}</span>;
   }

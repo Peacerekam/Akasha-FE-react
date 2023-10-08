@@ -74,6 +74,7 @@ const electroRvList = {
 const dendroRvList = {
   Nahida: [CRate, CDMG, ATK_, EM],
   Alhaitham: [CRate, CDMG, ATK_, EM, ER],
+  Tighnari: [CRate, CDMG, ATK_, EM, ER],
 };
 
 const defaultRvFilter = [CRate, CDMG];

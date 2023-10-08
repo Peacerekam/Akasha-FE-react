@@ -74,7 +74,6 @@ const SessionDataContextProvider: React.FC<{ children: any }> = ({
     }
   }, []);
 
-  // read from local storage
   useEffect(() => {
     fetchSessionData(true);
   }, [fetchSessionData]);

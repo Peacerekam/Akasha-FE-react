@@ -86,7 +86,7 @@ export const ProfilePage: React.FC = () => {
   const { uid } = useParams();
   const { hoverElement } = useContext(HoverElementContext);
   const { disableAdsForThisPage, adProvider } = useContext(AdProviderContext);
-  const { addTab } = useContext(LastProfilesContext);
+  const { addTab, lastProfiles } = useContext(LastProfilesContext);
   const { setTitle } = useContext(TitleContext);
   const { translate } = useContext(TranslationContext);
   const { isAuthenticated, isBound, fetchSessionData, boundAccounts } =
@@ -557,6 +557,7 @@ export const ProfilePage: React.FC = () => {
       JSON.stringify(responseData.account),
       isAccountOwner,
       handleToggleBuildsModal,
+      lastProfiles
     ]
   );
 

@@ -34,14 +34,20 @@ export default class VenatusAdsComponent extends React.Component<
     if (!isMobile && hideOnDesktop) return;
     if (isMobile && hideOnMobile) return;
 
-    console.log(`%c\n\n > ${this.props.adType}: MOUNT `, "color: green; font-size: 16px;");
+    console.log(
+      `%c\n\n > ${this.props.adType}: MOUNT `,
+      "color: green; font-size: 16px;"
+    );
     if (adType !== "Video") {
       (window as any).__vm_add = (window as any).__vm_add || [];
       (window as any).__vm_add.push(this.adRef.current);
       console.log(`%c > ${adType}: VM_ADD `, "color: green; font-size: 16px;");
       console.log(this.adRef.current);
     } else {
-      console.log(`%c > ${adType}: .........`, "color: green; font-size: 16px;");
+      console.log(
+        `%c > ${adType}: .........`,
+        "color: green; font-size: 16px;"
+      );
     }
   }
 
@@ -52,10 +58,16 @@ export default class VenatusAdsComponent extends React.Component<
     if (!isMobile && hideOnDesktop) return;
     if (isMobile && hideOnMobile) return;
 
-    console.log(`%c\n\n > ${this.props.adType}: UNMOUNT `, "color: red; font-size: 16px;");
+    console.log(
+      `%c\n\n > ${this.props.adType}: UNMOUNT `,
+      "color: red; font-size: 16px;"
+    );
 
     if (adType === "RichMedia") {
-      console.log(`%c > ${adType}: VM_REMOVE_CATEGORY `, "color: red; font-size: 16px;");
+      console.log(
+        `%c > ${adType}: VM_REMOVE_CATEGORY `,
+        "color: red; font-size: 16px;"
+      );
       console.log(this.adRef.current);
       (window as any).top.__vm_remove_category = ["richmedia_all"];
       return;
@@ -72,6 +84,7 @@ export default class VenatusAdsComponent extends React.Component<
   render() {
     const { adType, hideOnDesktop, hideOnMobile } = this.props;
     if (!adType) return null;
+    if (adType === "Video") return; // quick and dirty
 
     const { width } = this.state;
     const isMobile = width <= 800; // 768;
@@ -101,7 +114,10 @@ export default class VenatusAdsComponent extends React.Component<
     return (
       <div
         className={`vm-container ${
-          adType === "RichMedia" || adType === "Video" ? "shrink-ad" : ""
+          adType === "RichMedia"
+            ? // || adType === "Video" // quick and dirty
+              "shrink-ad"
+            : ""
         }`}
       >
         <span className="ad-debug">
@@ -111,16 +127,22 @@ export default class VenatusAdsComponent extends React.Component<
         <div
           ref={this.adRef}
           className="vm-placement"
-          {...(adType === "Video"
-            ? {
-                id: "vm-av",
-                "data-format": "isvideo",
-              }
-            : {
-                "data-id": adID,
-                style: { display: adType === "RichMedia" ? "none" : "block" },
-                "data-display-type": isHybridBanner ? "hybrid-banner" : "",
-              })}
+          {...{
+            "data-id": adID,
+            style: { display: adType === "RichMedia" ? "none" : "block" },
+            "data-display-type": isHybridBanner ? "hybrid-banner" : "",
+          }}
+          // quick and dirty
+          // {...(adType === "Video"
+          //   ? {
+          //       id: "vm-av",
+          //       "data-format": "isvideo",
+          //     }
+          //   : {
+          //       "data-id": adID,
+          //       style: { display: adType === "RichMedia" ? "none" : "block" },
+          //       "data-display-type": isHybridBanner ? "hybrid-banner" : "",
+          //     })}
         />
       </div>
     );
