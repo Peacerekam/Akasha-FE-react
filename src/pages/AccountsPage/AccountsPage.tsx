@@ -216,15 +216,6 @@ export const AccountsPage: React.FC = () => {
               format="rawText"
             />
           );
-
-          const lastProfileUpdate = new Date(row?.lastProfileUpdate || "");
-          const strDate = lastProfileUpdate.toLocaleString("en-US", {
-            month: "short",
-            day: "numeric",
-            year: "numeric",
-          });
-
-          return <div style={{ whiteSpace: "nowrap" }}>{strDate}</div>;
         },
       },
       // {
@@ -254,6 +245,10 @@ export const AccountsPage: React.FC = () => {
     ],
     [lookupUID]
   );
+
+  const uidsQuery = useMemo(() => {
+    return uidsToQuery(lastProfiles.map((a) => a.uid));
+  }, [lastProfiles.length])
 
   return (
     <div className="flex">
@@ -305,7 +300,7 @@ export const AccountsPage: React.FC = () => {
             fetchURL={FETCH_ACCOUNTS_URL}
             filtersURL={FETCH_ACCOUNTS_FILTERS_URL}
             fetchParams={{
-              uids: uidsToQuery(lastProfiles.map((a) => a.uid)),
+              uids: uidsQuery,
               uid: lookupUID,
               // variant,
               // filter: "[all]1",
