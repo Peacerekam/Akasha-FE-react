@@ -115,12 +115,12 @@ export const ArtifactSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       const response = await axios.post(deleteArtiURL, null, opts);
       if (response?.data?.error) {
         if (response?.data?.error.includes(":")) {
-          const _s = response?.data?.error.split(":");
+          const _s = response?.data?.error.split("[!&^%#!@]");
           const _msg = _s[0];
-          const _ch = _s[1].split(",");
+          const _ch = _s[1].split("[&@(*)!]");
           const _errorMessage = (
             <div>
-              {_msg}:
+              {_msg}
               {_ch.map((x: string) => (
                 <div key={x}>- {x}</div>
               ))}

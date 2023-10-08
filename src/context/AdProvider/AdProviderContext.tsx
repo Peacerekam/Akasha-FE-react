@@ -94,14 +94,17 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
   useEffect(() => {
     if (adProvider) return;
 
-    if (location.search.includes("playwire-test")) {
-      setAdProvider("playwire");
-      setContentWidth(1100);
-    } else {
-      setAdProvider("venatus");
-      setContentWidth(1100); // embrace new site width early
-      // setContentWidth(1280);
-    }
+    setAdProvider("playwire");
+    setContentWidth(1100);
+
+    // if (location.search.includes("playwire-test")) {
+    //   setAdProvider("playwire");
+    //   setContentWidth(1100);
+    // } else {
+    //   setAdProvider("venatus");
+    //   setContentWidth(1100); // embrace new site width early
+    //   // setContentWidth(1280);
+    // }
   }, [location.search]);
 
   useEffect(() => {
