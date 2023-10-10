@@ -1,10 +1,18 @@
 # Akasha System (work in progress)
-React frontend for Akasha System, app link: 
-https://peacerekam.github.io/akasha/
-https://mimee.ovh/akasha
+React frontend for Akasha System: 
+
 https://akasha.cv/
 
-![obraz](https://user-images.githubusercontent.com/26521952/192246970-8158aec3-7622-481e-b258-9322ee726532.png)
-![obraz](https://user-images.githubusercontent.com/26521952/192246480-42bea284-7204-462b-8962-0f253a3ae9cd.png)
-![obraz](https://user-images.githubusercontent.com/26521952/192246715-d522efe2-816d-482b-a850-dbe245574337.png)
-![obraz](https://user-images.githubusercontent.com/26521952/192246865-46d31f2f-2fff-4235-a597-925f07132874.png)
+https://mimee.ovh/akasha
+
+https://peacerekam.github.io/akasha/
+
+![obraz](https://github.com/Peacerekam/akasha/assets/26521952/490f1c07-51b6-4936-98bd-c64c6606dab0)
+
+![obraz](https://github.com/Peacerekam/akasha/assets/26521952/36cade47-2ea7-4992-b1f1-1a6d538f3484)
+
+![obraz](https://github.com/Peacerekam/akasha/assets/26521952/7ea9c625-a5ff-460f-8504-6a60a47115c3)
+
+![obraz](https://github.com/Peacerekam/akasha/assets/26521952/3b592f62-1059-4186-aa3b-efc1f7821d49)
+
+![obraz](https://github.com/Peacerekam/akasha/assets/26521952/22b494f0-b994-4de0-848c-d0487efdbd35)
