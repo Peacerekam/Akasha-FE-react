@@ -45,7 +45,7 @@ const urls = {
 
 export const BASENAME = "/";
 export const showAds = true;
-export const isProduction = false; // set to true for akasha.cv domain
+export const isProduction = true; // set to true for akasha.cv domain
 export const TRANSLATION_VERSION = 0.28; // increment this when translation keys are outdated
 const MAINTENANCE_MODE = false;
 

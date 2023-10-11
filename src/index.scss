@@ -38,6 +38,13 @@ body {
   // }
 }
 
+// to avoid crappy horizontal mobile scrolling bug
+@media (max-width: 800px) {
+  .ps__rail-x {
+    pointer-events: none;
+  }
+}
+
 .content-wrapper {
   // max-width: 1100px;
   transition: max-width 0.1s ease-in-out;
