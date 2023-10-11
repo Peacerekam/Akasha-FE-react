@@ -135,7 +135,6 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
 
   return (
     <AdProviderContext.Provider value={value}>
-      {/* Only load this component once, at the top most level of your app */}
       {adProvider === "playwire" && (
         <>
           {/* <div
@@ -153,6 +152,7 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
             <div>PLAYWIRE_PUBLISHER_ID: {PLAYWIRE_PUBLISHER_ID}</div>
             <div>PLAYWIRE_WEBSITE_ID: {PLAYWIRE_WEBSITE_ID}</div>
           </div> */}
+          {/* Only load this component once, at the top most level of your app */}
           <Ramp publisherId={PLAYWIRE_PUBLISHER_ID} id={PLAYWIRE_WEBSITE_ID} />
         </>
       )}

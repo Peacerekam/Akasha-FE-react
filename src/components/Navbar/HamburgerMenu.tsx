@@ -58,7 +58,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
     _body?.classList.remove("overflow-hidden");
   };
 
-  const closeDelay = 250;
+  const closeDelay = 150;
 
   const displayNavElement = (
     nav: NavElement,

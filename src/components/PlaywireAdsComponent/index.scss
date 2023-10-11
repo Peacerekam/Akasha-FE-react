@@ -1,5 +1,19 @@
 .profile-header-wrapper.profile-header-wrapper {
   gap: 0px;
+
+  .pw-container {
+    &.video-ad-container {
+      .playwire-ad-unit {
+        .pw-tag > div > * {
+          @media (max-width: 800px) {
+            margin-top: 10px;
+            margin-bottom: 0;
+            margin-left: 0;
+          }
+        }
+      }
+    }
+  }
 }
 
 .pw-container {

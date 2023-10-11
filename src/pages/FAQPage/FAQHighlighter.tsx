@@ -25,7 +25,7 @@ export const FAQHighlighter: React.FC<FAQHighlighterProps> = ({
     const a = textToHighlight.toLowerCase();
 
     if (splitWords) {
-      const split = searchText.split(" ");
+      const split = searchText.trim().split(" ");
       for (const word of split) {
         const b = word.toLowerCase();
         count += a.split(b).length - 1;
@@ -41,7 +41,7 @@ export const FAQHighlighter: React.FC<FAQHighlighterProps> = ({
   return (
     <Highlighter
       highlightClassName="faq-header-highlight-class"
-      searchWords={searchText.split(" ")}
+      searchWords={searchText.trim().split(" ")}
       autoEscape={true}
       textToHighlight={textToHighlight}
     />
