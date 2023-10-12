@@ -1098,7 +1098,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             {displayBuildName
               ? row.type !== "current"
                 ? row.type
-                : row.name
+                : translate(row.name)
               : translate(row.name, getGenderFromIcon(row.icon))}
           </div>
           {!privacyFlag && (
