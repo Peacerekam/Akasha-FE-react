@@ -296,7 +296,7 @@ export const uidsToQuery = (uids: (string | number)[]) => {
 
   uids.forEach((uid) => {
     if (!uid) return;
-    stringified += `[uid]${uid}`;
+    stringified += `[uid]${(""+uid).toLowerCase()}`;
   });
 
   return stringified;

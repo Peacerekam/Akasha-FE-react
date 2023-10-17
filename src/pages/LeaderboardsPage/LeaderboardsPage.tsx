@@ -393,9 +393,10 @@ export const LeaderboardsPage: React.FC = () => {
 
   const [chartData, setChartData] = useState<any[]>([]);
 
-  const uidsQuery = useMemo(() => {
-    return uidsToQuery(lastProfiles.map((a) => a.uid));
-  }, [lastProfiles.length])
+  const uidsQuery = useMemo(
+    () => uidsToQuery(lastProfiles.map((a) => a.uid)),
+    [lastProfiles.length]
+  );
 
   const fetchChartData = async () => {
     let chartURL = `/api/charts/calculations/${calculationId}`;

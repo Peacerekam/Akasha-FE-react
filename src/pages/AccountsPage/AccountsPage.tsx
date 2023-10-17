@@ -246,9 +246,10 @@ export const AccountsPage: React.FC = () => {
     [lookupUID]
   );
 
-  const uidsQuery = useMemo(() => {
-    return uidsToQuery(lastProfiles.map((a) => a.uid));
-  }, [lastProfiles.length])
+  const uidsQuery = useMemo(
+    () => uidsToQuery(lastProfiles.map((a) => a.uid)),
+    [lastProfiles.length]
+  );
 
   return (
     <div className="flex">

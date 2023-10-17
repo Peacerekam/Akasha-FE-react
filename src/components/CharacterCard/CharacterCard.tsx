@@ -1108,7 +1108,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         {/* 
         <div className="character-title">{chartsData?.characterMetadata?.title}</div>
         <div className="character-title">{chartsData?.characterMetadata?.constellation}</div> 
-      */}
+        */}
         <div className="character-level">
           {translate("Lv.")} {row.propMap.level.val}
           <span className="opacity-5">

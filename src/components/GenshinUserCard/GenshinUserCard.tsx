@@ -75,7 +75,9 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
   } as React.CSSProperties;
 
   const uid = accountData.account.uid;
-  const relatedProfile = lastProfiles.find((a) => a.uid === uid);
+  const relatedProfile = lastProfiles.find(
+    (a) => a.uid?.toLowerCase() === uid?.toLowerCase()
+  );
   const favourites = lastProfiles.filter((a) => (a.priority || 1) > 1);
   const disableNewFavs = favourites.length >= 10;
   const favourited = (relatedProfile?.priority || 1) > 1;

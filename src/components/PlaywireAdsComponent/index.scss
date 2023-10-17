@@ -126,3 +126,19 @@ body:not(.overflow-hidden) {
     z-index: 1001;
   }
 }
+
+body.ads-disabled {
+  #bgdiv,
+  #tyche_trendi_video_container,
+  #pw-oop-flex_leaderboard_container,
+  .is-docked,
+  .pw-pos-bottom-right,
+  .pw-container,
+  .pw-tag {
+    display: none;
+  }
+  .flex-special-container {
+    // display: none !important;
+    min-height: 0px !important;
+  }
+}

@@ -173,18 +173,20 @@
     padding: 2px;
     padding-left: 0;
 
-    .ar-badge {
-      margin: 0;
+    .ar-badge,
+    .region-badge {
+      font-size: 13px;
+      margin-right: 5px;
     }
   }
 }
 
 @keyframes hamburgerSlide {
   0% {
-    transform: translateX(100%)
+    transform: translateX(100%);
   }
   100% {
-    transform: translateX(0%)
+    transform: translateX(0%);
   }
 }
 
@@ -207,7 +209,7 @@
     .active-tab {
       box-shadow: #e7f6f2 2px 0 0 inset !important;
     }
-    
+
     .is-favourited {
       svg {
         color: orange;
@@ -219,11 +221,11 @@
 
     .navbar-tab:hover {
       background-color: #426a74;
-      transition: .2s !important;
+      transition: 0.2s !important;
     }
 
     a {
-      height: 42px;  
+      height: 42px;
       justify-content: start;
       padding-left: 25px;
       overflow: hidden;
