@@ -135,7 +135,7 @@ body.ads-disabled {
   .pw-pos-bottom-right,
   .pw-container,
   .pw-tag {
-    display: none;
+    display: none !important;
   }
   .flex-special-container {
     // display: none !important;

@@ -21,6 +21,7 @@ import {
 } from "../../utils/helpers";
 import { BuildNameInput } from "./BuildNameInput";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
+import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 
 export type ProfileSettingsModalProps = {
   isOpen: boolean;
@@ -50,6 +51,7 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
 
   // @TODO: .....................
   const { profileObject } = useContext(SessionDataContext);
+  const { translate } = useContext(TranslationContext);
   const isPatreon = !!profileObject.isPatreon;
 
   const fetchBuildsData = async (
@@ -143,7 +145,7 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
   const filteredBuilds = useMemo(() => {
     const filterFunc = (a: any) => {
       const buildType = a.type?.toLowerCase();
-      const buildName = a.name?.toLowerCase();
+      const buildName = translate(a.name)?.toLowerCase();
       const compareTo = searchText?.toLowerCase();
       return (
         buildName.includes(compareTo) ||
@@ -247,7 +249,7 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     const handleChangeBuildName = async (event: any) => {
       let newBuildName = event?.target?.value?.trim()?.slice(0, 40);
 
-      if (newBuildName === selectedBuild.name) {
+      if (newBuildName === translate(selectedBuild.name)) {
         newBuildName = "current";
       }
       if (newBuildName === selectedBuild.type || !newBuildName) {
@@ -279,7 +281,9 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
 
     const displayBuildSettingsRow = (char: any) => {
       const buildId = getBuildId(char);
-      const displayName = char.type === "current" ? char.name : char.type;
+      const displayName =
+        char.type === "current" ? translate(char.name) : char.type;
+
       const isHidden = char.isHidden;
       const rowClassnames = [
         "compact-table-row",
