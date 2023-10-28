@@ -180,7 +180,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
     navigate(
       newURL,
-      { replace: true } // @TODO: see if this is better UX
+      { replace: true } 
     );
   };
 

@@ -129,7 +129,7 @@ export const getSubstatsInOrder = (
   const reordered: any[] = [];
   const arr = [...allSubstatsInOrder];
 
-  // @TODO: cool feature but wont work in my case
+  // cool feature but wont work in my case
   // if (unshiftKey) {
   //   const index = arr.indexOf(unshiftKey);
   //   if (index > -1) {

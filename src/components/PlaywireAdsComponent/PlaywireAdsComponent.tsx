@@ -3,8 +3,6 @@ import "./index.scss";
 
 const { RampUnit } = require("@playwire/pw-react-component");
 
-// @TODO: i think i can safely turn this back to functional component again
-
 export type PlaywireAdsComponentProps = {
   adType: PlaywireAdTypes;
   hybrid?: "desktop" | "mobile";

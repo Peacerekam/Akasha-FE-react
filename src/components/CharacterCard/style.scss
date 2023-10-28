@@ -365,7 +365,6 @@ $hardcoded-scale: 1;
   }
 
   &.no-leaderboards {
-    // @TODO: ...
     grid-template-columns: 500px * $hardcoded-scale 1fr;
     .character-right {
       display: none;
@@ -381,10 +380,10 @@ $hardcoded-scale: 1;
     $simplified-color: var(--element-color);
     $simplified-color-2: var(--element-color-2);
     // .character-card-background {
-    //   box-shadow: 0 0 0 1px * $hardcoded-scale $simplified-color !important; // @TODO: ...
+    //   box-shadow: 0 0 0 1px * $hardcoded-scale $simplified-color !important; 
     // }
     .compact-artifact {
-      // box-shadow: 0 0 0 1px * $hardcoded-scale $simplified-color, 0 0 0px * $hardcoded-scale 3px * $hardcoded-scale $simplified-color-2 !important; // @TODO: ...
+      // box-shadow: 0 0 0 1px * $hardcoded-scale $simplified-color, 0 0 0px * $hardcoded-scale 3px * $hardcoded-scale $simplified-color-2 !important;
       border: 1px * $hardcoded-scale solid $simplified-color !important;
       position: relative;
       &::after {
@@ -567,25 +566,25 @@ $hardcoded-scale: 1;
         background: $const-default-bg;
         width: $const-square-size;
         height: $const-square-size;
-        &.activated {
-          // ...
-          // box-shadow: 0 0 0px * $hardcoded-scale 1px * $hardcoded-scale rgba(white, 0.6),
-          //   0 0 0px * $hardcoded-scale 2px * $hardcoded-scale var(--element-color), 0 0 0px * $hardcoded-scale 4px * $hardcoded-scale var(--element-color-2);
+        // &.activated {
+        //   // ...
+        //   // box-shadow: 0 0 0px * $hardcoded-scale 1px * $hardcoded-scale rgba(white, 0.6),
+        //   //   0 0 0px * $hardcoded-scale 2px * $hardcoded-scale var(--element-color), 0 0 0px * $hardcoded-scale 4px * $hardcoded-scale var(--element-color-2);
 
-          // top: -1px * $hardcoded-scale;
-          // left: -1px * $hardcoded-scale;
-          // position: relative;
-          // z-index: -1;
-        }
-        &:not(.activated) {
-          // opacity: 0.45;
-          // box-shadow: 0 0 0px * $hardcoded-scale 1px * $hardcoded-scale var(--element-color);
-          // border: 1px * $hardcoded-scale solid var(--element-color);
-          // top: -1px * $hardcoded-scale;
-          // left: -1px * $hardcoded-scale;
-          // position: relative;
-          // z-index: -1;
-        }
+        //   // top: -1px * $hardcoded-scale;
+        //   // left: -1px * $hardcoded-scale;
+        //   // position: relative;
+        //   // z-index: -1;
+        // }
+        // &:not(.activated) {
+        //   // opacity: 0.45;
+        //   // box-shadow: 0 0 0px * $hardcoded-scale 1px * $hardcoded-scale var(--element-color);
+        //   // border: 1px * $hardcoded-scale solid var(--element-color);
+        //   // top: -1px * $hardcoded-scale;
+        //   // left: -1px * $hardcoded-scale;
+        //   // position: relative;
+        //   // z-index: -1;
+        // }
       }
     }
     .character-talents {
@@ -602,8 +601,8 @@ $hardcoded-scale: 1;
 
         &.talent-boosted {
           .talent-display-value {
-            // background-color: #44cded; // @TODO: ..
-            background-color: var(--element-color); // @TODO: ..
+            // background-color: #44cded; 
+            background-color: var(--element-color); 
           }
           > span {
             border: 1px * $hardcoded-scale solid rgba(white, 0.6);
@@ -632,13 +631,13 @@ $hardcoded-scale: 1;
               z-index: -1;
             }
           }
-          img:not(.crown-of-insight) {
-            // box-shadow: 0 0 3px * $hardcoded-scale 1px * $hardcoded-scale rgba(white, 0.4), 0 0 4px * $hardcoded-scale 2px * $hardcoded-scale #44cded;
-            // box-shadow: 0 0 3px * $hardcoded-scale 1px * $hardcoded-scale rgba(white, 0.4), 0 0 4px * $hardcoded-scale 2px * $hardcoded-scale var(--element-color);
-            // box-shadow: 0 0 0px * $hardcoded-scale 1px * $hardcoded-scale rgba(white, 0.6),
-            //   0 0 0px * $hardcoded-scale 2px * $hardcoded-scale var(--element-color),
-            //   0 0 0px * $hardcoded-scale 4px * $hardcoded-scale var(--element-color-2);
-          }
+          // img:not(.crown-of-insight) {
+          //   // box-shadow: 0 0 3px * $hardcoded-scale 1px * $hardcoded-scale rgba(white, 0.4), 0 0 4px * $hardcoded-scale 2px * $hardcoded-scale #44cded;
+          //   // box-shadow: 0 0 3px * $hardcoded-scale 1px * $hardcoded-scale rgba(white, 0.4), 0 0 4px * $hardcoded-scale 2px * $hardcoded-scale var(--element-color);
+          //   // box-shadow: 0 0 0px * $hardcoded-scale 1px * $hardcoded-scale rgba(white, 0.6),
+          //   //   0 0 0px * $hardcoded-scale 2px * $hardcoded-scale var(--element-color),
+          //   //   0 0 0px * $hardcoded-scale 4px * $hardcoded-scale var(--element-color-2);
+          // }
         }
         &.talent-crowned {
           .talent-display-value {
@@ -661,7 +660,7 @@ $hardcoded-scale: 1;
         }
         .talent-icon-placeholder,
         img:not(.crown-of-insight) {
-          background-color: rgba(rgb(34, 34, 34), 0.7); // @TODO: ..
+          background-color: rgba(rgb(34, 34, 34), 0.7); 
           border-radius: 100%;
           width: 33px * $hardcoded-scale;
           height: 33px * $hardcoded-scale;
@@ -674,7 +673,7 @@ $hardcoded-scale: 1;
         .talent-display-value {
           font-size: 13px * $hardcoded-scale;
           padding: 3px * $hardcoded-scale 6px * $hardcoded-scale;
-          background-color: #3a3a3a; // @TODO: ..
+          background-color: #3a3a3a; 
           border-radius: 10px * $hardcoded-scale;
           z-index: 3;
           width: fit-content;
@@ -997,7 +996,6 @@ $hardcoded-scale: 1;
   .chart-radar-wrapper {
     // ...
     // z-index: 5;
-    // @TODO: see this one later
     // mask-image: radial-gradient(black 65%, transparent 75%);
     canvas {
       height: 310px * $hardcoded-scale !important;
@@ -1106,13 +1104,13 @@ $hardcoded-scale: 1;
     //   drop-shadow(0px * $hardcoded-scale 1px * $hardcoded-scale 0px * $hardcoded-scale var(--element-color))
     //   drop-shadow(0px * $hardcoded-scale -1px * $hardcoded-scale 0px * $hardcoded-scale var(--element-color));
 
-    &.elemental-bg {
-      > div {
-        // background-position: top !important;
-        // filter: contrast(0.75) brightness(1.6) sepia(1)
-        //   hue-rotate(var(--hue-rotate)) saturate(3);
-      }
-    }
+    // &.elemental-bg {
+    //   > div {
+    //     // background-position: top !important;
+    //     // filter: contrast(0.75) brightness(1.6) sepia(1)
+    //     //   hue-rotate(var(--hue-rotate)) saturate(3);
+    //   }
+    // }
 
     > div {
       background-color: var(--element-color-2); // this fallback until image is loaded
@@ -1127,7 +1125,7 @@ $hardcoded-scale: 1;
   }
 }
 
-// @FIX: simulate html2canvas
+// simulate html2canvas which doesnt support filter and box-shadow
 .card-wrapper {
   * {
     filter: none !important;

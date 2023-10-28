@@ -376,7 +376,7 @@ export const LeaderboardsPage: React.FC = () => {
       thisCalc?.short,
       calculationSortKey,
       translate,
-      // FETCH_LEADERBOARDS_URL, @TODO: not needed?
+      // FETCH_LEADERBOARDS_URL,
     ]
   );
 
@@ -569,8 +569,8 @@ export const LeaderboardsPage: React.FC = () => {
       },
     ];
 
-    // @TODO:
-    // @FIX:
+    // @TODO: make context around Podium + Chart + Tables 
+    // @FIX: make context around Podium + Chart + Tables 
 
     // make context around Podium + Chart + Tables
     //
@@ -578,8 +578,8 @@ export const LeaderboardsPage: React.FC = () => {
     // miniTable = provide data for chart searched player points
     // podium = take data from mainTable if page = 0, otherwise ask for first 3 elements
 
-    // @TODO:
-    // @FIX:
+    // @TODO: make context around Podium + Chart + Tables 
+    // @FIX: make context around Podium + Chart + Tables 
 
     return (
       <div className="lb-chart-wrapper">
@@ -732,7 +732,7 @@ export const LeaderboardsPage: React.FC = () => {
             <div key={`${currentCategory}${variant}`}>
               <CustomTable
                 fetchURL={FETCH_LEADERBOARDS_URL}
-                // @TODO: ?? wont work because of how I handle fetchParams.filter
+                // wont work because of how I handle fetchParams.filter
                 // filtersURL={`${FETCH_CHARACTER_FILTERS_URL}?type=leaderboards`}
                 fetchParams={{
                   uids: uidsToQuery(lastProfiles.map((a) => a.uid)),

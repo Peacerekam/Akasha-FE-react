@@ -231,7 +231,6 @@ export const FiltersContainer = ({
           handleModifyFilter={handleModifyFilter}
         />
       )}
-      {/* @TODO: perfect scroll here?  */}
       <div className="filters-container">
         <div className="pills-container">
           <CustomQueryBuilder

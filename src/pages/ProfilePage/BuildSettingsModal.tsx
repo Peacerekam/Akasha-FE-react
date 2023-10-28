@@ -49,7 +49,6 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const uploadInput = useRef<HTMLInputElement>(null);
 
-  // @TODO: .....................
   const { profileObject } = useContext(SessionDataContext);
   const { translate } = useContext(TranslationContext);
   const isPatreon = !!profileObject.isPatreon;
@@ -164,7 +163,6 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       const formData = new FormData();
       formData.append("file", file);
 
-      // @TODO: need to handle auth as well
       const { uid, characterId, type } = selectedBuild;
       const _uid = encodeURIComponent(uid);
       const postNamecardURL = `/api/user/namecard/${_uid}/${characterId}`;

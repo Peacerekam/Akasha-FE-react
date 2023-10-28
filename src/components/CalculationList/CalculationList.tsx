@@ -82,7 +82,6 @@ export const CalculationList: React.FC<CalculationListProps> = ({
             <tr key={id}>
               <td>
                 {ranking ?? (
-                  // @TODO: something cooler than this tho
                   <span title="Rankings are cached. If you see this you need to refresh the page">
                     -
                   </span>

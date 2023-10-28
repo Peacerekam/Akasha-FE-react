@@ -61,12 +61,6 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
     //   document.querySelector(".navbar-tabs")?.classList.remove("anim");
     // }
 
-    // @TODO: possibly lower this? or maybe change entire logic when adProvider === "playwire"
-    // 2.g.
-    if (adProvider === "playwire") {
-      // (window as any).ramp?.triggerRefresh();
-    }
-
     setTimeout(() => {
       setReloadAds(false);
 

@@ -196,7 +196,7 @@
   width: 100%;
   max-width: 220px;
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   flex-direction: column;
   animation: 0.3s hamburgerSlide ease-in-out forwards;
   box-shadow: 0 0 10px rgba(black, 0.75);

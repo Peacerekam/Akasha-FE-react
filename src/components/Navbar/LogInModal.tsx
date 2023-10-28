@@ -40,7 +40,6 @@ export const LogInModal: React.FC<LogInModalProps> = ({
 
   if (!isOpen) return null;
 
-  // @TODO: show spinner after clicking any of the links?
   const patreonAuthLink = `${axios.defaults.baseURL}/auth/patreon`;
   const discordAuthLink = `${axios.defaults.baseURL}/auth/discord`;
 
@@ -93,7 +92,7 @@ export const LogInModal: React.FC<LogInModalProps> = ({
                             title="Logout?"
                           />
                         </ConfirmTooltip>
-                        {/* @TODO: unbind account here? */}
+                        {/* @TODO: unbind account button here? */}
                       </div>
                     </td>
                   </tr>

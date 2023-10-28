@@ -14,7 +14,7 @@ export const ELEMENT_TO_HUE = {
   Pyro: 325,
   Electro: 230,
   Anemo: 120,
-  Geo: 375, // @TODO: ??
+  Geo: 375,
   Cryo: 160,
   Dendro: 65,
   Hydro: 180,

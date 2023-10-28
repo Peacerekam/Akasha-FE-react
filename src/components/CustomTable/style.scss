@@ -112,7 +112,6 @@ $characterStats: "hp", "atk", "def", "hydrodmgbonus", "geodmgbonus",
 }
 
 .custom-table-wrapper {
-  // @TODO: use perfect scroll instead?
   // overflow: auto;
   &.disable-table {
     table.custom-table {

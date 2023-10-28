@@ -89,6 +89,7 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
 
   const displayPfp = accountData.account.profilePictureLink ? (
     <img
+      alt=""
       className="profile-picture"
       src={accountData.account.profilePictureLink}
     />

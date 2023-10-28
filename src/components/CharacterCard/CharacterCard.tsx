@@ -636,7 +636,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                 ) : (
                   <div>
                     {ranking ?? (
-                      // @TODO: something cooler than this tho
                       <span title="Rankings are cached. If you see this you need to refresh the page">
                         -
                       </span>
