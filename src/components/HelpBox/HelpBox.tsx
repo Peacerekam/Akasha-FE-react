@@ -1,11 +1,11 @@
-import { faQuestionCircle, faX } from "@fortawesome/free-solid-svg-icons";
+import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { helpContentArtifacts } from "./helpContentArtifacts";
 import { helpContentBuilds } from "./helpContentBuilds";
 import { helpContentLeaderboards } from "./helpContentLeaderboards";
-import "./style.scss";
 import { helpContentAccounts } from "./helpContentAccounts";
+import "./style.scss";
 
 type HelpBoxProps = {
   page: "builds" | "leaderboards" | "artifacts" | "accounts";

@@ -63,14 +63,14 @@ export const CalculationList: React.FC<CalculationListProps> = ({
             name,
             ranking,
             outOf,
-            details,
             weapon,
             result,
-            stats,
             variant,
-            short,
             calculationId,
             teammates,
+            // details,
+            // stats,
+            // short,
           } = calc;
 
           const _id = calculationId || id;

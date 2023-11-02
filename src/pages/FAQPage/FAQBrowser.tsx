@@ -43,7 +43,7 @@ export const FAQBrowser: React.FC<FAQBrowserProps> = ({
   useEffect(() => {
     if (location.search) {
       const query = new URLSearchParams(location.search);
-      const _ = query.forEach((val, key) => {
+      query.forEach((val, key) => {
         if (key !== "q") return;
         clearWordHits();
         setSearchText(val);

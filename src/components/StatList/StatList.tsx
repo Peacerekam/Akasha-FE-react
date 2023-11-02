@@ -16,6 +16,7 @@ type StatListProps = {
   strikethrough?: boolean;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getStatsFromCalculation = (row: any, currentCategory: string) => {
   const stats = row?.calculations?.[currentCategory]?.stats;
   if (!stats) return null;

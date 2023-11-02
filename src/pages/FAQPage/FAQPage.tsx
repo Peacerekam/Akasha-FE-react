@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import "./style.scss";
 
 export const FAQPage: React.FC = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_wordHits, _setWordHits] = useState<{
     [id: number]: number;
   }>({});
@@ -93,7 +94,7 @@ export const FAQPage: React.FC = () => {
                     id={0}
                     searchText={searchText}
                     textCallback={handleTextCallback}
-                    textToHighlight={`Crit Value on Akasha counts crit stats gained from artifacts only,
+                    textToHighlight={`Character's total Crit Value on Akasha counts crit stats gained from artifacts only,
                     meaning crits gained from character's ascension stats or crit
                     weapons are ignored. This behaviour in consistent with the
                     "Artifact Details" screen in-game.`}
@@ -144,7 +145,7 @@ export const FAQPage: React.FC = () => {
                     textCallback={handleTextCallback}
                     textToHighlight={`For example a HP% roll of 5.3% equals to 90% RV. That is because
                     maximum roll value of HP% is 5.8%, therefore: 5.3/5.8 ~ 90%. RV is not a perfect metric either,
-                    it does not measure artifact main stats and values every substat the same when they obviously are not. Akasha has some specific substats
+                    it does not measure artifact main stats and assumes every substat is equally important when they obviously are not. Akasha has some specific substats
                     already picked per character for RV calculation, but due to various different playstyles this does not 
                     have to be correct - you can select any substats you you want to include or exclude from RV calculation.`}
                   />

@@ -11,8 +11,6 @@ import {
 } from "../../utils/helpers";
 import { useNavigate } from "react-router-dom";
 import {
-  AdsComponent,
-  ARBadge,
   CustomTable,
   HelpBox,
   NotificationBar,
@@ -171,7 +169,7 @@ export const ArtifactsPage: React.FC = () => {
                 isCV ? "critvalue" : ""
               }`}
             >
-              <span style={{ marginRight: "5px" }}>
+              <span className="mr-3" >
                 <StatIcon name={key} />
               </span>
               {substatValue}

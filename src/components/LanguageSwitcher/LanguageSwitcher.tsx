@@ -11,7 +11,6 @@ import {
 } from "../../context/TranslationProvider/TranslationProviderContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGlobe } from "@fortawesome/free-solid-svg-icons";
-import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 import "./style.scss";
 
 const KEY_TO_FULL: Record<Language, string> = {
@@ -38,7 +37,7 @@ const reorderedLanguages = [
 ];
 
 export const LanguageSwitcher: React.FC = () => {
-  const { screenWidth } = useContext(AdProviderContext);
+  // const { screenWidth } = useContext(AdProviderContext);
   const { setLanguage, language } = useContext(TranslationContext);
   const [isOpen, setIsOpen] = useState(false);
 

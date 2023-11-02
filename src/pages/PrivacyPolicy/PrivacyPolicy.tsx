@@ -1,13 +1,12 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
 import { StylizedContentBlock } from "../../components/StylizedContentBlock";
-import { AdsComponentManager } from "../../components";
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 import "./style.scss";
 
 export const PrivacyPolicyPage: React.FC = () => {
   const { adProvider } = useContext(AdProviderContext);
-
+  
   const advertismentsText =
     adProvider === "playwire" ? (
       <>

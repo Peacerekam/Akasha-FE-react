@@ -122,18 +122,18 @@ export const FiltersContainer = ({
     applyModalBodyStyle(offsets);
   };
 
-  const handleOpenFilters = (
-    event: React.MouseEvent<HTMLElement>,
-    index?: number
-  ) => {
-    if (event.target !== event.currentTarget) return;
+  // const handleOpenFilters = (
+  //   event: React.MouseEvent<HTMLElement>,
+  //   index?: number
+  // ) => {
+  //   if (event.target !== event.currentTarget) return;
 
-    setFilterSelectFocus(index);
-    setShowFiltersModal(true);
+  //   setFilterSelectFocus(index);
+  //   setShowFiltersModal(true);
 
-    const offsets = getRelativeCoords(event);
-    applyModalBodyStyle(offsets);
-  };
+  //   const offsets = getRelativeCoords(event);
+  //   applyModalBodyStyle(offsets);
+  // };
 
   const handleRemoveFilter = (filter: FilterOption) => {
     console.log("removed filter", filter);

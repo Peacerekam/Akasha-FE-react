@@ -583,7 +583,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             ranking,
             outOf,
             // details,
-            weapon,
+            // weapon,
             // result,
             // stats,
             variant,

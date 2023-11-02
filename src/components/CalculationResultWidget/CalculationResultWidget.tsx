@@ -79,7 +79,10 @@ export const CalculationResultWidget: React.FC<
 
         for (const calc of calcsArr) {
           const _calc = calc as any;
-          const { calculationId, variant } = _calc;
+          const {
+            calculationId,
+            // variant
+          } = _calc;
           // const calcKey = `${calculationId}${variant?.name || ""}`;
           if (!calc?.ranking) continue;
 

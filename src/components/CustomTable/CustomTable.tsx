@@ -178,10 +178,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
     const newURL = `?${suffix}`;
 
-    navigate(
-      newURL,
-      { replace: true } 
-    );
+    navigate(newURL, { replace: true });
   };
 
   const readParamsFromURL = () => {
@@ -367,7 +364,11 @@ export const CustomTable: React.FC<CustomTableProps> = ({
       column: any,
       event: React.MouseEvent<HTMLTableCellElement, MouseEvent>
     ) => {
-      const { sortable, sortField, sortFields } = column;
+      const {
+        sortable,
+        sortField,
+        // sortFields
+      } = column;
       if (!sortable || !sortField) return;
       handleSetSort(sortField);
     };

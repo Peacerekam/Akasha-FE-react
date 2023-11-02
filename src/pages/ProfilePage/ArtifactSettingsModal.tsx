@@ -8,7 +8,6 @@ import { Artifact, ConfirmTooltip, Spinner } from "../../components";
 import {
   abortSignalCatcher,
   getSessionIdFromCookie,
-  _getEncodeURIComponents,
 } from "../../utils/helpers";
 import { ProfileSettingsModalProps } from "./BuildSettingsModal";
 

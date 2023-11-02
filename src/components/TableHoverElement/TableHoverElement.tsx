@@ -6,10 +6,9 @@ import { FollowCursor } from "../FollowCursor";
 import { StatList } from "../StatList";
 import { ArtifactDetailsResponse } from "../../types/ArtifactDetailsResponse";
 
-import "./style.scss";
 import { FancyBuildBorder } from "../FancyBuildBorder";
-import { StatListSide } from "../StatListSide";
 import { GenshinUserCard } from "../GenshinUserCard";
+import "./style.scss";
 
 type TableHoverElementProps = {
   row?: any;

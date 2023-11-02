@@ -2,8 +2,7 @@ import React, { useContext } from "react";
 import { StatIcon } from "../StatIcon";
 import "./style.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { SizeProp } from "@fortawesome/fontawesome-svg-core";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { shadeColor } from "../../utils/helpers";
 import { ELEMENT_TO_COLOR } from "../CharacterCard/cardHelpers";
 
@@ -160,14 +159,14 @@ export const TeammatesCompact: React.FC<TeammatesCompactProps> = ({
     // return <></>
     return flexTeammateIcon();
 
-    return (
-      <div className="no-teammate-fill-img">
-        <FontAwesomeIcon
-          icon={faXmark}
-          size={`${Math.round(scale)}x` as SizeProp}
-        />
-      </div>
-    );
+    // return (
+    //   <div className="no-teammate-fill-img">
+    //     <FontAwesomeIcon
+    //       icon={faXmark}
+    //       size={`${Math.round(scale)}x` as SizeProp}
+    //     />
+    //   </div>
+    // );
   };
 
   const flexTeammateIcon = () => {

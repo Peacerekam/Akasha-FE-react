@@ -26,7 +26,6 @@ import {
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { AdsComponentManager } from "../../components/AdsComponentManager";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
-import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 
 export type BuildsColumns = {
   _id: string;
@@ -40,7 +39,6 @@ export type BuildsColumns = {
 };
 
 export const BuildsPage: React.FC = () => {
-  const { adProvider } = useContext(AdProviderContext);
   const { hoverElement } = useContext(HoverElementContext);
   const { translate } = useContext(TranslationContext);
   const navigate = useNavigate();
@@ -202,6 +200,12 @@ export const BuildsPage: React.FC = () => {
             _value *= 100;
           }
 
+          _value = _value?.toFixed(isPercent ? 1 : 0);
+
+          if (_value === "-0" || _value === "-0.0") {
+            _value = "0";
+          }
+
           return (
             <div
               key={normalizeText(_stat.name)}
@@ -209,10 +213,10 @@ export const BuildsPage: React.FC = () => {
                 _stat.name.replace("%", "")
               )}`}
             >
-              <span style={{ marginRight: "5px" }}>
+              <span className="mr-3" >
                 <StatIcon name={_stat.name.replace("%", "")} />
               </span>
-              {_value?.toFixed(isPercent ? 1 : 0)}
+              {_value}
               {isPercent ? "%" : ""}
               {/* {_stat.name} */}
             </div>

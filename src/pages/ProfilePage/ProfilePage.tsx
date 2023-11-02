@@ -255,7 +255,7 @@ export const ProfilePage: React.FC = () => {
                 isCV ? "critvalue" : ""
               }`}
             >
-              <span style={{ marginRight: "3px" }}>
+              <span className="mr-3" >
                 <StatIcon name={key} />
               </span>
               {substatValue}
@@ -415,6 +415,12 @@ export const ProfilePage: React.FC = () => {
             _value *= 100;
           }
 
+          _value = _value?.toFixed(isPercent ? 1 : 0);
+
+          if (_value === "-0" || _value === "-0.0") {
+            _value = "0";
+          }
+
           return (
             <div
               key={normalizeText(_stat.name)}
@@ -422,10 +428,10 @@ export const ProfilePage: React.FC = () => {
                 _stat.name.replace("%", "")
               )}`}
             >
-              <span style={{ marginRight: "3px" }}>
+              <span className="mr-3" >
                 <StatIcon name={_stat.name.replace("%", "")} />
               </span>
-              {_value?.toFixed(isPercent ? 1 : 0)}
+              {_value}
               {isPercent ? "%" : ""}
               {/* {_stat.name} */}
             </div>

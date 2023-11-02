@@ -17,7 +17,6 @@ import {
   abortSignalCatcher,
   getSessionIdFromCookie,
   PATREON_URL,
-  _getEncodeURIComponents,
 } from "../../utils/helpers";
 import { BuildNameInput } from "./BuildNameInput";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";

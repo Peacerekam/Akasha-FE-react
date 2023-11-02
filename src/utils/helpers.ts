@@ -683,6 +683,7 @@ export const fillUpToFourStats = (stats: any[], row: any) => {
 };
 
 export const getRelevantCharacterStats = (row: any) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [mainDmgBonus, ...otherDmgBonuses] = getRelevantDmgBonuses(row);
 
   const prepStats = [

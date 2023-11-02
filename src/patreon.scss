@@ -5,7 +5,7 @@ $patreon-colors: cyan, lime, red, white, orange, fuchsia, gold, silver, brown;
 .custom-table-wrapper {
   table.custom-table {
     @each $color in $patreon-colors {
-      tr.decorate-row.patreon-#{$color} {
+      tr.decorate-row.patreon-#{"" + $color} {
         $patreon-color: $color;
 
         &:hover {

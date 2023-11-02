@@ -13,7 +13,7 @@ export const Footer: React.FC = () => {
   const playwireBadge =
     adProvider === "playwire" ? (
       <div className="pw-badge">
-        <a href="http://www.playwire.com" rel="noopener" target="_blank">
+        <a href="http://www.playwire.com" rel="noreferrer" target="_blank">
           <img
             src="https://www.playwire.com/hubfs/Powered-by-Playwire-Badges/Ads-Powered-by-playwire-2021-standalone-small-white-300px.png"
             alt="Playwire"
@@ -29,7 +29,7 @@ export const Footer: React.FC = () => {
         </a>
         <a
           href="https://www.playwire.com/contact-direct-sales"
-          rel="noopener"
+          rel="noreferrer"
           target="_blank"
         >
           Advertise on this site.
