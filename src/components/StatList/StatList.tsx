@@ -121,7 +121,7 @@ export const StatList: React.FC<StatListProps> = ({
       return (
         <div key={name} className="table-stat-row">
           <div className="flex gap-5 w-100">
-            <img className="stat-icon" src={icon} />
+            <img alt="" className="stat-icon" src={icon} />
             <span style={{ color: "#90ee90" }}> {translate(name)}</span>
           </div>
           <div style={{ color: "#90ee90" }}>×{Math.floor(count / 2) * 2}</div>
@@ -179,6 +179,7 @@ export const StatList: React.FC<StatListProps> = ({
     <div className="table-stat-row">
       <div className="flex gap-5">
         <img
+          alt=""
           className={`stat-icon ${strikethrough ? "strike-through" : ""}`}
           src={row.weapon.icon}
         />
@@ -209,7 +210,7 @@ export const StatList: React.FC<StatListProps> = ({
   const displayCharacter = showCharacter && (
     <div className="table-stat-row">
       <div className="flex gap-5">
-        <img className="stat-icon" src={row.icon} />
+        <img alt="" className="stat-icon" src={row.icon} />
         <span>{translate(row.name, gender)}</span>
         <div className="relative">
           <span className="refinement-display">

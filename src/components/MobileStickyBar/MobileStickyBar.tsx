@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import "./style.scss";
-import { showAds } from "../../App";
 import { AdsComponent } from "../AdsComponent";
 import { useLocation } from "react-router-dom";
+import "./style.scss";
+import { SHOW_ADS } from "../../utils/maybeEnv";
 
 export const MobileStickyBar: React.FC = () => {
   const [hide, setHide] = useState<boolean>(false);
@@ -27,7 +27,7 @@ export const MobileStickyBar: React.FC = () => {
       <button onClick={handleHide} className="close-ad-btn">
         ×
       </button>
-      {showAds && <AdsComponent dataAdSlot="9021820760" />}
+      {SHOW_ADS && <AdsComponent dataAdSlot="9021820760" />}
     </div>
   );
 };

@@ -76,7 +76,7 @@ export const FiltersModal = ({
                       {isStatIcon ? (
                         <StatIcon name={o.name ?? ""} />
                       ) : (
-                        <img src={o.icon} />
+                        <img alt="" src={o.icon} />
                       )}
                       {o.name}
                     </span>

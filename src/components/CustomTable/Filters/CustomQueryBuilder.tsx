@@ -63,7 +63,7 @@ export const CustomQueryBuilder = ({
                         {isStatIcon ? (
                           <StatIcon name={iconName ?? ""} />
                         ) : (
-                          <img src={opt.icon} />
+                          <img alt="" src={opt.icon} />
                         )}
                         <Highlighter
                           highlightClassName="text-highlight-class"

@@ -653,7 +653,8 @@ export const LeaderboardsPage: React.FC = () => {
                         // borderBottom: "1px solid white",
                       }}
                     >
-                      <img
+                      <img 
+                        alt={thisCalc.name}
                         style={{ width: 40, height: 40, marginBottom: 15 }}
                         src={thisCalc.characterIcon}
                       />

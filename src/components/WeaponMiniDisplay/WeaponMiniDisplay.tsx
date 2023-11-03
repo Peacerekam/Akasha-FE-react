@@ -9,15 +9,14 @@ export const WeaponMiniDisplay: React.FC<WeaponMiniDisplayProps> = ({
   refinement,
   style = {},
 }) => {
-
   const _style = {
     ...style,
     // '--icon-url': `url(${icon})`,
-  } as React.CSSProperties
- 
+  } as React.CSSProperties;
+
   return (
     <div className="table-icon-text-pair relative" style={_style}>
-      <img src={icon} className="table-icon" />
+      <img alt=" " src={icon} className="table-icon" />
       <span className="bottom-right-absolute">
         {refinement ? `R${refinement}` : "?"}
       </span>

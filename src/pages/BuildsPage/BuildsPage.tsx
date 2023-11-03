@@ -89,7 +89,12 @@ export const BuildsPage: React.FC = () => {
 
           return (
             <div className="table-icon-text-pair">
-              <img className="table-icon" src={row.icon} title={row?.name} />
+              <img
+                alt=" "
+                className="table-icon"
+                src={row.icon}
+                title={row?.name}
+              />
               {/* <div className="table-icon-text-pair relative">
                 <img src={row.icon} className="table-icon" title={row?.name} />
                 <span className="bottom-right-absolute">
@@ -213,7 +218,7 @@ export const BuildsPage: React.FC = () => {
                 _stat.name.replace("%", "")
               )}`}
             >
-              <span className="mr-3" >
+              <span className="mr-3">
                 <StatIcon name={_stat.name.replace("%", "")} />
               </span>
               {_value}

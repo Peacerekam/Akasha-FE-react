@@ -36,19 +36,20 @@ export const Artifact: React.FC<ArtifactProps> = ({
   equipped,
 }) => {
   const { translate } = useContext(TranslationContext);
-  
-  const artifactBg = {
-    5: ArtifactBackground,
-    // @TODO: add more background to artifacts
-    // 4: ArtifactBackground,
-    // 3: ArtifactBackground,
-    // 2: ArtifactBackground,
-    // 1: ArtifactBackground,
-    4: NoArtifact,
-    3: NoArtifact,
-    2: NoArtifact,
-    1: NoArtifact,
-  }[artifact?.stars];
+
+  const artifactBg =
+    {
+      5: ArtifactBackground,
+      // @TODO: add more background to artifacts
+      // 4: ArtifactBackground,
+      // 3: ArtifactBackground,
+      // 2: ArtifactBackground,
+      // 1: ArtifactBackground,
+      4: NoArtifact,
+      3: NoArtifact,
+      2: NoArtifact,
+      1: NoArtifact,
+    }[artifact?.stars] || NoArtifact;
 
   // const artifactHue = {
   //   5: '0deg',
@@ -111,10 +112,10 @@ export const Artifact: React.FC<ArtifactProps> = ({
       <div className="artifact-level">+{artifact.level - 1}</div>
       <div className="artifact-rarity">
         {[...Array(artifact.stars)].map((e, i) => (
-          <img key={`star-${i}`} src={RarityStar} />
+          <img alt="*" key={`star-${i}`} src={RarityStar} />
         ))}
       </div>
-      <img className="artifact-icon" src={artifact.icon} />
+      <img alt="" className="artifact-icon" src={artifact.icon} />
       <div className="substats">
         {Object.keys(artifact.substats).map((key: any) => {
           const substatName = key.replace("%", "").replace("RATE", "Rate");
@@ -135,8 +136,13 @@ export const Artifact: React.FC<ArtifactProps> = ({
               key={normSubName}
               className={`substat ${normSubName} ${isCV ? "critvalue" : ""}`}
             >
-              <span className="substat-name">{translate(substatName.replace("Flat ", ""))}</span>
-              <span className="substat-value">+{substatValue}{isPercent(key) ? "%" : ""}</span>
+              <span className="substat-name">
+                {translate(substatName.replace("Flat ", ""))}
+              </span>
+              <span className="substat-value">
+                +{substatValue}
+                {isPercent(key) ? "%" : ""}
+              </span>
               <span className="rv-display">{summedArtifactRolls[key].rv}%</span>
             </div>
           );
@@ -159,6 +165,7 @@ export const Artifact: React.FC<ArtifactProps> = ({
 
             return (
               <img
+                alt=""
                 key={`${build.characterId}-${index}`}
                 src={build.icon}
                 style={style}

@@ -104,7 +104,7 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
                     <div>{calc.name}</div>
                   </span>
                   <span className="for-pills">
-                    <img src={toEnkaUrl(calc.weapon.icon)} />
+                    <img alt="" src={toEnkaUrl(calc.weapon.icon)} />
                     {translate(calc.weapon.name)} -
                     {calc.variant ? <div>({calc.variant})</div> : ""}{" "}
                     {calc.name}

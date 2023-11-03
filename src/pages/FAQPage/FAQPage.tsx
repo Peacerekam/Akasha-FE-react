@@ -103,6 +103,7 @@ export const FAQPage: React.FC = () => {
               </div>
               {/* @TODO: host the img */}
               <img
+                alt="faq"
                 loading="lazy"
                 className="expandable-img"
                 src="https://cdn.discordapp.com/attachments/282208855289495554/1140306303202365450/image.png"
@@ -153,6 +154,7 @@ export const FAQPage: React.FC = () => {
               </div>
               {/* @TODO: host the img */}
               <img
+                alt="faq"
                 loading="lazy"
                 className="expandable-img"
                 src="https://cdn.discordapp.com/attachments/282208855289495554/1140306303202365450/image.png"
@@ -228,6 +230,7 @@ export const FAQPage: React.FC = () => {
                 </p>
               </div>
               <img
+                alt="faq"
                 loading="lazy"
                 className="expandable-img"
                 src="https://cdn.discordapp.com/attachments/282208855289495554/1140306303202365450/image.png"
@@ -294,6 +297,7 @@ export const FAQPage: React.FC = () => {
                 </p>
               </div>
               <img
+                alt="faq"
                 loading="lazy"
                 className="expandable-img"
                 src="https://cdn.discordapp.com/attachments/282208855289495554/1140306303202365450/image.png"
@@ -365,6 +369,7 @@ export const FAQPage: React.FC = () => {
                 </p>
               </div>
               <img
+                alt="faq"
                 loading="lazy"
                 className="expandable-img"
                 src="https://cdn.discordapp.com/attachments/282208855289495554/1140306303202365450/image.png"
@@ -413,6 +418,7 @@ export const FAQPage: React.FC = () => {
                 </p>
               </div>
               <img
+                alt="faq"
                 loading="lazy"
                 className="expandable-img"
                 src="https://cdn.discordapp.com/attachments/282208855289495554/1140306303202365450/image.png"

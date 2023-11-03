@@ -75,6 +75,7 @@ export const LogInModal: React.FC<LogInModalProps> = ({
                     <td>
                       <div className="centered-td">
                         <img
+                          alt="Avatar"
                           className="navbar-img"
                           src={profileObject.profilePicture}
                         />
@@ -131,6 +132,7 @@ export const LogInModal: React.FC<LogInModalProps> = ({
                             href={`/profile/${uid}`}
                           >
                             <img
+                              alt="Avatar"
                               className="table-icon"
                               src={profilePictureLink}
                             />

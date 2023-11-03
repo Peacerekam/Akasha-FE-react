@@ -26,7 +26,7 @@ const TalentDisplay: React.FC<TalentProps> = ({ title, talent, strikethrough }) 
   return (
     <div className="talent-display" title={`${title} - ${talent?.level}${isCrowned ? " - Crowned" : ""}`}>
       {talent?.icon ? (
-        <img src={talent?.icon} />
+        <img alt="" src={talent?.icon} />
       ) : (
         <div className="talent-icon-placeholder opacity-5">?</div>
       )}
@@ -36,7 +36,7 @@ const TalentDisplay: React.FC<TalentProps> = ({ title, talent, strikethrough }) 
         } ${isBoosted ? "talent-boosted" : ""}`}
       >
         {talent?.level}
-        {isCrowned && <img className="crown-of-insight" src={CrownOfInsight} />}
+        {isCrowned && <img alt="crown" className="crown-of-insight" src={CrownOfInsight} />}
       </div>
     </div>
   );

@@ -33,6 +33,8 @@ import {
 import { PrivacyPolicyPage } from "./pages/PrivacyPolicy";
 import { TranslationContextProvider } from "./context/TranslationProvider/TranslationProviderContext";
 import { ContentWrapper } from "./components/ContentWrapper";
+import { domainRedirect } from "./utils/helpers";
+import { BASENAME, MAINTENANCE_MODE, IS_PRODUCATION } from "./utils/maybeEnv";
 
 // @TODO: env variables later on...
 const urls = {
@@ -43,14 +45,8 @@ const urls = {
   // "game-rise-ovh": "http://54.39.29.82",
 };
 
-export const BASENAME = "/";
-export const showAds = true;
-export const isProduction = true; // set to true for akasha.cv domain
-export const TRANSLATION_VERSION = 0.28; // increment this when translation keys are outdated
-const MAINTENANCE_MODE = false;
-
 const getApiBaseURL = () => {
-  if (isProduction) {
+  if (IS_PRODUCATION) {
     return urls["prod-akasha-cv"];
   }
 
@@ -68,34 +64,29 @@ axios.defaults.withCredentials = true;
 //   },
 // });
 
-const domainRedirect = () => {
-  const currentHref = window.location.href;
-
-  // let _from = "!@#$%!@#$";
-  let _from = "mimee.ovh";
-
-  switch (currentHref) {
-    case "peacerekam.github.io":
-      _from = "peacerekam.github.io";
-      break;
-    case "146.59.86.233":
-      _from = "146.59.86.233";
-      break;
-    case "54.39.29.82":
-      _from = "54.39.29.82";
-      break;
-  }
-
-  if (currentHref.includes(_from) || currentHref.startsWith("www.")) {
-    // startsWith ?? includes ??
-    const _to = "akasha.cv";
-    const newHref = currentHref
-      .replace("www.", "")
-      .replace(_from, _to) // change domain
-      .replace("/#/", "/"); // HashRouter to BrowserRouter
-    window.location.href = newHref;
-  }
-};
+const appRoutes: {
+  path: string;
+  Element: React.FC<any>;
+  props?: any;
+}[] = [
+  // @TODO: dashboard...
+  // { path: "/", Element: DashboardPage }
+  { path: "/", Element: AccountsPage },
+  { path: "/artifacts", Element: ArtifactsPage },
+  { path: "/builds", Element: BuildsPage },
+  { path: "/profiles", Element: AccountsPage },
+  { path: "/profile/:uid", Element: ProfilePage },
+  { path: "/leaderboards", Element: CategorySelectionPage },
+  { path: "/leaderboards/:calculationId", Element: LeaderboardsPage },
+  { path: "/leaderboards/:calculationId/:variant", Element: LeaderboardsPage },
+  { path: "/faq", Element: FAQPage },
+  { path: "/privacy-policy", Element: PrivacyPolicyPage },
+  {
+    path: "*",
+    Element: PageMessage,
+    props: { message: "404. Page not found." },
+  },
+];
 
 const App = () => {
   useEffect(() => {
@@ -134,9 +125,6 @@ const App = () => {
   return (
     // <QueryClientProvider client={queryClient}>
     <LastProfilesContextProvider>
-      {/* <CookieConsent>
-        This website uses cookies to enhance the user experience.
-      </CookieConsent> */}
       <SessionDataContextProvider>
         <BrowserRouter basename={BASENAME}>
           <NotificationsContextProvider>
@@ -161,46 +149,17 @@ const App = () => {
                   <ContentWrapper>
                     <HoverElementContextProvider>
                       <Routes>
-                        {/* @TODO: later use dashboard page instead */}
-                        {/* <Route path="/" element={<DashboardPage />} /> */}
-                        <Route path="/" element={<AccountsPage />} />
-                        <Route path="/artifacts" element={<ArtifactsPage />} />
-                        <Route path="/builds" element={<BuildsPage />} />
-                        <Route path="/profiles" element={<AccountsPage />} />
+                        {appRoutes.map((route) => {
+                          const { Element, path } = route;
 
-                        <Route path="/profile/:uid" element={<ProfilePage />} />
-
-                        {/* DEPRECATED */}
-                        {/* <Route path="/profile/:uid/ads" element={<ProfilePage />} /> */}
-
-                        <Route
-                          path="/leaderboards"
-                          element={<CategorySelectionPage />}
-                        />
-
-                        <Route
-                          path="/leaderboards/:calculationId"
-                          element={<LeaderboardsPage />}
-                        />
-
-                        <Route
-                          path="/leaderboards/:calculationId/:variant"
-                          element={<LeaderboardsPage />}
-                        />
-
-                        <Route path="/faq" element={<FAQPage />} />
-
-                        <Route
-                          path="/privacy-policy"
-                          element={<PrivacyPolicyPage />}
-                        />
-
-                        <Route
-                          path="*"
-                          element={
-                            <PageMessage message="404. Page not found." />
-                          }
-                        />
+                          return (
+                            <Route
+                              key={path}
+                              path={path}
+                              element={<Element {...route?.props} />}
+                            />
+                          );
+                        })}
                       </Routes>
                     </HoverElementContextProvider>
 

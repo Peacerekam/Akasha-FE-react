@@ -296,7 +296,7 @@ export const uidsToQuery = (uids: (string | number)[]) => {
 
   uids.forEach((uid) => {
     if (!uid) return;
-    stringified += `[uid]${(""+uid).toLowerCase()}`;
+    stringified += `[uid]${("" + uid).toLowerCase()}`;
   });
 
   return stringified;
@@ -718,4 +718,33 @@ export const getRelevantCharacterStats = (row: any) => {
   relevantStats = getCharacterStatsInOrder(relevantStats);
 
   return relevantStats;
+};
+
+export const domainRedirect = () => {
+  const currentHref = window.location.href;
+
+  // let _from = "!@#$%!@#$";
+  let _from = "mimee.ovh";
+
+  switch (currentHref) {
+    case "peacerekam.github.io":
+      _from = "peacerekam.github.io";
+      break;
+    case "146.59.86.233":
+      _from = "146.59.86.233";
+      break;
+    case "54.39.29.82":
+      _from = "54.39.29.82";
+      break;
+  }
+
+  if (currentHref.includes(_from) || currentHref.startsWith("www.")) {
+    // startsWith ?? includes ??
+    const _to = "akasha.cv";
+    const newHref = currentHref
+      .replace("www.", "")
+      .replace(_from, _to) // change domain
+      .replace("/#/", "/"); // HashRouter to BrowserRouter
+    window.location.href = newHref;
+  }
 };

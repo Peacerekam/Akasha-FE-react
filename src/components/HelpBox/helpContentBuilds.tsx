@@ -3,6 +3,7 @@ import { StatIcon } from "../StatIcon";
 
 export const getIconElement = (name: string) => (
   <img
+    alt={name}
     className="table-icon"
     src={`https://enka.network/ui/UI_AvatarIcon_${name}.png`}
   />

@@ -43,14 +43,14 @@ export const Footer: React.FC = () => {
         <StylizedContentBlock overrideImage={DomainBackground} />
         <div className="footer-main">
           <span style={{ cursor: "default", paddingLeft: 30 }}>
-            <img src={AkashaLogo} className="tilted-logo" />
+            <img alt="Akasha" src={AkashaLogo} className="tilted-logo" />
             <span className="logo-text">
               Akasha System
               <span className="annotation">Work in progress</span>
             </span>
           </span>
           <a target="_blank" rel="noreferrer" href="https://enka.network/">
-            <img src={PoweredByEnka} />
+            <img alt="Enka Network" src={PoweredByEnka} />
           </a>
           <Link to="/privacy-policy">Privacy Policy</Link>
           {playwireBadge}

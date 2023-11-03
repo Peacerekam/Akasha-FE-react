@@ -223,7 +223,7 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
     <div className="flex expanded-row">
       <div className="character-preview">
         <div className="character-type-preview">
-          <img className="table-icon" src={row.icon} title={row?.name} />
+          <img alt="" className="table-icon" src={row.icon} title={row?.name} />
           {translate("Lv.")} {row?.propMap?.level?.val || "??"}
           {" - "}
           {row.type === "current" ? row.name : row.type}

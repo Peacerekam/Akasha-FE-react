@@ -19,7 +19,7 @@ const TalentDisplay: React.FC<TalentProps> = ({ talent, strikethrough }) => {
   return (
     <div className="talent-display">
       {talent?.icon ? (
-        <img src={talent?.icon} />
+        <img alt="" src={talent?.icon} />
       ) : (
         <div className="talent-icon-placeholder opacity-5" >?</div>
       )}

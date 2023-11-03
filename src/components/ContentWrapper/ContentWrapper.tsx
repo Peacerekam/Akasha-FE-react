@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { isProduction } from "../../App";
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
+import { IS_PRODUCATION } from "../../utils/maybeEnv";
 
 type ContentWrapperProps = {
   children: any;
@@ -9,7 +9,7 @@ type ContentWrapperProps = {
 export const ContentWrapper: React.FC<ContentWrapperProps> = ({ children }) => {
   const { contentWidth } = useContext(AdProviderContext);
 
-  const classNames = ["content-wrapper", isProduction ? "" : "dev-indicator"]
+  const classNames = ["content-wrapper", IS_PRODUCATION ? "" : "dev-indicator"]
     .join(" ")
     .trim();
 

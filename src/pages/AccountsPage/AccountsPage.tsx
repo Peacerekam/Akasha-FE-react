@@ -82,6 +82,7 @@ export const AccountsPage: React.FC = () => {
               <div className="table-icon-text-pair">
                 {row.profilePictureLink ? (
                   <img
+                    alt=" "
                     className="table-icon"
                     src={row.profilePictureLink}
                     title={row.playerInfo.nickname}

@@ -1,6 +1,6 @@
 import React, { useState, createContext, useEffect, useCallback } from "react";
 import axios from "axios";
-import { TRANSLATION_VERSION } from "../../App";
+import { TRANSLATION_VERSION } from "../../utils/maybeEnv";
 
 export type Language =
   | "en"

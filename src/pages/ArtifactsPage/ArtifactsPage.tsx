@@ -94,7 +94,12 @@ export const ArtifactsPage: React.FC = () => {
         cell: (row) => {
           return (
             <div className="table-icon-text-pair">
-              <img className="table-icon" src={row.icon} title={row.name} />{" "}
+              <img
+                alt=" "
+                className="table-icon"
+                src={row.icon}
+                title={row.name}
+              />{" "}
               <span
                 style={{
                   color: {
@@ -169,7 +174,7 @@ export const ArtifactsPage: React.FC = () => {
                 isCV ? "critvalue" : ""
               }`}
             >
-              <span className="mr-3" >
+              <span className="mr-3">
                 <StatIcon name={key} />
               </span>
               {substatValue}

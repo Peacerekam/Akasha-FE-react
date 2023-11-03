@@ -180,7 +180,7 @@ export const ProfilePage: React.FC = () => {
         cell: (row) => {
           return (
             <div className="table-icon-text-pair">
-              <img className="table-icon" src={row.icon} />{" "}
+              <img alt=" " className="table-icon" src={row.icon} />{" "}
               <span
                 style={{
                   color: {
@@ -305,7 +305,7 @@ export const ProfilePage: React.FC = () => {
           const gender = getGenderFromIcon(row.icon);
           return (
             <div className="table-icon-text-pair">
-              <img className="table-icon" src={row.icon} />
+              <img alt=" " className="table-icon" src={row.icon} />
               {row.type !== "current" ? (
                 <ReplaceRowDataOnHover data={row.name} onHoverData={row.type} />
               ) : (

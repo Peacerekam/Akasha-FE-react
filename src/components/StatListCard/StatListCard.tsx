@@ -72,7 +72,7 @@ export const StatListCard: React.FC<StatListProps> = ({ row }) => {
       return (
         <div key={name} className="table-stat-row">
           <div className="flex gap-5 w-100">
-            <img className="stat-icon" src={icon} />
+            <img alt="" className="stat-icon" src={icon} />
             <span style={{ color: "#90ee90" }}>
               {" "}
               {translate(name)}

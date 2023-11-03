@@ -108,6 +108,7 @@ export const CategorySelectionPage: React.FC = () => {
             <div className="table-icon-text-pair">
               <StatIcon name={element} />
               <img
+                alt=" "
                 className="table-icon"
                 src={row.characterIcon}
                 title={row?.characterName}

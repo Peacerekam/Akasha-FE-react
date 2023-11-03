@@ -109,5 +109,5 @@ export const StatIcon: React.FC<StatIconProps> = ({ name }) => {
     return <span>×</span>
   }
 
-  return <img className="stat-icon" src={asset} />;
+  return <img alt="" className="stat-icon" src={asset} />;
 };

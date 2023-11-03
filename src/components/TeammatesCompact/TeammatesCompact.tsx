@@ -170,11 +170,13 @@ export const TeammatesCompact: React.FC<TeammatesCompactProps> = ({
   };
 
   const flexTeammateIcon = () => {
-    return <img className="flex-fill-img" src={FlexIcon} />;
+    return <img alt=" " className="flex-fill-img" src={FlexIcon} />;
   };
 
   const teammateIcon = (teammate: CalculationTeammate) => {
-    return <img className="table-icon" src={teammate.character?.icon} />;
+    return (
+      <img alt=" " className="table-icon" src={teammate.character?.icon} />
+    );
   };
 
   const renderTeammate = (teammate: CalculationTeammate, index: number) => {
@@ -247,6 +249,7 @@ export const TeammatesCompact: React.FC<TeammatesCompactProps> = ({
             {isNonFill && teammate.weapon?.icon ? (
               <div className="overlay-weapon-wrapper">
                 <img
+                  alt=" "
                   className="table-icon overlay-icon"
                   src={teammate.weapon?.icon}
                 />
@@ -257,6 +260,7 @@ export const TeammatesCompact: React.FC<TeammatesCompactProps> = ({
             {isNonFill && teammate.character?.artifactSet ? (
               <div className="overlay-artifact-wrapper">
                 <img
+                  alt=" "
                   className="table-icon overlay-icon"
                   src={teammate.character?.artifactSetIcon}
                 />

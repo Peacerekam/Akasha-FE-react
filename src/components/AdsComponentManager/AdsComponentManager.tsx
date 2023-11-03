@@ -7,7 +7,7 @@ import VenatusAdsComponent from "../VenatusAdsComponent/VenatusAdsComponent";
 import PlaywireAdsComponent, {
   PlaywireAdsComponentProps,
 } from "../PlaywireAdsComponent/PlaywireAdsComponent";
-import { showAds } from "../../App";
+import { SHOW_ADS } from "../../utils/maybeEnv";
 
 type AdsComponentManagerProps = VenatusAdsComponentProps &
   AdsComponentProps &
@@ -33,7 +33,7 @@ export const AdsComponentManager: React.FC<AdsComponentManagerProps> = (
     document.querySelector("body")?.classList.remove("ads-disabled");
   }
 
-  if (!showAds || reloadAds || adsDisabled || profileObject.isPatreon) {
+  if (!SHOW_ADS || reloadAds || adsDisabled || profileObject.isPatreon) {
     return <></>;
   }
 

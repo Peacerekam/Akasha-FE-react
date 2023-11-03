@@ -1,6 +1,6 @@
 import React, { useState, createContext, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { isProduction } from "../../App";
+import { IS_PRODUCATION } from "../../utils/maybeEnv";
 
 type TitleProviderContextType = {
   setTitle: (title: string) => void;
@@ -67,7 +67,7 @@ const TitleContextProvider: React.FC<{ children: any }> = ({ children }) => {
   useEffect(() => {
     if (document.title === title) return;
 
-    if (!isProduction) {
+    if (!IS_PRODUCATION) {
       setDocumentTitle(`DEV | ${title}`);
       return;
     }

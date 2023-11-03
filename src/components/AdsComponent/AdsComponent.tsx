@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
+import { IS_PRODUCATION } from "../../utils/maybeEnv";
 import "./index.scss";
-import { isProduction } from "../../App";
 
 export type AdsComponentProps = {
   dataAdSlot?: string;
@@ -17,7 +17,7 @@ export const AdsComponent: React.FC<AdsComponentProps> = ({ dataAdSlot }) => {
 
   const adStyle = {} as React.CSSProperties;
 
-  if (!isProduction) {
+  if (!IS_PRODUCATION) {
     adStyle.boxShadow = "cyan 0px 0px 0 2px";
     adStyle.height = 280;
   }
@@ -31,7 +31,7 @@ export const AdsComponent: React.FC<AdsComponentProps> = ({ dataAdSlot }) => {
         data-ad-slot={dataAdSlot}
         data-ad-format="auto"
         data-full-width-responsive="true"
-        data-adtest={isProduction ? "off" : "on"}
+        data-adtest={IS_PRODUCATION ? "off" : "on"}
       />
     </>
   );

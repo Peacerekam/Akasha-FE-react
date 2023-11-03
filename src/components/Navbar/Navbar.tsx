@@ -100,7 +100,7 @@ export const Navbar: React.FC = () => {
         ? { icon: <Spinner />, name: "", path: "" }
         : {
             icon: isAuthenticated ? (
-              <img className="navbar-img" src={profilePicture} />
+              <img alt="avatar" className="navbar-img" src={profilePicture} />
             ) : (
               <FontAwesomeIcon icon={faRightFromBracket} size="1x" />
             ),
@@ -161,7 +161,7 @@ export const Navbar: React.FC = () => {
       >
         <span className="logo">
           <span className="annotation">Work in progress</span>
-          <img src={AkashaLogo} className="tilted-logo" />
+          <img alt="Akasha" src={AkashaLogo} className="tilted-logo" />
           <span className="logo-text">Akasha System</span>
         </span>
       </a>
@@ -184,7 +184,7 @@ export const Navbar: React.FC = () => {
       >
         <span className="logo">
           <span className="annotation">Work in progress</span>
-          <img src={AkashaLogo} className="tilted-logo" />
+          <img alt="Akasha" src={AkashaLogo} className="tilted-logo" />
           <span className="logo-text">Akasha System</span>
         </span>
       </a>
@@ -192,7 +192,11 @@ export const Navbar: React.FC = () => {
       <div className="navbar-spacer" />
 
       <LogInModal isOpen={showLoginModal} toggleModal={handleToggleModal} />
-      <HamburgerMenu isOpen={showHamburger} toggleHamburger={handleToggleHamburger} navigation={NAVIGATION} />
+      <HamburgerMenu
+        isOpen={showHamburger}
+        toggleHamburger={handleToggleHamburger}
+        navigation={NAVIGATION}
+      />
 
       <a
         className="hamburger-wrapper"
@@ -208,7 +212,6 @@ export const Navbar: React.FC = () => {
           title="Menu"
         />
       </a>
-
     </>
   );
 

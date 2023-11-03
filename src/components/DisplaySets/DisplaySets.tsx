@@ -16,7 +16,7 @@ export const DisplaySets: React.FC<DisplaySetsProps> = ({ artifactSets }) => {
           const { icon, count } = artifactSets[name];
           return (
             <div key={name} className="table-icon-text-pair relative">
-              <img className="table-icon" src={icon} />
+              <img alt="" className="table-icon" src={icon} />
               <span className="bottom-right-absolute">
                 {Math.floor(count / 2) * 2}
               </span>

@@ -91,7 +91,7 @@ const TalentDisplay: React.FC<TalentProps> = ({ talent }) => {
     >
       {talent?.icon ? (
         <span>
-          <img src={talent?.icon} />
+          <img alt="" src={talent?.icon} />
         </span>
       ) : (
         <span>
@@ -100,7 +100,9 @@ const TalentDisplay: React.FC<TalentProps> = ({ talent }) => {
       )}
       <div className={"talent-display-value"}>
         <span>{talent?.level || "-"}</span>
-        {isCrowned && <img className="crown-of-insight" src={CrownOfInsight} />}
+        {isCrowned && (
+          <img alt="crown" className="crown-of-insight" src={CrownOfInsight} />
+        )}
       </div>
     </div>
   );
@@ -607,7 +609,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
           const lbBadge = (
             <span className="lb-badge">
-              <img className="weapon-icon" src={calc.weapon.icon} />
+              <img alt="" className="weapon-icon" src={calc.weapon.icon} />
               <span>
                 {short} {variant?.displayName?.replace("C6 ", "")}
               </span>
@@ -891,6 +893,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             </div>
           )}
           <img
+            alt=""
             style={{ display: "none" }}
             ref={backgroundPictureRef}
             src={toEnkaUrl(chartsData?.assets?.gachaIcon)}
@@ -925,10 +928,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       <div>
         <div className="character-weapon relative">
           <div className="weapon-icon">
-            <img src={row.weapon.icon} />
+            <img alt="" src={row.weapon.icon} />
             <div className="weapon-rarity">
               {[...Array(chartsData?.weaponMetadata?.rarity)].map((e, i) => (
-                <img key={`star-${i}`} src={RarityStar} />
+                <img alt="*" key={`star-${i}`} src={RarityStar} />
               ))}
             </div>
           </div>
@@ -1031,7 +1034,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
               {shorterName}
             </span>
             <span className="for-pills">
-              <img src={c.weapon.icon} />
+              <img alt="" src={c.weapon.icon} />
               {translate(c.weapon.name)} - top {_top}{" "}
               {c.variant?.displayName ? `(${c.variant?.displayName}) ` : " "}
               {c.short}
@@ -1115,7 +1118,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           </span>
         </div>
         <div className="character-friendship">
-          <img src={FriendshipIcon} /> {row.fetterInfo.expLevel}
+          <img alt="friendship" src={FriendshipIcon} />{" "}
+          {row.fetterInfo.expLevel}
         </div>
         <div
           className="character-cv"
@@ -1149,6 +1153,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                   ""
                 )}
                 <img
+                  alt="constellation"
                   key={`const-${i}`}
                   className={isActivated ? "activated" : ""}
                   src={toEnkaUrl(constImg)}
