@@ -59,8 +59,8 @@ const LastProfilesContextProvider: React.FC<{ children: any }> = ({
     });
   };
 
-  const sortByPriority = (a: NicknameUidPair, b: NicknameUidPair) =>
-    (a?.priority || 1) < (b?.priority || 1) ? 1 : -1;
+  // const sortByPriority = (a: NicknameUidPair, b: NicknameUidPair) =>
+  //   (a?.priority || 1) < (b?.priority || 1) ? 1 : -1;
 
   // add tab to state
   const addTab = (uid: string, nickname: string) => {
@@ -90,20 +90,27 @@ const LastProfilesContextProvider: React.FC<{ children: any }> = ({
           ...prev[index],
           priority: newPriority,
         };
-        return [...prev].sort(sortByPriority);
+
+        const favourites = prev.filter((a) => (a.priority || 1) > 1);
+        const rest = prev.filter((a) => (a.priority || 1) === 1);
+
+        return [...favourites, ...rest];
       }
 
-      const favourites = prev.filter((a) => (a.priority || 1) > 1);
+      const newProfile = { uid, nickname, priority };
+      const _prev = [...prev, newProfile];
+      const favourites = _prev.filter((a) => (a.priority || 1) > 1);
 
       if (favourites.length >= tabLimit) return prev;
 
-      const rest = prev.filter((a) => (a.priority || 1) === 1);
+      const rest = _prev.filter((a) => (a.priority || 1) === 1);
       const sliceFrom = -tabLimit + favourites.length;
-      const newProfile = { uid, nickname, priority };
 
-      return favourites
-        .concat([...rest, newProfile].slice(sliceFrom))
-        .sort(sortByPriority);
+      return [...favourites, ...rest.slice(sliceFrom)];
+
+      // return favourites
+      //   .concat([...rest, newProfile].slice(sliceFrom))
+      //   .sort(sortByPriority);
     });
   };
 
