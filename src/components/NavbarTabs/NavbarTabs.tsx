@@ -1,9 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
 import "./style.scss";
+
+import React, { useContext, useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
 
 export const NavbarTabs: React.FC = () => {
   const [animationStagger, setAnimationStagger] = useState(150);

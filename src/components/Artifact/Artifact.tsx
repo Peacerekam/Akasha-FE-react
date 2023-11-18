@@ -1,3 +1,10 @@
+import "./style.scss";
+
+import {
+  REAL_SUBSTAT_VALUES,
+  STAT_NAMES,
+  getSubstatEfficiency,
+} from "../../utils/substats";
 import React, { useContext } from "react";
 import {
   getArtifactCvClassName,
@@ -12,13 +19,6 @@ import {
 import ArtifactBackground from "../../assets/images/artifact-5star-bg.png";
 import NoArtifact from "../../assets/images/no-artifact.png";
 import RarityStar from "../../assets/images/star.png";
-
-import "./style.scss";
-import {
-  getSubstatEfficiency,
-  REAL_SUBSTAT_VALUES,
-  STAT_NAMES,
-} from "../../utils/substats";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 
 type ArtifactProps = {

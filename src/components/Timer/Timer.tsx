@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
 import "./style.scss";
+
+import React, { useEffect, useState } from "react";
 
 type TimerProps = {
   until: number;

@@ -1,5 +1,5 @@
-import { useEffect } from "react";
 import Highlighter from "react-highlight-words";
+import { useEffect } from "react";
 
 type FAQHighlighterProps = {
   id: number;

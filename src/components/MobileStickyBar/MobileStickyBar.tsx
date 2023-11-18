@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { AdsComponent } from "../AdsComponent";
-import { useLocation } from "react-router-dom";
 import "./style.scss";
+
+import React, { useEffect, useState } from "react";
+
+import { AdsComponent } from "../AdsComponent";
 import { SHOW_ADS } from "../../utils/maybeEnv";
+import { useLocation } from "react-router-dom";
 
 export const MobileStickyBar: React.FC = () => {
   const [hide, setHide] = useState<boolean>(false);

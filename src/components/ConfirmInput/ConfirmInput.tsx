@@ -1,8 +1,10 @@
-import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useCallback, useEffect, useRef, useState } from "react";
 import "../ConfirmTooltip/style.scss";
 import "./style.scss";
+
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 type ConfirmInputProps = {
   sort: string | null;

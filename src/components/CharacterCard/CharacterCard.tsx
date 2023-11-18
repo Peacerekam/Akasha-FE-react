@@ -1,52 +1,6 @@
-import React, {
-  useMemo,
-  useState,
-  useEffect,
-  useCallback,
-  useRef,
-  useContext,
-} from "react";
-import ReactSelect from "react-select";
-
-import html2canvas, { Options } from "html2canvas";
-// import { toBlob, toPng } from "html-to-image";
+import "./style.scss";
 
 import { Chart as ChartJS, registerables } from "chart.js";
-import { Radar } from "react-chartjs-2";
-import { useLocation } from "react-router-dom";
-
-import {
-  getArtifactsInOrder,
-  normalizeText,
-  getArtifactCvClassName,
-  isPercent,
-  getInGameSubstatValue,
-  getSubstatPercentageEfficiency,
-  toEnkaUrl,
-  ascensionToLevel,
-  getGenderFromIcon,
-  delay,
-} from "../../utils/helpers";
-import { REAL_SUBSTAT_VALUES, STAT_NAMES } from "../../utils/substats";
-import { StatIcon } from "../StatIcon";
-import { reactSelectCustomFilterTheme } from "../../utils/reactSelectCustomFilterTheme";
-import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCog,
-  faDownload,
-  faLock,
-  faMagnifyingGlass,
-} from "@fortawesome/free-solid-svg-icons";
-import { Spinner } from "../Spinner";
-import { StatListCard } from "../StatListCard";
-import { RollList } from "../RollList";
-import CrownOfInsight from "../../assets/images/Crown_of_Insight.webp";
-import RarityStar from "../../assets/images/star.png";
-import FriendshipIcon from "../../assets/icons/Item_Companionship_EXP.png";
-import { PreviewModal } from "./PreviewModal";
-import { applyModalBodyStyle, getRelativeCoords } from "../CustomTable/Filters";
-import { TeammatesCompact } from "../TeammatesCompact";
 import {
   ELEMENT_TO_COLOR,
   calcStatVals,
@@ -54,10 +8,58 @@ import {
   scales,
   toTalentProps,
 } from "./cardHelpers";
-import { ArtifactOnCanvas } from "../ArtifactListCompact";
-import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import { REAL_SUBSTAT_VALUES, STAT_NAMES } from "../../utils/substats";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { applyModalBodyStyle, getRelativeCoords } from "../CustomTable/Filters";
+import {
+  ascensionToLevel,
+  delay,
+  getArtifactCvClassName,
+  getArtifactsInOrder,
+  getGenderFromIcon,
+  getInGameSubstatValue,
+  getSubstatPercentageEfficiency,
+  isPercent,
+  normalizeText,
+  toEnkaUrl,
+} from "../../utils/helpers";
+import {
+  faCog,
+  faDownload,
+  faLock,
+  faMagnifyingGlass,
+} from "@fortawesome/free-solid-svg-icons";
+import html2canvas, { Options } from "html2canvas";
+
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
-import "./style.scss";
+import { ArtifactOnCanvas } from "../ArtifactListCompact";
+import CrownOfInsight from "../../assets/images/Crown_of_Insight.webp";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import FriendshipIcon from "../../assets/icons/Item_Companionship_EXP.png";
+import { PreviewModal } from "./PreviewModal";
+import { Radar } from "react-chartjs-2";
+import RarityStar from "../../assets/images/star.png";
+import ReactSelect from "react-select";
+import { RollList } from "../RollList";
+import { Spinner } from "../Spinner";
+import { StatIcon } from "../StatIcon";
+import { StatListCard } from "../StatListCard";
+import { TeammatesCompact } from "../TeammatesCompact";
+import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
+import { reactSelectCustomFilterTheme } from "../../utils/reactSelectCustomFilterTheme";
+import { useLocation } from "react-router-dom";
+
+// import { toBlob, toPng } from "html-to-image";
+
+
 
 ChartJS.register(...registerables);
 

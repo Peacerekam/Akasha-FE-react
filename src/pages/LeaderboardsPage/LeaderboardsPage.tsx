@@ -1,3 +1,27 @@
+import "./style.scss";
+
+import {
+  CalculationTeammate,
+  CritRatio,
+  CustomTable,
+  DisplaySets,
+  NotificationBar,
+  RegionBadge,
+  StatIcon,
+  StylizedContentBlock,
+  TeammatesCompact,
+  WeaponMiniDisplay,
+} from "../../components";
+import { Chart as ChartJS, registerables } from "chart.js";
+import {
+  FETCH_CATEGORIES_URL_V2,
+  FETCH_CHARACTER_FILTERS_URL,
+  FETCH_LEADERBOARDS_URL,
+  getRelevantCharacterStats,
+  iconUrlToNamecardUrl,
+  normalizeText,
+  uidsToQuery,
+} from "../../utils/helpers";
 import React, {
   useCallback,
   useContext,
@@ -5,43 +29,20 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import axios from "axios";
-import debounce from "lodash/debounce";
 import { useNavigate, useParams } from "react-router-dom";
-import { Chart as ChartJS, registerables } from "chart.js";
-import { Line } from "react-chartjs-2";
 
+import { AdsComponentManager } from "../../components/AdsComponentManager";
 import { BuildsColumns } from "../BuildsPage";
-import {
-  CritRatio,
-  StatIcon,
-  DisplaySets,
-  CustomTable,
-  WeaponMiniDisplay,
-  StylizedContentBlock,
-  RegionBadge,
-  TeammatesCompact,
-  CalculationTeammate,
-  NotificationBar,
-} from "../../components";
-import {
-  FETCH_CHARACTER_FILTERS_URL,
-  uidsToQuery,
-  FETCH_LEADERBOARDS_URL,
-  FETCH_CATEGORIES_URL_V2,
-  iconUrlToNamecardUrl,
-  normalizeText,
-  getRelevantCharacterStats,
-} from "../../utils/helpers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
-import { TableColumn } from "../../types/TableColumn";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
+import { Line } from "react-chartjs-2";
+import { TableColumn } from "../../types/TableColumn";
 import { TitleContext } from "../../context/TitleProvider/TitleProviderContext";
-import { AdsComponentManager } from "../../components/AdsComponentManager";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
-import "./style.scss";
+import axios from "axios";
+import debounce from "lodash/debounce";
+import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 
 ChartJS.register(...registerables);
 

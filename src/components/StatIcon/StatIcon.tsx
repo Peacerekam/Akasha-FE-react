@@ -1,28 +1,28 @@
-import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import "./style.scss";
 
-import CritRate from "../../assets/icons/CRITICAL.png";
-import CritDMG from "../../assets/icons/CRITICAL_HURT.png";
-import EM from "../../assets/icons/ELEMENT_MASTERY.png";
-import HP from "../../assets/icons/HP.png";
-import HP_ from "../../assets/icons/HP_PERCENT.png";
-import ER from "../../assets/icons/CHARGE_EFFICIENCY.png";
+import { faCirclet, faFlower, faGoblet, faPlume, faSands } from "./faIcons";
+
 import ATK from "../../assets/icons/ATTACK.png";
 import ATK_ from "../../assets/icons/ATTACK_PERCENT.png";
+import AnemoDMG from "../../assets/icons/WIND_ADD_HURT.png";
+import CritDMG from "../../assets/icons/CRITICAL_HURT.png";
+import CritRate from "../../assets/icons/CRITICAL.png";
+import CryoDMG from "../../assets/icons/ICE_ADD_HURT.png";
 import DEF from "../../assets/icons/DEFENSE.png";
 import DEF_ from "../../assets/icons/DEFENSE_PERCENT.png";
-import PyroDMG from "../../assets/icons/FIRE_ADD_HURT.png";
-import ElectroDMG from "../../assets/icons/ELEC_ADD_HURT.png";
 import DendroDMG from "../../assets/icons/GRASS_ADD_HURT.png";
+import EM from "../../assets/icons/ELEMENT_MASTERY.png";
+import ER from "../../assets/icons/CHARGE_EFFICIENCY.png";
+import ElectroDMG from "../../assets/icons/ELEC_ADD_HURT.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import GeoDMG from "../../assets/icons/ROCK_ADD_HURT.png";
-import AnemoDMG from "../../assets/icons/WIND_ADD_HURT.png";
+import HP from "../../assets/icons/HP.png";
+import HP_ from "../../assets/icons/HP_PERCENT.png";
+import HealingBonus from "../../assets/icons/HEAL_ADD.png";
 import HydroDMG from "../../assets/icons/WATER_ADD_HURT.png";
 import PhysicalDMG from "../../assets/icons/PHYSICAL_ADD_HURT.png";
-import CryoDMG from "../../assets/icons/ICE_ADD_HURT.png";
-import HealingBonus from "../../assets/icons/HEAL_ADD.png";
-import { faFlower, faPlume, faSands, faGoblet, faCirclet } from "./faIcons";
-
-import "./style.scss";
+import PyroDMG from "../../assets/icons/FIRE_ADD_HURT.png";
+import React from "react";
 
 type StatIconProps = { name: string };
 

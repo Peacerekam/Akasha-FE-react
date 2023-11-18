@@ -88,7 +88,7 @@
     .substat {
       gap: 3px;
       .roll-dots {
-        text-align: flex-end;
+        text-align: end;
         position: absolute;
         transform: translateX(calc(-100% - 3px));
         // filter: drop-shadow(0px 0px 3px black);

@@ -1,19 +1,20 @@
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheck,
+  faRightFromBracket,
   faX,
   faXmark,
-  faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 import { faDiscord, faPatreon } from "@fortawesome/free-brands-svg-icons";
-import { useContext } from "react";
-import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
-import { ConfirmTooltip } from "../ConfirmTooltip";
-import { optsParamsSessionID } from "../../utils/helpers";
+
 import { ARBadge } from "../ARBadge";
+import { ConfirmTooltip } from "../ConfirmTooltip";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { RegionBadge } from "../RegionBadge";
+import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
+import axios from "axios";
+import { optsParamsSessionID } from "../../utils/helpers";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 type LogInModalProps = {
   isOpen: boolean;

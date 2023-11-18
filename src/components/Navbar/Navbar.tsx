@@ -1,18 +1,20 @@
-import React, { useContext, useMemo, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDiscord, faPatreon } from "@fortawesome/free-brands-svg-icons";
-import { faBars, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate, useLocation } from "react-router-dom";
+import "./style.scss";
+
 import { DISCORD_URL, PATREON_URL } from "../../utils/helpers";
+import React, { useContext, useMemo, useState } from "react";
 import { applyModalBodyStyle, getRelativeCoords } from "../CustomTable/Filters";
+import { faBars, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { faDiscord, faPatreon } from "@fortawesome/free-brands-svg-icons";
+import { useLocation, useNavigate } from "react-router-dom";
+
+import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
+import AkashaLogo from "../../assets/images/favicon.svg";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { HamburgerMenu } from "./HamburgerMenu";
+import { LanguageSwitcher } from "../LanguageSwitcher";
 import { LogInModal } from "./LogInModal";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
 import { Spinner } from "../Spinner";
-import { LanguageSwitcher } from "../LanguageSwitcher";
-import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
-import AkashaLogo from "../../assets/images/favicon.svg";
-import { HamburgerMenu } from "./HamburgerMenu";
-import "./style.scss";
 
 export type NavElement = {
   name: string;

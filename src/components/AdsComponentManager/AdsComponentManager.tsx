@@ -1,13 +1,14 @@
-import React, { useContext } from "react";
-import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
-import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
 import { AdsComponent, AdsComponentProps } from "../AdsComponent";
-import { VenatusAdsComponentProps } from "../VenatusAdsComponent";
-import VenatusAdsComponent from "../VenatusAdsComponent/VenatusAdsComponent";
 import PlaywireAdsComponent, {
   PlaywireAdsComponentProps,
 } from "../PlaywireAdsComponent/PlaywireAdsComponent";
+import React, { useContext } from "react";
+
+import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 import { SHOW_ADS } from "../../utils/maybeEnv";
+import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
+import VenatusAdsComponent from "../VenatusAdsComponent/VenatusAdsComponent";
+import { VenatusAdsComponentProps } from "../VenatusAdsComponent";
 
 type AdsComponentManagerProps = VenatusAdsComponentProps &
   AdsComponentProps &

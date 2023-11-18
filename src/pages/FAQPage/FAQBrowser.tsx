@@ -1,7 +1,9 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { FAQHighlighter } from "./FAQHighlighter";
 import "./style.scss";
+
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+
+import { FAQHighlighter } from "./FAQHighlighter";
 import debounce from "lodash/debounce";
 
 type FAQBrowserProps = {

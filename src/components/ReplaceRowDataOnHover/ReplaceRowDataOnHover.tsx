@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
 import "./style.scss";
+
+import React, { useEffect, useRef, useState } from "react";
 
 type ReplaceRowDataOnHoverProps = {
   data: any;

@@ -1,14 +1,14 @@
-import axios from "axios";
+import "./style.scss";
+
 import React, { useEffect, useState } from "react";
 
 import { Artifact } from "../Artifact";
-import { FollowCursor } from "../FollowCursor";
-import { StatList } from "../StatList";
 import { ArtifactDetailsResponse } from "../../types/ArtifactDetailsResponse";
-
 import { FancyBuildBorder } from "../FancyBuildBorder";
+import { FollowCursor } from "../FollowCursor";
 import { GenshinUserCard } from "../GenshinUserCard";
-import "./style.scss";
+import { StatList } from "../StatList";
+import axios from "axios";
 
 type TableHoverElementProps = {
   row?: any;

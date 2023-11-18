@@ -1,5 +1,6 @@
-import { ARBadge } from "../ARBadge";
 import "./style.scss";
+
+import { ARBadge } from "../ARBadge";
 
 type StatListSideProps = {
   strikethrough: boolean;

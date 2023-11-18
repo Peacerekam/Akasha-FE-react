@@ -167,6 +167,7 @@ $hardcoded-scale: 1;
     background-color: #202525;
     padding: 5px 15px 15px;
     margin-top: 0 !important;
+    width: auto;
   }
   tr:nth-child(2n) {
     .toggled-conf-btn {
@@ -219,13 +220,15 @@ $hardcoded-scale: 1;
       }
     }
     .card-configuration {
-      width: 100%;
+      // width: 100%;
+      width: auto;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
       align-items: flex-start;
 
-      $conf-width: 700px;
+      $conf-width: 900px;
+      $label-width: 180px;
 
       .card-select-wrapper {
         display: grid;
@@ -233,7 +236,7 @@ $hardcoded-scale: 1;
         gap: 10px;
         grid-template-columns: 180px 100%;
         .card-select-label {
-          width: 190px;
+          width: $label-width;
           white-space: nowrap;
         }
         &.no-calcs {
@@ -245,18 +248,18 @@ $hardcoded-scale: 1;
         }
       }
       .card-checkboxes {
+        width: $conf-width;
         margin-top: 5px;
         display: flex;
         gap: 12px;
         justify-content: space-between;
-        width: $conf-width;
         flex-direction: column;
         label {
           display: inline-block;
-          width: 190px;
+          width: $label-width;
         }
         input {
-          margin-right: 5px;
+          margin-left: 15px;
         }
       }
       .card-select {
@@ -274,7 +277,7 @@ $hardcoded-scale: 1;
           display: flex;
           justify-content: flex-end;
           > div {
-            width: $conf-width !important;
+            width: $conf-width - $label-width !important;
           }
           .react-select-custom-option {
             .for-pills {

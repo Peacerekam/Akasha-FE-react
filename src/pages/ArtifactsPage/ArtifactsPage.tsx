@@ -1,15 +1,3 @@
-import React, { useContext, useMemo } from "react";
-
-import {
-  allSubstatsInOrder,
-  FETCH_ARTIFACTS_URL,
-  getArtifactCvColor,
-  getInGameSubstatValue,
-  getSubstatsInOrder,
-  isPercent,
-  normalizeText,
-} from "../../utils/helpers";
-import { useNavigate } from "react-router-dom";
 import {
   CustomTable,
   HelpBox,
@@ -18,16 +6,27 @@ import {
   StatIcon,
   StylizedContentBlock,
 } from "../../components";
-import { TableColumn } from "../../types/TableColumn";
-
-import DomainBackground from "../../assets/images/Tenshukaku_Concept_Art.webp";
+import {
+  FETCH_ARTIFACTS_URL,
+  allSubstatsInOrder,
+  getArtifactCvColor,
+  getInGameSubstatValue,
+  getSubstatsInOrder,
+  isPercent,
+  normalizeText,
+} from "../../utils/helpers";
 import {
   FETCH_ARTIFACT_FILTERS_URL,
   getRainbowTextStyle,
 } from "../../utils/helpers";
-import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
+import React, { useContext, useMemo } from "react";
+
 import { AdsComponentManager } from "../../components/AdsComponentManager";
+import DomainBackground from "../../assets/images/Tenshukaku_Concept_Art.webp";
+import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
+import { TableColumn } from "../../types/TableColumn";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import { useNavigate } from "react-router-dom";
 
 export type ArtifactColumns = {
   _id: string;

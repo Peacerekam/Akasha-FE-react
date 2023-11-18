@@ -1,6 +1,3 @@
-import React, { useContext, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
-import DomainBackground from "../../assets/images/Depths_of_Mt._Yougou_Concept_Art.webp";
 import {
   CustomTable,
   HelpBox,
@@ -14,9 +11,13 @@ import {
   FETCH_CATEGORIES_FILTERS_URL,
   FETCH_CATEGORIES_URL_V2,
 } from "../../utils/helpers";
-import { TableColumn } from "../../types/TableColumn";
+import React, { useContext, useMemo } from "react";
+
 import { AdsComponentManager } from "../../components/AdsComponentManager";
+import DomainBackground from "../../assets/images/Depths_of_Mt._Yougou_Concept_Art.webp";
+import { TableColumn } from "../../types/TableColumn";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import { useNavigate } from "react-router-dom";
 
 export type TransformedCategories = {
   characterName: string;

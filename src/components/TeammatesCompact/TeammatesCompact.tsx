@@ -1,21 +1,21 @@
-import React, { useContext } from "react";
-import { StatIcon } from "../StatIcon";
 import "./style.scss";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { shadeColor } from "../../utils/helpers";
-import { ELEMENT_TO_COLOR } from "../CharacterCard/cardHelpers";
 
-import FlexIcon from "../../assets/icons/world-quest.webp";
+import React, { useContext } from "react";
 
 import AnemoBg from "../../assets/images/teammates/anemo-team-bg.png";
 import CryoBg from "../../assets/images/teammates/cryo-team-bg.png";
 import DendroBg from "../../assets/images/teammates/dendro-team-bg.png";
+import { ELEMENT_TO_COLOR } from "../CharacterCard/cardHelpers";
 import ElectroBg from "../../assets/images/teammates/electro-team-bg.png";
+import FlexIcon from "../../assets/icons/world-quest.webp";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import GeoBg from "../../assets/images/teammates/geo-team-bg.png";
 import HydroBg from "../../assets/images/teammates/hydro-team-bg.png";
 import PyroBg from "../../assets/images/teammates/pyro-team-bg.png";
+import { StatIcon } from "../StatIcon";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { shadeColor } from "../../utils/helpers";
 
 export type Elements =
   | "Cryo"

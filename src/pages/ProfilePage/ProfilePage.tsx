@@ -1,4 +1,37 @@
-import axios from "axios";
+import "./style.scss";
+
+import {
+  CalculationResultWidget,
+  ConfirmTooltip,
+  CritRatio,
+  CustomTable,
+  DisplaySets,
+  GenshinUserCard,
+  LastUpdated,
+  NotificationBar,
+  ReplaceRowDataOnHover,
+  StatIcon,
+  StylizedContentBlock,
+  Timer,
+  WeaponMiniDisplay,
+} from "../../components";
+import {
+  FETCH_ARTIFACTS_URL,
+  FETCH_ARTIFACT_FILTERS_URL,
+  FETCH_BUILDS_URL,
+  FETCH_CHARACTER_FILTERS_URL,
+  abortSignalCatcher,
+  allSubstatsInOrder,
+  getArtifactCvColor,
+  getGenderFromIcon,
+  getInGameSubstatValue,
+  getRainbowTextStyle,
+  getRelevantCharacterStats,
+  getSubstatsInOrder,
+  isPercent,
+  normalizeText,
+  optsParamsSessionID,
+} from "../../utils/helpers";
 import React, {
   useCallback,
   useContext,
@@ -6,64 +39,32 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { useParams } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faGear,
-  faRotateRight,
-  faKey,
-} from "@fortawesome/free-solid-svg-icons";
-
-import {
-  abortSignalCatcher,
-  allSubstatsInOrder,
-  FETCH_ARTIFACTS_URL,
-  FETCH_ARTIFACT_FILTERS_URL,
-  FETCH_BUILDS_URL,
-  FETCH_CHARACTER_FILTERS_URL,
-  getArtifactCvColor,
-  getInGameSubstatValue,
-  getRainbowTextStyle,
-  getSubstatsInOrder,
-  isPercent,
-  normalizeText,
-  optsParamsSessionID,
-  getGenderFromIcon,
-  getRelevantCharacterStats,
-} from "../../utils/helpers";
-import { ArtifactColumns } from "../ArtifactsPage";
-import { BuildsColumns } from "../BuildsPage";
-import {
-  CritRatio,
-  StatIcon,
-  DisplaySets,
-  WeaponMiniDisplay,
-  CustomTable,
-  ReplaceRowDataOnHover,
-  Timer,
-  StylizedContentBlock,
-  CalculationResultWidget,
-  ConfirmTooltip,
-  GenshinUserCard,
-  NotificationBar,
-  LastUpdated,
-} from "../../components";
-import { TableColumn } from "../../types/TableColumn";
-import { BuildSettingsModal } from "./BuildSettingsModal";
 import {
   applyModalBodyStyle,
   getRelativeCoords,
 } from "../../components/CustomTable/Filters";
-import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
-import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
-import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
+import {
+  faGear,
+  faKey,
+  faRotateRight,
+} from "@fortawesome/free-solid-svg-icons";
+
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
-import { TitleContext } from "../../context/TitleProvider/TitleProviderContext";
-import { getSessionIdFromCookie } from "../../utils/helpers";
-import { ArtifactSettingsModal } from "./ArtifactSettingsModal";
 import { AdsComponentManager } from "../../components/AdsComponentManager";
+import { ArtifactColumns } from "../ArtifactsPage";
+import { ArtifactSettingsModal } from "./ArtifactSettingsModal";
+import { BuildSettingsModal } from "./BuildSettingsModal";
+import { BuildsColumns } from "../BuildsPage";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
+import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
+import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
+import { TableColumn } from "../../types/TableColumn";
+import { TitleContext } from "../../context/TitleProvider/TitleProviderContext";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
-import "./style.scss";
+import axios from "axios";
+import { getSessionIdFromCookie } from "../../utils/helpers";
+import { useParams } from "react-router-dom";
 
 export const ProfilePage: React.FC = () => {
   const [showArtifactSettingsModal, setShowArtifactSettingsModal] =
@@ -251,7 +252,7 @@ export const ProfilePage: React.FC = () => {
           return (
             <div
               key={normalizeText(key)}
-              className={`character-stat flex nowrap ${normalizeText(key)} ${
+              className={`substat flex nowrap ${normalizeText(key)} ${
                 isCV ? "critvalue" : ""
               }`}
             >

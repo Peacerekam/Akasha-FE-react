@@ -1,11 +1,11 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-import { CharacterCard } from "../CharacterCard";
-import { CalculationList } from "../CalculationList";
 import { ArtifactListCompact } from "../ArtifactListCompact";
+import { CalculationList } from "../CalculationList";
+import { CharacterCard } from "../CharacterCard";
 import { Spinner } from "../Spinner";
 import { SubstatPriorityTable } from "../SubstatPriorityTable";
+import axios from "axios";
 
 type ExpandedRowBuildsProps = {
   row: any;

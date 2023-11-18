@@ -1,7 +1,8 @@
-import { useContext } from "react";
+import "./style.scss";
+
 import Achievevement from "../../assets/icons/Achievement.webp";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
-import "./style.scss";
+import { useContext } from "react";
 
 type AchievementsBadgeProps = {
   count?: number;

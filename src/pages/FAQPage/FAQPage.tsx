@@ -1,17 +1,19 @@
-import React, { useCallback, useMemo, useState } from "react";
-import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
+import "./style.scss";
+
 import {
-  StylizedContentBlock,
   AdsComponentManager,
   StatIcon,
+  StylizedContentBlock,
 } from "../../components";
-import { FAQHighlighter } from "./FAQHighlighter";
+import React, { useCallback, useMemo, useState } from "react";
+
+import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
 import { FAQBrowser } from "./FAQBrowser";
-import debounce from "lodash/debounce";
+import { FAQHighlighter } from "./FAQHighlighter";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-import "./style.scss";
+import debounce from "lodash/debounce";
+import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
 
 export const FAQPage: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

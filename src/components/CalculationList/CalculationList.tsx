@@ -1,11 +1,13 @@
-import React, { useContext, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
-import { CalculationTeammate, TeammatesCompact } from "../TeammatesCompact";
 import "./style.scss";
+
+import { CalculationTeammate, TeammatesCompact } from "../TeammatesCompact";
+import React, { useContext, useMemo, useState } from "react";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
+import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 type CalculationResponse = {
   calculationId: number;

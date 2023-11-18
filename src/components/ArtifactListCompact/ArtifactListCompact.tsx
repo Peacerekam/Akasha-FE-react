@@ -1,19 +1,20 @@
-import React, { useMemo, useRef, useEffect, useContext } from "react";
+import "./style.scss";
 
+import { REAL_SUBSTAT_VALUES, STAT_NAMES } from "../../utils/substats";
+import React, { useContext, useEffect, useMemo, useRef } from "react";
 import {
-  getArtifactsInOrder,
-  normalizeText,
   getArtifactCvClassName,
-  isPercent,
+  getArtifactsInOrder,
   getInGameSubstatValue,
   getSubstatPercentageEfficiency,
+  isPercent,
+  normalizeText,
 } from "../../utils/helpers";
-import { REAL_SUBSTAT_VALUES, STAT_NAMES } from "../../utils/substats";
-import { RollList } from "../RollList";
-import { StatIcon } from "../StatIcon";
-import "./style.scss";
+
 import { ARBadge } from "../ARBadge";
 import { RegionBadge } from "../RegionBadge";
+import { RollList } from "../RollList";
+import { StatIcon } from "../StatIcon";
 import { TalentsDisplay } from "../TalentsDisplay";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 

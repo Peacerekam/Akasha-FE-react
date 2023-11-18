@@ -1,5 +1,6 @@
-import { useMemo } from "react";
 import "./style.scss";
+
+import { useMemo } from "react";
 
 type StylizedBlockTypes = "gradient";
 

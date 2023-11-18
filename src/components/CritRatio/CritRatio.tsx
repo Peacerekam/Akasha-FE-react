@@ -1,5 +1,6 @@
-import { getCharacterCvColor, getRainbowTextStyle } from "../../utils/helpers";
 import "./style.scss";
+
+import { getCharacterCvColor, getRainbowTextStyle } from "../../utils/helpers";
 
 type CritRatioProps = {
   row: any;

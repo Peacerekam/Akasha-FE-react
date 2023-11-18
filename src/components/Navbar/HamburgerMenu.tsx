@@ -1,10 +1,11 @@
+import { faStar, faX } from "@fortawesome/free-solid-svg-icons";
 import { useContext, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar, faX } from "@fortawesome/free-solid-svg-icons";
-import { NavElement } from "./Navbar";
 import { LanguageSwitcher } from "../LanguageSwitcher";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
+import { NavElement } from "./Navbar";
 
 type HamburgerMenuProps = {
   isOpen: boolean;

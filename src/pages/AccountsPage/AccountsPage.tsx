@@ -1,3 +1,20 @@
+import "./style.scss";
+
+import {
+  ARBadge,
+  CustomTable,
+  HelpBox,
+  LastUpdated,
+  NotificationBar,
+  RegionBadge,
+  StylizedContentBlock,
+} from "../../components";
+import {
+  FETCH_ACCOUNTS_FILTERS_URL,
+  FETCH_ACCOUNTS_URL,
+  uidsToQuery,
+} from "../../utils/helpers";
+import { Link, useNavigate } from "react-router-dom";
 import React, {
   useCallback,
   useContext,
@@ -5,32 +22,16 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import debounce from "lodash/debounce";
 
-import {
-  CustomTable,
-  StylizedContentBlock,
-  RegionBadge,
-  ARBadge,
-  HelpBox,
-  NotificationBar,
-  LastUpdated,
-} from "../../components";
-import { TableColumn } from "../../types/TableColumn";
 import Achievevement from "../../assets/icons/Achievement.webp";
-import DomainBackground from "../../assets/images/Grand_Narukami_Shrine_Concept_Art.webp";
-import {
-  FETCH_ACCOUNTS_FILTERS_URL,
-  FETCH_ACCOUNTS_URL,
-  uidsToQuery,
-} from "../../utils/helpers";
-import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
-import { BuildsColumns } from "../BuildsPage";
-import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
 import { AdsComponentManager } from "../../components/AdsComponentManager";
-import "./style.scss";
+import { BuildsColumns } from "../BuildsPage";
+import DomainBackground from "../../assets/images/Grand_Narukami_Shrine_Concept_Art.webp";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
+import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
+import { TableColumn } from "../../types/TableColumn";
+import debounce from "lodash/debounce";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 export const AccountsPage: React.FC = () => {

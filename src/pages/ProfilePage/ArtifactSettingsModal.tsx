@@ -1,15 +1,15 @@
-import { useEffect, useMemo, useState } from "react";
-import axios from "axios";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faX, faTrash } from "@fortawesome/free-solid-svg-icons";
-
 import { Artifact, ConfirmTooltip, Spinner } from "../../components";
 import {
   abortSignalCatcher,
   getSessionIdFromCookie,
 } from "../../utils/helpers";
+import { faTrash, faX } from "@fortawesome/free-solid-svg-icons";
+import { useEffect, useMemo, useState } from "react";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import PerfectScrollbar from "react-perfect-scrollbar";
 import { ProfileSettingsModalProps } from "./BuildSettingsModal";
+import axios from "axios";
 
 export const ArtifactSettingsModal: React.FC<ProfileSettingsModalProps> = ({
   isOpen,

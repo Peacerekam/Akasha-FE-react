@@ -1,5 +1,6 @@
-import React from "react";
 import "./style.scss";
+
+import React from "react";
 
 type PageMessageProps = {
   message: string;

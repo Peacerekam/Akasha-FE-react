@@ -1,11 +1,12 @@
-import { faCheck, faX, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useMemo, useState } from "react";
-import ReactSelect from "react-select";
 import { FilterOption, OptionsResponse } from "./FiltersContainer";
-import { reactSelectDarkTheme } from "../../../utils/reactSelectDarkTheme";
-import { isIcon } from "../../StatIcon";
+import { faCheck, faTrashAlt, faX } from "@fortawesome/free-solid-svg-icons";
+import { useMemo, useState } from "react";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ReactSelect from "react-select";
 import { StatIcon } from "../../StatIcon/StatIcon";
+import { isIcon } from "../../StatIcon";
+import { reactSelectDarkTheme } from "../../../utils/reactSelectDarkTheme";
 
 type FiltersModalProps = {
   filtersArray: FilterOption[];

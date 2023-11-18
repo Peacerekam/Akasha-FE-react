@@ -1,11 +1,13 @@
+import "./style.scss";
+
 import React, { useContext } from "react";
+
+import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
+import AkashaLogo from "../../assets/images/favicon.svg";
+import DomainBackground from "../../assets/images/Grand_Narukami_Shrine_Concept_Art.webp";
 import { Link } from "react-router-dom";
 import PoweredByEnka from "../../assets/images/enka.png";
-import AkashaLogo from "../../assets/images/favicon.svg";
-import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 import { StylizedContentBlock } from "../StylizedContentBlock";
-import DomainBackground from "../../assets/images/Grand_Narukami_Shrine_Concept_Art.webp";
-import "./style.scss";
 
 export const Footer: React.FC = () => {
   const { adProvider } = useContext(AdProviderContext);

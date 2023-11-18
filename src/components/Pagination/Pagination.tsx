@@ -1,16 +1,18 @@
+import "./style.scss";
+
 import React, { useContext, useMemo } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faAnglesLeft,
+  faAnglesRight,
+  faBackwardStep,
   faChevronLeft,
   faChevronRight,
-  faAnglesRight,
-  faAnglesLeft,
   faForwardStep,
-  faBackwardStep,
 } from "@fortawesome/free-solid-svg-icons";
-import { FetchParams } from "../CustomTable";
+
 import { ConfirmInput } from "../ConfirmInput";
-import "./style.scss";
+import { FetchParams } from "../CustomTable";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 // import { Spinner } from "../Spinner";
 

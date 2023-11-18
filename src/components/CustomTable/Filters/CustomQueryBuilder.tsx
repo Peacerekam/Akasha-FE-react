@@ -1,11 +1,12 @@
-import { useContext, useMemo, useState } from "react";
+import { FilterOption, OptionsResponse } from "./FiltersContainer";
 import ReactSelect, { MultiValue } from "react-select";
+import { StatIcon, isIcon } from "../../StatIcon";
+import { useContext, useMemo, useState } from "react";
+
 import Highlighter from "react-highlight-words";
-import { reactSelectCustomFilterTheme } from "../../../utils/reactSelectCustomFilterTheme";
-import { isIcon, StatIcon } from "../../StatIcon";
-import { OptionsResponse, FilterOption } from "./FiltersContainer";
 import { TranslationContext } from "../../../context/TranslationProvider/TranslationProviderContext";
 import { getGenderFromIcon } from "../../../utils/helpers";
+import { reactSelectCustomFilterTheme } from "../../../utils/reactSelectCustomFilterTheme";
 
 type CustomQueryBuilderProps = {
   optionGroups: OptionsResponse;

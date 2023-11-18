@@ -1,21 +1,15 @@
-import React, { useContext, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
-
 import {
   CritRatio,
-  StatIcon,
-  WeaponMiniDisplay,
-  DisplaySets,
   CustomTable,
-  ReplaceRowDataOnHover,
-  StylizedContentBlock,
+  DisplaySets,
   HelpBox,
-  RegionBadge,
   NotificationBar,
+  RegionBadge,
+  ReplaceRowDataOnHover,
+  StatIcon,
+  StylizedContentBlock,
+  WeaponMiniDisplay,
 } from "../../components";
-import { TableColumn } from "../../types/TableColumn";
-
-import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
 import {
   FETCH_BUILDS_URL,
   FETCH_CHARACTER_FILTERS_URL,
@@ -23,9 +17,14 @@ import {
   getRelevantCharacterStats,
   normalizeText,
 } from "../../utils/helpers";
-import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
+import React, { useContext, useMemo } from "react";
+
 import { AdsComponentManager } from "../../components/AdsComponentManager";
+import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
+import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
+import { TableColumn } from "../../types/TableColumn";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import { useNavigate } from "react-router-dom";
 
 export type BuildsColumns = {
   _id: string;

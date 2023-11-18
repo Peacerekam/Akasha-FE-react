@@ -1,5 +1,6 @@
-import CrownOfInsight from "../../assets/images/Crown_of_Insight.webp";
 import "./style.scss";
+
+import CrownOfInsight from "../../assets/images/Crown_of_Insight.webp";
 
 type TalentsDisplayProps = {
   strikethrough: boolean;

@@ -1,14 +1,15 @@
+import "./style.scss";
+
 import React, { useContext, useEffect, useMemo, useState } from "react";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ReactSelect from "react-select";
+import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import axios from "axios";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import { reactSelectCustomFilterTheme } from "../../utils/reactSelectCustomFilterTheme";
-import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import { toEnkaUrl } from "../../utils/helpers";
-import ReactSelect from "react-select";
-import "./style.scss";
-import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 
 type SubstatPriority = {
   calculation: {

@@ -1,40 +1,36 @@
-import axios from "axios";
-import React, { useEffect } from "react";
-// import CookieConsent from "react-cookie-consent";
-// import { QueryClient, QueryClientProvider } from "react-query";
-import { Routes, Route, BrowserRouter } from "react-router-dom";
-import { LastProfilesContextProvider } from "./context/LastProfiles/LastProfilesContext";
-import { HoverElementContextProvider } from "./context/HoverElement/HoverElementContext";
-import { SessionDataContextProvider } from "./context/SessionData/SessionDataContext";
-import { AdProviderContextProvider } from "./context/AdProvider/AdProviderContext";
-import { NotificationsContextProvider } from "./context/Notifications/NotificationsContext";
-import { TitleContextProvider } from "./context/TitleProvider/TitleProviderContext";
-
+import {
+  AccountsPage,
+  ArtifactsPage,
+  BuildsPage,
+  CategorySelectionPage,
+  FAQPage,
+  LeaderboardsPage,
+  ProfilePage,
+} from "./pages";
 import {
   AdsComponentManager,
   Footer,
   Navbar,
   NavbarTabs,
-  // MobileStickyBar,
-  // NotificationBar,
   PageMessage,
 } from "./components";
+import { BASENAME, IS_PRODUCATION, MAINTENANCE_MODE } from "./utils/maybeEnv";
+// import CookieConsent from "react-cookie-consent";
+// import { QueryClient, QueryClientProvider } from "react-query";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import React, { useEffect } from "react";
 
-import {
-  ArtifactsPage,
-  ProfilePage,
-  BuildsPage,
-  LeaderboardsPage,
-  CategorySelectionPage,
-  // DashboardPage,
-  AccountsPage,
-  FAQPage,
-} from "./pages";
-import { PrivacyPolicyPage } from "./pages/PrivacyPolicy";
-import { TranslationContextProvider } from "./context/TranslationProvider/TranslationProviderContext";
+import { AdProviderContextProvider } from "./context/AdProvider/AdProviderContext";
 import { ContentWrapper } from "./components/ContentWrapper";
+import { HoverElementContextProvider } from "./context/HoverElement/HoverElementContext";
+import { LastProfilesContextProvider } from "./context/LastProfiles/LastProfilesContext";
+import { NotificationsContextProvider } from "./context/Notifications/NotificationsContext";
+import { PrivacyPolicyPage } from "./pages/PrivacyPolicy";
+import { SessionDataContextProvider } from "./context/SessionData/SessionDataContext";
+import { TitleContextProvider } from "./context/TitleProvider/TitleProviderContext";
+import { TranslationContextProvider } from "./context/TranslationProvider/TranslationProviderContext";
+import axios from "axios";
 import { domainRedirect } from "./utils/helpers";
-import { BASENAME, MAINTENANCE_MODE, IS_PRODUCATION } from "./utils/maybeEnv";
 
 // @TODO: env variables later on...
 const urls = {
@@ -72,6 +68,7 @@ const appRoutes: {
   // @TODO: dashboard...
   // { path: "/", Element: DashboardPage }
   { path: "/", Element: AccountsPage },
+  { path: "/faq", Element: FAQPage },
   { path: "/artifacts", Element: ArtifactsPage },
   { path: "/builds", Element: BuildsPage },
   { path: "/profiles", Element: AccountsPage },
@@ -79,7 +76,6 @@ const appRoutes: {
   { path: "/leaderboards", Element: CategorySelectionPage },
   { path: "/leaderboards/:calculationId", Element: LeaderboardsPage },
   { path: "/leaderboards/:calculationId/:variant", Element: LeaderboardsPage },
-  { path: "/faq", Element: FAQPage },
   { path: "/privacy-policy", Element: PrivacyPolicyPage },
   {
     path: "*",

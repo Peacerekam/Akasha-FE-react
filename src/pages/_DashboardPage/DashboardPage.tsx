@@ -1,10 +1,10 @@
-import React from "react";
-// import { useNavigate } from "react-router-dom";
+import "./style.scss"
 
 import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
+import React from "react";
 import { StylizedContentBlock } from "../../components/StylizedContentBlock";
 
-import "./style.scss"
+// import { useNavigate } from "react-router-dom";
 
 export const DashboardPage: React.FC = () => {
   // const navigate = useNavigate();

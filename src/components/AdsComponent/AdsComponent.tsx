@@ -1,6 +1,8 @@
-import React, { useEffect } from "react";
-import { IS_PRODUCATION } from "../../utils/maybeEnv";
 import "./index.scss";
+
+import React, { useEffect } from "react";
+
+import { IS_PRODUCATION } from "../../utils/maybeEnv";
 
 export type AdsComponentProps = {
   dataAdSlot?: string;

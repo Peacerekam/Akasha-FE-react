@@ -1,26 +1,26 @@
-import { useContext, useEffect, useMemo, useRef, useState } from "react";
-import axios from "axios";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import Highlighter from "react-highlight-words";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faX,
-  faEye,
-  faEyeSlash,
-  faUpload,
-  faTrash,
-} from "@fortawesome/free-solid-svg-icons";
-
 import { ConfirmTooltip, Spinner, StatList } from "../../components";
-import { FancyBuildBorder } from "../../components/FancyBuildBorder";
 import {
+  PATREON_URL,
   abortSignalCatcher,
   getSessionIdFromCookie,
-  PATREON_URL,
 } from "../../utils/helpers";
+import {
+  faEye,
+  faEyeSlash,
+  faTrash,
+  faUpload,
+  faX,
+} from "@fortawesome/free-solid-svg-icons";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
+
 import { BuildNameInput } from "./BuildNameInput";
+import { FancyBuildBorder } from "../../components/FancyBuildBorder";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Highlighter from "react-highlight-words";
+import PerfectScrollbar from "react-perfect-scrollbar";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import axios from "axios";
 
 export type ProfileSettingsModalProps = {
   isOpen: boolean;

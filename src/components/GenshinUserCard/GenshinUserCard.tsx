@@ -1,14 +1,16 @@
+import "./style.scss";
+
 import React, { useContext } from "react";
 import { faStar, faUser } from "@fortawesome/free-solid-svg-icons";
-import { faStar as faStarRegular } from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Spinner } from "../Spinner";
+
 import { ARBadge } from "../ARBadge";
-import { RegionBadge } from "../RegionBadge";
 import { AchievementsBadge } from "../AchievementsBadge";
-import "./style.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
+import { RegionBadge } from "../RegionBadge";
+import { Spinner } from "../Spinner";
+import { faStar as faStarRegular } from "@fortawesome/free-regular-svg-icons";
 
 type AkashaAchievement = {
   id: number;

@@ -1,8 +1,9 @@
-import { useContext } from "react";
-import { StatIcon } from "../StatIcon";
 import "./style.scss";
+
+import { StatIcon } from "../StatIcon";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import { getRelevantDmgBonuses } from "../../utils/helpers";
+import { useContext } from "react";
 
 type StatListProps = {
   row: any;

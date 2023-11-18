@@ -1,12 +1,14 @@
-import axios from "axios";
-import React, { useMemo, useState, useEffect } from "react";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import { useNavigate } from "react-router-dom";
+import "./style.scss";
+
+import React, { useEffect, useMemo, useState } from "react";
 import { abortSignalCatcher, toShortThousands } from "../../utils/helpers";
+
+import PerfectScrollbar from "react-perfect-scrollbar";
 import { Spinner } from "../Spinner";
 // import { Timer } from "../Timer";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
-import "./style.scss";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 type CalculationResultWidgetProps = {
   uid?: string;

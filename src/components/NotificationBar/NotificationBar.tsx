@@ -1,7 +1,9 @@
+import "./style.scss";
+
 // import axios from "axios";
 import React, { useContext } from "react";
+
 import { NotificationsContext } from "../../context/Notifications/NotificationsContext";
-import "./style.scss";
 
 // type AkashaNotification = {
 //   color: string;

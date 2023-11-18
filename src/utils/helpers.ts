@@ -1,6 +1,6 @@
-import { getStatsFromRow } from "../components";
-import { getDefaultRvFilters } from "../components/RollList/defaultFilters";
 import { IHash } from "../types/IHash";
+import { getDefaultRvFilters } from "../components/RollList/defaultFilters";
+import { getStatsFromRow } from "../components";
 
 export const PATREON_URL = "https://www.patreon.com/mimee";
 export const DISCORD_URL = "https://discord.gg/vmdPppZVa8";
@@ -44,11 +44,12 @@ export const optsParamsSessionID = () => {
   };
 };
 
+// @FIX: additional param "weapon" | "character" ?
 export const ascensionToLevel = (ascension = 0) => {
   return (
     {
       0: 20,
-      1: 40,
+      1: 40, // @FIX: this is 20 for a weapon ??
       2: 50,
       3: 60,
       4: 70,
@@ -354,9 +355,9 @@ export const toEnkaUrl = (assetName?: string) => {
 };
 
 export const shadeColor = (color: string, percent: number) => {
-  var R = parseInt(color.substring(1, 3), 16);
-  var G = parseInt(color.substring(3, 5), 16);
-  var B = parseInt(color.substring(5, 7), 16);
+  let R = parseInt(color.substring(1, 3), 16);
+  let G = parseInt(color.substring(3, 5), 16);
+  let B = parseInt(color.substring(5, 7), 16);
 
   R = (R * (100 + percent)) / 100;
   G = (G * (100 + percent)) / 100;
@@ -370,9 +371,9 @@ export const shadeColor = (color: string, percent: number) => {
   G = Math.round(G);
   B = Math.round(B);
 
-  var RR = R.toString(16).length === 1 ? "0" + R.toString(16) : R.toString(16);
-  var GG = G.toString(16).length === 1 ? "0" + G.toString(16) : G.toString(16);
-  var BB = B.toString(16).length === 1 ? "0" + B.toString(16) : B.toString(16);
+  const RR = R.toString(16).length === 1 ? "0" + R.toString(16) : R.toString(16);
+  const GG = G.toString(16).length === 1 ? "0" + G.toString(16) : G.toString(16);
+  const BB = B.toString(16).length === 1 ? "0" + B.toString(16) : B.toString(16);
 
   return "#" + RR + GG + BB;
 };
@@ -541,7 +542,7 @@ export const getRelevantDmgBonuses = (row: any) => {
 export const getRelevantEmErHb = (row: any) => {
   const relevantExtraStats = [];
 
-  const hvThreshold = 0.2495; // 25% Healing Bonus
+  const hvThreshold = 0.2495; // 25% Healing Bonus -> // @TODO: change to 15% because thats 2pc set bonus?
   const emThreshold = 74.95; // 75 EM ~~ around 4 EM subs or set effect.
   const erThreshold = 1.0495; // higher than 105% ?
 

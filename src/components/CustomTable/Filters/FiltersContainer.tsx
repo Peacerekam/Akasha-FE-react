@@ -1,14 +1,16 @@
-import axios from "axios";
-import { useState, useEffect, useMemo } from "react";
-import { faList } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FiltersModal } from "./FiltersModal";
+import "./style.scss";
+
 import {
   abortSignalCatcher,
   filtersQueryToArray,
 } from "../../../utils/helpers";
+import { useEffect, useMemo, useState } from "react";
+
 import { CustomQueryBuilder } from "./CustomQueryBuilder";
-import "./style.scss";
+import { FiltersModal } from "./FiltersModal";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
+import { faList } from "@fortawesome/free-solid-svg-icons";
 import { useLocation } from "react-router-dom";
 
 type FiltersContainerProps = {

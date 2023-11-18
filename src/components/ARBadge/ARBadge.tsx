@@ -1,6 +1,7 @@
-import { useContext } from "react";
 import "./style.scss";
+
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import { useContext } from "react";
 
 type ARBadgeProps = {
   adventureRank?: number;

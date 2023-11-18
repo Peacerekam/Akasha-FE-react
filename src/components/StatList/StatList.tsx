@@ -1,12 +1,14 @@
-import { useContext } from "react";
+import "./style.scss";
+
 import {
   ascensionToLevel,
   getGenderFromIcon,
   getRelevantDmgBonuses,
 } from "../../utils/helpers";
+
 import { StatIcon } from "../StatIcon";
-import "./style.scss";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import { useContext } from "react";
 
 type StatListProps = {
   row: any;

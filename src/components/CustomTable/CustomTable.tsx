@@ -1,3 +1,27 @@
+import "./style.scss";
+
+import {
+  FETCH_ACCOUNTS_URL,
+  FETCH_COLLECTION_SIZE_URL,
+  FETCH_SEARCH_USERS_URL,
+  abortSignalCatcher,
+  arrayPushOrSplice,
+  normalizeText,
+} from "../../utils/helpers";
+import {
+  FETCH_ARTIFACTS_URL,
+  FETCH_BUILDS_URL,
+  FETCH_LEADERBOARDS_URL,
+} from "../../utils/helpers";
+import { FilterOption, FiltersContainer } from "./Filters";
+import {
+  GenshinUserCard,
+  Pagination,
+  Spinner,
+  StatIcon,
+  TeammatesCompact,
+  WeaponMiniDisplay,
+} from "../../components";
 import React, {
   useCallback,
   useContext,
@@ -5,38 +29,16 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import axios from "axios";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import {
-  StatIcon,
-  Spinner,
-  Pagination,
-  GenshinUserCard,
-  WeaponMiniDisplay,
-  TeammatesCompact,
-} from "../../components";
-import {
-  abortSignalCatcher,
-  arrayPushOrSplice,
-  FETCH_SEARCH_USERS_URL,
-  FETCH_COLLECTION_SIZE_URL,
-  normalizeText,
-  FETCH_ACCOUNTS_URL,
-} from "../../utils/helpers";
-import { FiltersContainer, FilterOption } from "./Filters";
 import { useLocation, useNavigate } from "react-router-dom";
-import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
-import {
-  FETCH_ARTIFACTS_URL,
-  FETCH_LEADERBOARDS_URL,
-  FETCH_BUILDS_URL,
-} from "../../utils/helpers";
-import "./style.scss";
-import { ExpandedRowBuilds } from "../ExpandedRowBuilds";
-import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
+import { ExpandedRowBuilds } from "../ExpandedRowBuilds";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
+import PerfectScrollbar from "react-perfect-scrollbar";
+import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import axios from "axios";
+import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 
 type CustomTableProps = {
   columns: any[];

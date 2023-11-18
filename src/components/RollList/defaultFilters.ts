@@ -39,6 +39,7 @@ const hydroRvList = {
   "Sangonomiya Kokomi": [HP, HP_, ER],
   "Kamisato Ayato": [CRate, CDMG, ER, ATK_],
   Yelan: [CRate, CDMG, HP_, ER],
+  Furina: [CRate, CDMG, HP_, ER],
   Neuvillette: [CRate, CDMG, HP_, ER],
 };
 
@@ -49,6 +50,7 @@ const cryoRvList = {
   Ganyu: [CRate, CDMG, ATK_, EM],
   Shenhe: [ER, ATK, ATK_, CRate, CDMG],
   "Kamisato Ayaka": [CRate, CDMG, ER, ATK_],
+  Wriothesley: [CRate, CDMG, ER, ATK_],
 };
 
 const geoRvList = {

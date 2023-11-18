@@ -1,6 +1,6 @@
+import { PatreonBorderInside } from "./PatreonBorderInside";
 import axios from "axios";
 import { getCharacterCvColor } from "../../utils/helpers";
-import { PatreonBorderInside } from "./PatreonBorderInside";
 
 type FancyBuildBorderProps = {
   hide: boolean;
