@@ -51,14 +51,14 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
   const [priorityData, setPriorityData] = useState<SubstatPriority[]>([]);
   const [show, setShow] = useState(false);
   const [relativeTo, setRelativeTo] = useState<string>("Base");
-  
+
   const { translate } = useContext(TranslationContext);
 
   const getSubstatPriority = async () => {
     const _uid = encodeURIComponent(row.uid);
     const calcDetailsURL = `/api/substatPriority/${_uid}/${row.characterId}`;
     const opts = {
-      params: { type: row.type },
+      params: { type: encodeURIComponent(row.type) },
     };
     const { data } = await axios.get(calcDetailsURL, opts);
     setPriorityData(data.data);
@@ -227,7 +227,13 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
         );
       }
     );
-  }, [priorityData, selectedPriorityData, selectedOption, relativeTo, translate]);
+  }, [
+    priorityData,
+    selectedPriorityData,
+    selectedOption,
+    relativeTo,
+    translate,
+  ]);
 
   //
   //  RESULTS ROWS

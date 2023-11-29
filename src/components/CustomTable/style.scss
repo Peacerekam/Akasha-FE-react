@@ -334,24 +334,6 @@ $characterStats: "hp", "atk", "def", "hydrodmgbonus", "geodmgbonus",
     }
   }
 
-  &.enka-profile {
-    &:hover {
-      &::after {
-        color: rgba(orange, 0.5);
-      }
-    }
-    &::after {
-      content: "- Enka";
-      position: relative;
-      top: -1px;
-      margin-left: 5px;
-      white-space: nowrap;
-      font-size: 10px;
-      color: rgba(white, 0.5);
-      color: #719bd4;
-    }
-  }
-
   &.new-lb-badge {
     &::before {
       content: "NEW";

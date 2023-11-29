@@ -173,7 +173,7 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
         },
         params: {
           sessionID: getSessionIdFromCookie(),
-          type,
+          type: encodeURIComponent(type),
         },
       });
 
@@ -200,7 +200,7 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       const opts = {
         params: {
           sessionID: getSessionIdFromCookie(),
-          type,
+          type: encodeURIComponent(type),
         },
       };
       await axios.post(postNamecardURL, null, opts); // no formData attached
@@ -218,7 +218,7 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       const opts = {
         params: {
           sessionID: getSessionIdFromCookie(),
-          type,
+          type: encodeURIComponent(type),
         },
       };
       await axios.post(toggleVisibilityURL, null, opts);
@@ -235,7 +235,7 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       const opts = {
         params: {
           sessionID: getSessionIdFromCookie(),
-          type,
+          type: encodeURIComponent(type),
         },
       };
       await axios.post(deleteBuildURL, null, opts);
@@ -264,7 +264,7 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
         params: {
           buildName: newBuildName,
           sessionID: getSessionIdFromCookie(),
-          type,
+          type: encodeURIComponent(type),
         },
       };
       const response = await axios.post(postBuildNameURL, null, opts); // no formData attached

@@ -263,7 +263,7 @@ export const LeaderboardsPage: React.FC = () => {
                 _stat.name.replace("%", "")
               )}`}
             >
-              <span className="mr-3" >
+              <span className="mr-3">
                 <StatIcon name={_stat.name.replace("%", "")} />
               </span>
               {_value}
@@ -390,9 +390,8 @@ export const LeaderboardsPage: React.FC = () => {
   const fetchCalculationInfo = async () => {
     if (!characterId) return;
 
-    const response = await axios.get(
-      `${FETCH_CATEGORIES_URL_V2}?characterId=${characterId}`
-    );
+    const opts = { params: { characterId } };
+    const response = await axios.get(FETCH_CATEGORIES_URL_V2, opts);
     const { data } = response.data;
 
     setCalculationInfo(data);
@@ -406,7 +405,7 @@ export const LeaderboardsPage: React.FC = () => {
   );
 
   const fetchChartData = async () => {
-    let chartURL = `/api/charts/calculations/${calculationId}`;
+    const chartURL = `/api/charts/calculations/${calculationId}`;
     const response = await axios.get(chartURL, {
       params: {
         variant,
@@ -576,8 +575,8 @@ export const LeaderboardsPage: React.FC = () => {
       },
     ];
 
-    // @TODO: make context around Podium + Chart + Tables 
-    // @FIX: make context around Podium + Chart + Tables 
+    // @TODO: make context around Podium + Chart + Tables
+    // @FIX: make context around Podium + Chart + Tables
 
     // make context around Podium + Chart + Tables
     //
@@ -585,8 +584,8 @@ export const LeaderboardsPage: React.FC = () => {
     // miniTable = provide data for chart searched player points
     // podium = take data from mainTable if page = 0, otherwise ask for first 3 elements
 
-    // @TODO: make context around Podium + Chart + Tables 
-    // @FIX: make context around Podium + Chart + Tables 
+    // @TODO: make context around Podium + Chart + Tables
+    // @FIX: make context around Podium + Chart + Tables
 
     return (
       <div className="lb-chart-wrapper">
@@ -654,7 +653,7 @@ export const LeaderboardsPage: React.FC = () => {
                         // borderBottom: "1px solid white",
                       }}
                     >
-                      <img 
+                      <img
                         alt={thisCalc.name}
                         style={{ width: 40, height: 40, marginBottom: 15 }}
                         src={thisCalc.characterIcon}

@@ -201,7 +201,7 @@ export const StatList: React.FC<StatListProps> = ({
           {translate("Lv.")} {row.weapon.weaponInfo.level}
         </span>
         <span className="opacity-5">
-          /{ascensionToLevel(row.weapon.weaponInfo?.promoteLevel)}
+          /{ascensionToLevel(row.weapon.weaponInfo?.promoteLevel, "weapon", row.weapon.weaponInfo.level)}
         </span>
       </div>
     </div>
@@ -225,7 +225,7 @@ export const StatList: React.FC<StatListProps> = ({
       <div className={strikethrough ? "strike-through opacity-5" : ""}>
         {translate("Lv.")} {row.propMap.level.val}
         <span className="opacity-5">
-          /{ascensionToLevel(row.propMap.ascension.val)}
+          /{ascensionToLevel(row.propMap.ascension.val, "character")}
         </span>
       </div>
     </div>

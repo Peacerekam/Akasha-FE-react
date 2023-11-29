@@ -44,12 +44,19 @@ export const optsParamsSessionID = () => {
   };
 };
 
-// @FIX: additional param "weapon" | "character" ?
-export const ascensionToLevel = (ascension = 0) => {
+export const ascensionToLevel = (
+  ascension = 0,
+  type: "weapon" | "character",
+  levelFallback?: number
+) => {
+  // this partially fixes my screw-up on the backend
+  // where promoteLevel is defaulted to a wrong value
+  if (type === "weapon" && levelFallback && levelFallback <= 20) return 20;
+
   return (
     {
       0: 20,
-      1: 40, // @FIX: this is 20 for a weapon ??
+      1: 40,
       2: 50,
       3: 60,
       4: 70,
@@ -371,9 +378,12 @@ export const shadeColor = (color: string, percent: number) => {
   G = Math.round(G);
   B = Math.round(B);
 
-  const RR = R.toString(16).length === 1 ? "0" + R.toString(16) : R.toString(16);
-  const GG = G.toString(16).length === 1 ? "0" + G.toString(16) : G.toString(16);
-  const BB = B.toString(16).length === 1 ? "0" + B.toString(16) : B.toString(16);
+  const RR =
+    R.toString(16).length === 1 ? "0" + R.toString(16) : R.toString(16);
+  const GG =
+    G.toString(16).length === 1 ? "0" + G.toString(16) : G.toString(16);
+  const BB =
+    B.toString(16).length === 1 ? "0" + B.toString(16) : B.toString(16);
 
   return "#" + RR + GG + BB;
 };
@@ -542,11 +552,11 @@ export const getRelevantDmgBonuses = (row: any) => {
 export const getRelevantEmErHb = (row: any) => {
   const relevantExtraStats = [];
 
-  const hvThreshold = 0.2495; // 25% Healing Bonus -> // @TODO: change to 15% because thats 2pc set bonus?
+  const hbThreshold = 0.2495; // 25% Healing Bonus -> // @TODO: change to 15% because thats 2pc set bonus?
   const emThreshold = 74.95; // 75 EM ~~ around 4 EM subs or set effect.
   const erThreshold = 1.0495; // higher than 105% ?
 
-  if (row.stats.healingBonus?.value >= hvThreshold) {
+  if (row.stats.healingBonus?.value >= hbThreshold) {
     relevantExtraStats.push({
       name: "Healing Bonus",
       value: row.stats.healingBonus.value,

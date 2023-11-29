@@ -32,7 +32,7 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
     const _uid = encodeURIComponent(row.uid);
     const artDetailsURL = `/api/artifacts/${_uid}/${row.characterId}`;
     const opts = {
-      params: { type: row.type },
+      params: { type: encodeURIComponent(row.type) },
     };
     const { data } = await axios.get(artDetailsURL, opts);
     setArtifacts(data.data);
@@ -44,7 +44,7 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
     const calcDetailsURL = `/api/leaderboards/${_uid}/${row.characterId}`;
     const opts = {
       params: {
-        type: row.type,
+        type: encodeURIComponent(row.type),
         variant: isProfile ? "profilePage" : "",
       },
     };

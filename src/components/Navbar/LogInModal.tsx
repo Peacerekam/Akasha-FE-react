@@ -121,10 +121,11 @@ export const LogInModal: React.FC<LogInModalProps> = ({
                       {boundAccounts.map((acc) => {
                         const { nickname, level } = acc.playerInfo;
                         const { uid, profilePictureLink } = acc;
+                        const isEnkaProfile = isNaN(+uid);
                         return (
                           <a
                             key={acc.uid}
-                            className="bound-account centered-td"
+                            className={`bound-account centered-td`}
                             onClick={(event) => {
                               event.preventDefault();
                               handleCloseModal(event, true);
@@ -137,7 +138,14 @@ export const LogInModal: React.FC<LogInModalProps> = ({
                               className="table-icon"
                               src={profilePictureLink}
                             />
-                            <div style={{ flex: 1 }}>{nickname}</div>
+                            <div
+                              style={{ flex: 1 }}
+                              className={`${
+                                isEnkaProfile ? "enka-profile" : ""
+                              }`}
+                            >
+                              {nickname}
+                            </div>
                             <RegionBadge region={acc?.playerInfo?.region} />
                             <ARBadge adventureRank={level} />
                           </a>
