@@ -101,7 +101,7 @@ export const BuildsPage: React.FC = () => {
                 </span>
               </div> */}
               {row.type !== "current" ? (
-                <ReplaceRowDataOnHover data={row.name} onHoverData={row.type} />
+                <ReplaceRowDataOnHover data={translate(row.name, gender)} onHoverData={row.type} />
               ) : (
                 translate(row.name, gender)
               )}

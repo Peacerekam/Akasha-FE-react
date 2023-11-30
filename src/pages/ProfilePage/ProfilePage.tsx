@@ -308,7 +308,7 @@ export const ProfilePage: React.FC = () => {
             <div className="table-icon-text-pair">
               <img alt=" " className="table-icon" src={row.icon} />
               {row.type !== "current" ? (
-                <ReplaceRowDataOnHover data={row.name} onHoverData={row.type} />
+                <ReplaceRowDataOnHover data={translate(row.name, gender)} onHoverData={row.type} />
               ) : (
                 translate(row.name, gender)
               )}
