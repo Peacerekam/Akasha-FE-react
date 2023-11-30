@@ -86,25 +86,33 @@ export const LastUpdated: React.FC<LastUpdatedProps> = ({
       className={isRawText ? "last-profile-update-raw" : "last-profile-update"}
     >
       {isRawText ? "" : <span>{label}</span>}
-      {timestamp[1].map((x: string) => {
-        if (x === "<NUMBER>") {
-          return (
-            <span className={isRawText ? "" : "value"} key="number">
-              {timestamp[0]}
-            </span>
-          );
-        }
-
-        const arr = x.split("<NUMBER>");
+      {timestamp[1].map((chunk: string) => {
+        const arr = chunk.split("<NUMBER>");
+        const isGlued = arr.length > 1 && !!arr[1];
 
         return (
-          <span key={x}>
-            {arr.map((y) => (
-              <span className={isRawText && y ? "" : "no-margin"} key={y}>
-                {y || timestamp[0]}
-              </span>
-            ))}
-          </span>
+          <React.Fragment key={chunk}>
+            {arr.map((word, index) => {
+              const value = word || timestamp[0]; // empty string will default to timestamp[0]
+              const isNumber = !word; // numbers show up as empty string
+              const removeMargin = isRawText && isGlued && isNumber;
+
+              if (index > 0 && isNumber) return; // do not render non-glued numbers twice
+
+              const classNames = [
+                removeMargin ? "no-margin" : "",
+                !isRawText && isNumber ? "value" : "",
+              ]
+                .join(" ")
+                .trim();
+
+              return (
+                <span className={classNames} key={value}>
+                  {value}
+                </span>
+              );
+            })}
+          </React.Fragment>
         );
       })}
     </span>
