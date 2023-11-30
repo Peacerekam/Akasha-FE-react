@@ -256,7 +256,7 @@ export const ProfilePage: React.FC = () => {
                 isCV ? "critvalue" : ""
               }`}
             >
-              <span className="mr-3" >
+              <span className="mr-3">
                 <StatIcon name={key} />
               </span>
               {substatValue}
@@ -304,13 +304,18 @@ export const ProfilePage: React.FC = () => {
         width: "180px",
         cell: (row) => {
           const gender = getGenderFromIcon(row.icon);
+          const characterName = translate(row.name, gender);
+
           return (
             <div className="table-icon-text-pair">
               <img alt=" " className="table-icon" src={row.icon} />
               {row.type !== "current" ? (
-                <ReplaceRowDataOnHover data={translate(row.name, gender)} onHoverData={row.type} />
+                <ReplaceRowDataOnHover
+                  data={characterName}
+                  onHoverData={row.type}
+                />
               ) : (
-                translate(row.name, gender)
+                characterName
               )}
             </div>
           );
@@ -429,7 +434,7 @@ export const ProfilePage: React.FC = () => {
                 _stat.name.replace("%", "")
               )}`}
             >
-              <span className="mr-3" >
+              <span className="mr-3">
                 <StatIcon name={_stat.name.replace("%", "")} />
               </span>
               {_value}
@@ -564,7 +569,7 @@ export const ProfilePage: React.FC = () => {
       JSON.stringify(responseData.account),
       isAccountOwner,
       handleToggleBuildsModal,
-      lastProfiles
+      lastProfiles,
     ]
   );
 

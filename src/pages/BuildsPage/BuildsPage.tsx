@@ -83,8 +83,9 @@ export const BuildsPage: React.FC = () => {
         sortable: false,
         sortField: "name",
         cell: (row) => {
-          const gender = getGenderFromIcon(row.icon);
           // const constellation = row.constellation ?? 0;
+          const gender = getGenderFromIcon(row.icon);
+          const characterName = translate(row.name, gender);
 
           return (
             <div className="table-icon-text-pair">
@@ -101,9 +102,12 @@ export const BuildsPage: React.FC = () => {
                 </span>
               </div> */}
               {row.type !== "current" ? (
-                <ReplaceRowDataOnHover data={translate(row.name, gender)} onHoverData={row.type} />
+                <ReplaceRowDataOnHover
+                  data={characterName}
+                  onHoverData={row.type}
+                />
               ) : (
-                translate(row.name, gender)
+                characterName
               )}
             </div>
           );
