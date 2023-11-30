@@ -31,6 +31,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
 import { TableColumn } from "../../types/TableColumn";
+import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import debounce from "lodash/debounce";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 
@@ -38,6 +39,7 @@ export const AccountsPage: React.FC = () => {
   const navigate = useNavigate();
   const { hoverElement } = useContext(HoverElementContext);
   const { lastProfiles } = useContext(LastProfilesContext);
+  const { language } = useContext(TranslationContext);
 
   const [inputUID, setInputUID] = useState<string>("");
   const [lookupUID, setLookupUID] = useState<string>("");
@@ -245,7 +247,7 @@ export const AccountsPage: React.FC = () => {
       //   },
       // },
     ],
-    [lookupUID]
+    [lookupUID, language]
   );
 
   const uidsQuery = useMemo(

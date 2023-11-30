@@ -1,6 +1,8 @@
 import "./style.scss";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
+
+import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 
 type LastUpdatedProps = {
   lastProfileUpdate?: number;
@@ -14,8 +16,9 @@ export const LastUpdated: React.FC<LastUpdatedProps> = ({
   format = "fancy",
 }) => {
   const [timestamp, setTimestamp] = useState<(string | number)[]>([0, ""]);
+  const { language } = useContext(TranslationContext);
 
-  const getLastProfileUpdate = () => {
+  const getLastProfileUpdate = useCallback(() => {
     if (!lastProfileUpdate) return [0, ""];
     const now = new Date().getTime();
     const then = Math.abs(lastProfileUpdate - now);
@@ -25,28 +28,42 @@ export const LastUpdated: React.FC<LastUpdatedProps> = ({
     const hoursCount = +(minutesCount / 60).toFixed(0);
     const daysCount = +(hoursCount / 24).toFixed(0);
 
+    const rtf1 = new Intl.RelativeTimeFormat(language, { style: "long" });
+
+    const getRtf = (num: number, type: Intl.RelativeTimeFormatUnit) => {
+      const str = rtf1
+        .format(-num, type)
+        .replace(num.toString(), "")
+        .trim();
+      return [num, str];
+    };
+
     const oneMinute = 1000 * 60;
     if (then < oneMinute) {
-      const _s = secondsCount > 1 ? "s" : "";
-      return [secondsCount, `second${_s} ago`];
+      return getRtf(secondsCount, "second");
+      // const _s = secondsCount > 1 ? "s" : "";
+      // return [secondsCount, `second${_s} ago`];
     }
 
     const oneHour = oneMinute * 60;
     if (then < oneHour) {
-      const _s = minutesCount > 1 ? "s" : "";
-      return [minutesCount, `minute${_s} ago`];
+      return getRtf(minutesCount, "minute");
+      // const _s = minutesCount > 1 ? "s" : "";
+      // return [minutesCount, `minute${_s} ago`];
     }
 
     const oneDay = oneHour * 24;
     if (then < oneDay) {
-      const _s = hoursCount > 1 ? "s" : "";
-      return [hoursCount, `hour${_s} ago`];
+      return getRtf(hoursCount, "hour");
+      // const _s = hoursCount > 1 ? "s" : "";
+      // return [hoursCount, `hour${_s} ago`];
     }
 
-    const _s = daysCount > 1 ? "s" : "";
+    // const _s = daysCount > 1 ? "s" : "";
 
-    return [daysCount, `day${_s} ago`];
-  };
+    return getRtf(daysCount, "day");
+    // return [daysCount, `day${_s} ago`];
+  }, [lastProfileUpdate, language]);
 
   useEffect(() => {
     // initial set
@@ -59,7 +76,10 @@ export const LastUpdated: React.FC<LastUpdatedProps> = ({
     }, 1000);
 
     return () => clearInterval(updateTimer);
-  }, [lastProfileUpdate]);
+  }, [lastProfileUpdate, language]);
+
+  console.log('\ntimestamp', timestamp)
+  console.log('lastProfileUpdate', lastProfileUpdate)
 
   if (!timestamp[0]) return null;
 

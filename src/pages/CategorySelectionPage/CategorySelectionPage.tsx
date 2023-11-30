@@ -78,7 +78,7 @@ export type CategoriesColumns = {
 
 export const CategorySelectionPage: React.FC = () => {
   const navigate = useNavigate();
-  const { translate } = useContext(TranslationContext);
+  const { translate, language } = useContext(TranslationContext);
 
   const CATEGORIES_COLUMNS: TableColumn<CategoriesColumns>[] = useMemo(
     () => [
@@ -123,7 +123,9 @@ export const CategorySelectionPage: React.FC = () => {
                 href={`/${leaderboardPath}`}
               >
                 {lbName}{" "}
-                <span style={{color: "gray", fontSize: 11, marginLeft: 10}}>{translate(row?.characterName)}</span>
+                <span style={{ color: "gray", fontSize: 11, marginLeft: 10 }}>
+                  {translate(row?.characterName)}
+                </span>
               </a>
             </div>
           );
@@ -263,7 +265,7 @@ export const CategorySelectionPage: React.FC = () => {
         width: "140px",
         cell: (row) => {
           const addDate = new Date(row?.addDate || "");
-          const strDate = addDate.toLocaleString("en-US", {
+          const strDate = addDate.toLocaleString(language, {
             month: "short",
             day: "numeric",
             year: "numeric",
@@ -280,7 +282,7 @@ export const CategorySelectionPage: React.FC = () => {
         },
       },
     ],
-    [translate]
+    [translate, language]
   );
 
   return (
