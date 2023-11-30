@@ -15,11 +15,11 @@ export const LastUpdated: React.FC<LastUpdatedProps> = ({
   label,
   format = "fancy",
 }) => {
-  const [timestamp, setTimestamp] = useState<(string | number)[]>([0, ""]);
+  const [timestamp, setTimestamp] = useState<any[]>([0, ""]);
   const { language } = useContext(TranslationContext);
 
   const getLastProfileUpdate = useCallback(() => {
-    if (!lastProfileUpdate) return [0, ""];
+    if (!lastProfileUpdate) return [0, []];
     const now = new Date().getTime();
     const then = Math.abs(lastProfileUpdate - now);
 
@@ -33,8 +33,8 @@ export const LastUpdated: React.FC<LastUpdatedProps> = ({
     const getRtf = (num: number, type: Intl.RelativeTimeFormatUnit) => {
       const str = rtf1
         .format(-num, type)
-        .replace(num.toString(), "")
-        .trim();
+        .replace(num.toString(), "<NUMBER>")
+        .split(" ");
       return [num, str];
     };
 
@@ -59,9 +59,8 @@ export const LastUpdated: React.FC<LastUpdatedProps> = ({
       // return [hoursCount, `hour${_s} ago`];
     }
 
-    // const _s = daysCount > 1 ? "s" : "";
-
     return getRtf(daysCount, "day");
+    // const _s = daysCount > 1 ? "s" : "";
     // return [daysCount, `day${_s} ago`];
   }, [lastProfileUpdate, language]);
 
@@ -78,20 +77,36 @@ export const LastUpdated: React.FC<LastUpdatedProps> = ({
     return () => clearInterval(updateTimer);
   }, [lastProfileUpdate, language]);
 
-  console.log('\ntimestamp', timestamp)
-  console.log('lastProfileUpdate', lastProfileUpdate)
-
   if (!timestamp[0]) return null;
 
-  if (format === "rawText") {
-    const text = [label, ...timestamp].join(" ");
-    return <span className="white-space-nowrap">{text}</span>;
-  }
+  const isRawText = format === "rawText";
 
   return (
-    <span className="last-profile-update">
-      <span>{label}</span> <span className="value">{timestamp[0]}</span>
-      <span>{timestamp[1]}</span>
+    <span
+      className={isRawText ? "last-profile-update-raw" : "last-profile-update"}
+    >
+      {isRawText ? "" : <span>{label}</span>}
+      {timestamp[1].map((x: string) => {
+        if (x === "<NUMBER>") {
+          return (
+            <span className={isRawText ? "" : "value"} key="number">
+              {timestamp[0]}
+            </span>
+          );
+        }
+
+        const arr = x.split("<NUMBER>");
+
+        return (
+          <span key={x}>
+            {arr.map((y) => (
+              <span className={isRawText && y ? "" : "no-margin"} key={y}>
+                {y || timestamp[0]}
+              </span>
+            ))}
+          </span>
+        );
+      })}
     </span>
   );
 };

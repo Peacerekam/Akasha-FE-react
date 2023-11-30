@@ -1,3 +1,9 @@
+.last-profile-update-raw {
+  span:not(:last-child):not(.no-margin) {
+    margin-right: 4px;
+  }
+}
+
 .last-profile-update {
   text-transform: uppercase;
   font-family: "GenshinFont";
