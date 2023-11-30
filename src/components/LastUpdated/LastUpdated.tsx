@@ -97,7 +97,10 @@ export const LastUpdated: React.FC<LastUpdatedProps> = ({
               const isNumber = !word; // numbers show up as empty string
               const removeMargin = isRawText && isGlued && isNumber;
 
-              if (index > 0 && isNumber) return; // do not render non-glued numbers twice
+              // do not render non-glued numbers twice
+              if (index > 0 && isNumber) {
+                return <React.Fragment key={`${value}-${index}`} />;
+              }
 
               const classNames = [
                 removeMargin ? "no-margin" : "",
