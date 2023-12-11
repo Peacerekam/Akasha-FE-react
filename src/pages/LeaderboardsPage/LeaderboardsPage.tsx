@@ -470,9 +470,8 @@ export const LeaderboardsPage: React.FC = () => {
                   const weaponicon = _weapon.icon ?? "";
                   const weaponRefinement = _weapon.refinement ?? 0;
                   const isActive = _weapon.calculationId === calculationId;
-                  const leaderboardPath = `leaderboards/${
-                    _weapon.calculationId
-                  }/${_weapon?.defaultVariant || ""}`;
+                  const _variant = _weapon?.defaultVariant || "";
+                  const leaderboardPath = `leaderboards/${_weapon.calculationId}/${_variant}`;
 
                   return (
                     <a

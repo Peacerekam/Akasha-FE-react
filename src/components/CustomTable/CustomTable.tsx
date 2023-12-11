@@ -515,9 +515,8 @@ export const CustomTable: React.FC<CustomTableProps> = ({
             <div className="flex expanded-row categories-exanded-row clickable-icons">
               <div style={{ overflow: "hidden" }}>
                 {row.weapons.map((weapon: any) => {
-                  const leaderboardPath = `leaderboards/${
-                    weapon.calculationId
-                  }/${weapon.defaultVariant || ""}`;
+                  const _variant = weapon.defaultVariant || "";
+                  const leaderboardPath = `leaderboards/${weapon.calculationId}/${_variant}`;
 
                   return (
                     <a

@@ -99,9 +99,8 @@ export const CategorySelectionPage: React.FC = () => {
           const lbName = row?.name || "";
 
           const firstWeapon = row.weapons[0];
-          const leaderboardPath = `leaderboards/${firstWeapon?.calculationId}/${
-            firstWeapon?.defaultVariant || ""
-          }`;
+          const _variant = firstWeapon?.defaultVariant || "";
+          const leaderboardPath = `leaderboards/${firstWeapon?.calculationId}/${_variant}`;
 
           const aClassName = row.new ? "new-lb-badge" : "";
 
@@ -156,9 +155,8 @@ export const CategorySelectionPage: React.FC = () => {
           return (
             <div className="table-icon-text-pair clickable-icons">
               {row.weapons.map((weapon: any) => {
-                const leaderboardPath = `leaderboards/${weapon.calculationId}/${
-                  weapon.defaultVariant || ""
-                }`;
+                const _variant = weapon.defaultVariant || "";
+                const leaderboardPath = `leaderboards/${weapon.calculationId}/${_variant}`;
 
                 return (
                   <a

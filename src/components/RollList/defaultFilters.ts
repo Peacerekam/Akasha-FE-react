@@ -50,7 +50,7 @@ const cryoRvList = {
   Ganyu: [CRate, CDMG, ATK_, EM],
   Shenhe: [ER, ATK, ATK_, CRate, CDMG],
   "Kamisato Ayaka": [CRate, CDMG, ER, ATK_],
-  Wriothesley: [CRate, CDMG, ER, ATK_],
+  Wriothesley: [CRate, CDMG, EM, ER, ATK_],
 };
 
 const geoRvList = {

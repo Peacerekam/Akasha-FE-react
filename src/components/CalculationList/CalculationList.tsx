@@ -76,7 +76,8 @@ export const CalculationList: React.FC<CalculationListProps> = ({
           } = calc;
 
           const _id = calculationId || id;
-          const leaderboardPath = `leaderboards/${_id}/${variant?.name || ""}`;
+          const _variant = variant?.name || "";
+          const leaderboardPath = `leaderboards/${_id}/${_variant}`;
           const leaveOnlyNumbersRegex = /\D+/g;
           const _ranking = +(ranking + "")?.replace(leaveOnlyNumbersRegex, "");
 
