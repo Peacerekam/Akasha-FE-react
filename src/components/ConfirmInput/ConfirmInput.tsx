@@ -40,7 +40,8 @@ export const ConfirmInput: React.FC<ConfirmInputProps> = ({
   const handleConfirm = () => {
     if (value === undefined || value === "") return;
 
-    const needsFormatting =
+    const isDmgOrHealingBonus = sort?.endsWith("Bonus.value");
+    const isCritOrEr =
       sort &&
       [
         "stats.critRate.value",
@@ -48,8 +49,10 @@ export const ConfirmInput: React.FC<ConfirmInputProps> = ({
         "stats.energyRecharge.value",
       ].includes(sort);
 
+    const needsNormalizing = isCritOrEr || isDmgOrHealingBonus;
+
     let numberValue = +value;
-    if (needsFormatting) numberValue /= 100;
+    if (needsNormalizing) numberValue /= 100;
 
     onConfirm(numberValue);
     setIsOpen(false);
