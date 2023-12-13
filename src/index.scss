@@ -25,7 +25,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 
   // dynamically added parts of <body> that arent react app root
-  // in this case itis react-select's portalled menu dropdown
+  // in this case it is react-select's portalled menu dropdown
   > div:not(#root) {
     z-index: 3;
   }

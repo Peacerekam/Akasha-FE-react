@@ -14,6 +14,7 @@ import { ConfirmInput } from "../ConfirmInput";
 import { FetchParams } from "../CustomTable";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+
 // import { Spinner } from "../Spinner";
 
 type PaginationProps = {
@@ -292,7 +293,8 @@ export const Pagination: React.FC<PaginationProps> = ({
     // accounts columns
     "playerInfo.finishAchievementNum": "Achievements",
     "playerInfo.level": "Adventure Rank",
-    "lastProfileUpdate": "Last profile update",
+    lastProfileUpdate: "Last profile update",
+    constellation: "Constellation",
     _id: "_id",
     // crappy columns
     // "weapon.name": false,
@@ -304,7 +306,7 @@ export const Pagination: React.FC<PaginationProps> = ({
   const disableSkip = !!sort && !sortToText[sort];
   const highlightedSort = (
     <span style={{ color: "orange", fontWeight: 600 }}>
-      {sort ? translate(sortToText[sort]) || "?" : "?"}
+      {sort && sortToText[sort] ? translate(sortToText[sort]) || "?" : "?"}
     </span>
   );
 
