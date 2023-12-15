@@ -1,14 +1,15 @@
+import {
+  REAL_SUBSTAT_VALUES,
+  STAT_NAMES,
+  getSubstatEfficiency,
+} from "../../utils/substats";
 import React, { useCallback, useMemo, useState } from "react";
 import {
   allSubstatsInOrder,
   getInGameSubstatValue,
   isPercent,
 } from "../../utils/helpers";
-import {
-  getSubstatEfficiency,
-  REAL_SUBSTAT_VALUES,
-  STAT_NAMES,
-} from "../../utils/substats";
+
 import { StatIcon } from "../StatIcon";
 import { getDefaultRvFilters } from "./defaultFilters";
 
@@ -52,14 +53,14 @@ export const RollList: React.FC<RollListProps> = ({ artifacts, character }) => {
         .filter((key) => Object.keys(summedTotalArtifactRolls).includes(key))
         .map((key) => {
           if (!highestCount) return null;
-          
+
           const readableValue = getInGameSubstatValue(
             summedTotalArtifactRolls[key].sum,
             key
           );
-          const _count = summedTotalArtifactRolls[key].count;
+          const count = summedTotalArtifactRolls[key].count;
           const opacity = Math.min(
-            Math.max(_count / (highestCount - 5), 0.35),
+            Math.max(count / (highestCount - 5), 0.35),
             1
           );
 
@@ -90,7 +91,7 @@ export const RollList: React.FC<RollListProps> = ({ artifacts, character }) => {
               onClick={() => toggleFilter(key)}
             >
               <span>
-                <span>{_count}</span>
+                <span>{count}</span>
                 <span style={{ opacity }}>
                   <StatIcon name={key} />
                   <span>
@@ -115,12 +116,25 @@ export const RollList: React.FC<RollListProps> = ({ artifacts, character }) => {
     return accumulator;
   }, [filter]);
 
+  const getTotalSubsCount = useCallback(() => {
+    const accumulator = filter.reduce((accumulator, key) => {
+      const count = summedTotalArtifactRolls[key]?.count || 0;
+      return (accumulator += count);
+    }, 0);
+
+    return accumulator;
+  }, [filter]);
+
   return (
     <div className="total-roll-list-wrapper">
       <div className="total-roll-list">
         {displayRolls}
         {highestCount !== null && (
           <div className="roll-list-member total-roll-rv">
+            <span>
+              <span>×{getTotalSubsCount()}</span>
+            </span>
+            <span style={{ marginRight: 5 }}>•</span>
             <span>
               <span>RV</span>
               <span>{getTotalRV()}%</span>

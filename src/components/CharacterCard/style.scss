@@ -10,7 +10,9 @@ $hardcoded-scale: 1;
   .total-roll-list-wrapper .total-roll-list {
     font-size: 14px * $hardcoded-scale;
     .total-roll-rv {
-      width: 80px * $hardcoded-scale;
+      // width: 80px * $hardcoded-scale;
+      display: flex;
+      width: auto;
     }
     .roll-list-member {
       padding: 3px * $hardcoded-scale 7px * $hardcoded-scale;
