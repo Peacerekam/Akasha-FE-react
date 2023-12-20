@@ -121,12 +121,12 @@ export const StatList: React.FC<StatListProps> = ({
     return activeSets.map((name) => {
       const { icon, count } = artifactSets[name];
       return (
-        <div key={name} className="table-stat-row">
+        <div key={name} className="table-stat-row green-tint">
           <div className="flex gap-5 w-100">
             <img alt="" className="stat-icon" src={icon} />
-            <span style={{ color: "#90ee90" }}> {translate(name)}</span>
+            <span>{translate(name)}</span>
           </div>
-          <div style={{ color: "#90ee90" }}>×{Math.floor(count / 2) * 2}</div>
+          <div>×{Math.floor(count / 2) * 2}</div>
         </div>
       );
     });
@@ -201,7 +201,12 @@ export const StatList: React.FC<StatListProps> = ({
           {translate("Lv.")} {row.weapon.weaponInfo.level}
         </span>
         <span className="opacity-5">
-          /{ascensionToLevel(row.weapon.weaponInfo?.promoteLevel, "weapon", row.weapon.weaponInfo.level)}
+          /
+          {ascensionToLevel(
+            row.weapon.weaponInfo?.promoteLevel,
+            "weapon",
+            row.weapon.weaponInfo.level
+          )}
         </span>
       </div>
     </div>

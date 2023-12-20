@@ -56,7 +56,7 @@ const getStatsFromRow = (row: any) => {
 
 export const StatListCard: React.FC<StatListProps> = ({ row }) => {
   const { translate } = useContext(TranslationContext);
-  
+
   const stats = getStatsFromRow(row);
 
   if (!stats) return <></>;
@@ -71,22 +71,19 @@ export const StatListCard: React.FC<StatListProps> = ({ row }) => {
     return activeSets.map((name) => {
       const { icon, count } = artifactSets[name];
       return (
-        <div key={name} className="table-stat-row">
+        <div key={name} className="table-stat-row green-tint">
           <div className="flex gap-5 w-100">
             <img alt="" className="stat-icon" src={icon} />
-            <span style={{ color: "#90ee90" }}>
-              {" "}
-              {translate(name)}
-            </span>
+            <span>{translate(name)}</span>
           </div>
-          <div style={{ color: "#90ee90" }}>×{Math.floor(count / 2) * 2}</div>
+          <div>×{Math.floor(count / 2) * 2}</div>
         </div>
       );
     });
   };
 
   const displayDamageValues = () => {
-    const relevantDamageTypes = getRelevantDmgBonuses(row)
+    const relevantDamageTypes = getRelevantDmgBonuses(row);
 
     return relevantDamageTypes.map((dmgStat: any) => (
       <div className="table-stat-row" key={dmgStat.name}>

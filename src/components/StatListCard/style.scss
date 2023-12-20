@@ -6,11 +6,22 @@
   flex-direction: column;
   justify-content: space-between;  
   height: 270px;
+
   .table-stat-row {
     display: flex;
     justify-content: space-between;
     // border-bottom: 1px dashed rgba(150, 150, 150, 0.75);
     font-size: 16px;
+    align-items: center;
+
+    &.green-tint {
+      color: #90ee90;
+      span {
+        white-space: initial;
+        max-width: 280px;
+      }
+    }
+
     > div:first-child {
       // width: 60%;
       width: 100%;

@@ -6,6 +6,14 @@
     // border-bottom: 1px dashed rgb(112, 112, 112);
     border-bottom: 1px dashed rgb(150, 150, 150);
     margin: 6px 0;
+
+    &.green-tint {
+      color: #90ee90;
+      span {
+        max-width: 235px;
+      }
+    }
+
     > div:first-child {
       width: 60%;
       align-items: center;
@@ -16,6 +24,7 @@
         white-space: nowrap;
       }
     }
+
   }
 }
 
