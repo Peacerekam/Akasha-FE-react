@@ -109,3 +109,71 @@ export const toTalentProps = (row: any, keys: string[], chartsData: any) => {
     icon,
   };
 };
+
+export const setGradientFromImage = (
+  gradient: CanvasGradient,
+  canvasHeight: number,
+  canvasWidth: number,
+  imgData: any,
+  steps: number,
+  alphaOverride: string | number,
+  chCtx: CanvasRenderingContext2D | null,
+  debug: boolean = false
+) => {
+  if (debug) {
+    chCtx!.globalCompositeOperation = "source-over";
+    console.log(imgData);
+  }
+
+  const outputColors = [];
+
+  for (let i = 0; i <= steps; i++) {
+    const targetY = Math.floor(((canvasHeight - 1) / steps) * i);
+    const targetX = 0;
+    const pixel = targetY + targetX;
+
+    //To get the array position in the entire image data array, simply multiply your pixel position by 4 (since each pixel will have its own r,g,b,a in that order)
+    const _position = pixel * 4;
+
+    const c = {
+      red: imgData.data[_position],
+      green: imgData.data[_position + 1],
+      blue: imgData.data[_position + 2],
+      alpha: imgData.data[_position + 3],
+    };
+
+    const hexCode =
+      c.alpha === 0
+        ? "#00000000"
+        : `#${[c.red, c.green, c.blue]
+            .map((x) => (x || 0).toString(16).padStart(2, "0"))
+            .join("")}${alphaOverride}`;
+
+    const gradientStep = i / steps;
+    gradient.addColorStop(gradientStep, hexCode);
+
+    outputColors.push(hexCode);
+
+    if (debug) {
+      chCtx!.beginPath();
+      // chCtx!.arc(canvasWidth - 1, targetY, 5, 0, 2 * Math.PI);
+
+      chCtx!.fillStyle = "black";
+      chCtx!.arc(canvasWidth - 1, targetY / 2, 9, 0, 2 * Math.PI);
+      chCtx!.fill();
+
+      chCtx!.closePath();
+      chCtx!.beginPath();
+
+      chCtx!.fillStyle = hexCode;
+      chCtx!.arc(canvasWidth - 1, targetY / 2, 8, 0, 2 * Math.PI);
+
+      chCtx!.closePath();
+      chCtx!.fill();
+
+      console.log(targetX, targetY, gradientStep, hexCode);
+    }
+  }
+
+  return outputColors;
+};

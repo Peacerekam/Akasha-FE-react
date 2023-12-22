@@ -65,9 +65,6 @@ export const ArtifactOnCanvas: React.FC<{
       const x = canvasWidth / 2 - newWidth / 2;
       const y = canvasHeight / 2 - newHeight / 2;
 
-      // get canvas context
-      const ctx = canvasRef.current.getContext("2d");
-
       // Create gradient
       const gradientMask = ctx!.createLinearGradient(
         canvasWidth - 100 * hardcodedScale,

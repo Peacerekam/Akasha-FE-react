@@ -6,6 +6,7 @@ import {
   calcStatVals,
   handleTitle,
   scales,
+  setGradientFromImage,
   toTalentProps,
 } from "./cardHelpers";
 import { REAL_SUBSTAT_VALUES, STAT_NAMES } from "../../utils/substats";
@@ -39,8 +40,8 @@ import {
 import html2canvas, { Options } from "html2canvas";
 
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
+import { ArtifactBackgroundOnCanvas } from "./ArtifactBackgroundOnCanvas";
 import { ArtifactOnCanvas } from "../ArtifactListCompact";
-import CrownOfInsight from "../../assets/images/Crown_of_Insight.webp";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FriendshipIcon from "../../assets/icons/Item_Companionship_EXP.png";
 import { PreviewModal } from "./PreviewModal";
@@ -51,6 +52,7 @@ import { RollList } from "../RollList";
 import { Spinner } from "../Spinner";
 import { StatIcon } from "../StatIcon";
 import { StatListCard } from "../StatListCard";
+import { TalentDisplay } from "./TalentDisplay";
 import { TeammatesCompact } from "../TeammatesCompact";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
@@ -59,8 +61,6 @@ import { useLocation } from "react-router-dom";
 
 // import { toBlob, toPng } from "html-to-image";
 
-
-
 ChartJS.register(...registerables);
 
 type CharacterCardProps = {
@@ -68,46 +68,6 @@ type CharacterCardProps = {
   artifacts: any[];
   _calculations: any;
   setSelectedCalculationId?: any;
-};
-
-type TalentProps = {
-  talent: {
-    boosted: boolean;
-    level: number;
-    rawLevel: number;
-    icon?: string;
-  };
-};
-
-const TalentDisplay: React.FC<TalentProps> = ({ talent }) => {
-  const isBoosted = !!talent?.boosted;
-  const isCrowned = talent?.rawLevel
-    ? talent?.rawLevel === 10
-    : talent?.level === (isBoosted ? 13 : 10);
-
-  return (
-    <div
-      className={`talent-display ${isCrowned ? "talent-crowned" : ""} ${
-        isBoosted ? "talent-boosted" : ""
-      }`}
-    >
-      {talent?.icon ? (
-        <span>
-          <img alt="" src={talent?.icon} />
-        </span>
-      ) : (
-        <span>
-          <div className="talent-icon-placeholder opacity-5">×</div>
-        </span>
-      )}
-      <div className={"talent-display-value"}>
-        <span>{talent?.level || "-"}</span>
-        {isCrowned && (
-          <img alt="crown" className="crown-of-insight" src={CrownOfInsight} />
-        )}
-      </div>
-    </div>
-  );
 };
 
 export const CharacterCard: React.FC<CharacterCardProps> = ({
@@ -120,6 +80,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   // const [enkaStyle, setEnkaStyle] = useState(false);
   const [namecardBg, setNamecardBg] = useState(false);
   const [simplifyColors, setSimplifyColors] = useState(false);
+  const [adaptiveBgColor, setAdaptiveBgColor] = useState(false);
   const [displayBuildName, setDisplayBuildName] = useState(true);
   const [privacyFlag, setPrivacyFlag] = useState(false);
   const [toggleConfigure, setToggleConfigure] = useState(false);
@@ -133,10 +94,12 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [imagePreviewBlob, setImagePreviewBlob] = useState<Blob>();
   const [filteredLeaderboards, setFilteredLeaderboards] = useState<any[]>([]);
+  const [adaptiveColors, setAdaptiveColors] = useState<[string[], string[]]>();
 
   const uploadPictureInputRef = useRef<HTMLInputElement>(null);
   const backgroundPictureRef = useRef<HTMLImageElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasBgRef = useRef<HTMLCanvasElement>(null);
 
   const { translate } = useContext(TranslationContext);
   const { contentWidth } = useContext(AdProviderContext);
@@ -144,23 +107,38 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const calculations = _calculations.calculations;
   const chartsData = _calculations.chartsData;
 
-  // const hardcodedScale = adProvider === "playwire" ? 0.85 : 1;
-  // const hardcodedScale = 0.87; // same as in css
   const hardcodedScale = +Math.max(
     0.87,
     contentWidth ? contentWidth / 1280 : 1
   ).toFixed(3);
   const canvasWidth = 500 * hardcodedScale;
   const canvasHeight = 485 * hardcodedScale;
+
+  const canvasBgWidth = 1200 * hardcodedScale;
+  const canvasBgHeight = 485 * hardcodedScale;
+
   const canvasPixelDensity = 2;
 
   const location = useLocation();
   const DEBUG_MODE = location.search?.includes("debug");
 
-  useEffect(() => {
-    // (document.body as any).style = `--hardcoded-card-scale: ${hardcodedScale}px`;
-    // console.log('\n\n\n\n\n\n\n\n', hardcodedScale)
-  }, [contentWidth]);
+  const noElementColor = "#ffffff";
+  const elementKey = chartsData?.characterMetadata?.element;
+  const elementalColor = ELEMENT_TO_COLOR[elementKey];
+  const namecardBgUrl = toEnkaUrl(chartsData?.characterMetadata?.namecard);
+  const elementalBgUrl = `/elementalBackgrounds/${chartsData?.characterMetadata?.element}-bg.jpg`;
+  const actualBgUrl = namecardBg ? namecardBgUrl : elementalBgUrl;
+  // const elementalBg = `url(/elementalBackgrounds/${chartsData?.characterMetadata?.element}-bg.png)`
+
+  const cardStyle = {
+    // "--hue-rotate": `${
+    //   ELEMENT_TO_HUE[chartsData?.characterMetadata?.element]
+    // }deg`,
+    // "--elemental-bg": `url(${elementalBgUrl})`,
+    "--element-color": elementalColor || noElementColor,
+    "--element-color-2": `${elementalColor || noElementColor}70`,
+    "--character-namecard-url": `url(${actualBgUrl})`,
+  } as React.CSSProperties;
 
   // load from local storage
   useEffect(() => {
@@ -172,6 +150,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
     if (savedObj.simplifyColors !== simplifyColors) {
       setSimplifyColors(savedObj.simplifyColors || simplifyColors);
+    }
+
+    if (savedObj.adaptiveBgColor !== adaptiveBgColor) {
+      setAdaptiveBgColor(savedObj.adaptiveBgColor || adaptiveBgColor);
     }
 
     if (savedObj.namecardBg !== namecardBg) {
@@ -195,6 +177,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       oldObj.simplifyColors = simplifyColors;
     }
 
+    if (oldObj.adaptiveBgColor !== adaptiveBgColor) {
+      oldObj.adaptiveBgColor = adaptiveBgColor;
+    }
+
     if (oldObj.namecardBg !== namecardBg) {
       oldObj.namecardBg = namecardBg;
     }
@@ -205,7 +191,13 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
     const newObj = { ...oldObj };
     localStorage.setItem("cardSettings", JSON.stringify(newObj));
-  }, [displayBuildName, simplifyColors, namecardBg, privacyFlag]);
+  }, [
+    displayBuildName,
+    simplifyColors,
+    adaptiveBgColor,
+    namecardBg,
+    privacyFlag,
+  ]);
 
   const handleToggleModal = (event: React.MouseEvent<HTMLElement>) => {
     setShowPreviewModal((prev) => !prev);
@@ -253,13 +245,19 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     if (!canvasRef.current || !backgroundPictureRef.current) return;
     const ctx = canvasRef.current.getContext("2d");
     ctx!.scale(canvasPixelDensity, canvasPixelDensity);
-    paintImageToCanvas(backgroundPictureRef.current.src, "gacha");
+  }, [canvasRef, backgroundPictureRef]);
+
+  useEffect(() => {
+    if (!backgroundPictureRef.current) return;
+
+    const mode = !uploadPictureInputRef?.current?.files?.[0] && "gacha";
+    paintImageToCanvas(backgroundPictureRef.current.src, mode);
 
     setIsLoadingImage(true);
     backgroundPictureRef.current.addEventListener("load", () => {
       setIsLoadingImage(false);
     });
-  }, [canvasRef, backgroundPictureRef]);
+  }, [backgroundPictureRef, adaptiveBgColor, namecardBg]);
 
   const calculationIds = useMemo(
     () =>
@@ -613,7 +611,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             <span className="lb-badge">
               <img alt="" className="weapon-icon" src={calc.weapon.icon} />
               <span>
-                {short} {variant?.displayName?.replace("C6 ", "")}
+                {short}{" "}
+                {variant?.displayName?.replace("C6", "").replace("C2", "")}
               </span>
             </span>
           );
@@ -690,7 +689,17 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
               key={artifact._id}
               className={`flex compact-artifact ${className}`}
             >
-              <div className="compact-artifact-bg" />
+              {/* old: */}
+              {/* <div className="compact-artifact-bg" /> */}
+
+              <ArtifactBackgroundOnCanvas
+                backgroundImage={actualBgUrl}
+                adaptiveBgColor={adaptiveBgColor}
+                namecardBg={namecardBg}
+                adaptiveColors={adaptiveColors}
+                hardcodedScale={hardcodedScale}
+              />
+
               {artifact.icon !== null ? (
                 <div className="compact-artifact-icon-container">
                   <ArtifactOnCanvas
@@ -762,83 +771,198 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         })}
       </>
     );
-  }, [JSON.stringify(reorderedArtifacts)]);
+  }, [JSON.stringify(reorderedArtifacts), actualBgUrl, adaptiveBgColor, adaptiveColors]);
 
   const artifactsDiv =
     reorderedArtifacts.length > 0 ? compactList : "no artifacts equipped";
 
-  const paintImageToCanvas = (result: string, mode?: string) => {
-    const img = backgroundPictureRef?.current;
-    if (!img) return;
+  const paintImageToCanvas = async (
+    result: string,
+    mode?: string | boolean
+  ) => {
+    const characterImg = backgroundPictureRef?.current;
+    if (!characterImg) return;
 
-    img.crossOrigin = "anonymous";
-    img.src = result + "";
+    characterImg.crossOrigin = "anonymous";
+    characterImg.src = result + "";
 
-    img.onload = () => {
-      if (!canvasRef.current) return;
+    const elementalOrNamecardBgImg = new Image();
+    elementalOrNamecardBgImg.crossOrigin = "anonymous";
+    elementalOrNamecardBgImg.src = actualBgUrl;
 
-      // Once the image is loaded, we will get the width & height of the image
+    const images = [characterImg, elementalOrNamecardBgImg];
+    const allPromises = images.map((image: any) => {
+      return new Promise((resolve) => {
+        image.onload = () => resolve(true);
+        image.onerror = () => resolve(true);
+      });
+    });
 
-      const imageWidth = img.width;
-      const imageHeight = img.height;
+    await Promise.all(allPromises);
 
-      // width    2048
-      // height   1024
+    // characterImg.onload = () => resolve()
+    // elementalOrNamecardBgImg.onload = () => resolve()
 
-      const _canvasWidth = mode === "gacha" ? canvasWidth * 1.55 : canvasWidth;
-      const _canvasHeight =
-        mode === "gacha" ? canvasHeight * 1.55 : canvasHeight;
+    if (!canvasRef.current) return;
 
-      // get the scale
-      // it is the min of the 2 ratios
-      const canvasScale = Math.max(
-        _canvasWidth / imageWidth,
-        _canvasHeight / imageHeight
-      );
+    // Once the image is loaded, we will get the width & height of the image
 
-      // Finding the new width and height based on the scale factor
-      const newWidth = imageWidth * canvasScale;
-      const newHeight = imageHeight * canvasScale;
+    const imageWidth = characterImg.width;
+    const imageHeight = characterImg.height;
 
-      // get canvas context
-      const ctx = canvasRef.current.getContext("2d");
+    // width    2048
+    // height   1024
 
-      // Create gradient
-      const gradientMask = ctx!.createLinearGradient(
-        canvasWidth - 101 * hardcodedScale,
-        0,
-        canvasWidth - 3 * hardcodedScale,
-        0
-      );
-      gradientMask.addColorStop(0, "black");
-      gradientMask.addColorStop(1, "transparent");
+    const _canvasWidth = mode === "gacha" ? canvasWidth * 1.55 : canvasWidth;
+    const _canvasHeight = mode === "gacha" ? canvasHeight * 1.55 : canvasHeight;
 
-      // clear canvas
-      ctx!.globalCompositeOperation = "source-out";
-      ctx!.clearRect(0, 0, canvasWidth, canvasHeight);
+    // get the scale
+    // it is the min of the 2 ratios
+    const canvasScale = Math.max(
+      _canvasWidth / imageWidth,
+      _canvasHeight / imageHeight
+    );
 
-      // Fill with gradient
-      ctx!.fillStyle = gradientMask;
-      ctx!.fillRect(0, 0, canvasWidth, canvasHeight);
+    // Finding the new width and height based on the scale factor
+    const newWidth = imageWidth * canvasScale;
+    const newHeight = imageHeight * canvasScale;
 
-      // get the top left position of the image
-      // in order to center the image within the canvas
-      let x = _canvasWidth / 2 - newWidth / 2;
-      let y = _canvasHeight / 2 - newHeight / 2;
+    // get canvas context
+    const characterCtx = canvasRef.current.getContext("2d");
 
-      if (mode === "gacha") {
-        if (row.name === "Traveler") {
-          x = x - 100 * hardcodedScale;
-          y = y + 30 * hardcodedScale;
-        } else {
-          x = x - 130 * hardcodedScale;
-          y = y - 82 * hardcodedScale;
-        }
+    // Create gradient
+    const gradientMask = characterCtx!.createLinearGradient(
+      canvasWidth - 101 * hardcodedScale,
+      0,
+      canvasWidth - 3 * hardcodedScale,
+      0
+    );
+    gradientMask.addColorStop(0, "black");
+    gradientMask.addColorStop(1, "transparent");
+
+    // clear canvas
+    characterCtx!.globalCompositeOperation = "source-out";
+    characterCtx!.clearRect(0, 0, canvasWidth, canvasHeight);
+
+    // Fill with gradient
+    characterCtx!.fillStyle = gradientMask;
+    characterCtx!.fillRect(0, 0, canvasWidth, canvasHeight);
+
+    // get the top left position of the image
+    // in order to center the image within the canvas
+    let x = _canvasWidth / 2 - newWidth / 2;
+    let y = _canvasHeight / 2 - newHeight / 2;
+
+    if (mode === "gacha") {
+      if (row.name === "Traveler") {
+        x = x - 100 * hardcodedScale;
+        y = y + 30 * hardcodedScale;
+      } else {
+        x = x - 130 * hardcodedScale;
+        y = y - 82 * hardcodedScale;
       }
+    }
 
-      ctx!.globalCompositeOperation = "source-in";
-      ctx!.drawImage(img, x, y, newWidth, newHeight);
+    characterCtx!.globalCompositeOperation = "source-in";
+    characterCtx!.drawImage(characterImg, x, y, newWidth, newHeight);
+
+    if (!canvasBgRef.current) return;
+
+    const backgroundCtx = canvasBgRef.current.getContext("2d");
+
+    const bgWidth = canvasPixelDensity * canvasBgWidth;
+    const bgHeight = canvasPixelDensity * canvasBgHeight;
+
+    // clear canvas
+    backgroundCtx!.globalCompositeOperation = "source-out";
+    backgroundCtx!.clearRect(0, 0, bgWidth, bgHeight);
+    backgroundCtx!.filter = "contrast(1)";
+
+    if (namecardBg) {
+      const namecardHeight = canvasPixelDensity * 572;
+      const yOffset = -(namecardHeight - bgHeight);
+      backgroundCtx!.drawImage(
+        elementalOrNamecardBgImg,
+        0,
+        yOffset,
+        bgWidth,
+        namecardHeight
+      );
+    } else {
+      backgroundCtx!.drawImage(
+        elementalOrNamecardBgImg,
+        0,
+        0,
+        bgWidth,
+        bgHeight
+      );
+    }
+
+    if (!adaptiveBgColor) return;
+
+    const rightEdgeData: any = characterCtx!.getImageData(
+      canvasWidth * 2 - 25, // newWidth - 1, // start X
+      0, // start Y
+      1, // width of extracted data
+      2 * canvasHeight - 1 // height of extracted data
+    );
+    
+    if (!rightEdgeData) return;
+
+    // Create gradient
+    const gradientCoords = [0, 0, 0, bgHeight] as const;
+    const adaptiveGradient_1 = backgroundCtx!.createLinearGradient(
+      ...gradientCoords
+    );
+
+    const gradientSteps = 2;
+
+    const setGradientFromImageDefault = (
+      gradient: CanvasGradient,
+      alphaOverride: string | number = "55"
+    ) => {
+      return setGradientFromImage(
+        gradient,
+        2 * canvasHeight,
+        canvasWidth,
+        rightEdgeData,
+        gradientSteps,
+        alphaOverride,
+        characterCtx
+      );
     };
+
+    const solidGradientColors = setGradientFromImageDefault(adaptiveGradient_1, "ff");
+
+    backgroundCtx!.globalCompositeOperation = "color";
+    backgroundCtx!.fillStyle = adaptiveGradient_1;
+    backgroundCtx!.fillRect(0, 0, bgWidth, bgHeight);
+
+    // Create gradient
+    const adaptiveGradient_2 = backgroundCtx!.createLinearGradient(
+      ...gradientCoords
+    );
+
+    // "multiply"
+    // "overlay"
+    // "color-dodge"
+    // "color-burn"
+    // "hard-light"
+    // "soft-light"
+    // "hue"
+    // "color"
+
+    const nonSolidGradientColors = setGradientFromImageDefault(adaptiveGradient_2, "55");
+
+    setAdaptiveColors([
+      solidGradientColors, nonSolidGradientColors
+    ])
+
+    backgroundCtx!.globalCompositeOperation = "hard-light";
+    backgroundCtx!.fillStyle = adaptiveGradient_2;
+    backgroundCtx!.filter = "contrast(1.5)";
+    // backgroundCtx!.filter = "contrast(150%)";
+    backgroundCtx!.fillRect(0, 0, bgWidth, bgHeight);
   };
 
   const characterShowcase = useMemo(
@@ -881,8 +1005,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             name="filename"
           />
           <canvas
-            height={canvasHeight * canvasPixelDensity}
             width={canvasWidth * canvasPixelDensity}
+            height={canvasHeight * canvasPixelDensity}
             style={{
               width: canvasWidth,
               height: canvasHeight,
@@ -948,7 +1072,12 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                   {translate("Lv.")} {row.weapon.weaponInfo.level}
                 </span>
                 <span className="opacity-5">
-                  /{ascensionToLevel(row.weapon.weaponInfo?.promoteLevel, "weapon", row.weapon.weaponInfo.level)}
+                  /
+                  {ascensionToLevel(
+                    row.weapon.weaponInfo?.promoteLevel,
+                    "weapon",
+                    row.weapon.weaponInfo.level
+                  )}
                 </span>
               </div>
             </div>
@@ -960,25 +1089,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     ),
     [row, chartsData, translate]
   );
-
-  const noElementColor = "#ffffff";
-  const elementKey = chartsData?.characterMetadata?.element;
-  const elementalColor = ELEMENT_TO_COLOR[elementKey];
-  const namecardBgUrl = toEnkaUrl(chartsData?.characterMetadata?.namecard);
-  const elementalBg = `url(/elementalBackgrounds/${chartsData?.characterMetadata?.element}-bg.jpg)`;
-  // const elementalBg = `url(/elementalBackgrounds/${chartsData?.characterMetadata?.element}-bg.png)`
-
-  const cardStyle = {
-    // "--hue-rotate": `${
-    //   ELEMENT_TO_HUE[chartsData?.characterMetadata?.element]
-    // }deg`,
-    "--element-color": elementalColor || noElementColor,
-    "--element-color-2": `${elementalColor || noElementColor}70`,
-    "--elemental-bg": elementalBg,
-    "--character-namecard-url": !namecardBg
-      ? elementalBg
-      : `url(${namecardBgUrl})`,
-  } as React.CSSProperties;
 
   const getBuildId = (build: any) => `${build.characterId}${build.type}`;
 
@@ -1217,17 +1327,40 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           <RollList artifacts={reorderedArtifacts} character={row.name} />
         </div>
         {/* <div className="wide-bg-shadow" /> */}
+        {/* <img
+          alt="uwu"
+          className="uwu-test"
+          src="https://cdn.discordapp.com/attachments/282208855289495554/1185322604526043186/random-gradient.png"
+        /> */}
         <div
           className={`character-card-background ${
             !namecardBg ? "elemental-bg" : ""
           }`}
           // style={bgStyle}
         >
-          <div />
+          {/* <div /> */}
+          <canvas
+            className="bg-as-canvas"
+            ref={canvasBgRef}
+            width={canvasBgWidth * canvasPixelDensity}
+            height={canvasBgHeight * canvasPixelDensity}
+            style={{
+              width: canvasBgWidth,
+              height: canvasBgHeight,
+            }}
+          />
         </div>
       </div>
     ),
-    [row, namecardBg, simplifyColors, cardStyle, generating, translate]
+    [
+      row,
+      namecardBg,
+      simplifyColors,
+      adaptiveBgColor,
+      cardStyle,
+      generating,
+      translate,
+    ]
   );
 
   const handleSelectChange = (option: any) => {
@@ -1510,7 +1643,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                   </div>
                   <div>
                     <label htmlFor={`${getBuildId(row)}-sc`}>
-                      Simplify colors
+                      Simplify border colors
                     </label>
                     <input
                       id={`${getBuildId(row)}-sc`}
@@ -1518,6 +1651,19 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                       checked={simplifyColors}
                       onChange={(e: any) =>
                         setSimplifyColors(!!e.target.checked)
+                      }
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor={`${getBuildId(row)}-abg`}>
+                      Adaptive background
+                    </label>
+                    <input
+                      id={`${getBuildId(row)}-abg`}
+                      type="checkbox"
+                      checked={adaptiveBgColor}
+                      onChange={(e: any) =>
+                        setAdaptiveBgColor(!!e.target.checked)
                       }
                     />
                   </div>

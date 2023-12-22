@@ -385,7 +385,7 @@ $hardcoded-scale: 1;
     $simplified-color: var(--element-color);
     $simplified-color-2: var(--element-color-2);
     // .character-card-background {
-    //   box-shadow: 0 0 0 1px * $hardcoded-scale $simplified-color !important; 
+    //   box-shadow: 0 0 0 1px * $hardcoded-scale $simplified-color !important;
     // }
     .compact-artifact {
       // box-shadow: 0 0 0 1px * $hardcoded-scale $simplified-color, 0 0 0px * $hardcoded-scale 3px * $hardcoded-scale $simplified-color-2 !important;
@@ -606,8 +606,8 @@ $hardcoded-scale: 1;
 
         &.talent-boosted {
           .talent-display-value {
-            // background-color: #44cded; 
-            background-color: var(--element-color); 
+            // background-color: #44cded;
+            background-color: var(--element-color);
           }
           > span {
             border: 1px * $hardcoded-scale solid rgba(white, 0.6);
@@ -665,7 +665,7 @@ $hardcoded-scale: 1;
         }
         .talent-icon-placeholder,
         img:not(.crown-of-insight) {
-          background-color: rgba(rgb(34, 34, 34), 0.7); 
+          background-color: rgba(rgb(34, 34, 34), 0.7);
           border-radius: 100%;
           width: 33px * $hardcoded-scale;
           height: 33px * $hardcoded-scale;
@@ -678,7 +678,7 @@ $hardcoded-scale: 1;
         .talent-display-value {
           font-size: 13px * $hardcoded-scale;
           padding: 3px * $hardcoded-scale 6px * $hardcoded-scale;
-          background-color: #3a3a3a; 
+          background-color: #3a3a3a;
           border-radius: 10px * $hardcoded-scale;
           z-index: 3;
           width: fit-content;
@@ -995,6 +995,9 @@ $hardcoded-scale: 1;
         // background-size: 10000%;
         background-size: initial !important;
       }
+      .compact-artifact-bg-canvas {
+        position: absolute;
+      }
     }
   }
 
@@ -1102,6 +1105,9 @@ $hardcoded-scale: 1;
       z-index: 1;
       box-sizing: border-box;
       border-radius: 5px * $hardcoded-scale;
+
+      // @TODO: check this...
+      top: calc(-100% - 4px);
     }
 
     // filter: drop-shadow(1px * $hardcoded-scale 0px * $hardcoded-scale 0px * $hardcoded-scale var(--element-color))
@@ -1118,7 +1124,9 @@ $hardcoded-scale: 1;
     // }
 
     > div {
-      background-color: var(--element-color-2); // this fallback until image is loaded
+      background-color: var(
+        --element-color-2
+      ); // this fallback until image is loaded
       background-image: var(--character-namecard-url);
       background-size: cover;
       background-position-y: bottom;
@@ -1126,6 +1134,11 @@ $hardcoded-scale: 1;
       border-radius: 5px * $hardcoded-scale;
       width: 100%;
       height: 100%;
+    }
+
+    .bg-as-canvas {
+      border-radius: 5px * $hardcoded-scale;
+      pointer-events: none;
     }
   }
 }
