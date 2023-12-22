@@ -251,7 +251,12 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     if (!backgroundPictureRef.current) return;
 
     const mode = !uploadPictureInputRef?.current?.files?.[0] && "gacha";
-    paintImageToCanvas(backgroundPictureRef.current.src, mode);
+    try {
+      paintImageToCanvas(backgroundPictureRef.current.src, mode);
+    } catch (err) {
+      // second time's a charm
+      paintImageToCanvas(backgroundPictureRef.current.src, mode);
+    }
 
     setIsLoadingImage(true);
     backgroundPictureRef.current.addEventListener("load", () => {
@@ -771,7 +776,12 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         })}
       </>
     );
-  }, [JSON.stringify(reorderedArtifacts), actualBgUrl, adaptiveBgColor, adaptiveColors]);
+  }, [
+    JSON.stringify(reorderedArtifacts),
+    actualBgUrl,
+    adaptiveBgColor,
+    adaptiveColors,
+  ]);
 
   const artifactsDiv =
     reorderedArtifacts.length > 0 ? compactList : "no artifacts equipped";
@@ -780,8 +790,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     result: string,
     mode?: string | boolean
   ) => {
+    if (!canvasBgRef?.current) return;
+    if (!backgroundPictureRef?.current) return;
+
     const characterImg = backgroundPictureRef?.current;
-    if (!characterImg) return;
 
     characterImg.crossOrigin = "anonymous";
     characterImg.src = result + "";
@@ -791,14 +803,64 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     elementalOrNamecardBgImg.src = actualBgUrl;
 
     const images = [characterImg, elementalOrNamecardBgImg];
+
+    const bgWidth = canvasPixelDensity * canvasBgWidth;
+    const bgHeight = canvasPixelDensity * canvasBgHeight;
+
+    const backgroundCtx = canvasBgRef.current.getContext("2d");
+
+    const drawBackground = () => {
+      if (!canvasBgRef.current) return;
+
+      // clear canvas
+      backgroundCtx!.globalCompositeOperation = "source-out";
+      backgroundCtx!.clearRect(0, 0, bgWidth, bgHeight);
+      backgroundCtx!.filter = "contrast(1)";
+
+      try {
+        if (namecardBg) {
+          const namecardHeight = canvasPixelDensity * 572;
+          const yOffset = -(namecardHeight - bgHeight);
+          backgroundCtx!.drawImage(
+            elementalOrNamecardBgImg,
+            0,
+            yOffset,
+            bgWidth,
+            namecardHeight
+          );
+        } else {
+          backgroundCtx!.drawImage(
+            elementalOrNamecardBgImg,
+            0,
+            0,
+            bgWidth,
+            bgHeight
+          );
+        }
+      } catch (err) {
+        // await delay(50);
+        // await drawBackground();
+      }
+
+      // return backgroundCtx;
+    };
+
     const allPromises = images.map((image: any) => {
+      if (!image) return new Promise((resolve) => resolve(true));
+
       return new Promise((resolve) => {
-        image.onload = () => resolve(true);
-        image.onerror = () => resolve(true);
+        image.onload = async () => {
+          drawBackground(); // it doesn't hurt to call it on each load tbh
+          resolve(true);
+        };
+        image.onerror = async () => {
+          resolve(true);
+        };
       });
     });
 
     await Promise.all(allPromises);
+    await delay(50);
 
     // characterImg.onload = () => resolve()
     // elementalOrNamecardBgImg.onload = () => resolve()
@@ -866,38 +928,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     characterCtx!.globalCompositeOperation = "source-in";
     characterCtx!.drawImage(characterImg, x, y, newWidth, newHeight);
 
-    if (!canvasBgRef.current) return;
-
-    const backgroundCtx = canvasBgRef.current.getContext("2d");
-
-    const bgWidth = canvasPixelDensity * canvasBgWidth;
-    const bgHeight = canvasPixelDensity * canvasBgHeight;
-
-    // clear canvas
-    backgroundCtx!.globalCompositeOperation = "source-out";
-    backgroundCtx!.clearRect(0, 0, bgWidth, bgHeight);
-    backgroundCtx!.filter = "contrast(1)";
-
-    if (namecardBg) {
-      const namecardHeight = canvasPixelDensity * 572;
-      const yOffset = -(namecardHeight - bgHeight);
-      backgroundCtx!.drawImage(
-        elementalOrNamecardBgImg,
-        0,
-        yOffset,
-        bgWidth,
-        namecardHeight
-      );
-    } else {
-      backgroundCtx!.drawImage(
-        elementalOrNamecardBgImg,
-        0,
-        0,
-        bgWidth,
-        bgHeight
-      );
-    }
-
     if (!adaptiveBgColor) return;
 
     const rightEdgeData: any = characterCtx!.getImageData(
@@ -906,7 +936,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       1, // width of extracted data
       2 * canvasHeight - 1 // height of extracted data
     );
-    
+
     if (!rightEdgeData) return;
 
     // Create gradient
@@ -932,7 +962,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       );
     };
 
-    const solidGradientColors = setGradientFromImageDefault(adaptiveGradient_1, "ff");
+    const solidGradientColors = setGradientFromImageDefault(
+      adaptiveGradient_1,
+      "ff"
+    );
 
     backgroundCtx!.globalCompositeOperation = "color";
     backgroundCtx!.fillStyle = adaptiveGradient_1;
@@ -952,11 +985,12 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     // "hue"
     // "color"
 
-    const nonSolidGradientColors = setGradientFromImageDefault(adaptiveGradient_2, "55");
+    const nonSolidGradientColors = setGradientFromImageDefault(
+      adaptiveGradient_2,
+      "55"
+    );
 
-    setAdaptiveColors([
-      solidGradientColors, nonSolidGradientColors
-    ])
+    setAdaptiveColors([solidGradientColors, nonSolidGradientColors]);
 
     backgroundCtx!.globalCompositeOperation = "hard-light";
     backgroundCtx!.fillStyle = adaptiveGradient_2;
