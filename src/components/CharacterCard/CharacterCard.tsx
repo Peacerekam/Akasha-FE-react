@@ -78,11 +78,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 }) => {
   const [width, setWidth] = useState<number>(window.innerWidth);
   // const [enkaStyle, setEnkaStyle] = useState(false);
-  const [namecardBg, setNamecardBg] = useState(false);
-  const [simplifyColors, setSimplifyColors] = useState(false);
-  const [adaptiveBgColor, setAdaptiveBgColor] = useState(false);
-  const [displayBuildName, setDisplayBuildName] = useState(true);
-  const [privacyFlag, setPrivacyFlag] = useState(false);
+  const [namecardBg, setNamecardBg] = useState<boolean>();
+  const [simplifyColors, setSimplifyColors] = useState<boolean>();
+  const [adaptiveBgColor, setAdaptiveBgColor] = useState<boolean>();
+  const [displayBuildName, setDisplayBuildName] = useState<boolean>();
+  const [privacyFlag, setPrivacyFlag] = useState<boolean>();
   const [toggleConfigure, setToggleConfigure] = useState(false);
   const [generating, setGenerating] = useState<
     "opening" | "downloading" | false
@@ -145,23 +145,25 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     const savedObj = JSON.parse(localStorage.getItem("cardSettings") ?? "{}");
 
     if (savedObj.displayBuildName !== displayBuildName) {
-      setDisplayBuildName(savedObj.displayBuildName || displayBuildName);
+      setDisplayBuildName(
+        savedObj.displayBuildName || displayBuildName || false
+      );
     }
 
     if (savedObj.simplifyColors !== simplifyColors) {
-      setSimplifyColors(savedObj.simplifyColors || simplifyColors);
+      setSimplifyColors(savedObj.simplifyColors || simplifyColors || false);
     }
 
     if (savedObj.adaptiveBgColor !== adaptiveBgColor) {
-      setAdaptiveBgColor(savedObj.adaptiveBgColor || adaptiveBgColor);
+      setAdaptiveBgColor(savedObj.adaptiveBgColor || adaptiveBgColor || false);
     }
 
     if (savedObj.namecardBg !== namecardBg) {
-      setNamecardBg(savedObj.namecardBg || namecardBg);
+      setNamecardBg(savedObj.namecardBg || namecardBg || false);
     }
 
     if (savedObj.privacyFlag !== privacyFlag) {
-      setPrivacyFlag(savedObj.privacyFlag || privacyFlag);
+      setPrivacyFlag(savedObj.privacyFlag || privacyFlag || false);
     }
   }, []);
 
@@ -249,14 +251,24 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
   useEffect(() => {
     if (!backgroundPictureRef.current) return;
+    if (adaptiveBgColor === undefined || namecardBg === undefined) return;
 
     const mode = !uploadPictureInputRef?.current?.files?.[0] && "gacha";
-    try {
-      paintImageToCanvas(backgroundPictureRef.current.src, mode);
-    } catch (err) {
-      // second time's a charm
-      paintImageToCanvas(backgroundPictureRef.current.src, mode);
-    }
+
+    const maybePaintImageToCanvas = async (i = 0) => {
+      if (!backgroundPictureRef.current) return;
+      if (i > 5) return;
+
+      try {
+        paintImageToCanvas(backgroundPictureRef.current.src, mode, true);
+      } catch (err) {
+        // second time's a charm
+        await delay(10);
+        maybePaintImageToCanvas(i + 1);
+      }
+    };
+
+    maybePaintImageToCanvas();
 
     setIsLoadingImage(true);
     backgroundPictureRef.current.addEventListener("load", () => {
@@ -691,7 +703,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
           return (
             <div
-              key={artifact._id}
+              key={`${artifact._id}${actualBgUrl}`}
               className={`flex compact-artifact ${className}`}
             >
               {/* old: */}
@@ -786,218 +798,228 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const artifactsDiv =
     reorderedArtifacts.length > 0 ? compactList : "no artifacts equipped";
 
-  const paintImageToCanvas = async (
-    result: string,
-    mode?: string | boolean
-  ) => {
-    if (!canvasBgRef?.current) return;
-    if (!backgroundPictureRef?.current) return;
+  const paintImageToCanvas = useCallback(
+    async (result: string, mode?: string | boolean, coldStart?: boolean) => {
+      if (!canvasBgRef?.current) return;
+      if (!backgroundPictureRef?.current) return;
 
-    const characterImg = backgroundPictureRef?.current;
+      const characterImg = backgroundPictureRef?.current;
 
-    characterImg.crossOrigin = "anonymous";
-    characterImg.src = result + "";
+      characterImg.crossOrigin = "anonymous";
+      characterImg.src = result + "";
 
-    const elementalOrNamecardBgImg = new Image();
-    elementalOrNamecardBgImg.crossOrigin = "anonymous";
-    elementalOrNamecardBgImg.src = actualBgUrl;
+      const elementalOrNamecardBgImg = new Image();
+      elementalOrNamecardBgImg.crossOrigin = "anonymous";
+      elementalOrNamecardBgImg.src = actualBgUrl;
 
-    const images = [characterImg, elementalOrNamecardBgImg];
+      const images = [characterImg, elementalOrNamecardBgImg];
 
-    const bgWidth = canvasPixelDensity * canvasBgWidth;
-    const bgHeight = canvasPixelDensity * canvasBgHeight;
+      const bgWidth = canvasPixelDensity * canvasBgWidth;
+      const bgHeight = canvasPixelDensity * canvasBgHeight;
 
-    const backgroundCtx = canvasBgRef.current.getContext("2d");
+      const backgroundCtx = canvasBgRef.current.getContext("2d");
 
-    const drawBackground = () => {
-      if (!canvasBgRef.current) return;
+      const drawBackground = async (i = 0) => {
+        if (!canvasBgRef.current) return;
+        if (i > 5) return;
+
+        // clear canvas
+        backgroundCtx!.globalCompositeOperation = "source-out";
+        backgroundCtx!.clearRect(0, 0, bgWidth, bgHeight);
+        backgroundCtx!.filter = "contrast(1)";
+
+        try {
+          if (namecardBg) {
+            const namecardHeight = canvasPixelDensity * 572;
+            const yOffset = -(namecardHeight - bgHeight);
+            backgroundCtx!.drawImage(
+              elementalOrNamecardBgImg,
+              0,
+              yOffset,
+              bgWidth,
+              namecardHeight
+            );
+          } else {
+            backgroundCtx!.drawImage(
+              elementalOrNamecardBgImg,
+              0,
+              0,
+              bgWidth,
+              bgHeight
+            );
+          }
+        } catch (err) {
+          console.log(err);
+          await delay(10);
+          await drawBackground(i + 1);
+        }
+
+        // return backgroundCtx;
+      };
+
+      const allPromises = images.map((image: any) => {
+        if (!image) return new Promise((resolve) => resolve(true));
+
+        return new Promise((resolve) => {
+          image.onload = async () => {
+            if (coldStart) {
+              await delay(10);
+              await drawBackground();
+            }
+            resolve(true);
+          };
+          image.onerror = async () => {
+            resolve(true);
+          };
+        });
+      });
+
+      await Promise.all(allPromises);
+      await drawBackground();
+
+      if (coldStart) {
+        await delay(10);
+      }
+
+      // characterImg.onload = () => resolve()
+      // elementalOrNamecardBgImg.onload = () => resolve()
+
+      if (!canvasRef.current) return;
+
+      // Once the image is loaded, we will get the width & height of the image
+
+      const imageWidth = characterImg.width;
+      const imageHeight = characterImg.height;
+
+      // width    2048
+      // height   1024
+
+      const _canvasWidth = mode === "gacha" ? canvasWidth * 1.55 : canvasWidth;
+      const _canvasHeight =
+        mode === "gacha" ? canvasHeight * 1.55 : canvasHeight;
+
+      // get the scale
+      // it is the min of the 2 ratios
+      const canvasScale = Math.max(
+        _canvasWidth / imageWidth,
+        _canvasHeight / imageHeight
+      );
+
+      // Finding the new width and height based on the scale factor
+      const newWidth = imageWidth * canvasScale;
+      const newHeight = imageHeight * canvasScale;
+
+      // get canvas context
+      const characterCtx = canvasRef.current.getContext("2d");
+
+      // Create gradient
+      const gradientMask = characterCtx!.createLinearGradient(
+        canvasWidth - 101 * hardcodedScale,
+        0,
+        canvasWidth - 3 * hardcodedScale,
+        0
+      );
+      gradientMask.addColorStop(0, "black");
+      gradientMask.addColorStop(1, "transparent");
 
       // clear canvas
-      backgroundCtx!.globalCompositeOperation = "source-out";
-      backgroundCtx!.clearRect(0, 0, bgWidth, bgHeight);
-      backgroundCtx!.filter = "contrast(1)";
+      characterCtx!.globalCompositeOperation = "source-out";
+      characterCtx!.clearRect(0, 0, canvasWidth, canvasHeight);
 
-      try {
-        if (namecardBg) {
-          const namecardHeight = canvasPixelDensity * 572;
-          const yOffset = -(namecardHeight - bgHeight);
-          backgroundCtx!.drawImage(
-            elementalOrNamecardBgImg,
-            0,
-            yOffset,
-            bgWidth,
-            namecardHeight
-          );
+      // Fill with gradient
+      characterCtx!.fillStyle = gradientMask;
+      characterCtx!.fillRect(0, 0, canvasWidth, canvasHeight);
+
+      // get the top left position of the image
+      // in order to center the image within the canvas
+      let x = _canvasWidth / 2 - newWidth / 2;
+      let y = _canvasHeight / 2 - newHeight / 2;
+
+      if (mode === "gacha") {
+        if (row.name === "Traveler") {
+          x = x - 100 * hardcodedScale;
+          y = y + 30 * hardcodedScale;
         } else {
-          backgroundCtx!.drawImage(
-            elementalOrNamecardBgImg,
-            0,
-            0,
-            bgWidth,
-            bgHeight
-          );
+          x = x - 130 * hardcodedScale;
+          y = y - 82 * hardcodedScale;
         }
-      } catch (err) {
-        // await delay(50);
-        // await drawBackground();
       }
 
-      // return backgroundCtx;
-    };
+      characterCtx!.globalCompositeOperation = "source-in";
+      characterCtx!.drawImage(characterImg, x, y, newWidth, newHeight);
 
-    const allPromises = images.map((image: any) => {
-      if (!image) return new Promise((resolve) => resolve(true));
+      if (!adaptiveBgColor) return;
 
-      return new Promise((resolve) => {
-        image.onload = async () => {
-          drawBackground(); // it doesn't hurt to call it on each load tbh
-          resolve(true);
-        };
-        image.onerror = async () => {
-          resolve(true);
-        };
-      });
-    });
-
-    await Promise.all(allPromises);
-    await delay(50);
-
-    // characterImg.onload = () => resolve()
-    // elementalOrNamecardBgImg.onload = () => resolve()
-
-    if (!canvasRef.current) return;
-
-    // Once the image is loaded, we will get the width & height of the image
-
-    const imageWidth = characterImg.width;
-    const imageHeight = characterImg.height;
-
-    // width    2048
-    // height   1024
-
-    const _canvasWidth = mode === "gacha" ? canvasWidth * 1.55 : canvasWidth;
-    const _canvasHeight = mode === "gacha" ? canvasHeight * 1.55 : canvasHeight;
-
-    // get the scale
-    // it is the min of the 2 ratios
-    const canvasScale = Math.max(
-      _canvasWidth / imageWidth,
-      _canvasHeight / imageHeight
-    );
-
-    // Finding the new width and height based on the scale factor
-    const newWidth = imageWidth * canvasScale;
-    const newHeight = imageHeight * canvasScale;
-
-    // get canvas context
-    const characterCtx = canvasRef.current.getContext("2d");
-
-    // Create gradient
-    const gradientMask = characterCtx!.createLinearGradient(
-      canvasWidth - 101 * hardcodedScale,
-      0,
-      canvasWidth - 3 * hardcodedScale,
-      0
-    );
-    gradientMask.addColorStop(0, "black");
-    gradientMask.addColorStop(1, "transparent");
-
-    // clear canvas
-    characterCtx!.globalCompositeOperation = "source-out";
-    characterCtx!.clearRect(0, 0, canvasWidth, canvasHeight);
-
-    // Fill with gradient
-    characterCtx!.fillStyle = gradientMask;
-    characterCtx!.fillRect(0, 0, canvasWidth, canvasHeight);
-
-    // get the top left position of the image
-    // in order to center the image within the canvas
-    let x = _canvasWidth / 2 - newWidth / 2;
-    let y = _canvasHeight / 2 - newHeight / 2;
-
-    if (mode === "gacha") {
-      if (row.name === "Traveler") {
-        x = x - 100 * hardcodedScale;
-        y = y + 30 * hardcodedScale;
-      } else {
-        x = x - 130 * hardcodedScale;
-        y = y - 82 * hardcodedScale;
-      }
-    }
-
-    characterCtx!.globalCompositeOperation = "source-in";
-    characterCtx!.drawImage(characterImg, x, y, newWidth, newHeight);
-
-    if (!adaptiveBgColor) return;
-
-    const rightEdgeData: any = characterCtx!.getImageData(
-      canvasWidth * 2 - 25, // newWidth - 1, // start X
-      0, // start Y
-      1, // width of extracted data
-      2 * canvasHeight - 1 // height of extracted data
-    );
-
-    if (!rightEdgeData) return;
-
-    // Create gradient
-    const gradientCoords = [0, 0, 0, bgHeight] as const;
-    const adaptiveGradient_1 = backgroundCtx!.createLinearGradient(
-      ...gradientCoords
-    );
-
-    const gradientSteps = 2;
-
-    const setGradientFromImageDefault = (
-      gradient: CanvasGradient,
-      alphaOverride: string | number = "55"
-    ) => {
-      return setGradientFromImage(
-        gradient,
-        2 * canvasHeight,
-        canvasWidth,
-        rightEdgeData,
-        gradientSteps,
-        alphaOverride,
-        characterCtx
+      const rightEdgeData: any = characterCtx!.getImageData(
+        Math.floor(canvasWidth * 2 - 25), // newWidth - 1, // start X
+        0, // start Y
+        1, // width of extracted data
+        Math.floor(2 * canvasHeight - 1) // height of extracted data
       );
-    };
 
-    const solidGradientColors = setGradientFromImageDefault(
-      adaptiveGradient_1,
-      "ff"
-    );
+      if (!rightEdgeData) return;
 
-    backgroundCtx!.globalCompositeOperation = "color";
-    backgroundCtx!.fillStyle = adaptiveGradient_1;
-    backgroundCtx!.fillRect(0, 0, bgWidth, bgHeight);
+      // Create gradient
+      const gradientCoords = [0, 0, 0, bgHeight] as const;
+      const adaptiveGradient_1 = backgroundCtx!.createLinearGradient(
+        ...gradientCoords
+      );
 
-    // Create gradient
-    const adaptiveGradient_2 = backgroundCtx!.createLinearGradient(
-      ...gradientCoords
-    );
+      const gradientSteps = 2;
 
-    // "multiply"
-    // "overlay"
-    // "color-dodge"
-    // "color-burn"
-    // "hard-light"
-    // "soft-light"
-    // "hue"
-    // "color"
+      const setGradientFromImageDefault = (
+        gradient: CanvasGradient,
+        alphaOverride: string | number = "55"
+      ) => {
+        return setGradientFromImage(
+          gradient,
+          2 * canvasHeight,
+          canvasWidth,
+          rightEdgeData,
+          gradientSteps,
+          alphaOverride,
+          characterCtx
+        );
+      };
 
-    const nonSolidGradientColors = setGradientFromImageDefault(
-      adaptiveGradient_2,
-      "55"
-    );
+      const solidGradientColors = setGradientFromImageDefault(
+        adaptiveGradient_1,
+        "ff"
+      );
 
-    setAdaptiveColors([solidGradientColors, nonSolidGradientColors]);
+      backgroundCtx!.globalCompositeOperation = "color";
+      backgroundCtx!.fillStyle = adaptiveGradient_1;
+      backgroundCtx!.fillRect(0, 0, bgWidth, bgHeight);
 
-    backgroundCtx!.globalCompositeOperation = "hard-light";
-    backgroundCtx!.fillStyle = adaptiveGradient_2;
-    backgroundCtx!.filter = "contrast(1.5)";
-    // backgroundCtx!.filter = "contrast(150%)";
-    backgroundCtx!.fillRect(0, 0, bgWidth, bgHeight);
-  };
+      // Create gradient
+      const adaptiveGradient_2 = backgroundCtx!.createLinearGradient(
+        ...gradientCoords
+      );
+
+      // "multiply"
+      // "overlay"
+      // "color-dodge"
+      // "color-burn"
+      // "hard-light"
+      // "soft-light"
+      // "hue"
+      // "color"
+
+      const nonSolidGradientColors = setGradientFromImageDefault(
+        adaptiveGradient_2,
+        "55"
+      );
+
+      setAdaptiveColors([solidGradientColors, nonSolidGradientColors]);
+
+      backgroundCtx!.globalCompositeOperation = "hard-light";
+      backgroundCtx!.fillStyle = adaptiveGradient_2;
+      backgroundCtx!.filter = "contrast(1.5)";
+      // backgroundCtx!.filter = "contrast(150%)";
+      backgroundCtx!.fillRect(0, 0, bgWidth, bgHeight);
+    },
+    [canvasBgRef, backgroundPictureRef, actualBgUrl, adaptiveBgColor]
+  );
 
   const characterShowcase = useMemo(
     () => (
@@ -1391,6 +1413,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       namecardBg,
       simplifyColors,
       adaptiveBgColor,
+      actualBgUrl,
       cardStyle,
       generating,
       translate,
