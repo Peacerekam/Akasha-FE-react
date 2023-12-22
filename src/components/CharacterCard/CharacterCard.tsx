@@ -145,9 +145,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     const savedObj = JSON.parse(localStorage.getItem("cardSettings") ?? "{}");
 
     const setIfDifferent = (setFunc: any, key: string, value: any) => {
-      if (savedObj[key] !== value) {
-        setFunc(savedObj[key] || value || false);
-      }
+      setFunc(savedObj[key] || value || false);
     };
 
     setIfDifferent(setDisplayBuildName, "displayBuildName", displayBuildName);
