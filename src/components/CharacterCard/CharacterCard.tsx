@@ -144,52 +144,42 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   useEffect(() => {
     const savedObj = JSON.parse(localStorage.getItem("cardSettings") ?? "{}");
 
-    if (savedObj.displayBuildName !== displayBuildName) {
-      setDisplayBuildName(
-        savedObj.displayBuildName || displayBuildName || false
-      );
-    }
+    const setIfDifferent = (setFunc: any, key: string, value: any) => {
+      if (savedObj[key] !== value) {
+        setFunc(savedObj[key] || value || false);
+      }
+    };
 
-    if (savedObj.simplifyColors !== simplifyColors) {
-      setSimplifyColors(savedObj.simplifyColors || simplifyColors || false);
-    }
+    setIfDifferent(setDisplayBuildName, "displayBuildName", displayBuildName);
+    setIfDifferent(setSimplifyColors, "simplifyColors", simplifyColors);
+    setIfDifferent(setAdaptiveBgColor, "adaptiveBgColor", adaptiveBgColor);
+    setIfDifferent(setNamecardBg, "namecardBg", namecardBg);
+    setIfDifferent(setPrivacyFlag, "privacyFlag", privacyFlag);
 
-    if (savedObj.adaptiveBgColor !== adaptiveBgColor) {
-      setAdaptiveBgColor(savedObj.adaptiveBgColor || adaptiveBgColor || false);
-    }
-
-    if (savedObj.namecardBg !== namecardBg) {
-      setNamecardBg(savedObj.namecardBg || namecardBg || false);
-    }
-
-    if (savedObj.privacyFlag !== privacyFlag) {
-      setPrivacyFlag(savedObj.privacyFlag || privacyFlag || false);
-    }
-  }, []);
+    console.log("\nLoading Character Card settings from Local Storage:")
+    console.table(savedObj);
+  }, [localStorage]);
 
   // save to local storage
   useEffect(() => {
     const oldObj = JSON.parse(localStorage.getItem("cardSettings") ?? "{}");
+    let dirty = false;
 
-    if (oldObj.displayBuildName !== displayBuildName) {
-      oldObj.displayBuildName = displayBuildName;
-    }
+    const assignIfDiffAndNotUndefined = (key: string, value: any) => {
+      if (oldObj[key] !== value && value !== undefined) {
+        console.log(`${key}: ${oldObj[key]} -> ${value}`)
+        oldObj[key] = value;
+        dirty = true;
+      }
+    };
 
-    if (oldObj.simplifyColors !== simplifyColors) {
-      oldObj.simplifyColors = simplifyColors;
-    }
+    assignIfDiffAndNotUndefined("displayBuildName", displayBuildName);
+    assignIfDiffAndNotUndefined("simplifyColors", simplifyColors);
+    assignIfDiffAndNotUndefined("adaptiveBgColor", adaptiveBgColor);
+    assignIfDiffAndNotUndefined("namecardBg", namecardBg);
+    assignIfDiffAndNotUndefined("privacyFlag", privacyFlag);
 
-    if (oldObj.adaptiveBgColor !== adaptiveBgColor) {
-      oldObj.adaptiveBgColor = adaptiveBgColor;
-    }
-
-    if (oldObj.namecardBg !== namecardBg) {
-      oldObj.namecardBg = namecardBg;
-    }
-
-    if (oldObj.privacyFlag !== privacyFlag) {
-      oldObj.privacyFlag = privacyFlag;
-    }
+    if (!dirty) return;
 
     const newObj = { ...oldObj };
     localStorage.setItem("cardSettings", JSON.stringify(newObj));
@@ -950,12 +940,24 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
       if (!adaptiveBgColor) return;
 
-      const rightEdgeData: any = characterCtx!.getImageData(
-        Math.floor(canvasWidth * 2 - 25), // newWidth - 1, // start X
-        0, // start Y
-        1, // width of extracted data
-        Math.floor(2 * canvasHeight - 1) // height of extracted data
-      );
+      const getRightEdgeData = async (i = 0) => {
+        if (i > 5) return;
+
+        try {
+          return characterCtx!.getImageData(
+            Math.floor(canvasWidth * 2 - 25), // newWidth - 1, // start X
+            0, // start Y
+            1, // width of extracted data
+            Math.floor(2 * canvasHeight - 1) // height of extracted data
+          );
+        } catch (err) {
+          console.log(err);
+          await delay(10);
+          getRightEdgeData(i + 1);
+        }
+      };
+
+      const rightEdgeData: any = await getRightEdgeData();
 
       if (!rightEdgeData) return;
 
