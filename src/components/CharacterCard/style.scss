@@ -1004,7 +1004,7 @@ $hardcoded-scale: 1;
         height: 100%;
         width: 100%;
         // background-image: var(--elemental-bg);
-        background-image: var(--character-namecard-url);
+        // background-image: var(--character-namecard-url);
         background-position-y: bottom;
         background-repeat: repeat;
         // filter: brightness(0.55) blur(15px * $hardcoded-scale);
@@ -1144,7 +1144,7 @@ $hardcoded-scale: 1;
       background-color: var(
         --element-color-2
       ); // this fallback until image is loaded
-      background-image: var(--character-namecard-url);
+      // background-image: var(--character-namecard-url);
       background-size: cover;
       background-position-y: bottom;
       background-repeat: repeat;

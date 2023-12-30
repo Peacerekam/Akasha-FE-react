@@ -81,7 +81,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   errorCallback,
 }) => {
   const [width, setWidth] = useState<number>(window.innerWidth);
-  // const [enkaStyle, setEnkaStyle] = useState(false);
+  const [bgRemDownload, setBgRemDownload] = useState<number>(-1);
   const [bgRemLoading, setBgRemLoading] = useState<boolean>(false);
   const [namecardBg, setNamecardBg] = useState<boolean>();
   const [simplifyColors, setSimplifyColors] = useState<boolean>();
@@ -137,9 +137,9 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const noElementColor = "#ffffff";
   const elementKey = chartsData?.characterMetadata?.element;
   const elementalColor = ELEMENT_TO_COLOR[elementKey];
-  const namecardBgUrl = toEnkaUrl(chartsData?.characterMetadata?.namecard);
-  const elementalBgUrl = `/elementalBackgrounds/${chartsData?.characterMetadata?.element}-bg.jpg`;
-  const actualBgUrl = namecardBg ? namecardBgUrl : elementalBgUrl;
+  // const namecardBgUrl = toEnkaUrl(chartsData?.characterMetadata?.namecard);
+  // const elementalBgUrl = `/elementalBackgrounds/${chartsData?.characterMetadata?.element}-bg.jpg`;
+  // const actualBgUrl = namecardBg ? namecardBgUrl : elementalBgUrl;
   // const elementalBg = `url(/elementalBackgrounds/${chartsData?.characterMetadata?.element}-bg.png)`
 
   const cardStyle = {
@@ -149,7 +149,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     // "--elemental-bg": `url(${elementalBgUrl})`,
     "--element-color": elementalColor || noElementColor,
     "--element-color-2": `${elementalColor || noElementColor}70`,
-    "--character-namecard-url": `url(${actualBgUrl})`,
+    // "--character-namecard-url": `url(${actualBgUrl})`,
   } as React.CSSProperties;
 
   // load from local storage
@@ -257,6 +257,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     if (adaptiveBgColor === undefined || namecardBg === undefined) return;
 
     const mode = !uploadPictureInputRef?.current?.files?.[0] && "gacha";
+    const coldStart = true;
 
     const maybePaintImageToCanvas = async (i = 0) => {
       if (!backgroundPictureRef.current) return;
@@ -266,7 +267,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       }
 
       try {
-        paintImageToCanvas(backgroundPictureRef.current.src, mode, true);
+        paintImageToCanvas(backgroundPictureRef.current.src, mode, coldStart);
       } catch (err) {
         // second time's a charm
         await delay(10);
@@ -274,9 +275,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       }
     };
 
+    setIsLoadingImage(true);
+    
     maybePaintImageToCanvas();
 
-    setIsLoadingImage(true);
     backgroundPictureRef.current.addEventListener("load", () => {
       setIsLoadingImage(false);
     });
@@ -683,6 +685,9 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   );
 
   const compactList = useMemo(() => {
+    const namecardBgUrl = toEnkaUrl(chartsData?.characterMetadata?.namecard);
+    const elementalBgUrl = `/elementalBackgrounds/${chartsData?.characterMetadata?.element}-bg.jpg`;
+    const actualBgUrl = namecardBg ? namecardBgUrl : elementalBgUrl;
     return (
       <>
         {reorderedArtifacts.map((artifact: any) => {
@@ -796,7 +801,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     );
   }, [
     JSON.stringify(reorderedArtifacts),
-    actualBgUrl,
+    chartsData,
     adaptiveBgColor,
     adaptiveColors,
     row,
@@ -825,6 +830,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       const _result = result + "";
 
       if (removeBg && isCustomBg) {
+        setBgRemLoading(true);
+
         // Custom Asset Serving
         // Currently, the wasm and onnx neural networks are served via unpkg.
         // For production use, we advise you to host them yourself.
@@ -835,6 +842,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           // publicPath: "https://example.com/assets/", // path to the wasm files
           progress: (key, current, total) => {
             console.log(`Downloading ${key}: ${current} of ${total}`);
+            setBgRemDownload((current / total) * 100);
           },
         };
 
@@ -861,16 +869,18 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         characterImg.src = _result;
       }
 
+      const namecardBgUrl = toEnkaUrl(chartsData?.characterMetadata?.namecard);
+      const elementalBgUrl = `/elementalBackgrounds/${chartsData?.characterMetadata?.element}-bg.jpg`;
+      const actualBgUrl = namecardBg ? namecardBgUrl : elementalBgUrl;
+
       const elementalOrNamecardBgImg = new Image();
       elementalOrNamecardBgImg.crossOrigin = "anonymous";
       elementalOrNamecardBgImg.src = actualBgUrl;
 
-      const images = [characterImg, elementalOrNamecardBgImg];
-
       const bgWidth = canvasPixelDensity * canvasBgWidth;
       const bgHeight = canvasPixelDensity * canvasBgHeight;
 
-      const backgroundCtx = canvasBgRef.current.getContext("2d");
+      const backgroundCtx = canvasBgRef?.current?.getContext("2d");
 
       const drawBackground = async (i = 0) => {
         if (!canvasBgRef.current) return;
@@ -912,6 +922,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
         // return backgroundCtx;
       };
+
+      const images = [characterImg, elementalOrNamecardBgImg];
 
       const allPromises = images.map((image: any) => {
         if (!image) return new Promise((resolve) => resolve(true));
@@ -1092,9 +1104,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     [
       canvasBgRef,
       backgroundPictureRef,
-      actualBgUrl,
+      chartsData,
       adaptiveBgColor,
       hasCustomBg,
+      namecardBg,
     ]
   );
 
@@ -1425,15 +1438,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     ]
   );
 
-  // const handleEffectsIteration = () => {
-  //   setIteration((prev) => prev + 1);
-  //   const effects = [setSimplifyColors, setNamecardBg];
-  //   let _i = iteration % 2;
-  //   for (let i = 0; i <= _i; i++) {
-  //     effects[i]((prev) => !prev);
-  //   }
-  // };
-
   const cardContainer = useMemo(
     () => (
       <div
@@ -1486,7 +1490,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       namecardBg,
       simplifyColors,
       adaptiveBgColor,
-      actualBgUrl,
+      chartsData,
       cardStyle,
       generating,
       translate,
@@ -1534,7 +1538,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       scale: 1.75,
       // width: 1806,
       // height: 853,
-      backgroundColor: null,
+      backgroundColor: null, // transparent
       allowTaint: true,
       useCORS: true,
       onclone: (document, element) => {
@@ -1819,7 +1823,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                       onChange={(e: any) => setPrivacyFlag(!!e.target.checked)}
                     />
                   </div>
-                  <div className={bgRemLoading || mode === "gacha" ? "disabled" : ""}>
+                  <div
+                    className={
+                      bgRemLoading || mode === "gacha" ? "disabled" : ""
+                    }
+                  >
                     <label htmlFor={`${buildId}-bgr`}>
                       AI background removal
                     </label>
@@ -1829,7 +1837,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                       onClick={() => {
                         if (bgRemLoading || mode === "gacha") return;
                         if (!backgroundPictureRef.current) return;
-                        setBgRemLoading(true);
 
                         const coldStart = false;
                         const removeBg = true;
@@ -1843,14 +1850,19 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                       }}
                     >
                       {bgRemLoading ? (
-                        <Spinner />
+                        <>
+                          <Spinner />{" "}
+                          {bgRemDownload > 0
+                            ? `${bgRemDownload.toFixed(1)}%`
+                            : "wait..."}
+                        </>
                       ) : (
                         <>
                           <FontAwesomeIcon
                             className="filter-icon hoverable-icon"
                             icon={faUserXmark}
                             size="1x"
-                            title="Download"
+                            title="Remove background"
                           />
                           start
                         </>
