@@ -36,8 +36,10 @@ import {
   faDownload,
   faLock,
   faMagnifyingGlass,
+  faUserXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import html2canvas, { Options } from "html2canvas";
+import imglyRemoveBackground, { Config } from "@imgly/background-removal";
 
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 import { ArtifactBackgroundOnCanvas } from "./ArtifactBackgroundOnCanvas";
@@ -68,6 +70,7 @@ type CharacterCardProps = {
   artifacts: any[];
   _calculations: any;
   setSelectedCalculationId?: any;
+  errorCallback?: () => {};
 };
 
 export const CharacterCard: React.FC<CharacterCardProps> = ({
@@ -75,9 +78,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   artifacts,
   _calculations,
   setSelectedCalculationId,
+  errorCallback,
 }) => {
   const [width, setWidth] = useState<number>(window.innerWidth);
   // const [enkaStyle, setEnkaStyle] = useState(false);
+  const [bgRemLoading, setBgRemLoading] = useState<boolean>(false);
   const [namecardBg, setNamecardBg] = useState<boolean>();
   const [simplifyColors, setSimplifyColors] = useState<boolean>();
   const [adaptiveBgColor, setAdaptiveBgColor] = useState<boolean>();
@@ -103,6 +108,13 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
   const { translate } = useContext(TranslationContext);
   const { contentWidth } = useContext(AdProviderContext);
+
+  const cardErrorCallback = async () => {
+    if (!errorCallback) return;
+
+    console.log("\nRerendering character card...", row.name, row.type);
+    errorCallback();
+  };
 
   const calculations = _calculations.calculations;
   const chartsData = _calculations.chartsData;
@@ -152,9 +164,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     setIfDifferent(setSimplifyColors, "simplifyColors", simplifyColors);
     setIfDifferent(setAdaptiveBgColor, "adaptiveBgColor", adaptiveBgColor);
     setIfDifferent(setNamecardBg, "namecardBg", namecardBg);
+    // setIfDifferent(setRemoveBg, "removeBg", removeBg);
     setIfDifferent(setPrivacyFlag, "privacyFlag", privacyFlag);
 
-    console.log("\nLoading Character Card settings from Local Storage:")
+    console.log("\nLoading Character Card settings from Local Storage:");
     console.table(savedObj);
   }, [localStorage]);
 
@@ -165,7 +178,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
     const assignIfDiffAndNotUndefined = (key: string, value: any) => {
       if (oldObj[key] !== value && value !== undefined) {
-        console.log(`${key}: ${oldObj[key]} -> ${value}`)
+        console.log(`${key}: ${oldObj[key]} -> ${value}`);
         oldObj[key] = value;
         dirty = true;
       }
@@ -175,6 +188,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     assignIfDiffAndNotUndefined("simplifyColors", simplifyColors);
     assignIfDiffAndNotUndefined("adaptiveBgColor", adaptiveBgColor);
     assignIfDiffAndNotUndefined("namecardBg", namecardBg);
+    // assignIfDiffAndNotUndefined("removeBg", removeBg);
     assignIfDiffAndNotUndefined("privacyFlag", privacyFlag);
 
     if (!dirty) return;
@@ -187,6 +201,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     adaptiveBgColor,
     namecardBg,
     privacyFlag,
+    // removeBg,
   ]);
 
   const handleToggleModal = (event: React.MouseEvent<HTMLElement>) => {
@@ -245,7 +260,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
     const maybePaintImageToCanvas = async (i = 0) => {
       if (!backgroundPictureRef.current) return;
-      if (i > 5) return;
+      if (i > 5) {
+        cardErrorCallback();
+        return;
+      }
 
       try {
         paintImageToCanvas(backgroundPictureRef.current.src, mode, true);
@@ -781,20 +799,67 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     actualBgUrl,
     adaptiveBgColor,
     adaptiveColors,
+    row,
+    namecardBg,
+    simplifyColors,
   ]);
 
   const artifactsDiv =
     reorderedArtifacts.length > 0 ? compactList : "no artifacts equipped";
 
   const paintImageToCanvas = useCallback(
-    async (result: string, mode?: string | boolean, coldStart?: boolean) => {
+    async (
+      result: string,
+      mode?: string | boolean,
+      coldStart?: boolean,
+      removeBg?: boolean
+    ) => {
       if (!canvasBgRef?.current) return;
       if (!backgroundPictureRef?.current) return;
 
       const characterImg = backgroundPictureRef?.current;
 
       characterImg.crossOrigin = "anonymous";
-      characterImg.src = result + "";
+
+      const isCustomBg = mode !== "gacha";
+      const _result = result + "";
+
+      if (removeBg && isCustomBg) {
+        // Custom Asset Serving
+        // Currently, the wasm and onnx neural networks are served via unpkg.
+        // For production use, we advise you to host them yourself.
+        // Therefore, copy all .wasm and .onnx files to your public path $PUBLIC_PATH and reconfigure the library.
+        const config: Config = {
+          debug: true,
+          // model: "small",
+          // publicPath: "https://example.com/assets/", // path to the wasm files
+          progress: (key, current, total) => {
+            console.log(`Downloading ${key}: ${current} of ${total}`);
+          },
+        };
+
+        let imgBgRemovedBlob = null;
+
+        try {
+          imgBgRemovedBlob = await imglyRemoveBackground(_result, {
+            ...config,
+            // fetchArgs: { mode: "no-cors" },
+          });
+        } catch (err) {
+          imgBgRemovedBlob = await imglyRemoveBackground(_result, {
+            ...config,
+            fetchArgs: { mode: "no-cors" },
+          });
+        }
+
+        characterImg.src = imgBgRemovedBlob
+          ? URL.createObjectURL(imgBgRemovedBlob)
+          : "";
+
+        setBgRemLoading(false);
+      } else {
+        characterImg.src = _result;
+      }
 
       const elementalOrNamecardBgImg = new Image();
       elementalOrNamecardBgImg.crossOrigin = "anonymous";
@@ -809,12 +874,15 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
       const drawBackground = async (i = 0) => {
         if (!canvasBgRef.current) return;
-        if (i > 5) return;
+        if (i > 5) {
+          cardErrorCallback();
+          return;
+        }
 
         // clear canvas
         backgroundCtx!.globalCompositeOperation = "source-out";
         backgroundCtx!.clearRect(0, 0, bgWidth, bgHeight);
-        backgroundCtx!.filter = "contrast(1)";
+        backgroundCtx!.filter = "contrast(100%)";
 
         try {
           if (namecardBg) {
@@ -939,7 +1007,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       if (!adaptiveBgColor) return;
 
       const getRightEdgeData = async (i = 0) => {
-        if (i > 5) return;
+        if (i > 5) {
+          cardErrorCallback();
+          return;
+        }
 
         try {
           return characterCtx!.getImageData(
@@ -1014,11 +1085,17 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
       backgroundCtx!.globalCompositeOperation = "hard-light";
       backgroundCtx!.fillStyle = adaptiveGradient_2;
-      backgroundCtx!.filter = "contrast(1.5)";
+      backgroundCtx!.filter = "contrast(150%)";
       // backgroundCtx!.filter = "contrast(150%)";
       backgroundCtx!.fillRect(0, 0, bgWidth, bgHeight);
     },
-    [canvasBgRef, backgroundPictureRef, actualBgUrl, adaptiveBgColor]
+    [
+      canvasBgRef,
+      backgroundPictureRef,
+      actualBgUrl,
+      adaptiveBgColor,
+      hasCustomBg,
+    ]
   );
 
   const characterShowcase = useMemo(
@@ -1050,7 +1127,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                 "load",
                 async (a) => {
                   paintImageToCanvas(reader.result + "");
-                  setHasCustomBg("horizontal"); // irrelevant
+                  setHasCustomBg("horizontal");
                 },
                 false
               );
@@ -1093,6 +1170,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       isLoadingImage,
       chartsData,
       hardcodedScale,
+      // removeBg,
     ]
   );
 
@@ -1383,11 +1461,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           <RollList artifacts={reorderedArtifacts} character={row.name} />
         </div>
         {/* <div className="wide-bg-shadow" /> */}
-        {/* <img
-          alt="uwu"
-          className="uwu-test"
-          src="https://cdn.discordapp.com/attachments/282208855289495554/1185322604526043186/random-gradient.png"
-        /> */}
         <div
           className={`character-card-background ${
             !namecardBg ? "elemental-bg" : ""
@@ -1448,11 +1521,13 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     "--scale-factor": formattedSF,
   } as React.CSSProperties;
 
+  const buildId = getBuildId(row);
+
   const handleGenerateAndDownload = async (
     mode: "download" | "open",
     event: any
   ) => {
-    const cardNode = document.getElementById(getBuildId(row));
+    const cardNode = document.getElementById(buildId);
     if (!cardNode) return;
 
     const _opts: Partial<Options> = {
@@ -1572,6 +1647,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     setGenerating(false);
   };
 
+  const mode = !uploadPictureInputRef?.current?.files?.[0] && "gacha";
+
   return (
     <div
       className="flex expanded-row relative mb-0 scale-factor-source"
@@ -1585,7 +1662,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       />
       <div className="card-wrapper-height-fix">
         <div
-          id={getBuildId(row)}
+          id={buildId}
           className={`card-wrapper relative ${DEBUG_MODE ? "debug" : ""}`}
         >
           <div className="html-to-image-target">{cardContainer}</div>
@@ -1684,13 +1761,13 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                     </div>
                   </div>
                 </div>
-                <div className="card-checkboxes ">
+                <div className="card-checkboxes">
                   <div>
-                    <label htmlFor={`${getBuildId(row)}-bname`}>
+                    <label htmlFor={`${buildId}-bname`}>
                       Display build name
                     </label>
                     <input
-                      id={`${getBuildId(row)}-bname`}
+                      id={`${buildId}-bname`}
                       type="checkbox"
                       checked={displayBuildName}
                       onChange={(e: any) =>
@@ -1699,11 +1776,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                     />
                   </div>
                   <div>
-                    <label htmlFor={`${getBuildId(row)}-sc`}>
+                    <label htmlFor={`${buildId}-sc`}>
                       Simplify border colors
                     </label>
                     <input
-                      id={`${getBuildId(row)}-sc`}
+                      id={`${buildId}-sc`}
                       type="checkbox"
                       checked={simplifyColors}
                       onChange={(e: any) =>
@@ -1712,11 +1789,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                     />
                   </div>
                   <div>
-                    <label htmlFor={`${getBuildId(row)}-abg`}>
+                    <label htmlFor={`${buildId}-abg`}>
                       Adaptive background
                     </label>
                     <input
-                      id={`${getBuildId(row)}-abg`}
+                      id={`${buildId}-abg`}
                       type="checkbox"
                       checked={adaptiveBgColor}
                       onChange={(e: any) =>
@@ -1725,26 +1802,66 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                     />
                   </div>
                   <div>
-                    <label htmlFor={`${getBuildId(row)}-nb`}>
-                      Namecard background
-                    </label>
+                    <label htmlFor={`${buildId}-nb`}>Namecard background</label>
                     <input
-                      id={`${getBuildId(row)}-nb`}
+                      id={`${buildId}-nb`}
                       checked={namecardBg}
                       type="checkbox"
                       onChange={(e: any) => setNamecardBg(!!e.target.checked)}
                     />
                   </div>
                   <div>
-                    <label htmlFor={`${getBuildId(row)}-hr`}>
-                      Hide UID & ranking
-                    </label>
+                    <label htmlFor={`${buildId}-hr`}>Hide UID & ranking</label>
                     <input
-                      id={`${getBuildId(row)}-hr`}
+                      id={`${buildId}-hr`}
                       checked={privacyFlag}
                       type="checkbox"
                       onChange={(e: any) => setPrivacyFlag(!!e.target.checked)}
                     />
+                  </div>
+                  <div className={bgRemLoading || mode === "gacha" ? "disabled" : ""}>
+                    <label htmlFor={`${buildId}-bgr`}>
+                      AI background removal
+                    </label>
+                    <button
+                      id={`${buildId}-bgr`}
+                      disabled={bgRemLoading || mode === "gacha" ? true : false}
+                      onClick={() => {
+                        if (bgRemLoading || mode === "gacha") return;
+                        if (!backgroundPictureRef.current) return;
+                        setBgRemLoading(true);
+
+                        const coldStart = false;
+                        const removeBg = true;
+
+                        paintImageToCanvas(
+                          backgroundPictureRef.current.src,
+                          mode,
+                          coldStart,
+                          removeBg
+                        );
+                      }}
+                    >
+                      {bgRemLoading ? (
+                        <Spinner />
+                      ) : (
+                        <>
+                          <FontAwesomeIcon
+                            className="filter-icon hoverable-icon"
+                            icon={faUserXmark}
+                            size="1x"
+                            title="Download"
+                          />
+                          start
+                        </>
+                      )}
+                    </button>
+                    <span
+                      className="opacity-5"
+                      style={{ marginLeft: 10, fontSize: 12 }}
+                    >
+                      (dank af, beta af, requires downloading 88MB model)
+                    </span>
                   </div>
                 </div>
               </div>

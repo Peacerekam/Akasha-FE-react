@@ -6,6 +6,7 @@ import { CharacterCard } from "../CharacterCard";
 import { Spinner } from "../Spinner";
 import { SubstatPriorityTable } from "../SubstatPriorityTable";
 import axios from "axios";
+import { delay } from "../../utils/helpers";
 
 type ExpandedRowBuildsProps = {
   row: any;
@@ -57,6 +58,12 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
     getArtifacts();
   }, []);
 
+  const errorCallback = async () => {
+    setIsFetching(true);
+    await delay(10)
+    setIsFetching(false);
+  }
+
   const content = (
     <>
       {isProfile ? (
@@ -66,6 +73,7 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
             artifacts={artifacts}
             _calculations={_calculations}
             setSelectedCalculationId={setSelectedCalculationId}
+            errorCallback={errorCallback}
           />
           <div>
             <SubstatPriorityTable

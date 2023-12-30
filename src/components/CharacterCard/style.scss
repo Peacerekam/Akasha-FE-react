@@ -263,6 +263,23 @@ $hardcoded-scale: 1;
         input {
           margin-left: 15px;
         }
+        button {
+          margin-left: 5px;
+        }
+        .disabled {
+          opacity: 0.5;
+        }
+        .disabled,
+        .disabled * {
+          cursor: not-allowed !important;
+          color: white !important;
+        }
+        .lds-ellipsis {
+          height: 12px;
+          > div {
+            top: 0px;
+          }
+        }
       }
       .card-select {
         margin-top: 10px;
@@ -311,7 +328,7 @@ $hardcoded-scale: 1;
   $invSf: calc(1 - $sf);
 
   .card-wrapper-height-fix {
-    height: calc($sf * 570px * $hardcoded-scale);
+    height: calc($sf * 585px * $hardcoded-scale);
   }
 
   .card-wrapper {
