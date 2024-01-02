@@ -110,7 +110,10 @@ export const getArtifactsInOrder = (
     if (desiredArtifact) {
       reordered.push(desiredArtifact);
     } else if (fillEmpty) {
-      reordered.push(dummyArtifact);
+      reordered.push({
+        ...dummyArtifact,
+        _id: Math.random(),
+      });
     }
   });
 

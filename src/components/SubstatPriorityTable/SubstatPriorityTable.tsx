@@ -55,12 +55,11 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
   const { translate } = useContext(TranslationContext);
 
   const getSubstatPriority = async () => {
+    if (!row.md5) return;
     const _uid = encodeURIComponent(row.uid);
-    const calcDetailsURL = `/api/substatPriority/${_uid}/${row.characterId}`;
-    const opts = {
-      params: { type: encodeURIComponent(row.type) },
-    };
-    const { data } = await axios.get(calcDetailsURL, opts);
+    const _md5 = encodeURIComponent(row.md5);
+    const calcDetailsURL = `/api/substatPriority/${_uid}/${_md5}`;
+    const { data } = await axios.get(calcDetailsURL);
     setPriorityData(data.data);
   };
 

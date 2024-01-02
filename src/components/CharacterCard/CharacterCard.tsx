@@ -276,7 +276,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     };
 
     setIsLoadingImage(true);
-    
+
     maybePaintImageToCanvas();
 
     backgroundPictureRef.current.addEventListener("load", () => {
@@ -1237,7 +1237,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     [row, chartsData, translate]
   );
 
-  const getBuildId = (build: any) => `${build.characterId}${build.type}`;
+  const getBuildId = (build: any) => `${build.md5}`;
 
   const renderOptions = useCallback(
     (calcId: any) => {

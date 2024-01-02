@@ -158,12 +158,19 @@ $characterStats: "hp", "atk", "def", "hydrodmgbonus", "geodmgbonus",
 
     .expanded-row {
       width: 100%;
-      animation: fadeInRow 0.6s ease-in-out;
       margin-bottom: 20px;
       margin-top: 5px;
       gap: 15px;
       font-size: 16px;
       justify-content: center;
+      animation: fadeInRow 0.6s ease-in-out;
+
+      &.disable-anim:not(.toggle-config) {
+        animation: none !important;
+        .expanded-row:not(.toggle-config) {
+          animation: none !important;
+        }
+      }
 
       // @at-root .ad-provider-playwire & {
       > .character-preview {

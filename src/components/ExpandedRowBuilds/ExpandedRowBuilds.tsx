@@ -6,7 +6,6 @@ import { CharacterCard } from "../CharacterCard";
 import { Spinner } from "../Spinner";
 import { SubstatPriorityTable } from "../SubstatPriorityTable";
 import axios from "axios";
-import { delay } from "../../utils/helpers";
 
 type ExpandedRowBuildsProps = {
   row: any;
@@ -18,6 +17,8 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
   isProfile,
 }) => {
   const [isFetching, setIsFetching] = useState(true);
+  const [disableAnimations, setDisableAnimations] = useState(false);
+  const [iterator, setIterator] = useState(1);
   const [artifacts, setArtifacts] = useState<any[]>([]);
   const [_calculations, setCalculations] = useState<{
     calculations: any[];
@@ -29,23 +30,23 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
   const [selectedCalculationId, setSelectedCalculationId] = useState<string>();
 
   const getArtifacts = async () => {
+    if (!row.md5) return;
     setIsFetching(true);
     const _uid = encodeURIComponent(row.uid);
-    const artDetailsURL = `/api/artifacts/${_uid}/${row.characterId}`;
-    const opts = {
-      params: { type: encodeURIComponent(row.type) },
-    };
-    const { data } = await axios.get(artDetailsURL, opts);
+    const _md5 = encodeURIComponent(row.md5);
+    const artDetailsURL = `/api/artifacts/${_uid}/${_md5}`;
+    const { data } = await axios.get(artDetailsURL);
     setArtifacts(data.data);
     setIsFetching(false);
   };
 
   const getCalculations = async () => {
+    if (!row.md5) return;
     const _uid = encodeURIComponent(row.uid);
-    const calcDetailsURL = `/api/leaderboards/${_uid}/${row.characterId}`;
+    const _md5 = encodeURIComponent(row.md5);
+    const calcDetailsURL = `/api/leaderboards/${_uid}/${_md5}`;
     const opts = {
       params: {
-        type: encodeURIComponent(row.type),
         variant: isProfile ? "profilePage" : "",
       },
     };
@@ -59,10 +60,13 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
   }, []);
 
   const errorCallback = async () => {
-    setIsFetching(true);
-    await delay(10)
-    setIsFetching(false);
-  }
+    setDisableAnimations(true);
+    setIterator((prev) => prev + 1);
+
+    // setIsFetching(true);
+    // await delay(1);
+    // setIsFetching(false);
+  };
 
   const content = (
     <>
@@ -99,7 +103,10 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
   );
 
   return (
-    <div className="flex expanded-row">
+    <div
+      key={iterator}
+      className={`flex expanded-row ${disableAnimations ? "disable-anim" : ""}`}
+    >
       {isFetching ? <Spinner /> : content}
     </div>
   );

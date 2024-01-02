@@ -185,26 +185,26 @@ export const FiltersContainer = ({
     });
   };
 
-  const formatPillName = (pill: FilterOption) => {
-    const equipTypeMap = {
-      EQUIP_BRACER: "Flower",
-      EQUIP_NECKLACE: "Feather",
-      EQUIP_SHOES: "Sands",
-      EQUIP_RING: "Goblet",
-      EQUIP_DRESS: "Circlet",
-    } as any;
-    return (
-      {
-        equipType: equipTypeMap[pill.value],
-        stars: `${pill.value}*`,
-        constellation: `C${pill.value}`,
-        "weapon.weaponInfo.refinementLevel.value": `R${+pill.value + 1}`,
-        "artifactSets.$1": `1p ${pill.value}`,
-        "artifactSets.$2": `2p ${pill.value}`,
-        "artifactSets.$4": `4p ${pill.value}`,
-      }[pill.name] ?? pill.value
-    );
-  };
+  // const formatPillName = (pill: FilterOption) => {
+  //   const equipTypeMap = {
+  //     EQUIP_BRACER: "Flower",
+  //     EQUIP_NECKLACE: "Feather",
+  //     EQUIP_SHOES: "Sands",
+  //     EQUIP_RING: "Goblet",
+  //     EQUIP_DRESS: "Circlet",
+  //   } as any;
+  //   return (
+  //     {
+  //       equipType: equipTypeMap[pill.value],
+  //       stars: `${pill.value}*`,
+  //       constellation: `C${pill.value}`,
+  //       "weapon.weaponInfo.refinementLevel.value": `R${+pill.value + 1}`,
+  //       "artifactSets.$1": `1p ${pill.value}`,
+  //       "artifactSets.$2": `2p ${pill.value}`,
+  //       "artifactSets.$4": `4p ${pill.value}`,
+  //     }[pill.name] ?? pill.value
+  //   );
+  // };
 
   const handleReplaceFilter = (filters: FilterOption[]) => {
     setFiltersArray(filters);

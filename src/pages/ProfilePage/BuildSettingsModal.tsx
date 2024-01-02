@@ -72,7 +72,7 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     setIsLoading(false);
   };
 
-  const getBuildId = (build: any) => `${build.characterId}${build.type}`;
+  const getBuildId = (build: any) => `${build.md5}`;
 
   const selectedBuild = useMemo(
     () => builds?.find((b) => getBuildId(b) === selectedBuildId) || {},
@@ -156,26 +156,30 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
   const modalContent = useMemo(() => {
     const handleSubmitNamecard = async () => {
       const file = uploadInput?.current?.files?.[0];
-      if (!file || !selectedBuild) return;
+
+      if (!file || !selectedBuild || !selectedBuild?.md5) return;
       setIsPending(true);
 
       const formData = new FormData();
       formData.append("file", file);
 
-      const { uid, characterId, type } = selectedBuild;
+      const { uid, md5 } = selectedBuild;
       const _uid = encodeURIComponent(uid);
-      const postNamecardURL = `/api/user/namecard/${_uid}/${characterId}`;
+      const _md5 = encodeURIComponent(md5);
+      const postNamecardURL = `/api/user/namecard/${_uid}/${_md5}`;
 
-      // const response = ...
-      await axios.post(postNamecardURL, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        params: {
-          sessionID: getSessionIdFromCookie(),
-          type: encodeURIComponent(type),
-        },
-      });
+      try {
+        await axios.post(postNamecardURL, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          params: {
+            sessionID: getSessionIdFromCookie(),
+          },
+        });
+      } catch (err) {
+        console.log(err)
+      }
 
       setIsPending(false);
       clearBgImage();
@@ -192,33 +196,41 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     };
 
     const handleDeleteBackground = async () => {
+      if (!selectedBuild?.md5) return;
+
       setIsDirty(true);
       setIsPending(true);
-      const { uid, characterId, type } = selectedBuild;
+      const { uid, md5 } = selectedBuild;
       const _uid = encodeURIComponent(uid);
-      const postNamecardURL = `/api/user/namecard/${_uid}/${characterId}`;
+      const _md5 = encodeURIComponent(md5);
+      const postNamecardURL = `/api/user/namecard/${_uid}/${_md5}`;
       const opts = {
         params: {
           sessionID: getSessionIdFromCookie(),
-          type: encodeURIComponent(type),
         },
       };
-      await axios.post(postNamecardURL, null, opts); // no formData attached
+      try {
+        await axios.post(postNamecardURL, null, opts); // no formData attached
+      } catch(err) {
+        console.log(err)
+      }
       setIsPending(false);
       clearBgImage();
       fetchBuildsData(accountData?.uid);
     };
 
     const handleToggleBuildVisibility = async (char: any) => {
+      if (!selectedBuild?.md5) return;
+
       setIsDirty(true);
       setIsPending(true);
-      const { uid, characterId, type } = char;
+      const { uid, md5 } = char;
       const _uid = encodeURIComponent(uid);
-      const toggleVisibilityURL = `/api/user/toggleBuildVisibility/${_uid}/${characterId}`;
+      const _md5 = encodeURIComponent(md5);
+      const toggleVisibilityURL = `/api/user/toggleBuildVisibility/${_uid}/${_md5}`;
       const opts = {
         params: {
           sessionID: getSessionIdFromCookie(),
-          type: encodeURIComponent(type),
         },
       };
       await axios.post(toggleVisibilityURL, null, opts);
@@ -227,15 +239,17 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     };
 
     const handleDeleteBuild = async (char: any) => {
+      if (!selectedBuild?.md5) return;
+
       setIsDirty(true);
       setIsPending(true);
-      const { uid, characterId, type } = char;
+      const { uid, md5 } = char;
       const _uid = encodeURIComponent(uid);
-      const deleteBuildURL = `/api/user/deleteBuild/${_uid}/${characterId}`;
+      const _md5 = encodeURIComponent(md5);
+      const deleteBuildURL = `/api/user/deleteBuild/${_uid}/${_md5}`;
       const opts = {
         params: {
           sessionID: getSessionIdFromCookie(),
-          type: encodeURIComponent(type),
         },
       };
       await axios.post(deleteBuildURL, null, opts);
@@ -249,29 +263,33 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       if (newBuildName === translate(selectedBuild.name)) {
         newBuildName = "current";
       }
-      if (newBuildName === selectedBuild.type || !newBuildName) {
+      if (
+        newBuildName === selectedBuild.type ||
+        !newBuildName ||
+        !selectedBuild?.md5
+      ) {
         return;
       }
 
       setIsDirty(true);
       setIsPending(true);
 
-      const { uid, characterId, type } = selectedBuild;
+      const { uid, md5 } = selectedBuild;
       const _uid = encodeURIComponent(uid);
+      const _md5 = encodeURIComponent(md5);
 
-      const postBuildNameURL = `/api/user/setBuildName/${_uid}/${characterId}`;
+      const postBuildNameURL = `/api/user/setBuildName/${_uid}/${_md5}`;
       const opts = {
         params: {
           buildName: newBuildName,
           sessionID: getSessionIdFromCookie(),
-          type: encodeURIComponent(type),
         },
       };
       const response = await axios.post(postBuildNameURL, null, opts); // no formData attached
       if (response.data.error) return;
 
       await fetchBuildsData(accountData?.uid);
-      const newBuildId = `${selectedBuild.characterId}${newBuildName}`;
+      const newBuildId = `${md5}`;
       setIsPending(false);
       setSelectedBuildId(newBuildId);
     };
