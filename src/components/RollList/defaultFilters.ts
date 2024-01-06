@@ -35,7 +35,7 @@ const hydroRvList = {
   Nilou: [CRate, EM, ER, CDMG, HP_, HP],
   Xingqiu: [CRate, CDMG, ATK_, ER],
   Mona: [CRate, CDMG, ER, EM, ATK_],
-  Tartaglia: [CRate, CDMG, ATK_, EM],
+  Tartaglia: [CRate, CDMG, ATK_, EM, ER],
   "Sangonomiya Kokomi": [HP, HP_, ER],
   "Kamisato Ayato": [CRate, CDMG, ER, ATK_],
   Yelan: [CRate, CDMG, HP_, ER],
@@ -59,13 +59,14 @@ const geoRvList = {
   Zhongli: [CRate, CDMG, ATK_, HP_],
   "Yun Jin": [CRate, ER, DEF, DEF_],
   "Arataki Itto": [CRate, CDMG, ER, DEF_, ATK_],
+  Navia: [CRate, CDMG, ATK_, ER],
 };
 
 const electroRvList = {
   Razor: [CRate, CDMG, ATK_],
   Lisa: [CRate, CDMG, ATK_, EM],
   Fischl: [ATK_, EM, CRate, CDMG],
-  Keqing: [CRate, CDMG, ATK_],
+  Keqing: [CRate, CDMG, ATK_, EM],
   Beidou: [ER, ATK_, CRate, CDMG],
   "Yae Miko": [ER, ATK_, CRate, CDMG, EM],
   "Raiden Shogun": [CRate, CDMG, ATK_, ER],
