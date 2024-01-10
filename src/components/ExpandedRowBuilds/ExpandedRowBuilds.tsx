@@ -21,23 +21,21 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
   const [iterator, setIterator] = useState(1);
   const [artifacts, setArtifacts] = useState<any[]>([]);
   const [_calculations, setCalculations] = useState<{
-    calculations: any[];
+    calculations: any;
     chartsData: any;
   }>({
-    calculations: [],
+    calculations: {},
     chartsData: {},
   });
   const [selectedCalculationId, setSelectedCalculationId] = useState<string>();
 
   const getArtifacts = async () => {
     if (!row.md5) return;
-    setIsFetching(true);
     const _uid = encodeURIComponent(row.uid);
     const _md5 = encodeURIComponent(row.md5);
     const artDetailsURL = `/api/artifacts/${_uid}/${_md5}`;
     const { data } = await axios.get(artDetailsURL);
     setArtifacts(data.data);
-    setIsFetching(false);
   };
 
   const getCalculations = async () => {
@@ -54,9 +52,26 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
     setCalculations(data.data);
   };
 
+  const getArtifactsAndCalculations = async () => {
+    const tasks = [getCalculations, getArtifacts];
+    const allPromises = tasks.map((task: any) => {
+      return new Promise(async (resolve) => {
+        try {
+          await task();
+        } catch (err) {
+          console.log(err);
+        }
+        resolve(true);
+      });
+    });
+
+    setIsFetching(true);
+    await Promise.all(allPromises);
+    setIsFetching(false);
+  };
+
   useEffect(() => {
-    getCalculations();
-    getArtifacts();
+    getArtifactsAndCalculations();
   }, []);
 
   const errorCallback = async () => {
@@ -67,6 +82,8 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
     // await delay(1);
     // setIsFetching(false);
   };
+
+  const hasLeaderboards = Object.keys(_calculations.calculations).length > 0;
 
   const content = (
     <>
@@ -79,24 +96,28 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
             setSelectedCalculationId={setSelectedCalculationId}
             errorCallback={errorCallback}
           />
-          <div>
-            <SubstatPriorityTable
-              row={row}
-              selectedCalculationId={selectedCalculationId}
-            />
-            <CalculationList
-              row={row}
-              calculations={_calculations.calculations}
-            />
-          </div>
+          {hasLeaderboards && (
+            <div>
+              <SubstatPriorityTable
+                row={row}
+                selectedCalculationId={selectedCalculationId}
+              />
+              <CalculationList
+                row={row}
+                calculations={_calculations.calculations}
+              />
+            </div>
+          )}
         </>
       ) : (
         <>
           <ArtifactListCompact row={row} artifacts={artifacts} />
-          <CalculationList
-            row={row}
-            calculations={_calculations.calculations}
-          />
+          {hasLeaderboards && (
+            <CalculationList
+              row={row}
+              calculations={_calculations.calculations}
+            />
+          )}
         </>
       )}
     </>
