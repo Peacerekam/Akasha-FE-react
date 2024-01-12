@@ -759,7 +759,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
           unknownPage={unknownPage}
           setHideIndexColumn={setHideIndexColumn}
           setUnknownPage={setUnknownPage}
-          calculationShortName={columns[columns.length - 1].name}
+          calculationShortName={columns[columns.length - 1].name} // last column is always short calc name?
           alwaysShowIndexColumn={alwaysShowIndexColumn}
         />
       )}

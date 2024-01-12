@@ -998,6 +998,14 @@ $hardcoded-scale: 1;
       //     // filter: drop-shadow(0px * $hardcoded-scale 0px * $hardcoded-scale 3px * $hardcoded-scale black);
       //   }
       // }
+
+      &:first-child {
+        margin-left:auto;
+      }
+      &:last-child {
+        margin-right:auto;
+      }
+
       .compact-artifact-bg {
         position: absolute;
         // content: "";
@@ -1048,6 +1056,15 @@ $hardcoded-scale: 1;
       background-color: var(--element-color);
       position: relative;
       display: flex;
+      width: fit-content;
+      width: max-content;
+
+      &:first-child {
+        margin-left: auto;
+      }
+      &:last-child {
+        margin-right: auto;
+      }
 
       > span {
         font-weight: 700;

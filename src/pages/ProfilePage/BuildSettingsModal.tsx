@@ -220,7 +220,7 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     };
 
     const handleToggleBuildVisibility = async (char: any) => {
-      if (!selectedBuild?.md5) return;
+      if (!char?.md5) return;
 
       setIsDirty(true);
       setIsPending(true);
@@ -239,7 +239,7 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     };
 
     const handleDeleteBuild = async (char: any) => {
-      if (!selectedBuild?.md5) return;
+      if (!char?.md5) return;
 
       setIsDirty(true);
       setIsPending(true);

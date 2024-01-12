@@ -20,9 +20,9 @@ type PlaywireAdTypes =
 const AD_TYPE_TO_KEY: { [key: string]: string } = {
   LeaderboardATF: "leaderboard_atf",
   LeaderboardBTF: "leaderboard_btf",
+  Video: "med_rect_atf", // not video?
   // MobileLeaderboardATF: "647dac8af97ba856bd4b7f5d",
   // MobileLeaderboardBTF: "647dac98cf4d572f0c0f54f7",
-  Video: "med_rect_atf", // not video?
   // RichMedia: "richmedia??", // display: none; ??
 };
 

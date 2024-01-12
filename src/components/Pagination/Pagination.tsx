@@ -31,7 +31,7 @@ type PaginationProps = {
   unknownPage?: boolean;
   setHideIndexColumn?: React.Dispatch<React.SetStateAction<boolean>> | null;
   setUnknownPage?: React.Dispatch<React.SetStateAction<boolean>> | null;
-  calculationShortName?: any[];
+  calculationShortName?: string;
   alwaysShowIndexColumn?: boolean;
 };
 
@@ -80,8 +80,8 @@ export const Pagination: React.FC<PaginationProps> = ({
     const nextValue = accessFieldByString(lastItem, sort);
     // const smallerNextValue = isNaN(+nextValue) ? nextValue : (+nextValue).toFixed(2);
 
-    const p =
-      nextValue !== "" ? `${order === -1 ? "lt" : "gt"}|${nextValue || 0}` : "";
+    const prefix = order === -1 ? "lt" : "gt";
+    const p = nextValue !== "" ? `${prefix}|${nextValue || 0}` : "";
 
     if (!p && setHideIndexColumn && setUnknownPage) {
       setHideIndexColumn(false);
@@ -102,8 +102,8 @@ export const Pagination: React.FC<PaginationProps> = ({
     const nextValue = accessFieldByString(firstItem, sort);
     // const smallerNextValue = isNaN(+nextValue) ? nextValue : (+nextValue).toFixed(2);
 
-    const p =
-      nextValue !== "" ? `${order === -1 ? "gt" : "lt"}|${nextValue}` : "";
+    const prefix = order === -1 ? "gt" : "lt";
+    const p = nextValue !== "" ? `${prefix}|${nextValue}` : "";
 
     if (!p && setHideIndexColumn && setUnknownPage) {
       setHideIndexColumn(false);
@@ -142,7 +142,8 @@ export const Pagination: React.FC<PaginationProps> = ({
       setUnknownPage(lastPage === 0);
     }
 
-    const p = `${order === -1 ? "gt|-" : "lt|"}${100_000_000}`;
+    const prefix = order === -1 ? "gt|-" : "lt|";
+    const p = `${prefix}${100_000_000}`;
 
     setParams((prev: FetchParams) => ({
       ...prev,
