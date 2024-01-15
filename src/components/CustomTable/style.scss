@@ -209,6 +209,7 @@ $characterStats: "hp", "atk", "def", "hydrodmgbonus", "geodmgbonus",
     }
 
     .clickable-icons {
+      gap: 5px;
       a {
         &:hover {
           color: orange !important;
@@ -331,6 +332,9 @@ $characterStats: "hp", "atk", "def", "hydrodmgbonus", "geodmgbonus",
   }
   &:hover {
     color: orange;
+    &.new-lb-badge::before {
+      color: orange;
+    }
     .ar-badge {
       color: white;
     }
@@ -352,6 +356,7 @@ $characterStats: "hp", "atk", "def", "hydrodmgbonus", "geodmgbonus",
       font-weight: 600;
       font-size: 11px;
       color: white;
+      text-shadow: 0 0.08em 0.1em black, 0 0.1em 0.3em rgba(0, 0, 0, 0.4);
     }
   }
 }

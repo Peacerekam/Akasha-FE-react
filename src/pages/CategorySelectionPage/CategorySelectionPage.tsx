@@ -101,8 +101,8 @@ export const CategorySelectionPage: React.FC = () => {
           const firstWeapon = row.weapons[0];
           const _variant = firstWeapon?.defaultVariant || "";
           const leaderboardPath = `leaderboards/${firstWeapon?.calculationId}/${_variant}`;
-
           const aClassName = row.new ? "new-lb-badge" : "";
+          const isNiche = row.label === "niche";
 
           return (
             <div className="table-icon-text-pair">
@@ -121,6 +121,20 @@ export const CategorySelectionPage: React.FC = () => {
                 }}
                 href={`/${leaderboardPath}`}
               >
+                {isNiche && (
+                  <div
+                    style={{ width: "auto" }}
+                    className="c-badge-wrapper"
+                    title="This leaderboard will not be prioritized on profile highlights"
+                  >
+                    <div
+                      style={{ width: "auto", fontSize: 11, marginRight: 5 }}
+                      className={`c-badge c-0-badge`}
+                    >
+                      {row.label?.toUpperCase()}
+                    </div>
+                  </div>
+                )}
                 {lbName}{" "}
                 <span style={{ color: "gray", fontSize: 11, marginLeft: 10 }}>
                   {translate(row?.characterName)}

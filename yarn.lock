@@ -1643,10 +1643,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@playwire/pw-react-component@^1.0.7":
-  version "1.0.7"
-  resolved "https://registry.npmjs.org/@playwire/pw-react-component/-/pw-react-component-1.0.7.tgz"
-  integrity sha512-lv8ftztSjlLt7lAEF4/z9kMoT2oCISLQxsgBFeTEmg4xGyaH2PvgryOyRZLoKhJtcZai/3jts7IaipPOACMgbA==
+"@playwire/pw-react-component@^1.0.8":
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/@playwire/pw-react-component/-/pw-react-component-1.0.8.tgz#26d58f483c086fa7ee81aa40221e195d883e8f68"
+  integrity sha512-g7Prur3FDeZ2GLK+AmCj+5DoaUvpd+4urw5TZ2hreqg8MCvnoHUecbDBMsZZAjwKef6p5Xa+ji78CZiPw4mikw==
 
 "@pmmmwh/react-refresh-webpack-plugin@^0.5.3":
   version "0.5.5"

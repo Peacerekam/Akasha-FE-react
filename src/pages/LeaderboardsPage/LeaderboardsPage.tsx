@@ -65,6 +65,7 @@ type CategoryWeaponInfo = {
 };
 
 type CalculationInfoResponse = {
+  label?: string;
   name: string;
   short: string;
   details: string;
@@ -394,7 +395,8 @@ export const LeaderboardsPage: React.FC = () => {
     const response = await axios.get(FETCH_CATEGORIES_URL_V2, opts);
     const { data } = response.data;
 
-    setCalculationInfo(data);
+    const sortedData = data.sort((c: any) => (c.label === "niche" ? 1 : -1));
+    setCalculationInfo(sortedData);
   };
 
   const [chartData, setChartData] = useState<any[]>([]);
@@ -462,8 +464,23 @@ export const LeaderboardsPage: React.FC = () => {
       <div className="other-calc-container">
         {calculationInfo?.map((_cat) => {
           const categoryName = _cat.name;
+          const isNiche = _cat.label === "niche";
           return (
-            <div key={_cat.name}>
+            <div key={_cat.name} style={{ opacity: isNiche ? 0.5 : 1 }}>
+              {isNiche && (
+                <span
+                  style={{ width: "auto", display: "inline-block" }}
+                  className="c-badge-wrapper"
+                  title="This leaderboard will not be prioritized on profile highlights"
+                >
+                  <span
+                    style={{ width: "auto", fontSize: 11, marginRight: 5 }}
+                    className={`c-badge c-0-badge`}
+                  >
+                    {_cat.label?.toUpperCase()}
+                  </span>
+                </span>
+              )}
               {categoryName}
               <div className="flex">
                 {_cat.weapons.map((_weapon: any, index) => {
@@ -599,6 +616,8 @@ export const LeaderboardsPage: React.FC = () => {
     );
   }, [chartData]);
 
+  const isNiche = thisCalc?.label === "niche";
+
   return (
     <div className="flex" key={calculationId}>
       {hoverElement}
@@ -692,6 +711,41 @@ export const LeaderboardsPage: React.FC = () => {
                       teammates={thisWeaponCalc?.teammates}
                       scale={2.75}
                     />
+                  </div>
+                  <div>
+                    {isNiche && (
+                      <div
+                        style={{
+                          marginTop: 25,
+                          color: "gray",
+                          fontSize: 14,
+                          marginLeft: 10,
+                          marginBottom: 10,
+                        }}
+                      >
+                        This leaderboard was marked as
+                        <span
+                          style={{ width: "auto", display: "inline" }}
+                          className="c-badge-wrapper"
+                          title="This leaderboard will not be prioritized on profile highlights"
+                        >
+                          <span
+                            style={{
+                              width: "auto",
+                              fontSize: 11,
+                              marginLeft: 5,
+                              marginRight: 5,
+                              display: "inline",
+                              color: "white",
+                            }}
+                            className={`c-badge c-0-badge`}
+                          >
+                            {thisCalc.label?.toUpperCase()}
+                          </span>
+                        </span>
+                        and will <b>not</b> be prioritized on profile highlights
+                      </div>
+                    )}
                   </div>
                 </div>
               )}

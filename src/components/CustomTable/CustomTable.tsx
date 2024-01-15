@@ -268,7 +268,8 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   };
 
   useEffect(() => {
-    if (totalRowsHash) getSetTotalRows(totalRowsHash);
+    if (!totalRowsHash) return;
+    getSetTotalRows(totalRowsHash);
   }, [totalRowsHash]);
 
   useEffect(() => {
@@ -510,6 +511,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
       const isCategoriesRow = !!row.weapons;
 
       if (isCategoriesRow) {
+        const isNiche = row.label === "niche";
         return (
           <>
             <div className="flex expanded-row categories-exanded-row clickable-icons">
@@ -517,10 +519,11 @@ export const CustomTable: React.FC<CustomTableProps> = ({
                 {row.weapons.map((weapon: any) => {
                   const _variant = weapon.defaultVariant || "";
                   const leaderboardPath = `leaderboards/${weapon.calculationId}/${_variant}`;
-
+                  const fullName = `${weapon?.name} R${weapon.refinement}`;
                   return (
                     <a
-                      title={`${weapon?.name} R${weapon.refinement}`}
+                      key={fullName}
+                      title={fullName}
                       onClick={(event) => {
                         event.preventDefault();
                         navigate(`/${leaderboardPath}`);
@@ -544,6 +547,39 @@ export const CustomTable: React.FC<CustomTableProps> = ({
                   teammates={row.weapons[0].teammates}
                   scale={3}
                 />
+                {isNiche && (
+                  <div
+                    style={{
+                      width: 330,
+                      marginTop: 20,
+                      color: "gray",
+                      textAlign: "center",
+                      fontSize: 14,
+                    }}
+                  >
+                    This leaderboard was marked as
+                    <span
+                      style={{ width: "auto", display: "inline" }}
+                      className="c-badge-wrapper"
+                      title="This leaderboard will not be prioritized on profile highlights"
+                    >
+                      <span
+                        style={{
+                          width: "auto",
+                          fontSize: 11,
+                          marginLeft: 5,
+                          marginRight: 5,
+                          display: "inline",
+                          color: "white",
+                        }}
+                        className={`c-badge c-0-badge`}
+                      >
+                        {row.label?.toUpperCase()}
+                      </span>
+                    </span>
+                    and will <b>not</b> be prioritized on profile highlights
+                  </div>
+                )}
               </div>
               {/* <div style={{ overflow: "hidden" }}>
               show top 1 build for each category?
@@ -592,7 +628,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
         expandableRows ? "pointer" : "",
         shouldHighlightRows && !!patreonObj?.active ? "decorate-row" : "",
         shouldHighlightRows && !!patreonObj?.active
-          ? `patreon-${patreonObj?.color}`
+          ? `patreon-${patreonObj?.color || "cyan"}` // default to cyan
           : "",
         // {
         //   1: "decorate-row patreon-gold",

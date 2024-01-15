@@ -67,7 +67,8 @@ export const Pagination: React.FC<PaginationProps> = ({
   alwaysShowIndexColumn = false,
 }) => {
   const { translate } = useContext(TranslationContext);
-  const lastPage = Math.ceil(totalRows / pageSize) || 1;
+  const lastPage =
+    Math.ceil(totalRows / pageSize) || (rows.length === pageSize ? 0 : 1);
   const disableNext = unknownPage ? false : pageNumber === lastPage;
   const disablePrevious = unknownPage ? false : pageNumber === 1;
 
@@ -235,12 +236,11 @@ export const Pagination: React.FC<PaginationProps> = ({
 
   // if (totalRows === 0) return null;
 
-  const to = Math.min(pageNumber * pageSize, totalRows);
+  const to =
+    totalRows !== 0
+      ? Math.min(pageNumber * pageSize, totalRows)
+      : Math.max(pageNumber * pageSize, totalRows);
   const from = Math.max(to - pageSize + 1, 1);
-
-  // const classNames = ["pagination", isLoading ? "is-loading" : ""]
-  //   .join(" ")
-  //   .trim();
 
   const handleSkipToValue = (value: number, dir?: "<" | ">") => {
     if (!setParams || !setHideIndexColumn || !setUnknownPage) return;
@@ -319,7 +319,9 @@ export const Pagination: React.FC<PaginationProps> = ({
         </div>
       ) : null} */}
       <div className="pagination">
-        {(disableNext && disablePrevious) || rows.length === 0 ? (
+        {(disableNext && disablePrevious) ||
+        rows.length === 0 ||
+        (totalRows !== 0 && totalRows <= pageSize) ? (
           ""
         ) : (
           <div className="pagination-buttons">
@@ -415,10 +417,10 @@ export const Pagination: React.FC<PaginationProps> = ({
             </span>
           </div>
         )}
-        {to !== 0 && (
+        {rows.length !== 0 && (
           <div className="pagination-details">
             {unknownPage ? `unknown page` : `${from}-${to}`} of{" "}
-            {isFetchingPagination ? "---" : totalRows}
+            {isFetchingPagination ? "---" : totalRows || "unknown"}
           </div>
         )}
       </div>
