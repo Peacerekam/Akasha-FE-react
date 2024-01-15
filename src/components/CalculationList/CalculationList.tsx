@@ -10,6 +10,7 @@ import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 
 type CalculationResponse = {
+  label?: string;
   calculationId: number;
   result: number;
   ranking: number | string;
@@ -80,6 +81,7 @@ export const CalculationList: React.FC<CalculationListProps> = ({
           const leaderboardPath = `leaderboards/${_id}/${_variant}`;
           const leaveOnlyNumbersRegex = /\D+/g;
           const _ranking = +(ranking + "")?.replace(leaveOnlyNumbersRegex, "");
+          const isNiche = calc?.label === "niche";
 
           return (
             <tr key={id}>
@@ -123,6 +125,20 @@ export const CalculationList: React.FC<CalculationListProps> = ({
                     navigate(`/${leaderboardPath}`);
                   }}
                 >
+                  {isNiche && (
+                    <span
+                      style={{ width: "auto", display: "inline-block" }}
+                      className="c-badge-wrapper"
+                      title="This leaderboard will not be prioritized on profile highlights"
+                    >
+                      <span
+                        style={{ width: "auto", fontSize: 11, marginRight: 5 }}
+                        className={`c-badge c-0-badge`}
+                      >
+                        {calc?.label?.toUpperCase()}
+                      </span>
+                    </span>
+                  )}
                   {name}
                 </a>
               </td>

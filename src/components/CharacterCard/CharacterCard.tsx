@@ -36,10 +36,8 @@ import {
   faDownload,
   faLock,
   faMagnifyingGlass,
-  faUserXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import html2canvas, { Options } from "html2canvas";
-import imglyRemoveBackground, { Config } from "@imgly/background-removal";
 
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 import { ArtifactBackgroundOnCanvas } from "./ArtifactBackgroundOnCanvas";
@@ -61,6 +59,9 @@ import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import { reactSelectCustomFilterTheme } from "../../utils/reactSelectCustomFilterTheme";
 import { useLocation } from "react-router-dom";
 
+// import imglyRemoveBackground, { Config } from "@imgly/background-removal";
+
+
 // import { toBlob, toPng } from "html-to-image";
 
 ChartJS.register(...registerables);
@@ -81,8 +82,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   errorCallback,
 }) => {
   const [width, setWidth] = useState<number>(window.innerWidth);
-  const [bgRemDownload, setBgRemDownload] = useState<number>(-1);
-  const [bgRemLoading, setBgRemLoading] = useState<boolean>(false);
+  // const [bgRemDownload, setBgRemDownload] = useState<number>(-1);
+  // const [bgRemLoading, setBgRemLoading] = useState<boolean>(false);
   const [namecardBg, setNamecardBg] = useState<boolean>();
   const [simplifyColors, setSimplifyColors] = useState<boolean>();
   const [adaptiveBgColor, setAdaptiveBgColor] = useState<boolean>();
@@ -164,7 +165,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     setIfDifferent(setSimplifyColors, "simplifyColors", simplifyColors);
     setIfDifferent(setAdaptiveBgColor, "adaptiveBgColor", adaptiveBgColor);
     setIfDifferent(setNamecardBg, "namecardBg", namecardBg);
-    // setIfDifferent(setRemoveBg, "removeBg", removeBg);
     setIfDifferent(setPrivacyFlag, "privacyFlag", privacyFlag);
 
     console.log("\nLoading Character Card settings from Local Storage:");
@@ -188,7 +188,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     assignIfDiffAndNotUndefined("simplifyColors", simplifyColors);
     assignIfDiffAndNotUndefined("adaptiveBgColor", adaptiveBgColor);
     assignIfDiffAndNotUndefined("namecardBg", namecardBg);
-    // assignIfDiffAndNotUndefined("removeBg", removeBg);
     assignIfDiffAndNotUndefined("privacyFlag", privacyFlag);
 
     if (!dirty) return;
@@ -200,8 +199,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     simplifyColors,
     adaptiveBgColor,
     namecardBg,
-    privacyFlag,
-    // removeBg,
+    privacyFlag
   ]);
 
   const handleToggleModal = (event: React.MouseEvent<HTMLElement>) => {
@@ -830,6 +828,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       const _result = result + "";
 
       if (removeBg && isCustomBg) {
+        /*
         setBgRemLoading(true);
 
         // Custom Asset Serving
@@ -865,6 +864,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           : "";
 
         setBgRemLoading(false);
+        */
       } else {
         characterImg.src = _result;
       }
@@ -1651,7 +1651,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     setGenerating(false);
   };
 
-  const mode = !uploadPictureInputRef?.current?.files?.[0] && "gacha";
+  // const mode = !uploadPictureInputRef?.current?.files?.[0] && "gacha";
 
   return (
     <div
@@ -1823,7 +1823,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                       onChange={(e: any) => setPrivacyFlag(!!e.target.checked)}
                     />
                   </div>
-                  <div
+                  {/* <div
                     className={
                       bgRemLoading || mode === "gacha" ? "disabled" : ""
                     }
@@ -1874,7 +1874,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                     >
                       (dank af, beta af, requires downloading 88MB model)
                     </span>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             ) : (
