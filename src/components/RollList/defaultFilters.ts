@@ -14,8 +14,8 @@ const anemoRvList = {
   Venti: [CRate, CDMG, ATK_, EM, ER],
   Xiao: [CRate, CDMG, ATK_, ER],
   Jean: [CRate, CDMG, ATK_, ER, EM],
-  Faruzan: [CRate, CDMG, ATK_, ER, EM],
-  Wanderer: [CRate, CDMG, ATK_, ER, EM],
+  Faruzan: [CRate, CDMG, ATK_, ER],
+  Wanderer: [CRate, CDMG, ATK_, ER],
   "Kaedehara Kazuha": [CRate, CDMG, ATK_, EM, ER],
 };
 
@@ -29,6 +29,9 @@ const pyroRvList = {
   Xiangling: [CRate, CDMG, ATK_, EM, ER],
   "Hu Tao": [CRate, CDMG, HP_, EM],
   Lyney: [CRate, CDMG, ATK_, ER],
+  Xinyan: [CRate, CDMG, ATK_, ER],
+  Thoma: [CRate, CDMG, ATK_, ER],
+  Amber: [CRate, CDMG, ATK_, ER],
 };
 
 const hydroRvList = {
@@ -41,6 +44,7 @@ const hydroRvList = {
   Yelan: [CRate, CDMG, HP_, ER],
   Furina: [CRate, CDMG, HP_, ER],
   Neuvillette: [CRate, CDMG, HP_, ER],
+  Barbara: [CRate, CDMG, ATK_, HP_, ER],
 };
 
 const cryoRvList = {
@@ -51,6 +55,8 @@ const cryoRvList = {
   Shenhe: [ER, ATK, ATK_, CRate, CDMG],
   "Kamisato Ayaka": [CRate, CDMG, ER, ATK_],
   Wriothesley: [CRate, CDMG, EM, ER, ATK_],
+  Charlotte: [CRate, CDMG, ER, ATK_],
+  Mika: [CRate, CDMG, HP_, ER, ATK_],
 };
 
 const geoRvList = {
@@ -72,12 +78,16 @@ const electroRvList = {
   "Raiden Shogun": [CRate, CDMG, ATK_, ER],
   "Kuki Shinobu": [CRate, CDMG, ATK_, EM, ER],
   Cyno: [CRate, CDMG, ATK_, EM, ER],
+  "Kujou Sara": [CRate, CDMG, ATK_, ER],
+  Dori: [CRate, CDMG, HP_, ATK_, ER],
 };
 
 const dendroRvList = {
   Nahida: [CRate, CDMG, ATK_, EM],
   Alhaitham: [CRate, CDMG, ATK_, EM, ER],
   Tighnari: [CRate, CDMG, ATK_, EM, ER],
+  "Yaoyao": [CRate, CDMG, ATK_, EM, ER],
+  "Collei": [CRate, CDMG, ATK_, EM, ER],
 };
 
 const defaultRvFilter = [CRate, CDMG];

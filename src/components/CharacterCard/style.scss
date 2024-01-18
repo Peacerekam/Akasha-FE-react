@@ -3,6 +3,19 @@ $hardcoded-scale: 1;
 // $hardcoded-scale: 0.87;
 
 .character-card-container {
+  &:not(.disable-input) {
+    .character-left > div {
+      cursor: pointer;
+    }
+  }
+  &.disable-input {
+    .character-left > div {
+      .character-showcase-pic-container {
+        pointer-events: none !important;
+      }
+    }
+  }
+
   font-size: 16px * $hardcoded-scale;
   .gap-5 {
     gap: 5px * $hardcoded-scale;
@@ -351,6 +364,8 @@ $hardcoded-scale: 1;
   align-items: center;
   width: 525px * $hardcoded-scale;
   height: 430px * $hardcoded-scale;
+  font-family: "GenshinFont";
+  text-shadow: 0 0.08em 0.1em black, 0 0.1em 0.3em rgba(0, 0, 0, 0.4);
   .lds-ellipsis {
     transform: scale(1.5);
   }
@@ -533,6 +548,7 @@ $hardcoded-scale: 1;
         height: $const-square-size;
         position: relative;
 
+        .no-const,
         .const-locked {
           position: absolute;
           left: 0;
@@ -827,7 +843,6 @@ $hardcoded-scale: 1;
       height: 485px * $hardcoded-scale;
       $shadow-color: rgba(black, 0.15);
       background: linear-gradient(90deg, $shadow-color 80%, transparent);
-      cursor: pointer;
       border-radius: 4px * $hardcoded-scale;
 
       .character-showcase-pic-container {
@@ -838,36 +853,38 @@ $hardcoded-scale: 1;
             opacity: 0 !important;
           }
         }
-        &::after {
-          transition: opacity 0.2s;
-          opacity: 0;
-          position: absolute;
-          content: "Click to change image";
-          display: flex;
-          font-family: "GenshinFont";
-          font-size: 20px * $hardcoded-scale;
-          text-shadow: 0 0.08em 0.1em black, 0 0.1em 0.3em rgba(0, 0, 0, 0.4);
-          top: 185px * $hardcoded-scale;
-          left: 130px * $hardcoded-scale;
-          pointer-events: none;
-          z-index: 2;
-        }
-        &::before {
-          transition: opacity 0.2s;
-          opacity: 0;
-          position: absolute;
-          content: "";
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 485px * $hardcoded-scale;
-          background: linear-gradient(
-            90deg,
-            rgba(black, 0.3) 40%,
-            transparent 50%
-          );
-          pointer-events: none;
-          z-index: 1;
+        &:not(.disable-input) {
+          &::after {
+            transition: opacity 0.2s;
+            opacity: 0;
+            position: absolute;
+            content: "Click to change image";
+            display: flex;
+            font-family: "GenshinFont";
+            font-size: 20px * $hardcoded-scale;
+            text-shadow: 0 0.08em 0.1em black, 0 0.1em 0.3em rgba(0, 0, 0, 0.4);
+            top: 185px * $hardcoded-scale;
+            left: 130px * $hardcoded-scale;
+            pointer-events: none;
+            z-index: 2;
+          }
+          &::before {
+            transition: opacity 0.2s;
+            opacity: 0;
+            position: absolute;
+            content: "";
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 485px * $hardcoded-scale;
+            background: linear-gradient(
+              90deg,
+              rgba(black, 0.3) 40%,
+              transparent 50%
+            );
+            pointer-events: none;
+            z-index: 1;
+          }
         }
       }
       &:hover {
@@ -1000,10 +1017,10 @@ $hardcoded-scale: 1;
       // }
 
       &:first-child {
-        margin-left:auto;
+        margin-left: auto;
       }
       &:last-child {
-        margin-right:auto;
+        margin-right: auto;
       }
 
       .compact-artifact-bg {

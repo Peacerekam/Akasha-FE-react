@@ -16,7 +16,7 @@ export const ArtifactBackgroundOnCanvas: React.FC<{
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const canvasWidth = 420 * hardcodedScale;
-  const canvasHeight = 200 * hardcodedScale;
+  const canvasHeight = 280 * hardcodedScale;
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -51,33 +51,33 @@ export const ArtifactBackgroundOnCanvas: React.FC<{
         img,
         namecardBg ? -25 : -128,
         namecardBg ? -70 : -23,
-        (namecardBg ? 420 : img.width) * conditionalScale,
-        (namecardBg ? 280 : img.height) * conditionalScale
+        (namecardBg ? canvasWidth : img.width) * conditionalScale,
+        (namecardBg ? canvasHeight : img.height) * conditionalScale
       );
 
       const gradientCoords = [0, 0, 0, canvasHeight] as const;
-      
+
       if (adaptiveBgColor && adaptiveColors) {
         const adaptiveGradientSolid = ctx!.createLinearGradient(
           ...gradientCoords
         );
         const adaptiveGradient = ctx!.createLinearGradient(...gradientCoords);
-  
+
         const fillColorSolid = adaptiveColors[0];
         adaptiveGradientSolid.addColorStop(0, fillColorSolid[0]);
         adaptiveGradientSolid.addColorStop(
           0.5,
           fillColorSolid[fillColorSolid.length - 2]
         );
-  
+
         const fillColor = adaptiveColors[1];
         adaptiveGradient.addColorStop(0, fillColor[0]);
         adaptiveGradient.addColorStop(0.5, fillColor[fillColor.length - 2]);
-  
+
         ctx!.globalCompositeOperation = "color";
         ctx!.fillStyle = adaptiveGradientSolid;
         ctx!.fillRect(0, 0, canvasWidth, canvasHeight);
-  
+
         ctx!.globalCompositeOperation = "hard-light";
         ctx!.fillStyle = adaptiveGradient;
         ctx!.filter = "contrast(150%)"; // 1.2 ? 120% ?
@@ -86,7 +86,7 @@ export const ArtifactBackgroundOnCanvas: React.FC<{
 
       // brightness hack for safari iOS
       const brightnessMask = ctx!.createLinearGradient(...gradientCoords);
-      brightnessMask.addColorStop(0, `#000000${adaptiveBgColor ? '75' : '58'}`);
+      brightnessMask.addColorStop(0, `#000000${adaptiveBgColor ? "75" : "58"}`);
 
       ctx!.globalCompositeOperation = "source-over";
       ctx!.fillStyle = brightnessMask;

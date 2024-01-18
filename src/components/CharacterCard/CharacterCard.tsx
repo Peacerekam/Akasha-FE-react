@@ -61,7 +61,6 @@ import { useLocation } from "react-router-dom";
 
 // import imglyRemoveBackground, { Config } from "@imgly/background-removal";
 
-
 // import { toBlob, toPng } from "html-to-image";
 
 ChartJS.register(...registerables);
@@ -199,7 +198,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     simplifyColors,
     adaptiveBgColor,
     namecardBg,
-    privacyFlag
+    privacyFlag,
   ]);
 
   const handleToggleModal = (event: React.MouseEvent<HTMLElement>) => {
@@ -949,6 +948,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         await delay(10);
       }
 
+      if (characterImg.classList.contains("invalid-picture")) return;
+
       // characterImg.onload = () => resolve()
       // elementalOrNamecardBgImg.onload = () => resolve()
 
@@ -1111,8 +1112,18 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     ]
   );
 
-  const characterShowcase = useMemo(
-    () => (
+  const characterShowcase = useMemo(() => {
+    const charImgUrl = toEnkaUrl(chartsData?.assets?.gachaIcon);
+    const showcaseContainerClassNames = [
+      "character-showcase-pic-container",
+      hasCustomBg,
+      row.name === "Traveler" ? "is-traveler" : "",
+      generating ? "is-generating" : "",
+      charImgUrl ? "" : "disable-input",
+    ]
+      .join(" ")
+      .trim();
+    return (
       <div>
         <div className="column-shadow-gradient-top" />
         <div className="column-shadow-gradient-left" />
@@ -1120,9 +1131,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         {/* <div className="column-shadow-gradient" /> */}
         <div
           style={{ pointerEvents: "all" }}
-          className={`character-showcase-pic-container ${hasCustomBg} ${
-            row.name === "Traveler" ? "is-traveler" : ""
-          } ${generating ? "is-generating" : ""}`}
+          className={showcaseContainerClassNames}
           onClick={() => {
             uploadPictureInputRef?.current?.click();
           }}
@@ -1161,31 +1170,31 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           />
           {isLoadingImage && (
             <div className="image-loading-wrapper">
-              <Spinner />
+              {charImgUrl ? <Spinner /> : "Something went wrong :("}
             </div>
           )}
           <img
             alt=""
+            className={charImgUrl ? "" : "invalid-picture"}
             style={{ display: "none" }}
             ref={backgroundPictureRef}
-            src={toEnkaUrl(chartsData?.assets?.gachaIcon)}
+            src={charImgUrl}
           />
         </div>
       </div>
-    ),
-    [
-      row,
-      uploadPictureInputRef,
-      backgroundPictureRef,
-      canvasRef,
-      hasCustomBg,
-      generating,
-      isLoadingImage,
-      chartsData,
-      hardcodedScale,
-      // removeBg,
-    ]
-  );
+    );
+  }, [
+    row,
+    uploadPictureInputRef,
+    backgroundPictureRef,
+    canvasRef,
+    hasCustomBg,
+    generating,
+    isLoadingImage,
+    chartsData,
+    hardcodedScale,
+    // removeBg,
+  ]);
 
   const characterStats = useMemo(
     () => (
@@ -1400,7 +1409,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                 key={`${constImg}-${i}`}
                 className={isActivated ? "activated" : ""}
               >
-                {!isActivated ? (
+                {!isActivated && (
                   <span className="const-locked">
                     <FontAwesomeIcon
                       className="lock-icon"
@@ -1408,15 +1417,17 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                       size="1x"
                     />
                   </span>
-                ) : (
-                  ""
                 )}
-                <img
-                  alt="constellation"
-                  key={`const-${i}`}
-                  className={isActivated ? "activated" : ""}
-                  src={toEnkaUrl(constImg)}
-                />
+                {constImg ? (
+                  <img
+                    alt="constellation"
+                    key={`const-${i}`}
+                    className={isActivated ? "activated" : ""}
+                    src={toEnkaUrl(constImg)}
+                  />
+                ) : (
+                  <div className="no-const" />
+                )}
               </div>
             );
           })}
@@ -1438,16 +1449,19 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     ]
   );
 
-  const cardContainer = useMemo(
-    () => (
-      <div
-        className={`character-card-container ${
-          !namecardBg ? "elemental-bg-wrap" : ""
-        } ${simplifyColors ? "simplify-colors" : ""} ${
-          hasLeaderboardsColumn ? "" : "no-leaderboards"
-        }`}
-        style={cardStyle}
-      >
+  const cardContainer = useMemo(() => {
+    const charImgUrl = toEnkaUrl(chartsData?.assets?.gachaIcon);
+    const cardContainerClassNames = [
+      "character-card-container",
+      !namecardBg ? "elemental-bg-wrap" : "",
+      simplifyColors ? "simplify-colors" : "",
+      hasLeaderboardsColumn ? "" : "no-leaderboards",
+      charImgUrl ? "" : "disable-input",
+    ]
+      .join(" ")
+      .trim();
+    return (
+      <div className={cardContainerClassNames} style={cardStyle}>
         <div
           className="absolute-overlay"
           // onClick={handleEffectsIteration}
@@ -1484,18 +1498,17 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           />
         </div>
       </div>
-    ),
-    [
-      row,
-      namecardBg,
-      simplifyColors,
-      adaptiveBgColor,
-      chartsData,
-      cardStyle,
-      generating,
-      translate,
-    ]
-  );
+    );
+  }, [
+    row,
+    namecardBg,
+    simplifyColors,
+    adaptiveBgColor,
+    chartsData,
+    cardStyle,
+    generating,
+    translate,
+  ]);
 
   const handleSelectChange = (option: any) => {
     // const filters = options.map((o: any) => o.value);
