@@ -171,12 +171,12 @@ export const CategorySelectionPage: React.FC = () => {
               {row.weapons.map((weapon: any) => {
                 const _variant = weapon.defaultVariant || "";
                 const leaderboardPath = `leaderboards/${weapon.calculationId}/${_variant}`;
-
+                const weaponLabel = `${weapon?.name} R${weapon?.refinement}`
                 return (
                   <a
                     style={{ color: "white" }}
-                    key={`${weapon?.name} R${weapon?.refinement}`}
-                    title={`${weapon?.name} R${weapon?.refinement}`}
+                    key={weaponLabel}
+                    title={weaponLabel}
                     onClick={(event) => {
                       event.preventDefault();
                       navigate(`/${leaderboardPath}`);
@@ -192,17 +192,6 @@ export const CategorySelectionPage: React.FC = () => {
               })}
             </div>
           );
-
-          // const weaponName = row?.weapon?.name || "";
-          // const refinement = row.weapon.refinement ?? 0;
-          //
-          // <div className="table-icon-text-pair">
-          //   <WeaponMiniDisplay
-          //     icon={row.weapon.icon}
-          //     refinement={refinement}
-          //   />
-          //   <span style={{ opacity: 0.5 }}>{weaponName}</span>
-          // </div>
         },
       },
       {

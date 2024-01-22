@@ -68,7 +68,7 @@ export const Pagination: React.FC<PaginationProps> = ({
 }) => {
   const { translate } = useContext(TranslationContext);
   const lastPage =
-    Math.ceil(totalRows / pageSize) || (rows.length === pageSize ? 0 : 1);
+    Math.ceil(totalRows / pageSize) || (rows.length >= pageSize ? 0 : 1);
   const disableNext = unknownPage ? false : pageNumber === lastPage;
   const disablePrevious = unknownPage ? false : pageNumber === 1;
 
