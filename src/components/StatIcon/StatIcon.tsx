@@ -24,7 +24,7 @@ import PhysicalDMG from "../../assets/icons/PHYSICAL_ADD_HURT.png";
 import PyroDMG from "../../assets/icons/FIRE_ADD_HURT.png";
 import React from "react";
 
-type StatIconProps = { name: string };
+type StatIconProps = { name: string; sizeOverride?: number };
 
 const statKeys: {
   [key: string]: any;
@@ -47,13 +47,13 @@ const statKeys: {
   DEF: DEF,
   DEF_: DEF_,
   "DEF%": DEF_,
-  "Pyro": PyroDMG,
-  "Electro": ElectroDMG,
-  "Cryo": CryoDMG,
-  "Geo": GeoDMG,
-  "Dendro": DendroDMG,
-  "Anemo": AnemoDMG,
-  "Hydro": HydroDMG,
+  Pyro: PyroDMG,
+  Electro: ElectroDMG,
+  Cryo: CryoDMG,
+  Geo: GeoDMG,
+  Dendro: DendroDMG,
+  Anemo: AnemoDMG,
+  Hydro: HydroDMG,
   "Pyro DMG Bonus": PyroDMG,
   "Electro DMG Bonus": ElectroDMG,
   "Cryo DMG Bonus": CryoDMG,
@@ -86,14 +86,17 @@ const statKeys: {
   "Crit Value": {
     type: "empty",
   },
-  "x": {
+  x: {
     type: "x",
-  }
+  },
 };
 
 export const isIcon = (name: string) => !!statKeys[name];
 
-export const StatIcon: React.FC<StatIconProps> = ({ name }) => {
+export const StatIcon: React.FC<StatIconProps> = ({
+  name,
+  sizeOverride = null,
+}) => {
   const asset = statKeys[name];
   if (!asset) return null;
 
@@ -102,12 +105,19 @@ export const StatIcon: React.FC<StatIconProps> = ({ name }) => {
   }
 
   if (asset.type === "empty") {
-    return <span className="empty-stat-icon"/>;
+    return <span className="empty-stat-icon" />;
   }
 
   if (asset.type === "x") {
-    return <span>×</span>
+    return <span>×</span>;
   }
 
-  return <img alt="" className="stat-icon" src={asset} />;
+  const styleObj: React.CSSProperties = {};
+
+  if (sizeOverride) {
+    styleObj.width = sizeOverride;
+    styleObj.height = sizeOverride;
+  }
+
+  return <img alt="" className="stat-icon" src={asset} style={styleObj} />;
 };

@@ -1,26 +1,117 @@
 import "./style.scss";
 
-import { REAL_SUBSTAT_VALUES, STAT_NAMES } from "../../utils/substats";
-import React, { useContext, useEffect, useMemo, useRef } from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import {
   getArtifactCvClassName,
+  getArtifactRvClassName,
   getArtifactsInOrder,
   getInGameSubstatValue,
   getSubstatPercentageEfficiency,
+  getSummedArtifactRolls,
   isPercent,
   normalizeText,
 } from "../../utils/helpers";
 
 import { ARBadge } from "../ARBadge";
+import { MetricContext } from "../../context/MetricProvider/MetricProvider";
 import { RegionBadge } from "../RegionBadge";
 import { RollList } from "../RollList";
 import { StatIcon } from "../StatIcon";
 import { TalentsDisplay } from "../TalentsDisplay";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import { getDefaultRvFilters } from "../RollList/defaultFilters";
 
 type ArtifactListCompactProps = {
   row: any;
   artifacts: any[];
+};
+
+export const ArtifactMetricDisplay: React.FC<{
+  row: any;
+  artifact: any;
+}> = ({ row, artifact }) => {
+  const [displayFormula, setDisplayFormula] = useState<boolean>(false);
+  const { metric, setMetric, getArtifactMetricValue, customRvFilter } =
+    useContext(MetricContext);
+
+  const substatKeys = Object.keys(artifact.substats);
+  const metricValue = getArtifactMetricValue(row.name, artifact);
+
+  const summedArtifactRolls = getSummedArtifactRolls(artifact);
+  const characterRvStats =
+    customRvFilter[row.name] || getDefaultRvFilters(row.name);
+
+  const critRate = +(artifact.substats?.["Crit RATE"]?.toFixed(1) || 0);
+  const critDmg = +(artifact.substats?.["Crit DMG"]?.toFixed(1) || 0);
+  const iconSize = 16;
+
+  const metricMathDisplay = (
+    <span className="metric-formula">
+      {metric === "RV" ? (
+        substatKeys
+          .filter((substatName) => characterRvStats.includes(substatName))
+          .map((substatName, index) => {
+            const sub = summedArtifactRolls[substatName];
+            return (
+              <span key={substatName}>
+                {index !== 0 ? <span> + </span> : ""}
+                <span className="white-space-nowrap">
+                  <StatIcon sizeOverride={iconSize} name={substatName} />{" "}
+                  {sub.rv} <span className="smol-percentage">%</span>
+                </span>
+              </span>
+            );
+          })
+      ) : (
+        <div style={{ display: "flex", flexWrap: "wrap" }}>
+          <span className="white-space-nowrap">
+            {critRate ? (
+              <>
+                <StatIcon sizeOverride={iconSize} name={"Crit RATE"} />{" "}
+                {critRate} × 2
+              </>
+            ) : (
+              ""
+            )}
+            {critRate && critDmg ? <span> + </span> : ""}
+          </span>
+          {critDmg ? (
+            <span className="white-space-nowrap">
+              <StatIcon sizeOverride={iconSize} name={"Crit DMG"} /> {critDmg}
+            </span>
+          ) : (
+            ""
+          )}
+        </div>
+      )}
+    </span>
+  );
+
+  return (
+    <div
+      className="compact-artifact-metric-container"
+      onMouseEnter={() => setDisplayFormula(true)}
+      onMouseLeave={() => setDisplayFormula(false)}
+    >
+      <span
+        className="compact-artifact-crit-value pointer"
+        onClick={() => setMetric(metric === "CV" ? "RV" : "CV")}
+        title="Click to toggle between CV and RV"
+      >
+        {displayFormula ? metricMathDisplay : ""}
+        <span>
+          {metricValue}{" "}
+          {metric === "CV" ? (
+            "cv"
+          ) : (
+            <>
+              <span className="smol-percentage">%</span> RV
+            </>
+          )}
+        </span>
+      </span>
+    </div>
+  );
 };
 
 export const ArtifactOnCanvas: React.FC<{
@@ -111,6 +202,7 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
   artifacts,
 }) => {
   const { translate } = useContext(TranslationContext);
+  const { metric, customRvFilter } = useContext(MetricContext);
 
   const reordered = useMemo(
     () => getArtifactsInOrder(artifacts, true),
@@ -123,21 +215,16 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
         <div className="artifacts-row">
           {reordered.map((artifact: any) => {
             const substatKeys = Object.keys(artifact.substats);
-            const className = getArtifactCvClassName(artifact);
+            const className =
+              metric === "CV"
+                ? getArtifactCvClassName(artifact)
+                : getArtifactRvClassName(
+                    row.name,
+                    artifact,
+                    customRvFilter[row.name]
+                  );
 
-            const summedArtifactRolls: {
-              [key: string]: { count: number; sum: number };
-            } = artifact.substatsIdList.reduce((acc: any, id: number) => {
-              const { value, type } = REAL_SUBSTAT_VALUES[id];
-              const realStatName = STAT_NAMES[type];
-              return {
-                ...acc,
-                [realStatName]: {
-                  count: (acc[realStatName]?.count ?? 0) + 1,
-                  sum: (acc[realStatName]?.sum ?? 0) + value,
-                },
-              };
-            }, {});
+            const summedArtifactRolls = getSummedArtifactRolls(artifact);
 
             const mainStatValue = isPercent(artifact.mainStatKey)
               ? Math.round(artifact.mainStatValue * 10) / 10
@@ -146,14 +233,11 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
             return (
               <div
                 key={artifact._id}
-                className={`flex compact-artifact ${className}`}
+                className={`flex compact-artifact ${className} metric-${metric}`}
               >
                 {artifact.icon !== null ? (
                   <div className="compact-artifact-icon-container">
                     <ArtifactOnCanvas icon={artifact.icon} />
-                    <span className="compact-artifact-crit-value">
-                      {Math.round(artifact.critValue * 10) / 10} cv
-                    </span>
                     <span className="compact-artifact-main-stat">
                       <StatIcon name={artifact.mainStatKey} />
                       {mainStatValue}
@@ -162,6 +246,9 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
                   </div>
                 ) : (
                   <div className="no-artifact">×</div>
+                )}
+                {artifact.icon !== null && (
+                  <ArtifactMetricDisplay row={row} artifact={artifact} />
                 )}
                 <div className="compact-artifact-subs">
                   {substatKeys.map((key: any) => {
@@ -176,10 +263,17 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
                     const normSubName = normalizeText(
                       key.replace("substats", "")
                     );
+
+                    const isFactored =
+                      metric === "CV"
+                        ? isCV
+                        : !!customRvFilter[row.name]?.includes(key);
+
                     const classNames = [
                       "substat flex nowrap gap-5",
                       normalizeText(normSubName),
                       isCV ? "critvalue" : "",
+                      isFactored ? "rv-relevant" : "rv-not-relevant",
                     ]
                       .join(" ")
                       .trim();
@@ -192,17 +286,21 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
                     const rollDots = "•".repeat(summedArtifactRolls[key].count);
 
                     return (
-                      <div
-                        key={normalizeText(key)}
-                        className={classNames}
-                        style={{ opacity: opacity }}
-                      >
-                        <span className="roll-dots">{rollDots}</span>
-                        <span>
+                      <div key={normalizeText(key)} className={classNames}>
+                        <span
+                          className="roll-dots"
+                          style={{ opacity: opacity }}
+                        >
+                          {rollDots}
+                        </span>
+                        <span style={{ opacity: opacity }}>
                           <StatIcon name={key} />
                         </span>
-                        {substatValue}
-                        {isPercent(key) ? "%" : ""}
+                        <span style={{ opacity: opacity }}>
+                          {substatValue}
+                          {isPercent(key) ? "%" : ""}
+                        </span>
+                        {isFactored ? <span className="stat-highlight" /> : ""}
                       </div>
                     );
                   })}
@@ -215,7 +313,7 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
         <RollList artifacts={reordered} character={row.name} />
       </>
     );
-  }, [JSON.stringify(reordered)]);
+  }, [JSON.stringify(reordered), metric, customRvFilter[row.name]?.length]);
 
   return (
     <div className="flex expanded-row">

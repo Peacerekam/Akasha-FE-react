@@ -10,7 +10,7 @@ export const helpContentArtifacts = (
       Default sorting for this table is by <b>CV (Crit Value)</b>. It is
       calculated with the following formula:
       <div className="desc-formula">
-        2 * <StatIcon name="Crit RATE" />
+        2 × <StatIcon name="Crit RATE" />
         Crit RATE + <StatIcon name="Crit DMG" /> Crit DMG
       </div>
     </div>

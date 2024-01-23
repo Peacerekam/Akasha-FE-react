@@ -86,22 +86,22 @@ const dendroRvList = {
   Nahida: [CRate, CDMG, ATK_, EM],
   Alhaitham: [CRate, CDMG, ATK_, EM, ER],
   Tighnari: [CRate, CDMG, ATK_, EM, ER],
-  "Yaoyao": [CRate, CDMG, ATK_, EM, ER],
-  "Collei": [CRate, CDMG, ATK_, EM, ER],
+  Yaoyao: [CRate, CDMG, ATK_, EM, ER],
+  Collei: [CRate, CDMG, ATK_, EM, ER],
 };
 
 const defaultRvFilter = [CRate, CDMG];
 
+export const allRvFilters: Record<string, string[]> = {
+  ...anemoRvList,
+  ...pyroRvList,
+  ...hydroRvList,
+  ...cryoRvList,
+  ...geoRvList,
+  ...electroRvList,
+  ...dendroRvList,
+};
+
 export const getDefaultRvFilters = (character: string) => {
-  return (
-    {
-      ...anemoRvList,
-      ...pyroRvList,
-      ...hydroRvList,
-      ...cryoRvList,
-      ...geoRvList,
-      ...electroRvList,
-      ...dendroRvList,
-    }[character] || defaultRvFilter
-  );
+  return allRvFilters[character] || defaultRvFilter;
 };

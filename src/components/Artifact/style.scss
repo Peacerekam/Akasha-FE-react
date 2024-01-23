@@ -172,8 +172,10 @@
   //   0 0 0px 5px rgba(cyan, 0.25);
   // animation: cyanGlow 2s infinite;
 
+  $color-1: cyan;
+
   position: relative;
-  border: 1px solid cyan;
+  border: 1px solid $color-1;
 
   &::after {
     content: "";
@@ -182,7 +184,7 @@
     left: -3px;
     width: 100%;
     height: 100%;
-    border: 3px solid rgba(cyan, 0.5);
+    border: 3px solid rgba($color-1, 0.5);
     z-index: 1;
   }
   &::before {
@@ -192,12 +194,32 @@
     left: -5px;
     width: 100%;
     height: 100%;
-    border: 5px solid rgba(cyan, 0.25);
+    border: 5px solid rgba($color-1, 0.25);
     z-index: 1;
   }
 
+  .substat.rv-relevant {
+    &::after {
+      background: linear-gradient(
+        0deg,
+        transparent 10%,
+        $color-1,
+        transparent 90%
+      ) !important;
+      color: $color-1;
+      border-right-color: $color-1;
+    }
+    
+    .stat-highlight.stat-highlight {
+      border-right-color: $color-1;
+    }
+  }
+
   .compact-artifact-crit-value {
-    color: cyan;
+    color: $color-1;
+    &.pointer:hover {
+      box-shadow: inset 0 0 0 1px $color-1 !important;
+    }
   }
 }
 
@@ -216,8 +238,10 @@
   // box-shadow: 0 0 0 1px red, 0 0 0px 3px rgba(red, 0.5),
   //   0 0 0px 5px rgba(red, 0.25);
 
+  $color-1: red;
+
   position: relative;
-  border: 1px solid red;
+  border: 1px solid $color-1;
 
   &::after {
     content: "";
@@ -226,7 +250,7 @@
     left: -3px;
     width: 100%;
     height: 100%;
-    border: 3px solid rgba(red, 0.5);
+    border: 3px solid rgba($color-1, 0.5);
     z-index: 1;
   }
   &::before {
@@ -236,12 +260,31 @@
     left: -5px;
     width: 100%;
     height: 100%;
-    border: 5px solid rgba(red, 0.25);
+    border: 5px solid rgba($color-1, 0.25);
     z-index: 1;
   }
 
+  .substat.rv-relevant {
+    &::after {
+      background: linear-gradient(
+        0deg,
+        transparent 10%,
+        $color-1,
+        transparent 90%
+      ) !important;
+      color: $color-1;
+      border-right-color: $color-1;
+    }
+    .stat-highlight.stat-highlight {
+      border-right-color: $color-1;
+    }
+  }
+
   .compact-artifact-crit-value {
-    color: red;
+    color: $color-1;
+    &.pointer:hover {
+      box-shadow: inset 0 0 0 1px $color-1 !important;
+    }
   }
 }
 
@@ -250,8 +293,10 @@
   // box-shadow: 0 0 0 1px rgba(255, 217, 0, 1), 0 0 0px 3px rgba(255, 217, 0, 0.5),
   //   0 0 0px 5px rgba(255, 217, 0, 0.25);
 
+  $color-1: rgb(255, 217, 0);
+
   position: relative;
-  border: 1px solid rgba(255, 217, 0, 1);
+  border: 1px solid rgba($color-1, 1);
 
   &::after {
     content: "";
@@ -260,7 +305,7 @@
     left: -3px;
     width: 100%;
     height: 100%;
-    border: 3px solid rgba(255, 217, 0, 0.5);
+    border: 3px solid rgba($color-1, 0.5);
     z-index: 1;
   }
   &::before {
@@ -270,12 +315,31 @@
     left: -5px;
     width: 100%;
     height: 100%;
-    border: 5px solid rgba(255, 217, 0, 0.25);
+    border: 5px solid rgba($color-1, 0.25);
     z-index: 1;
   }
 
+  .substat.rv-relevant {
+    &::after {
+      background: linear-gradient(
+        0deg,
+        transparent 10%,
+        $color-1,
+        transparent 90%
+      ) !important;
+      color: $color-1;
+      border-right-color: $color-1;
+    }
+    .stat-highlight.stat-highlight {
+      border-right-color: $color-1;
+    }
+  }
+
   .compact-artifact-crit-value {
-    color: rgb(255, 217, 0);
+    color: $color-1;
+    &.pointer:hover {
+      box-shadow: inset 0 0 0 1px $color-1 !important;
+    }
   }
 }
 
@@ -284,8 +348,10 @@
   // box-shadow: 0 0 0 1px rgba(orange, 1), 0 0 0px 3px rgba(orange, 0.5),
   //   0 0 0px 5px rgba(orange, 0.25);
 
+  $color-1: orange;
+
   position: relative;
-  border: 1px solid rgba(orange, 1);
+  border: 1px solid rgba($color-1, 1);
 
   &::after {
     content: "";
@@ -294,7 +360,7 @@
     left: -3px;
     width: 100%;
     height: 100%;
-    border: 3px solid rgba(orange, 0.5);
+    border: 3px solid rgba($color-1, 0.5);
     z-index: 1;
   }
   &::before {
@@ -304,12 +370,31 @@
     left: -5px;
     width: 100%;
     height: 100%;
-    border: 5px solid rgba(orange, 0.25);
+    border: 5px solid rgba($color-1, 0.25);
     z-index: 1;
   }
 
+  .substat.rv-relevant {
+    &::after {
+      background: linear-gradient(
+        0deg,
+        transparent 10%,
+        $color-1,
+        transparent 90%
+      ) !important;
+      color: $color-1;
+      border-right-color: $color-1;
+    }
+    .stat-highlight.stat-highlight {
+      border-right-color: $color-1;
+    }
+  }
+
   .compact-artifact-crit-value {
-    color: orange;
+    color: $color-1;
+    &.pointer:hover {
+      box-shadow: inset 0 0 0 1px $color-1 !important;
+    }
   }
 }
 
@@ -317,9 +402,10 @@
   // box-shadow: 0 0 0 1px rgb(194, 102, 255);
   // box-shadow: 0 0 0 1px rgba(194, 102, 255, 1),
   //   0 0 0px 3px rgba(194, 102, 255, 0.5);
+  $color-1: rgba(194, 102, 255);
 
   position: relative;
-  border: 1px solid rgba(194, 102, 255, 1);
+  border: 1px solid $color-1;
 
   &::after {
     content: "";
@@ -328,12 +414,31 @@
     left: -3px;
     width: 100%;
     height: 100%;
-    border: 3px solid rgba(194, 102, 255, 0.5);
+    border: 3px solid rgba($color-1, 0.5);
     z-index: 1;
   }
 
+  .substat.rv-relevant {
+    &::after {
+      background: linear-gradient(
+        0deg,
+        transparent 10%,
+        $color-1,
+        transparent 90%
+      ) !important;
+      color: $color-1;
+      border-right-color: $color-1;
+    }
+    .stat-highlight.stat-highlight {
+      border-right-color: $color-1;
+    }
+  }
+
   .compact-artifact-crit-value {
-    color: rgb(194, 102, 255);
+    color: $color-1;
+    &.pointer:hover {
+      box-shadow: inset 0 0 0 1px rgb(194, 102, 255) !important;
+    }
   }
 }
 
@@ -342,8 +447,9 @@
   // box-shadow: 0 0 0 1px rgba(102, 163, 255, 1),
   //   0 0 0px 3px rgba(102, 163, 255, 0.5);
 
+  $color-1: rgba(102, 163, 255);
   position: relative;
-  border: 1px solid rgba(102, 163, 255, 1);
+  border: 1px solid $color-1;
 
   &::after {
     content: "";
@@ -352,19 +458,60 @@
     left: -3px;
     width: 100%;
     height: 100%;
-    border: 3px solid rgba(102, 163, 255, 0.5);
+    border: 3px solid rgba($color-1, 0.5);
     z-index: 1;
   }
 
+  .substat.rv-relevant {
+    &::after {
+      background: linear-gradient(
+        0deg,
+        transparent 10%,
+        $color-1,
+        transparent 90%
+      ) !important;
+      color: $color-1;
+      border-right-color: $color-1;
+    }
+    .stat-highlight.stat-highlight {
+      border-right-color: $color-1;
+    }
+  }
+
   .compact-artifact-crit-value {
-    color: rgb(102, 163, 255);
+    color: $color-1;
+    &.pointer:hover {
+      box-shadow: inset 0 0 0 1px $color-1 !important;
+    }
   }
 }
 
 .poo-artifact {
   // box-shadow: 0 0 0 1px gray;
-  border: 1px solid gray;
+  $color-1: gray;
+  position: relative;
+  border: 1px solid $color-1;
+
+  .substat.rv-relevant {
+    &::after {
+      background: linear-gradient(
+        0deg,
+        transparent 10%,
+        $color-1,
+        transparent 90%
+      ) !important;
+      color: $color-1;
+      border-right-color: $color-1;
+    }
+    .stat-highlight.stat-highlight {
+      border-right-color: $color-1;
+    }
+  }
+
   .compact-artifact-crit-value {
-    color: gray;
+    color: $color-1;
+    &.pointer:hover {
+      box-shadow: inset 0 0 0 1px $color-1 !important;
+    }
   }
 }

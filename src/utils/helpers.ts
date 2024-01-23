@@ -1,3 +1,9 @@
+import {
+  REAL_SUBSTAT_VALUES,
+  STAT_NAMES,
+  getSubstatEfficiency,
+} from "./substats";
+
 import { IHash } from "../types/IHash";
 import { getDefaultRvFilters } from "../components/RollList/defaultFilters";
 import { getStatsFromRow } from "../components";
@@ -207,6 +213,34 @@ export const getArtifactCvClassName = (artifact?: any) => {
   if (_cv >= 35) return "diamond-artifact";
   if (_cv >= 25) return "good-artifact";
   if (_cv >= 15) return "ok-artifact";
+  return "poo-artifact";
+};
+
+export const getArtifactRvClassName = (
+  characterName: string,
+  artifact: any,
+  overrideFilter?: string[]
+) => {
+  const summedArtifactRolls = getSummedArtifactRolls(artifact);
+  const characterRvStats = overrideFilter || getDefaultRvFilters(characterName);
+
+  let _RV = characterRvStats.reduce((accumulator, key) => {
+    const _rv = summedArtifactRolls[key]?.rv || 0;
+    return (accumulator += _rv);
+  }, 0);
+
+  const isCritCirclet =
+    artifact?.equipType === "EQUIP_DRESS" &&
+    artifact?.mainStatKey.startsWith("Crit");
+
+  if (isCritCirclet) _RV += 100;
+
+  if (_RV >= 900) return "wtf-artifact";
+  if (_RV >= 750) return "unicorn-artifact";
+  if (_RV >= 650) return "upper-diamond-artifact";
+  if (_RV >= 550) return "diamond-artifact";
+  if (_RV >= 450) return "good-artifact";
+  if (_RV >= 350) return "ok-artifact";
   return "poo-artifact";
 };
 
@@ -761,4 +795,35 @@ export const domainRedirect = () => {
       .replace("/#/", "/"); // HashRouter to BrowserRouter
     window.location.href = newHref;
   }
+};
+
+export const getSummedArtifactRolls = (artifact: any) => {
+  const counted: {
+    [statName: string]: {
+      count: number;
+      sum: number;
+      rv: number;
+      // rvList: {
+      //   name: string;
+      //   value: number;
+      // }[];
+    };
+  } = {};
+  for (const id of artifact.substatsIdList) {
+    const { value, type } = REAL_SUBSTAT_VALUES[id];
+    const statName = STAT_NAMES[type];
+    const _rv = getSubstatEfficiency(value, statName);
+    // const _rvEntry = {
+    //   name: "statName",
+    //   value: _rv,
+    // };
+
+    counted[statName] = {
+      count: (counted[statName]?.count ?? 0) + 1,
+      sum: (counted[statName]?.sum ?? 0) + value,
+      rv: (counted[statName]?.rv ?? 0) + _rv,
+      // rvList: [...(counted[statName]?.rvList ?? []), _rvEntry],
+    };
+  }
+  return counted;
 };

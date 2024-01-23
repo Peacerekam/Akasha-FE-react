@@ -3,13 +3,14 @@ import {
   STAT_NAMES,
   getSubstatEfficiency,
 } from "../../utils/substats";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useContext, useEffect, useMemo } from "react";
 import {
   allSubstatsInOrder,
   getInGameSubstatValue,
   isPercent,
 } from "../../utils/helpers";
 
+import { MetricContext } from "../../context/MetricProvider/MetricProvider";
 import { StatIcon } from "../StatIcon";
 import { getDefaultRvFilters } from "./defaultFilters";
 
@@ -19,9 +20,15 @@ type RollListProps = {
 };
 
 export const RollList: React.FC<RollListProps> = ({ artifacts, character }) => {
-  const [filter, setFilter] = useState<string[]>(
-    getDefaultRvFilters(character)
-  );
+  const { customRvFilter, setCustomRvFilter } = useContext(MetricContext);
+
+  const filter = customRvFilter[character] || getDefaultRvFilters(character);
+
+  useEffect(() => {
+    return () => {
+      setCustomRvFilter(character, getDefaultRvFilters(character));
+    };
+  }, []);
 
   const summedTotalArtifactRolls: {
     [key: string]: { count: number; sum: number; rv: number };
@@ -65,16 +72,15 @@ export const RollList: React.FC<RollListProps> = ({ artifacts, character }) => {
           );
 
           const toggleFilter = (key: string) => {
-            setFilter((prev) => {
-              const arr = [...prev];
-              const index = arr.indexOf(key);
-              if (index > -1) {
-                arr.splice(index, 1);
-              } else {
-                arr.push(key);
-              }
-              return arr;
-            });
+            const arr = [...filter];
+            const index = arr.indexOf(key);
+            if (index > -1) {
+              arr.splice(index, 1);
+            } else {
+              arr.push(key);
+            }
+
+            setCustomRvFilter(character, arr);
           };
 
           const className = [

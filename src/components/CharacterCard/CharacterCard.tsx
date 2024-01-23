@@ -1,5 +1,9 @@
 import "./style.scss";
 
+import {
+  ArtifactMetricDisplay,
+  ArtifactOnCanvas,
+} from "../ArtifactListCompact";
 import { Chart as ChartJS, registerables } from "chart.js";
 import {
   ELEMENT_TO_COLOR,
@@ -9,7 +13,6 @@ import {
   setGradientFromImage,
   toTalentProps,
 } from "./cardHelpers";
-import { REAL_SUBSTAT_VALUES, STAT_NAMES } from "../../utils/substats";
 import React, {
   useCallback,
   useContext,
@@ -23,10 +26,12 @@ import {
   ascensionToLevel,
   delay,
   getArtifactCvClassName,
+  getArtifactRvClassName,
   getArtifactsInOrder,
   getGenderFromIcon,
   getInGameSubstatValue,
   getSubstatPercentageEfficiency,
+  getSummedArtifactRolls,
   isPercent,
   normalizeText,
   toEnkaUrl,
@@ -41,9 +46,9 @@ import html2canvas, { Options } from "html2canvas";
 
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 import { ArtifactBackgroundOnCanvas } from "./ArtifactBackgroundOnCanvas";
-import { ArtifactOnCanvas } from "../ArtifactListCompact";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FriendshipIcon from "../../assets/icons/Item_Companionship_EXP.png";
+import { MetricContext } from "../../context/MetricProvider/MetricProvider";
 import { PreviewModal } from "./PreviewModal";
 import { Radar } from "react-chartjs-2";
 import RarityStar from "../../assets/images/star.png";
@@ -108,6 +113,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
   const { translate } = useContext(TranslationContext);
   const { contentWidth } = useContext(AdProviderContext);
+  const { metric, customRvFilter } = useContext(MetricContext);
 
   const cardErrorCallback = async () => {
     if (!errorCallback) return;
@@ -689,21 +695,16 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       <>
         {reorderedArtifacts.map((artifact: any) => {
           const substatKeys = Object.keys(artifact.substats);
-          const className = getArtifactCvClassName(artifact);
+          const className =
+            metric === "CV"
+              ? getArtifactCvClassName(artifact)
+              : getArtifactRvClassName(
+                  row.name,
+                  artifact,
+                  customRvFilter[row.name]
+                );
 
-          const summedArtifactRolls: {
-            [key: string]: { count: number; sum: number };
-          } = artifact.substatsIdList.reduce((acc: any, id: number) => {
-            const { value, type } = REAL_SUBSTAT_VALUES[id];
-            const realStatName = STAT_NAMES[type];
-            return {
-              ...acc,
-              [realStatName]: {
-                count: (acc[realStatName]?.count ?? 0) + 1,
-                sum: (acc[realStatName]?.sum ?? 0) + value,
-              },
-            };
-          }, {});
+          const summedArtifactRolls = getSummedArtifactRolls(artifact);
 
           const mainStatValue = isPercent(artifact.mainStatKey)
             ? Math.round(artifact.mainStatValue * 10) / 10
@@ -724,16 +725,12 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                 adaptiveColors={adaptiveColors}
                 hardcodedScale={hardcodedScale}
               />
-
               {artifact.icon !== null ? (
                 <div className="compact-artifact-icon-container">
                   <ArtifactOnCanvas
                     icon={artifact.icon}
                     hardcodedScale={hardcodedScale}
                   />
-                  <span className="compact-artifact-crit-value">
-                    <span>{Math.round(artifact.critValue * 10) / 10} cv</span>
-                  </span>
                   <span className="compact-artifact-main-stat">
                     <StatIcon name={artifact.mainStatKey} />
                     <span>
@@ -744,6 +741,9 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                 </div>
               ) : (
                 <div className="no-artifact">×</div>
+              )}
+              {artifact.icon !== null && (
+                <ArtifactMetricDisplay row={row} artifact={artifact} />
               )}
               <div className="compact-artifact-subs">
                 {substatKeys.map((key: any) => {
@@ -758,10 +758,17 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                   const normSubName = normalizeText(
                     key.replace("substats", "")
                   );
+
+                  const isFactored =
+                    metric === "CV"
+                      ? isCV
+                      : !!customRvFilter[row.name]?.includes(key);
+
                   const classNames = [
                     "substat flex nowrap gap-5",
                     normalizeText(normSubName),
                     isCV ? "critvalue" : "",
+                    isFactored ? "rv-relevant" : "rv-not-relevant",
                   ]
                     .join(" ")
                     .trim();
@@ -774,19 +781,18 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                   const rollDots = "•".repeat(summedArtifactRolls[key].count);
 
                   return (
-                    <div
-                      key={normalizeText(key)}
-                      className={classNames}
-                      style={{ opacity: opacity }}
-                    >
-                      <span className="roll-dots">{rollDots}</span>
-                      <span>
+                    <div key={normalizeText(key)} className={classNames}>
+                      <span className="roll-dots" style={{ opacity: opacity }}>
+                        {rollDots}
+                      </span>
+                      <span style={{ opacity: opacity }}>
                         <StatIcon name={key} />
                       </span>
-                      <span>
+                      <span style={{ opacity: opacity }}>
                         {substatValue}
                         {isPercent(key) ? "%" : ""}
                       </span>
+                      {isFactored ? <span className="stat-highlight" /> : ""}
                     </div>
                   );
                 })}
@@ -804,6 +810,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     row,
     namecardBg,
     simplifyColors,
+    metric,
+    customRvFilter[row.name]?.length,
   ]);
 
   const artifactsDiv =
@@ -1508,6 +1516,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     cardStyle,
     generating,
     translate,
+    customRvFilter[row.name]?.length,
   ]);
 
   const handleSelectChange = (option: any) => {
@@ -1579,7 +1588,12 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           -1
         );
         offsetElementBy(".lb-badge > span", -1);
-        offsetElementBy(".compact-artifact-crit-value > span", -2);
+        // offsetElementBy(".compact-artifact-crit-value > span", -2);
+        // offsetElementBy(".compact-artifact-crit-value > .smol-percentage", -2);
+        offsetElementBy(
+          ".compact-artifact-crit-value > span:not(.metric-formula)",
+          -1
+        );
         offsetElementBy(".table-stat-row span", -1);
         offsetElementBy(".table-stat-row > div:not(.flex)", -1);
 

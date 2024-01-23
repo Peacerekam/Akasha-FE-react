@@ -22,6 +22,7 @@
     }
   }
 
+  .compact-artifact-metric-container,
   .compact-artifact-icon-container {
     width: 100px;
     height: 135px;
@@ -32,11 +33,19 @@
     position: relative;
     // mask-image: linear-gradient(to right, black 45%, transparent 100%);
     overflow: hidden;
+
+    &.compact-artifact-metric-container {
+      position: absolute;
+      z-index: 10;
+      margin: 0 !important;
+      height: calc(100% - 25px) !important;
+    }
     .compact-artifact-icon {
       width: 180px;
       height: 180px;
     }
     .compact-artifact-crit-value {
+      z-index: 2;
       background-color: #000000be;
       border-radius: 6px;
       padding: 3px 5px;
@@ -46,6 +55,8 @@
       font-size: 12px;
       line-height: 14px;
       height: 14px;
+      display: flex;
+      gap: 2px;
     }
     .compact-artifact-main-stat {
       position: absolute;
@@ -87,6 +98,55 @@
     }
     .substat {
       gap: 3px;
+      // &.rv-not-relevant {
+      //   .roll-dots {
+      //     // display: none;
+      //   }
+      // }
+      // &.rv-relevant {
+      //   > span:last-child {
+      //     &::after {
+      //       font-size: 12px;
+      //       content: "*";
+      //       width: 0px;
+      //       display: inline-block;
+      //       position: relative;
+      //       top: -4px;
+      //       right: -1px;
+      //     }
+      //   }
+      // }
+      &.rv-relevant {
+        .stat-highlight {
+          position: absolute;
+          right: 0px;
+          z-index: 1;
+          opacity: 1;
+          width: 0;
+          height: 0;
+          margin-top: 6px;
+          $triangle-size: 5px;
+          border-top: $triangle-size solid transparent;
+          border-bottom: $triangle-size solid transparent;
+          border-right: $triangle-size solid;
+        }
+        // &::after {
+        //   content: "";
+        //   position: absolute;
+        //   right: 0px;
+        //   width: 50%;
+        //   height: 20px;
+        //   z-index: -1;
+        //   opacity: 1;
+        //   width: 0;
+        //   height: 0;
+        //   margin-top: 6px;
+        //   $triangle-size: 5px;
+        //   border-top: $triangle-size solid transparent;
+        //   border-bottom: $triangle-size solid transparent;
+        //   border-right: $triangle-size solid cyan;
+        // }
+      }
       .roll-dots {
         text-align: end;
         position: absolute;
@@ -201,4 +261,29 @@
   display: flex;
   gap: 15px;
   margin: 0 10px;
+}
+
+.metric-formula {
+  position: absolute;
+  top: 20px;
+  left: 0px;
+  font-size: 14px;
+  background-color: rgba(0, 0, 0, 0.85);
+  border: 1.2px inset rgba(white, 0.5);
+  border-radius: 6px;
+  min-width: 75px;
+  max-width: 85px;
+  min-height: 20px;
+  color: white;
+  padding: 3px 5px 6px;
+
+  img {
+    top: 2px;
+    position: relative;
+  }
+}
+
+.smol-percentage {
+  opacity: 0.8;
+  font-size: 11px;
 }

@@ -50,6 +50,7 @@ $hardcoded-scale: 1;
     }
   }
   .compact-artifact {
+    .compact-artifact-metric-container,
     .compact-artifact-icon-container {
       width: 100px * $hardcoded-scale;
       height: 135px * $hardcoded-scale;
@@ -435,6 +436,11 @@ $hardcoded-scale: 1;
       }
       &::before {
         display: none !important;
+      }
+      .substat.rv-relevant {
+        .stat-highlight.stat-highlight {
+          border-right-color: $simplified-color !important;
+        }
       }
     }
     .character-artifacts-rv {

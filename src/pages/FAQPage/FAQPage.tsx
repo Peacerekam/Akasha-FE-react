@@ -75,7 +75,7 @@ export const FAQPage: React.FC = () => {
                   />
 
                   <div className="desc-formula">
-                    2 * <StatIcon name="Crit RATE" />
+                    2 × <StatIcon name="Crit RATE" />
                     <FAQHighlighter
                       id={0}
                       searchText={searchText}

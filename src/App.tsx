@@ -24,6 +24,7 @@ import { AdProviderContextProvider } from "./context/AdProvider/AdProviderContex
 import { ContentWrapper } from "./components/ContentWrapper";
 import { HoverElementContextProvider } from "./context/HoverElement/HoverElementContext";
 import { LastProfilesContextProvider } from "./context/LastProfiles/LastProfilesContext";
+import { MetricContextProvider } from "./context/MetricProvider/MetricProvider";
 import { NotificationsContextProvider } from "./context/Notifications/NotificationsContext";
 import { PrivacyPolicyPage } from "./pages/PrivacyPolicy";
 import { SessionDataContextProvider } from "./context/SessionData/SessionDataContext";
@@ -143,21 +144,23 @@ const App = () => {
                   </div>
 
                   <ContentWrapper>
-                    <HoverElementContextProvider>
-                      <Routes>
-                        {appRoutes.map((route) => {
-                          const { Element, path } = route;
+                    <MetricContextProvider>
+                      <HoverElementContextProvider>
+                        <Routes>
+                          {appRoutes.map((route) => {
+                            const { Element, path } = route;
 
-                          return (
-                            <Route
-                              key={path}
-                              path={path}
-                              element={<Element {...route?.props} />}
-                            />
-                          );
-                        })}
-                      </Routes>
-                    </HoverElementContextProvider>
+                            return (
+                              <Route
+                                key={path}
+                                path={path}
+                                element={<Element {...route?.props} />}
+                              />
+                            );
+                          })}
+                        </Routes>
+                      </HoverElementContextProvider>
+                    </MetricContextProvider>
 
                     <div className="flex-special-container">
                       <AdsComponentManager
