@@ -229,11 +229,11 @@ export const getArtifactRvClassName = (
     return (accumulator += _rv);
   }, 0);
 
-  const isCritCirclet =
-    artifact?.equipType === "EQUIP_DRESS" &&
-    artifact?.mainStatKey.startsWith("Crit");
+  // const isCritCirclet =
+  //   artifact?.equipType === "EQUIP_DRESS" &&
+  //   artifact?.mainStatKey.startsWith("Crit");
 
-  if (isCritCirclet) _RV += 100;
+  // if (isCritCirclet) _RV += 100;
 
   if (_RV >= 900) return "wtf-artifact";
   if (_RV >= 750) return "unicorn-artifact";

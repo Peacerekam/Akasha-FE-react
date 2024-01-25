@@ -25,7 +25,12 @@ export const RollList: React.FC<RollListProps> = ({ artifacts, character }) => {
   const filter = customRvFilter[character] || getDefaultRvFilters(character);
 
   useEffect(() => {
+    if (!customRvFilter[character]) {
+      // set default filter for characters that don't have one
+      setCustomRvFilter(character, getDefaultRvFilters(character));
+    }
     return () => {
+      // reset rv filter back to defaults
       setCustomRvFilter(character, getDefaultRvFilters(character));
     };
   }, []);
