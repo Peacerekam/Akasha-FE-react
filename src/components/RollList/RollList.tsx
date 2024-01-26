@@ -10,7 +10,7 @@ import {
   isPercent,
 } from "../../utils/helpers";
 
-import { MetricContext } from "../../context/MetricProvider/MetricProvider";
+import { SettingsContext } from "../../context/MetricProvider/MetricProvider";
 import { StatIcon } from "../StatIcon";
 import { getDefaultRvFilters } from "./defaultFilters";
 
@@ -20,7 +20,7 @@ type RollListProps = {
 };
 
 export const RollList: React.FC<RollListProps> = ({ artifacts, character }) => {
-  const { customRvFilter, setCustomRvFilter } = useContext(MetricContext);
+  const { customRvFilter, setCustomRvFilter } = useContext(SettingsContext);
 
   const filter = customRvFilter[character] || getDefaultRvFilters(character);
 

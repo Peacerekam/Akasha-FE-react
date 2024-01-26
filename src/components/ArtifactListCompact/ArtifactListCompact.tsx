@@ -17,9 +17,9 @@ import {
 } from "../../utils/helpers";
 
 import { ARBadge } from "../ARBadge";
-import { MetricContext } from "../../context/MetricProvider/MetricProvider";
 import { RegionBadge } from "../RegionBadge";
 import { RollList } from "../RollList";
+import { SettingsContext } from "../../context/MetricProvider/MetricProvider";
 import { StatIcon } from "../StatIcon";
 import { TalentsDisplay } from "../TalentsDisplay";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
@@ -43,7 +43,7 @@ export const CompactArtifact: React.FC<CompactArtifactProps> = ({
   overrideMetric,
   canvasBgProps = null,
 }) => {
-  const { metric, customRvFilter } = useContext(MetricContext);
+  const { metric, customRvFilter } = useContext(SettingsContext);
 
   const _metric = overrideMetric || metric;
   const substatKeys = Object.keys(artifact.substats);
@@ -143,7 +143,7 @@ export const ArtifactMetricDisplay: React.FC<{
 }> = ({ row, artifact, overrideMetric }) => {
   const [displayFormula, setDisplayFormula] = useState<boolean>(false);
   const { metric, setMetric, getArtifactMetricValue, customRvFilter } =
-    useContext(MetricContext);
+    useContext(SettingsContext);
 
   const _metric = overrideMetric || metric;
 
@@ -323,7 +323,7 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
   artifacts,
 }) => {
   const { translate } = useContext(TranslationContext);
-  const { metric, customRvFilter } = useContext(MetricContext);
+  const { metric, customRvFilter } = useContext(SettingsContext);
 
   const reordered = useMemo(
     () => getArtifactsInOrder(artifacts, true),

@@ -1,0 +1,152 @@
+.settings-page-content-wrapper {
+  text-align: center;
+  // margin-bottom: 10px;
+  .settings-page-header {
+    padding: 10px;
+    text-align: left;
+    @media (max-width: 800px) {
+      text-align: center;
+    }
+    .settings-header {
+      font-size: 30px;
+      font-weight: 600;
+      margin-top: 0px;
+      margin-left: 10px;
+      @media (max-width: 800px) {
+        margin-left: 0px;
+      }
+    }
+    p {
+      margin-top: 5px;
+      margin-left: 10px;
+      @media (max-width: 800px) {
+        margin-left: 0px;
+      }
+    }
+  }
+  .settings-page-body {
+    padding: 10px;
+    padding-bottom: 50px;
+    .settings-group {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      &:not(:first-child) {
+        margin-top: 40px;
+        @media (max-width: 800px) {
+          margin-top: 60px;
+        }
+      }
+      > div:first-child {
+        margin-left: 10px;
+        width: 100%;
+        min-width: 200px;
+        flex: 1;
+        text-align: left;
+        @media (max-width: 800px) {
+          margin-left: 0px;
+          text-align: center;
+        }
+      }
+      > div:last-child {
+        min-width: 65%;
+        flex: 1;
+      }
+      .smaller-font {
+        margin-top: 5px;
+        font-size: 14px;
+      }
+    }
+    .highlights-mock-up {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      flex: 1;
+      > div {
+        max-width: 600px;
+      }
+    }
+    .rv-or-cv {
+      gap: 30px;
+      margin-top: 30px;
+      justify-content: center;
+      flex: 1;
+      .metric-name {
+        margin-bottom: 10px;
+        font-weight: 600;
+        font-size: 22px;
+        // font-family: "GenshinFont";
+        position: relative;
+        .default {
+          position: absolute;
+          font-size: 12px;
+          top: -10px;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+      }
+      > .opacity-5 {
+        &:hover {
+          opacity: 1;
+        }
+      }
+      .selected-metric {
+        position: absolute;
+
+        $size: 18px;
+        top: calc(($size / -2) - 2px);
+        left: calc(($size / -2) - 2px);
+        width: calc(100% + $size);
+        height: calc(100% + $size);
+        border: 2px dashed orange;
+        border-radius: 10px;
+      }
+    }
+    .pseudo-slider {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 22px;
+      @media (max-width: 800px) {
+        margin-left: 0px;
+        text-align: center;
+        margin-top: 30px;
+      }
+      > div {
+        padding: 10px;
+        position: relative;
+        &:hover {
+          opacity: 1;
+        }
+      }
+
+      .default {
+        position: absolute;
+        font-size: 12px;
+        top: -4px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .selected-decimals {
+        position: absolute;
+
+        $size: 35px;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: calc(100% + $size);
+        height: calc(100% + $size);
+        border: 2px dashed orange;
+        border-radius: 1000px;
+        width: $size;
+        height: $size;
+
+        + .default {
+          top: -12px;
+        }
+      }
+    }
+  }
+}

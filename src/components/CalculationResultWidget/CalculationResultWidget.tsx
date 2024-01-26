@@ -1,9 +1,10 @@
 import "./style.scss";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { abortSignalCatcher, toShortThousands } from "../../utils/helpers";
 
 import PerfectScrollbar from "react-perfect-scrollbar";
+import { SettingsContext } from "../../context/MetricProvider/MetricProvider";
 import { Spinner } from "../Spinner";
 // import { Timer } from "../Timer";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
@@ -12,15 +13,18 @@ import { useNavigate } from "react-router-dom";
 
 type CalculationResultWidgetProps = {
   uid?: string;
+  noLinks?: boolean;
 };
 
 export const CalculationResultWidget: React.FC<
   CalculationResultWidgetProps
-> = ({ uid }) => {
+> = ({ uid, noLinks = false }) => {
   const [isLoading, setIsLoading] = useState(false);
   // const [retryTimer, setRetryTimer] = useState<number | null>(null);
   const [data, setData] = useState<any[]>([]);
   const navigate = useNavigate();
+
+  const { getTopRanking } = useContext(SettingsContext);
 
   const fetchCalcData = async (
     uid: string,
@@ -191,7 +195,8 @@ export const CalculationResultWidget: React.FC<
               break;
           }
 
-          const _top = Math.min(100, Math.ceil((_ranking / outOf) * 100));
+          const _percentage = getTopRanking(_ranking, outOf);
+          const _top = ranking ? `top ${_percentage || "?"}%` : "";
 
           return (
             <div key={`${name}-${weapon.name}`} className={weaponMatchClass}>
@@ -199,7 +204,9 @@ export const CalculationResultWidget: React.FC<
                 title={`${weaponMatchString}\n${calc.name} - ${weapon.name} R${
                   weapon?.refinement || 1
                 }`}
-                className="highlight-tile"
+                className={`highlight-tile ${
+                  noLinks ? "pointer-events-none" : ""
+                }`}
                 onClick={(event) => {
                   event.preventDefault();
                   navigate(`/leaderboards/${id}/${variant?.name || ""}`);
@@ -227,7 +234,7 @@ export const CalculationResultWidget: React.FC<
                     // style={{ boxShadow: `0 0 0px 2px ${weaponColor}20` }}
                   />
                 </div>
-                <div>{ranking ? `top ${_top || "?"}%` : ""}</div>
+                <div>{_top}</div>
                 <span>
                   {ranking ?? "---"}
                   <span className="opacity-5">
@@ -238,7 +245,7 @@ export const CalculationResultWidget: React.FC<
             </div>
           );
         }),
-    [resultsArray]
+    [resultsArray, getTopRanking]
   );
 
   if (isLoading) {

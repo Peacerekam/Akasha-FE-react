@@ -24,10 +24,11 @@ import { AdProviderContextProvider } from "./context/AdProvider/AdProviderContex
 import { ContentWrapper } from "./components/ContentWrapper";
 import { HoverElementContextProvider } from "./context/HoverElement/HoverElementContext";
 import { LastProfilesContextProvider } from "./context/LastProfiles/LastProfilesContext";
-import { MetricContextProvider } from "./context/MetricProvider/MetricProvider";
 import { NotificationsContextProvider } from "./context/Notifications/NotificationsContext";
 import { PrivacyPolicyPage } from "./pages/PrivacyPolicy";
 import { SessionDataContextProvider } from "./context/SessionData/SessionDataContext";
+import { SettingsContextProvider } from "./context/MetricProvider/MetricProvider";
+import { SettingsPage } from "./pages/SettingsPage";
 import { TitleContextProvider } from "./context/TitleProvider/TitleProviderContext";
 import { TranslationContextProvider } from "./context/TranslationProvider/TranslationProviderContext";
 import axios from "axios";
@@ -77,6 +78,7 @@ const appRoutes: {
   { path: "/leaderboards", Element: CategorySelectionPage },
   { path: "/leaderboards/:calculationId", Element: LeaderboardsPage },
   { path: "/leaderboards/:calculationId/:variant", Element: LeaderboardsPage },
+  { path: "/settings", Element: SettingsPage },
   { path: "/privacy-policy", Element: PrivacyPolicyPage },
   {
     path: "*",
@@ -144,7 +146,7 @@ const App = () => {
                   </div>
 
                   <ContentWrapper>
-                    <MetricContextProvider>
+                    <SettingsContextProvider>
                       <HoverElementContextProvider>
                         <Routes>
                           {appRoutes.map((route) => {
@@ -160,7 +162,7 @@ const App = () => {
                           })}
                         </Routes>
                       </HoverElementContextProvider>
-                    </MetricContextProvider>
+                    </SettingsContextProvider>
 
                     <div className="flex-special-container">
                       <AdsComponentManager

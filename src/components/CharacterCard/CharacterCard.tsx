@@ -34,17 +34,15 @@ import {
 import html2canvas, { Options } from "html2canvas";
 
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
-import {
-  CompactArtifact,
-} from "../ArtifactListCompact";
+import { CompactArtifact } from "../ArtifactListCompact";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FriendshipIcon from "../../assets/icons/Item_Companionship_EXP.png";
-import { MetricContext } from "../../context/MetricProvider/MetricProvider";
 import { PreviewModal } from "./PreviewModal";
 import { Radar } from "react-chartjs-2";
 import RarityStar from "../../assets/images/star.png";
 import ReactSelect from "react-select";
 import { RollList } from "../RollList";
+import { SettingsContext } from "../../context/MetricProvider/MetricProvider";
 import { Spinner } from "../Spinner";
 import { StatListCard } from "../StatListCard";
 import { TalentDisplay } from "./TalentDisplay";
@@ -52,6 +50,7 @@ import { TeammatesCompact } from "../TeammatesCompact";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import { reactSelectCustomFilterTheme } from "../../utils/reactSelectCustomFilterTheme";
+import { useCardSettings } from "../../hooks/useCardSettings";
 import { useLocation } from "react-router-dom";
 
 // import imglyRemoveBackground, { Config } from "@imgly/background-removal";
@@ -78,11 +77,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const [width, setWidth] = useState<number>(window.innerWidth);
   // const [bgRemDownload, setBgRemDownload] = useState<number>(-1);
   // const [bgRemLoading, setBgRemLoading] = useState<boolean>(false);
-  const [namecardBg, setNamecardBg] = useState<boolean>();
-  const [simplifyColors, setSimplifyColors] = useState<boolean>();
-  const [adaptiveBgColor, setAdaptiveBgColor] = useState<boolean>();
-  const [displayBuildName, setDisplayBuildName] = useState<boolean>();
-  const [privacyFlag, setPrivacyFlag] = useState<boolean>();
   const [toggleConfigure, setToggleConfigure] = useState(false);
   const [generating, setGenerating] = useState<
     "opening" | "downloading" | false
@@ -103,7 +97,20 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
   const { translate } = useContext(TranslationContext);
   const { contentWidth } = useContext(AdProviderContext);
-  const { metric, customRvFilter } = useContext(MetricContext);
+  const { metric, customRvFilter, getTopRanking } = useContext(SettingsContext);
+
+  const {
+    displayBuildName,
+    simplifyColors,
+    adaptiveBgColor,
+    namecardBg,
+    privacyFlag,
+    setDisplayBuildName,
+    setSimplifyColors,
+    setAdaptiveBgColor,
+    setNamecardBg,
+    setPrivacyFlag,
+  } = useCardSettings();
 
   const cardErrorCallback = async () => {
     if (!errorCallback) return;
@@ -147,55 +154,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     "--element-color-2": `${elementalColor || noElementColor}70`,
     // "--character-namecard-url": `url(${actualBgUrl})`,
   } as React.CSSProperties;
-
-  // load from local storage
-  useEffect(() => {
-    const savedObj = JSON.parse(localStorage.getItem("cardSettings") ?? "{}");
-
-    const setIfDifferent = (setFunc: any, key: string, value: any) => {
-      setFunc(savedObj[key] || value || false);
-    };
-
-    setIfDifferent(setDisplayBuildName, "displayBuildName", displayBuildName);
-    setIfDifferent(setSimplifyColors, "simplifyColors", simplifyColors);
-    setIfDifferent(setAdaptiveBgColor, "adaptiveBgColor", adaptiveBgColor);
-    setIfDifferent(setNamecardBg, "namecardBg", namecardBg);
-    setIfDifferent(setPrivacyFlag, "privacyFlag", privacyFlag);
-
-    console.log("\nLoading Character Card settings from Local Storage:");
-    console.table(savedObj);
-  }, [localStorage]);
-
-  // save to local storage
-  useEffect(() => {
-    const oldObj = JSON.parse(localStorage.getItem("cardSettings") ?? "{}");
-    let dirty = false;
-
-    const assignIfDiffAndNotUndefined = (key: string, value: any) => {
-      if (oldObj[key] !== value && value !== undefined) {
-        console.log(`${key}: ${oldObj[key]} -> ${value}`);
-        oldObj[key] = value;
-        dirty = true;
-      }
-    };
-
-    assignIfDiffAndNotUndefined("displayBuildName", displayBuildName);
-    assignIfDiffAndNotUndefined("simplifyColors", simplifyColors);
-    assignIfDiffAndNotUndefined("adaptiveBgColor", adaptiveBgColor);
-    assignIfDiffAndNotUndefined("namecardBg", namecardBg);
-    assignIfDiffAndNotUndefined("privacyFlag", privacyFlag);
-
-    if (!dirty) return;
-
-    const newObj = { ...oldObj };
-    localStorage.setItem("cardSettings", JSON.stringify(newObj));
-  }, [
-    displayBuildName,
-    simplifyColors,
-    adaptiveBgColor,
-    namecardBg,
-    privacyFlag,
-  ]);
 
   const handleToggleModal = (event: React.MouseEvent<HTMLElement>) => {
     setShowPreviewModal((prev) => !prev);
@@ -612,12 +570,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           } = calc;
 
           const leaveOnlyNumbersRegex = /\D+/g;
+
           const _ranking = +(ranking + "")?.replace(leaveOnlyNumbersRegex, "");
-          const _top = ranking
-            ? `TOP ${
-                Math.min(100, Math.ceil((_ranking / outOf) * 100)) || "?"
-              }%`
-            : "";
+          const _percentage = getTopRanking(_ranking, outOf);
+
+          const _top = ranking ? `TOP ${_percentage || "?"}%` : "";
 
           const topBadge = (
             <span className="lb-badge" style={{ marginRight: 5 }}>
@@ -670,7 +627,14 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         })}
       </div>
     );
-  }, [privacyFlag, chartsData, filteredLeaderboards, generating, translate]);
+  }, [
+    privacyFlag,
+    chartsData,
+    filteredLeaderboards,
+    generating,
+    translate,
+    getTopRanking,
+  ]);
 
   const reorderedArtifacts = useMemo(
     () => getArtifactsInOrder(artifacts, true),

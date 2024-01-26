@@ -1,4 +1,9 @@
-import React, { createContext, useCallback, useState } from "react";
+import React, {
+  SetStateAction,
+  createContext,
+  useCallback,
+  useState,
+} from "react";
 import {
   allRvFilters,
   getDefaultRvFilters,
@@ -6,28 +11,39 @@ import {
 
 import { getSummedArtifactRolls } from "../../utils/helpers";
 
-type Metric = "RV" | "CV";
+export type Metric = "RV" | "CV";
 
-type MetricProviderContextType = {
-  setCustomRvFilter: (characterName: string, filter: string[]) => void;
-  getArtifactMetricValue: (characterName: string, artifact: any) => number;
-  setMetric: (metric: Metric) => void;
+type SettingsProviderContextType = {
   metric: Metric;
+  topDecimals: number;
   customRvFilter: Record<string, string[]>;
+  setMetric: (metric: Metric) => void;
+  setTopDecimals: React.Dispatch<SetStateAction<number>>;
+  setCustomRvFilter: (characterName: string, filter: string[]) => void;
+  getArtifactMetricValue: (
+    characterName: string,
+    artifact: any,
+    overrideMetric?: "CV" | "RV"
+  ) => number;
+  getTopRanking: (ranking: number, outOf: number) => number;
 };
 
 const defaultValue = {
+  metric: "RV",
+  topDecimals: 0,
+  customRvFilter: {},
+  setMetric: () => {},
+  setTopDecimals: () => 0,
   setCustomRvFilter: () => {},
   getArtifactMetricValue: () => 0,
-  setMetric: () => {},
-  metric: "RV",
-  customRvFilter: {},
-} as MetricProviderContextType;
+  getTopRanking: () => 100,
+} as SettingsProviderContextType;
 
-const MetricContext = createContext(defaultValue);
+const SettingsContext = createContext(defaultValue);
 
-const MetricContextProvider: React.FC<{ children: any }> = ({ children }) => {
-  const [metric, setMetric] = useState<Metric>("RV");
+const SettingsContextProvider: React.FC<{ children: any }> = ({ children }) => {
+  const [metric, setMetric] = useState<Metric>("RV"); // localStorage instead?
+  const [topDecimals, setTopDecimals] = useState<number>(0); // localStorage instead?
 
   const [customRvFilter, _setCustomRvFilter] =
     useState<Record<string, string[]>>(allRvFilters);
@@ -43,8 +59,10 @@ const MetricContextProvider: React.FC<{ children: any }> = ({ children }) => {
   );
 
   const getArtifactMetricValue = useCallback(
-    (characterName: string, artifact: any) => {
-      if (metric === "CV") {
+    (characterName: string, artifact: any, overrideMetric?: "CV" | "RV") => {
+      const _metric = overrideMetric || metric;
+
+      if (_metric === "CV") {
         const _CV = +artifact.critValue.toFixed(1);
         return _CV;
       }
@@ -63,17 +81,35 @@ const MetricContextProvider: React.FC<{ children: any }> = ({ children }) => {
     [metric, customRvFilter]
   );
 
+  const getTopRanking = useCallback(
+    (ranking: number, outOf: number) => {
+      const _pow = Math.pow(10, topDecimals);
+      const _percentage =
+        topDecimals === 0
+          ? Math.min(100, Math.ceil((ranking / outOf) * 100))
+          : Math.ceil((ranking / outOf) * _pow * 100) / _pow;
+
+      return _percentage;
+    },
+    [topDecimals]
+  );
+
   const value = {
+    metric,
+    topDecimals,
+    customRvFilter,
+    setMetric,
+    setTopDecimals,
     setCustomRvFilter,
     getArtifactMetricValue,
-    setMetric,
-    metric,
-    customRvFilter,
+    getTopRanking,
   };
 
   return (
-    <MetricContext.Provider value={value}>{children}</MetricContext.Provider>
+    <SettingsContext.Provider value={value}>
+      {children}
+    </SettingsContext.Provider>
   );
 };
 
-export { MetricContext, MetricContextProvider };
+export { SettingsContext, SettingsContextProvider };
