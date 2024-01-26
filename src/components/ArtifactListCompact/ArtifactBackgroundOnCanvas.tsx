@@ -1,12 +1,14 @@
 import { useEffect, useRef } from "react";
 
-export const ArtifactBackgroundOnCanvas: React.FC<{
+export type ArtifactBgOnCanvasProps = {
   backgroundImage: string;
   adaptiveBgColor?: boolean;
   namecardBg?: boolean;
   hardcodedScale?: number;
   adaptiveColors?: [string[], string[]];
-}> = ({
+};
+
+export const ArtifactBackgroundOnCanvas: React.FC<ArtifactBgOnCanvasProps> = ({
   backgroundImage,
   adaptiveBgColor,
   namecardBg,

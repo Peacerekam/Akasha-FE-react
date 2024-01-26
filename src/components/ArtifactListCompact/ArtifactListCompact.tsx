@@ -1,5 +1,9 @@
 import "./style.scss";
 
+import {
+  ArtifactBackgroundOnCanvas,
+  ArtifactBgOnCanvasProps,
+} from "./ArtifactBackgroundOnCanvas";
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import {
   getArtifactCvClassName,
@@ -26,16 +30,129 @@ type ArtifactListCompactProps = {
   artifacts: any[];
 };
 
+type CompactArtifactProps = {
+  artifact: any;
+  row: any;
+  canvasBgProps?: ArtifactBgOnCanvasProps;
+  overrideMetric?: "RV" | "CV";
+};
+
+export const CompactArtifact: React.FC<CompactArtifactProps> = ({
+  artifact,
+  row,
+  overrideMetric,
+  canvasBgProps = null,
+}) => {
+  const { metric, customRvFilter } = useContext(MetricContext);
+
+  const _metric = overrideMetric || metric;
+  const substatKeys = Object.keys(artifact.substats);
+  const className =
+    _metric === "CV"
+      ? getArtifactCvClassName(artifact)
+      : getArtifactRvClassName(row.name, artifact, customRvFilter[row.name]);
+
+  const summedArtifactRolls = getSummedArtifactRolls(artifact);
+
+  const mainStatValue = isPercent(artifact.mainStatKey)
+    ? Math.round(artifact.mainStatValue * 10) / 10
+    : Math.round(artifact.mainStatValue);
+
+  return (
+    <div
+      key={artifact._id}
+      className={`flex compact-artifact ${className} metric-${_metric}`}
+    >
+      {!!canvasBgProps && <ArtifactBackgroundOnCanvas {...canvasBgProps} />}
+      {artifact.icon !== null ? (
+        <div className="compact-artifact-icon-container">
+          <ArtifactOnCanvas icon={artifact.icon} />
+          <span className="compact-artifact-main-stat">
+            <StatIcon name={artifact.mainStatKey} />
+            {mainStatValue}
+            {isPercent(artifact.mainStatKey) ? "%" : ""}
+          </span>
+        </div>
+      ) : (
+        <div className="no-artifact">×</div>
+      )}
+      {artifact.icon !== null && (
+        <ArtifactMetricDisplay
+          row={row}
+          artifact={artifact}
+          overrideMetric={overrideMetric}
+        />
+      )}
+      <div className="compact-artifact-subs">
+        {substatKeys.map((key: any) => {
+          if (!key) return <></>;
+
+          const substatValue = getInGameSubstatValue(
+            artifact.substats[key],
+            key
+          );
+          const isCV = key.includes("Crit");
+
+          const normSubName = normalizeText(key.replace("substats", ""));
+
+          const isFactored =
+            _metric === "CV" ? isCV : !!customRvFilter[row.name]?.includes(key);
+
+          const classNames = [
+            "substat flex nowrap gap-5",
+            normalizeText(normSubName),
+            isCV ? "critvalue" : "",
+            isFactored ? "rv-relevant" : "rv-not-relevant",
+          ]
+            .join(" ")
+            .trim();
+
+          const opacity = getSubstatPercentageEfficiency(
+            normSubName,
+            artifact.substats[key]
+          );
+
+          const rollDots = "•".repeat(summedArtifactRolls[key].count);
+
+          return (
+            <div key={normalizeText(key)} className={classNames}>
+              <span className="roll-dots" style={{ opacity: opacity }}>
+                {rollDots}
+              </span>
+              <span style={{ opacity: opacity }}>
+                <StatIcon name={key} />
+              </span>
+              <span style={{ opacity: opacity }}>
+                {substatValue}
+                {isPercent(key) ? "%" : ""}
+              </span>
+              {isFactored ? <span className="stat-highlight" /> : ""}
+            </div>
+          );
+        })}
+      </div>
+      {/* <Artifact key={art._id} artifact={art} width={200} /> */}
+    </div>
+  );
+};
+
 export const ArtifactMetricDisplay: React.FC<{
   row: any;
   artifact: any;
-}> = ({ row, artifact }) => {
+  overrideMetric?: "RV" | "CV";
+}> = ({ row, artifact, overrideMetric }) => {
   const [displayFormula, setDisplayFormula] = useState<boolean>(false);
   const { metric, setMetric, getArtifactMetricValue, customRvFilter } =
     useContext(MetricContext);
 
+  const _metric = overrideMetric || metric;
+
   const substatKeys = Object.keys(artifact.substats);
-  const metricValue = getArtifactMetricValue(row.name, artifact);
+  const metricValue = getArtifactMetricValue(
+    row.name,
+    artifact,
+    overrideMetric
+  );
 
   const summedArtifactRolls = getSummedArtifactRolls(artifact);
   const characterRvStats =
@@ -47,7 +164,7 @@ export const ArtifactMetricDisplay: React.FC<{
 
   const metricMathDisplay = (
     <span className="metric-formula">
-      {metric === "RV" ? (
+      {_metric === "RV" ? (
         substatKeys
           .filter((substatName) => characterRvStats.includes(substatName))
           .map((substatName, index) => {
@@ -94,14 +211,18 @@ export const ArtifactMetricDisplay: React.FC<{
       onMouseLeave={() => setDisplayFormula(false)}
     >
       <span
-        className="compact-artifact-crit-value pointer"
-        onClick={() => setMetric(metric === "CV" ? "RV" : "CV")}
+        className={`compact-artifact-crit-value ${
+          overrideMetric ? "" : "pointer"
+        }`}
+        onClick={() =>
+          !overrideMetric && setMetric(_metric === "CV" ? "RV" : "CV")
+        }
         title="Click to toggle between CV and RV"
       >
         {displayFormula ? metricMathDisplay : ""}
         <span>
           {metricValue}{" "}
-          {metric === "CV" ? (
+          {_metric === "CV" ? (
             "cv"
           ) : (
             <>
@@ -214,100 +335,7 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
       <>
         <div className="artifacts-row">
           {reordered.map((artifact: any) => {
-            const substatKeys = Object.keys(artifact.substats);
-            const className =
-              metric === "CV"
-                ? getArtifactCvClassName(artifact)
-                : getArtifactRvClassName(
-                    row.name,
-                    artifact,
-                    customRvFilter[row.name]
-                  );
-
-            const summedArtifactRolls = getSummedArtifactRolls(artifact);
-
-            const mainStatValue = isPercent(artifact.mainStatKey)
-              ? Math.round(artifact.mainStatValue * 10) / 10
-              : Math.round(artifact.mainStatValue);
-
-            return (
-              <div
-                key={artifact._id}
-                className={`flex compact-artifact ${className} metric-${metric}`}
-              >
-                {artifact.icon !== null ? (
-                  <div className="compact-artifact-icon-container">
-                    <ArtifactOnCanvas icon={artifact.icon} />
-                    <span className="compact-artifact-main-stat">
-                      <StatIcon name={artifact.mainStatKey} />
-                      {mainStatValue}
-                      {isPercent(artifact.mainStatKey) ? "%" : ""}
-                    </span>
-                  </div>
-                ) : (
-                  <div className="no-artifact">×</div>
-                )}
-                {artifact.icon !== null && (
-                  <ArtifactMetricDisplay row={row} artifact={artifact} />
-                )}
-                <div className="compact-artifact-subs">
-                  {substatKeys.map((key: any) => {
-                    if (!key) return <></>;
-
-                    const substatValue = getInGameSubstatValue(
-                      artifact.substats[key],
-                      key
-                    );
-                    const isCV = key.includes("Crit");
-
-                    const normSubName = normalizeText(
-                      key.replace("substats", "")
-                    );
-
-                    const isFactored =
-                      metric === "CV"
-                        ? isCV
-                        : !!customRvFilter[row.name]?.includes(key);
-
-                    const classNames = [
-                      "substat flex nowrap gap-5",
-                      normalizeText(normSubName),
-                      isCV ? "critvalue" : "",
-                      isFactored ? "rv-relevant" : "rv-not-relevant",
-                    ]
-                      .join(" ")
-                      .trim();
-
-                    const opacity = getSubstatPercentageEfficiency(
-                      normSubName,
-                      artifact.substats[key]
-                    );
-
-                    const rollDots = "•".repeat(summedArtifactRolls[key].count);
-
-                    return (
-                      <div key={normalizeText(key)} className={classNames}>
-                        <span
-                          className="roll-dots"
-                          style={{ opacity: opacity }}
-                        >
-                          {rollDots}
-                        </span>
-                        <span style={{ opacity: opacity }}>
-                          <StatIcon name={key} />
-                        </span>
-                        <span style={{ opacity: opacity }}>
-                          {substatValue}
-                          {isPercent(key) ? "%" : ""}
-                        </span>
-                        {isFactored ? <span className="stat-highlight" /> : ""}
-                      </div>
-                    );
-                  })}
-                </div>
-                {/* <Artifact key={art._id} artifact={art} width={200} /> */}
-              </div>
-            );
+            return <CompactArtifact artifact={artifact} row={row} />;
           })}
         </div>
         <RollList artifacts={reordered} character={row.name} />

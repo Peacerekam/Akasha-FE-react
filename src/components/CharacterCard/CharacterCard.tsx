@@ -1,9 +1,5 @@
 import "./style.scss";
 
-import {
-  ArtifactMetricDisplay,
-  ArtifactOnCanvas,
-} from "../ArtifactListCompact";
 import { Chart as ChartJS, registerables } from "chart.js";
 import {
   ELEMENT_TO_COLOR,
@@ -25,15 +21,8 @@ import { applyModalBodyStyle, getRelativeCoords } from "../CustomTable/Filters";
 import {
   ascensionToLevel,
   delay,
-  getArtifactCvClassName,
-  getArtifactRvClassName,
   getArtifactsInOrder,
   getGenderFromIcon,
-  getInGameSubstatValue,
-  getSubstatPercentageEfficiency,
-  getSummedArtifactRolls,
-  isPercent,
-  normalizeText,
   toEnkaUrl,
 } from "../../utils/helpers";
 import {
@@ -45,7 +34,9 @@ import {
 import html2canvas, { Options } from "html2canvas";
 
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
-import { ArtifactBackgroundOnCanvas } from "./ArtifactBackgroundOnCanvas";
+import {
+  CompactArtifact,
+} from "../ArtifactListCompact";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FriendshipIcon from "../../assets/icons/Item_Companionship_EXP.png";
 import { MetricContext } from "../../context/MetricProvider/MetricProvider";
@@ -55,7 +46,6 @@ import RarityStar from "../../assets/images/star.png";
 import ReactSelect from "react-select";
 import { RollList } from "../RollList";
 import { Spinner } from "../Spinner";
-import { StatIcon } from "../StatIcon";
 import { StatListCard } from "../StatListCard";
 import { TalentDisplay } from "./TalentDisplay";
 import { TeammatesCompact } from "../TeammatesCompact";
@@ -691,117 +681,22 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     const namecardBgUrl = toEnkaUrl(chartsData?.characterMetadata?.namecard);
     const elementalBgUrl = `/elementalBackgrounds/${chartsData?.characterMetadata?.element}-bg.jpg`;
     const actualBgUrl = namecardBg ? namecardBgUrl : elementalBgUrl;
-    return (
-      <>
-        {reorderedArtifacts.map((artifact: any) => {
-          const substatKeys = Object.keys(artifact.substats);
-          const className =
-            metric === "CV"
-              ? getArtifactCvClassName(artifact)
-              : getArtifactRvClassName(
-                  row.name,
-                  artifact,
-                  customRvFilter[row.name]
-                );
-
-          const summedArtifactRolls = getSummedArtifactRolls(artifact);
-
-          const mainStatValue = isPercent(artifact.mainStatKey)
-            ? Math.round(artifact.mainStatValue * 10) / 10
-            : Math.round(artifact.mainStatValue);
-
-          return (
-            <div
-              key={`${artifact._id}${actualBgUrl}`}
-              className={`flex compact-artifact ${className}`}
-            >
-              {/* old: */}
-              {/* <div className="compact-artifact-bg" /> */}
-
-              <ArtifactBackgroundOnCanvas
-                backgroundImage={actualBgUrl}
-                adaptiveBgColor={adaptiveBgColor}
-                namecardBg={namecardBg}
-                adaptiveColors={adaptiveColors}
-                hardcodedScale={hardcodedScale}
-              />
-              {artifact.icon !== null ? (
-                <div className="compact-artifact-icon-container">
-                  <ArtifactOnCanvas
-                    icon={artifact.icon}
-                    hardcodedScale={hardcodedScale}
-                  />
-                  <span className="compact-artifact-main-stat">
-                    <StatIcon name={artifact.mainStatKey} />
-                    <span>
-                      {mainStatValue}
-                      {isPercent(artifact.mainStatKey) ? "%" : ""}
-                    </span>
-                  </span>
-                </div>
-              ) : (
-                <div className="no-artifact">×</div>
-              )}
-              {artifact.icon !== null && (
-                <ArtifactMetricDisplay row={row} artifact={artifact} />
-              )}
-              <div className="compact-artifact-subs">
-                {substatKeys.map((key: any) => {
-                  if (!key) return <></>;
-
-                  const substatValue = getInGameSubstatValue(
-                    artifact.substats[key],
-                    key
-                  );
-                  const isCV = key.includes("Crit");
-
-                  const normSubName = normalizeText(
-                    key.replace("substats", "")
-                  );
-
-                  const isFactored =
-                    metric === "CV"
-                      ? isCV
-                      : !!customRvFilter[row.name]?.includes(key);
-
-                  const classNames = [
-                    "substat flex nowrap gap-5",
-                    normalizeText(normSubName),
-                    isCV ? "critvalue" : "",
-                    isFactored ? "rv-relevant" : "rv-not-relevant",
-                  ]
-                    .join(" ")
-                    .trim();
-
-                  const opacity = getSubstatPercentageEfficiency(
-                    normSubName,
-                    artifact.substats[key]
-                  );
-
-                  const rollDots = "•".repeat(summedArtifactRolls[key].count);
-
-                  return (
-                    <div key={normalizeText(key)} className={classNames}>
-                      <span className="roll-dots" style={{ opacity: opacity }}>
-                        {rollDots}
-                      </span>
-                      <span style={{ opacity: opacity }}>
-                        <StatIcon name={key} />
-                      </span>
-                      <span style={{ opacity: opacity }}>
-                        {substatValue}
-                        {isPercent(key) ? "%" : ""}
-                      </span>
-                      {isFactored ? <span className="stat-highlight" /> : ""}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          );
-        })}
-      </>
-    );
+    return reorderedArtifacts.map((artifact: any) => {
+      return (
+        <CompactArtifact
+          key={artifact._id}
+          artifact={artifact}
+          row={row}
+          canvasBgProps={{
+            backgroundImage: actualBgUrl,
+            adaptiveBgColor,
+            namecardBg,
+            adaptiveColors,
+            hardcodedScale,
+          }}
+        />
+      );
+    });
   }, [
     JSON.stringify(reorderedArtifacts),
     chartsData,
