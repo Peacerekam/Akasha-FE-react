@@ -61,6 +61,8 @@ const TranslationContextProvider: React.FC<{ children: any }> = ({
   const [language, setLanguage] = useState<Language>("en");
   const [textMap, setTextMap] = useState<Partial<TextMap>>({});
 
+  const lsKeyTextMap = "textMap";
+  const lsKeyLanguage = "language";
   const NO_TRANSLATION_STRING = `NO_TRANSLATION_${TRANSLATION_VERSION}`;
 
   const hasNewKeys = (oldObj: Hashmap = {}, newObj: Hashmap = {}) => {
@@ -120,7 +122,7 @@ const TranslationContextProvider: React.FC<{ children: any }> = ({
   );
 
   useEffect(() => {
-    const textMapFromLS = JSON.parse(localStorage.getItem("textMap") ?? "{}");
+    const textMapFromLS = JSON.parse(localStorage.getItem(lsKeyTextMap) ?? "{}");
 
     let outdated = false;
     for (const language of Object.keys(textMapFromLS)) {
@@ -159,16 +161,16 @@ const TranslationContextProvider: React.FC<{ children: any }> = ({
       ? defaultLangauge
       : navigatorLanguage;
 
-    const languageFromLS = localStorage.getItem("language") ?? detectedLanguage;
+    const languageFromLS = localStorage.getItem(lsKeyLanguage) ?? detectedLanguage;
     setLanguage(languageFromLS as Language);
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("textMap", JSON.stringify(textMap));
+    localStorage.setItem(lsKeyTextMap, JSON.stringify(textMap));
   }, [textMap]);
 
   useEffect(() => {
-    localStorage.setItem("language", language);
+    localStorage.setItem(lsKeyLanguage, language);
   }, [language]);
 
   useEffect(() => {

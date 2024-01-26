@@ -10,7 +10,7 @@ import {
   isPercent,
 } from "../../utils/helpers";
 
-import { SettingsContext } from "../../context/MetricProvider/MetricProvider";
+import { SettingsContext } from "../../context/SettingsProvider/SettingsProvider";
 import { StatIcon } from "../StatIcon";
 import { getDefaultRvFilters } from "./defaultFilters";
 

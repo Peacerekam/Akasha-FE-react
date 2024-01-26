@@ -9,7 +9,7 @@ import {
 import {
   Metric,
   SettingsContext,
-} from "../../context/MetricProvider/MetricProvider";
+} from "../../context/SettingsProvider/SettingsProvider";
 import React, { useContext } from "react";
 import {
   dummyArtifactResponseData,
@@ -59,6 +59,7 @@ export const SettingsPage: React.FC = () => {
                     const isDefault = label === "RV";
                     return (
                       <div
+                        key={label}
                         className={isSelected ? "" : "opacity-5 pointer"}
                         onClick={() => setMetric(label)}
                       >

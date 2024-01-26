@@ -28,10 +28,11 @@ const LastProfilesContextProvider: React.FC<{ children: any }> = ({
   const [lastProfiles, setLastProfiles] = useState<NicknameUidPair[]>([]);
 
   const tabLimit = 10;
+  const lsKey = "navbarTabs";
 
   // read from local storage
   useEffect(() => {
-    const obj = JSON.parse(localStorage.getItem("navbarTabs") ?? "{}");
+    const obj = JSON.parse(localStorage.getItem(lsKey) ?? "{}");
 
     // reset localStorage if old object is present
     if (obj.nicknameMap) {
@@ -48,7 +49,7 @@ const LastProfilesContextProvider: React.FC<{ children: any }> = ({
   // save to local storage
   useEffect(() => {
     const obj = { lastProfiles };
-    localStorage.setItem("navbarTabs", JSON.stringify(obj));
+    localStorage.setItem(lsKey, JSON.stringify(obj));
   }, [lastProfiles]);
 
   const findUID = (elements: NicknameUidPair[], uid: string) => {

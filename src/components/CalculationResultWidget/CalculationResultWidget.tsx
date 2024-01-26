@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useMemo, useState } from "react";
 import { abortSignalCatcher, toShortThousands } from "../../utils/helpers";
 
 import PerfectScrollbar from "react-perfect-scrollbar";
-import { SettingsContext } from "../../context/MetricProvider/MetricProvider";
+import { SettingsContext } from "../../context/SettingsProvider/SettingsProvider";
 import { Spinner } from "../Spinner";
 // import { Timer } from "../Timer";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";

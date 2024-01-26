@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-type UseState<T> = React.Dispatch<React.SetStateAction<T | undefined>>;
+export type UseState<T> = React.Dispatch<React.SetStateAction<T | undefined>>;
 
 type CardSettings = {
   displayBuildName?: boolean;
@@ -23,15 +23,22 @@ export const useCardSettings = (): CardSettings => {
   const [displayBuildName, setDisplayBuildName] = useState<boolean>();
   const [privacyFlag, setPrivacyFlag] = useState<boolean>();
 
+  const lsKey = "cardSettings";
+
   // load from local storage
   useEffect(() => {
-    const savedObj = JSON.parse(localStorage.getItem("cardSettings") ?? "{}");
+    const savedObj = JSON.parse(localStorage.getItem(lsKey) ?? "{}");
 
-    const setIfDifferent = (setFunc: any, key: string, value: any) => {
-      setFunc(savedObj[key] || value || false);
+    const setIfDifferent = (
+      setFunc: any,
+      key: string,
+      value: any,
+      defaultValue: any = false
+    ) => {
+      setFunc(savedObj[key] || value || defaultValue);
     };
 
-    setIfDifferent(setDisplayBuildName, "displayBuildName", displayBuildName);
+    setIfDifferent(setDisplayBuildName, "displayBuildName", displayBuildName, true);
     setIfDifferent(setSimplifyColors, "simplifyColors", simplifyColors);
     setIfDifferent(setAdaptiveBgColor, "adaptiveBgColor", adaptiveBgColor);
     setIfDifferent(setNamecardBg, "namecardBg", namecardBg);
@@ -43,7 +50,7 @@ export const useCardSettings = (): CardSettings => {
 
   // save to local storage
   useEffect(() => {
-    const oldObj = JSON.parse(localStorage.getItem("cardSettings") ?? "{}");
+    const oldObj = JSON.parse(localStorage.getItem(lsKey) ?? "{}");
     let dirty = false;
 
     const assignIfDiffAndNotUndefined = (key: string, value: any) => {
@@ -63,7 +70,7 @@ export const useCardSettings = (): CardSettings => {
     if (!dirty) return;
 
     const newObj = { ...oldObj };
-    localStorage.setItem("cardSettings", JSON.stringify(newObj));
+    localStorage.setItem(lsKey, JSON.stringify(newObj));
   }, [
     displayBuildName,
     simplifyColors,

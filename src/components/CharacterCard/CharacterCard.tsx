@@ -42,7 +42,7 @@ import { Radar } from "react-chartjs-2";
 import RarityStar from "../../assets/images/star.png";
 import ReactSelect from "react-select";
 import { RollList } from "../RollList";
-import { SettingsContext } from "../../context/MetricProvider/MetricProvider";
+import { SettingsContext } from "../../context/SettingsProvider/SettingsProvider";
 import { Spinner } from "../Spinner";
 import { StatListCard } from "../StatListCard";
 import { TalentDisplay } from "./TalentDisplay";

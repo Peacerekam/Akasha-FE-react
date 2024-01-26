@@ -24,9 +24,11 @@ export const HelpBox: React.FC<HelpBoxProps> = ({ page }) => {
   // const [isClosed, setIsClosed] = useState(true);
   const [isClosed, setIsClosed] = useState(false);
 
+  const lsKey = "helpBox";
+
   // read from local storage
   useEffect(() => {
-    // const obj = JSON.parse(localStorage.getItem("helpBox") ?? "{}");
+    // const obj = JSON.parse(localStorage.getItem(lsKey) ?? "{}");
     // setIsClosed(!!obj[page]);
 
     setIsClosed(false)
@@ -34,9 +36,9 @@ export const HelpBox: React.FC<HelpBoxProps> = ({ page }) => {
 
   // save to local storage
   useEffect(() => {
-    const oldObj = JSON.parse(localStorage.getItem("helpBox") ?? "{}");
+    const oldObj = JSON.parse(localStorage.getItem(lsKey) ?? "{}");
     const newObj = { ...oldObj, [page]: isClosed };
-    localStorage.setItem("helpBox", JSON.stringify(newObj));
+    localStorage.setItem(lsKey, JSON.stringify(newObj));
   }, [isClosed]);
 
   const handleToggleHelpBox = () => setIsClosed((prev) => !prev);

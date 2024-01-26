@@ -27,7 +27,7 @@ import { LastProfilesContextProvider } from "./context/LastProfiles/LastProfiles
 import { NotificationsContextProvider } from "./context/Notifications/NotificationsContext";
 import { PrivacyPolicyPage } from "./pages/PrivacyPolicy";
 import { SessionDataContextProvider } from "./context/SessionData/SessionDataContext";
-import { SettingsContextProvider } from "./context/MetricProvider/MetricProvider";
+import { SettingsContextProvider } from "./context/SettingsProvider/SettingsProvider";
 import { SettingsPage } from "./pages/SettingsPage";
 import { TitleContextProvider } from "./context/TitleProvider/TitleProviderContext";
 import { TranslationContextProvider } from "./context/TranslationProvider/TranslationProviderContext";

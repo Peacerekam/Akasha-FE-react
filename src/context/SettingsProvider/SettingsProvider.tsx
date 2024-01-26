@@ -1,24 +1,20 @@
-import React, {
-  SetStateAction,
-  createContext,
-  useCallback,
-  useState,
-} from "react";
+import React, { createContext, useCallback, useEffect, useState } from "react";
 import {
   allRvFilters,
   getDefaultRvFilters,
 } from "../../components/RollList/defaultFilters";
 
+import { UseState } from "../../hooks/useCardSettings";
 import { getSummedArtifactRolls } from "../../utils/helpers";
 
 export type Metric = "RV" | "CV";
 
 type SettingsProviderContextType = {
-  metric: Metric;
-  topDecimals: number;
+  metric?: Metric;
+  topDecimals?: number;
   customRvFilter: Record<string, string[]>;
   setMetric: (metric: Metric) => void;
-  setTopDecimals: React.Dispatch<SetStateAction<number>>;
+  setTopDecimals: UseState<number>;
   setCustomRvFilter: (characterName: string, filter: string[]) => void;
   getArtifactMetricValue: (
     characterName: string,
@@ -42,11 +38,55 @@ const defaultValue = {
 const SettingsContext = createContext(defaultValue);
 
 const SettingsContextProvider: React.FC<{ children: any }> = ({ children }) => {
-  const [metric, setMetric] = useState<Metric>("RV"); // localStorage instead?
-  const [topDecimals, setTopDecimals] = useState<number>(0); // localStorage instead?
+  const [metric, setMetric] = useState<Metric>(); // localStorage instead?
+  const [topDecimals, setTopDecimals] = useState<number>(); // localStorage instead?
 
   const [customRvFilter, _setCustomRvFilter] =
     useState<Record<string, string[]>>(allRvFilters);
+
+  const lsKey = "generalSettings";
+
+  // load from local storage
+  useEffect(() => {
+    const savedObj = JSON.parse(localStorage.getItem(lsKey) ?? "{}");
+
+    const setIfDifferent = (
+      setFunc: any,
+      key: string,
+      value: any,
+      defaultValue: any = false
+    ) => {
+      setFunc(savedObj[key] || value || defaultValue);
+    };
+
+    setIfDifferent(setMetric, "metric", metric, "RV");
+    setIfDifferent(setTopDecimals, "topDecimals", topDecimals, 0);
+
+    console.log("\nGeneral settings from Local Storage:");
+    console.table(savedObj);
+  }, [localStorage]);
+
+  // save to local storage
+  useEffect(() => {
+    const oldObj = JSON.parse(localStorage.getItem(lsKey) ?? "{}");
+    let dirty = false;
+
+    const assignIfDiffAndNotUndefined = (key: string, value: any) => {
+      if (oldObj[key] !== value && value !== undefined) {
+        console.log(`${key}: ${oldObj[key]} -> ${value}`);
+        oldObj[key] = value;
+        dirty = true;
+      }
+    };
+
+    assignIfDiffAndNotUndefined("metric", metric);
+    assignIfDiffAndNotUndefined("topDecimals", topDecimals);
+
+    if (!dirty) return;
+
+    const newObj = { ...oldObj };
+    localStorage.setItem(lsKey, JSON.stringify(newObj));
+  }, [metric, topDecimals]);
 
   const setCustomRvFilter = useCallback(
     (characterName: string, filter: string[]) => {
@@ -83,7 +123,7 @@ const SettingsContextProvider: React.FC<{ children: any }> = ({ children }) => {
 
   const getTopRanking = useCallback(
     (ranking: number, outOf: number) => {
-      const _pow = Math.pow(10, topDecimals);
+      const _pow = Math.pow(10, topDecimals || 0);
       const _percentage =
         topDecimals === 0
           ? Math.min(100, Math.ceil((ranking / outOf) * 100))
