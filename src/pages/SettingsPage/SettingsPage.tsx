@@ -49,8 +49,8 @@ export const SettingsPage: React.FC = () => {
                   <div>Artifact rating metric: {metric}</div>
                   <div className="opacity-5 smaller-font">
                     This can also be toggled by clicking on RV/CV value in the
-                    top left corner of artifact display. Neither are perfect,
-                    but using RV makes you cooler.
+                    top left corner of artifact display. Neither are perfect but
+                    using RV makes you cooler.
                   </div>
                 </div>
                 <div className="flex rv-or-cv">

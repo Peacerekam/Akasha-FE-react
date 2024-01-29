@@ -132,7 +132,9 @@
     padding: 0 2px;
     box-sizing: border-box;
     background-color: rgba(black, 0.15);
-
+    > div {
+      white-space: nowrap;
+    }
     &:hover {
       background-color: rgba(black, 0.35);
     }
@@ -141,7 +143,7 @@
       border-radius: 50px;
       font-weight: 800;
       white-space: nowrap;
-      // font-family: "GenshinFont"; 
+      // font-family: "GenshinFont";
 
       &.stacked {
         width: 100%;
