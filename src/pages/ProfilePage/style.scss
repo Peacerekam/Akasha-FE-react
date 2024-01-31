@@ -379,7 +379,7 @@
     justify-content: center;
     align-items: center;
     // background-color: rgba(#a8781f, 0.2);
-    background-color: #3C3624;
+    background-color: #3c3624;
     border: 2px dashed rgb(255, 217, 0);
     color: rgba(255, 217, 0, 0.9);
     padding: 15px 0px;
@@ -401,6 +401,15 @@
       font-size: 12px;
       opacity: 0.7;
       max-width: 400px;
+    }
+  }
+  .enka-status-link {
+    margin-top: 15px !important;
+    margin-bottom: 5px;
+    font-style: italic;
+    font-size: 12px;
+    a {
+      color: red;
     }
   }
 }

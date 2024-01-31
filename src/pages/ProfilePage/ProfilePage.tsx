@@ -66,6 +66,16 @@ import axios from "axios";
 import { getSessionIdFromCookie } from "../../utils/helpers";
 import { useParams } from "react-router-dom";
 
+type TitleAndDescription = {
+  title: string;
+  description: string;
+};
+
+type ResponseData = {
+  account: any;
+  error?: TitleAndDescription;
+};
+
 export const ProfilePage: React.FC = () => {
   const [showArtifactSettingsModal, setShowArtifactSettingsModal] =
     useState(false);
@@ -76,13 +86,10 @@ export const ProfilePage: React.FC = () => {
   const [fetchCount, setFetchCount] = useState(0);
   const [bindTime, setBindTime] = useState<number>();
   const [refreshTime, setRefreshTime] = useState<number>();
-  const [responseData, setResponseData] = useState<{
-    account: any;
-    error?: {
-      title: string;
-      description: string;
-    };
-  }>({ account: null });
+  const [enkaError, setEnkaError] = useState<TitleAndDescription>();
+  const [responseData, setResponseData] = useState<ResponseData>({
+    account: null,
+  });
 
   const { uid } = useParams();
   const { hoverElement } = useContext(HoverElementContext);
@@ -105,6 +112,7 @@ export const ProfilePage: React.FC = () => {
     const _uid = encodeURIComponent(uid);
     const url = `/api/user/${_uid}`;
     setResponseData({ account: null });
+    setEnkaError(undefined);
 
     const opts = {
       signal: abortController?.signal,
@@ -537,6 +545,11 @@ export const ProfilePage: React.FC = () => {
     if (ttl === 0) {
       await fetchProfile(uid);
     }
+
+    if (data?.data?.error) {
+      setEnkaError(data.data.error);
+    }
+
     const getTime = new Date().getTime();
     const then = getTime + (ttl || ttlMax);
     setRefreshTime(then);
@@ -818,9 +831,34 @@ export const ProfilePage: React.FC = () => {
     .join(" ")
     .trim();
 
+  const displayEnkaErrorMessage = enkaError ? (
+    <div className="bind-message-wrapper flex">
+      <div className="bind-message">
+        <div>{enkaError.title}</div>
+        <div>
+          <span className="important-text">{enkaError.description}</span>
+        </div>
+        <div className="less-important enka-status-link">
+          Enka.network API status can be checked{" "}
+          <a
+            href={`http://status.enka.network/`}
+            rel="noreferrer"
+            target="_blank"
+          >
+            here
+          </a>
+          .
+        </div>
+      </div>
+    </div>
+  ) : (
+    ""
+  );
+
   return (
     <div style={cssVariables}>
       {hoverElement}
+      {displayEnkaErrorMessage}
       {displayBindMessage}
       <div className="flex">
         <div>

@@ -38,8 +38,8 @@ const defaultValue = {
 const SettingsContext = createContext(defaultValue);
 
 const SettingsContextProvider: React.FC<{ children: any }> = ({ children }) => {
-  const [metric, setMetric] = useState<Metric>(); // localStorage instead?
-  const [topDecimals, setTopDecimals] = useState<number>(); // localStorage instead?
+  const [metric, setMetric] = useState<Metric>();
+  const [topDecimals, setTopDecimals] = useState<number>();
 
   const [customRvFilter, _setCustomRvFilter] =
     useState<Record<string, string[]>>(allRvFilters);
@@ -103,33 +103,32 @@ const SettingsContextProvider: React.FC<{ children: any }> = ({ children }) => {
       const _metric = overrideMetric || metric;
 
       if (_metric === "CV") {
-        const _CV = +artifact.critValue.toFixed(1);
-        return _CV;
+        const critValue = +artifact.critValue.toFixed(1);
+        return critValue;
       }
 
       const summedArtifactRolls = getSummedArtifactRolls(artifact);
       const characterRvStats =
         customRvFilter[characterName] || getDefaultRvFilters(characterName);
 
-      const _RV = characterRvStats.reduce((accumulator, key) => {
+      const rollValue = characterRvStats.reduce((accumulator, key) => {
         const _rv = summedArtifactRolls[key]?.rv || 0;
         return (accumulator += _rv);
       }, 0);
 
-      return _RV;
+      return rollValue;
     },
     [metric, customRvFilter]
   );
 
   const getTopRanking = useCallback(
     (ranking: number, outOf: number) => {
-      const _pow = Math.pow(10, topDecimals || 0);
-      const _percentage =
-        topDecimals === 0
-          ? Math.min(100, Math.ceil((ranking / outOf) * 100))
-          : Math.ceil((ranking / outOf) * _pow * 100) / _pow;
+      if (topDecimals === 0) {
+        return Math.min(100, Math.ceil((ranking / outOf) * 100));
+      }
 
-      return _percentage;
+      const _pow = Math.pow(10, topDecimals || 0);
+      return Math.ceil((ranking / outOf) * _pow * 100) / _pow;
     },
     [topDecimals]
   );
