@@ -17,6 +17,7 @@ const anemoRvList = {
   Faruzan: [CRate, CDMG, ATK_, ER],
   Wanderer: [CRate, CDMG, ATK_, ER],
   "Kaedehara Kazuha": [CRate, CDMG, ATK_, EM, ER],
+  Xianyun: [CRate, CDMG, ATK_, ER],
 };
 
 const pyroRvList = {
@@ -32,6 +33,8 @@ const pyroRvList = {
   Xinyan: [CRate, CDMG, ATK_, ER],
   Thoma: [CRate, CDMG, ATK_, ER],
   Amber: [CRate, CDMG, ATK_, ER],
+  Chevreuse: [CRate, CDMG, ATK_, HP_, ER],
+  Gaming: [CRate, CDMG, ATK_, EM],
 };
 
 const hydroRvList = {
