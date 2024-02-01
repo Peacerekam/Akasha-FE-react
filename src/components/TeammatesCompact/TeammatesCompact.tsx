@@ -8,13 +8,11 @@ import DendroBg from "../../assets/images/teammates/dendro-team-bg.png";
 import { ELEMENT_TO_COLOR } from "../CharacterCard/cardHelpers";
 import ElectroBg from "../../assets/images/teammates/electro-team-bg.png";
 import FlexIcon from "../../assets/icons/world-quest.webp";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import GeoBg from "../../assets/images/teammates/geo-team-bg.png";
 import HydroBg from "../../assets/images/teammates/hydro-team-bg.png";
 import PyroBg from "../../assets/images/teammates/pyro-team-bg.png";
 import { StatIcon } from "../StatIcon";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { shadeColor } from "../../utils/helpers";
 
 export type Elements =
@@ -239,7 +237,7 @@ export const TeammatesCompact: React.FC<TeammatesCompactProps> = ({
         {!simplify && isNonFill && constellation ? (
           <div className="teammate-const-overlay">
             {constellation}
-            {constellation !== 6 ? <FontAwesomeIcon icon={faPlus} /> : null}
+            {/* {constellation !== 6 ? <FontAwesomeIcon icon={faPlus} /> : null} */}
           </div>
         ) : (
           ""

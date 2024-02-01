@@ -175,7 +175,7 @@ export const LeaderboardsPage: React.FC = () => {
           return (
             <div className="table-icon-text-pair">
               {row.type !== "current" ? (
-                row.type
+                <span style={{ maxWidth: 200 }}>{row.type}</span>
               ) : (
                 <span style={{ opacity: 0.25 }}>{translate(row.name)}</span>
               )}

@@ -122,7 +122,9 @@ const TranslationContextProvider: React.FC<{ children: any }> = ({
   );
 
   useEffect(() => {
-    const textMapFromLS = JSON.parse(localStorage.getItem(lsKeyTextMap) ?? "{}");
+    const textMapFromLS = JSON.parse(
+      localStorage.getItem(lsKeyTextMap) ?? "{}"
+    );
 
     let outdated = false;
     for (const language of Object.keys(textMapFromLS)) {
@@ -161,7 +163,8 @@ const TranslationContextProvider: React.FC<{ children: any }> = ({
       ? defaultLangauge
       : navigatorLanguage;
 
-    const languageFromLS = localStorage.getItem(lsKeyLanguage) ?? detectedLanguage;
+    const languageFromLS =
+      localStorage.getItem(lsKeyLanguage) ?? detectedLanguage;
     setLanguage(languageFromLS as Language);
   }, []);
 
@@ -204,11 +207,14 @@ const TranslationContextProvider: React.FC<{ children: any }> = ({
         }
 
         if (gender) {
+          // maybe one day i will properly fix it
+          /* eslint-disable no-useless-escape */
           return matchedTranslation
             .replace(/^#/, "")
             .replace(/\{([^#]+)#([^\}]+)\}/g, (_, $1, $2) =>
               $1 === gender ? $2 : ""
             );
+          /* eslint-enable no-useless-escape */
         }
         return matchedTranslation || "";
       }

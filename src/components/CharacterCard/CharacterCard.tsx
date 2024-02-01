@@ -1287,7 +1287,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                 )}
                 {constImg ? (
                   <img
-                    alt="constellation"
+                    alt=" "
                     key={`const-${i}`}
                     className={isActivated ? "activated" : ""}
                     src={toEnkaUrl(constImg)}
