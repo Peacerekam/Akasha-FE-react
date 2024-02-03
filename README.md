@@ -1,11 +1,7 @@
 # Akasha System (work in progress)
 React frontend for Akasha System: 
 
-https://akasha.cv/
-
-https://mimee.ovh/akasha
-
-https://peacerekam.github.io/akasha/
+https://akasha.cv/ / https://peacerekam.github.io/akasha/
 
 Profile Page / Character Card generation
 ![obraz](https://github.com/Peacerekam/akasha/assets/26521952/490f1c07-51b6-4936-98bd-c64c6606dab0)
