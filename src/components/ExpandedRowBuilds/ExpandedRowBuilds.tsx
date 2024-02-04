@@ -105,6 +105,7 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
               <CalculationList
                 row={row}
                 calculations={_calculations.calculations}
+                selectedCalculationId={selectedCalculationId}
               />
             </div>
           )}
@@ -116,6 +117,7 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
             <CalculationList
               row={row}
               calculations={_calculations.calculations}
+              selectedCalculationId={selectedCalculationId}
             />
           )}
         </>

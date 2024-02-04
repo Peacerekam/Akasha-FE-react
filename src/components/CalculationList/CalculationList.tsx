@@ -4,6 +4,7 @@ import { CalculationTeammate, TeammatesCompact } from "../TeammatesCompact";
 import React, { useContext, useMemo, useState } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { SettingsContext } from "../../context/SettingsProvider/SettingsProvider";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
@@ -31,12 +32,15 @@ type CalculationResponse = {
 type CalculationListProps = {
   row: any;
   calculations: any[];
+  selectedCalculationId?: string;
 };
 
 export const CalculationList: React.FC<CalculationListProps> = ({
   row,
   calculations,
+  selectedCalculationId,
 }) => {
+  const { getTopRanking } = useContext(SettingsContext);
   const { translate } = useContext(TranslationContext);
   const [show, setShow] = useState(false);
 
@@ -83,8 +87,14 @@ export const CalculationList: React.FC<CalculationListProps> = ({
           const _ranking = +(ranking + "")?.replace(leaveOnlyNumbersRegex, "");
           const isNiche = calc?.label === "niche";
 
+          const _percentage = getTopRanking(_ranking, outOf);
+          const _top = ranking ? `top ${_percentage || "?"}%` : "";
+
+          const fullCalcId = `${_id}${_variant}`
+          const trClassName = fullCalcId === selectedCalculationId ? "decorate-row patreon-cyan" : ""
+
           return (
-            <tr key={id}>
+            <tr key={id} className={trClassName}>
               <td>
                 {ranking ?? (
                   <span title="Rankings are cached. If you see this you need to refresh the page">
@@ -93,13 +103,7 @@ export const CalculationList: React.FC<CalculationListProps> = ({
                 )}
                 <span className="opacity-5">/{outOf || "???"}</span>
               </td>
-              <td>
-                {ranking
-                  ? `top ${
-                      Math.min(100, Math.ceil((_ranking / outOf) * 100)) || "?"
-                    }%`
-                  : ""}
-              </td>
+              <td>{_top}</td>
               <td>
                 <WeaponMiniDisplay
                   icon={weapon?.icon}
@@ -146,7 +150,7 @@ export const CalculationList: React.FC<CalculationListProps> = ({
             </tr>
           );
         }),
-    [JSON.stringify(calculationIds), translate]
+    [JSON.stringify(calculationIds), translate, getTopRanking, selectedCalculationId]
   );
 
   // const tilesList = useMemo(

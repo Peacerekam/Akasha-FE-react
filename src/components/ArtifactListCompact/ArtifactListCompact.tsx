@@ -243,7 +243,7 @@ export const ArtifactOnCanvas: React.FC<{
 
   const canvasWidth = 180 * hardcodedScale;
   const canvasHeight = 180 * hardcodedScale;
-  const canvasPixelDensity = 2;
+  const canvasPixelDensity = 2; // doesnt look like 2x is needed at all for artifacts
 
   useEffect(() => {
     if (!canvasRef.current) return;
