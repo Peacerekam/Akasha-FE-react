@@ -4,6 +4,7 @@ import React, { useContext, useEffect, useMemo, useState } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ReactSelect from "react-select";
+import { Spinner } from "../Spinner";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import axios from "axios";
@@ -64,8 +65,10 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
   };
 
   useEffect(() => {
-    getSubstatPriority();
-  }, []);
+    if (show && priorityData && priorityData.length === 0) {
+      getSubstatPriority();
+    }
+  }, [show]);
 
   useEffect(() => {
     if (selectedCalculationId) {
@@ -496,7 +499,9 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
     .join(" ")
     .trim();
 
-  return priorityData && priorityData.length > 0 ? (
+  const displaySpinner = priorityData && priorityData.length === 0;
+
+  return (
     <div className="expanded-row flex">
       <div className="substat-priority-wrapper">
         <div className="clickable" onClick={() => setShow((prev) => !prev)}>
@@ -509,34 +514,40 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
         </div>
         {show && (
           <div className="substat-priority-list">
-            <div className="calc-selection">{calcsSelection}</div>
-            <table className="substat-table" cellSpacing={0}>
-              <tbody>
-                <tr>{tableHeaders}</tr>
-                <tr>{resultsTableRows}</tr>
-                <tr>{dmgGainTableRows}</tr>
-                <tr>{relativeTableRows}</tr>
-                {relativeTo !== "Base" ? (
-                  <tr>{relativeRollTableRows}</tr>
-                ) : null}
-                <tr>{rankingsTableRows}</tr>
-              </tbody>
-            </table>
-            <div className="substat-priority-help">
-              * above table shows how an additional single max substat roll
-              affects your leaderboard result. How you interpret this data is up
-              to you ¯\_(ツ)_/¯.
-              <br />
-              One interesting use is to find if you hit diminishing returns on
-              any of your stats. For example, some Ayaka builds with extremely
-              high Crit DMG might start seeing a better performance from ATK%
-              rolls instead. Similarly if any of the % gains is much higher than
-              the rest, chances are your build is unbalanced and needs that
-              stat.
-            </div>
+            {displaySpinner ? (
+              <Spinner />
+            ) : (
+              <>
+                <div className="calc-selection">{calcsSelection}</div>
+                <table className="substat-table" cellSpacing={0}>
+                  <tbody>
+                    <tr>{tableHeaders}</tr>
+                    <tr>{resultsTableRows}</tr>
+                    <tr>{dmgGainTableRows}</tr>
+                    <tr>{relativeTableRows}</tr>
+                    {relativeTo !== "Base" ? (
+                      <tr>{relativeRollTableRows}</tr>
+                    ) : null}
+                    <tr>{rankingsTableRows}</tr>
+                  </tbody>
+                </table>
+                <div className="substat-priority-help">
+                  * above table shows how an additional single max substat roll
+                  affects your leaderboard result. How you interpret this data
+                  is up to you ¯\_(ツ)_/¯.
+                  <br />
+                  One interesting use is to find if you hit diminishing returns
+                  on any of your stats. For example, some Ayaka builds with
+                  extremely high Crit DMG might start seeing a better
+                  performance from ATK% rolls instead. Similarly if any of the %
+                  gains is much higher than the rest, chances are your build is
+                  unbalanced and needs that stat.
+                </div>
+              </>
+            )}
           </div>
         )}
       </div>
     </div>
-  ) : null;
+  );
 };
