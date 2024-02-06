@@ -8,7 +8,6 @@ import {
   DisplaySets,
   GenshinUserCard,
   LastUpdated,
-  NotificationBar,
   ReplaceRowDataOnHover,
   StatIcon,
   StylizedContentBlock,
@@ -929,7 +928,7 @@ export const ProfilePage: React.FC = () => {
       <div id="content-container">
         <div className="flex">
           <div className={contentBlockClassNames} key={fetchCount}>
-            <NotificationBar />
+            {/* <NotificationBar /> */}
             {/* <PatreonBorderInside
               classNames={[responseData.account?.patreon?.active ? "" : "hide"]}
               style={{

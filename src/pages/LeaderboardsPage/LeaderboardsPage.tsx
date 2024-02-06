@@ -5,7 +5,6 @@ import {
   CritRatio,
   CustomTable,
   DisplaySets,
-  NotificationBar,
   RegionBadge,
   StatIcon,
   StylizedContentBlock,
@@ -627,7 +626,7 @@ export const LeaderboardsPage: React.FC = () => {
           className="content-block w-100"
           style={{ display: "inline-block" }}
         >
-          <NotificationBar />
+          {/* <NotificationBar /> */}
           <StylizedContentBlock
             variant="gradient"
             revealCondition={!!calculationInfo}
@@ -773,7 +772,7 @@ export const LeaderboardsPage: React.FC = () => {
             overrideImage={blockBackgroundImage}
           />
           <div className="relative search-input-wrapper">
-            UID / nickname
+            Enter UID / nickname
             <div>
               <div className="search-input relative">
                 <input

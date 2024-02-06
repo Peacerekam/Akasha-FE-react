@@ -1,52 +1,10 @@
 import "./style.scss";
 
-// import axios from "axios";
 import React, { useContext } from "react";
 
 import { NotificationsContext } from "../../context/Notifications/NotificationsContext";
 
-// type AkashaNotification = {
-//   color: string;
-//   message: string;
-// };
-
 export const NotificationBar: React.FC = () => {
-  // const [notification, setNotification] = useState<AkashaNotification>();
-  // const [hide, setHide] = useState(false);
-
-  // const getNotification = async (abortController: AbortController) => {
-  //   const notificationURL = `/api/notifications/topbar`;
-  //   const opts = { signal: abortController?.signal };
-
-  //   const { data } = await axios.get(notificationURL, opts);
-  //   if (!data) return;
-
-  //   const lastMessage = localStorage.getItem("seenNotification");
-  //   const shouldHide = lastMessage === data.message;
-
-  //   setHide(shouldHide);
-  //   setNotification(data);
-
-  //   if (!shouldHide) return;
-  //   localStorage.setItem("seenNotification", data.message);
-  // };
-
-  // const handleClose = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-  //   event.preventDefault();
-  //   setHide(true);
-  //   if (notification?.message) {
-  //     localStorage.setItem("seenNotification", notification?.message);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   const abortController = new AbortController();
-  //   getNotification(abortController);
-  //   return () => {
-  //     abortController.abort();
-  //   };
-  // }, []);
-
   const {
     notification,
     hideNotification: hide,

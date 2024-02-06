@@ -34,20 +34,25 @@ const NotificationsContextProvider: React.FC<{ children: any }> = ({
   const lsKey = "seenNotification";
 
   const getNotification = async (abortController: AbortController) => {
-    const notificationURL = `/api/notifications/topbar`;
+    const notificationURL = `/api/v2/notifications/topbar`;
     const opts = { signal: abortController?.signal };
 
     const { data } = await axios.get(notificationURL, opts);
-    if (!data) return;
+    const relevantData = data?.data?.[0];
+
+    if (!relevantData?.content) return;
 
     const lastMessage = localStorage.getItem(lsKey);
-    const shouldHide = lastMessage === data.message;
+    const shouldHide = lastMessage === relevantData.content;
 
     setHideNotification(shouldHide);
-    setNotification(data);
+    setNotification({
+      message: relevantData.content,
+      color: relevantData.color,
+    });
 
     if (!shouldHide) return;
-    localStorage.setItem(lsKey, data.message);
+    localStorage.setItem(lsKey, relevantData.content);
   };
 
   const handleClose = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {

@@ -348,7 +348,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         sorted.length > 1 ? +sorted[sorted.length - 1].value : 0;
 
       const relevantDamageTypes = sorted.filter(
-        (a: any) => +a.value !== lowestDmg && +a.value > 0.14 && !isNaN(a.value)
+        (a: any) => +a.value !== lowestDmg && +a.value > 0.10 && !isNaN(a.value)
       );
 
       const relevantStatNames = Object.keys(chartData.avgStats).filter(

@@ -1,7 +1,6 @@
 import {
   CustomTable,
   HelpBox,
-  NotificationBar,
   StatIcon,
   StylizedContentBlock,
   TeammatesCompact,
@@ -289,7 +288,7 @@ export const CategorySelectionPage: React.FC = () => {
   return (
     <div className="flex">
       <div className="content-block w-100" id="content-container">
-        <NotificationBar />
+        {/* <NotificationBar /> */}
         <StylizedContentBlock
           // variant="gradient"
           overrideImage={DomainBackground}

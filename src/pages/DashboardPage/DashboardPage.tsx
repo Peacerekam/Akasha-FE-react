@@ -1,8 +1,11 @@
-import "./style.scss"
-
 import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { LookupUID } from "../AccountsPage/LookupUID";
+import { NewsDisplay } from "./NewsDisplay";
+import { NotificationBar } from "../../components";
 import React from "react";
 import { StylizedContentBlock } from "../../components/StylizedContentBlock";
+import { faHashtag } from "@fortawesome/free-solid-svg-icons";
 
 // import { useNavigate } from "react-router-dom";
 
@@ -13,9 +16,27 @@ export const DashboardPage: React.FC = () => {
   return (
     <div className="flex">
       <div className="content-block w-100" id="content-container">
+        <NotificationBar />
         <StylizedContentBlock overrideImage={DomainBackground} />
         <div className="relative">
-          <div style={{ display: "grid", gridTemplateColumns: "3fr 1fr" }}>
+          <LookupUID />
+
+          <div className="block-highlight news-section">
+            <div className="news-header">
+              <FontAwesomeIcon
+                icon={faHashtag}
+                size="1x"
+                title="#akasha-news"
+              />
+              akasha-news
+              <span className="ch-desc">
+                <span className="ch-spacer">|</span>fetched via Discord
+              </span>
+            </div>
+            <NewsDisplay />
+          </div>
+
+          {/* <div style={{ display: "grid", gridTemplateColumns: "3fr 1fr" }}>
             <div
               style={{
                 gridColumn: 1,
@@ -78,7 +99,7 @@ export const DashboardPage: React.FC = () => {
               <div>-</div>
               <div>-</div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

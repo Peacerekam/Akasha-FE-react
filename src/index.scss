@@ -95,12 +95,19 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+
+  > div {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
 }
 
 .search-input {
   // margin-top: 10px;
-  // margin-bottom: 5px;
-  width: 250px;
+  // margin-bottom: 5px;  
+  width: 100%;
+  max-width: 250px;
   input {
     background-color: rgba(0, 0, 0, 0.4);
     color: white;

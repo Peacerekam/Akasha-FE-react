@@ -90,8 +90,11 @@ export const CalculationList: React.FC<CalculationListProps> = ({
           const _percentage = getTopRanking(_ranking, outOf);
           const _top = ranking ? `top ${_percentage || "?"}%` : "";
 
-          const fullCalcId = `${_id}${_variant}`
-          const trClassName = fullCalcId === selectedCalculationId ? "decorate-row patreon-cyan" : ""
+          const fullCalcId = `${_id}${_variant}`;
+          const trClassName =
+            fullCalcId === selectedCalculationId
+              ? "decorate-row patreon-cyan"
+              : "";
 
           return (
             <tr key={id} className={trClassName}>
@@ -114,7 +117,7 @@ export const CalculationList: React.FC<CalculationListProps> = ({
               <td>
                 <TeammatesCompact teammates={teammates} simplify />
               </td>
-              <td>
+              <td className="white-space-nowrap">
                 {/* <div className="stacked">
                     <div className="stacked-top">{short}</div>
                     <div className="stacked-bottom">{variant?.displayName}</div>
@@ -123,6 +126,7 @@ export const CalculationList: React.FC<CalculationListProps> = ({
               </td>
               <td>
                 <a
+                  className="white-space-nowrap"
                   href={`/${leaderboardPath}`}
                   onClick={(event) => {
                     event.preventDefault();
@@ -150,7 +154,12 @@ export const CalculationList: React.FC<CalculationListProps> = ({
             </tr>
           );
         }),
-    [JSON.stringify(calculationIds), translate, getTopRanking, selectedCalculationId]
+    [
+      JSON.stringify(calculationIds),
+      translate,
+      getTopRanking,
+      selectedCalculationId,
+    ]
   );
 
   // const tilesList = useMemo(

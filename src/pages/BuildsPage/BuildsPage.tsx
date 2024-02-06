@@ -3,7 +3,6 @@ import {
   CustomTable,
   DisplaySets,
   HelpBox,
-  NotificationBar,
   RegionBadge,
   ReplaceRowDataOnHover,
   StatIcon,
@@ -311,7 +310,7 @@ export const BuildsPage: React.FC = () => {
     <div className="flex">
       {hoverElement}
       <div className="content-block w-100" id="content-container">
-        <NotificationBar />
+        {/* <NotificationBar /> */}
         <StylizedContentBlock overrideImage={DomainBackground} />
         <div className="flex-special-container">
           <AdsComponentManager adType="Video" />

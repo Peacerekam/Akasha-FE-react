@@ -3,33 +3,44 @@ import "./style.scss";
 import {
   ARBadge,
   CustomTable,
-  HelpBox,
   LastUpdated,
   RegionBadge,
-  StylizedContentBlock,
 } from "../../components";
 import {
   FETCH_ACCOUNTS_FILTERS_URL,
   FETCH_ACCOUNTS_URL,
+  uidsToQuery,
 } from "../../utils/helpers";
-import React, { useContext, useMemo } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 import Achievevement from "../../assets/icons/Achievement.webp";
-import { AdsComponentManager } from "../../components/AdsComponentManager";
 import { BuildsColumns } from "../BuildsPage";
-import DomainBackground from "../../assets/images/Grand_Narukami_Shrine_Concept_Art.webp";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
-import { LookupUID } from "./LookupUID";
+import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
 import { TableColumn } from "../../types/TableColumn";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import debounce from "lodash/debounce";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
 
-export const AccountsPage: React.FC = () => {
+export const LookupUID: React.FC = () => {
   const navigate = useNavigate();
-  const { hoverElement } = useContext(HoverElementContext);
+  const { lastProfiles } = useContext(LastProfilesContext);
   const { language } = useContext(TranslationContext);
+
+  const [inputUID, setInputUID] = useState<string>("");
+  const [lookupUID, setLookupUID] = useState<string>("");
+  const debouncedSetLookupUID = useCallback(debounce(setLookupUID, 350), []);
+
+  useEffect(() => {
+    debouncedSetLookupUID(inputUID);
+  }, [inputUID]);
 
   const ACCOUNTS_COLUMNS: TableColumn<BuildsColumns>[] = useMemo(
     () => [
@@ -229,41 +240,63 @@ export const AccountsPage: React.FC = () => {
       //   },
       // },
     ],
-    [language]
+    [lookupUID, language]
+  );
+
+  const uidsQuery = useMemo(
+    () => uidsToQuery(lastProfiles.map((a) => a.uid)),
+    [lastProfiles.length]
   );
 
   return (
-    <div className="flex">
-      {hoverElement}
-      <div className="content-block w-100" id="content-container">
-        {/* <NotificationBar /> */}
-        <StylizedContentBlock overrideImage={DomainBackground} />
-        <div className="flex-special-container">
-          <AdsComponentManager adType="Video" />
-          <HelpBox page="accounts" />
-        </div>
-        {/* <AdsComponentManager
-          adType="LeaderboardBTF"
-          dataAdSlot="6204085735"
-          hybrid="mobile"
-          hideOnDesktop
-        /> */}
+    <div className="lookup-uid-wrapper">
+      <div className="relative search-input-wrapper">
+        Enter UID / nickname
         <div>
-          <LookupUID />
-
-          {/* spacer */}
-          <div style={{ marginTop: "30px" }} />
-
-          <CustomTable
-            fetchURL={FETCH_ACCOUNTS_URL}
-            filtersURL={FETCH_ACCOUNTS_FILTERS_URL}
-            columns={ACCOUNTS_COLUMNS}
-            defaultSort="playerInfo.finishAchievementNum"
-            // expandableRows
-            projectParamsToPath
-            expandableRows
-          />
+          <div className="search-input relative">
+            <input
+              defaultValue={inputUID}
+              onChange={(event) => {
+                setInputUID(event.target.value);
+              }}
+            />
+            {!inputUID && (
+              <span className="fake-placeholder">type here...</span>
+            )}
+          </div>
         </div>
+      </div>
+      {lookupUID && (
+        <div className="lookup-not-found-prompt">
+          <div>
+            Don't see <i>"{lookupUID}"</i> on the list? Click{" "}
+            <Link to={`/profile/${lookupUID}`}>here</Link> to load the profile
+            into Akasha System.
+          </div>{" "}
+          Make sure your data is available on Enka.Network first:{" "}
+          <a href={`https://enka.network/u/${lookupUID}/`}>
+            https://enka.network/u/{lookupUID}/
+          </a>
+        </div>
+      )}
+      <div>
+        <CustomTable
+          fetchURL={FETCH_ACCOUNTS_URL}
+          filtersURL={FETCH_ACCOUNTS_FILTERS_URL}
+          fetchParams={{
+            uids: uidsQuery,
+            uid: lookupUID,
+            // variant,
+            // filter: "[all]1",
+            // calculationId: currentCategory,
+          }}
+          columns={ACCOUNTS_COLUMNS}
+          defaultSort="playerInfo.finishAchievementNum"
+          ignoreEmptyUidsArray
+          alwaysShowIndexColumn
+          expandableRows
+          // hidePagination
+        />
       </div>
     </div>
   );

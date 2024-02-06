@@ -17,11 +17,10 @@ const helpBoxContents = {
   builds: helpContentBuilds,
   leaderboards: helpContentLeaderboards,
   artifacts: helpContentArtifacts,
-  accounts: helpContentAccounts
+  accounts: helpContentAccounts,
 };
 
 export const HelpBox: React.FC<HelpBoxProps> = ({ page }) => {
-  // const [isClosed, setIsClosed] = useState(true);
   const [isClosed, setIsClosed] = useState(false);
 
   const lsKey = "helpBox";
@@ -31,7 +30,7 @@ export const HelpBox: React.FC<HelpBoxProps> = ({ page }) => {
     // const obj = JSON.parse(localStorage.getItem(lsKey) ?? "{}");
     // setIsClosed(!!obj[page]);
 
-    setIsClosed(false)
+    setIsClosed(false);
   }, []);
 
   // save to local storage
@@ -58,9 +57,9 @@ export const HelpBox: React.FC<HelpBoxProps> = ({ page }) => {
       </div>
     );
   }
+
   return (
     <div className="relative block-highlight page-description-wrapper">
-      {/* @TODO: bring back the funtionality later? */}
       {/* <div
         className="help-box-btn close-help-box"
         onClick={handleToggleHelpBox}

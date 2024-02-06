@@ -3,6 +3,7 @@ import {
   ArtifactsPage,
   BuildsPage,
   CategorySelectionPage,
+  DashboardPage,
   FAQPage,
   LeaderboardsPage,
   ProfilePage,
@@ -67,9 +68,8 @@ const appRoutes: {
   Element: React.FC<any>;
   props?: any;
 }[] = [
-  // @TODO: dashboard...
-  // { path: "/", Element: DashboardPage }
-  { path: "/", Element: AccountsPage },
+  // { path: "/", Element: AccountsPage },
+  { path: "/", Element: DashboardPage },
   { path: "/faq", Element: FAQPage },
   { path: "/artifacts", Element: ArtifactsPage },
   { path: "/builds", Element: BuildsPage },
