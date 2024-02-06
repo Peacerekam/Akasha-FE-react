@@ -347,9 +347,15 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       const lowestDmg =
         sorted.length > 1 ? +sorted[sorted.length - 1].value : 0;
 
-      const relevantDamageTypes = sorted.filter(
-        (a: any) => +a.value !== lowestDmg && +a.value > 0.10 && !isNaN(a.value)
-      );
+      const relevantDamageTypes = sorted.filter((a: any) => {
+        const roundedA = +(a.value || 0).toFixed(2);
+        const roundedLowest = +(lowestDmg || 0).toFixed(2);
+        const minStatThreshold = 0.1; // 10% DMG
+        const isNotLowest = roundedA !== roundedLowest;
+        const isHigherThanThreshold = roundedA > minStatThreshold;
+        const isNotNaN = !isNaN(a.value);
+        return isNotLowest && isHigherThanThreshold && isNotNaN;
+      });
 
       const relevantStatNames = Object.keys(chartData.avgStats).filter(
         (statName: string) =>
