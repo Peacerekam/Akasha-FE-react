@@ -335,7 +335,7 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
       <>
         <div className="artifacts-row">
           {reordered.map((artifact: any) => {
-            return <CompactArtifact artifact={artifact} row={row} />;
+            return <CompactArtifact key={artifact._id} artifact={artifact} row={row} />;
           })}
         </div>
         <RollList artifacts={reordered} character={row.name} />
