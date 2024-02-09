@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import Markdown from "react-markdown";
 import { Spinner } from "../../components";
 import axios from "axios";
+import remarkGfm from "remark-gfm";
 import { timeAgo } from "../../utils/helpers";
 
 export const NewsDisplay: React.FC = () => {
@@ -44,7 +45,7 @@ export const NewsDisplay: React.FC = () => {
 
     const createdAt = timeAgo(message.createdAt);
     const editedAt = timeAgo(message.editedAt);
-    const content = message.content;
+    const content = message.content; //.replaceAll("~~", "~");
     const profileLink = "/profile/701464050";
 
     return (
@@ -70,7 +71,9 @@ export const NewsDisplay: React.FC = () => {
             </div>
           </div>
           <div className="discord-like-content">
-            <Markdown>{content}</Markdown>
+            <Markdown remarkPlugins={[[remarkGfm, { singleTilde: false }]]}>
+              {content}
+            </Markdown>
             {message.editedAt && (
               <span className="discord-like-edited-at" title={editedAt}>
                 (edited){/* Monday, 5 January 2024 14:53 */}
