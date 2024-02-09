@@ -4,13 +4,17 @@ $hardcoded-scale: 1;
 
 .lock-scrolling {
   overflow: hidden !important;
+  touch-action: none !important;
+
   .custom-table-wrapper {
     .scrollbar-container {
       display: contents !important;
+      touch-action: none !important;
     }
     .custom-table {
       overflow: hidden !important;
       display: block !important;
+      touch-action: none !important;
     }
   }
 }

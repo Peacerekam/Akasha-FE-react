@@ -82,6 +82,10 @@ type Coords = {
   y: number;
 };
 
+type MouseOrTouchEvent =
+  | React.MouseEvent<HTMLDivElement>
+  | React.TouchEvent<HTMLDivElement>;
+
 const compressPNG = async (
   result: string,
   canvasWidth: number,
@@ -270,14 +274,14 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   useEffect(() => {
     if (isMobile) {
       if (isDragging) {
-        document.body.classList.add("lock-scrolling");
+        document.body!.classList.add("lock-scrolling");
       } else {
-        document.body.classList.remove("lock-scrolling");
+        document.body!.classList.remove("lock-scrolling");
       }
     }
 
     return () => {
-      document.body.classList.remove("lock-scrolling");
+      document.body!.classList.remove("lock-scrolling");
     };
   }, [isDragging, isMobile]);
 
@@ -1123,33 +1127,39 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
     const paintMode = !uploadPictureInputRef?.current?.files?.[0] && "gacha";
 
-    const onContainerMouseDown = (
-      event: React.PointerEvent<HTMLDivElement>
-    ) => {
-      event.preventDefault();
-
+    const onContainerMouseDown = (event: MouseOrTouchEvent) => {
       if (!toggleConfigure) return;
 
       setIsDragging(true);
 
-      setDragOffset((prev) => ({
-        x: event.clientX - (prev?.x || 0),
-        y: event.clientY - (prev?.y || 0),
-      }));
+      // desktop event
+      const isMouseEvent = "clientX" in event;
+
+      setDragOffset((prev) => {
+        const x = isMouseEvent
+          ? event.clientX
+          : event?.touches?.[0].clientX || 0;
+        const y = isMouseEvent
+          ? event.clientY
+          : event?.touches?.[0].clientY || 0;
+        return {
+          x: x - (prev?.x || 0),
+          y: y - (prev?.y || 0),
+        };
+      });
     };
 
-    const onContainerMouseMove = (
-      event: React.PointerEvent<HTMLDivElement>
-    ) => {
-      event.preventDefault();
-
+    const onContainerMouseMove = (event: MouseOrTouchEvent) => {
       if (!isDragging) return;
       if (!toggleConfigure) return;
       if (!compressedImage) return;
 
+      // desktop event
+      const isMouseEvent = "clientX" in event;
+
       const pointerPos = {
-        x: event.clientX,
-        y: event.clientY,
+        x: isMouseEvent ? event.clientX : event?.touches?.[0].clientX || 0,
+        y: isMouseEvent ? event.clientY : event?.touches?.[0].clientY || 0,
       };
 
       throttledPaintImageToCanvas(
@@ -1160,18 +1170,23 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       );
     };
 
-    const onContainerMouseUp = (event: React.PointerEvent<HTMLDivElement>) => {
-      event.preventDefault();
-
+    const onContainerMouseUp = (event: MouseOrTouchEvent) => {
       if (!isDragging) return;
       if (!toggleConfigure) return;
       if (!compressedImage) return;
 
       setIsDragging(false);
 
+      // desktop event
+      const isMouseEvent = "clientX" in event;
+
       const pointerPos = {
-        x: event.clientX,
-        y: event.clientY,
+        x: isMouseEvent
+          ? event.clientX
+          : event?.changedTouches?.[0].clientX || 0,
+        y: isMouseEvent
+          ? event.clientY
+          : event?.changedTouches?.[0].clientY || 0,
       };
 
       setDragOffset((prev) => ({
@@ -1195,13 +1210,16 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         <div
           style={{ pointerEvents: "all" }}
           className={showcaseContainerClassNames}
-          // onMouseUp={onContainerMouseUp}
-          // onMouseDown={onContainerMouseDown}
-          // onMouseMove={onContainerMouseMove}
-          onPointerUp={onContainerMouseUp}
-          onPointerDown={onContainerMouseDown}
-          onPointerMove={onContainerMouseMove}
-          onPointerOut={onContainerMouseUp} // same as mouse up
+          // desktop support
+          onMouseUp={onContainerMouseUp}
+          onMouseDown={onContainerMouseDown}
+          onMouseMove={onContainerMouseMove}
+          onMouseOut={onContainerMouseUp} // same as mouse up
+          // mobile support
+          onTouchEnd={onContainerMouseUp}
+          onTouchStart={onContainerMouseDown}
+          onTouchMove={onContainerMouseMove}
+          // onTouchCancel={onContainerMouseUp} // same as touch up
           onClick={onContainerClick}
         >
           <input
