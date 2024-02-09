@@ -156,6 +156,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   // dragging related
   const [compressedImage, setCompressedImage] = useState<string>();
   const [dragOffset, setDragOffset] = useState<Coords | null>(null);
+  const [imgDimensions, setImgDimensions] = useState<Coords>({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
 
   const uploadPictureInputRef = useRef<HTMLInputElement>(null);
@@ -275,7 +276,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     if (!backgroundPictureRef.current) return;
     if (adaptiveBgColor === undefined || namecardBg === undefined) return;
 
-    const mode = !uploadPictureInputRef?.current?.files?.[0] && "gacha";
+    const paintMode = !uploadPictureInputRef?.current?.files?.[0] && "gacha";
     const coldStart = true;
 
     const maybePaintImageToCanvas = async (i = 0) => {
@@ -285,13 +286,16 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         return;
       }
 
+      // @TODO: save backgroundPictureRef.current.src into state
+      // @TODO: so it can be reverted to at any time
+      
       try {
         paintImageToCanvas(
           compressedImage || backgroundPictureRef.current.src,
-          mode,
+          paintMode,
           coldStart,
           null,
-          true
+          false
         );
         setCompressedImage(compressedImage || backgroundPictureRef.current.src);
       } catch (err) {
@@ -889,6 +893,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       const newWidth = imageWidth * canvasScale;
       const newHeight = imageHeight * canvasScale;
 
+      setImgDimensions({
+        x: newWidth,
+        y: newHeight,
+      });
+
       // get canvas context
       const characterCtx = canvasRef.current.getContext("2d");
 
@@ -925,7 +934,12 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         }
       }
 
-      if (dragOffset && !noDrag) {
+      if (!noDrag && !pointerPos && dragOffset) {
+        // this triggers on zoom and image config changes
+        x += dragOffset.x;
+        y += dragOffset.y;
+      } else if (dragOffset && !noDrag) {
+        // this triggers on mouseMove
         x -= dragOffset.x;
         y -= dragOffset.y;
       }
@@ -938,25 +952,21 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       };
 
       if (pointerPos) {
-        x += pointerPos.x;
-        y += pointerPos.y;
+        x += pointerPos?.x;
+        y += pointerPos?.y;
       }
 
-      console.log("x,y", x, y);
-      console.log("pointerPos", pointerPos?.x, pointerPos?.y);
-      console.log("dragOffset", dragOffset?.x, dragOffset?.y);
-
+      // handle horizontal overflow
       if (x > boundaries.x1) {
         x = boundaries.x1;
-      }
-      if (x < boundaries.x2) {
+      } else if (x < boundaries.x2) {
         x = boundaries.x2;
       }
 
+      // handle vertical overflow
       if (y > boundaries.y1) {
         y = boundaries.y1;
-      }
-      if (y < boundaries.y2) {
+      } else if (y < boundaries.y2) {
         y = boundaries.y2;
       }
 
@@ -1066,9 +1076,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         result: string,
         mode?: string | boolean,
         coldStart?: boolean,
-        pointerPos?: Coords
-      ) => paintImageToCanvas(result, mode, coldStart, pointerPos),
-      8 // ~ 120fps
+        pointerPos?: Coords,
+        noDrag?: boolean
+      ) => paintImageToCanvas(result, mode, coldStart, pointerPos, noDrag),
+      5 // ~ 200fps
     ),
     [paintImageToCanvas]
   );
@@ -1088,11 +1099,9 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     const paintMode = !uploadPictureInputRef?.current?.files?.[0] && "gacha";
 
     const onContainerMouseDown = (
-      event: React.MouseEvent<HTMLDivElement, MouseEvent>
+      event: React.PointerEvent<HTMLDivElement>
     ) => {
-      console.log(
-        `Canvas drag start position: x: ${event.clientX}, y: ${event.clientY}`
-      );
+      event.preventDefault();
 
       setIsDragging(true);
 
@@ -1103,8 +1112,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     };
 
     const onContainerMouseMove = (
-      event: React.MouseEvent<HTMLDivElement, MouseEvent>
+      event: React.PointerEvent<HTMLDivElement>
     ) => {
+      event.preventDefault();
+
       if (!isDragging) return;
       if (!compressedImage) return;
 
@@ -1121,25 +1132,28 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       );
     };
 
-    const onContainerMouseUp = (
-      event: React.MouseEvent<HTMLDivElement, MouseEvent>
-    ) => {
+    const onContainerMouseUp = (event: React.PointerEvent<HTMLDivElement>) => {
+      event.preventDefault();
+
       if (!isDragging) return;
       if (!compressedImage) return;
 
       setIsDragging(false);
-      setDragOffset((prev) => ({
-        x: event.clientX - (prev?.x || 0),
-        y: event.clientY - (prev?.y || 0),
-      }));
 
       const pointerPos = {
         x: event.clientX,
         y: event.clientY,
       };
 
-      // paintImageToCanvas(imageBuffer, paintMode, false);
-      paintImageToCanvas(compressedImage, paintMode, false, pointerPos);
+      setDragOffset((prev) => ({
+        x: pointerPos.x - (prev?.x || 0),
+        y: pointerPos.y - (prev?.y || 0),
+      }));
+    };
+
+    const onContainerClick = () => {
+      // enable zoom and upload pic buttons
+      setToggleConfigure(true);
     };
 
     return (
@@ -1152,9 +1166,13 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         <div
           style={{ pointerEvents: "all" }}
           className={showcaseContainerClassNames}
-          onMouseUp={onContainerMouseUp}
-          onMouseDown={onContainerMouseDown}
-          onMouseMove={onContainerMouseMove}
+          // onMouseUp={onContainerMouseUp}
+          // onMouseDown={onContainerMouseDown}
+          // onMouseMove={onContainerMouseMove}
+          onPointerUp={onContainerMouseUp}
+          onPointerDown={onContainerMouseDown}
+          onPointerMove={onContainerMouseMove}
+          onClick={onContainerClick}
         >
           <input
             ref={uploadPictureInputRef}
@@ -1223,9 +1241,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     isLoadingImage,
     chartsData,
     hardcodedScale,
-    dragOffset,
     isDragging,
     compressedImage,
+    imgDimensions,
+    zoomLevel,
+    dragOffset,
   ]);
 
   const characterStats = useMemo(
@@ -1492,71 +1512,123 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     ]
       .join(" ")
       .trim();
+
+    const paintMode = !uploadPictureInputRef?.current?.files?.[0] && "gacha";
+    const zoomIncrement = 1.05;
+
     return (
       <div className={cardContainerClassNames} style={cardStyle}>
-        <div
-          style={{
-            zIndex: 999,
-            position: "absolute",
-            display: "flex",
-            top: 10,
-            left: 350,
-            textAlign: "center",
-            gap: 5,
-          }}
-        >
+        {toggleConfigure && (
           <div
             style={{
-              padding: 5,
-              border: "2px solid red",
-              borderRadius: "100px",
-              background: "black",
-              cursor: "pointer",
-            }}
-            onClick={() => {
-              uploadPictureInputRef?.current?.click();
-            }}
-          >
-            CHANGE IMAGE
-          </div>
-          <div
-            style={{
-              padding: 5,
-              border: "2px solid red",
-              borderRadius: "100px",
-              background: "black",
-              cursor: "pointer",
-              width: 20,
-            }}
-            onClick={() => {
-              setZoomLevel((prev) => prev / 1.1);
+              zIndex: 999,
+              position: "absolute",
+              display: "flex",
+              top: 10,
+              left: 350,
+              textAlign: "center",
+              gap: 5,
             }}
           >
-            -
-          </div>
-          <div
-            style={{
-              padding: 5,
-              border: "2px solid red",
-              borderRadius: "100px",
-              background: "black",
-              cursor: "pointer",
-              width: 20,
-            }}
-            onClick={() => {
-              setZoomLevel((prev) => prev * 1.1);
-            }}
-          >
-            +
-          </div>
-        </div>
+            <div
+              style={{
+                padding: 5,
+                border: "2px solid red",
+                borderRadius: "100px",
+                background: "black",
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                uploadPictureInputRef?.current?.click();
+              }}
+            >
+              CHANGE IMAGE
+            </div>
+            <div
+              style={{
+                padding: 5,
+                border: "2px solid red",
+                borderRadius: "100px",
+                background: "black",
+                cursor: "pointer",
+                width: 20,
+              }}
+              onClick={() => {
+                const minZoomLevel = paintMode === "gacha" ? 0.64 : 1;
 
-        <div
-          className="absolute-overlay"
-          // onClick={handleEffectsIteration}
-        >
-          {cardOverlay}
-        </div>
+                if (imgDimensions.x / zoomIncrement < canvasWidth) {
+                  setZoomLevel(minZoomLevel);
+                } else if (imgDimensions.y / zoomIncrement < canvasHeight) {
+                  setZoomLevel(minZoomLevel);
+                } else {
+                  setZoomLevel((prev) => prev / zoomIncrement);
+                }
+              }}
+            >
+              -
+            </div>
+            <div
+              style={{
+                padding: 5,
+                border: "2px solid red",
+                borderRadius: "100px",
+                background: "black",
+                cursor: "pointer",
+                width: 20,
+              }}
+              onClick={() => {
+                // no limits on zooming in
+                setZoomLevel((prev) => prev * zoomIncrement);
+              }}
+            >
+              +
+            </div>
+            <div
+              style={{
+                padding: 5,
+                border: "2px solid red",
+                borderRadius: "100px",
+                background: "black",
+                cursor: "pointer",
+                width: 50,
+              }}
+              onClick={() => {
+                setZoomLevel(1);
+                setDragOffset(null);
+
+                // if zoomLevel doesn't change then force canvas re-paint
+                if (zoomLevel === 1 && compressedImage) {
+                  paintImageToCanvas(
+                    compressedImage,
+                    paintMode,
+                    false,
+                    null,
+                    true
+                  );
+                }
+              }}
+            >
+              reset
+            </div>
+            <div
+              style={{
+                padding: 5,
+                border: "2px solid red",
+                borderRadius: "100px",
+                background: "black",
+                cursor: "pointer",
+                width: 50,
+              }}
+              onClick={() => {
+                setToggleConfigure(false)
+              }}
+            >
+              apply
+            </div>
+          </div>
+        )}
+
+        <div className="absolute-overlay">{cardOverlay}</div>
         <div className="character-left">{characterShowcase}</div>
         <div className="character-middle">{characterMiddle}</div>
         <div className="character-right">{leaderboardHighlighs}</div>
@@ -1598,6 +1670,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     generating,
     translate,
     customRvFilter[row.name]?.length,
+    imgDimensions,
   ]);
 
   const handleSelectChange = (option: any) => {
