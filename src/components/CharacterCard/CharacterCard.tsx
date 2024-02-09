@@ -26,10 +26,19 @@ import {
   toEnkaUrl,
 } from "../../utils/helpers";
 import {
+  faArrowDown,
+  faArrowLeft,
+  faArrowRight,
+  faArrowUp,
+  faCheck,
   faCog,
   faDownload,
+  faImage,
   faLock,
   faMagnifyingGlass,
+  faMinus,
+  faPlus,
+  faRefresh,
 } from "@fortawesome/free-solid-svg-icons";
 import html2canvas, { Options } from "html2canvas";
 
@@ -288,7 +297,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
       // @TODO: save backgroundPictureRef.current.src into state
       // @TODO: so it can be reverted to at any time
-      
+
       try {
         paintImageToCanvas(
           compressedImage || backgroundPictureRef.current.src,
@@ -1088,6 +1097,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     const charImgUrl = toEnkaUrl(chartsData?.assets?.gachaIcon);
     const showcaseContainerClassNames = [
       "character-showcase-pic-container",
+      toggleConfigure ? "editable" : "",
+      isDragging ? "is-dragging" : "",
       hasCustomBg,
       row.name === "Traveler" ? "is-traveler" : "",
       generating ? "is-generating" : "",
@@ -1103,6 +1114,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     ) => {
       event.preventDefault();
 
+      if (!toggleConfigure) return;
+
       setIsDragging(true);
 
       setDragOffset((prev) => ({
@@ -1117,6 +1130,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       event.preventDefault();
 
       if (!isDragging) return;
+      if (!toggleConfigure) return;
       if (!compressedImage) return;
 
       const pointerPos = {
@@ -1136,6 +1150,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       event.preventDefault();
 
       if (!isDragging) return;
+      if (!toggleConfigure) return;
       if (!compressedImage) return;
 
       setIsDragging(false);
@@ -1246,6 +1261,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     imgDimensions,
     zoomLevel,
     dragOffset,
+    toggleConfigure,
   ]);
 
   const characterStats = useMemo(
@@ -1498,6 +1514,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       talentSkillProps,
       talentBurstProps,
       displayBuildName,
+      toggleConfigure,
     ]
   );
 
@@ -1515,120 +1532,143 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
     const paintMode = !uploadPictureInputRef?.current?.files?.[0] && "gacha";
     const zoomIncrement = 1.05;
+    const arrowSize = 2;
+
+    const displayArrows = (
+      <div className="drag-arrows">
+        <FontAwesomeIcon
+          className=""
+          icon={faArrowLeft}
+          size={`${arrowSize}x`}
+          style={{
+            top: 137,
+            left: 92,
+          }}
+        />
+        <FontAwesomeIcon
+          className=""
+          icon={faArrowRight}
+          size={`${arrowSize}x`}
+          style={{
+            top: 137,
+            left: 392,
+          }}
+        />
+        <FontAwesomeIcon
+          className=""
+          icon={faArrowUp}
+          size={`${arrowSize}x`}
+          style={{
+            top: 92,
+            left: 242,
+          }}
+        />
+        <FontAwesomeIcon
+          className=""
+          icon={faArrowDown}
+          size={`${arrowSize}x`}
+          style={{
+            top: 187,
+            left: 242,
+          }}
+        />
+      </div>
+    );
+
+    const displayZoomButtons = (
+      <div className="zoom-level-buttons">
+        <div
+          className="single-config-button"
+          title="Zoom in"
+          onClick={() => {
+            // no limits on zooming in
+            setZoomLevel((prev) => prev * zoomIncrement);
+          }}
+        >
+          <FontAwesomeIcon icon={faPlus} size={`1x`} />
+        </div>
+        <div
+          className="single-config-button"
+          title="Zoom out"
+          onClick={() => {
+            const minZoomLevel = paintMode === "gacha" ? 0.64 : 1;
+
+            if (imgDimensions.x / zoomIncrement < canvasWidth) {
+              setZoomLevel(minZoomLevel);
+            } else if (imgDimensions.y / zoomIncrement < canvasHeight) {
+              setZoomLevel(minZoomLevel);
+            } else {
+              setZoomLevel((prev) => prev / zoomIncrement);
+            }
+          }}
+        >
+          <FontAwesomeIcon icon={faMinus} size={`1x`} />
+        </div>
+        <div
+          className="single-config-button"
+          title="Reset zoom & position"
+          onClick={() => {
+            setZoomLevel(1);
+            setDragOffset(null);
+
+            // if zoomLevel doesn't change then force canvas re-paint
+            if (zoomLevel === 1 && compressedImage) {
+              paintImageToCanvas(compressedImage, paintMode, false, null, true);
+            }
+          }}
+        >
+          <FontAwesomeIcon icon={faRefresh} size={`1x`} />
+        </div>
+      </div>
+    );
+
+    const displayTopButtons = (
+      <div className="top-buttons">
+        <div
+          title="Upload image"
+          onClick={() => {
+            uploadPictureInputRef?.current?.click();
+          }}
+        >
+          <FontAwesomeIcon icon={faImage} size={`2x`} />
+          Upload image...
+        </div>
+        <div
+          className="single-config-button"
+          title="Exit edit mode"
+          onClick={() => {
+            setToggleConfigure(false);
+          }}
+        >
+          <FontAwesomeIcon icon={faCheck} size={`1x`} />
+        </div>
+      </div>
+    );
 
     return (
       <div className={cardContainerClassNames} style={cardStyle}>
         {toggleConfigure && (
           <div
+            className="config-overlay"
             style={{
-              zIndex: 999,
-              position: "absolute",
-              display: "flex",
-              top: 10,
-              left: 350,
-              textAlign: "center",
-              gap: 5,
+              opacity: isDragging ? 0.33 : 1,
+              display: generating ? "none" : "block",
             }}
           >
-            <div
-              style={{
-                padding: 5,
-                border: "2px solid red",
-                borderRadius: "100px",
-                background: "black",
-                cursor: "pointer",
-              }}
-              onClick={() => {
-                uploadPictureInputRef?.current?.click();
-              }}
-            >
-              CHANGE IMAGE
-            </div>
-            <div
-              style={{
-                padding: 5,
-                border: "2px solid red",
-                borderRadius: "100px",
-                background: "black",
-                cursor: "pointer",
-                width: 20,
-              }}
-              onClick={() => {
-                const minZoomLevel = paintMode === "gacha" ? 0.64 : 1;
-
-                if (imgDimensions.x / zoomIncrement < canvasWidth) {
-                  setZoomLevel(minZoomLevel);
-                } else if (imgDimensions.y / zoomIncrement < canvasHeight) {
-                  setZoomLevel(minZoomLevel);
-                } else {
-                  setZoomLevel((prev) => prev / zoomIncrement);
-                }
-              }}
-            >
-              -
-            </div>
-            <div
-              style={{
-                padding: 5,
-                border: "2px solid red",
-                borderRadius: "100px",
-                background: "black",
-                cursor: "pointer",
-                width: 20,
-              }}
-              onClick={() => {
-                // no limits on zooming in
-                setZoomLevel((prev) => prev * zoomIncrement);
-              }}
-            >
-              +
-            </div>
-            <div
-              style={{
-                padding: 5,
-                border: "2px solid red",
-                borderRadius: "100px",
-                background: "black",
-                cursor: "pointer",
-                width: 50,
-              }}
-              onClick={() => {
-                setZoomLevel(1);
-                setDragOffset(null);
-
-                // if zoomLevel doesn't change then force canvas re-paint
-                if (zoomLevel === 1 && compressedImage) {
-                  paintImageToCanvas(
-                    compressedImage,
-                    paintMode,
-                    false,
-                    null,
-                    true
-                  );
-                }
-              }}
-            >
-              reset
-            </div>
-            <div
-              style={{
-                padding: 5,
-                border: "2px solid red",
-                borderRadius: "100px",
-                background: "black",
-                cursor: "pointer",
-                width: 50,
-              }}
-              onClick={() => {
-                setToggleConfigure(false)
-              }}
-            >
-              apply
-            </div>
+            {displayArrows}
+            {displayZoomButtons}
+            {displayTopButtons}
           </div>
         )}
 
-        <div className="absolute-overlay">{cardOverlay}</div>
+        <div
+          className="absolute-overlay"
+          style={{
+            opacity: toggleConfigure && !generating ? 0.33 : 1,
+          }}
+        >
+          {cardOverlay}
+        </div>
         <div className="character-left">{characterShowcase}</div>
         <div className="character-middle">{characterMiddle}</div>
         <div className="character-right">{leaderboardHighlighs}</div>
@@ -1671,6 +1711,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     translate,
     customRvFilter[row.name]?.length,
     imgDimensions,
+    isDragging,
+    toggleConfigure
   ]);
 
   const handleSelectChange = (option: any) => {

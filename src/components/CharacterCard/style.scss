@@ -3,6 +3,77 @@ $hardcoded-scale: 1;
 // $hardcoded-scale: 0.87;
 
 .character-card-container {
+  .config-overlay {
+    z-index: 999;
+    top: 0;
+    left: 0;
+    position: absolute;
+    text-align: center;
+    display: block;
+
+    .drag-arrows {
+      position: absolute;
+      top: 50px * $hardcoded-scale;
+      left: 0;
+      transition: opacity 0.2s;
+      pointer-events: none !important;
+      svg {
+        position: absolute;
+        width: 20px * $hardcoded-scale;
+        height: 20px * $hardcoded-scale;
+      }
+    }
+
+    .zoom-level-buttons,
+    .top-buttons {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+
+      .single-config-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px * $hardcoded-scale;
+        width: 30px * $hardcoded-scale;
+        height: 30px * $hardcoded-scale;
+        padding: 5px * $hardcoded-scale;
+      }
+
+      &.top-buttons {
+        top: 10px * $hardcoded-scale;
+        left: 311px * $hardcoded-scale;
+        > div {
+          &:first-child {
+            display: flex;
+            white-space: nowrap;
+            align-items: center;
+            gap: 10px;
+          }
+        }
+      }
+      &.zoom-level-buttons {
+        top: 220px * $hardcoded-scale;
+        left: 452px * $hardcoded-scale;
+      }
+      > div {
+        background-color: rgba(black, 0.6);
+        display: flex;
+        flex-grow: 0;
+        justify-content: flex-end;
+        padding: 15px * $hardcoded-scale;
+        border-radius: 5px * $hardcoded-scale;
+        border: 1px solid rgba(white, 0.4);
+        cursor: pointer;
+
+        &:hover {
+          background-color: rgba(black, 0.8);
+          border: 1px solid rgba(white, 0.8);
+        }
+      }
+    }
+  }
   &:not(.disable-input) {
     .character-left > div {
       // cursor: pointer;
@@ -861,17 +932,32 @@ $hardcoded-scale: 1;
           }
         }
         &:not(.disable-input) {
+          &.editable {
+            &.is-dragging {
+              &::after {
+                opacity: 0.33;
+              }
+            }
+            &::after {
+              left: 140px * $hardcoded-scale;
+              content: "Drag to adjust image";
+            }
+            &::after,
+            &::before {
+              opacity: 1;
+            }
+          }
           &::after {
             transition: opacity 0.2s;
             opacity: 0;
             position: absolute;
-            content: "Drag to adjust image";
+            content: "Click to configure image";
             display: flex;
             font-family: "GenshinFont";
             font-size: 20px * $hardcoded-scale;
             text-shadow: 0 0.08em 0.1em black, 0 0.1em 0.3em rgba(0, 0, 0, 0.4);
             top: 185px * $hardcoded-scale;
-            left: 130px * $hardcoded-scale;
+            left: 120px * $hardcoded-scale;
             pointer-events: none;
             z-index: 2;
           }
