@@ -1187,6 +1187,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           onPointerUp={onContainerMouseUp}
           onPointerDown={onContainerMouseDown}
           onPointerMove={onContainerMouseMove}
+          onPointerOut={onContainerMouseUp} // same as mouse up
           onClick={onContainerClick}
         >
           <input
@@ -1712,7 +1713,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     customRvFilter[row.name]?.length,
     imgDimensions,
     isDragging,
-    toggleConfigure
+    toggleConfigure,
   ]);
 
   const handleSelectChange = (option: any) => {
