@@ -86,7 +86,7 @@ const electroRvList = {
 };
 
 const dendroRvList = {
-  Nahida: [CRate, CDMG, ATK_, EM],
+  Nahida: [CRate, CDMG, EM],
   Alhaitham: [CRate, CDMG, ATK_, EM, ER],
   Tighnari: [CRate, CDMG, ATK_, EM, ER],
   Yaoyao: [CRate, CDMG, ATK_, EM, ER],

@@ -5,7 +5,8 @@ $hardcoded-scale: 1;
 .character-card-container {
   &:not(.disable-input) {
     .character-left > div {
-      cursor: pointer;
+      // cursor: pointer;
+      cursor: grab;
     }
   }
   &.disable-input {
@@ -864,7 +865,7 @@ $hardcoded-scale: 1;
             transition: opacity 0.2s;
             opacity: 0;
             position: absolute;
-            content: "Click to change image";
+            content: "Drag to adjust image";
             display: flex;
             font-family: "GenshinFont";
             font-size: 20px * $hardcoded-scale;

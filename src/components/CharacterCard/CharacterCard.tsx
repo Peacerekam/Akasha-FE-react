@@ -50,6 +50,7 @@ import { TeammatesCompact } from "../TeammatesCompact";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import { reactSelectCustomFilterTheme } from "../../utils/reactSelectCustomFilterTheme";
+import { throttle } from "lodash";
 import { useCardSettings } from "../../hooks/useCardSettings";
 import { useLocation } from "react-router-dom";
 
@@ -67,6 +68,66 @@ type CharacterCardProps = {
   errorCallback?: () => {};
 };
 
+type Coords = {
+  x: number;
+  y: number;
+};
+
+const compressPNG = async (
+  result: string,
+  canvasWidth: number,
+  canvasHeight: number,
+  qualityFactor: number
+): Promise<string> => {
+  return new Promise((resolve) => {
+    const img = new Image();
+    const c = document.createElement("canvas");
+    const ctx = c.getContext("2d");
+
+    const blobToDataURL = (blob: any, callback: any) => {
+      const a = new FileReader();
+      a.onload = function (e: any) {
+        callback(e.target.result);
+      };
+      a.readAsDataURL(blob);
+    };
+
+    img.onload = function () {
+      c.width = img.naturalWidth; // update canvas size to match image
+      c.height = img.naturalHeight;
+
+      const imageWidth = img.width;
+      const imageHeight = img.height;
+
+      const canvasScale =
+        Math.max(canvasWidth / imageWidth, canvasHeight / imageHeight) *
+        qualityFactor;
+
+      // Finding the new width and height based on the scale factor
+      const newWidth = imageWidth * canvasScale;
+      const newHeight = imageHeight * canvasScale;
+
+      c.width = newWidth; // update canvas size to match image
+      c.height = newHeight;
+
+      // ___ctx!.globalCompositeOperation = "source-in";
+      ctx!.drawImage(img, 0, 0, newWidth, newHeight);
+
+      c.toBlob(
+        async (blob) => {
+          blobToDataURL(blob, (dataURL: any) => {
+            resolve(dataURL + "");
+          });
+        }
+        // "image/jpeg",
+        // 0.9
+      );
+    };
+    img.crossOrigin = "anonymous"; // if from different origin
+    img.src = result + "";
+  });
+};
+
 export const CharacterCard: React.FC<CharacterCardProps> = ({
   row,
   artifacts,
@@ -74,21 +135,28 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   setSelectedCalculationId,
   errorCallback,
 }) => {
+  // states
   const [width, setWidth] = useState<number>(window.innerWidth);
-  // const [bgRemDownload, setBgRemDownload] = useState<number>(-1);
-  // const [bgRemLoading, setBgRemLoading] = useState<boolean>(false);
+  const [zoomLevel, setZoomLevel] = useState<number>(1);
+  const [imagePreviewBlob, setImagePreviewBlob] = useState<Blob>();
+  const [filteredLeaderboards, setFilteredLeaderboards] = useState<any[]>([]);
+  const [adaptiveColors, setAdaptiveColors] = useState<[string[], string[]]>();
+
+  // flags
   const [toggleConfigure, setToggleConfigure] = useState(false);
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
+  const [isLoadingImage, setIsLoadingImage] = useState(false);
   const [generating, setGenerating] = useState<
     "opening" | "downloading" | false
   >(false);
   const [hasCustomBg, setHasCustomBg] = useState<
     "vertical" | "horizontal" | ""
   >("");
-  const [isLoadingImage, setIsLoadingImage] = useState(false);
-  const [showPreviewModal, setShowPreviewModal] = useState(false);
-  const [imagePreviewBlob, setImagePreviewBlob] = useState<Blob>();
-  const [filteredLeaderboards, setFilteredLeaderboards] = useState<any[]>([]);
-  const [adaptiveColors, setAdaptiveColors] = useState<[string[], string[]]>();
+
+  // dragging related
+  const [compressedImage, setCompressedImage] = useState<string>();
+  const [dragOffset, setDragOffset] = useState<Coords | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   const uploadPictureInputRef = useRef<HTMLInputElement>(null);
   const backgroundPictureRef = useRef<HTMLImageElement>(null);
@@ -218,7 +286,14 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       }
 
       try {
-        paintImageToCanvas(backgroundPictureRef.current.src, mode, coldStart);
+        paintImageToCanvas(
+          compressedImage || backgroundPictureRef.current.src,
+          mode,
+          coldStart,
+          null,
+          true
+        );
+        setCompressedImage(compressedImage || backgroundPictureRef.current.src);
       } catch (err) {
         // second time's a charm
         await delay(10);
@@ -227,13 +302,18 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     };
 
     setIsLoadingImage(true);
-
     maybePaintImageToCanvas();
 
     backgroundPictureRef.current.addEventListener("load", () => {
       setIsLoadingImage(false);
     });
-  }, [backgroundPictureRef, adaptiveBgColor, namecardBg]);
+  }, [
+    backgroundPictureRef,
+    adaptiveBgColor,
+    namecardBg,
+    zoomLevel,
+    compressedImage,
+  ]);
 
   const calculationIds = useMemo(
     () =>
@@ -687,7 +767,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       result: string,
       mode?: string | boolean,
       coldStart?: boolean,
-      removeBg?: boolean
+      pointerPos?: Coords | null,
+      noDrag: boolean = false
     ) => {
       if (!canvasBgRef?.current) return;
       if (!backgroundPictureRef?.current) return;
@@ -695,51 +776,9 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       const characterImg = backgroundPictureRef?.current;
 
       characterImg.crossOrigin = "anonymous";
-
-      const isCustomBg = mode !== "gacha";
+      // const isCustomBg = mode !== "gacha";
       const _result = result + "";
-
-      if (removeBg && isCustomBg) {
-        /*
-        setBgRemLoading(true);
-
-        // Custom Asset Serving
-        // Currently, the wasm and onnx neural networks are served via unpkg.
-        // For production use, we advise you to host them yourself.
-        // Therefore, copy all .wasm and .onnx files to your public path $PUBLIC_PATH and reconfigure the library.
-        const config: Config = {
-          debug: true,
-          // model: "small",
-          // publicPath: "https://example.com/assets/", // path to the wasm files
-          progress: (key, current, total) => {
-            console.log(`Downloading ${key}: ${current} of ${total}`);
-            setBgRemDownload((current / total) * 100);
-          },
-        };
-
-        let imgBgRemovedBlob = null;
-
-        try {
-          imgBgRemovedBlob = await imglyRemoveBackground(_result, {
-            ...config,
-            // fetchArgs: { mode: "no-cors" },
-          });
-        } catch (err) {
-          imgBgRemovedBlob = await imglyRemoveBackground(_result, {
-            ...config,
-            fetchArgs: { mode: "no-cors" },
-          });
-        }
-
-        characterImg.src = imgBgRemovedBlob
-          ? URL.createObjectURL(imgBgRemovedBlob)
-          : "";
-
-        setBgRemLoading(false);
-        */
-      } else {
-        characterImg.src = _result;
-      }
+      characterImg.src = _result;
 
       const namecardBgUrl = toEnkaUrl(chartsData?.characterMetadata?.namecard);
       const elementalBgUrl = `/elementalBackgrounds/${chartsData?.characterMetadata?.element}-bg.jpg`;
@@ -842,10 +881,9 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
       // get the scale
       // it is the min of the 2 ratios
-      const canvasScale = Math.max(
-        _canvasWidth / imageWidth,
-        _canvasHeight / imageHeight
-      );
+      const canvasScale =
+        Math.max(_canvasWidth / imageWidth, _canvasHeight / imageHeight) *
+        zoomLevel;
 
       // Finding the new width and height based on the scale factor
       const newWidth = imageWidth * canvasScale;
@@ -885,6 +923,41 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           x = x - 130 * hardcodedScale;
           y = y - 82 * hardcodedScale;
         }
+      }
+
+      if (dragOffset && !noDrag) {
+        x -= dragOffset.x;
+        y -= dragOffset.y;
+      }
+
+      const boundaries = {
+        x1: 0,
+        x2: -(newWidth - canvasWidth),
+        y1: 0,
+        y2: -(newHeight - canvasHeight),
+      };
+
+      if (pointerPos) {
+        x += pointerPos.x;
+        y += pointerPos.y;
+      }
+
+      console.log("x,y", x, y);
+      console.log("pointerPos", pointerPos?.x, pointerPos?.y);
+      console.log("dragOffset", dragOffset?.x, dragOffset?.y);
+
+      if (x > boundaries.x1) {
+        x = boundaries.x1;
+      }
+      if (x < boundaries.x2) {
+        x = boundaries.x2;
+      }
+
+      if (y > boundaries.y1) {
+        y = boundaries.y1;
+      }
+      if (y < boundaries.y2) {
+        y = boundaries.y2;
       }
 
       characterCtx!.globalCompositeOperation = "source-in";
@@ -982,7 +1055,22 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       adaptiveBgColor,
       hasCustomBg,
       namecardBg,
+      dragOffset,
+      zoomLevel,
     ]
+  );
+
+  const throttledPaintImageToCanvas = useCallback(
+    throttle(
+      (
+        result: string,
+        mode?: string | boolean,
+        coldStart?: boolean,
+        pointerPos?: Coords
+      ) => paintImageToCanvas(result, mode, coldStart, pointerPos),
+      8 // ~ 120fps
+    ),
+    [paintImageToCanvas]
   );
 
   const characterShowcase = useMemo(() => {
@@ -996,21 +1084,82 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     ]
       .join(" ")
       .trim();
+
+    const paintMode = !uploadPictureInputRef?.current?.files?.[0] && "gacha";
+
+    const onContainerMouseDown = (
+      event: React.MouseEvent<HTMLDivElement, MouseEvent>
+    ) => {
+      console.log(
+        `Canvas drag start position: x: ${event.clientX}, y: ${event.clientY}`
+      );
+
+      setIsDragging(true);
+
+      setDragOffset((prev) => ({
+        x: event.clientX - (prev?.x || 0),
+        y: event.clientY - (prev?.y || 0),
+      }));
+    };
+
+    const onContainerMouseMove = (
+      event: React.MouseEvent<HTMLDivElement, MouseEvent>
+    ) => {
+      if (!isDragging) return;
+      if (!compressedImage) return;
+
+      const pointerPos = {
+        x: event.clientX,
+        y: event.clientY,
+      };
+
+      throttledPaintImageToCanvas(
+        compressedImage,
+        paintMode,
+        false,
+        pointerPos
+      );
+    };
+
+    const onContainerMouseUp = (
+      event: React.MouseEvent<HTMLDivElement, MouseEvent>
+    ) => {
+      if (!isDragging) return;
+      if (!compressedImage) return;
+
+      setIsDragging(false);
+      setDragOffset((prev) => ({
+        x: event.clientX - (prev?.x || 0),
+        y: event.clientY - (prev?.y || 0),
+      }));
+
+      const pointerPos = {
+        x: event.clientX,
+        y: event.clientY,
+      };
+
+      // paintImageToCanvas(imageBuffer, paintMode, false);
+      paintImageToCanvas(compressedImage, paintMode, false, pointerPos);
+    };
+
     return (
       <div>
         <div className="column-shadow-gradient-top" />
         <div className="column-shadow-gradient-left" />
         <div className="column-shadow-gradient-bottom" />
         {/* <div className="column-shadow-gradient" /> */}
+
         <div
           style={{ pointerEvents: "all" }}
           className={showcaseContainerClassNames}
-          onClick={() => {
-            uploadPictureInputRef?.current?.click();
-          }}
+          onMouseUp={onContainerMouseUp}
+          onMouseDown={onContainerMouseDown}
+          onMouseMove={onContainerMouseMove}
         >
           <input
             ref={uploadPictureInputRef}
+            type="file"
+            name="filename"
             style={{ display: "none", pointerEvents: "all" }}
             onChange={() => {
               const file = uploadPictureInputRef?.current?.files?.[0];
@@ -1020,8 +1169,18 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
               reader.addEventListener(
                 "load",
-                async (a) => {
-                  paintImageToCanvas(reader.result + "");
+                async () => {
+                  const dataURL = await compressPNG(
+                    reader.result + "",
+                    canvasWidth,
+                    canvasHeight,
+                    2
+                  );
+
+                  setDragOffset(null);
+                  setZoomLevel(1);
+                  setCompressedImage(dataURL);
+                  paintImageToCanvas(dataURL, false, false, null, true);
                   setHasCustomBg("horizontal");
                 },
                 false
@@ -1029,8 +1188,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
               reader.readAsDataURL(file);
             }}
-            type="file"
-            name="filename"
           />
           <canvas
             width={canvasWidth * canvasPixelDensity}
@@ -1066,7 +1223,9 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     isLoadingImage,
     chartsData,
     hardcodedScale,
-    // removeBg,
+    dragOffset,
+    isDragging,
+    compressedImage,
   ]);
 
   const characterStats = useMemo(
@@ -1335,6 +1494,63 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       .trim();
     return (
       <div className={cardContainerClassNames} style={cardStyle}>
+        <div
+          style={{
+            zIndex: 999,
+            position: "absolute",
+            display: "flex",
+            top: 10,
+            left: 350,
+            textAlign: "center",
+            gap: 5,
+          }}
+        >
+          <div
+            style={{
+              padding: 5,
+              border: "2px solid red",
+              borderRadius: "100px",
+              background: "black",
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              uploadPictureInputRef?.current?.click();
+            }}
+          >
+            CHANGE IMAGE
+          </div>
+          <div
+            style={{
+              padding: 5,
+              border: "2px solid red",
+              borderRadius: "100px",
+              background: "black",
+              cursor: "pointer",
+              width: 20,
+            }}
+            onClick={() => {
+              setZoomLevel((prev) => prev / 1.1);
+            }}
+          >
+            -
+          </div>
+          <div
+            style={{
+              padding: 5,
+              border: "2px solid red",
+              borderRadius: "100px",
+              background: "black",
+              cursor: "pointer",
+              width: 20,
+            }}
+            onClick={() => {
+              setZoomLevel((prev) => prev * 1.1);
+            }}
+          >
+            +
+          </div>
+        </div>
+
         <div
           className="absolute-overlay"
           // onClick={handleEffectsIteration}
@@ -1715,58 +1931,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                       onChange={(e: any) => setPrivacyFlag(!!e.target.checked)}
                     />
                   </div>
-                  {/* <div
-                    className={
-                      bgRemLoading || mode === "gacha" ? "disabled" : ""
-                    }
-                  >
-                    <label htmlFor={`${buildId}-bgr`}>
-                      AI background removal
-                    </label>
-                    <button
-                      id={`${buildId}-bgr`}
-                      disabled={bgRemLoading || mode === "gacha" ? true : false}
-                      onClick={() => {
-                        if (bgRemLoading || mode === "gacha") return;
-                        if (!backgroundPictureRef.current) return;
-
-                        const coldStart = false;
-                        const removeBg = true;
-
-                        paintImageToCanvas(
-                          backgroundPictureRef.current.src,
-                          mode,
-                          coldStart,
-                          removeBg
-                        );
-                      }}
-                    >
-                      {bgRemLoading ? (
-                        <>
-                          <Spinner />{" "}
-                          {bgRemDownload > 0
-                            ? `${bgRemDownload.toFixed(1)}%`
-                            : "wait..."}
-                        </>
-                      ) : (
-                        <>
-                          <FontAwesomeIcon
-                            className="filter-icon hoverable-icon"
-                            icon={faUserXmark}
-                            size="1x"
-                            title="Remove background"
-                          />
-                          start
-                        </>
-                      )}
-                    </button>
-                    <span
-                      className="opacity-5"
-                      style={{ marginLeft: 10, fontSize: 12 }}
-                    >
-                      (dank af, beta af, requires downloading 88MB model)
-                    </span>
-                  </div> */}
                 </div>
               </div>
             ) : (
