@@ -2,6 +2,19 @@ $character-card-width: 1200px;
 $hardcoded-scale: 1;
 // $hardcoded-scale: 0.87;
 
+.lock-scrolling {
+  overflow: hidden !important;
+  .custom-table-wrapper {
+    .scrollbar-container {
+      display: contents !important;
+    }
+    .custom-table {
+      overflow: hidden !important;
+      display: block !important;
+    }
+  }
+}
+
 .character-card-container {
   .config-overlay {
     z-index: 999;

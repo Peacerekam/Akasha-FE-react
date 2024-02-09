@@ -174,7 +174,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const canvasBgRef = useRef<HTMLCanvasElement>(null);
 
   const { translate } = useContext(TranslationContext);
-  const { contentWidth } = useContext(AdProviderContext);
+  const { contentWidth, isMobile } = useContext(AdProviderContext);
   const { metric, customRvFilter, getTopRanking } = useContext(SettingsContext);
 
   const {
@@ -266,6 +266,20 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
     return translate(output);
   };
+
+  useEffect(() => {
+    if (isMobile) {
+      if (isDragging) {
+        document.body.classList.add("lock-scrolling");
+      } else {
+        document.body.classList.remove("lock-scrolling");
+      }
+    }
+
+    return () => {
+      document.body.classList.remove("lock-scrolling");
+    };
+  }, [isDragging, isMobile]);
 
   useEffect(() => {
     window.addEventListener("resize", handleWindowSizeChange);

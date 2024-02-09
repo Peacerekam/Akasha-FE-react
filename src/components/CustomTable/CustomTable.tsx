@@ -761,6 +761,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
       <PerfectScrollbar
         options={{
           suppressScrollY: true,
+          // suppressScrollX: false,
         }}
       >
         <table className={tableClassNames} cellSpacing={0}>
