@@ -47,7 +47,7 @@ export default class PlaywireAdsComponent extends React.Component<
     const adID = AD_TYPE_TO_KEY[adType];
     if (!adID) return;
 
-    console.log(`%c\n > ${adID}: MOUNT `, "color: green; font-size: 16px;");
+    console.log(`%c  > Mount: ${adID}`, "color: green;");
   }
 
   componentWillUnmount() {
@@ -60,7 +60,7 @@ export default class PlaywireAdsComponent extends React.Component<
     const adID = AD_TYPE_TO_KEY[adType];
     if (!adID) return;
 
-    console.log(`%c\n > ${adID}: UNMOUNT `, "color: red; font-size: 16px;");
+    console.log(`%c  > Unmount: ${adID}`, "color: red;");
   }
 
   render() {
