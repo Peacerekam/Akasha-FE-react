@@ -141,6 +141,21 @@ const compressPNG = async (
   });
 };
 
+const getCoordsFromEvent = (event: MouseOrTouchEvent) => {
+  const isMouseEvent = "clientX" in event;
+  const coords = isMouseEvent
+    ? event
+    : event?.touches?.[0] || event?.changedTouches?.[0];
+
+  const x = coords.clientX || 0;
+  const y = coords.clientY || 0;
+
+  return { x, y };
+};
+
+type OpenDownloadingFalse = "opening" | "downloading" | false;
+type VerticalOrHorizontal = "vertical" | "horizontal" | "";
+
 export const CharacterCard: React.FC<CharacterCardProps> = ({
   row,
   artifacts,
@@ -159,24 +174,22 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const [toggleConfigure, setToggleConfigure] = useState(false);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [isLoadingImage, setIsLoadingImage] = useState(false);
-  const [generating, setGenerating] = useState<
-    "opening" | "downloading" | false
-  >(false);
-  const [hasCustomBg, setHasCustomBg] = useState<
-    "vertical" | "horizontal" | ""
-  >("");
+  const [generating, setGenerating] = useState<OpenDownloadingFalse>(false);
+  const [hasCustomBg, setHasCustomBg] = useState<VerticalOrHorizontal>("");
 
   // dragging related
   const [compressedImage, setCompressedImage] = useState<string>();
-  const [dragOffset, setDragOffset] = useState<Coords | null>(null);
   const [imgDimensions, setImgDimensions] = useState<Coords>({ x: 0, y: 0 });
+  const [dragOffset, setDragOffset] = useState<Coords | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
+  // refs
   const uploadPictureInputRef = useRef<HTMLInputElement>(null);
   const backgroundPictureRef = useRef<HTMLImageElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvasBgRef = useRef<HTMLCanvasElement>(null);
 
+  // context
   const { translate } = useContext(TranslationContext);
   const { contentWidth, isMobile } = useContext(AdProviderContext);
   const { metric, customRvFilter, getTopRanking } = useContext(SettingsContext);
@@ -194,47 +207,33 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     setPrivacyFlag,
   } = useCardSettings();
 
-  const cardErrorCallback = async () => {
-    if (!errorCallback) return;
+  const location = useLocation();
+  const DEBUG_MODE = location.search?.includes("debug");
 
-    console.log("\nRerendering character card...", row.name, row.type);
-    errorCallback();
-  };
-
+  const buildId = `${row.md5}`;
   const calculations = _calculations.calculations;
   const chartsData = _calculations.chartsData;
 
-  const hardcodedScale = +Math.max(
-    0.87,
-    contentWidth ? contentWidth / 1280 : 1
-  ).toFixed(3);
+  const canvasPixelDensity = 2; // helps when exporting at higher scale
+  const maxScale = contentWidth ? contentWidth / 1280 : 1;
+  const hardcodedScale = +Math.max(0.87, maxScale).toFixed(3);
+
   const canvasWidth = 500 * hardcodedScale;
   const canvasHeight = 485 * hardcodedScale;
-
   const canvasBgWidth = 1200 * hardcodedScale;
   const canvasBgHeight = 485 * hardcodedScale;
-
-  const canvasPixelDensity = 2;
-
-  const location = useLocation();
-  const DEBUG_MODE = location.search?.includes("debug");
 
   const noElementColor = "#ffffff";
   const elementKey = chartsData?.characterMetadata?.element;
   const elementalColor = ELEMENT_TO_COLOR[elementKey];
-  // const namecardBgUrl = toEnkaUrl(chartsData?.characterMetadata?.namecard);
-  // const elementalBgUrl = `/elementalBackgrounds/${chartsData?.characterMetadata?.element}-bg.jpg`;
-  // const actualBgUrl = namecardBg ? namecardBgUrl : elementalBgUrl;
-  // const elementalBg = `url(/elementalBackgrounds/${chartsData?.characterMetadata?.element}-bg.png)`
 
-  const cardStyle = {
-    // "--hue-rotate": `${
-    //   ELEMENT_TO_HUE[chartsData?.characterMetadata?.element]
-    // }deg`,
-    // "--elemental-bg": `url(${elementalBgUrl})`,
-    "--element-color": elementalColor || noElementColor,
-    "--element-color-2": `${elementalColor || noElementColor}70`,
-    // "--character-namecard-url": `url(${actualBgUrl})`,
+  const windowSizeT = 1280 - 10;
+  const maxCardWidth = Math.min(windowSizeT, width);
+  const scaleFactor = Math.max(0.75, +(maxCardWidth / windowSizeT));
+  const formattedSF = scaleFactor.toFixed(3);
+  const wrapperStyle = {
+    "--hardcoded-card-scale": hardcodedScale,
+    "--scale-factor": formattedSF,
   } as React.CSSProperties;
 
   const handleToggleModal = (event: React.MouseEvent<HTMLElement>) => {
@@ -271,20 +270,14 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     return translate(output);
   };
 
-  useEffect(() => {
-    if (isMobile) {
-      if (isDragging) {
-        document.body!.classList.add("lock-scrolling");
-      } else {
-        document.body!.classList.remove("lock-scrolling");
-      }
-    }
+  const cardErrorCallback = async () => {
+    if (!errorCallback) return;
 
-    return () => {
-      document.body!.classList.remove("lock-scrolling");
-    };
-  }, [isDragging, isMobile]);
+    console.log("\nRerendering character card...", row.name, row.type);
+    errorCallback();
+  };
 
+  // resize handler
   useEffect(() => {
     window.addEventListener("resize", handleWindowSizeChange);
 
@@ -293,12 +286,29 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     };
   }, []);
 
+  // lock viewport on mobile when dragging image on the card
+  useEffect(() => {
+    if (isMobile) {
+      if (isDragging) {
+        document.body!.classList.add("lock-viewport");
+      } else {
+        document.body!.classList.remove("lock-viewport");
+      }
+    }
+
+    return () => {
+      document.body!.classList.remove("lock-viewport");
+    };
+  }, [isDragging, isMobile]);
+
+  // canvas pixel density
   useEffect(() => {
     if (!canvasRef.current || !backgroundPictureRef.current) return;
     const ctx = canvasRef.current.getContext("2d");
     ctx!.scale(canvasPixelDensity, canvasPixelDensity);
   }, [canvasRef, backgroundPictureRef]);
 
+  // canvas re-painting
   useEffect(() => {
     if (!backgroundPictureRef.current) return;
     if (adaptiveBgColor === undefined || namecardBg === undefined) return;
@@ -312,9 +322,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         cardErrorCallback();
         return;
       }
-
-      // @TODO: save backgroundPictureRef.current.src into state
-      // @TODO: so it can be reverted to at any time
 
       try {
         paintImageToCanvas(
@@ -790,9 +797,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     customRvFilter[row.name]?.length,
   ]);
 
-  const artifactsDiv =
-    reorderedArtifacts.length > 0 ? compactList : "no artifacts equipped";
-
   const paintImageToCanvas = useCallback(
     async (
       result: string,
@@ -1106,9 +1110,14 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         pointerPos?: Coords,
         noDrag?: boolean
       ) => paintImageToCanvas(result, mode, coldStart, pointerPos, noDrag),
-      5 // ~ 200fps
+      isMobile ? 32 : 8
+      //  5 ms =   200 fps // <-- seems to lag on mobile?
+      //  8 ms = ~ 120 fps
+      // 10 ms =   100 fps
+      // 16 ms = ~  60 fps
+      // 32 ms = ~  30 fps
     ),
-    [paintImageToCanvas]
+    [paintImageToCanvas, isMobile]
   );
 
   const characterShowcase = useMemo(() => {
@@ -1117,7 +1126,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       "character-showcase-pic-container",
       toggleConfigure ? "editable" : "",
       isDragging ? "is-dragging" : "",
-      hasCustomBg,
+      hasCustomBg, // "horizontal", "vertical" or ""
       row.name === "Traveler" ? "is-traveler" : "",
       generating ? "is-generating" : "",
       charImgUrl ? "" : "disable-input",
@@ -1131,73 +1140,63 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       if (!toggleConfigure) return;
 
       setIsDragging(true);
-
-      // desktop event
-      const isMouseEvent = "clientX" in event;
-
-      setDragOffset((prev) => {
-        const x = isMouseEvent
-          ? event.clientX
-          : event?.touches?.[0].clientX || 0;
-        const y = isMouseEvent
-          ? event.clientY
-          : event?.touches?.[0].clientY || 0;
-        return {
-          x: x - (prev?.x || 0),
-          y: y - (prev?.y || 0),
-        };
-      });
-    };
-
-    const onContainerMouseMove = (event: MouseOrTouchEvent) => {
-      if (!isDragging) return;
-      if (!toggleConfigure) return;
-      if (!compressedImage) return;
-
-      // desktop event
-      const isMouseEvent = "clientX" in event;
-
-      const pointerPos = {
-        x: isMouseEvent ? event.clientX : event?.touches?.[0].clientX || 0,
-        y: isMouseEvent ? event.clientY : event?.touches?.[0].clientY || 0,
-      };
-
-      throttledPaintImageToCanvas(
-        compressedImage,
-        paintMode,
-        false,
-        pointerPos
-      );
-    };
-
-    const onContainerMouseUp = (event: MouseOrTouchEvent) => {
-      if (!isDragging) return;
-      if (!toggleConfigure) return;
-      if (!compressedImage) return;
-
-      setIsDragging(false);
-
-      // desktop event
-      const isMouseEvent = "clientX" in event;
-
-      const pointerPos = {
-        x: isMouseEvent
-          ? event.clientX
-          : event?.changedTouches?.[0].clientX || 0,
-        y: isMouseEvent
-          ? event.clientY
-          : event?.changedTouches?.[0].clientY || 0,
-      };
+      const { x, y } = getCoordsFromEvent(event);
 
       setDragOffset((prev) => ({
-        x: pointerPos.x - (prev?.x || 0),
-        y: pointerPos.y - (prev?.y || 0),
+        x: x - (prev?.x || 0),
+        y: y - (prev?.y || 0),
       }));
     };
 
+    const onContainerMouseUp = (event: MouseOrTouchEvent) => {
+      if (!isDragging || !toggleConfigure || !compressedImage) return;
+
+      setIsDragging(false);
+      const { x, y } = getCoordsFromEvent(event);
+
+      setDragOffset((prev) => ({
+        x: x - (prev?.x || 0),
+        y: y - (prev?.y || 0),
+      }));
+    };
+
+    const onContainerMouseMove = (event: MouseOrTouchEvent) => {
+      if (!isDragging || !toggleConfigure || !compressedImage) return;
+
+      const pos = getCoordsFromEvent(event);
+      throttledPaintImageToCanvas(compressedImage, paintMode, false, pos);
+    };
+
     const onContainerClick = () => {
-      // enable zoom and upload pic buttons
-      setToggleConfigure(true);
+      setToggleConfigure(true); // enable zoom and upload pic buttons
+    };
+
+    const onFileUpload = () => {
+      const file = uploadPictureInputRef?.current?.files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+
+      reader.addEventListener(
+        "load",
+        async () => {
+          const dataURL = await compressPNG(
+            reader.result + "",
+            canvasWidth,
+            canvasHeight,
+            2
+          );
+
+          setDragOffset(null);
+          setZoomLevel(1);
+          setCompressedImage(dataURL);
+          paintImageToCanvas(dataURL, false, false, null, true);
+          setHasCustomBg("horizontal");
+        },
+        false
+      );
+
+      reader.readAsDataURL(file);
     };
 
     return (
@@ -1227,33 +1226,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             type="file"
             name="filename"
             style={{ display: "none", pointerEvents: "all" }}
-            onChange={() => {
-              const file = uploadPictureInputRef?.current?.files?.[0];
-              if (!file) return;
-
-              const reader = new FileReader();
-
-              reader.addEventListener(
-                "load",
-                async () => {
-                  const dataURL = await compressPNG(
-                    reader.result + "",
-                    canvasWidth,
-                    canvasHeight,
-                    2
-                  );
-
-                  setDragOffset(null);
-                  setZoomLevel(1);
-                  setCompressedImage(dataURL);
-                  paintImageToCanvas(dataURL, false, false, null, true);
-                  setHasCustomBg("horizontal");
-                },
-                false
-              );
-
-              reader.readAsDataURL(file);
-            }}
+            onChange={onFileUpload}
           />
           <canvas
             width={canvasWidth * canvasPixelDensity}
@@ -1347,8 +1320,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     [row, chartsData, translate]
   );
 
-  const getBuildId = (build: any) => `${build.md5}`;
-
   const renderOptions = useCallback(
     (calcId: any) => {
       const c = calculations[calcId];
@@ -1441,28 +1412,16 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     [calculations, translate]
   );
 
-  const hasLeaderboardsColumn =
-    filteredLeaderboards.length > 0 && filteredLeaderboards[0] !== "hide";
+  const cardOverlay = useMemo(() => {
+    const talentSkillProps = toTalentProps(row, ["elementalSkill"], chartsData);
+    const talentBurstProps = toTalentProps(row, ["elementalBurst"], chartsData);
+    const talentNAProps = toTalentProps(
+      row,
+      ["normalAttacks", "normalAttack"],
+      chartsData
+    );
 
-  const talentNAProps = toTalentProps(
-    row,
-    ["normalAttacks", "normalAttack"],
-    chartsData
-  );
-  const talentSkillProps = toTalentProps(row, ["elementalSkill"], chartsData);
-  const talentBurstProps = toTalentProps(row, ["elementalBurst"], chartsData);
-
-  // const cvTextColor = getCharacterCvColor(row.critValue);
-  // let cvTextStyle = {} as React.CSSProperties;
-
-  // if (cvTextColor === "rainbow") {
-  //   cvTextStyle = getRainbowTextStyle();
-  // } else {
-  //   cvTextStyle.filter = `drop-shadow(0 0 5px ${cvTextColor})`;
-  // }
-
-  const cardOverlay = useMemo(
-    () => (
+    return (
       <>
         <div key="character-name" className="character-name">
           <div>
@@ -1477,9 +1436,9 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           )}
         </div>
         {/* 
-        <div className="character-title">{chartsData?.characterMetadata?.title}</div>
-        <div className="character-title">{chartsData?.characterMetadata?.constellation}</div> 
-        */}
+          <div className="character-title">{chartsData?.characterMetadata?.title}</div>
+          <div className="character-title">{chartsData?.characterMetadata?.constellation}</div> 
+          */}
         <div className="character-level">
           {translate("Lv.")} {row.propMap.level.val}
           <span className="opacity-5">
@@ -1490,12 +1449,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           <img alt="friendship" src={FriendshipIcon} />{" "}
           {row.fetterInfo.expLevel}
         </div>
-        <div
-          className="character-cv"
-          // style={cvTextStyle}
-        >
-          {row.critValue.toFixed(1)} cv
-        </div>
+        <div className="character-cv">{row.critValue.toFixed(1)} cv</div>
         {!privacyFlag && (
           <div key="character-uid" className="character-uid">
             {row.uid}
@@ -1539,20 +1493,15 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           <TalentDisplay talent={talentBurstProps} />
         </div>
       </>
-    ),
-    [
-      row,
-      privacyFlag,
-      talentNAProps,
-      talentSkillProps,
-      talentBurstProps,
-      displayBuildName,
-      toggleConfigure,
-    ]
-  );
+    );
+  }, [row, chartsData, privacyFlag, displayBuildName, toggleConfigure]);
 
   const cardContainer = useMemo(() => {
     const charImgUrl = toEnkaUrl(chartsData?.assets?.gachaIcon);
+
+    const hasLeaderboardsColumn =
+      filteredLeaderboards.length > 0 && filteredLeaderboards[0] !== "hide";
+      
     const cardContainerClassNames = [
       "character-card-container",
       !namecardBg ? "elemental-bg-wrap" : "",
@@ -1570,7 +1519,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     const displayArrows = (
       <div className="drag-arrows">
         <FontAwesomeIcon
-          className=""
           icon={faArrowLeft}
           size={`${arrowSize}x`}
           style={{
@@ -1579,7 +1527,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           }}
         />
         <FontAwesomeIcon
-          className=""
           icon={faArrowRight}
           size={`${arrowSize}x`}
           style={{
@@ -1588,7 +1535,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           }}
         />
         <FontAwesomeIcon
-          className=""
           icon={faArrowUp}
           size={`${arrowSize}x`}
           style={{
@@ -1597,7 +1543,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           }}
         />
         <FontAwesomeIcon
-          className=""
           icon={faArrowDown}
           size={`${arrowSize}x`}
           style={{
@@ -1624,6 +1569,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           className="single-config-button"
           title="Zoom out"
           onClick={() => {
+            // zoom out limit so we never see edges of the images
             const minZoomLevel = paintMode === "gacha" ? 0.64 : 1;
 
             if (imgDimensions.x / zoomIncrement < canvasWidth) {
@@ -1678,6 +1624,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       </div>
     );
 
+    const cardStyle = {
+      "--element-color": elementalColor || noElementColor,
+      "--element-color-2": `${elementalColor || noElementColor}70`,
+    } as React.CSSProperties;
+
     return (
       <div className={cardContainerClassNames} style={cardStyle}>
         {toggleConfigure && (
@@ -1707,7 +1658,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         <div className="character-right">{leaderboardHighlighs}</div>
         <div className="character-artifacts">
           {/* ... */}
-          {artifactsDiv}
+          {compactList}
         </div>
         <div className="character-artifacts-rv">
           <RollList artifacts={reorderedArtifacts} character={row.name} />
@@ -1739,18 +1690,17 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     simplifyColors,
     adaptiveBgColor,
     chartsData,
-    cardStyle,
+    elementalColor,
+    noElementColor,
     generating,
     translate,
     customRvFilter[row.name]?.length,
-    imgDimensions,
     isDragging,
     toggleConfigure,
+    leaderboardHighlighs,
   ]);
 
   const handleSelectChange = (option: any) => {
-    // const filters = options.map((o: any) => o.value);
-    // setFilteredLeaderboards(filters);
     setFilteredLeaderboards([option.value]);
   };
 
@@ -1759,24 +1709,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       return filteredLeaderboards.includes(calc.value);
     });
   }, [filteredLeaderboards, calcOptions]);
-
-  // const defaultOption = useMemo(() => {
-  //   return calcOptions.filter((calc) => {
-  //     return filteredLeaderboards.includes(calc.value);
-  //   });
-  // }, [filteredLeaderboards, calcOptions]);
-
-  const windowSizeT = 1280 - 10;
-  const maxCardWidth = Math.min(windowSizeT, width);
-  const scaleFactor = Math.max(0.75, +(maxCardWidth / windowSizeT));
-  // const formattedSF = (adProvider === "playwire" ? Math.min(0.88, scaleFactor) : scaleFactor).toFixed(3)
-  const formattedSF = scaleFactor.toFixed(3);
-  const wrapperStyle = {
-    "--hardcoded-card-scale": hardcodedScale,
-    "--scale-factor": formattedSF,
-  } as React.CSSProperties;
-
-  const buildId = getBuildId(row);
 
   const handleGenerateAndDownload = async (
     mode: "download" | "open",
@@ -1906,8 +1838,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     }
     setGenerating(false);
   };
-
-  // const mode = !uploadPictureInputRef?.current?.files?.[0] && "gacha";
 
   return (
     <div
