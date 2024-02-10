@@ -59,7 +59,7 @@ import { TeammatesCompact } from "../TeammatesCompact";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import { reactSelectCustomFilterTheme } from "../../utils/reactSelectCustomFilterTheme";
-import { throttle } from "lodash";
+import throttle from "lodash/throttle";
 import { useCardSettings } from "../../hooks/useCardSettings";
 import { useLocation } from "react-router-dom";
 
@@ -1501,7 +1501,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
     const hasLeaderboardsColumn =
       filteredLeaderboards.length > 0 && filteredLeaderboards[0] !== "hide";
-      
+
     const cardContainerClassNames = [
       "character-card-container",
       !namecardBg ? "elemental-bg-wrap" : "",
