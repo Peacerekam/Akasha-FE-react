@@ -769,6 +769,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     const namecardBgUrl = toEnkaUrl(chartsData?.characterMetadata?.namecard);
     const elementalBgUrl = `/elementalBackgrounds/${chartsData?.characterMetadata?.element}-bg.jpg`;
     const actualBgUrl = namecardBg ? namecardBgUrl : elementalBgUrl;
+
     return reorderedArtifacts.map((artifact: any) => {
       return (
         <CompactArtifact
@@ -779,22 +780,22 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             backgroundImage: actualBgUrl,
             adaptiveBgColor,
             namecardBg,
-            adaptiveColors,
+            adaptiveColors: adaptiveColors ? [...adaptiveColors] : undefined,
             hardcodedScale,
           }}
         />
       );
     });
   }, [
-    JSON.stringify(reorderedArtifacts),
-    chartsData,
-    adaptiveBgColor,
-    adaptiveColors,
     row,
+    metric,
+    chartsData,
     namecardBg,
     simplifyColors,
-    metric,
+    adaptiveBgColor,
     customRvFilter[row.name]?.length,
+    JSON.stringify(reorderedArtifacts),
+    JSON.stringify(adaptiveColors),
   ]);
 
   const paintImageToCanvas = useCallback(
@@ -1734,18 +1735,19 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     );
   }, [
     row,
-    namecardBg,
-    simplifyColors,
-    adaptiveBgColor,
+    generating,
+    isDragging,
     chartsData,
+    namecardBg,
+    compactList,
+    simplifyColors,
     elementalColor,
     noElementColor,
-    generating,
-    translate,
-    customRvFilter[row.name]?.length,
-    isDragging,
     toggleConfigure,
+    adaptiveBgColor,
     leaderboardHighlighs,
+    customRvFilter[row.name]?.length,
+    translate,
   ]);
 
   const handleSelectChange = (option: any) => {
