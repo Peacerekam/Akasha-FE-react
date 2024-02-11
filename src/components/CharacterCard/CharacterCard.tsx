@@ -780,7 +780,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             backgroundImage: actualBgUrl,
             adaptiveBgColor,
             namecardBg,
-            adaptiveColors: adaptiveColors ? [...adaptiveColors] : undefined,
+            adaptiveColors,
             hardcodedScale,
           }}
         />
@@ -1278,6 +1278,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             onChange={onFileUpload}
           />
           <canvas
+            key={`canvas-img-${buildId}`} // just to make sure
             width={canvasWidth * canvasPixelDensity}
             height={canvasHeight * canvasPixelDensity}
             style={{
@@ -1545,22 +1546,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     );
   }, [row, chartsData, privacyFlag, displayBuildName, toggleConfigure]);
 
-  const cardContainer = useMemo(() => {
-    const charImgUrl = toEnkaUrl(chartsData?.assets?.gachaIcon);
-
-    const hasLeaderboardsColumn =
-      filteredLeaderboards.length > 0 && filteredLeaderboards[0] !== "hide";
-
-    const cardContainerClassNames = [
-      "character-card-container",
-      !namecardBg ? "elemental-bg-wrap" : "",
-      simplifyColors ? "simplify-colors" : "",
-      hasLeaderboardsColumn ? "" : "no-leaderboards",
-      charImgUrl ? "" : "disable-input",
-    ]
-      .join(" ")
-      .trim();
-
+  const cardOverlayWrapper = useMemo(() => {
     const paintMode = !uploadPictureInputRef?.current?.files?.[0] && "gacha";
     const zoomIncrement = 1.05;
     const arrowSize = 2;
@@ -1673,13 +1659,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       </div>
     );
 
-    const cardStyle = {
-      "--element-color": elementalColor || noElementColor,
-      "--element-color-2": `${elementalColor || noElementColor}70`,
-    } as React.CSSProperties;
-
     return (
-      <div className={cardContainerClassNames} style={cardStyle}>
+      <>
         {toggleConfigure && (
           <div
             className="config-overlay"
@@ -1702,52 +1683,20 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         >
           {cardOverlay}
         </div>
-        <div className="character-left">{characterShowcase}</div>
-        <div className="character-middle">{characterMiddle}</div>
-        <div className="character-right">{leaderboardHighlighs}</div>
-        <div className="character-artifacts">
-          {/* ... */}
-          {compactList}
-        </div>
-        <div className="character-artifacts-rv">
-          <RollList artifacts={reorderedArtifacts} character={row.name} />
-        </div>
-        {/* <div className="wide-bg-shadow" /> */}
-        <div
-          className={`character-card-background ${
-            !namecardBg ? "elemental-bg" : ""
-          }`}
-          // style={bgStyle}
-        >
-          {/* <div /> */}
-          <canvas
-            className="bg-as-canvas"
-            ref={canvasBgRef}
-            width={canvasBgWidth * canvasPixelDensity}
-            height={canvasBgHeight * canvasPixelDensity}
-            style={{
-              width: canvasBgWidth,
-              height: canvasBgHeight,
-            }}
-          />
-        </div>
-      </div>
+      </>
     );
   }, [
     row,
-    generating,
-    isDragging,
     chartsData,
-    namecardBg,
-    compactList,
-    simplifyColors,
-    elementalColor,
-    noElementColor,
+    privacyFlag,
+    displayBuildName,
     toggleConfigure,
-    adaptiveBgColor,
-    leaderboardHighlighs,
-    customRvFilter[row.name]?.length,
-    translate,
+    compressedImage,
+    zoomLevel,
+    isDragging,
+    generating,
+    uploadPictureInputRef,
+    imgDimensions, // ?
   ]);
 
   const handleSelectChange = (option: any) => {
@@ -1889,6 +1838,26 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     setGenerating(false);
   };
 
+  const charImgUrl = toEnkaUrl(chartsData?.assets?.gachaIcon);
+
+  const hasLeaderboardsColumn =
+    filteredLeaderboards.length > 0 && filteredLeaderboards[0] !== "hide";
+
+  const cardContainerClassNames = [
+    "character-card-container",
+    !namecardBg ? "elemental-bg-wrap" : "",
+    simplifyColors ? "simplify-colors" : "",
+    hasLeaderboardsColumn ? "" : "no-leaderboards",
+    charImgUrl ? "" : "disable-input",
+  ]
+    .join(" ")
+    .trim();
+
+  const cardStyle = {
+    "--element-color": elementalColor || noElementColor,
+    "--element-color-2": `${elementalColor || noElementColor}70`,
+  } as React.CSSProperties;
+
   return (
     <div
       className="flex expanded-row relative mb-0 scale-factor-source"
@@ -1905,7 +1874,35 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           id={buildId}
           className={`card-wrapper relative ${DEBUG_MODE ? "debug" : ""}`}
         >
-          <div className="html-to-image-target">{cardContainer}</div>
+          <div className="html-to-image-target">
+            <div className={cardContainerClassNames} style={cardStyle}>
+              {cardOverlayWrapper}
+              <div className="character-left">{characterShowcase}</div>
+              <div className="character-middle">{characterMiddle}</div>
+              <div className="character-right">{leaderboardHighlighs}</div>
+              <div className="character-artifacts">{compactList}</div>
+              <div className="character-artifacts-rv">
+                <RollList artifacts={reorderedArtifacts} character={row.name} />
+              </div>
+              <div
+                className={`character-card-background ${
+                  !namecardBg ? "elemental-bg" : ""
+                }`}
+              >
+                <canvas
+                  key={`canvas-${buildId}`} // just to make sure
+                  className="bg-as-canvas"
+                  ref={canvasBgRef}
+                  width={canvasBgWidth * canvasPixelDensity}
+                  height={canvasBgHeight * canvasPixelDensity}
+                  style={{
+                    width: canvasBgWidth,
+                    height: canvasBgHeight,
+                  }}
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div className="card-buttons-wrapper">
