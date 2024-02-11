@@ -47,6 +47,7 @@ $hardcoded-scale: 1;
       display: flex;
       flex-direction: column;
       align-items: flex-end;
+      pointer-events: none;
 
       .single-config-button {
         display: flex;
@@ -75,6 +76,7 @@ $hardcoded-scale: 1;
         left: 452px * $hardcoded-scale;
       }
       > div {
+        pointer-events: all;
         background-color: rgba(black, 0.6);
         display: flex;
         flex-grow: 0;

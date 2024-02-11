@@ -1154,9 +1154,57 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       setIsDragging(false);
       const { x, y } = getCoordsFromEvent(event);
 
+      let freedomX = (imgDimensions.x - canvasWidth) / 2;
+      let freedomY = (imgDimensions.y - canvasHeight) / 2;
+
+      let leakOffsetX = 0;
+      let leakOffsetY = 0;
+
+      if (dragOffset) {
+        if (paintMode === "gacha") {
+          if (row.name === "Traveler") {
+            freedomX = 160;
+            freedomY = 370;
+          } else {
+            freedomX = 510;
+            freedomY = 158;
+          }
+        }
+
+        const vectorX = dragOffset.x - x;
+        const vectorY = dragOffset.y - y;
+        const isHorizontal = Math.abs(vectorX) > freedomX;
+        const isVertical = Math.abs(vectorY) > freedomY;
+
+        if (isVertical) {
+          if (vectorY < 0) {
+            // leak top
+            const _y = imgDimensions.y / 2 + vectorY;
+            leakOffsetY = (2 * _y - canvasHeight) / 2;
+          } else if (vectorY > 0) {
+            // leak bottom
+            const _y = imgDimensions.y / 2 + vectorY;
+            leakOffsetY = -(2 * freedomY - (2 * _y - canvasHeight) / 2);
+          }
+        }
+
+        // leak left
+        if (isHorizontal) {
+          if (vectorX < 0) {
+            // leak left
+            const _x = imgDimensions.x / 2 + vectorX;
+            leakOffsetX = (2 * _x - canvasWidth) / 2;
+          } else if (vectorX > 0) {
+            // leak right
+            const _x = imgDimensions.x / 2 + vectorX;
+            leakOffsetX = -(2 * freedomX - (2 * _x - canvasWidth) / 2);
+          }
+        }
+      }
+
       setDragOffset((prev) => ({
-        x: x - (prev?.x || 0),
-        y: y - (prev?.y || 0),
+        x: x - (prev?.x || 0) + leakOffsetX,
+        y: y - (prev?.y || 0) + leakOffsetY,
       }));
     };
 
