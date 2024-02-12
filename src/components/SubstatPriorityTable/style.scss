@@ -70,6 +70,9 @@
     display: flex;
     gap: 10px;
     align-items: center;
+    &:hover {
+      color: orange;
+    }
   }
 
   .calc-selection {

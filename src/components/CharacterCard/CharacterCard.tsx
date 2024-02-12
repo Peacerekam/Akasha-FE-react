@@ -1849,6 +1849,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     simplifyColors ? "simplify-colors" : "",
     hasLeaderboardsColumn ? "" : "no-leaderboards",
     charImgUrl ? "" : "disable-input",
+    toggleConfigure ? "editable" : "",
   ]
     .join(" ")
     .trim();

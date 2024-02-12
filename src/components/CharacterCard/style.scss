@@ -94,9 +94,13 @@ $hardcoded-scale: 1;
     }
   }
   &:not(.disable-input) {
+    &.editable {
+      .character-left > div {
+        cursor: grab;
+      }
+    }
     .character-left > div {
-      // cursor: pointer;
-      cursor: grab;
+      cursor: pointer;
     }
   }
   &.disable-input {
