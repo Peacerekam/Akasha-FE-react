@@ -94,20 +94,20 @@ const compressPNG = async (
 ): Promise<string> => {
   return new Promise((resolve) => {
     const img = new Image();
-    const c = document.createElement("canvas");
-    const ctx = c.getContext("2d");
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
 
     const blobToDataURL = (blob: any, callback: any) => {
-      const a = new FileReader();
-      a.onload = function (e: any) {
+      const reader = new FileReader();
+      reader.onload = function (e: any) {
         callback(e.target.result);
       };
-      a.readAsDataURL(blob);
+      reader.readAsDataURL(blob);
     };
 
     img.onload = function () {
-      c.width = img.naturalWidth; // update canvas size to match image
-      c.height = img.naturalHeight;
+      canvas.width = img.naturalWidth; // update canvas size to match image
+      canvas.height = img.naturalHeight;
 
       const imageWidth = img.width;
       const imageHeight = img.height;
@@ -120,13 +120,13 @@ const compressPNG = async (
       const newWidth = imageWidth * canvasScale;
       const newHeight = imageHeight * canvasScale;
 
-      c.width = newWidth; // update canvas size to match image
-      c.height = newHeight;
+      canvas.width = newWidth; // update canvas size to match image
+      canvas.height = newHeight;
 
       // ___ctx!.globalCompositeOperation = "source-in";
       ctx!.drawImage(img, 0, 0, newWidth, newHeight);
 
-      c.toBlob(
+      canvas.toBlob(
         async (blob) => {
           blobToDataURL(blob, (dataURL: any) => {
             resolve(dataURL + "");
@@ -1111,12 +1111,12 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         pointerPos?: Coords,
         noDrag?: boolean
       ) => paintImageToCanvas(result, mode, coldStart, pointerPos, noDrag),
-      isMobile ? 32 : 8
+      isMobile ? 33 : 17
       //  5 ms =   200 fps // <-- seems to lag on mobile?
       //  8 ms = ~ 120 fps
       // 10 ms =   100 fps
-      // 16 ms = ~  60 fps
-      // 32 ms = ~  30 fps
+      // 17 ms = ~  60 fps
+      // 33 ms = ~  30 fps
     ),
     [paintImageToCanvas, isMobile]
   );
@@ -1158,8 +1158,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       let freedomX = (imgDimensions.x - canvasWidth) / 2;
       let freedomY = (imgDimensions.y - canvasHeight) / 2;
 
-      let leakOffsetX = 0;
-      let leakOffsetY = 0;
+      let offsetX = 0;
+      let offsetY = 0;
 
       if (dragOffset) {
         if (paintMode === "gacha") {
@@ -1181,11 +1181,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           if (vectorY < 0) {
             // leak top
             const _y = imgDimensions.y / 2 + vectorY;
-            leakOffsetY = (2 * _y - canvasHeight) / 2;
+            offsetY = (2 * _y - canvasHeight) / 2;
           } else if (vectorY > 0) {
             // leak bottom
             const _y = imgDimensions.y / 2 + vectorY;
-            leakOffsetY = -(2 * freedomY - (2 * _y - canvasHeight) / 2);
+            offsetY = -(2 * freedomY - (2 * _y - canvasHeight) / 2);
           }
         }
 
@@ -1194,18 +1194,18 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           if (vectorX < 0) {
             // leak left
             const _x = imgDimensions.x / 2 + vectorX;
-            leakOffsetX = (2 * _x - canvasWidth) / 2;
+            offsetX = (2 * _x - canvasWidth) / 2;
           } else if (vectorX > 0) {
             // leak right
             const _x = imgDimensions.x / 2 + vectorX;
-            leakOffsetX = -(2 * freedomX - (2 * _x - canvasWidth) / 2);
+            offsetX = -(2 * freedomX - (2 * _x - canvasWidth) / 2);
           }
         }
       }
 
       setDragOffset((prev) => ({
-        x: x - (prev?.x || 0) + leakOffsetX,
-        y: y - (prev?.y || 0) + leakOffsetY,
+        x: x - (prev?.x || 0) + offsetX,
+        y: y - (prev?.y || 0) + offsetY,
       }));
     };
 
@@ -1224,28 +1224,35 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       const file = uploadPictureInputRef?.current?.files?.[0];
       if (!file) return;
 
-      const reader = new FileReader();
+      try {
+        setIsLoadingImage(true);
+        const reader = new FileReader();
 
-      reader.addEventListener(
-        "load",
-        async () => {
-          const dataURL = await compressPNG(
-            reader.result + "",
-            canvasWidth,
-            canvasHeight,
-            2
-          );
+        reader.addEventListener(
+          "load",
+          async () => {
+            const dataURL = await compressPNG(
+              reader.result + "",
+              canvasWidth,
+              canvasHeight,
+              2
+            );
 
-          setDragOffset(null);
-          setZoomLevel(1);
-          setCompressedImage(dataURL);
-          paintImageToCanvas(dataURL, false, false, null, true);
-          setHasCustomBg("horizontal");
-        },
-        false
-      );
+            setDragOffset(null);
+            setZoomLevel(1);
+            setCompressedImage(dataURL);
+            paintImageToCanvas(dataURL, false, false, null, true);
+            setHasCustomBg("horizontal");
+            setIsLoadingImage(false);
+          },
+          false
+        );
 
-      reader.readAsDataURL(file);
+        reader.readAsDataURL(file);
+      } catch (err) {
+        console.log(err);
+        setIsLoadingImage(false);
+      }
     };
 
     return (
