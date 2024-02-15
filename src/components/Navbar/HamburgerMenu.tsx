@@ -59,7 +59,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
     _body?.classList.remove("overflow-hidden");
   };
 
-  const closeDelay = 150;
+  const closeDelay = 50; // honestly it might be useless anyways
 
   const displayNavElement = (
     nav: NavElement,
@@ -139,13 +139,16 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
             {pageNav.map((nav, i) => getNavElement(nav, i, true))}
           </div>
 
-          <div className="navbar-spacer with-label" data-label="recently viewed" />
+          <div
+            className="navbar-spacer with-label"
+            data-label="recently viewed"
+          />
 
           <div className="player-tabs-nav">
             {lastProfiles.map((profile) => {
               const { uid, nickname, priority } = profile;
               const isFav = priority === 2;
-               
+
               const classNames = [
                 "navbar-tab",
                 location.pathname.endsWith(uid) ? "active-tab" : "",

@@ -60,7 +60,7 @@ import { TranslationContext } from "../../context/TranslationProvider/Translatio
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import { reactSelectCustomFilterTheme } from "../../utils/reactSelectCustomFilterTheme";
 import throttle from "lodash/throttle";
-import { useCardSettings } from "../../hooks/useCardSettings";
+import { useCardSettings } from "../../hooks/";
 import { useLocation } from "react-router-dom";
 
 // import imglyRemoveBackground, { Config } from "@imgly/background-removal";

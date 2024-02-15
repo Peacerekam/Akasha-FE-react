@@ -8,6 +8,7 @@ import {
 
 import { StatIcon } from "../StatIcon";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import { getPercentageStat } from "../StatListCard";
 import { useContext } from "react";
 
 type StatListProps = {
@@ -57,23 +58,22 @@ export const getStatsFromRow = (row: any) => {
   const hp = stats.maxHp.value.toFixed(0);
   const atk = stats.atk.value.toFixed(0);
   const def = stats.def.value.toFixed(0);
-  const cr = ((stats.critRate?.value || 0) * 100).toFixed(1);
-  const cd = ((stats.critDamage?.value || 0) * 100).toFixed(1);
-  const er = ((stats.energyRecharge?.value || 0) * 100).toFixed(1);
+
+  const cr = getPercentageStat(stats.critRate, 1);
+  const cd = getPercentageStat(stats.critDamage, 1);
+  const er = getPercentageStat(stats.energyRecharge, 1);
   const em = +stats.elementalMastery?.value.toFixed(0) || 0;
 
-  const healBonus = ((stats.healingBonus?.value || 0) * 100).toFixed(1);
+  const healBonus = getPercentageStat(stats.healingBonus, 1);
 
-  const pyroDMG = ((stats.pyroDamageBonus?.value || 0) * 100).toFixed(1);
-  const hydroDMG = ((stats.hydroDamageBonus?.value || 0) * 100).toFixed(1);
-  const cryoDMG = ((stats.cryoDamageBonus?.value || 0) * 100).toFixed(1);
-  const dendroDMG = ((stats.dendroDamageBonus?.value || 0) * 100).toFixed(1); // partially missing data
-  const electroDMG = ((stats.electroDamageBonus?.value || 0) * 100).toFixed(1);
-  const anemoDMG = ((stats.anemoDamageBonus?.value || 0) * 100).toFixed(1);
-  const geoDMG = ((stats.geoDamageBonus?.value || 0) * 100).toFixed(1);
-  const physicalDMG = ((stats.physicalDamageBonus?.value || 0) * 100).toFixed(
-    1
-  );
+  const pyroDMG = getPercentageStat(stats.pyroDamageBonus, 1);
+  const hydroDMG = getPercentageStat(stats.hydroDamageBonus, 1);
+  const cryoDMG = getPercentageStat(stats.cryoDamageBonus, 1);
+  const dendroDMG = getPercentageStat(stats.dendroDamageBonus, 1);
+  const electroDMG = getPercentageStat(stats.electroDamageBonus, 1);
+  const anemoDMG = getPercentageStat(stats.anemoDamageBonus, 1);
+  const geoDMG = getPercentageStat(stats.geoDamageBonus, 1);
+  const physicalDMG = getPercentageStat(stats.physicalDamageBonus, 1);
 
   return {
     hp,

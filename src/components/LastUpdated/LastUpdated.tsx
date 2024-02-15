@@ -41,27 +41,19 @@ export const LastUpdated: React.FC<LastUpdatedProps> = ({
     const oneMinute = 1000 * 60;
     if (then < oneMinute) {
       return getRtf(secondsCount, "second");
-      // const _s = secondsCount > 1 ? "s" : "";
-      // return [secondsCount, `second${_s} ago`];
     }
 
     const oneHour = oneMinute * 60;
     if (then < oneHour) {
       return getRtf(minutesCount, "minute");
-      // const _s = minutesCount > 1 ? "s" : "";
-      // return [minutesCount, `minute${_s} ago`];
     }
 
     const oneDay = oneHour * 24;
     if (then < oneDay) {
       return getRtf(hoursCount, "hour");
-      // const _s = hoursCount > 1 ? "s" : "";
-      // return [hoursCount, `hour${_s} ago`];
     }
 
     return getRtf(daysCount, "day");
-    // const _s = daysCount > 1 ? "s" : "";
-    // return [daysCount, `day${_s} ago`];
   }, [lastProfileUpdate, language]);
 
   useEffect(() => {

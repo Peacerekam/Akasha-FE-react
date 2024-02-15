@@ -92,7 +92,6 @@ const appRoutes: {
   Element: React.FC<any>;
   props?: any;
 }[] = [
-  // { path: "/", Element: AccountsPage },
   { path: "/", Element: DashboardPage },
   { path: "/faq", Element: FAQPage },
   { path: "/artifacts", Element: ArtifactsPage },
@@ -154,7 +153,6 @@ const App = () => {
             <AdProviderContextProvider>
               <TitleContextProvider>
                 <TranslationContextProvider>
-                  {/* <MobileStickyBar /> */}
                   <div id="top-of-the-page">
                     {/* <NotificationBar /> */}
                     <Navbar />

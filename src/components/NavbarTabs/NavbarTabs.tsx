@@ -8,7 +8,7 @@ import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesCont
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 
 export const NavbarTabs: React.FC = () => {
-  const [animationStagger, setAnimationStagger] = useState(150);
+  const [animationStagger, setAnimationStagger] = useState(75);
   const { lastProfiles, removeTab } = useContext(LastProfilesContext);
   const navigate = useNavigate();
   const location = useLocation();

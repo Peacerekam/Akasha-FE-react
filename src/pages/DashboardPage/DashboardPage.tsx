@@ -13,6 +13,16 @@ export const DashboardPage: React.FC = () => {
   // const navigate = useNavigate();
   // const pathname = window.location.pathname;
 
+  const newsHeader = (
+    <div className="news-header">
+      <FontAwesomeIcon icon={faHashtag} size="1x" title="#akasha-news" />
+      akasha-news
+      <span className="ch-desc">
+        <span className="ch-spacer">|</span>fetched via Discord
+      </span>
+    </div>
+  );
+
   return (
     <div className="flex">
       <div className="content-block w-100" id="content-container">
@@ -22,17 +32,7 @@ export const DashboardPage: React.FC = () => {
           <LookupUID />
 
           <div className="block-highlight news-section">
-            <div className="news-header">
-              <FontAwesomeIcon
-                icon={faHashtag}
-                size="1x"
-                title="#akasha-news"
-              />
-              akasha-news
-              <span className="ch-desc">
-                <span className="ch-spacer">|</span>fetched via Discord
-              </span>
-            </div>
+            {newsHeader}
             <NewsDisplay />
           </div>
 

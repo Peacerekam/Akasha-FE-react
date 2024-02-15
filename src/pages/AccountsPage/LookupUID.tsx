@@ -26,6 +26,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
 import { TableColumn } from "../../types/TableColumn";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import { abyssProgressToColor } from "./AccountsPage";
 import debounce from "lodash/debounce";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 
@@ -170,32 +171,16 @@ export const LookupUID: React.FC = () => {
         },
       },
       {
-        name: "Abyss",
+        name: "Spiral Abyss",
         sortable: false,
-        sortField: "playerInfo.worldLevel",
+        sortField: "playerInfo.towerFloorIndex",
         width: "70px",
         cell: (row) => {
           const floor = row?.playerInfo?.towerFloorIndex || "";
           const chamber = row?.playerInfo?.towerLevelIndex || "";
 
           const abyssProgress = floor && chamber ? `${floor}-${chamber}` : "";
-          let color = "gray";
-
-          if (floor === 10) {
-            color = "rgb(102, 163, 255)";
-          }
-          if (floor === 11) {
-            color = "rgb(194, 102, 255)";
-          }
-          if (floor === 11 && chamber === 3) {
-            color = "orange";
-          }
-          if (floor === 12) {
-            color = "rgb(255, 217, 0)";
-          }
-          if (floor === 12 && chamber === 3) {
-            color = "cyan";
-          }
+          const color = abyssProgressToColor(floor, chamber)
 
           return <div style={{ color }}>{abyssProgress}</div>;
         },

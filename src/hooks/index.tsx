@@ -1,1 +1,2 @@
-export * from "./useFetchTableData"
+export * from "./useFetchTableData";
+export * from "./useCardSettings";

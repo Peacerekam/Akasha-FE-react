@@ -45,7 +45,7 @@ export const RollList: React.FC<RollListProps> = ({ artifacts, character }) => {
       acc[realStatName] = {
         count: (acc[realStatName]?.count ?? 0) + 1,
         sum: (acc[realStatName]?.sum ?? 0) + value,
-        rv: (acc[realStatName]?.rv ?? 0) + 123,
+        // rv: (acc[realStatName]?.rv ?? 0) + 123,
       };
     }
     return acc;

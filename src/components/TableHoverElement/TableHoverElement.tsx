@@ -95,7 +95,7 @@ export const TableHoverElement: React.FC<TableHoverElementProps> = ({
     const wrapperClassNames = [
       "hover-element row-hover-artifact-preview account-hover-wrapper",
       hide ? "fade-out" : "fade-in",
-      borderColorClass
+      borderColorClass,
     ].join(" ");
 
     return (
@@ -139,7 +139,6 @@ export const TableHoverElement: React.FC<TableHoverElementProps> = ({
           showWeapon
         />
       </FancyBuildBorder>
-      {/* {true && <StatListSide row={rowData} strikethrough={strikethrough} />} */}
     </FollowCursor>
   );
 };

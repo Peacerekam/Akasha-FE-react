@@ -4,7 +4,7 @@ import {
   getDefaultRvFilters,
 } from "../../components/RollList/defaultFilters";
 
-import { UseState } from "../../hooks/useCardSettings";
+import { UseState } from "../../hooks/";
 import { getSummedArtifactRolls } from "../../utils/helpers";
 
 export type Metric = "RV" | "CV";

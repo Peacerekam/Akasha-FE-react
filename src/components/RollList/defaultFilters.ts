@@ -9,7 +9,7 @@ const ATK = "Flat ATK";
 const DEF = "Flat DEF";
 const HP = "Flat HP";
 
-const anemoRvList = {
+const ANEMO_RV_LIST = {
   Sayu: [EM, ER],
   Venti: [CRate, CDMG, ATK_, EM, ER],
   Xiao: [CRate, CDMG, ATK_, ER],
@@ -17,10 +17,11 @@ const anemoRvList = {
   Faruzan: [CRate, CDMG, ATK_, ER],
   Wanderer: [CRate, CDMG, ATK_, ER],
   "Kaedehara Kazuha": [CRate, CDMG, ATK_, EM, ER],
+  Sucrose: [CRate, CDMG, ATK_, EM, ER],
   Xianyun: [CRate, CDMG, ATK_, ER],
 };
 
-const pyroRvList = {
+const PYRO_RV_LIST = {
   Klee: [CRate, CDMG, ATK_, EM],
   Diluc: [CRate, CDMG, ATK_, EM],
   Dehya: [CRate, CDMG, ATK_, ER, HP_],
@@ -37,7 +38,7 @@ const pyroRvList = {
   Gaming: [CRate, CDMG, ATK_, EM],
 };
 
-const hydroRvList = {
+const HYDRO_RV_LIST = {
   Nilou: [CRate, EM, ER, CDMG, HP_, HP],
   Xingqiu: [CRate, CDMG, ATK_, ER],
   Mona: [CRate, CDMG, ER, EM, ATK_],
@@ -50,7 +51,7 @@ const hydroRvList = {
   Barbara: [CRate, CDMG, ATK_, HP_, ER],
 };
 
-const cryoRvList = {
+const CRYO_RV_LIST = {
   Diona: [HP_, ER],
   Qiqi: [CRate, CDMG, ATK_],
   Eula: [CRate, CDMG, ER, ATK_],
@@ -62,7 +63,7 @@ const cryoRvList = {
   Mika: [CRate, CDMG, HP_, ER, ATK_],
 };
 
-const geoRvList = {
+const GEO_RV_LIST = {
   Albedo: [CRate, CDMG, DEF_],
   Noelle: [CRate, CDMG, DEF_, ATK_, ER],
   Zhongli: [CRate, CDMG, ATK_, HP_],
@@ -71,7 +72,7 @@ const geoRvList = {
   Navia: [CRate, CDMG, ATK_, ER],
 };
 
-const electroRvList = {
+const ELECTRO_RV_LIST = {
   Razor: [CRate, CDMG, ATK_],
   Lisa: [CRate, CDMG, ATK_, EM],
   Fischl: [ATK_, EM, CRate, CDMG],
@@ -85,7 +86,7 @@ const electroRvList = {
   Dori: [CRate, CDMG, HP_, ATK_, ER],
 };
 
-const dendroRvList = {
+const DENDRO_RV_LIST = {
   Nahida: [CRate, CDMG, EM],
   Alhaitham: [CRate, CDMG, ATK_, EM, ER],
   Tighnari: [CRate, CDMG, ATK_, EM, ER],
@@ -96,13 +97,13 @@ const dendroRvList = {
 const defaultRvFilter = [CRate, CDMG];
 
 export const allRvFilters: Record<string, string[]> = {
-  ...anemoRvList,
-  ...pyroRvList,
-  ...hydroRvList,
-  ...cryoRvList,
-  ...geoRvList,
-  ...electroRvList,
-  ...dendroRvList,
+  ...ANEMO_RV_LIST,
+  ...PYRO_RV_LIST,
+  ...HYDRO_RV_LIST,
+  ...CRYO_RV_LIST,
+  ...GEO_RV_LIST,
+  ...ELECTRO_RV_LIST,
+  ...DENDRO_RV_LIST,
 };
 
 export const getDefaultRvFilters = (character: string) => {

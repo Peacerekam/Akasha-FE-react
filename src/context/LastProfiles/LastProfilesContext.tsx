@@ -60,9 +60,6 @@ const LastProfilesContextProvider: React.FC<{ children: any }> = ({
     });
   };
 
-  // const sortByPriority = (a: NicknameUidPair, b: NicknameUidPair) =>
-  //   (a?.priority || 1) < (b?.priority || 1) ? 1 : -1;
-
   // add tab to state
   const addTab = (uid: string, nickname: string) => {
     setLastProfiles((prev) => {
@@ -108,10 +105,6 @@ const LastProfilesContextProvider: React.FC<{ children: any }> = ({
       const sliceFrom = -tabLimit + favourites.length;
 
       return [...favourites, ...rest.slice(sliceFrom)];
-
-      // return favourites
-      //   .concat([...rest, newProfile].slice(sliceFrom))
-      //   .sort(sortByPriority);
     });
   };
 

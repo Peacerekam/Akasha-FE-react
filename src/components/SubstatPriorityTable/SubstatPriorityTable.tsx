@@ -46,12 +46,12 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
   row,
   selectedCalculationId,
 }) => {
-  const [selectedCalcId, setSelectedCalcId] = useState<string>(
+  const [calculationId, setCalculationId] = useState<string>(
     selectedCalculationId || ""
   );
   const [priorityData, setPriorityData] = useState<SubstatPriority[]>([]);
-  const [show, setShow] = useState(false);
   const [relativeTo, setRelativeTo] = useState<string>("Base");
+  const [show, setShow] = useState(false);
 
   const { translate } = useContext(TranslationContext);
 
@@ -72,12 +72,12 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
 
   useEffect(() => {
     if (selectedCalculationId) {
-      setSelectedCalcId(selectedCalculationId);
+      setCalculationId(selectedCalculationId);
     }
   }, [selectedCalculationId]);
 
   const handleSelectChange = (option: any) => {
-    setSelectedCalcId(option.value);
+    setCalculationId(option.value);
   };
 
   const calcOptions = useMemo(
@@ -116,9 +116,11 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
               </>
             );
 
-            const rawLabel = `${_data.calculation.weapon.name} R${
-              _data.calculation.weapon.refinement
-            } ${_data.calculation.name} ${calc.variant || ""}`;
+            const weaponName = _data.calculation.weapon.name;
+            const weaponRefinement = _data.calculation.weapon.refinement;
+            const calcName = _data.calculation.name;
+            const calcVariant = calc.variant || "";
+            const rawLabel = `${weaponName} R${weaponRefinement} ${calcName} ${calcVariant}`;
 
             const thisOpt = {
               label,
@@ -133,8 +135,8 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
   );
 
   const selectedOption = useMemo(() => {
-    return calcOptions.find((d) => d.value === selectedCalcId);
-  }, [selectedCalcId, priorityData, selectedCalcId, translate]);
+    return calcOptions.find((d) => d.value === calculationId);
+  }, [priorityData, calculationId, translate]);
 
   const calcsSelection = useMemo(() => {
     return (
@@ -179,9 +181,9 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
 
   const selectedPriorityData = useMemo(() => {
     return priorityData?.find(
-      (x) => x.calculation.calculationId === selectedCalcId
+      (x) => x.calculation.calculationId === calculationId
     );
-  }, [priorityData, selectedCalcId, selectedOption]);
+  }, [priorityData, calculationId, selectedOption]);
 
   //
   //  HEADERS
