@@ -3,7 +3,7 @@ import "./patreon.scss";
 import "react-perfect-scrollbar/dist/css/styles.css";
 
 import App from "./App";
-import React from "react";
+// import React from "react";
 import ReactDOM from "react-dom/client";
 
 const root = ReactDOM.createRoot(

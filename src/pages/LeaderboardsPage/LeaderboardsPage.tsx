@@ -302,9 +302,32 @@ export const LeaderboardsPage: React.FC = () => {
 
     const opts = { params: { characterId } };
     const response = await axios.get(FETCH_CATEGORIES_URL_V2, opts);
-    const { data } = response.data;
+    const { data }: { data: CalculationInfoResponse[] } = response.data;
 
-    const sortedData = data.sort((c: any) => (c.label === "niche" ? 1 : -1));
+    const sortFn = (a: CalculationInfoResponse, b: CalculationInfoResponse) => {
+      if (a.label === b.label) {
+        // C6 leaderboards show last
+        if (b.name.startsWith("C6")) {
+          return -1;
+        }
+        if (a.name.startsWith("C6")) {
+          return 1;
+        }
+
+        // similar names will sort based on calcId
+        if (a.name.slice(0, 7) === b.name.slice(0, 7)) {
+          const _a_id = a.weapons?.[0]?.calculationId;
+          const _b_id = b.weapons?.[0]?.calculationId;
+          return _b_id > _a_id ? -1 : 1;
+        }
+
+        // otherwise sort based on name alone
+        return a.name > b.name ? -1 : 1;
+      }
+      return a.label === "niche" ? 1 : -1;
+    };
+
+    const sortedData = data.sort(sortFn);
     setCalculationInfo(sortedData);
   };
 
