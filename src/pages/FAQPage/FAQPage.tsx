@@ -150,7 +150,7 @@ export const FAQPage: React.FC = () => {
                     maximum roll value of HP% is 5.8%, therefore: 5.3/5.8 ~ 90%. RV is not a perfect metric either,
                     it does not measure artifact main stats and assumes every substat is equally important when they obviously are not. Akasha has some specific substats
                     already picked per character for RV calculation, but due to various different playstyles this does not 
-                    have to be correct - you can select any substats you you want to include or exclude from RV calculation.`}
+                    have to be correct - you can select any substats you want to include or exclude from RV calculation.`}
                   />
                 </p>
               </div>

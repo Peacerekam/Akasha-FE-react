@@ -56,6 +56,7 @@ type CategoryWeaponInfo = {
   type: string;
   details: string;
   teammates: CalculationTeammate[];
+  short: string;
   filters?: {
     displayName: string;
     name: string;
@@ -274,7 +275,7 @@ export const LeaderboardsPage: React.FC = () => {
         },
       })),
       {
-        name: thisCalc?.short || "???", // currentCategory.split(' - ')[1],
+        name: thisWeaponCalc?.short || "???", // currentCategory.split(' - ')[1],
         // width: "100px",
         sortable: true,
         sortField: calculationSortKey,
@@ -290,7 +291,7 @@ export const LeaderboardsPage: React.FC = () => {
     [
       currentCategory,
       calculationInfo,
-      thisCalc?.short,
+      thisWeaponCalc?.short,
       calculationSortKey,
       translate,
       // FETCH_LEADERBOARDS_URL,

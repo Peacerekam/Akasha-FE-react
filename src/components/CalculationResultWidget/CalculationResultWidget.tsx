@@ -72,16 +72,18 @@ export const CalculationResultWidget: React.FC<
         abortController.abort();
       };
     }
-  }, [uid]);
+  }, []);
 
   const resultsArray = useMemo(() => {
     if (data.length > 0) {
       const calcArray = [];
       for (const build of data) {
-        const calcsArr = [
-          build.calculations.fit,
-          // build.calculations.best
-        ];
+        const calcsArr = build?.calculations?.fit
+          ? [
+              build.calculations.fit,
+              // build.calculations.best
+            ]
+          : [];
 
         for (const calc of calcsArr) {
           const _calc = calc as any;
