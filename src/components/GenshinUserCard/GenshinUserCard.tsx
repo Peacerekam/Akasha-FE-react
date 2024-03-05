@@ -83,6 +83,7 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
   const favourites = lastProfiles.filter((a) => (a.priority || 1) > 1);
   const disableNewFavs = favourites.length >= 10;
   const favourited = (relatedProfile?.priority || 1) > 1;
+  const isEnkaProfile = isNaN(+uid);
 
   const handleMarkAsFavourite = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
@@ -140,7 +141,14 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
 
         <div className="genshin-card-content">
           <div className="genshin-card-top-row">
-            <div className="card-big-text">{playerInfo.nickname}</div>
+            <div className="card-big-text">
+              {playerInfo.nickname}
+              {isEnkaProfile ? (
+                <span className="enka-icon" title="Enka.Network Profile" />
+              ) : (
+                ""
+              )}
+            </div>
             <div className="badges-container">
               <RegionBadge region={playerInfo.region} />
               <AchievementsBadge count={playerInfo.finishAchievementNum} />

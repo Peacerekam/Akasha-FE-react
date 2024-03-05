@@ -36,6 +36,8 @@ export const NavbarTabs: React.FC = () => {
           .join(" ")
           .trim();
 
+        const isEnkaProfile = isNaN(+uid);
+
         return (
           <div
             key={`tab-${uid}-${nickname}`}
@@ -51,6 +53,14 @@ export const NavbarTabs: React.FC = () => {
             >
               {isFav && <FontAwesomeIcon icon={faStar} size="1x" />}
               {nickname ?? uid}
+              {isEnkaProfile ? (
+                <span
+                  className="enka-profile-tab"
+                  title="Enka.Network Profile"
+                />
+              ) : (
+                ""
+              )}
             </a>
             {!isFav && (
               <span

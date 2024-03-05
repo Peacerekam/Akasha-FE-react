@@ -21,6 +21,18 @@
     }
   }
 
+  .enka-icon {
+    &::after {
+      content: "\e93a";
+      font-family: "shicon";
+      font-size: 20px;
+      position: relative;
+      pointer-events: none;
+      margin-left: 10px;
+      color: #719bd4;
+    }
+  }
+
   .fav-btn {
     position: absolute;
     top: 0;
@@ -207,6 +219,7 @@
     box-shadow: 0 0 0 2px rgb(168, 120, 31);
   }
 }
+
 .expanded-row {
   $card-width: 530px;
   .uid-result {

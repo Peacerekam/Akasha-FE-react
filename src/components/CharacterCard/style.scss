@@ -20,6 +20,13 @@ $hardcoded-scale: 1;
 }
 
 .character-card-container {
+  &.is-generating {
+    .character-showcase-pic-container,
+    .compact-artifact-metric-container {
+      pointer-events: none !important
+    }
+  }
+
   .config-overlay {
     z-index: 999;
     top: 0;

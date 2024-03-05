@@ -125,6 +125,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   const [totalRowsHash, setTotalRowsHash] = useState<string>("");
   const [totalRowsCount, setTotalRowsCount] = useState<number>(0);
   const [hideIndexColumn, setHideIndexColumn] = useState(false);
+  const [paramsProjection, setParamsProjection] = useState(false);
   const [unknownPage, setUnknownPage] = useState(false);
   const { updateTableHoverElement } = useContext(HoverElementContext);
   const { adProvider, setContentWidth } = useContext(AdProviderContext);
@@ -176,10 +177,9 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     const toAppend = tmp.join("&");
     const hash = location.hash || "";
     const suffix = `${toAppend}${hash}`;
-    if (!suffix) return;
+    if (!paramsProjection) return;
 
-    const newURL = `?${suffix}`;
-
+    const newURL = suffix ? `?${suffix}` : '';
     navigate(newURL, { replace: true });
   };
 
@@ -221,6 +221,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   useEffect(() => {
     if (projectParamsToPath) {
       appendParamsToURL();
+      setParamsProjection(true);
     }
 
     if (fetchURL) {

@@ -1857,6 +1857,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     hasLeaderboardsColumn ? "" : "no-leaderboards",
     charImgUrl ? "" : "disable-input",
     toggleConfigure ? "editable" : "",
+    generating ? "is-generating" : "",
   ]
     .join(" ")
     .trim();

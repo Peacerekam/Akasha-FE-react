@@ -1,4 +1,3 @@
-
 @keyframes slideIn {
   0% {
     opacity: 0;
@@ -56,14 +55,29 @@
       border-left: 1px solid darken(#395b64, 15);
     }
 
+    .enka-profile-tab {
+      &::after {
+        content: "\e93a";
+        font-family: "shicon";
+        font-size: 15px;
+        position: relative;
+        top: 1px;
+        pointer-events: none;
+        margin-left: 7px;
+        color: #719bd4;
+      }
+    }
+
     &.active-tab {
-      a, .close-tab {
-        box-shadow: #E7F6F2 0 -2px 0 inset;
+      a,
+      .close-tab {
+        box-shadow: #e7f6f2 0 -2px 0 inset;
       }
     }
     &:not(.active-tab) {
       background-color: darken(#395b64, 10);
-      a, .close-tab {
+      a,
+      .close-tab {
         background-color: darken(#395b64, 10);
       }
     }
@@ -80,12 +94,14 @@
           transition: 0.2s !important;
         }
       }
-      a, .close-tab {
+      a,
+      .close-tab {
         transition: background-color 0.2s;
         background-color: lighten(#395b64, 5);
       }
     }
-    a, .close-tab {
+    a,
+    .close-tab {
       text-decoration: none;
       color: white;
       display: flex;

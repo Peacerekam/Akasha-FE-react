@@ -8,6 +8,7 @@ import { SettingsContext } from "../../context/SettingsProvider/SettingsProvider
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { toShortThousands } from "../../utils/helpers";
 import { useNavigate } from "react-router-dom";
 
 type CalculationResponse = {
@@ -98,22 +99,29 @@ export const CalculationList: React.FC<CalculationListProps> = ({
 
           return (
             <tr key={id} className={trClassName}>
-              <td>
+              <td title={`${ranking ?? "-"}/${outOf}`}>
                 {ranking ?? (
                   <span title="Rankings are cached. If you see this you need to refresh the page">
                     -
                   </span>
                 )}
-                <span className="opacity-5">/{outOf || "???"}</span>
+                <span className="opacity-5">
+                  /{toShortThousands(outOf) || "???"}
+                </span>
               </td>
               <td>{_top}</td>
-              <td>
+              <td className="pr-0">
                 <WeaponMiniDisplay
                   icon={weapon?.icon}
                   refinement={weapon?.refinement || 1}
                 />
               </td>
-              <td>{translate(weapon?.name)}</td>
+              <td
+                className="max-width-130-ellipsis"
+                title={`${translate(weapon?.name)} R${weapon?.refinement}`}
+              >
+                {translate(weapon?.name)}
+              </td>
               <td>
                 <TeammatesCompact teammates={teammates} simplify />
               </td>

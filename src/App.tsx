@@ -56,28 +56,36 @@ axios.defaults.baseURL = getApiBaseURL();
 axios.defaults.withCredentials = true;
 
 // Add a request interceptor
-axios.interceptors.request.use(function (config) {
-  // Do something before request is sent
-  // console.log(config.url)
-  return config;
-}, function (error) {
-  // Do something with request error
-  return Promise.reject(error);
-});
+axios.interceptors.request.use(
+  (config) => {
+    // Do something before request is sent
+    // console.log(config.url)
+    return config;
+  },
+  (error) => {
+    // Do something with request error
+    return Promise.reject(error);
+  }
+);
 
 // Add a response interceptor
-axios.interceptors.response.use(function (response) {
-  // Any status code that lie within the range of 2xx cause this function to trigger
-  console.log(response.config.url, response.status, response.statusText)
-  return response;
-}, function (error) {
-  // Any status codes that falls outside the range of 2xx cause this function to trigger
-  const response = error.response;
-  if (response) {
-    console.log(response.config.url, response.status, response.statusText)
+axios.interceptors.response.use(
+  (response) => {
+    // Any status code that lie within the range of 2xx cause this function to trigger
+    // console.log(response?.config?.url, response.status, response.statusText);
+    return response;
+  },
+  (error) => {
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // const response = error.response;
+    // if (response?.config?.url) {
+    //   console.log(response?.config?.url, response.status, response.statusText);
+    // } else {
+    //   console.log(error?.message, "-", error?.config?.url)
+    // }
+    return Promise.reject(error);
   }
-  return Promise.reject(error);
-});
+);
 
 // const queryClient = new QueryClient({
 //   defaultOptions: {

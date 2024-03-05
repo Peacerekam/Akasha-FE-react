@@ -22,7 +22,20 @@
           font-weight: 600;
           text-align: right;
         }
+
+        white-space: nowrap;
       }
+    }
+
+    .max-width-130-ellipsis {
+      max-width: 130px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .pr-0 {
+      padding-right: 0 !important; 
     }
 
     .stacked {

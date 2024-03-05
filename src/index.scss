@@ -105,7 +105,7 @@ body {
 
 .search-input {
   // margin-top: 10px;
-  // margin-bottom: 5px;  
+  // margin-bottom: 5px;
   width: 100%;
   max-width: 250px;
   input {
@@ -607,13 +607,21 @@ body {
     }
   }
   &::after {
-    content: "- Enka";
+    // content: "- Enka";
+    // position: relative;
+    // top: -1px;
+    // margin-left: 5px;
+    // white-space: nowrap;
+    // font-size: 10px;
+    // color: rgba(white, 0.5);
+
+    content: "\e93a";
+    font-family: "shicon";
+    font-size: 12px;
     position: relative;
-    top: -1px;
-    margin-left: 5px;
-    white-space: nowrap;
-    font-size: 10px;
-    color: rgba(white, 0.5);
+    top: 1px;
+    pointer-events: none;
     color: #719bd4;
+    margin-left: 5px;
   }
 }

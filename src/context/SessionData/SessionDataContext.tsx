@@ -50,35 +50,38 @@ const SessionDataContextProvider: React.FC<{ children: any }> = ({
     [boundAccounts]
   );
 
+  const setIsFetchingIfTrue = (modifyIsFetching: boolean, value: boolean) =>
+    modifyIsFetching && setIsFetching(value);
+
   const fetchSessionData = useCallback(async (modifyIsFetching = false) => {
-    if (modifyIsFetching) {
-      setIsFetching(true);
-    }
+    setIsFetchingIfTrue(modifyIsFetching, true);
 
-    const getSessionURL = "/auth/status/";
-    const response = await axios.get(getSessionURL, optsParamsSessionID());
-    const { data } = response.data;
-    setBoundAccounts(data.accounts);
+    try {
+      const getSessionURL = "/auth/status/";
+      const response = await axios.get(getSessionURL, optsParamsSessionID());
+      const { data } = response.data;
+      setBoundAccounts(data.accounts);
 
-    const debugDisplay = {
-      ...data,
-      accounts: data.accounts.map((x: any) => x.uid).join(", ") || null,
-    };
+      const debugDisplay = {
+        ...data,
+        accounts: data.accounts.map((x: any) => x.uid).join(", ") || null,
+      };
 
-    console.table(debugDisplay);
+      console.table(debugDisplay);
 
-    if (data.username) {
-      setIsAuthenticated(true);
-      const { username, profilePicture, isPatreon } = data;
-      setProfileObject({
-        username,
-        profilePicture,
-        isPatreon,
-      });
-    }
-
-    if (modifyIsFetching) {
-      setIsFetching(false);
+      if (data.username) {
+        setIsAuthenticated(true);
+        const { username, profilePicture, isPatreon } = data;
+        setProfileObject({
+          username,
+          profilePicture,
+          isPatreon,
+        });
+      }
+      setIsFetchingIfTrue(modifyIsFetching, false);
+    } catch (e) {
+      // ...
+      setIsFetchingIfTrue(modifyIsFetching, false);
     }
   }, []);
 
