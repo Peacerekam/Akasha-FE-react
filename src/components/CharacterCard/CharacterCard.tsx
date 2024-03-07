@@ -1551,7 +1551,14 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         </div>
       </>
     );
-  }, [row, chartsData, privacyFlag, displayBuildName, toggleConfigure]);
+  }, [
+    row,
+    chartsData,
+    privacyFlag,
+    displayBuildName,
+    toggleConfigure,
+    translate,
+  ]);
 
   const cardOverlayWrapper = useMemo(() => {
     const paintMode = !uploadPictureInputRef?.current?.files?.[0] && "gacha";
@@ -1704,6 +1711,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     generating,
     uploadPictureInputRef,
     imgDimensions, // ?
+    translate,
   ]);
 
   const handleSelectChange = (option: any) => {
@@ -1781,18 +1789,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     try {
       if (mode === "download") {
         setGenerating("downloading");
-        // const dataUrl = await toPng(cardNode, {
-        //   pixelRatio: 1.5,
-        //   fetchRequestInit: {
-        //     mode: "cors",
-        //     credentials: "same-origin", // include, *same-origin, omit
-        //   },
-        //   // filter: (node: HTMLElement) => {
-        //   //   const exclusionClasses = ['remove-me', 'secret-div'];
-        //   //   return !exclusionClasses.some((classname) => node.classList?.contains(classname));
-        //   // }
-        //   // cacheBust: true,
-        // });
 
         await delay(genDelay);
         const canvas = await html2canvas(cardNode, _opts);
@@ -1809,17 +1805,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       if (mode === "open") {
         setGenerating("opening");
 
-        // const dataUrl = await toBlob(cardNode, {
-        //   pixelRatio: 1.5,
-        //   fetchRequestInit: {
-        //     mode: "cors",
-        //     credentials: "same-origin", // include, *same-origin, omit
-        //   },
-        // });
-        // if (!dataUrl) return;
-        // setImagePreviewBlob(dataUrl);
-        // handleToggleModal(event);
-
         await delay(genDelay);
         const canvas = await html2canvas(cardNode, _opts);
 
@@ -1828,17 +1813,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           setImagePreviewBlob(blob);
           handleToggleModal(event);
         });
-
-        // if (!dataUrl) return;
-
-        // const url = URL.createObjectURL(dataUrl);
-        // window.open(url, '_blank');
       }
-
-      // @debug
-      // const _img = new Image();
-      // _img.src = dataUrl;
-      // document.body.appendChild(_img);
     } catch (err) {
       console.log(err);
     }
