@@ -108,6 +108,14 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
       )}
       <div>
         {selectedCalculationId && (
+          <div>
+            Damage distribution aaa
+            <span>
+              bar chart / pie chart
+            </span>
+          </div>
+        )}
+        {selectedCalculationId && (
           <SubstatPriorityTable
             row={row}
             selectedCalculationId={selectedCalculationId}

@@ -33,6 +33,7 @@ type SubstatPriority = {
       newRank: number | string;
       oldRank: number | string;
       substatValue: number;
+      outOf: number;
     };
   };
 };
@@ -85,6 +86,21 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
       priorityData && priorityData.length > 0
         ? priorityData.map((_data) => {
             const calc = _data.calculation;
+
+            const _base = _data.substats["Base"];
+            const leaveOnlyNumbersRegex = /\D+/g;
+            const _ranking = +(_base.oldRank + "")?.replace(
+              leaveOnlyNumbersRegex,
+              ""
+            );
+
+            const _top = _base.oldRank
+              ? `${
+                  Math.min(100, Math.ceil((_ranking / _base.outOf) * 100)) ||
+                  "?"
+                }%`
+              : "";
+
             const label = (
               <>
                 <span className="react-select-custom-option">
@@ -103,6 +119,7 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
                     >
                       {translate(calc.weapon.name)}
                     </div>
+                    <div style={{ width: 60 }}>top {_top}</div>
                     {calc.variant ? <div>({calc.variant})</div> : ""}
                     <div>{calc.name}</div>
                   </span>
