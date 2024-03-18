@@ -169,7 +169,7 @@ export const CalculationResultWidget: React.FC<
   const tilesList = useMemo(
     () =>
       resultsArray
-        .filter((c) => !!c.outOf)
+        .filter((c) => !!c.outOf && !c.hidden)
         .map((calc: any, index: number) => {
           const { name, ranking, outOf, weapon, short, id, variant, priority } =
             calc;

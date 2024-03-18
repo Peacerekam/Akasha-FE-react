@@ -4,6 +4,7 @@ import React, { useContext, useEffect, useMemo, useState } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ReactSelect from "react-select";
+import { SettingsContext } from "../../context/SettingsProvider/SettingsProvider";
 import { Spinner } from "../Spinner";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
@@ -55,6 +56,7 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
   const [show, setShow] = useState(false);
 
   const { translate } = useContext(TranslationContext);
+  const { getTopRanking } = useContext(SettingsContext);
 
   const getSubstatPriority = async () => {
     if (!row.md5) return;
@@ -96,7 +98,7 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
 
             const _top = _base.oldRank
               ? `${
-                  Math.min(100, Math.ceil((_ranking / _base.outOf) * 100)) ||
+                  getTopRanking(_ranking, _base.outOf) ||
                   "?"
                 }%`
               : "";
@@ -125,7 +127,7 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
                   </span>
                   <span className="for-pills">
                     <img alt="" src={toEnkaUrl(calc.weapon.icon)} />
-                    {translate(calc.weapon.name)} -
+                    {translate(calc.weapon.name)} - top {_top}
                     {calc.variant ? <div>({calc.variant})</div> : ""}{" "}
                     {calc.name}
                   </span>
@@ -148,7 +150,7 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
             return thisOpt;
           })
         : [],
-    [priorityData, translate]
+    [priorityData, translate, getTopRanking]
   );
 
   const selectedOption = useMemo(() => {

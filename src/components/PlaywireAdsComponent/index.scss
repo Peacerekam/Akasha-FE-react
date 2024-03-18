@@ -129,9 +129,12 @@ body:not(.overflow-hidden) {
 body.ads-disabled {
   #bgdiv,
   #tyche_trendi_video_container,
+  #tyche_trendi_video,
   #pw-oop-flex_leaderboard_container,
+  #corner_ad_video,
   .is-docked,
   .pw-pos-bottom-right,
+  .pw-corner-ad-video,
   .pw-container,
   .pw-tag {
     display: none !important;

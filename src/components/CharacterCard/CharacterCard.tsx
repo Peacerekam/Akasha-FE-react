@@ -1399,8 +1399,9 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       }
       const leaveOnlyNumbersRegex = /\D+/g;
       const _ranking = +(c.ranking + "")?.replace(leaveOnlyNumbersRegex, "");
+      
       const _top = c.ranking
-        ? `${Math.min(100, Math.ceil((_ranking / c.outOf) * 100)) || "?"}%`
+        ? `${getTopRanking(_ranking, c.outOf) || "?"}%`
         : "";
 
       const shorterName =
@@ -1424,7 +1425,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
               >
                 {translate(c.weapon.name)}
               </div>
-              <div style={{ width: 60 }}>top {_top}</div>
+              <div style={{ width: 80 }}>top {_top}</div>
               {c.variant?.displayName
                 ? `(${c.variant?.displayName}) `
                 : ""}{" "}
@@ -1455,7 +1456,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
       return thisOpt;
     },
-    [calculations, translate]
+    [calculations, translate, getTopRanking]
   );
 
   const calcOptions = useMemo(

@@ -34,6 +34,7 @@ import { AdsComponentManager } from "../../components/AdsComponentManager";
 import { BuildsColumns } from "../BuildsPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
+import { IS_PRODUCATION } from "../../utils/maybeEnv";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
 import { Line } from "react-chartjs-2";
 import { TableColumn } from "../../types/TableColumn";
@@ -65,6 +66,7 @@ type CategoryWeaponInfo = {
 };
 
 type CalculationInfoResponse = {
+  hidden?: boolean;
   label?: string;
   name: string;
   short: string;
@@ -398,8 +400,20 @@ export const LeaderboardsPage: React.FC = () => {
         {calculationInfo?.map((_cat) => {
           const categoryName = _cat.name;
           const isNiche = _cat.label === "niche";
+
           return (
-            <div key={_cat.name} style={{ opacity: isNiche ? 0.5 : 1 }}>
+            <div
+              key={_cat.name}
+              style={{
+                opacity: isNiche ? 0.5 : 1,
+                background: !IS_PRODUCATION && _cat?.hidden ? "#ff00ff44" : "",
+                display: IS_PRODUCATION
+                  ? _cat?.hidden
+                    ? "none"
+                    : "block"
+                  : "block",
+              }}
+            >
               {isNiche && (
                 <span
                   style={{ width: "auto", display: "inline-block" }}
@@ -433,6 +447,15 @@ export const LeaderboardsPage: React.FC = () => {
                         navigate(`/${leaderboardPath}`);
                       }}
                       href={`/${leaderboardPath}`}
+                      style={{
+                        background:
+                          !IS_PRODUCATION && _weapon?.hidden ? "#ff00ff44" : "",
+                        display: IS_PRODUCATION
+                          ? _weapon?.hidden
+                            ? "none"
+                            : "block"
+                          : "block",
+                      }}
                     >
                       <WeaponMiniDisplay
                         icon={weaponicon}
