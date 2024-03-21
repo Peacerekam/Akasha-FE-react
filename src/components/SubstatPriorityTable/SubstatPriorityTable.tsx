@@ -121,7 +121,7 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
                     >
                       {translate(calc.weapon.name)}
                     </div>
-                    <div style={{ width: 60 }}>top {_top}</div>
+                    <div style={{ width: 80 }}>top {_top}</div>
                     {calc.variant ? <div>({calc.variant})</div> : ""}
                     <div>{calc.name}</div>
                   </span>
