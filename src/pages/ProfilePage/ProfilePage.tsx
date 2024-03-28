@@ -104,6 +104,8 @@ export const ProfilePage: React.FC = () => {
     [uid, isAuthenticated, boundAccounts]
   );
 
+  const refreshAbortController = useMemo(() => new AbortController(), [uid]);
+
   const fetchProfile = async (
     uid: string,
     abortController?: AbortController
@@ -164,6 +166,7 @@ export const ProfilePage: React.FC = () => {
 
     return () => {
       abortController.abort();
+      refreshAbortController.abort();
     };
   }, [uid]);
 
@@ -467,7 +470,13 @@ export const ProfilePage: React.FC = () => {
     setEnableRefreshBtn(false);
     const _uid = encodeURIComponent(uid);
     const refreshURL = `/api/user/refresh/${_uid}`;
-    const { data } = await axios.get(refreshURL, optsParamsSessionID());
+
+    const opts = {
+      signal: refreshAbortController?.signal,
+      ...optsParamsSessionID(),
+    };
+
+    const { data } = await axios.get(refreshURL, opts);
 
     const {
       ttl,
@@ -604,7 +613,7 @@ export const ProfilePage: React.FC = () => {
           <div
             title="Refresh builds"
             className={refreshBtnClassName}
-            onClick={handleRefreshData}
+            onClick={() => abortSignalCatcher(handleRefreshData)}
             key={`refresh-${uid}-${!!enableRefreshBtn}`}
           >
             <FontAwesomeIcon icon={faRotateRight} size="1x" />

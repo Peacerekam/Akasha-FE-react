@@ -179,7 +179,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     const suffix = `${toAppend}${hash}`;
     if (!paramsProjection) return;
 
-    const newURL = suffix ? `?${suffix}` : '';
+    const newURL = suffix ? `?${suffix}` : "";
     navigate(newURL, { replace: true });
   };
 
@@ -426,6 +426,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
       const isHighlighted =
         params.sort &&
         (sortField === params.sort || sortFields?.includes(params.sort));
+
       const classNames = [
         "relative",
         isHighlighted ? "highlight-cell" : "",
