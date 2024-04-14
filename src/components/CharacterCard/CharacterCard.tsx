@@ -20,6 +20,7 @@ import React, {
 import { applyModalBodyStyle, getRelativeCoords } from "../CustomTable/Filters";
 import {
   ascensionToLevel,
+  cssJoin,
   delay,
   getArtifactsInOrder,
   getGenderFromIcon,
@@ -355,46 +356,48 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
   const calculationIds = useMemo(
     () =>
-      Object.keys(calculations ?? []).sort((a: any, b: any) => {
-        const _aRank = ("" + calculations[a].ranking)?.replace("~", "");
-        const _bRank = ("" + calculations[b].ranking)?.replace("~", "");
+      Object.keys(calculations ?? [])
+        .filter((c: any) => !c.hidden)
+        .sort((a: any, b: any) => {
+          const _aRank = ("" + calculations[a].ranking)?.replace("~", "");
+          const _bRank = ("" + calculations[b].ranking)?.replace("~", "");
 
-        const _aVal = _aRank.startsWith("(")
-          ? _aRank.slice(1, _aRank.length - 1)
-          : _aRank;
+          const _aVal = _aRank.startsWith("(")
+            ? _aRank.slice(1, _aRank.length - 1)
+            : _aRank;
 
-        const _bVal = _bRank.startsWith("(")
-          ? _bRank.slice(1, _bRank.length - 1)
-          : _bRank;
+          const _bVal = _bRank.startsWith("(")
+            ? _bRank.slice(1, _bRank.length - 1)
+            : _bRank;
 
-        const _a = calculations[a];
-        const _b = calculations[b];
+          const _a = calculations[a];
+          const _b = calculations[b];
 
-        const topA_ = +_aVal / _a.outOf;
-        const topB_ = +_bVal / _b.outOf;
+          const topA_ = +_aVal / _a.outOf;
+          const topB_ = +_bVal / _b.outOf;
 
-        const isTop1_a = Math.min(100, Math.ceil(topA_ * 100)) === 1;
-        const isTop1_b = Math.min(100, Math.ceil(topB_ * 100)) === 1;
+          const isTop1_a = Math.min(100, Math.ceil(topA_ * 100)) === 1;
+          const isTop1_b = Math.min(100, Math.ceil(topB_ * 100)) === 1;
 
-        const _priority = _b.priority - _a.priority;
+          const _priority = _b.priority - _a.priority;
 
-        if (_priority !== 0) {
-          return _priority;
-        }
+          if (_priority !== 0) {
+            return _priority;
+          }
 
-        if (isTop1_a && isTop1_b) {
-          return +_aVal - +_bVal;
-        }
+          if (isTop1_a && isTop1_b) {
+            return +_aVal - +_bVal;
+          }
 
-        return topA_ - topB_;
+          return topA_ - topB_;
 
-        // return (
-        //   _b.priority - _a.priority ||
-        //   (isTop1_a && isTop1_b ? +_aVal - +_bVal : topA_ - topB_)
-        // );
+          // return (
+          //   _b.priority - _a.priority ||
+          //   (isTop1_a && isTop1_b ? +_aVal - +_bVal : topA_ - topB_)
+          // );
 
-        // return +valA < +valB ? -1 : 1;
-      }),
+          // return +valA < +valB ? -1 : 1;
+        }),
     [calculations]
   );
 
@@ -1123,7 +1126,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
   const characterShowcase = useMemo(() => {
     const charImgUrl = toEnkaUrl(chartsData?.assets?.gachaIcon);
-    const showcaseContainerClassNames = [
+    const showcaseContainerClassNames = cssJoin([
       "character-showcase-pic-container",
       toggleConfigure ? "editable" : "",
       isDragging ? "is-dragging" : "",
@@ -1131,9 +1134,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       row.name === "Traveler" ? "is-traveler" : "",
       generating ? "is-generating" : "",
       charImgUrl ? "" : "disable-input",
-    ]
-      .join(" ")
-      .trim();
+    ]);
 
     const paintMode = !uploadPictureInputRef?.current?.files?.[0] && "gacha";
 
@@ -1399,7 +1400,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       }
       const leaveOnlyNumbersRegex = /\D+/g;
       const _ranking = +(c.ranking + "")?.replace(leaveOnlyNumbersRegex, "");
-      
+
       const _top = c.ranking
         ? `${getTopRanking(_ranking, c.outOf) || "?"}%`
         : "";
@@ -1462,10 +1463,13 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const calcOptions = useMemo(
     () =>
       calculations && Object.keys(calculations).length > 0
-        ? ["", ...Object.keys(calculations)].map(renderOptions).sort((a, b) => {
-            // return b.priority - a.priority || a.top - b.top;
-            return a.top > b.top ? 1 : -1;
-          })
+        ? ["", ...Object.keys(calculations)]
+            .filter((key: any) => !calculations?.[key]?.hidden)
+            .map(renderOptions)
+            .sort((a, b) => {
+              // return b.priority - a.priority || a.top - b.top;
+              return a.top > b.top ? 1 : -1;
+            })
         : [],
     [calculations, translate]
   );
@@ -1826,7 +1830,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const hasLeaderboardsColumn =
     filteredLeaderboards.length > 0 && filteredLeaderboards[0] !== "hide";
 
-  const cardContainerClassNames = [
+  const cardContainerClassNames = cssJoin([
     "character-card-container",
     !namecardBg ? "elemental-bg-wrap" : "",
     simplifyColors ? "simplify-colors" : "",
@@ -1834,9 +1838,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     charImgUrl ? "" : "disable-input",
     toggleConfigure ? "editable" : "",
     generating ? "is-generating" : "",
-  ]
-    .join(" ")
-    .trim();
+  ]);
 
   const cardStyle = {
     "--element-color": elementalColor || noElementColor,
@@ -1857,7 +1859,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       <div className="card-wrapper-height-fix">
         <div
           id={buildId}
-          className={`card-wrapper relative ${DEBUG_MODE ? "debug" : ""}`}
+          className={cssJoin([
+            "card-wrapper relative",
+            DEBUG_MODE ? "debug" : "",
+          ])}
         >
           <div className="html-to-image-target">
             <div className={cardContainerClassNames} style={cardStyle}>
@@ -1900,7 +1905,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                 </>
               ) : (
                 <button
-                  className={`dl-button ${generating ? "opacity-5" : ""}`}
+                  className={cssJoin([
+                    "dl-button",
+                    generating ? "opacity-5" : "",
+                  ])}
                   disabled={generating ? true : false}
                   onClick={(event) =>
                     handleGenerateAndDownload("download", event)
@@ -1921,7 +1929,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                 </>
               ) : (
                 <button
-                  className={`dl-button ${generating ? "opacity-5" : ""}`}
+                  className={cssJoin([
+                    "dl-button",
+                    generating ? "opacity-5" : "",
+                  ])}
                   disabled={generating ? true : false}
                   onClick={(event) => handleGenerateAndDownload("open", event)}
                 >

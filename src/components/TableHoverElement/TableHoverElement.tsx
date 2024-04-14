@@ -1,6 +1,7 @@
 import "./style.scss";
 
 import React, { useEffect, useState } from "react";
+import axios, { AxiosRequestConfig } from "axios";
 
 import { Artifact } from "../Artifact";
 import { ArtifactDetailsResponse } from "../../types/ArtifactDetailsResponse";
@@ -8,7 +9,8 @@ import { FancyBuildBorder } from "../FancyBuildBorder";
 import { FollowCursor } from "../FollowCursor";
 import { GenshinUserCard } from "../GenshinUserCard";
 import { StatList } from "../StatList";
-import axios from "axios";
+import { cssJoin } from "../../utils/helpers";
+import { useParams } from "react-router-dom";
 
 type TableHoverElementProps = {
   row?: any;
@@ -28,9 +30,17 @@ export const TableHoverElement: React.FC<TableHoverElementProps> = ({
     [id: string]: ArtifactDetailsResponse;
   }>({});
 
+  const { uid } = useParams();
+  const isCombined = uid?.startsWith("@");
+
   const getArtifactDetails = async () => {
-    const artDetailsURL = `/api/artifacts/${rowData._id}`;
-    const { data } = await axios.get(artDetailsURL);
+    const md5 = isCombined ? rowData.universal_md5 || rowData._id : rowData._id;
+    const artDetailsURL = `/api/artifacts/${md5}`;
+
+    const opts: AxiosRequestConfig<any> = {};
+    if (isCombined) opts.params = { queryVariant: "isCombined" };
+
+    const { data } = await axios.get(artDetailsURL, opts);
     setArtifactDetails((prev) => ({
       ...prev,
       [rowData._id]: data.data,
@@ -65,10 +75,10 @@ export const TableHoverElement: React.FC<TableHoverElementProps> = ({
   if (hidden) return null;
 
   if (isArtifact) {
-    const wrapperClassNames = [
+    const wrapperClassNames = cssJoin([
       "hover-element row-hover-artifact-preview",
       hide ? "fade-out" : "fade-in",
-    ].join(" ");
+    ]);
 
     const equippedOn = artifactDetails?.[rowData._id]?.builds;
     return (
@@ -92,11 +102,11 @@ export const TableHoverElement: React.FC<TableHoverElementProps> = ({
       ? `ar-${Math.floor(roundedAR / 5) * 5}-badge`
       : "ar-60-badge";
 
-    const wrapperClassNames = [
+    const wrapperClassNames = cssJoin([
       "hover-element row-hover-artifact-preview account-hover-wrapper",
       hide ? "fade-out" : "fade-in",
       borderColorClass,
-    ].join(" ");
+    ]);
 
     return (
       <FollowCursor

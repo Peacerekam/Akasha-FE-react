@@ -7,6 +7,7 @@ import {
 } from "../../utils/substats";
 import React, { useContext } from "react";
 import {
+  cssJoin,
   getArtifactCvClassName,
   getCharacterCvColor,
   getInGameSubstatValue,
@@ -134,7 +135,11 @@ export const Artifact: React.FC<ArtifactProps> = ({
             <div
               style={{ opacity: opacity }}
               key={normSubName}
-              className={`substat ${normSubName} ${isCV ? "critvalue" : ""}`}
+              className={cssJoin([
+                "substat",
+                normSubName,
+                isCV ? "critvalue" : "",
+              ])}
             >
               <span className="substat-name">
                 {translate(substatName.replace("Flat ", ""))}

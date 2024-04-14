@@ -2,6 +2,7 @@ import "./style.scss";
 
 import {
   ascensionToLevel,
+  cssJoin,
   getGenderFromIcon,
   getRelevantDmgBonuses,
 } from "../../utils/helpers";
@@ -182,7 +183,10 @@ export const StatList: React.FC<StatListProps> = ({
       <div className="flex gap-5">
         <img
           alt=""
-          className={`stat-icon ${strikethrough ? "strike-through" : ""}`}
+          className={cssJoin([
+            "stat-icon",
+            strikethrough ? "strike-through" : "",
+          ])}
           src={row.weapon.icon}
         />
         <span className={strikethrough ? "strike-through opacity-5" : ""}>

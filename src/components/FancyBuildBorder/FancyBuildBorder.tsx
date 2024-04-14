@@ -1,6 +1,7 @@
+import { cssJoin, getCharacterCvColor } from "../../utils/helpers";
+
 import { PatreonBorderInside } from "./PatreonBorderInside";
 import axios from "axios";
-import { getCharacterCvColor } from "../../utils/helpers";
 
 type FancyBuildBorderProps = {
   hide: boolean;
@@ -19,13 +20,11 @@ export const FancyBuildBorder: React.FC<FancyBuildBorderProps> = ({
   resetOffset,
   overwriteBackground,
 }) => {
-  const wrapperClassNames = [
+  const wrapperClassNames = cssJoin([
     "row-hover-build-preview",
     hide ? "fade-out" : "fade-in",
     patreonObj?.active ? "patreon-stat-list" : "",
-  ]
-    .join(" ")
-    .trim();
+  ])
 
   const cv = rowData?.critValue || 0;
 

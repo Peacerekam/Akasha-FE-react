@@ -20,6 +20,15 @@
   &.no-label {
     width: 41px;
   }
+
+  &.has-hours {
+    width: 65px;
+    > span {
+      width: 100%;
+      text-align: right;
+    }
+  }
+
   .value {
     font-size: 15px;
   }

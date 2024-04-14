@@ -1,7 +1,7 @@
 import React, { createContext, useCallback, useEffect, useState } from "react";
+import axios, { AxiosRequestConfig } from "axios";
 
 import { TRANSLATION_VERSION } from "../../utils/maybeEnv";
-import axios from "axios";
 
 export type Language =
   | "en"
@@ -87,7 +87,7 @@ const TranslationContextProvider: React.FC<{ children: any }> = ({
 
         const words = Array.from(new Set(Object.keys(requestedWords)));
         const fetchURL = `/api/textmap/${language}`;
-        const opts = { params: { words } };
+        const opts: AxiosRequestConfig<any> = { params: { words } };
         const { data } = await axios.get(fetchURL, opts);
 
         const responseHasNewTranslations = hasNewKeys(

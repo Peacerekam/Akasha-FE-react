@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { LanguageSwitcher } from "../LanguageSwitcher";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
 import { NavElement } from "./Navbar";
+import { cssJoin } from "../../utils/helpers";
 
 type HamburgerMenuProps = {
   isOpen: boolean;
@@ -149,13 +150,11 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
               const { uid, nickname, priority } = profile;
               const isFav = priority === 2;
 
-              const classNames = [
+              const classNames = cssJoin([
                 "navbar-tab",
                 location.pathname.endsWith(uid) ? "active-tab" : "",
                 isFav ? "is-favourited" : "",
-              ]
-                .join(" ")
-                .trim();
+              ]);
 
               return (
                 <div

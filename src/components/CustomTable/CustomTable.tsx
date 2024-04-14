@@ -6,6 +6,7 @@ import {
   FETCH_SEARCH_USERS_URL,
   abortSignalCatcher,
   arrayPushOrSplice,
+  cssJoin,
   normalizeText,
 } from "../../utils/helpers";
 import {
@@ -29,6 +30,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
+import axios, { AxiosRequestConfig } from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
@@ -37,7 +39,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
-import axios from "axios";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 
 type CustomTableProps = {
@@ -310,13 +311,13 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
     setIsLoading(true);
 
-    const opts = {
+    const opts: AxiosRequestConfig<any> = {
       signal: abortController.signal,
       params: {
         ...params,
         ...fetchParams,
       },
-    } as any;
+    };
 
     const getSetData = async () => {
       const response = await axios.get(fetchURL, opts);
@@ -333,7 +334,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
   const tableClassNames = useMemo(
     () =>
-      [
+      cssJoin([
         "custom-table",
         params.sort?.startsWith("substats") // || params.sort === "critValue"
           ? `highlight-${normalizeText(params.sort?.replace("substats", ""))}`
@@ -347,9 +348,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
                 .replace("Damage", "DMG")
             )}`
           : "",
-      ]
-        .join(" ")
-        .trim(),
+      ]),
     [params.sort]
   );
 
@@ -378,12 +377,10 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     };
 
     const displaySortIcon = (order: number = 1) => {
-      const iconClassNames = [
+      const iconClassNames = cssJoin([
         "sort-direction-icon",
         order === -1 ? "rotate-180deg" : "",
-      ]
-        .join(" ")
-        .trim();
+      ]);
 
       return (
         <FontAwesomeIcon
@@ -399,12 +396,10 @@ export const CustomTable: React.FC<CustomTableProps> = ({
       const displayKey = key.replace(".value", "").split(".").pop(); // get last
       if (!displayKey) return null;
       const isHighlighted = params.sort && key === params.sort;
-      const classNames = [
+      const classNames = cssJoin([
         "flex nowrap gap-5",
         isHighlighted ? "highlight-cell" : "",
-      ]
-        .join(" ")
-        .trim();
+      ]);
 
       const fixKey = fixKeyMap[displayKey] || displayKey;
 
@@ -427,13 +422,11 @@ export const CustomTable: React.FC<CustomTableProps> = ({
         params.sort &&
         (sortField === params.sort || sortFields?.includes(params.sort));
 
-      const classNames = [
+      const classNames = cssJoin([
         "relative",
         isHighlighted ? "highlight-cell" : "",
         sortable ? "sortable-column" : "",
-      ]
-        .join(" ")
-        .trim();
+      ]);
 
       let columnName: string | JSX.Element =
         typeof name === "string" ? translate(name) : name;
@@ -626,7 +619,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
       // @TODO: patreon
       const patreonObj = row.owner?.patreon || row.patreon;
 
-      const rowClassNames = [
+      const rowClassNames = cssJoin([
         expandableRows ? "pointer" : "",
         shouldHighlightRows && !!patreonObj?.active ? "decorate-row" : "",
         shouldHighlightRows && !!patreonObj?.active
@@ -637,9 +630,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
         //   2: "decorate-row patreon-white",
         //   3: "decorate-row patreon-brown",
         // }[row.index as number],
-      ]
-        .join(" ")
-        .trim();
+      ]);
 
       return (
         <tr
@@ -667,14 +658,12 @@ export const CustomTable: React.FC<CustomTableProps> = ({
               params.sort &&
               (sortField === params.sort || sortFields?.includes(params.sort));
 
-            const tdClassNames = [
+            const tdClassNames = cssJoin([
               isHighlighted ? "highlight-cell" : "",
               getDynamicTdClassName ? getDynamicTdClassName(row) : "",
               !hideIndexColumn && column.name === "#" ? "first-column" : "",
               hideIndexColumn && index === 1 ? "first-column" : "",
-            ]
-              .join(" ")
-              .trim();
+            ]);
 
             return (
               <td
@@ -713,12 +702,10 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     [columns.length]
   );
 
-  const wrapperClassNames = [
+  const wrapperClassNames = cssJoin([
     "custom-table-wrapper",
     isLoading ? "disable-table" : "",
-  ]
-    .join(" ")
-    .trim();
+  ]);
 
   const fillerRow = useMemo(() => {
     if (totalRowsCount < params.size) return null;

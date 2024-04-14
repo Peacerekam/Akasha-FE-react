@@ -109,6 +109,8 @@ export const CategorySelectionPage: React.FC = () => {
               <img
                 alt=" "
                 className="table-icon"
+                width={25}
+                height={25}
                 src={row.characterIcon}
                 title={row?.characterName}
               />

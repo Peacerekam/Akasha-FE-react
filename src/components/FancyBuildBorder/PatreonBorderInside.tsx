@@ -1,3 +1,5 @@
+import { cssJoin } from "../../utils/helpers";
+
 type PatreonBorderInsideProps = {
   classNames?: string[];
   style?: React.CSSProperties;
@@ -9,12 +11,7 @@ export const PatreonBorderInside: React.FC<PatreonBorderInsideProps> = ({
   style = {},
   animationSpeedMultiplier = 1,
 }) => {
-  const borderClassName = [
-    "patreon-stat-decoration", 
-    ...classNames,
-  ]
-    .join(" ")
-    .trim();
+  const borderClassName = cssJoin(["patreon-stat-decoration", ...classNames]);
 
   const borderCssVars = {
     "--animation-duration": `${1.5 * animationSpeedMultiplier}s`,

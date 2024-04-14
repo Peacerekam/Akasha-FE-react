@@ -1,6 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
-
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 
 type AkashaNotification = {
   color: string;
@@ -35,7 +34,7 @@ const NotificationsContextProvider: React.FC<{ children: any }> = ({
 
   const getNotification = async (abortController: AbortController) => {
     const notificationURL = `/api/v2/notifications/topbar`;
-    const opts = { signal: abortController?.signal };
+    const opts: AxiosRequestConfig<any> = { signal: abortController?.signal };
 
     const { data } = await axios.get(notificationURL, opts);
     const relevantData = data?.data?.[0];

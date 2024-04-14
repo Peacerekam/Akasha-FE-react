@@ -9,6 +9,11 @@
   $circle-size: 4px;
   $tile-height: 90px;
 
+  &.expanded-showcase {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(80px, 100%), 1fr));
+  }
+
   .mismatching-weapon {
     // opacity: 0.85;
     // background-color: #ff000020;

@@ -1,11 +1,11 @@
 import "./style.scss";
 
 import React, { useEffect, useState } from "react";
+import axios, { AxiosRequestConfig } from "axios";
 
 import { Link } from "react-router-dom";
 import Markdown from "react-markdown";
 import { Spinner } from "../../components";
-import axios from "axios";
 import remarkGfm from "remark-gfm";
 import { timeAgo } from "../../utils/helpers";
 
@@ -15,7 +15,7 @@ export const NewsDisplay: React.FC = () => {
 
   const fetchNews = async (abortController: AbortController) => {
     const notificationURL = `/api/news`;
-    const opts = { signal: abortController?.signal };
+    const opts: AxiosRequestConfig<any> = { signal: abortController?.signal };
 
     try {
       const { data } = await axios.get(notificationURL, opts);

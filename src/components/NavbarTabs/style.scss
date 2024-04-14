@@ -66,6 +66,17 @@
         margin-left: 7px;
         color: #719bd4;
       }
+
+      + span::after {
+        margin-left: 2px;
+      }
+
+      &.akasha-icon {
+        &::after {
+          content: "" !important; // akasha icon
+          color: #5db0c5;
+        }
+      }
     }
 
     &.active-tab {

@@ -166,7 +166,7 @@ export const Navbar: React.FC = () => {
         }}
       >
         <span className="logo">
-          <span className="annotation">Work in progress</span>
+          <span className="annotation">Work still in progress</span>
           <img alt="Akasha" src={AkashaLogo} className="tilted-logo" />
           <span className="logo-text">Akasha System</span>
         </span>
@@ -189,7 +189,7 @@ export const Navbar: React.FC = () => {
         }}
       >
         <span className="logo">
-          <span className="annotation">Work in progress</span>
+          <span className="annotation">Work still in progress</span>
           <img alt="Akasha" src={AkashaLogo} className="tilted-logo" />
           <span className="logo-text">Akasha System</span>
         </span>

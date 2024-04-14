@@ -58,10 +58,10 @@ export const ConfirmTooltip: React.FC<ConfirmTooltipProps> = ({
               className="flex confirm-buttons"
               style={{ justifyContent: "space-between" }}
             >
-              <div onClick={handleConfirm}>
+              <div onClick={handleConfirm} title="Confirm">
                 <FontAwesomeIcon icon={faCheck} size="1x" />
               </div>
-              <div onClick={handleClose}>
+              <div onClick={handleClose} title="Cancel">
                 <FontAwesomeIcon icon={faXmark} size="1x" />
               </div>
             </div>

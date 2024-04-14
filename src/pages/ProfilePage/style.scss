@@ -264,6 +264,30 @@
       .compact-table-row-left {
         cursor: pointer;
         width: 100%;
+
+        .enka-icon {
+          &::after {
+            content: "\e93a";
+            font-family: "shicon";
+            font-size: 14px;
+            position: relative;
+            top: 0px;
+            pointer-events: none;
+            margin-left: 7px;
+            color: #719bd4;
+          }
+
+          + span::after {
+            margin-left: 2px;
+          }
+
+          &.akasha-icon {
+            &::after {
+              content: "" !important; // akasha icon
+              color: #5db0c5;
+            }
+          }
+        }
       }
       .compact-table-row-right,
       .compact-table-row-left {
@@ -485,4 +509,29 @@
   font-weight: 600;
   text-align: center;
   margin: 10px 0;
+}
+
+.chevron-down-icon {
+  margin-top: 1px;
+  transform: rotate(0deg);
+  transition: transform 0.3s;
+  margin-left: auto;
+  color: white;
+  &:hover {
+    color: orange;
+  }
+  &.rotate-180deg {
+    transform: rotate(180deg);
+  }
+}
+
+.showcase-expand-wrapper {
+  width: 100%;
+  text-align: center;
+  position: absolute;
+  top: -5px;
+  > svg {
+    cursor: pointer;
+    padding: 5px;
+  }
 }

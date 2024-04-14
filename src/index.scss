@@ -606,16 +606,19 @@ body {
       color: rgba(orange, 0.5);
     }
   }
-  &::after {
-    // content: "- Enka";
-    // position: relative;
-    // top: -1px;
-    // margin-left: 5px;
-    // white-space: nowrap;
-    // font-size: 10px;
-    // color: rgba(white, 0.5);
 
-    content: "\e93a";
+  &.akasha-icon {
+    &:hover::after {
+      color: rgba(orange, 0.5);
+    }
+    &::after {
+      content: ""; // akasha icon
+      color: #5db0c5;
+    }
+  }
+
+  &::after {
+    content: "\e93a"; // enka icon
     font-family: "shicon";
     font-size: 12px;
     position: relative;

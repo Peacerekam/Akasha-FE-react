@@ -28,9 +28,10 @@ import React, {
   useMemo,
   useState,
 } from "react";
+import axios, { AxiosRequestConfig } from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { AdsComponentManager } from "../../components/AdsComponentManager";
+// import { AdsComponentManager } from "../../components/AdsComponentManager";
 import { BuildsColumns } from "../BuildsPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
@@ -40,7 +41,6 @@ import { Line } from "react-chartjs-2";
 import { TableColumn } from "../../types/TableColumn";
 import { TitleContext } from "../../context/TitleProvider/TitleProviderContext";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
-import axios from "axios";
 import debounce from "lodash/debounce";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 
@@ -60,6 +60,7 @@ type CategoryWeaponInfo = {
   short: string;
   filters?: {
     displayName: string;
+    displayGroup: string;
     name: string;
     query: any;
   }[];
@@ -132,6 +133,9 @@ export const LeaderboardsPage: React.FC = () => {
   useEffect(() => {
     setTitle(`${thisCalc?.name} | Akasha System`);
   }, [thisCalc]);
+
+  const thisVariant = thisWeaponCalc?.filters?.find((x) => x.name === variant);
+  // console.log("thisVariant", thisVariant);
 
   const LEADERBOARDS_COLUMNS: TableColumn<BuildsColumns>[] = useMemo(
     () => [
@@ -277,7 +281,22 @@ export const LeaderboardsPage: React.FC = () => {
         },
       })),
       {
-        name: thisWeaponCalc?.short || "???", // currentCategory.split(' - ')[1],
+        name: (
+          <span className="table-icon-text-pair" style={{ gap: 5 }}>
+            <img
+              className="table-icon small"
+              src={thisWeaponCalc?.icon}
+              alt={thisWeaponCalc?.name}
+              title={thisWeaponCalc?.name}
+            />
+            {thisWeaponCalc?.short || "???"}{" "}
+            {thisVariant && (
+              <span style={{ opacity: 0.5, fontSize: 10, marginTop: 1 }}>
+                {thisVariant.displayName}
+              </span>
+            )}
+          </span>
+        ), // currentCategory.split(' - ')[1],
         // width: "100px",
         sortable: true,
         sortField: calculationSortKey,
@@ -294,6 +313,7 @@ export const LeaderboardsPage: React.FC = () => {
       currentCategory,
       calculationInfo,
       thisWeaponCalc?.short,
+      variant,
       calculationSortKey,
       translate,
       // FETCH_LEADERBOARDS_URL,
@@ -303,7 +323,7 @@ export const LeaderboardsPage: React.FC = () => {
   const fetchCalculationInfo = async () => {
     if (!characterId) return;
 
-    const opts = { params: { characterId } };
+    const opts: AxiosRequestConfig<any> = { params: { characterId } };
     const response = await axios.get(FETCH_CATEGORIES_URL_V2, opts);
     const { data }: { data: CalculationInfoResponse[] } = response.data;
 
@@ -358,39 +378,147 @@ export const LeaderboardsPage: React.FC = () => {
     ? iconUrlToNamecardUrl(thisCalc?.characterIcon)
     : "";
 
+  const calcVariants = useMemo(() => {
+    if (!thisWeaponCalc?.filters || thisWeaponCalc?.filters?.length === 0) {
+      return null;
+    }
+
+    const output: any = {
+      groups: {
+        base: [],
+      },
+    };
+
+    output.groups["base"].push({
+      name: "",
+      displayName: "NONE",
+      displayGroup: "base",
+    });
+
+    for (const filter of thisWeaponCalc.filters) {
+      const groupName = filter.displayGroup || "base";
+      // const groupName = filter.displayName.startsWith("✓") ? "C2" : "base";
+
+      if (!output.groups[groupName]) output.groups[groupName] = [];
+      output.groups[groupName].push(filter);
+    }
+
+    for (const groupName of Object.keys(output.groups)) {
+      if (groupName === "base") continue;
+      if (output.groups[groupName].length > 1) continue;
+
+      output.groups["base"].push(output.groups[groupName][0]);
+      delete output.groups[groupName];
+    }
+
+    output["__MAX_ROWS__"] = Math.max(
+      ...[...Object.values(output.groups).map((x: any) => x.length)]
+    );
+
+    return output;
+  }, [thisWeaponCalc]); // @TODO: investigate rerendering
+
   const displayVariantSelector =
     thisWeaponCalc?.filters && thisWeaponCalc?.filters?.length > 0 ? (
       <div className="variant-selection-wrapper">
-        Available sub-categories:
-        <div className="variant-selection">
-          <a
-            className={!variant ? "current-selection" : ""}
-            onClick={(event) => {
-              event.preventDefault();
-              navigate(`/leaderboards/${calculationId}/`);
-            }}
-            href={`/leaderboards/${calculationId}/`}
+        <b>Available sub-categories:</b>
+        {/* @TODO: */}
+        {/* @TODO: */}
+        {/* @TODO: */}
+        {/* @TODO: */}
+        <div>
+          <table
+            className={`variants-table ${
+              (calculationInfo?.length || 0) < 3 &&
+              calcVariants["__MAX_ROWS__"] > 4 &&
+              Object.keys(calcVariants.groups).length === 1
+                ? "horizontal"
+                : ""
+            }`}
           >
-            NONE
-          </a>
-          {/* get this from API instead */}
-          {thisWeaponCalc.filters?.map((val) => {
-            const isActive = variant === val.name;
-            return (
-              <a
-                key={val.name}
-                className={isActive ? "current-selection" : ""}
-                onClick={(event) => {
-                  event.preventDefault();
-                  navigate(`/leaderboards/${calculationId}/${val.name}`);
-                }}
-                href={`/leaderboards/${calculationId}/${val.name}`}
-              >
-                {val.displayName}
-              </a>
-            );
-          })}
+            {Object.keys(calcVariants.groups).length === 1 ? (
+              ""
+            ) : (
+              <thead>
+                <tr>
+                  {Object.keys(calcVariants.groups).map((x) => {
+                    return <th key={x}>{x === "base" ? "#" : x}</th>;
+                  })}
+                </tr>
+              </thead>
+            )}
+            <tbody>
+              {Array(calcVariants["__MAX_ROWS__"])
+                .fill(0)
+                .map((_, index: number) => {
+                  return (
+                    <tr key={`column-${index}`}>
+                      {Object.keys(calcVariants.groups).map((key) => {
+                        const filter = calcVariants.groups[key][index];
+                        if (!filter) return <td key={key}></td>;
+
+                        const isNoneActive = !variant && filter.name === "";
+                        const isActive =
+                          isNoneActive || variant === filter.name;
+
+                        return (
+                          <td key={filter.name}>
+                            <a
+                              title={`${filter.displayGroup} (${filter.displayName})`}
+                              className={isActive ? "current-selection" : ""}
+                              onClick={(event) => {
+                                event.preventDefault();
+                                navigate(
+                                  `/leaderboards/${calculationId}/${filter.name}`
+                                );
+                              }}
+                              href={`/leaderboards/${calculationId}/${filter.name}`}
+                            >
+                              {filter.displayName}
+                            </a>
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  );
+                })}
+              {/* {Object.keys(calcVariants.groups).map(
+                  (key: any) => {
+                    return (
+                      <tr key={`column-${key.name}`}>
+                        {calcVariants.groups[key].map((filter: any) => {
+                          if (!filter) return <td></td>;
+  
+                          const isActive = variant === filter.name;
+  
+                          return (
+                            <td key={filter.name}>
+                              <a
+                                className={isActive ? "current-selection" : ""}
+                                onClick={(event) => {
+                                  event.preventDefault();
+                                  navigate(
+                                    `/leaderboards/${calculationId}/${filter.name}`
+                                  );
+                                }}
+                                href={`/leaderboards/${calculationId}/${filter.name}`}
+                              >
+                                {filter.displayName}
+                              </a>
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    );
+                  }
+                )} */}
+            </tbody>
+          </table>
         </div>
+        {/* @TODO: */}
+        {/* @TODO: */}
+        {/* @TODO: */}
+        {/* @TODO: */}
       </div>
     ) : null;
 
@@ -406,7 +534,7 @@ export const LeaderboardsPage: React.FC = () => {
               key={_cat.name}
               style={{
                 opacity: isNiche ? 0.5 : 1,
-                background: !IS_PRODUCATION && _cat?.hidden ? "#ff00ff44" : "",
+                outline: !IS_PRODUCATION && _cat?.hidden ? "2px dashed #ff00ff44" : "",
                 display: IS_PRODUCATION
                   ? _cat?.hidden
                     ? "none"
@@ -715,8 +843,32 @@ export const LeaderboardsPage: React.FC = () => {
             hideOnDesktop
           /> */}
 
-          <div className="flex-special-container">
+          {/* @TODO: test this location... */}
+          {/* <div className="flex-special-container relative">
             <AdsComponentManager adType="Video" />
+            <div
+              style={{
+                width: 300,
+                height: 300,
+                background: "cyan",
+                opacity: 0.5,
+              }}
+            ></div>
+          </div> */}
+
+          <div className="flex-special-container">
+            {/* @TODO: test this location... */}
+            {/* <AdsComponentManager adType="Video" /> */}
+            {/* <div
+              style={{
+                marginLeft: 10,
+                width: 300,
+                height: 300,
+                background: "cyan",
+                opacity: 0.5,
+              }}
+            ></div> */}
+
             <div className="relative other-calculations-display block-highlight highlight-tile-container">
               {displayRelevantCategories}
             </div>

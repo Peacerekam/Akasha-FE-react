@@ -54,7 +54,7 @@ export const LogInModal: React.FC<LogInModalProps> = ({
 
   return (
     <div className="modal-wrapper" onClick={handleCloseModal}>
-      <div className="modal" style={{ width: 400 }}>
+      <div className="modal" style={{ width: 450 }}>
         <div className="modal-header">
           <span className="modal-title">
             {isAuthenticated ? "Account settings" : "Log In"}
@@ -94,7 +94,6 @@ export const LogInModal: React.FC<LogInModalProps> = ({
                             title="Logout?"
                           />
                         </ConfirmTooltip>
-                        {/* @TODO: unbind account button here? */}
                       </div>
                     </td>
                   </tr>
@@ -123,32 +122,45 @@ export const LogInModal: React.FC<LogInModalProps> = ({
                         const { uid, profilePictureLink } = acc;
                         const isEnkaProfile = isNaN(+uid);
                         return (
-                          <a
-                            key={acc.uid}
-                            className={`bound-account centered-td`}
-                            onClick={(event) => {
-                              event.preventDefault();
-                              handleCloseModal(event, true);
-                              navigate(`/profile/${uid}`);
-                            }}
-                            href={`/profile/${uid}`}
-                          >
-                            <img
-                              alt="Avatar"
-                              className="table-icon"
-                              src={profilePictureLink}
-                            />
-                            <div
+                          <div key={acc.uid} className="flex nowrap">
+                            <a
+                              className={`bound-account centered-td`}
                               style={{ flex: 1 }}
-                              className={`${
-                                isEnkaProfile ? "enka-profile" : ""
-                              }`}
+                              onClick={(event) => {
+                                event.preventDefault();
+                                handleCloseModal(event, true);
+                                navigate(`/profile/${uid}`);
+                              }}
+                              href={`/profile/${uid}`}
                             >
-                              {nickname}
-                            </div>
-                            <RegionBadge region={acc?.playerInfo?.region} />
-                            <ARBadge adventureRank={level} />
-                          </a>
+                              <img
+                                alt="Avatar"
+                                className="table-icon"
+                                src={profilePictureLink}
+                              />
+                              <div
+                                style={{ flex: 1 }}
+                                className={`${
+                                  isEnkaProfile ? "enka-profile" : ""
+                                }`}
+                              >
+                                {nickname}
+                              </div>
+                              <RegionBadge region={acc?.playerInfo?.region} />
+                              <ARBadge adventureRank={level} />
+                            </a>
+                            {/* <ConfirmTooltip
+                              text={`Do you want to delete "${nickname}" profile?`}
+                              onConfirm={handleLogout}
+                            >
+                              <FontAwesomeIcon
+                                className="filter-icon hoverable-icon"
+                                icon={faTrash}
+                                size="1x"
+                                title="Logout?"
+                              />
+                            </ConfirmTooltip> */}
+                          </div>
                         );
                       })}
                     </td>

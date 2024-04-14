@@ -1,6 +1,7 @@
 import "./style.scss";
 
 import CrownOfInsight from "../../assets/images/Crown_of_Insight.webp";
+import { cssJoin } from "../../utils/helpers";
 
 type TalentsDisplayProps = {
   strikethrough: boolean;
@@ -18,26 +19,37 @@ type TalentProps = {
   };
 };
 
-const TalentDisplay: React.FC<TalentProps> = ({ title, talent, strikethrough }) => {
+const TalentDisplay: React.FC<TalentProps> = ({
+  title,
+  talent,
+  strikethrough,
+}) => {
   const isBoosted = !!talent?.boosted;
   const isCrowned = talent?.rawLevel
     ? talent?.rawLevel === 10
     : talent?.level === (isBoosted ? 13 : 10);
 
   return (
-    <div className="talent-display" title={`${title} - ${talent?.level}${isCrowned ? " - Crowned" : ""}`}>
+    <div
+      className="talent-display"
+      title={`${title} - ${talent?.level}${isCrowned ? " - Crowned" : ""}`}
+    >
       {talent?.icon ? (
         <img alt="" src={talent?.icon} />
       ) : (
         <div className="talent-icon-placeholder opacity-5">?</div>
       )}
       <div
-        className={`talent-display-value ${
-          strikethrough ? "strike-through opacity-5" : ""
-        } ${isBoosted ? "talent-boosted" : ""}`}
+        className={cssJoin([
+          "talent-display-value",
+          strikethrough ? "strike-through opacity-5" : "",
+          isBoosted ? "talent-boosted" : "",
+        ])}
       >
         {talent?.level}
-        {isCrowned && <img alt="crown" className="crown-of-insight" src={CrownOfInsight} />}
+        {isCrowned && (
+          <img alt="crown" className="crown-of-insight" src={CrownOfInsight} />
+        )}
       </div>
     </div>
   );

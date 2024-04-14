@@ -1,8 +1,9 @@
 import "./style.scss";
 
+import { cssJoin } from "../../utils/helpers";
 import { useMemo } from "react";
 
-type StylizedBlockTypes = "gradient";
+type StylizedBlockTypes = "gradient" | "gradient-reverse";
 
 type StylizedContentBlockProps = {
   variant?: StylizedBlockTypes;
@@ -17,13 +18,11 @@ export const StylizedContentBlock: React.FC<StylizedContentBlockProps> = ({
 }) => {
   const classNames = useMemo(
     () =>
-      [
+      cssJoin([
         variant ?? "",
         "stylized-content-block-wrapper",
         revealCondition ? "reveal-anim" : "",
-      ]
-        .join(" ")
-        .trim(),
+      ]),
     [variant, revealCondition]
   );
 

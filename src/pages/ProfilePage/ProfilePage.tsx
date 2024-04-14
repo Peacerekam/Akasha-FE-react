@@ -21,6 +21,7 @@ import {
   FETCH_CHARACTER_FILTERS_URL,
   abortSignalCatcher,
   allSubstatsInOrder,
+  cssJoin,
   getArtifactCvColor,
   getGenderFromIcon,
   getInGameSubstatValue,
@@ -29,7 +30,7 @@ import {
   getSubstatsInOrder,
   isPercent,
   normalizeText,
-  optsParamsSessionID,
+  uidsToQuery,
 } from "../../utils/helpers";
 import React, {
   useCallback,
@@ -42,11 +43,14 @@ import {
   applyModalBodyStyle,
   getRelativeCoords,
 } from "../../components/CustomTable/Filters";
+import axios, { AxiosRequestConfig } from "axios";
 import {
+  faChevronDown,
   faGear,
   faKey,
   faRotateRight,
 } from "@fortawesome/free-solid-svg-icons";
+import { useLocation, useParams } from "react-router-dom";
 
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 import { AdsComponentManager } from "../../components/AdsComponentManager";
@@ -57,13 +61,12 @@ import { BuildsColumns } from "../BuildsPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
+import { ProfileSelector } from "../../components/ProfileSelector";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
 import { TableColumn } from "../../types/TableColumn";
 import { TitleContext } from "../../context/TitleProvider/TitleProviderContext";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
-import axios from "axios";
 import { getSessionIdFromCookie } from "../../utils/helpers";
-import { useParams } from "react-router-dom";
 
 type TitleAndDescription = {
   title: string;
@@ -86,10 +89,15 @@ export const ProfilePage: React.FC = () => {
   const [bindTime, setBindTime] = useState<number>();
   const [refreshTime, setRefreshTime] = useState<number>();
   const [enkaError, setEnkaError] = useState<TitleAndDescription>();
+  const [relevantProfiles, setRelevantProfiles] = useState<any[]>([]);
+  const [isFetchingProfiles, setIsFetchingProfiles] = useState(false);
+  const [isShowcaseExpanded, setIsShowcaseExpanded] = useState(false);
+  const [isShowcaseExpandable, setIsShowcaseExpandable] = useState(false);
   const [responseData, setResponseData] = useState<ResponseData>({
     account: null,
   });
 
+  const location = useLocation();
   const { uid } = useParams();
   const { hoverElement } = useContext(HoverElementContext);
   const { disableAdsForThisPage, adProvider } = useContext(AdProviderContext);
@@ -99,27 +107,46 @@ export const ProfilePage: React.FC = () => {
   const { isAuthenticated, isBound, fetchSessionData, boundAccounts } =
     useContext(SessionDataContext);
 
+  const DEBUG_MODE = location.search?.includes("debug");
+
+  const isCombined = uid?.startsWith("@");
+
   const isAccountOwner = useMemo(
     () => isBound(uid),
     [uid, isAuthenticated, boundAccounts]
   );
 
-  const refreshAbortController = useMemo(() => new AbortController(), [uid]);
+  const abortControllers = useMemo(
+    () => ({
+      // since they all abort at once, why
+      // not use just a single one instead?
+      profile: new AbortController(),
+      refresh: new AbortController(),
+      profiles: new AbortController(),
+    }),
+    [uid]
+  );
 
-  const fetchProfile = async (
-    uid: string,
-    abortController?: AbortController
-  ) => {
-    const _uid = encodeURIComponent(uid);
+  const fetchProfile = async (overrideUID?: string) => {
+    if (!uid) return;
+    const _uid = encodeURIComponent(overrideUID || uid);
     const url = `/api/user/${_uid}`;
     setResponseData({ account: null });
     setEnkaError(undefined);
 
-    const opts = {
-      signal: abortController?.signal,
-      params: {
-        sessionID: getSessionIdFromCookie(),
-      },
+    const opts: AxiosRequestConfig<any> = {
+      signal: abortControllers.profile.signal,
+      ...(DEBUG_MODE
+        ? {
+            headers: {
+              Authorization: `Bearer ${getSessionIdFromCookie()}`,
+            },
+          }
+        : {
+            params: {
+              sessionID: getSessionIdFromCookie(),
+            },
+          }),
     };
 
     const getSetData = async () => {
@@ -144,6 +171,12 @@ export const ProfilePage: React.FC = () => {
       setRefreshTime(thenTTL);
       setEnableRefreshBtn(data.ttl === 0);
 
+      if (isCombined) {
+        // overwrite binding stuff for combined profiles
+        data.bindTTL = 0;
+        data.secret = null;
+      }
+
       const thenBindTTL = getTime + data.bindTTL;
       setBindTime(thenBindTTL);
       setEnableBindBtn(data.bindTTL === 0);
@@ -153,6 +186,37 @@ export const ProfilePage: React.FC = () => {
     await abortSignalCatcher(getSetData);
   };
 
+  const fetchRelevantProfiles = async () => {
+    if (!uid) return;
+
+    const _uid = encodeURIComponent(isCombined ? uid?.slice(1) : uid);
+    const relevantProfilesURL = `/api/getRelevantProfiles/${_uid}`;
+
+    const opts: AxiosRequestConfig<any> = {
+      signal: abortControllers.profiles.signal,
+      ...(DEBUG_MODE
+        ? {
+            headers: {
+              Authorization: `Bearer ${getSessionIdFromCookie()}`,
+            },
+          }
+        : {
+            params: {
+              sessionID: getSessionIdFromCookie(),
+            },
+          }),
+    };
+
+    const { data } = await axios.get(relevantProfilesURL, opts);
+    setRelevantProfiles(data.data || []);
+
+    const defaultUID = data?.data?.find(
+      (x: any) => x?.defaultProfile
+    )?.defaultProfile;
+
+    return defaultUID;
+  };
+
   const handleAddNewTab = ({ account }: any) => {
     if (!uid) return;
     const nickname = account?.playerInfo?.nickname || "???";
@@ -160,13 +224,35 @@ export const ProfilePage: React.FC = () => {
     setTitle(`${nickname}'s Profile | Akasha System`);
   };
 
+  const fetchInOrder = async () => {
+    if (isCombined) {
+      setResponseData({ account: null });
+      const defaultUID = await fetchRelevantProfiles();
+      fetchProfile(defaultUID);
+    } else {
+      fetchRelevantProfiles();
+      fetchProfile();
+    }
+  };
+
   useEffect(() => {
-    const abortController = new AbortController();
-    if (uid) fetchProfile(uid, abortController);
+    setIsFetchingProfiles(false);
+  }, [relevantProfiles]);
+
+  useEffect(() => {
+    // no need to fetch on initial page load
+    if (fetchCount === 0) return;
+
+    // fetchCount increment means builds count display is outdated
+    fetchRelevantProfiles();
+  }, [fetchCount]);
+
+  useEffect(() => {
+    fetchInOrder();
+    setIsFetchingProfiles(true);
 
     return () => {
-      abortController.abort();
-      refreshAbortController.abort();
+      Object.values(abortControllers).forEach((ac) => ac.abort());
     };
   }, [uid]);
 
@@ -230,6 +316,7 @@ export const ProfilePage: React.FC = () => {
             ? Math.round(row.mainStatValue * 10) / 10
             : Math.round(row.mainStatValue);
 
+          // return <Artifact artifact={row} width={275} />;
           return (
             <div className="nowrap">
               {mainStatValue}
@@ -459,11 +546,11 @@ export const ProfilePage: React.FC = () => {
   );
 
   // @TODO: sum them on server side so we can sort by that?
-  const sumOfAchievementPoints = responseData?.account?.achievements?.reduce(
-    (accumulator: any, currentValue: any) =>
-      accumulator + currentValue.score * currentValue.count,
-    0
-  );
+  // const sumOfAchievementPoints = responseData?.account?.achievements?.reduce(
+  //   (accumulator: any, currentValue: any) =>
+  //     accumulator + currentValue.score * currentValue.count,
+  //   0
+  // );
 
   const handleRefreshData = async () => {
     if (!uid) return;
@@ -471,9 +558,19 @@ export const ProfilePage: React.FC = () => {
     const _uid = encodeURIComponent(uid);
     const refreshURL = `/api/user/refresh/${_uid}`;
 
-    const opts = {
-      signal: refreshAbortController?.signal,
-      ...optsParamsSessionID(),
+    const opts: AxiosRequestConfig<any> = {
+      signal: abortControllers.refresh.signal,
+      ...(DEBUG_MODE
+        ? {
+            headers: {
+              Authorization: `Bearer ${getSessionIdFromCookie()}`,
+            },
+          }
+        : {
+            params: {
+              sessionID: getSessionIdFromCookie(),
+            },
+          }),
     };
 
     const { data } = await axios.get(refreshURL, opts);
@@ -485,7 +582,7 @@ export const ProfilePage: React.FC = () => {
     } = data;
 
     if (ttl === 0) {
-      await fetchProfile(uid);
+      await fetchProfile();
     }
 
     if (data?.data?.error) {
@@ -496,6 +593,7 @@ export const ProfilePage: React.FC = () => {
     const then = getTime + (ttl || ttlMax);
     setRefreshTime(then);
     fetchSessionData();
+    triggerRefetch();
   };
 
   const handleToggleBuildsModal = (event: React.MouseEvent<HTMLElement>) => {
@@ -553,27 +651,24 @@ export const ProfilePage: React.FC = () => {
       const DISABLE_FLOATING_BUTTONS = false;
       const defaultBtnClassName = DISABLE_FLOATING_BUTTONS ? "disable-btn" : "";
 
-      const settingsBtnClassName = ["floating-button", defaultBtnClassName]
-        .join(" ")
-        .trim();
+      const settingsBtnClassName = cssJoin([
+        "floating-button",
+        defaultBtnClassName,
+      ]);
 
-      const refreshBtnClassName = [
+      const refreshBtnClassName = cssJoin([
         "floating-button",
         defaultBtnClassName,
         enableRefreshBtn ? "" : "disable-btn",
-      ]
-        .join(" ")
-        .trim();
+      ]);
 
-      const bindBtnClassName = [
+      const bindBtnClassName = cssJoin([
         "floating-button",
         defaultBtnClassName,
         enableBindBtn ? "" : "disable-btn",
-      ]
-        .join(" ")
-        .trim();
+      ]);
 
-      const bindAccount = async (uid?: string) => {
+      const bindAccount = async () => {
         if (!uid) return;
         setEnableBindBtn(false);
         const _uid = encodeURIComponent(uid);
@@ -581,10 +676,20 @@ export const ProfilePage: React.FC = () => {
         const { data } = await axios.post(
           bindAccountURL,
           null,
-          optsParamsSessionID()
+          DEBUG_MODE
+            ? {
+                headers: {
+                  Authorization: `Bearer ${getSessionIdFromCookie()}`,
+                },
+              }
+            : {
+                params: {
+                  sessionID: getSessionIdFromCookie(),
+                },
+              }
         );
         setBindSecret(data.secret);
-        await fetchProfile(uid);
+        await fetchProfile();
       };
 
       const showBindAccBtn = isAuthenticated && !isAccountOwner;
@@ -630,7 +735,7 @@ export const ProfilePage: React.FC = () => {
               ) : null}
               <ConfirmTooltip
                 text="Do you want to bind this account?"
-                onConfirm={() => bindAccount(uid)}
+                onConfirm={bindAccount}
                 className={
                   !enableBindBtn || DISABLE_FLOATING_BUTTONS
                     ? "pointer-events-none"
@@ -697,9 +802,9 @@ export const ProfilePage: React.FC = () => {
       return (
         <div className="floating-profile-buttons-wrapper">
           <div className="floating-profile-buttons">
-            {refreshButton}
-            {enkaButton}
-            {bindingButton}
+            {!isCombined && refreshButton}
+            {!isCombined && enkaButton}
+            {!isCombined && bindingButton}
             {buildSettingsButton}
             {artifactSettingsButton}
           </div>
@@ -719,6 +824,7 @@ export const ProfilePage: React.FC = () => {
 
   const displayBindMessage = useMemo(() => {
     if (!bindTime || !bindSecret) return <></>;
+
     return (
       <div className="bind-message-wrapper">
         <div className="bind-message">
@@ -746,7 +852,14 @@ export const ProfilePage: React.FC = () => {
         </div>
       </div>
     );
-  }, [bindSecret, enableBindBtn, bindTime]);
+  }, [bindSecret, enableBindBtn, bindTime, isCombined]);
+
+  const relevantProfilesQuery = useMemo(() => {
+    const _uids = relevantProfiles
+      .map((x) => x.uid)
+      .filter((x) => !x.startsWith("@"));
+    return uidsToQuery(_uids);
+  }, [JSON.stringify(relevantProfiles)]);
 
   if (responseData.error) {
     return (
@@ -757,7 +870,7 @@ export const ProfilePage: React.FC = () => {
             .split(".")
             .filter((d) => d)
             .map((block) => (
-              <div>{block}</div>
+              <div key={block}>{block}</div>
             ))}
         </div>
       </div>
@@ -766,12 +879,10 @@ export const ProfilePage: React.FC = () => {
 
   const triggerRefetch = () => setFetchCount((prev) => prev + 1);
 
-  const contentBlockClassNames = [
+  const contentBlockClassNames = cssJoin([
     "content-block w-100",
     responseData.account?.patreon?.active ? "patreon-profile" : "",
-  ]
-    .join(" ")
-    .trim();
+  ]);
 
   const displayEnkaErrorMessage = enkaError ? (
     <div className="bind-message-wrapper flex">
@@ -802,6 +913,7 @@ export const ProfilePage: React.FC = () => {
       {hoverElement}
       {displayEnkaErrorMessage}
       {displayBindMessage}
+
       <div className="flex">
         <div>
           {false &&
@@ -847,10 +959,37 @@ export const ProfilePage: React.FC = () => {
               marginTop: "20px",
             }}
           >
-            Achievement points: {sumOfAchievementPoints ?? "---"}
+            {/* Achievement points: {sumOfAchievementPoints ?? "---"} */}
           </div>
         )}
+        {DEBUG_MODE && (
+          <span
+            style={{
+              color: "magenta",
+              fontWeight: 600,
+              width: "100%",
+              textAlign: "center",
+            }}
+          >
+            DEBUG MODE
+          </span>
+        )}
       </div>
+
+      {(relevantProfiles?.length || 0) > 1 ? (
+        <div className={contentBlockClassNames}>
+          <StylizedContentBlock
+            variant="gradient-reverse"
+            revealCondition={!!responseData.account}
+          />
+          <ProfileSelector
+            uid={uid}
+            profiles={relevantProfiles}
+            isFetchingProfiles={isFetchingProfiles}
+          />
+        </div>
+      ) : null}
+
       {displayFloatingButtons({
         bind: true,
         refresh: true,
@@ -864,6 +1003,7 @@ export const ProfilePage: React.FC = () => {
             toggleModal={handleToggleBuildsModal}
             accountData={responseData?.account}
             parentRefetchData={triggerRefetch}
+            uids={isCombined ? relevantProfilesQuery : undefined}
           />
         )}
       </div>
@@ -883,17 +1023,49 @@ export const ProfilePage: React.FC = () => {
             /> */}
             <StylizedContentBlock
               variant="gradient"
-              revealCondition={responseData.account}
+              revealCondition={!!responseData.account}
             />
             <div className="flex profile-header-wrapper">
               <div className="flex gap-10 profile-header">
                 {displayGenshinCard}
-                <div className="profile-highlights">
+                <div
+                  className={cssJoin([
+                    "profile-highlights",
+                    isShowcaseExpandable && isShowcaseExpanded ? "w-100" : "",
+                  ])}
+                >
                   {responseData.account && (
-                    <CalculationResultWidget uid={uid} />
+                    <CalculationResultWidget
+                      uid={uid}
+                      uids={isCombined ? relevantProfilesQuery : undefined}
+                      expanded={isShowcaseExpandable && isShowcaseExpanded}
+                      setIsShowcaseExpandable={setIsShowcaseExpandable}
+                    />
                   )}
                 </div>
               </div>
+
+              {isShowcaseExpandable && (
+                <div className="relative w-100">
+                  <div
+                    className="showcase-expand-wrapper"
+                    onClick={() => setIsShowcaseExpanded((x) => !x)}
+                    title={`${
+                      isShowcaseExpanded ? "Fold" : "Expand"
+                    } builds showcase`}
+                  >
+                    {/* expand */}
+                    <FontAwesomeIcon
+                      className={cssJoin([
+                        "chevron-down-icon",
+                        isShowcaseExpanded ? "rotate-180deg" : "",
+                      ])}
+                      icon={faChevronDown}
+                      size="1x"
+                    />
+                  </div>
+                </div>
+              )}
               <AdsComponentManager adType="Video" />
             </div>
             {responseData.account && (
@@ -905,25 +1077,16 @@ export const ProfilePage: React.FC = () => {
                 defaultSort="critValue"
                 expandableRows
                 fetchParams={{
-                  uid: uid,
+                  uid: isCombined ? uid?.slice(1) : uid,
+                  uids: isCombined ? relevantProfilesQuery : "",
                 }}
               />
             )}
           </div>
         </div>
-        {/* <div className="flex">
-          {!reloadAds && (
-            <div className="flex-special-container">
-              <AdsComponentManager
-                adType="LeaderboardBTF"
-                dataAdSlot="6204085735"
-                hybrid="mobile"
-                hideOnDesktop
-              />
-            </div>
-          )}
-        </div> */}
+
         {displayFloatingButtons({ artifactSettings: true })}
+
         <div>
           {isAccountOwner && (
             <ArtifactSettingsModal
@@ -931,6 +1094,7 @@ export const ProfilePage: React.FC = () => {
               toggleModal={handleToggleArtifactsModal}
               accountData={responseData?.account}
               parentRefetchData={triggerRefetch}
+              uids={isCombined ? relevantProfilesQuery : undefined}
             />
           )}
         </div>
@@ -945,7 +1109,7 @@ export const ProfilePage: React.FC = () => {
               }}
               animationSpeedMultiplier={2}
             /> */}
-            <StylizedContentBlock revealCondition={responseData.account} />
+            <StylizedContentBlock revealCondition={!!responseData.account} />
             {responseData.account && (
               <CustomTable
                 fetchURL={FETCH_ARTIFACTS_URL}
@@ -953,7 +1117,8 @@ export const ProfilePage: React.FC = () => {
                 filtersURL={`${FETCH_ARTIFACT_FILTERS_URL}?type=profile`}
                 defaultSort="critValue"
                 fetchParams={{
-                  uid: uid,
+                  uid: isCombined ? uid?.slice(1) : uid,
+                  uids: isCombined ? relevantProfilesQuery : "",
                 }}
               />
             )}

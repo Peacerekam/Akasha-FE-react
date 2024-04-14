@@ -3,6 +3,7 @@ import "./style.scss";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import { cssJoin } from "../../utils/helpers";
 
 type LastUpdatedProps = {
   lastProfileUpdate?: number;
@@ -94,12 +95,10 @@ export const LastUpdated: React.FC<LastUpdatedProps> = ({
                 return <React.Fragment key={`${value}-${index}`} />;
               }
 
-              const classNames = [
+              const classNames = cssJoin([
                 removeMargin ? "no-margin" : "",
                 !isRawText && isNumber ? "value" : "",
-              ]
-                .join(" ")
-                .trim();
+              ]);
 
               return (
                 <span className={classNames} key={value}>

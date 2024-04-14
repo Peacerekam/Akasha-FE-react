@@ -2,6 +2,8 @@ import "./index.scss";
 
 import * as React from "react";
 
+import { cssJoin } from "../../utils/helpers";
+
 const { RampUnit } = require("@playwire/pw-react-component");
 
 export type PlaywireAdsComponentProps = {
@@ -82,14 +84,12 @@ export default class PlaywireAdsComponent extends React.Component<
     //   mobileAdType === "MobileLeaderboardBTF" ||
     //   mobileAdType === "LeaderboardATF";
 
-    const classNamesContainer = [
+    const classNamesContainer = cssJoin([
       "pw-container",
       adType === "Video" ? "video-ad-container" : "",
-    ]
-      .join(" ")
-      .trim();
+    ]);
 
-    const classNamesAd = ["playwire-ad-unit", `ad-${adID}`].join(" ").trim();
+    const classNamesAd = cssJoin(["playwire-ad-unit", `ad-${adID}`]);
 
     return (
       <div className={classNamesContainer}>

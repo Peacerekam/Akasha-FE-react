@@ -2,6 +2,8 @@ import "./style.scss";
 
 import React, { useEffect, useState } from "react";
 
+import { cssJoin } from "../../utils/helpers";
+
 type TimerProps = {
   until: number;
   label?: string;
@@ -45,20 +47,34 @@ export const Timer: React.FC<TimerProps> = ({
   }
 
   const getFormattedText = (then: number) => {
-    const minutes = Math.floor(then / 60000);
-    const seconds = Math.floor((then - minutes * 60000) / 1000);
+    const _3600k = 3_600_000;
+    const _60k = 60_000;
+    const hours = Math.floor(then / _3600k);
+    const minutes = Math.floor((then - hours * _3600k) / _60k);
+    const seconds = Math.floor((then - hours * _3600k - minutes * _60k) / 1000);
+    const displayMins = `${minutes}`.padStart(2, "0");
     const displaySecs = `${seconds}`.padStart(2, "0");
-    const timeLeft = `${minutes}:${displaySecs}`;
-    return timeLeft;
+
+    if (hours > 0) {
+      return `${hours}:${displayMins}:${displaySecs}`;
+    }
+
+    return `${minutes}:${displaySecs}`;
   };
+
+  const value = getFormattedText(timestamp);
 
   const classNames = removeStyling
     ? ""
-    : ["refresh-timer", label ? "" : "no-label"].join(" ").trim();
+    : cssJoin([
+        "refresh-timer",
+        label ? "" : "no-label",
+        value.length > 5 ? "has-hours" : "",
+      ]);
 
   return (
     <span className={classNames}>
-      {label && <span>{label}</span>} <span className="value">{getFormattedText(timestamp)}</span>
+      {label && <span>{label}</span>} <span className="value">{value}</span>
     </span>
   );
 };

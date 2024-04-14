@@ -4,12 +4,12 @@ import {
   abortSignalCatcher,
   filtersQueryToArray,
 } from "../../../utils/helpers";
+import axios, { AxiosRequestConfig } from "axios";
 import { useEffect, useMemo, useState } from "react";
 
 import { CustomQueryBuilder } from "./CustomQueryBuilder";
 import { FiltersModal } from "./FiltersModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios from "axios";
 import { faList } from "@fortawesome/free-solid-svg-icons";
 import { useLocation } from "react-router-dom";
 
@@ -66,7 +66,7 @@ export const FiltersContainer = ({
     fetchURL: string,
     abortController: AbortController
   ) => {
-    const opts = {
+    const opts: AxiosRequestConfig<any> = {
       signal: abortController?.signal,
     };
 

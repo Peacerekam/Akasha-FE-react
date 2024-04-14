@@ -1,16 +1,16 @@
 import "./style.scss";
 
+import { Link, useLocation } from "react-router-dom";
 import React, { useContext, useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
+import { cssJoin } from "../../utils/helpers";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 
 export const NavbarTabs: React.FC = () => {
   const [animationStagger, setAnimationStagger] = useState(75);
   const { lastProfiles, removeTab } = useContext(LastProfilesContext);
-  const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
@@ -27,16 +27,17 @@ export const NavbarTabs: React.FC = () => {
         } as React.CSSProperties;
 
         const isFav = priority === 2;
+        const pageUID = location.pathname.replace("/profile/", "");
+        const isActive = pageUID.toLowerCase() === uid.toLowerCase();
 
-        const classNames = [
+        const classNames = cssJoin([
           "navbar-tab",
-          location.pathname.endsWith(uid) ? "active-tab" : "",
+          isActive ? "active-tab" : "",
           isFav ? "is-favourited" : "",
-        ]
-          .join(" ")
-          .trim();
+        ]);
 
         const isEnkaProfile = isNaN(+uid);
+        const isCombined = uid.startsWith("@");
 
         return (
           <div
@@ -44,24 +45,33 @@ export const NavbarTabs: React.FC = () => {
             className={classNames}
             style={style}
           >
-            <a
-              href={`/profile/${uid}`}
-              onClick={(event) => {
-                event.preventDefault();
-                navigate(`/profile/${uid}`);
-              }}
-            >
+            <Link to={`/profile/${uid}`}>
               {isFav && <FontAwesomeIcon icon={faStar} size="1x" />}
               {nickname ?? uid}
-              {isEnkaProfile ? (
+              {!isCombined && (
                 <span
-                  className="enka-profile-tab"
-                  title="Enka.Network Profile"
+                  className={`enka-profile-tab ${
+                    !isEnkaProfile ? "akasha-icon" : ""
+                  }`}
+                  title={
+                    isEnkaProfile ? "Enka.Network Profile" : "Akasha Profile"
+                  }
                 />
-              ) : (
-                ""
               )}
-            </a>
+              {isCombined && (
+                <>
+                  <span
+                    className={`enka-profile-tab akasha-icon`}
+                    title="Akasha Profile"
+                  />
+                  <span
+                    className={`enka-profile-tab`}
+                    title="Enka.Network Profile"
+                  />
+                </>
+              )}
+              {/* {isCombined ? "[C]" : ""} */}
+            </Link>
             {!isFav && (
               <span
                 className="close-tab"

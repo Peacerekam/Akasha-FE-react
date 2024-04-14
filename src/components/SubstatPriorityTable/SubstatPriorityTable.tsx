@@ -1,6 +1,7 @@
 import "./style.scss";
 
 import React, { useContext, useEffect, useMemo, useState } from "react";
+import { cssJoin, toEnkaUrl } from "../../utils/helpers";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ReactSelect from "react-select";
@@ -11,7 +12,6 @@ import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import axios from "axios";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { reactSelectCustomFilterTheme } from "../../utils/reactSelectCustomFilterTheme";
-import { toEnkaUrl } from "../../utils/helpers";
 
 type SubstatPriority = {
   calculation: {
@@ -97,10 +97,7 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
             );
 
             const _top = _base.oldRank
-              ? `${
-                  getTopRanking(_ranking, _base.outOf) ||
-                  "?"
-                }%`
+              ? `${getTopRanking(_ranking, _base.outOf) || "?"}%`
               : "";
 
             const label = (
@@ -405,7 +402,7 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
 
       return (
         <td
-          className={`${roundedVal === 0 ? "opacity-5" : ""}`}
+          className={roundedVal === 0 ? "opacity-5" : ""}
           key={`${name}-percentage`}
           style={cellStyle}
         >
@@ -454,7 +451,7 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
 
       return (
         <td
-          className={`${roundedVal === 0 ? "opacity-5" : ""}`}
+          className={roundedVal === 0 ? "opacity-5" : ""}
           key={`${name}-percentage`}
           style={cellStyle}
         >
@@ -516,9 +513,10 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
     });
   }, [priorityData, selectedPriorityData, selectedOption, relativeTo]);
 
-  const iconClassNames = ["sort-direction-icon", !show ? "rotate-180deg" : ""]
-    .join(" ")
-    .trim();
+  const iconClassNames = cssJoin([
+    "sort-direction-icon",
+    !show ? "rotate-180deg" : "",
+  ]);
 
   const displaySpinner = priorityData && priorityData.length === 0;
 

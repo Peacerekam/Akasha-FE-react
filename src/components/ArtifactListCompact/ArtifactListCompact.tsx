@@ -6,6 +6,7 @@ import {
 } from "./ArtifactBackgroundOnCanvas";
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import {
+  cssJoin,
   getArtifactCvClassName,
   getArtifactRvClassName,
   getArtifactsInOrder,
@@ -98,14 +99,12 @@ export const CompactArtifact: React.FC<CompactArtifactProps> = ({
           const isFactored =
             _metric === "CV" ? isCV : !!customRvFilter[row.name]?.includes(key);
 
-          const classNames = [
+          const classNames = cssJoin([
             "substat flex nowrap gap-5",
             normalizeText(normSubName),
             isCV ? "critvalue" : "",
             isFactored ? "rv-relevant" : "rv-not-relevant",
-          ]
-            .join(" ")
-            .trim();
+          ])
 
           const opacity = getSubstatPercentageEfficiency(
             normSubName,

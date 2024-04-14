@@ -2,13 +2,13 @@ import "./style.scss";
 
 import { CalculationTeammate, TeammatesCompact } from "../TeammatesCompact";
 import React, { useContext, useMemo, useState } from "react";
+import { cssJoin, toShortThousands } from "../../utils/helpers";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { SettingsContext } from "../../context/SettingsProvider/SettingsProvider";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
-import { toShortThousands } from "../../utils/helpers";
 import { useNavigate } from "react-router-dom";
 
 type CalculationResponse = {
@@ -28,6 +28,7 @@ type CalculationResponse = {
   weapon: { name: string; icon: string; refinement?: number };
   stats: any;
   teammates: CalculationTeammate[];
+  hidden?: boolean;
 };
 
 type CalculationListProps = {
@@ -64,7 +65,7 @@ export const CalculationList: React.FC<CalculationListProps> = ({
   const compactList = useMemo(
     () =>
       calculationIds
-        // .filter((id: any) => calculations[id]?.ranking)
+        .filter((id: any) => !calculations[id]?.hidden)
         .map((id: any, index) => {
           const calc: CalculationResponse = calculations[id];
           const {
@@ -92,10 +93,11 @@ export const CalculationList: React.FC<CalculationListProps> = ({
           const _top = ranking ? `top ${_percentage || "?"}%` : "";
 
           const fullCalcId = `${_id}${_variant}`;
-          const trClassName =
+          const trClassName = cssJoin([
             fullCalcId === selectedCalculationId
               ? "decorate-row patreon-cyan"
-              : "";
+              : "",
+          ]);
 
           return (
             <tr key={id} className={trClassName}>
@@ -214,9 +216,10 @@ export const CalculationList: React.FC<CalculationListProps> = ({
   //   [calculationIds]
   // );
 
-  const iconClassNames = ["sort-direction-icon", !show ? "rotate-180deg" : ""]
-    .join(" ")
-    .trim();
+  const iconClassNames = cssJoin([
+    "sort-direction-icon",
+    !show ? "rotate-180deg" : "",
+  ]);
 
   return calculationIds.length > 0 ? (
     <div className="expanded-row flex">

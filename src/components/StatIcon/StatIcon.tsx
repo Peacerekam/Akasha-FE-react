@@ -119,5 +119,5 @@ export const StatIcon: React.FC<StatIconProps> = ({
     styleObj.height = sizeOverride;
   }
 
-  return <img alt="" className="stat-icon" src={asset} style={styleObj} />;
+  return <img alt="" width={18} height={18} className="stat-icon" src={asset} style={styleObj} />;
 };

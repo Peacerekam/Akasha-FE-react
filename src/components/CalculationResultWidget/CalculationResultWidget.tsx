@@ -1,26 +1,32 @@
 import "./style.scss";
 
 import React, { useContext, useEffect, useMemo, useState } from "react";
-import { abortSignalCatcher, toShortThousands } from "../../utils/helpers";
+import {
+  abortSignalCatcher,
+  cssJoin,
+  toShortThousands,
+} from "../../utils/helpers";
+import axios, { AxiosRequestConfig } from "axios";
 
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { SettingsContext } from "../../context/SettingsProvider/SettingsProvider";
 import { Spinner } from "../Spinner";
 // import { Timer } from "../Timer";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 type CalculationResultWidgetProps = {
   uid?: string;
+  uids?: string;
   noLinks?: boolean;
+  expanded?: boolean;
+  setIsShowcaseExpandable?: (isExpandable: boolean) => void;
 };
 
 export const CalculationResultWidget: React.FC<
   CalculationResultWidgetProps
-> = ({ uid, noLinks = false }) => {
+> = ({ uid, uids, noLinks = false, expanded, setIsShowcaseExpandable }) => {
   const [isLoading, setIsLoading] = useState(false);
-  // const [retryTimer, setRetryTimer] = useState<number | null>(null);
   const [data, setData] = useState<any[]>([]);
   const navigate = useNavigate();
 
@@ -30,11 +36,13 @@ export const CalculationResultWidget: React.FC<
     uid: string,
     abortController?: AbortController
   ) => {
-    const _uid = encodeURIComponent(uid);
+    const _uid = uid?.startsWith("@") ? uid.slice(1) : uid;
     const fetchURL = `/api/getCalculationsForUser/${_uid}`;
-    const opts = {
+    const opts: AxiosRequestConfig<any> = {
       signal: abortController?.signal,
-    } as any;
+    };
+
+    if (uids) opts.params = { uids };
 
     const getSetData = async () => {
       setIsLoading(true);
@@ -54,11 +62,6 @@ export const CalculationResultWidget: React.FC<
           return;
         }
       }
-
-      // if no valid rankings at all then retry in 60s
-      // const getTime = new Date().getTime();
-      // const thenTTL = getTime + 59000;
-      // setRetryTimer(thenTTL);
     };
 
     await abortSignalCatcher(getSetData);
@@ -250,6 +253,12 @@ export const CalculationResultWidget: React.FC<
     [resultsArray, getTopRanking]
   );
 
+  useEffect(() => {
+    if (!setIsShowcaseExpandable) return;
+    const isExpandable = tilesList.length > 8
+    setIsShowcaseExpandable(isExpandable)
+  }, [tilesList])
+
   if (isLoading) {
     return (
       <>
@@ -275,30 +284,23 @@ export const CalculationResultWidget: React.FC<
   return (
     <>
       {tilesList.length > 0 ? (
-        <PerfectScrollbar>
-          <div
-            className="highlight-tile-container"
-            style={{ position: "relative" }}
-          >
-            {tilesList}
-          </div>
-        </PerfectScrollbar>
+        <>
+          <PerfectScrollbar>
+            <div
+              className={cssJoin([
+                "highlight-tile-container",
+                expanded ? "expanded-showcase" : "",
+              ])}
+            >
+              {tilesList}
+            </div>
+          </PerfectScrollbar>
+        </>
       ) : (
         <div className="retrying-timer">
           <div className="retrying-timer-label">no highlights available</div>
         </div>
       )}
-
-      {/* {retryTimer ? (
-        <div className="retrying-timer">
-          <div className="retrying-timer-label">Reloading highlights in:</div>
-          <Timer until={retryTimer} onFinish={handleFinishTimer} />
-        </div>
-      ) : tilesList.length === 0 && retryTimer === 0 ? (
-        <div className="retrying-timer">
-          <div className="retrying-timer-label">no highlights available</div>
-        </div>
-      ) : null} */}
     </>
   );
 };

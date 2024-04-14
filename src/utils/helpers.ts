@@ -908,3 +908,17 @@ export const timeAgo = (dateParam: any) => {
 
   return getFormattedDate(date); // 10. January 2017. at 10:20
 };
+
+// bad practice hurr durr
+// (Array.prototype as any).cssJoin = function () {
+//   return this.filter((name: any) => name).join(" ");
+// };
+
+export const cssJoin = (classes: Record<string, any> | string[]) => {
+  const isArray = Array.isArray(classes);
+  if (isArray) return classes.filter((name) => name).join(" ");
+
+  return Object.keys(classes)
+    .filter((name) => classes[name])
+    .join(" ");
+};

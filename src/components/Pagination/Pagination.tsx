@@ -14,6 +14,7 @@ import { ConfirmInput } from "../ConfirmInput";
 import { FetchParams } from "../CustomTable";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import { cssJoin } from "../../utils/helpers";
 
 // import { Spinner } from "../Spinner";
 
@@ -196,12 +197,10 @@ export const Pagination: React.FC<PaginationProps> = ({
   const displayPageRange = useMemo(
     () =>
       getVisiblePages.map((page: number, index) => {
-        const classNames = [
+        const classNames = cssJoin([
           "relative button-wrapper",
           page === pageNumber ? "highlight-button" : "",
-        ]
-          .join(" ")
-          .trim();
+        ]);
 
         const displayFirstLabel = (
           <span onClick={() => handleSetPage(1)} className="button-label">

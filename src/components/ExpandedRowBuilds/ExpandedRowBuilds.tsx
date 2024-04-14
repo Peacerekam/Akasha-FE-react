@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
+import axios, { AxiosRequestConfig } from "axios";
 
 import { ArtifactListCompact } from "../ArtifactListCompact";
 import { CalculationList } from "../CalculationList";
 import { CharacterCard } from "../CharacterCard";
 import { Spinner } from "../Spinner";
 import { SubstatPriorityTable } from "../SubstatPriorityTable";
-import axios from "axios";
+import { cssJoin } from "../../utils/helpers";
 import { useParams } from "react-router-dom";
 
 type ExpandedRowBuildsProps = {
@@ -51,7 +52,7 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
     const _uid = encodeURIComponent(row.uid);
     const _md5 = encodeURIComponent(row.md5);
     const calcDetailsURL = `/api/leaderboards/${_uid}/${_md5}`;
-    const opts = {
+    const opts: AxiosRequestConfig<any> = {
       params: {
         variant: isProfile ? "profilePage" : "",
       },
@@ -134,7 +135,10 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
   return (
     <div
       key={iterator}
-      className={`flex expanded-row ${disableAnimations ? "disable-anim" : ""}`}
+      className={cssJoin([
+        "flex expanded-row",
+        disableAnimations ? "disable-anim" : "",
+      ])}
     >
       {isFetching ? <Spinner /> : content}
     </div>

@@ -2,8 +2,10 @@ import { ConfirmTooltip, Spinner, StatList } from "../../components";
 import {
   PATREON_URL,
   abortSignalCatcher,
+  cssJoin,
   getSessionIdFromCookie,
 } from "../../utils/helpers";
+import axios, { AxiosRequestConfig } from "axios";
 import {
   faEye,
   faEyeSlash,
@@ -20,7 +22,7 @@ import Highlighter from "react-highlight-words";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
-import axios from "axios";
+import { useParams } from "react-router-dom";
 
 export type ProfileSettingsModalProps = {
   isOpen: boolean;
@@ -30,6 +32,7 @@ export type ProfileSettingsModalProps = {
     uid: string;
   } & any;
   parentRefetchData: () => void;
+  uids?: string;
 };
 
 export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
@@ -37,6 +40,7 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
   toggleModal,
   accountData,
   parentRefetchData,
+  uids,
 }) => {
   const [selectedBuildId, setSelectedBuildId] = useState<string>();
   const [backgroundPreview, setBackgroundPreview] = useState<string>("");
@@ -52,15 +56,20 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
   const { translate } = useContext(TranslationContext);
   const isPatreon = !!profileObject.isPatreon;
 
+  const { uid: pageUID } = useParams();
+  const isCombinedPage = pageUID?.startsWith("@");
+
   const fetchBuildsData = async (
     uid: string,
     abortController?: AbortController
   ) => {
     const _uid = encodeURIComponent(uid);
     const fetchURL = `/api/builds/${_uid}`;
-    const opts = {
+    const opts: AxiosRequestConfig<any> = {
       signal: abortController?.signal,
-    } as any;
+    };
+
+    if (uids) opts.params = { uids };
 
     const getSetData = async () => {
       const response = await axios.get(fetchURL, opts);
@@ -178,7 +187,7 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
           },
         });
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
 
       setIsPending(false);
@@ -204,15 +213,15 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       const _uid = encodeURIComponent(uid);
       const _md5 = encodeURIComponent(md5);
       const postNamecardURL = `/api/user/namecard/${_uid}/${_md5}`;
-      const opts = {
+      const opts: AxiosRequestConfig<any> = {
         params: {
           sessionID: getSessionIdFromCookie(),
         },
       };
       try {
         await axios.post(postNamecardURL, null, opts); // no formData attached
-      } catch(err) {
-        console.log(err)
+      } catch (err) {
+        console.log(err);
       }
       setIsPending(false);
       clearBgImage();
@@ -228,7 +237,19 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       const _uid = encodeURIComponent(uid);
       const _md5 = encodeURIComponent(md5);
       const toggleVisibilityURL = `/api/user/toggleBuildVisibility/${_uid}/${_md5}`;
-      const opts = {
+      const opts: AxiosRequestConfig<any> = {
+        headers: {
+          // @TODO: TEST THIS
+          // @TODO: TEST THIS
+          // @TODO: TEST THIS
+          // @TODO: TEST THIS
+          // @TODO: TEST THIS
+          // @TODO: TEST THIS
+          // @TODO: TEST THIS
+          // @TODO: TEST THIS
+          // @TODO: TEST THIS
+          Authorization: `Bearer ${getSessionIdFromCookie()}`,
+        },
         params: {
           sessionID: getSessionIdFromCookie(),
         },
@@ -247,7 +268,7 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       const _uid = encodeURIComponent(uid);
       const _md5 = encodeURIComponent(md5);
       const deleteBuildURL = `/api/user/deleteBuild/${_uid}/${_md5}`;
-      const opts = {
+      const opts: AxiosRequestConfig<any> = {
         params: {
           sessionID: getSessionIdFromCookie(),
         },
@@ -279,7 +300,7 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       const _md5 = encodeURIComponent(md5);
 
       const postBuildNameURL = `/api/user/setBuildName/${_uid}/${_md5}`;
-      const opts = {
+      const opts: AxiosRequestConfig<any> = {
         params: {
           buildName: newBuildName,
           sessionID: getSessionIdFromCookie(),
@@ -300,14 +321,14 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
         char.type === "current" ? translate(char.name) : char.type;
 
       const isHidden = char.isHidden;
-      const rowClassnames = [
+      const rowClassnames = cssJoin([
         "compact-table-row",
         buildId === selectedBuildId ? "selected-build-row" : "",
         isHidden ? "opacity-3" : "",
         char?.customNamecard ? "has-custom-namecard" : "",
-      ]
-        .join(" ")
-        .trim();
+      ]);
+
+      const isEnka = isNaN(+char.uid);
 
       return (
         <div key={buildId} className={rowClassnames}>
@@ -318,6 +339,11 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
               setSelectedBuildId(buildId);
             }}
           >
+            {isCombinedPage && (
+              <span
+                className={isEnka ? "enka-icon" : "enka-icon akasha-icon"}
+              />
+            )}
             <img className="table-icon" src={char.icon} alt={char.icon} />
             <div className="compact-table-name">
               {selectedBuildId === buildId ? (
@@ -376,12 +402,10 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     // @TODO: patreon
     const patreonObj = selectedBuild?.owner?.patreon;
 
-    const uploadBtnClassNames = [
+    const uploadBtnClassNames = cssJoin([
       "regular-btn",
       backgroundPreview ? "blinking" : "opacity-3 disabled",
-    ]
-      .join(" ")
-      .trim();
+    ]);
 
     const statListPlaceholder = <div style={{ width: 342, height: 394 }} />;
     return (

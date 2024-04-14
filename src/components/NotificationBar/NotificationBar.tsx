@@ -3,6 +3,7 @@ import "./style.scss";
 import React, { useContext } from "react";
 
 import { NotificationsContext } from "../../context/Notifications/NotificationsContext";
+import { cssJoin } from "../../utils/helpers";
 
 export const NotificationBar: React.FC = () => {
   const {
@@ -15,14 +16,12 @@ export const NotificationBar: React.FC = () => {
   const isHidden = hide || !notification;
   // const isLoading = !notification && !isHidden;
 
-  const classNames = [
+  const classNames = cssJoin([
     notification?.color ? `notification-color-${notification?.color}` : "",
     "notification-bar",
     isHidden ? "hide" : "reveal",
     // isLoading ? "is-loading" : ""
-  ]
-    .join(" ")
-    .trim();
+  ]);
 
   const messageContent = notification?.message
     ?.split("\n")

@@ -6,6 +6,7 @@ import {
 import React, { useCallback, useContext, useEffect, useMemo } from "react";
 import {
   allSubstatsInOrder,
+  cssJoin,
   getInGameSubstatValue,
   isPercent,
 } from "../../utils/helpers";
@@ -88,12 +89,10 @@ export const RollList: React.FC<RollListProps> = ({ artifacts, character }) => {
             setCustomRvFilter(character, arr);
           };
 
-          const className = [
+          const className = cssJoin([
             "roll-list-member x-prefix",
             filter.includes(key) ? "active-rv" : "",
-          ]
-            .join(" ")
-            .trim();
+          ]);
 
           return (
             <div

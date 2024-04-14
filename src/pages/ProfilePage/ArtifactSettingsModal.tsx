@@ -3,19 +3,20 @@ import {
   abortSignalCatcher,
   getSessionIdFromCookie,
 } from "../../utils/helpers";
+import axios, { AxiosRequestConfig } from "axios";
 import { faTrash, faX } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useMemo, useState } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { ProfileSettingsModalProps } from "./BuildSettingsModal";
-import axios from "axios";
 
 export const ArtifactSettingsModal: React.FC<ProfileSettingsModalProps> = ({
   isOpen,
   toggleModal,
   accountData,
   parentRefetchData,
+  uids,
 }) => {
   const [artifacts, setArtifacts] = useState<any[]>([]);
   const [searchText, setSearchText] = useState<string>("");
@@ -30,9 +31,11 @@ export const ArtifactSettingsModal: React.FC<ProfileSettingsModalProps> = ({
   ) => {
     const _uid = encodeURIComponent(uid);
     const fetchURL = `/api/artifactsByUid/${_uid}`;
-    const opts = {
+    const opts: AxiosRequestConfig<any> = {
       signal: abortController?.signal,
-    } as any;
+    };
+
+    if (uids) opts.params = { uids };
 
     const getSetData = async () => {
       const response = await axios.get(fetchURL, opts);
@@ -108,7 +111,7 @@ export const ArtifactSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       const { uid, md5, _id } = artifact;
       const _uid = encodeURIComponent(uid);
       const deleteArtiURL = `/api/user/deleteArtifact/${_uid}/${md5 || _id}`;
-      const opts = {
+      const opts: AxiosRequestConfig<any> = {
         params: { sessionID: getSessionIdFromCookie() },
       };
       const response = await axios.post(deleteArtiURL, null, opts);
@@ -140,7 +143,7 @@ export const ArtifactSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       const uid = filteredArtifacts?.[0]?.uid;
       const _uid = encodeURIComponent(uid);
       const deleteAllArtiURL = `/api/user/deleteAllUnequippedArtifacts/${_uid}`;
-      const opts = {
+      const opts: AxiosRequestConfig<any> = {
         params: { sessionID: getSessionIdFromCookie() },
       };
       const response = await axios.post(deleteAllArtiURL, null, opts);
@@ -152,10 +155,8 @@ export const ArtifactSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     };
 
     const displayArtifactSettingsRow = (artifact: any) => {
-      const rowClassnames = ["relative"].join(" ").trim();
-
       return (
-        <div key={artifact._id} className={rowClassnames}>
+        <div key={artifact._id} className="relative">
           {/* <img className="table-icon" src={artifact.icon} alt={artifact.icon} /> */}
           {/* <div className="compact-table-name artifacts-table">
             <Highlighter
@@ -218,7 +219,10 @@ export const ArtifactSettingsModal: React.FC<ProfileSettingsModalProps> = ({
                   text={`Delete all unequipped aritfacts?`}
                   onConfirm={() => handleDeleteAllArtifacts()}
                 >
-                  <button className="remove-btn" title="Delete all unequipped artifacts">
+                  <button
+                    className="remove-btn"
+                    title="Delete all unequipped artifacts"
+                  >
                     <FontAwesomeIcon icon={faTrash} size="1x" />
                   </button>
                 </ConfirmTooltip>

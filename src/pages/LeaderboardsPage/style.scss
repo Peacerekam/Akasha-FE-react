@@ -1,30 +1,61 @@
 .other-calculations-display {
   margin: 10px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  .other-calc-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    text-align: center;
+
+    margin: 10px;
+    width: min(600px, 100% - 15px);
+    flex-grow: 1;
+
+    .flex {
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+  }
 
   .variant-selection-wrapper {
+    flex-grow: 1;
     display: flex;
     gap: 10px;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin-top: 20px;
-    .variant-selection {
-      display: flex;
-      flex-wrap: wrap;
-    }
+    margin: 10px;
   }
 
-  .other-calc-container {
-    display: flex;
-    justify-content: center;
-    gap: 50px;
-    flex-wrap: wrap;
+  td {
     text-align: center;
-    .flex {
-      justify-content: center;
-      flex-wrap: wrap;
+  }
+
+  .variants-table {
+    &.horizontal {
+      tbody {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      tr,
+      td {
+        display: contents;
+      }
+      a {
+        margin: 0;
+      }
+    }
+
+    td {
+      height: 33px;
+    }
+    a {
+      padding: 8px;
     }
   }
 
@@ -33,10 +64,12 @@
     margin: 2px;
     color: #e7f6f2;
     text-decoration: none;
+
     &:hover {
       background-color: rgba(black, 0.3);
       box-shadow: inset 0 0 5px 2px rgba(orange, 0.3);
     }
+
     &.current-selection {
       background-color: rgba(black, 0.3);
       box-shadow: inset 0 0 5px 2px rgba(black, 0.5);
@@ -50,19 +83,19 @@
 .calc-setup-info-wrapper {
   display: flex;
   flex-wrap: wrap;
+
   table {
     background-color: rgba(black, 0.3);
     padding: 8px;
     margin: 8px;
     height: fit-content;
-    // width: 30%;
-    // width: 23%;
     width: 30%;
   }
 }
 
 .lb-chart-wrapper {
   width: 500px;
+
   canvas {
     width: 100% !important;
   }

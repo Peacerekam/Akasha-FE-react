@@ -15,6 +15,19 @@
       background-position-y: max(-200px, -15vw);
     }
   }
+  &.gradient-reverse {
+    &::after {
+      // background: linear-gradient(#2c3333 40%, transparent 15%, #2c3333dd 5%);
+      background: linear-gradient(#2c3333cc 5%, #2c3333aa 8%, transparent 18%);
+      // background: transparent;
+    }
+    .stylized-content-block {
+      background-position-y: -25px;
+      @media (max-width: 800px) {
+        background-position-y: 0;
+      }
+    }
+  }
   .stylized-content-block {
     position: absolute;
     background-image: var(--name-card-url);

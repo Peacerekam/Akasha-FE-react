@@ -10,7 +10,9 @@ import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
 import { RegionBadge } from "../RegionBadge";
 import { Spinner } from "../Spinner";
+import { cssJoin } from "../../utils/helpers";
 import { faStar as faStarRegular } from "@fortawesome/free-regular-svg-icons";
+import { useParams } from "react-router-dom";
 
 type AkashaAchievement = {
   id: number;
@@ -53,6 +55,10 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
   const { favouriteTab, lastProfiles } = useContext(LastProfilesContext);
   const playerInfo = accountData.account?.playerInfo;
 
+  const { uid: _uid } = useParams();
+  const uid = _uid || accountData.account.uid;
+  const isCombined = uid.startsWith("@");
+
   if (!playerInfo) {
     return (
       <div className="genshin-user-card-wrapper">
@@ -76,7 +82,6 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
     backgroundImage: `url(${accountData.account.nameCardLink})`,
   } as React.CSSProperties;
 
-  const uid = accountData.account.uid;
   const relatedProfile = lastProfiles.find(
     (a) => a.uid?.toLowerCase() === uid?.toLowerCase()
   );
@@ -123,12 +128,10 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
 
   return (
     <div
-      className={[
+      className={cssJoin([
         "genshin-user-card-wrapper",
         isAccountOwner ? "pointer clickable-card" : "",
-      ]
-        .join(" ")
-        .trim()}
+      ])}
     >
       {displayFavBtn}
       {showBackgroundImage && <div className="card-background" style={style} />}
@@ -143,7 +146,7 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
           <div className="genshin-card-top-row">
             <div className="card-big-text">
               {playerInfo.nickname}
-              {isEnkaProfile ? (
+              {isEnkaProfile && !isCombined ? (
                 <span className="enka-icon" title="Enka.Network Profile" />
               ) : (
                 ""
