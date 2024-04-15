@@ -1009,29 +1009,29 @@ export const ProfilePage: React.FC = () => {
                     />
                   )}
                 </div>
+                {isShowcaseExpandable && (
+                  <div className="relative w-100">
+                    <div
+                      className="showcase-expand-wrapper"
+                      onClick={() => setIsShowcaseExpanded((x) => !x)}
+                      title={`${
+                        isShowcaseExpanded ? "Fold" : "Expand"
+                      } builds showcase`}
+                    >
+                      {/* expand */}
+                      <FontAwesomeIcon
+                        className={cssJoin([
+                          "chevron-down-icon",
+                          isShowcaseExpanded ? "rotate-180deg" : "",
+                        ])}
+                        icon={faChevronDown}
+                        size="1x"
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
 
-              {isShowcaseExpandable && (
-                <div className="relative w-100">
-                  <div
-                    className="showcase-expand-wrapper"
-                    onClick={() => setIsShowcaseExpanded((x) => !x)}
-                    title={`${
-                      isShowcaseExpanded ? "Fold" : "Expand"
-                    } builds showcase`}
-                  >
-                    {/* expand */}
-                    <FontAwesomeIcon
-                      className={cssJoin([
-                        "chevron-down-icon",
-                        isShowcaseExpanded ? "rotate-180deg" : "",
-                      ])}
-                      icon={faChevronDown}
-                      size="1x"
-                    />
-                  </div>
-                </div>
-              )}
               <AdsComponentManager adType="Video" />
             </div>
             {responseData.account && (
