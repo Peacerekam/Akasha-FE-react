@@ -19,6 +19,7 @@ type SubstatPriority = {
     name: string;
     short?: string;
     variant?: string;
+    hidden?: boolean;
     weapon: {
       name: string;
       icon: string;
@@ -86,66 +87,68 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
   const calcOptions = useMemo(
     () =>
       priorityData && priorityData.length > 0
-        ? priorityData.map((_data) => {
-            const calc = _data.calculation;
+        ? priorityData
+            .filter((x) => !x.calculation?.hidden)
+            .map((_data) => {
+              const calc = _data.calculation;
 
-            const _base = _data.substats["Base"];
-            const leaveOnlyNumbersRegex = /\D+/g;
-            const _ranking = +(_base.oldRank + "")?.replace(
-              leaveOnlyNumbersRegex,
-              ""
-            );
+              const _base = _data.substats["Base"];
+              const leaveOnlyNumbersRegex = /\D+/g;
+              const _ranking = +(_base.oldRank + "")?.replace(
+                leaveOnlyNumbersRegex,
+                ""
+              );
 
-            const _top = _base.oldRank
-              ? `${getTopRanking(_ranking, _base.outOf) || "?"}%`
-              : "";
+              const _top = _base.oldRank
+                ? `${getTopRanking(_ranking, _base.outOf) || "?"}%`
+                : "";
 
-            const label = (
-              <>
-                <span className="react-select-custom-option">
-                  <span className="for-dropdown">
-                    <WeaponMiniDisplay
-                      icon={toEnkaUrl(calc.weapon.icon)}
-                      refinement={calc.weapon.refinement}
-                    />
-                    <div
-                      style={{
-                        width: 150,
-                        whiteSpace: "nowrap",
-                        textOverflow: "ellipsis",
-                        overflow: "hidden",
-                      }}
-                    >
-                      {translate(calc.weapon.name)}
-                    </div>
-                    <div style={{ width: 80 }}>top {_top}</div>
-                    {calc.variant ? <div>({calc.variant})</div> : ""}
-                    <div>{calc.name}</div>
+              const label = (
+                <>
+                  <span className="react-select-custom-option">
+                    <span className="for-dropdown">
+                      <WeaponMiniDisplay
+                        icon={toEnkaUrl(calc.weapon.icon)}
+                        refinement={calc.weapon.refinement}
+                      />
+                      <div
+                        style={{
+                          width: 150,
+                          whiteSpace: "nowrap",
+                          textOverflow: "ellipsis",
+                          overflow: "hidden",
+                        }}
+                      >
+                        {translate(calc.weapon.name)}
+                      </div>
+                      <div style={{ width: 80 }}>top {_top}</div>
+                      {calc.variant ? <div>({calc.variant})</div> : ""}
+                      <div>{calc.name}</div>
+                    </span>
+                    <span className="for-pills">
+                      <img alt="" src={toEnkaUrl(calc.weapon.icon)} />
+                      {translate(calc.weapon.name)} - top {_top}
+                      {calc.variant ? <div>({calc.variant})</div> : ""}{" "}
+                      {calc.name}
+                    </span>
                   </span>
-                  <span className="for-pills">
-                    <img alt="" src={toEnkaUrl(calc.weapon.icon)} />
-                    {translate(calc.weapon.name)} - top {_top}
-                    {calc.variant ? <div>({calc.variant})</div> : ""}{" "}
-                    {calc.name}
-                  </span>
-                </span>
-              </>
-            );
+                </>
+              );
 
-            const weaponName = _data.calculation.weapon.name;
-            const weaponRefinement = _data.calculation.weapon.refinement;
-            const calcName = _data.calculation.name;
-            const calcVariant = calc.variant || "";
-            const rawLabel = `${weaponName} R${weaponRefinement} ${calcName} ${calcVariant}`;
+              const weaponName = _data.calculation.weapon.name;
+              const weaponRefinement = _data.calculation.weapon.refinement;
+              const calcName = _data.calculation.name;
+              const calcVariant = calc.variant || "";
+              const rawLabel = `${weaponName} R${weaponRefinement} ${calcName} ${calcVariant}`;
 
-            const thisOpt = {
-              label,
-              rawLabel,
-              value: _data.calculation.calculationId,
-            };
+              const thisOpt = {
+                label,
+                rawLabel,
+                value: _data.calculation.calculationId,
+              };
 
-            return thisOpt;
-          })
+              return thisOpt;
+            })
         : [],
     [priorityData, translate, getTopRanking]
   );

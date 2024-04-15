@@ -136,17 +136,9 @@ export const ProfilePage: React.FC = () => {
 
     const opts: AxiosRequestConfig<any> = {
       signal: abortControllers.profile.signal,
-      ...(DEBUG_MODE
-        ? {
-            headers: {
-              Authorization: `Bearer ${getSessionIdFromCookie()}`,
-            },
-          }
-        : {
-            params: {
-              sessionID: getSessionIdFromCookie(),
-            },
-          }),
+      headers: {
+        Authorization: `Bearer ${getSessionIdFromCookie()}`,
+      },
     };
 
     const getSetData = async () => {
@@ -194,17 +186,9 @@ export const ProfilePage: React.FC = () => {
 
     const opts: AxiosRequestConfig<any> = {
       signal: abortControllers.profiles.signal,
-      ...(DEBUG_MODE
-        ? {
-            headers: {
-              Authorization: `Bearer ${getSessionIdFromCookie()}`,
-            },
-          }
-        : {
-            params: {
-              sessionID: getSessionIdFromCookie(),
-            },
-          }),
+      headers: {
+        Authorization: `Bearer ${getSessionIdFromCookie()}`,
+      },
     };
 
     const { data } = await axios.get(relevantProfilesURL, opts);
@@ -560,17 +544,9 @@ export const ProfilePage: React.FC = () => {
 
     const opts: AxiosRequestConfig<any> = {
       signal: abortControllers.refresh.signal,
-      ...(DEBUG_MODE
-        ? {
-            headers: {
-              Authorization: `Bearer ${getSessionIdFromCookie()}`,
-            },
-          }
-        : {
-            params: {
-              sessionID: getSessionIdFromCookie(),
-            },
-          }),
+      headers: {
+        Authorization: `Bearer ${getSessionIdFromCookie()}`,
+      },
     };
 
     const { data } = await axios.get(refreshURL, opts);
@@ -673,21 +649,11 @@ export const ProfilePage: React.FC = () => {
         setEnableBindBtn(false);
         const _uid = encodeURIComponent(uid);
         const bindAccountURL = `/api/user/bind/${_uid}`;
-        const { data } = await axios.post(
-          bindAccountURL,
-          null,
-          DEBUG_MODE
-            ? {
-                headers: {
-                  Authorization: `Bearer ${getSessionIdFromCookie()}`,
-                },
-              }
-            : {
-                params: {
-                  sessionID: getSessionIdFromCookie(),
-                },
-              }
-        );
+        const { data } = await axios.post(bindAccountURL, null, {
+          headers: {
+            Authorization: `Bearer ${getSessionIdFromCookie()}`,
+          },
+        });
         setBindSecret(data.secret);
         await fetchProfile();
       };

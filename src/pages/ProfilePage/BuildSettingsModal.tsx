@@ -181,10 +181,11 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
         await axios.post(postNamecardURL, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${getSessionIdFromCookie()}`,
           },
-          params: {
-            sessionID: getSessionIdFromCookie(),
-          },
+          // params: {
+          //   sessionID: getSessionIdFromCookie(),
+          // },
         });
       } catch (err) {
         console.log(err);
@@ -214,8 +215,11 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       const _md5 = encodeURIComponent(md5);
       const postNamecardURL = `/api/user/namecard/${_uid}/${_md5}`;
       const opts: AxiosRequestConfig<any> = {
-        params: {
-          sessionID: getSessionIdFromCookie(),
+        // params: {
+        //   sessionID: getSessionIdFromCookie(),
+        // },
+        headers: {
+          Authorization: `Bearer ${getSessionIdFromCookie()}`,
         },
       };
       try {
@@ -239,20 +243,11 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       const toggleVisibilityURL = `/api/user/toggleBuildVisibility/${_uid}/${_md5}`;
       const opts: AxiosRequestConfig<any> = {
         headers: {
-          // @TODO: TEST THIS
-          // @TODO: TEST THIS
-          // @TODO: TEST THIS
-          // @TODO: TEST THIS
-          // @TODO: TEST THIS
-          // @TODO: TEST THIS
-          // @TODO: TEST THIS
-          // @TODO: TEST THIS
-          // @TODO: TEST THIS
           Authorization: `Bearer ${getSessionIdFromCookie()}`,
         },
-        params: {
-          sessionID: getSessionIdFromCookie(),
-        },
+        // params: {
+        //   sessionID: getSessionIdFromCookie(),
+        // },
       };
       await axios.post(toggleVisibilityURL, null, opts);
       setIsPending(false);
@@ -269,8 +264,11 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       const _md5 = encodeURIComponent(md5);
       const deleteBuildURL = `/api/user/deleteBuild/${_uid}/${_md5}`;
       const opts: AxiosRequestConfig<any> = {
-        params: {
-          sessionID: getSessionIdFromCookie(),
+        // params: {
+        //   sessionID: getSessionIdFromCookie(),
+        // },
+        headers: {
+          Authorization: `Bearer ${getSessionIdFromCookie()}`,
         },
       };
       await axios.post(deleteBuildURL, null, opts);
@@ -303,7 +301,10 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       const opts: AxiosRequestConfig<any> = {
         params: {
           buildName: newBuildName,
-          sessionID: getSessionIdFromCookie(),
+          // sessionID: getSessionIdFromCookie(),
+        },
+        headers: {
+          Authorization: `Bearer ${getSessionIdFromCookie()}`,
         },
       };
       const response = await axios.post(postBuildNameURL, null, opts); // no formData attached

@@ -55,7 +55,11 @@ export const ArtifactSettingsModal: React.FC<ProfileSettingsModalProps> = ({
   }, [accountData?.uid]);
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen) {
+      setErrorMsg(<></>);
+      return;
+    }
+
     if (artifacts.length > 0) return;
 
     if (accountData?.uid) {
@@ -112,7 +116,10 @@ export const ArtifactSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       const _uid = encodeURIComponent(uid);
       const deleteArtiURL = `/api/user/deleteArtifact/${_uid}/${md5 || _id}`;
       const opts: AxiosRequestConfig<any> = {
-        params: { sessionID: getSessionIdFromCookie() },
+        // params: { sessionID: getSessionIdFromCookie() },
+        headers: {
+          Authorization: `Bearer ${getSessionIdFromCookie()}`,
+        },
       };
       const response = await axios.post(deleteArtiURL, null, opts);
       if (response?.data?.error) {
@@ -129,8 +136,9 @@ export const ArtifactSettingsModal: React.FC<ProfileSettingsModalProps> = ({
             </div>
           );
           setErrorMsg(_errorMessage);
-        } else {
-          setErrorMsg(response?.data?.error);
+        } else if (response?.data?.message) {
+          // idk
+          setErrorMsg(response?.data?.message);
         }
       }
       setIsPending(false);
@@ -144,11 +152,17 @@ export const ArtifactSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       const _uid = encodeURIComponent(uid);
       const deleteAllArtiURL = `/api/user/deleteAllUnequippedArtifacts/${_uid}`;
       const opts: AxiosRequestConfig<any> = {
-        params: { sessionID: getSessionIdFromCookie() },
+        // params: { sessionID: getSessionIdFromCookie() },
+        headers: {
+          Authorization: `Bearer ${getSessionIdFromCookie()}`,
+        },
       };
       const response = await axios.post(deleteAllArtiURL, null, opts);
       if (response?.data?.error) {
         setErrorMsg(response?.data?.error);
+      } else if (response?.data?.message) {
+        // idk
+        setErrorMsg(response?.data?.message);
       }
       setIsPending(false);
       fetchArtifactsData(accountData?.uid);
@@ -237,7 +251,7 @@ export const ArtifactSettingsModal: React.FC<ProfileSettingsModalProps> = ({
         </div>
       </div>
     );
-  }, [accountData?.uid, filteredArtifacts, searchText, isPending]);
+  }, [accountData?.uid, filteredArtifacts, searchText, isPending, errorMsg]);
 
   if (!isOpen) return null;
 

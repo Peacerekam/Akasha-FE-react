@@ -1,7 +1,7 @@
 import React, { createContext, useCallback, useEffect, useState } from "react";
 
 import axios from "axios";
-import { optsParamsSessionID } from "../../utils/helpers";
+import { optsHeadersSessionID } from "../../utils/helpers";
 
 type SessionProfile = {
   username?: string;
@@ -60,7 +60,7 @@ const SessionDataContextProvider: React.FC<{ children: any }> = ({
 
     try {
       const getSessionURL = "/auth/status/";
-      const response = await axios.get(getSessionURL, optsParamsSessionID());
+      const response = await axios.get(getSessionURL, optsHeadersSessionID());
       const { data } = response.data;
       setBoundAccounts(data.accounts);
 

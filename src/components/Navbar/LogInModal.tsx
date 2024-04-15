@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { RegionBadge } from "../RegionBadge";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
 import axios from "axios";
-import { optsParamsSessionID } from "../../utils/helpers";
+import { optsHeadersSessionID } from "../../utils/helpers";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -47,7 +47,7 @@ export const LogInModal: React.FC<LogInModalProps> = ({
   const handleLogout = async () => {
     try {
       const logoutURL = "/api/logout";
-      await axios.post(logoutURL, null, optsParamsSessionID());
+      await axios.post(logoutURL, null, optsHeadersSessionID());
       window.location.reload();
     } catch (err) {}
   };

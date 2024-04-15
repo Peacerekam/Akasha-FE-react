@@ -42,12 +42,17 @@ export const getSessionIdFromCookie = () => {
   return document.cookie?.split("connect.sid=s%3A")?.[1]?.split(".")?.[0] ?? "";
 };
 
-export const optsParamsSessionID = () => {
+export const optsHeadersSessionID = () => {
   return {
-    params: {
-      sessionID: getSessionIdFromCookie(),
-    },
-  };
+    headers: {
+      Authorization: `Bearer ${getSessionIdFromCookie()}`,
+    }
+  }
+  // return {
+  //   params: {
+  //     sessionID: getSessionIdFromCookie(),
+  //   },
+  // };
 };
 
 export const ascensionToLevel = (
