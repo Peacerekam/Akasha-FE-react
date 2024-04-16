@@ -3,6 +3,7 @@ import "./style.scss";
 import {
   AdsComponentManager,
   CalculationResultWidget,
+  CalculationResultWidgetExpander,
   CompactArtifact,
   StylizedContentBlock,
 } from "../../components";
@@ -24,14 +25,8 @@ import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 export const SettingsPage: React.FC = () => {
   const { boundAccounts } = useContext(SessionDataContext);
-  const {
-    metric,
-    setMetric,
-    topDecimals,
-    setTopDecimals,
-    showcaseState,
-    setShowcaseState,
-  } = useContext(SettingsContext);
+  const { metric, setMetric, topDecimals, setTopDecimals, showcaseState } =
+    useContext(SettingsContext);
 
   const uid = boundAccounts?.[0]?.uid || "700181030";
   const availableMetrics: Metric[] = ["RV", "CV"];
@@ -140,22 +135,7 @@ export const SettingsPage: React.FC = () => {
             />
           </div>
           <div className="relative w-100">
-            <div
-              className="showcase-expand-wrapper"
-              style={{ top: 0 }}
-              onClick={() => setShowcaseState((x) => !x)}
-              title={`${showcaseState ? "Fold" : "Expand"} builds showcase`}
-            >
-              {/* expand */}
-              <FontAwesomeIcon
-                className={cssJoin([
-                  "chevron-down-icon",
-                  showcaseState ? "rotate-180deg" : "",
-                ])}
-                icon={faChevronDown}
-                size="1x"
-              />
-            </div>
+            <CalculationResultWidgetExpander style={{ top: 0 }} />
           </div>
         </div>
       </div>
