@@ -738,6 +738,17 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     }));
   };
 
+  // hardcoded last column
+  // ignore all elements that are not strings
+  const calculationShortName = useMemo(
+    () =>
+      columns[columns.length - 1]?.name?.props?.children
+        ?.filter((x: any) => typeof x === "string")
+        ?.join("")
+        ?.trim(),
+    [columns.length]
+  );
+
   return (
     <div className={wrapperClassNames}>
       {filtersURL && (
@@ -785,7 +796,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
           unknownPage={unknownPage}
           setHideIndexColumn={setHideIndexColumn}
           setUnknownPage={setUnknownPage}
-          calculationShortName={columns[columns.length - 1].name} // last column is always short calc name?
+          calculationShortName={calculationShortName} // last column is always short calc name?
           alwaysShowIndexColumn={alwaysShowIndexColumn}
         />
       )}
