@@ -17,12 +17,21 @@ import {
 } from "./dummyData";
 
 import DomainBackground from "../../assets/images/Depths_of_Mt._Yougou_Concept_Art.webp";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
+import { cssJoin } from "../../utils/helpers";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 export const SettingsPage: React.FC = () => {
   const { boundAccounts } = useContext(SessionDataContext);
-  const { metric, setMetric, topDecimals, setTopDecimals } =
-    useContext(SettingsContext);
+  const {
+    metric,
+    setMetric,
+    topDecimals,
+    setTopDecimals,
+    showcaseState,
+    setShowcaseState,
+  } = useContext(SettingsContext);
 
   const uid = boundAccounts?.[0]?.uid || "700181030";
   const availableMetrics: Metric[] = ["RV", "CV"];
@@ -31,7 +40,10 @@ export const SettingsPage: React.FC = () => {
   const artifactRatingSetting = (
     <div className="settings-group">
       <div>
-        <div>Artifact rating metric: {metric}</div>
+        <div>
+          Artifact rating metric:{" "}
+          <span className="current-value">{metric}</span>
+        </div>
         <div className="opacity-5 smaller-font">
           This can also be toggled by clicking on RV/CV value in the top left
           corner of artifact display. Neither are perfect but using RV makes you
@@ -72,10 +84,31 @@ export const SettingsPage: React.FC = () => {
   const rankingDecimalsSetting = (
     <div className="settings-group">
       <div>
-        <div>Build ranking decimals: {topDecimals}</div>
+        <div>
+          Build ranking decimals:{" "}
+          <span className="current-value">{topDecimals}</span>
+        </div>
         <div className="opacity-5 smaller-font">
           For extra precision, but you shouldn't really care about this as it is
           for the very few leaderboard chasers.
+        </div>
+        <div style={{ marginTop: 20 }}>
+          Profile showcase state:{" "}
+          <span className="current-value">
+            {/* {isShowcaseExpanded ? "expanded" : "folded"} */}
+            <FontAwesomeIcon
+              className={cssJoin([
+                "chevron-down-icon pointer-events-none",
+                showcaseState ? "rotate-180deg" : "",
+              ])}
+              icon={faChevronDown}
+              size="1x"
+            />
+          </span>
+        </div>
+        <div className="opacity-5 smaller-font">
+          Useful if you want to make a screenshot of all your ranks at once or
+          if you find scrolling cringe.
         </div>
       </div>
       <div>
@@ -99,14 +132,38 @@ export const SettingsPage: React.FC = () => {
           })}
         </div>
         <div className="highlights-mock-up">
-          <CalculationResultWidget uid={uid} noLinks />
+          <div className="w-100">
+            <CalculationResultWidget
+              uid={uid}
+              noLinks
+              expanded={showcaseState}
+            />
+          </div>
+          <div className="relative w-100">
+            <div
+              className="showcase-expand-wrapper"
+              style={{ top: 0 }}
+              onClick={() => setShowcaseState((x) => !x)}
+              title={`${showcaseState ? "Fold" : "Expand"} builds showcase`}
+            >
+              {/* expand */}
+              <FontAwesomeIcon
+                className={cssJoin([
+                  "chevron-down-icon",
+                  showcaseState ? "rotate-180deg" : "",
+                ])}
+                icon={faChevronDown}
+                size="1x"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>
   );
 
   return (
-    <div className="flex ">
+    <div className="flex">
       <div className="content-block w-100" id="content-container">
         <StylizedContentBlock overrideImage={DomainBackground} />
         <div className="relative settings-page-content-wrapper">

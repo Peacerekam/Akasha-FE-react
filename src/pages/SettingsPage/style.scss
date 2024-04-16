@@ -53,6 +53,14 @@
         min-width: 65%;
         flex: 1;
       }
+      .current-value {
+        font-weight: 600;
+        margin-left: 5px;
+      }
+      .current-value,
+      .current-value svg {
+        color: orange;
+      }
       .smaller-font {
         margin-top: 5px;
         font-size: 14px;
@@ -61,6 +69,8 @@
     .highlights-mock-up {
       display: flex;
       justify-content: center;
+      align-items: center;
+      flex-direction: column;
       width: 100%;
       flex: 1;
       > div {

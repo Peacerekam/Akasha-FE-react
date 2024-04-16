@@ -732,8 +732,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                   scale={1.7 * hardcodedScale}
                 />
                 <span className="under-chart-badges">
-                  {topBadge}
-                  {lbBadge}
+                  <div className="mobile-fix">
+                    {topBadge}
+                    {lbBadge}
+                  </div>
                 </span>
                 {/* <div>{shorterName}</div> */}
                 {privacyFlag ? (
@@ -773,22 +775,26 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     const elementalBgUrl = `/elementalBackgrounds/${chartsData?.characterMetadata?.element}-bg.jpg`;
     const actualBgUrl = namecardBg ? namecardBgUrl : elementalBgUrl;
 
-    return reorderedArtifacts.map((artifact: any) => {
-      return (
-        <CompactArtifact
-          key={artifact._id}
-          artifact={artifact}
-          row={row}
-          canvasBgProps={{
-            backgroundImage: actualBgUrl,
-            adaptiveBgColor,
-            namecardBg,
-            adaptiveColors,
-            hardcodedScale,
-          }}
-        />
-      );
-    });
+    return (
+      <div className="mobile-fix">
+        {reorderedArtifacts.map((artifact: any) => {
+          return (
+            <CompactArtifact
+              key={artifact._id}
+              artifact={artifact}
+              row={row}
+              canvasBgProps={{
+                backgroundImage: actualBgUrl,
+                adaptiveBgColor,
+                namecardBg,
+                adaptiveColors,
+                hardcodedScale,
+              }}
+            />
+          );
+        })}
+      </div>
+    );
   }, [
     row,
     metric,
@@ -1224,6 +1230,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     const onFileUpload = () => {
       const file = uploadPictureInputRef?.current?.files?.[0];
       if (!file) return;
+
+      // const mp4blob = URL.createObjectURL(file);
 
       try {
         setIsLoadingImage(true);

@@ -20,12 +20,18 @@ type CalculationResultWidgetProps = {
   uids?: string;
   noLinks?: boolean;
   expanded?: boolean;
-  setIsShowcaseExpandable?: (isExpandable: boolean) => void;
+  // setIsShowcaseExpandable?: (isExpandable: boolean) => void;
 };
 
 export const CalculationResultWidget: React.FC<
   CalculationResultWidgetProps
-> = ({ uid, uids, noLinks = false, expanded, setIsShowcaseExpandable }) => {
+> = ({
+  uid,
+  uids,
+  noLinks = false,
+  expanded,
+  // setIsShowcaseExpandable
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<any[]>([]);
   const navigate = useNavigate();
@@ -253,11 +259,11 @@ export const CalculationResultWidget: React.FC<
     [resultsArray, getTopRanking]
   );
 
-  useEffect(() => {
-    if (!setIsShowcaseExpandable) return;
-    const isExpandable = tilesList.length > 8
-    setIsShowcaseExpandable(isExpandable)
-  }, [tilesList])
+  // useEffect(() => {
+  //   if (!setIsShowcaseExpandable) return;
+  //   const isExpandable = tilesList.length > 8
+  //   setIsShowcaseExpandable(isExpandable)
+  // }, [tilesList])
 
   if (isLoading) {
     return (

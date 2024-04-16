@@ -1,1 +1,2 @@
-export * from './CalculationResultWidget'
+export * from "./CalculationResultWidget";
+export * from "./CalculationResultWidgetExpander";

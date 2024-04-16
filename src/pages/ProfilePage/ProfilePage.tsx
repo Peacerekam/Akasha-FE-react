@@ -2,6 +2,7 @@ import "./style.scss";
 
 import {
   CalculationResultWidget,
+  CalculationResultWidgetExpander,
   ConfirmTooltip,
   CritRatio,
   CustomTable,
@@ -45,7 +46,6 @@ import {
 } from "../../components/CustomTable/Filters";
 import axios, { AxiosRequestConfig } from "axios";
 import {
-  faChevronDown,
   faGear,
   faKey,
   faRotateRight,
@@ -63,6 +63,7 @@ import { HoverElementContext } from "../../context/HoverElement/HoverElementCont
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
 import { ProfileSelector } from "../../components/ProfileSelector";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
+import { SettingsContext } from "../../context/SettingsProvider/SettingsProvider";
 import { TableColumn } from "../../types/TableColumn";
 import { TitleContext } from "../../context/TitleProvider/TitleProviderContext";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
@@ -91,14 +92,13 @@ export const ProfilePage: React.FC = () => {
   const [enkaError, setEnkaError] = useState<TitleAndDescription>();
   const [relevantProfiles, setRelevantProfiles] = useState<any[]>([]);
   const [isFetchingProfiles, setIsFetchingProfiles] = useState(false);
-  const [isShowcaseExpanded, setIsShowcaseExpanded] = useState(false);
-  const [isShowcaseExpandable, setIsShowcaseExpandable] = useState(false);
   const [responseData, setResponseData] = useState<ResponseData>({
     account: null,
   });
 
   const location = useLocation();
   const { uid } = useParams();
+  const { showcaseState } = useContext(SettingsContext);
   const { hoverElement } = useContext(HoverElementContext);
   const { disableAdsForThisPage, adProvider } = useContext(AdProviderContext);
   const { addTab, lastProfiles } = useContext(LastProfilesContext);
@@ -997,37 +997,20 @@ export const ProfilePage: React.FC = () => {
                 <div
                   className={cssJoin([
                     "profile-highlights",
-                    isShowcaseExpandable && isShowcaseExpanded ? "w-100" : "",
+                    showcaseState ? "w-100" : "",
                   ])}
                 >
                   {responseData.account && (
                     <CalculationResultWidget
                       uid={uid}
                       uids={isCombined ? relevantProfilesQuery : undefined}
-                      expanded={isShowcaseExpandable && isShowcaseExpanded}
-                      setIsShowcaseExpandable={setIsShowcaseExpandable}
+                      expanded={showcaseState}
                     />
                   )}
                 </div>
-                {isShowcaseExpandable && (
+                {responseData?.account && (
                   <div className="relative w-100">
-                    <div
-                      className="showcase-expand-wrapper"
-                      onClick={() => setIsShowcaseExpanded((x) => !x)}
-                      title={`${
-                        isShowcaseExpanded ? "Fold" : "Expand"
-                      } builds showcase`}
-                    >
-                      {/* expand */}
-                      <FontAwesomeIcon
-                        className={cssJoin([
-                          "chevron-down-icon",
-                          isShowcaseExpanded ? "rotate-180deg" : "",
-                        ])}
-                        icon={faChevronDown}
-                        size="1x"
-                      />
-                    </div>
+                    <CalculationResultWidgetExpander />
                   </div>
                 )}
               </div>

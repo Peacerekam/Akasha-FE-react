@@ -1124,6 +1124,11 @@ $hardcoded-scale: 1;
     bottom: 30px * $hardcoded-scale;
     z-index: 2;
 
+    .mobile-fix {
+      display: flex;
+      gap: 15px * $hardcoded-scale;
+    }
+
     .compact-artifact {
       // overflow: hidden;
       position: relative;
@@ -1139,12 +1144,12 @@ $hardcoded-scale: 1;
       //   }
       // }
 
-      &:first-child {
-        margin-left: auto;
-      }
-      &:last-child {
-        margin-right: auto;
-      }
+      // &:first-child {
+      //   margin-left: auto;
+      // }
+      // &:last-child {
+      //   margin-right: auto;
+      // }
 
       .compact-artifact-bg {
         position: absolute;
@@ -1190,6 +1195,11 @@ $hardcoded-scale: 1;
       display: flex;
       height: 25px * $hardcoded-scale;
       margin-top: 12px * $hardcoded-scale;
+
+      .mobile-fix {
+        display: flex;
+        height: 25px * $hardcoded-scale;
+      }
     }
 
     .lb-badge {
@@ -1199,12 +1209,12 @@ $hardcoded-scale: 1;
       width: fit-content;
       width: max-content;
 
-      &:first-child {
-        margin-left: auto;
-      }
-      &:last-child {
-        margin-right: auto;
-      }
+      // &:first-child {
+      //   margin-left: auto;
+      // }
+      // &:last-child {
+      //   margin-right: auto;
+      // }
 
       > span {
         font-weight: 700;

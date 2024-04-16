@@ -12,9 +12,11 @@ export type Metric = "RV" | "CV";
 type SettingsProviderContextType = {
   metric?: Metric;
   topDecimals?: number;
+  showcaseState?: boolean;
   customRvFilter: Record<string, string[]>;
-  setMetric: (metric: Metric) => void;
+  setMetric: UseState<Metric>;
   setTopDecimals: UseState<number>;
+  setShowcaseState: UseState<boolean>;
   setCustomRvFilter: (characterName: string, filter: string[]) => void;
   getArtifactMetricValue: (
     characterName: string,
@@ -29,7 +31,8 @@ const defaultValue = {
   topDecimals: 0,
   customRvFilter: {},
   setMetric: () => {},
-  setTopDecimals: () => 0,
+  setTopDecimals: () => {},
+  setShowcaseState: () => {},
   setCustomRvFilter: () => {},
   getArtifactMetricValue: () => 0,
   getTopRanking: () => 100,
@@ -40,6 +43,7 @@ const SettingsContext = createContext(defaultValue);
 const SettingsContextProvider: React.FC<{ children: any }> = ({ children }) => {
   const [metric, setMetric] = useState<Metric>();
   const [topDecimals, setTopDecimals] = useState<number>();
+  const [showcaseState, setShowcaseState] = useState<boolean>();
 
   const [customRvFilter, _setCustomRvFilter] =
     useState<Record<string, string[]>>(allRvFilters);
@@ -61,6 +65,7 @@ const SettingsContextProvider: React.FC<{ children: any }> = ({ children }) => {
 
     setIfDifferent(setMetric, "metric", metric, "RV");
     setIfDifferent(setTopDecimals, "topDecimals", topDecimals, 0);
+    setIfDifferent(setShowcaseState, "showcaseState", showcaseState, false);
 
     console.log("\nGeneral settings from Local Storage:");
     console.table(savedObj);
@@ -81,12 +86,13 @@ const SettingsContextProvider: React.FC<{ children: any }> = ({ children }) => {
 
     assignIfDiffAndNotUndefined("metric", metric);
     assignIfDiffAndNotUndefined("topDecimals", topDecimals);
+    assignIfDiffAndNotUndefined("showcaseState", showcaseState);
 
     if (!dirty) return;
 
     const newObj = { ...oldObj };
     localStorage.setItem(lsKey, JSON.stringify(newObj));
-  }, [metric, topDecimals]);
+  }, [metric, topDecimals, showcaseState]);
 
   const setCustomRvFilter = useCallback(
     (characterName: string, filter: string[]) => {
@@ -136,9 +142,11 @@ const SettingsContextProvider: React.FC<{ children: any }> = ({ children }) => {
   const value = {
     metric,
     topDecimals,
+    showcaseState,
     customRvFilter,
     setMetric,
     setTopDecimals,
+    setShowcaseState,
     setCustomRvFilter,
     getArtifactMetricValue,
     getTopRanking,
