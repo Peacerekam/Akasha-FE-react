@@ -100,7 +100,8 @@ const getFixedSortKey = (key: string, fetchURL?: string | null) => {
     physicalDamageBonus: "Physical DMG Bonus",
     healingBonus: "Healing Bonus",
     name: `${collectionPrefix} Name`.trim(),
-    type: "Build Name",
+    sortableType: "Build Name",
+    lastBuildUpdate: "Last Build Update",
   };
 
   return fixKeyMap[key] || key;

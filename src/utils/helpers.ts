@@ -46,8 +46,8 @@ export const optsHeadersSessionID = () => {
   return {
     headers: {
       Authorization: `Bearer ${getSessionIdFromCookie()}`,
-    }
-  }
+    },
+  };
   // return {
   //   params: {
   //     sessionID: getSessionIdFromCookie(),
@@ -926,4 +926,16 @@ export const cssJoin = (classes: Record<string, any> | string[]) => {
   return Object.keys(classes)
     .filter((name) => classes[name])
     .join(" ");
+};
+
+export const isBuildNew = (lastBuildUpdate?: number) => {
+  if (!lastBuildUpdate) return false;
+
+  const now = new Date().getTime();
+  const minutesSince = lastBuildUpdate
+    ? (now - lastBuildUpdate) / 1000 / 60
+    : null;
+
+  const isNew = !!minutesSince && minutesSince < 30;
+  return isNew;
 };

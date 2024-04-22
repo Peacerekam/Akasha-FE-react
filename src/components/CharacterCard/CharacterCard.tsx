@@ -732,9 +732,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                   scale={1.7 * hardcodedScale}
                 />
                 <span className="under-chart-badges">
-                  <div className="mobile-fix">
-                    {topBadge}
-                    {lbBadge}
+                  <div className="mobile-fix w-100">
+                    <div className="mobile-fix">
+                      {topBadge}
+                      {lbBadge}
+                    </div>
                   </div>
                 </span>
                 {/* <div>{shorterName}</div> */}
@@ -776,23 +778,25 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     const actualBgUrl = namecardBg ? namecardBgUrl : elementalBgUrl;
 
     return (
-      <div className="mobile-fix">
-        {reorderedArtifacts.map((artifact: any) => {
-          return (
-            <CompactArtifact
-              key={artifact._id}
-              artifact={artifact}
-              row={row}
-              canvasBgProps={{
-                backgroundImage: actualBgUrl,
-                adaptiveBgColor,
-                namecardBg,
-                adaptiveColors,
-                hardcodedScale,
-              }}
-            />
-          );
-        })}
+      <div className="mobile-fix w-100 justify-content-center">
+        <div className="mobile-fix">
+          {reorderedArtifacts.map((artifact: any) => {
+            return (
+              <CompactArtifact
+                key={artifact._id}
+                artifact={artifact}
+                row={row}
+                canvasBgProps={{
+                  backgroundImage: actualBgUrl,
+                  adaptiveBgColor,
+                  namecardBg,
+                  adaptiveColors,
+                  hardcodedScale,
+                }}
+              />
+            );
+          })}
+        </div>
       </div>
     );
   }, [

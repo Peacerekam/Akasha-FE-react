@@ -348,20 +348,26 @@ $characterStats: "hp", "atk", "def", "hydrodmgbonus", "geodmgbonus",
       border: 1px solid orange;
     }
   }
+}
 
-  &.new-lb-badge {
+.new-lb-badge {
+  &:is(span) {
     &::before {
-      content: "NEW";
-      background-color: #40839b;
-      margin-right: 5px;
-      white-space: nowrap;
-      padding: 2px 5px;
-      border-radius: 5px;
-      font-weight: 600;
-      font-size: 11px;
-      color: white;
-      text-shadow: 0 0.08em 0.1em black, 0 0.1em 0.3em rgba(0, 0, 0, 0.4);
+      margin-right: 0px !important;
     }
+  }
+  &::before {
+    content: "NEW";
+    background-color: #40839b;
+    margin-right: 5px;
+    white-space: nowrap;
+    padding: 2px 5px;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 11px;
+    color: white;
+    text-shadow: 0 0.08em 0.1em black, 0 0.1em 0.3em rgba(0, 0, 0, 0.4);
+    display: block;
   }
 }
 

@@ -16,9 +16,13 @@ import {
   FETCH_CATEGORIES_URL_V2,
   FETCH_CHARACTER_FILTERS_URL,
   FETCH_LEADERBOARDS_URL,
+  cssJoin,
+  getGenderFromIcon,
   getRelevantCharacterStats,
   iconUrlToNamecardUrl,
+  isBuildNew,
   normalizeText,
+  timeAgo,
   uidsToQuery,
 } from "../../utils/helpers";
 import React, {
@@ -154,11 +158,21 @@ export const LeaderboardsPage: React.FC = () => {
         width: "180px",
         cell: (row) => {
           const isEnkaProfile = isNaN(+row.uid);
+
+          const updatedAtLabel =
+            (row?.lastBuildUpdate || 0) < 1000
+              ? row.owner?.nickname
+              : `${row.owner?.nickname} - ${timeAgo(row?.lastBuildUpdate)}`;
+
+          const isNew = isBuildNew(row?.lastBuildUpdate);
+
           return (
             <a
-              className={`row-link-element ${
-                isEnkaProfile ? "enka-profile" : ""
-              }`}
+              title={updatedAtLabel}
+              className={cssJoin([
+                "row-link-element",
+                isEnkaProfile ? "enka-profile" : "",
+              ])}
               onClick={(event) => {
                 event.preventDefault();
                 navigate(`/profile/${row.uid}`);
@@ -167,7 +181,7 @@ export const LeaderboardsPage: React.FC = () => {
             >
               {/* <ARBadge adventureRank={row.owner?.adventureRank} /> */}
               <RegionBadge region={row.owner?.region} />
-              {/* {isEnkaProfile ? <EnkaBadge /> : ""} */}
+              {isNew && <div className="new-lb-badge mr-3" />}
               {row.owner?.nickname}
             </a>
           );
@@ -178,13 +192,19 @@ export const LeaderboardsPage: React.FC = () => {
         sortable: false,
         sortField: "type",
         cell: (row) => {
+          const gender = getGenderFromIcon(row.icon);
+          const characterName = translate(row.name, gender);
+
+          const _content =
+            row.type !== "current" ? (
+              <span style={{ maxWidth: 200 }}>{row.type}</span>
+            ) : (
+              <span style={{ opacity: 0.25 }}>{characterName}</span>
+            );
+
           return (
             <div className="table-icon-text-pair">
-              {row.type !== "current" ? (
-                <span style={{ maxWidth: 200 }}>{row.type}</span>
-              ) : (
-                <span style={{ opacity: 0.25 }}>{translate(row.name)}</span>
-              )}
+              {_content}
             </div>
           );
         },
@@ -534,7 +554,8 @@ export const LeaderboardsPage: React.FC = () => {
               key={_cat.name}
               style={{
                 opacity: isNiche ? 0.5 : 1,
-                outline: !IS_PRODUCATION && _cat?.hidden ? "2px dashed #ff00ff44" : "",
+                outline:
+                  !IS_PRODUCATION && _cat?.hidden ? "2px dashed #ff00ff44" : "",
                 display: IS_PRODUCATION
                   ? _cat?.hidden
                     ? "none"

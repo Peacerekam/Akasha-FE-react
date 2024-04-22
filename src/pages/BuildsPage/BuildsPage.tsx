@@ -12,9 +12,12 @@ import {
 import {
   FETCH_BUILDS_URL,
   FETCH_CHARACTER_FILTERS_URL,
+  cssJoin,
   getGenderFromIcon,
   getRelevantCharacterStats,
+  isBuildNew,
   normalizeText,
+  timeAgo,
 } from "../../utils/helpers";
 import React, { useContext, useMemo } from "react";
 
@@ -59,11 +62,20 @@ export const BuildsPage: React.FC = () => {
           if (!row.owner?.adventureRank) return <></>;
           const isEnkaProfile = isNaN(+row.uid);
 
+          const updatedAtLabel =
+            (row?.lastBuildUpdate || 0) < 1000
+              ? row.owner?.nickname
+              : `${row.owner?.nickname} - ${timeAgo(row?.lastBuildUpdate)}`;
+
+          const isNew = isBuildNew(row?.lastBuildUpdate);
+
           return (
             <a
-              className={`row-link-element ${
-                isEnkaProfile ? "enka-profile" : ""
-              }`}
+              title={updatedAtLabel}
+              className={cssJoin([
+                "row-link-element",
+                isEnkaProfile ? "enka-profile" : "",
+              ])}
               onClick={(event) => {
                 event.preventDefault();
                 navigate(`/profile/${row.uid}`);
@@ -72,6 +84,7 @@ export const BuildsPage: React.FC = () => {
             >
               {/* <ARBadge adventureRank={row.owner.adventureRank} /> */}
               <RegionBadge region={row.owner.region} />
+              {isNew && <div className="new-lb-badge mr-3" />}
               {row.owner.nickname}
             </a>
           );

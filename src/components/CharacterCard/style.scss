@@ -1127,6 +1127,10 @@ $hardcoded-scale: 1;
     .mobile-fix {
       display: flex;
       gap: 15px * $hardcoded-scale;
+      justify-content: center;
+      > .mobile-fix {
+        justify-content: flex-start;
+      }
     }
 
     .compact-artifact {
@@ -1199,6 +1203,10 @@ $hardcoded-scale: 1;
       .mobile-fix {
         display: flex;
         height: 25px * $hardcoded-scale;
+        justify-content: center;
+        > .mobile-fix {
+          justify-content: flex-start;
+        }
       }
     }
 

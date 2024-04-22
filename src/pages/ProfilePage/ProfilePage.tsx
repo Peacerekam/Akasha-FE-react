@@ -29,8 +29,10 @@ import {
   getRainbowTextStyle,
   getRelevantCharacterStats,
   getSubstatsInOrder,
+  isBuildNew,
   isPercent,
   normalizeText,
+  timeAgo,
   uidsToQuery,
 } from "../../utils/helpers";
 import React, {
@@ -209,6 +211,8 @@ export const ProfilePage: React.FC = () => {
   };
 
   const fetchInOrder = async () => {
+    if (!uid) return;
+
     if (isCombined) {
       setResponseData({ account: null });
       const defaultUID = await fetchRelevantProfiles();
@@ -381,26 +385,44 @@ export const ProfilePage: React.FC = () => {
       {
         name: "Name",
         sortable: true,
-        sortField: "name",
-        // sortFields: [
-        //   "name",
-        //   "type",
-        // ],
+        // sortField: "name",
+        sortFields: ["name", "sortableType", "lastBuildUpdate"],
         width: "180px",
         cell: (row) => {
           const gender = getGenderFromIcon(row.icon);
           const characterName = translate(row.name, gender);
+          const updatedAtLabel =
+            (row?.lastBuildUpdate || 0) < 1000
+              ? characterName
+              : `${characterName} - ${timeAgo(row?.lastBuildUpdate)}`;
+
+          const isNew = isBuildNew(row?.lastBuildUpdate);
+
+          const _content =
+            row.type !== "current" ? (
+              <ReplaceRowDataOnHover
+                data={characterName}
+                onHoverData={row.type}
+              />
+            ) : (
+              characterName
+            );
 
           return (
-            <div className="table-icon-text-pair">
-              <img alt=" " className="table-icon" src={row.icon} />
-              {row.type !== "current" ? (
-                <ReplaceRowDataOnHover
-                  data={characterName}
-                  onHoverData={row.type}
-                />
+            <div className={"table-icon-text-pair"} title={updatedAtLabel}>
+              <img
+                alt=" "
+                title={updatedAtLabel}
+                className="table-icon"
+                src={row.icon}
+              />
+              {isNew ? (
+                <>
+                  <span className="new-lb-badge" />
+                  {_content}
+                </>
               ) : (
-                characterName
+                _content
               )}
             </div>
           );
@@ -1023,6 +1045,7 @@ export const ProfilePage: React.FC = () => {
             </div>
             {responseData.account && (
               <CustomTable
+                projectParamsToPath
                 growContentOnExpandedRow
                 fetchURL={FETCH_BUILDS_URL}
                 columns={BUILDS_COLUMNS}

@@ -49,7 +49,9 @@ export const LogInModal: React.FC<LogInModalProps> = ({
       const logoutURL = "/api/logout";
       await axios.post(logoutURL, null, optsHeadersSessionID());
       window.location.reload();
-    } catch (err) {}
+    } catch (err) {
+      // ...
+    }
   };
 
   return (

@@ -294,9 +294,12 @@ export const Pagination: React.FC<PaginationProps> = ({
     "playerInfo.finishAchievementNum": "Achievements",
     "playerInfo.level": "Adventure Rank",
     lastProfileUpdate: "Last profile update",
+    lastBuildUpdate: "Last build update",
     constellation: "Constellation",
     _id: "_id",
     // crappy columns
+    // "sortableType": "Build Name",
+    // "name": "Character Name",
     // "weapon.name": false,
     // constellation: "Constellation",
     // name: false,
