@@ -89,6 +89,7 @@ export const ProfilePage: React.FC = () => {
   const [enableBindBtn, setEnableBindBtn] = useState(false);
   const [bindSecret, setBindSecret] = useState("");
   const [fetchCount, setFetchCount] = useState(0);
+  const [initialLoad, setInitialLoad] = useState(true);
   const [bindTime, setBindTime] = useState<number>();
   const [refreshTime, setRefreshTime] = useState<number>();
   const [enkaError, setEnkaError] = useState<TitleAndDescription>();
@@ -239,7 +240,11 @@ export const ProfilePage: React.FC = () => {
   useEffect(() => {
     fetchInOrder();
     setIsFetchingProfiles(true);
-    navigate("", { replace: true }); // clear URL filters
+    setInitialLoad(false)
+
+    if (!initialLoad) {
+      navigate("", { replace: true, state: location.state }); // clear URL filters
+    }
 
     return () => {
       Object.values(abortControllers).forEach((ac) => ac.abort());

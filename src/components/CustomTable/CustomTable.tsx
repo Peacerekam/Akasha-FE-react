@@ -150,6 +150,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   const { adProvider, setContentWidth } = useContext(AdProviderContext);
   const { translate } = useContext(TranslationContext);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const defaultParams = {
     sort: defaultSort || "",
@@ -162,8 +163,6 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     fromId: "",
   };
   const [params, setParams] = useState<FetchParams>(defaultParams);
-
-  const navigate = useNavigate();
 
   // @TODO: react-query
   // @FIX react-query
@@ -199,7 +198,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     if (!paramsProjection) return;
 
     const newURL = suffix ? `?${suffix}` : "";
-    navigate(newURL, { replace: true });
+    navigate(newURL, { replace: true, state: location.state });
   };
 
   const readParamsFromURL = () => {
@@ -262,7 +261,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     JSON.stringify(fetchParams),
     fetchURL,
     projectParamsToPath,
-    ignoreEmptyUidsArray,
+    ignoreEmptyUidsArray
   ]);
 
   const getSetTotalRows = async (totalRowsHash: string) => {
