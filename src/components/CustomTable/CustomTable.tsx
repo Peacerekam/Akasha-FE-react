@@ -68,25 +68,42 @@ export type FetchParams = {
   fromId?: string;
 };
 
-const fixKeyMap: { [key: string]: string } = {
-  critValue: "Crit Value",
-  critRate: "Crit Rate",
-  critDamage: "Crit DMG",
-  critDMG: "Crit DMG",
-  maxHp: "Max HP",
-  atk: "ATK",
-  def: "DEF",
-  elementalMastery: "Elemental Mastery",
-  energyRecharge: "Energy Recharge",
-  hydroDamageBonus: "Hydro DMG Bonus",
-  geoDamageBonus: "Geo DMG Bonus",
-  pyroDamageBonus: "Pyro DMG Bonus",
-  cryoDamageBonus: "Cryo DMG Bonus",
-  electroDamageBonus: "Electro DMG Bonus",
-  anemoDamageBonus: "Anemo DMG Bonus",
-  dendroDamageBonus: "Dendro DMG Bonus",
-  physicalDamageBonus: "Physical DMG Bonus",
-  healingBonus: "Healing Bonus",
+const getFixedSortKey = (key: string, fetchURL?: string | null) => {
+  if (!fetchURL) return key;
+
+  const collectionName = getCollectionName(fetchURL);
+  if (!collectionName) return key;
+
+  const collectionPrefix =
+    {
+      characters: "Character",
+      artifacts: "Artifact",
+    }[collectionName] || "";
+
+  const fixKeyMap: { [key: string]: string } = {
+    critValue: "Crit Value",
+    critRate: "Crit Rate",
+    critDamage: "Crit DMG",
+    critDMG: "Crit DMG",
+    maxHp: "Max HP",
+    atk: "ATK",
+    def: "DEF",
+    elementalMastery: "Elemental Mastery",
+    energyRecharge: "Energy Recharge",
+    hydroDamageBonus: "Hydro DMG Bonus",
+    geoDamageBonus: "Geo DMG Bonus",
+    pyroDamageBonus: "Pyro DMG Bonus",
+    cryoDamageBonus: "Cryo DMG Bonus",
+    electroDamageBonus: "Electro DMG Bonus",
+    anemoDamageBonus: "Anemo DMG Bonus",
+    dendroDamageBonus: "Dendro DMG Bonus",
+    physicalDamageBonus: "Physical DMG Bonus",
+    healingBonus: "Healing Bonus",
+    name: `${collectionPrefix} Name`.trim(),
+    type: "Build Name",
+  };
+
+  return fixKeyMap[key] || key;
 };
 
 const getCollectionName = (fetchURL: string = "") => {
@@ -401,7 +418,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
         isHighlighted ? "highlight-cell" : "",
       ]);
 
-      const fixKey = fixKeyMap[displayKey] || displayKey;
+      const fixKey = getFixedSortKey(displayKey, fetchURL);
 
       return (
         <div
@@ -435,7 +452,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
         const key = params.sort.replace(".value", "").split(".").pop(); //
         if (!key) return null;
 
-        const fixKey = fixKeyMap[key] || key;
+        const fixKey = getFixedSortKey(key, fetchURL);
 
         columnName = (
           <>

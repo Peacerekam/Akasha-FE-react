@@ -382,6 +382,10 @@ export const ProfilePage: React.FC = () => {
         name: "Name",
         sortable: true,
         sortField: "name",
+        // sortFields: [
+        //   "name",
+        //   "type",
+        // ],
         width: "180px",
         cell: (row) => {
           const gender = getGenderFromIcon(row.icon);
