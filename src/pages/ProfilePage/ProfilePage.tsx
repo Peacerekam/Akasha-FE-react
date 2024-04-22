@@ -52,7 +52,7 @@ import {
   faKey,
   faRotateRight,
 } from "@fortawesome/free-solid-svg-icons";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 import { AdsComponentManager } from "../../components/AdsComponentManager";
@@ -99,6 +99,7 @@ export const ProfilePage: React.FC = () => {
   });
 
   const location = useLocation();
+  const navigate = useNavigate();
   const { uid } = useParams();
   const { showcaseState } = useContext(SettingsContext);
   const { hoverElement } = useContext(HoverElementContext);
@@ -238,6 +239,7 @@ export const ProfilePage: React.FC = () => {
   useEffect(() => {
     fetchInOrder();
     setIsFetchingProfiles(true);
+    navigate("", { replace: true }); // clear URL filters
 
     return () => {
       Object.values(abortControllers).forEach((ac) => ac.abort());
