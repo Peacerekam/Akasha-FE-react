@@ -165,6 +165,16 @@ $hardcoded-scale: 1;
       }
     }
 
+    &.metric-CV {
+      .compact-artifact-metric-container,
+      .compact-artifact-icon-container {
+        .compact-artifact-crit-value {
+          // @TODO: does this need testing?
+          max-width: 40px * $hardcoded-scale;
+        }
+      }
+    }
+
     .compact-artifact-metric-container,
     .compact-artifact-icon-container {
       width: 100px * $hardcoded-scale;

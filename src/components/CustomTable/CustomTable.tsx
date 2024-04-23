@@ -261,7 +261,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     JSON.stringify(fetchParams),
     fetchURL,
     projectParamsToPath,
-    ignoreEmptyUidsArray
+    ignoreEmptyUidsArray,
   ]);
 
   const getSetTotalRows = async (totalRowsHash: string) => {
@@ -651,7 +651,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
       return (
         <tr
-          key={row._id}
+          key={`${row._id}-${params.sort}`}
           className={rowClassNames}
           onMouseEnter={() =>
             updateTableHoverElement({
@@ -701,8 +701,9 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   }, [
     // JSON.stringify(expandedRows),
     // params.sort,
-    JSON.stringify(rows),
+    // JSON.stringify(rows),
     // calculationColumn,
+    rows,
     columns.length,
     hideIndexColumn,
     translate,
