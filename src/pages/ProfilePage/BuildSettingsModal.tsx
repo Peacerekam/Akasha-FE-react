@@ -4,6 +4,7 @@ import {
   abortSignalCatcher,
   cssJoin,
   getSessionIdFromCookie,
+  isBuildNew,
 } from "../../utils/helpers";
 import axios, { AxiosRequestConfig } from "axios";
 import {
@@ -330,7 +331,8 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       ]);
 
       const isEnka = isNaN(+char.uid);
-
+      const isNew = isBuildNew(char?.lastBuildUpdate);
+      
       return (
         <div key={buildId} className={rowClassnames}>
           <div
@@ -346,6 +348,7 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
               />
             )}
             <img className="table-icon" src={char.icon} alt={char.icon} />
+            {isNew && <div className="new-lb-badge"/>}
             <div className="compact-table-name">
               {selectedBuildId === buildId ? (
                 <BuildNameInput

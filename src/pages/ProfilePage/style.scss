@@ -265,6 +265,10 @@
         cursor: pointer;
         width: 100%;
 
+        .new-lb-badge::before {
+          margin-right: 0px;
+        }
+
         .enka-icon {
           &::after {
             content: "\e93a";
