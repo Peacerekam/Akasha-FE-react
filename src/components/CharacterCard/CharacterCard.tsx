@@ -710,7 +710,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           );
 
           const lbBadge = (
-            <span className="lb-badge">
+            <span className="lb-badge with-icon">
               <img alt="" className="weapon-icon" src={calc.weapon.icon} />
               <span>
                 {short}{" "}

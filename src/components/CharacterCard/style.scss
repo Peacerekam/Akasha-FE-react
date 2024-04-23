@@ -23,7 +23,7 @@ $hardcoded-scale: 1;
   &.is-generating {
     .character-showcase-pic-container,
     .compact-artifact-metric-container {
-      pointer-events: none !important
+      pointer-events: none !important;
     }
   }
 
@@ -152,6 +152,19 @@ $hardcoded-scale: 1;
     }
   }
   .compact-artifact {
+    height: 135px * $hardcoded-scale;
+
+    &:nth-child(1) {
+      .compact-artifact-main-stat {
+        max-width: 42px * $hardcoded-scale !important;
+      }
+    }
+    &:nth-child(2) {
+      .compact-artifact-main-stat {
+        max-width: 33px * $hardcoded-scale !important;
+      }
+    }
+
     .compact-artifact-metric-container,
     .compact-artifact-icon-container {
       width: 100px * $hardcoded-scale;
@@ -159,17 +172,38 @@ $hardcoded-scale: 1;
       margin-right: 10px * $hardcoded-scale;
       .compact-artifact-crit-value {
         font-size: 12px * $hardcoded-scale;
+        max-width: 50px * $hardcoded-scale;
       }
-      .compact-artifact-main-stat .stat-icon {
-        width: 22px * $hardcoded-scale;
-        height: 22px * $hardcoded-scale;
+      .compact-artifact-main-stat {
+        left: -2px * $hardcoded-scale;
+        bottom: 1px * $hardcoded-scale;
+        max-width: 50px * $hardcoded-scale;
+        height: 24px * $hardcoded-scale;
+        padding-left: 30px * $hardcoded-scale;
+        .stat-icon {
+          width: 22px * $hardcoded-scale;
+          height: 22px * $hardcoded-scale;
+          left: 4px * $hardcoded-scale;
+        }
+      }
+      .compact-artifact-icon.compact-artifact-icon {
+        top: -22px * $hardcoded-scale;
+        left: -40px * $hardcoded-scale;
+        width: 180px * $hardcoded-scale;
+        height: 180px * $hardcoded-scale;
       }
     }
     .compact-artifact-subs {
       margin: 15px * $hardcoded-scale;
       margin-left: 0;
+      width: 70px * $hardcoded-scale;
       .substat {
         gap: 3px * $hardcoded-scale;
+        &.rv-relevant .stat-highlight {
+          right: -15px * $hardcoded-scale;
+          margin-top: 6px * $hardcoded-scale;
+          $triangle-size: 5px * $hardcoded-scale;
+        }
       }
       .stat-icon {
         width: 22px * $hardcoded-scale;
@@ -1136,7 +1170,8 @@ $hardcoded-scale: 1;
     .compact-artifact {
       // overflow: hidden;
       position: relative;
-      min-width: 190px * $hardcoded-scale;
+      // min-width: 190px * $hardcoded-scale;
+      width: 195px * $hardcoded-scale;
       background-color: black;
 
       // .substat {
@@ -1195,17 +1230,28 @@ $hardcoded-scale: 1;
     }
 
     .under-chart-badges {
-      justify-content: center;
-      display: flex;
-      height: 25px * $hardcoded-scale;
-      margin-top: 12px * $hardcoded-scale;
+      // justify-content: center;
+      // display: flex;
+      // height: 25px * $hardcoded-scale;
+      margin-top: 15px * $hardcoded-scale;
+      display: inline-block;
+      width: 100%;
 
       .mobile-fix {
-        display: flex;
+        // display: flex;
+        // justify-content: center;
         height: 25px * $hardcoded-scale;
-        justify-content: center;
+
         > .mobile-fix {
-          justify-content: flex-start;
+          // display: flex;
+          // justify-content: center;
+          width: min-content;
+          text-wrap: nowrap;
+          // margin-left: auto;
+          // margin-right: auto;
+          position: relative;
+          transform: translate(-50%);
+          left: 50%;
         }
       }
     }
@@ -1213,9 +1259,20 @@ $hardcoded-scale: 1;
     .lb-badge {
       background-color: var(--element-color);
       position: relative;
-      display: flex;
-      width: fit-content;
-      width: max-content;
+      // display: flex;
+
+      &.with-icon {
+        padding-left: 38px * $hardcoded-scale;
+        .weapon-icon {
+          position: absolute;
+          bottom: 0;
+          left: 5px * $hardcoded-scale;
+        }
+      }
+
+      // width: fit-content;
+      // width: max-content;
+      // width: auto;
 
       // &:first-child {
       //   margin-left: auto;
@@ -1235,7 +1292,7 @@ $hardcoded-scale: 1;
       }
     }
     > div {
-      margin-top: 8px * $hardcoded-scale;
+      margin-top: 5px * $hardcoded-scale;
       font-family: "GenshinFont";
       font-size: 15px * $hardcoded-scale;
     }

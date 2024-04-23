@@ -62,7 +62,7 @@ export const CompactArtifact: React.FC<CompactArtifactProps> = ({
   return (
     <div
       key={artifact._id}
-      className={`flex compact-artifact ${className} metric-${_metric}`}
+      className={`compact-artifact ${className} metric-${_metric}`}
     >
       {!!canvasBgProps && <ArtifactBackgroundOnCanvas {...canvasBgProps} />}
       {artifact.icon !== null ? (
