@@ -92,7 +92,7 @@ export const CategorySelectionPage: React.FC = () => {
         name: "Leaderboard",
         width: "100px",
         sortable: true,
-        sortField: "name",
+        sortFields: ["name", "characterName", "element", "c6"],
         cell: (row) => {
           const element = row?.element || "";
           const lbName = row?.name || "";
@@ -104,63 +104,72 @@ export const CategorySelectionPage: React.FC = () => {
           const isNiche = row.label === "niche";
 
           return (
-            <div className="table-icon-text-pair">
-              <StatIcon name={element} />
-              <img
-                alt=" "
-                className="table-icon"
-                width={25}
-                height={25}
-                src={row.characterIcon}
-                title={row?.characterName}
-              />
-              <a
-                className={`row-link-element ${aClassName}`}
-                onClick={(event) => {
-                  event.preventDefault();
-                  navigate(`/${leaderboardPath}`);
-                }}
-                href={`/${leaderboardPath}`}
-              >
-                {isNiche && (
-                  <div
-                    style={{ width: "auto" }}
-                    className="c-badge-wrapper"
-                    title="This leaderboard will not be prioritized on profile highlights"
-                  >
+            <div className="flex nowrap" style={{ justifyContent: "space-between" }}>
+              <div className="table-icon-text-pair">
+                <StatIcon name={element} />
+                <img
+                  alt=" "
+                  className="table-icon"
+                  width={25}
+                  height={25}
+                  src={row.characterIcon}
+                  title={row?.characterName}
+                />
+                <a
+                  className={`row-link-element ${aClassName}`}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    navigate(`/${leaderboardPath}`);
+                  }}
+                  href={`/${leaderboardPath}`}
+                >
+                  {isNiche && (
                     <div
-                      style={{ width: "auto", fontSize: 11, marginRight: 5 }}
-                      className={`c-badge c-0-badge`}
+                      style={{ width: "auto" }}
+                      className="c-badge-wrapper"
+                      title="This leaderboard will not be prioritized on profile highlights"
                     >
-                      {row.label?.toUpperCase()}
+                      <div
+                        style={{ width: "auto", fontSize: 11, marginRight: 5 }}
+                        className={`c-badge c-0-badge`}
+                      >
+                        {row.label?.toUpperCase()}
+                      </div>
                     </div>
-                  </div>
-                )}
-                {lbName}{" "}
-                <span style={{ color: "gray", fontSize: 11, marginLeft: 10 }}>
-                  {translate(row?.characterName)}
-                </span>
-              </a>
-            </div>
-          );
-        },
-      },
-      {
-        name: "",
-        width: "0px",
-        sortable: true,
-        sortField: "c6",
-        cell: (row) => {
-          if (!row.c6) return "";
-          return (
-            <div className="table-icon-text-pair c-badge-wrapper">
-              <div style={{ width: 18 }} className={`c-badge c-6-badge`}>
-                C6
+                  )}
+                  {lbName}{" "}
+                  <span style={{ color: "gray", fontSize: 11, margin: '0px 10px' }}>
+                    {translate(row?.characterName)}
+                  </span>
+                </a>
               </div>
+              {!!row.c6 && (
+                <div className="table-icon-text-pair c-badge-wrapper">
+                  <div style={{ width: 18 }} className={`c-badge c-6-badge`}>
+                    C6
+                  </div>
+                </div>
+              )}
             </div>
           );
         },
       },
+      // {
+      //   name: "",
+      //   width: "0px",
+      //   sortable: true,
+      //   sortField: "c6",
+      //   cell: (row) => {
+      //     if (!row.c6) return "";
+      //     return (
+      //       <div className="table-icon-text-pair c-badge-wrapper">
+      //         <div style={{ width: 18 }} className={`c-badge c-6-badge`}>
+      //           C6
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
       {
         name: "Weapons",
         // width: "100px",

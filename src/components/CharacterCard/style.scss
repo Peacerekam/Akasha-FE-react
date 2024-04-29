@@ -169,7 +169,6 @@ $hardcoded-scale: 1;
       .compact-artifact-metric-container,
       .compact-artifact-icon-container {
         .compact-artifact-crit-value {
-          // @TODO: does this need testing?
           max-width: 40px * $hardcoded-scale;
         }
       }

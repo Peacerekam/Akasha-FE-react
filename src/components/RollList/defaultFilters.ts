@@ -36,6 +36,7 @@ const PYRO_RV_LIST = {
   Amber: [CRate, CDMG, ATK_, ER],
   Chevreuse: [CRate, CDMG, ATK_, HP_, ER],
   Gaming: [CRate, CDMG, ATK_, EM],
+  Arlecchino: [CRate, CDMG, ATK_, EM, ER],
 };
 
 const HYDRO_RV_LIST = {

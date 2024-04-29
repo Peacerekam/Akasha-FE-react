@@ -82,6 +82,7 @@
       display: block;
       max-width: 60px;
       text-align: center;
+      text-wrap: nowrap;
     }
     .compact-artifact-main-stat {
       position: absolute;
@@ -101,7 +102,7 @@
       justify-content: center;
       text-align: center;
       height: 24px;
-      display: block;  
+      display: block;
       padding-left: 30px;
 
       .stat-icon {
@@ -311,6 +312,7 @@
   color: white;
   padding: 3px 5px 6px;
   text-align: left;
+  text-wrap: wrap;
 
   img {
     top: 2px;

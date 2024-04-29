@@ -2,6 +2,7 @@ import "./style.scss";
 
 import {
   FETCH_ACCOUNTS_URL,
+  FETCH_CATEGORIES_URL_V2,
   FETCH_COLLECTION_SIZE_URL,
   FETCH_SEARCH_USERS_URL,
   abortSignalCatcher,
@@ -78,6 +79,7 @@ const getFixedSortKey = (key: string, fetchURL?: string | null) => {
     {
       characters: "Character",
       artifacts: "Artifact",
+      leaderboards: "Leaderboard"
     }[collectionName] || "";
 
   const fixKeyMap: { [key: string]: string } = {
@@ -102,6 +104,9 @@ const getFixedSortKey = (key: string, fetchURL?: string | null) => {
     name: `${collectionPrefix} Name`.trim(),
     sortableType: "Build Name",
     lastBuildUpdate: "Last Build Update",
+    characterName: "Character Name",
+    element: "Character Element",
+    c6: "C6"
   };
 
   return fixKeyMap[key] || key;
@@ -117,6 +122,7 @@ const getCollectionName = (fetchURL: string = "") => {
     [FETCH_LEADERBOARDS_URL]: "charactersLb",
     [FETCH_BUILDS_URL]: "characters",
     [FETCH_ACCOUNTS_URL]: "accounts",
+    [FETCH_CATEGORIES_URL_V2]: "leaderboards",
   }[fetchURL];
 
   return collectionName;
@@ -268,7 +274,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     if (!fetchURL) return;
 
     const collectionName = getCollectionName(fetchURL);
-    if (!collectionName) return;
+    if (!collectionName || collectionName === "leaderboards") return;
 
     setIsFetchingPagination(true);
 
