@@ -1171,8 +1171,12 @@ $hardcoded-scale: 1;
       display: flex;
       gap: 15px * $hardcoded-scale;
       justify-content: center;
+      text-wrap: nowrap;
+      white-space: nowrap;
       > .mobile-fix {
         justify-content: flex-start;
+        text-wrap: nowrap;
+        white-space: nowrap;
       }
     }
 
@@ -1250,17 +1254,20 @@ $hardcoded-scale: 1;
         // display: flex;
         // justify-content: center;
         height: 25px * $hardcoded-scale;
+        text-wrap: nowrap;
+        white-space: nowrap;
 
         > .mobile-fix {
           // display: flex;
           // justify-content: center;
           width: min-content;
-          text-wrap: nowrap;
           // margin-left: auto;
           // margin-right: auto;
           position: relative;
           transform: translate(-50%);
           left: 50%;
+          text-wrap: nowrap;
+          white-space: nowrap;
         }
       }
     }
@@ -1269,6 +1276,8 @@ $hardcoded-scale: 1;
       background-color: var(--element-color);
       position: relative;
       // display: flex;
+      text-wrap: nowrap;
+      white-space: nowrap;
 
       &.with-icon {
         padding-left: 38px * $hardcoded-scale;

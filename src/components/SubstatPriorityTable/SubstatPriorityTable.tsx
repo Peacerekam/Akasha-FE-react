@@ -525,7 +525,7 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
 
   return (
     <div className="expanded-row flex">
-      <div className="substat-priority-wrapper clickable">
+      <div className="substat-priority-wrapper">
         <div className="clickable" onClick={() => setShow((prev) => !prev)}>
           {show ? "Hide" : "Show"} substat priority
           <FontAwesomeIcon

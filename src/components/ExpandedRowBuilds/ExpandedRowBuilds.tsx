@@ -4,6 +4,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import { ArtifactListCompact } from "../ArtifactListCompact";
 import { CalculationList } from "../CalculationList";
 import { CharacterCard } from "../CharacterCard";
+import { DamageDistrubution } from "../DamageDistrubution";
 import { Spinner } from "../Spinner";
 import { SubstatPriorityTable } from "../SubstatPriorityTable";
 import { cssJoin } from "../../utils/helpers";
@@ -108,15 +109,7 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
         <ArtifactListCompact row={row} artifacts={artifacts} />
       )}
       <div>
-        {/* @TODO: later */}
-        {/* {selectedCalculationId && (
-          <div>
-            Damage distribution aaa
-            <span>
-              bar chart / pie chart
-            </span>
-          </div>
-        )} */}
+        {selectedCalculationId && <DamageDistrubution row={row} />}
         {selectedCalculationId && (
           <SubstatPriorityTable
             row={row}
