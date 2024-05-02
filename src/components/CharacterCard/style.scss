@@ -1171,12 +1171,15 @@ $hardcoded-scale: 1;
       display: flex;
       gap: 15px * $hardcoded-scale;
       justify-content: center;
-      text-wrap: nowrap;
-      white-space: nowrap;
-      > .mobile-fix {
-        justify-content: flex-start;
+
+      &,
+      * {
         text-wrap: nowrap;
         white-space: nowrap;
+      }
+
+      .mobile-fix {
+        justify-content: flex-start;
       }
     }
 
@@ -1254,10 +1257,14 @@ $hardcoded-scale: 1;
         // display: flex;
         // justify-content: center;
         height: 25px * $hardcoded-scale;
-        text-wrap: nowrap;
-        white-space: nowrap;
 
-        > .mobile-fix {
+        &,
+        * {
+          text-wrap: nowrap;
+          white-space: nowrap;
+        }
+
+        .mobile-fix {
           // display: flex;
           // justify-content: center;
           width: min-content;
@@ -1266,8 +1273,6 @@ $hardcoded-scale: 1;
           position: relative;
           transform: translate(-50%);
           left: 50%;
-          text-wrap: nowrap;
-          white-space: nowrap;
         }
       }
     }

@@ -74,55 +74,56 @@
       color: orange;
     }
   }
+}
 
-  .calc-selection {
-    display: flex;
-    gap: 5px;
-    justify-content: center;
+.calc-selection {
+  display: flex;
+  gap: 5px;
+  justify-content: center;  
+  font-size: 14px;
 
-    .substat-priority-select-wrapper {
-      display: grid;
-      align-items: center;
-      gap: 10px;
-      grid-template-columns: 175px 100%;
-      .substat-priority-select-label {
-        white-space: nowrap;
-        margin-left: 5px;
-      }
-      &.no-calcs {
-        opacity: 0.3;
-        cursor: not-allowed;
-        .substat-priority-select:hover {
-          background-color: rgba(0, 0, 0, 0.4);
-        }
+  .substat-priority-select-wrapper {
+    display: grid;
+    align-items: center;
+    gap: 10px;
+    grid-template-columns: 175px 100%;
+    .substat-priority-select-label {
+      white-space: nowrap;
+      margin-left: 5px;
+    }
+    &.no-calcs {
+      opacity: 0.3;
+      cursor: not-allowed;
+      .substat-priority-select:hover {
+        background-color: rgba(0, 0, 0, 0.4);
       }
     }
+  }
 
-    .substat-priority-select {
-      width: 100%;
-      background-color: rgba(0, 0, 0, 0.4);
-      height: 32px;
-      user-select: none;
+  .substat-priority-select {
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    height: 32px;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+    .react-select-calcs-wrapper {
       display: flex;
-      align-items: center;
-      width: fit-content;
-      &:hover {
-        background-color: rgba(0, 0, 0, 0.5);
+      justify-content: flex-end;
+      > div {
+        width: 700px !important;
       }
-      .react-select-calcs-wrapper {
-        display: flex;
-        justify-content: flex-end;
-        > div {
-          width: 700px !important;
+      .react-select-custom-option {
+        .for-pills {
+          display: flex;
+          gap: 5px;
         }
-        .react-select-custom-option {
-          .for-pills {
-            display: flex;
-            gap: 5px;
-          }
-          .for-dropdown {
-            display: none;
-          }
+        .for-dropdown {
+          display: none;
         }
       }
     }

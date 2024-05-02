@@ -109,7 +109,12 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
         <ArtifactListCompact row={row} artifacts={artifacts} />
       )}
       <div>
-        {selectedCalculationId && <DamageDistrubution row={row} />}
+        {selectedCalculationId && (
+          <DamageDistrubution
+            row={row}
+            selectedCalculationId={selectedCalculationId}
+          />
+        )}
         {selectedCalculationId && (
           <SubstatPriorityTable
             row={row}
