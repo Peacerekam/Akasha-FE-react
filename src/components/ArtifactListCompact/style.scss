@@ -82,7 +82,13 @@
       display: block;
       max-width: 60px;
       text-align: center;
-      text-wrap: nowrap;
+      text-wrap: nowrap !important;
+      white-space: nowrap !important;
+      > *:not(.metric-formula),
+      > *:not(.metric-formula) * {
+        text-wrap: nowrap !important;
+        white-space: nowrap !important;
+      }
     }
     .compact-artifact-main-stat {
       position: absolute;

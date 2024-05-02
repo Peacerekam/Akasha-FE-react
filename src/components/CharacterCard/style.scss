@@ -1172,8 +1172,8 @@ $hardcoded-scale: 1;
       gap: 15px * $hardcoded-scale;
       justify-content: center;
 
-      &,
-      * {
+      &:not(.metric-formula),
+      > *:not(.metric-formula) {
         text-wrap: nowrap;
         white-space: nowrap;
       }
