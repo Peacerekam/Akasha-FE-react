@@ -18,6 +18,7 @@ type Additional = {
   quantity?: number;
   type?: string;
   value: number;
+  index?: number;
 };
 
 type DamageData = {
@@ -92,6 +93,7 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
 
   const getDamageDistribution = async () => {
     if (!row.md5) return;
+
     const _uid = encodeURIComponent(row.uid);
     const _md5 = encodeURIComponent(row.md5);
     const dmgDistributionURL = `/api/damageDistribution/${variantlessId}/${_uid}/${_md5}`;
@@ -99,8 +101,25 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
 
     setAllDamageData(data.data);
 
-    const toHighlight = data.data.find((x: any) => x.id === variantlessId);
-    setHighlighted(toHighlight?.additional?.[0]);
+    const toHighlight: DamageData = data.data.find(
+      (x: DamageData) => x.id === variantlessId
+    );
+
+    if (!toHighlight.additional) return;
+
+    const indexOfLargestValue = toHighlight.additional.reduce(
+      (max: number, curr: Additional, currIndex: number, arr: Additional[]) => {
+        const totalValue_A = arr[max].value * (arr[max].quantity || 1);
+        const totalValue_B = curr.value * (curr.quantity || 1);
+        return totalValue_B > totalValue_A ? currIndex : max;
+      },
+      0
+    );
+
+    setHighlighted({
+      ...toHighlight.additional[indexOfLargestValue],
+      index: indexOfLargestValue,
+    });
   };
 
   useEffect(() => {
@@ -110,11 +129,16 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
   }, [show]);
 
   useEffect(() => {
-    setHighlighted(damageData?.additional?.[0]);
+    if (!damageData?.additional?.[0]) return;
+
+    setHighlighted({
+      ...damageData?.additional?.[0],
+      index: 0,
+    });
   }, [variantlessId]);
 
   const displayHighligted = useMemo(() => {
-    if (!highlighted || !damageData) {
+    if (!highlighted?.name || !damageData) {
       return <div className="highlighted-damage-source" />;
     }
 
@@ -163,7 +187,7 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
                 </td>
               </tr>
               <tr>
-                <td>% of total</td>
+                <td>% of Result</td>
                 <td style={{ color: _color }}>{+_p.toFixed(2)}%</td>
               </tr>
             </tbody>
@@ -201,18 +225,25 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
               ? _MAP[el.type.slice(0, 1)] || "gray"
               : "gray";
 
+            const classNames = cssJoin([
+              "damage-data",
+              i === highlighted?.index ? "highlighted" : "",
+            ]);
+
+            const _style = {
+              width: `${_p}%`,
+              backgroundColor: _color,
+            } as React.CSSProperties;
+
             return (
               <div
                 tabIndex={0}
-                className="damage-data"
+                className={classNames}
                 key={`${i}-${el.name}`}
                 title={_title}
-                style={{
-                  width: `${_p}%`,
-                  backgroundColor: _color,
-                }}
-                onMouseOver={() => setHighlighted(el)}
-                onClick={() => setHighlighted(el)}
+                style={_style}
+                onMouseOver={() => setHighlighted({ ...el, index: i })}
+                onClick={() => setHighlighted({ ...el, index: i })}
               >
                 <div tabIndex={0} className="damage-data-content">
                   {el.type || "?"}
@@ -242,17 +273,30 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
           const nextValue = instances[i + 1]?.value;
           const displayValue = +val.toFixed(0);
           const _quantity = +(el?.quantity || 1)?.toFixed(2);
-          const _title = el.quantity ? `${_quantity}x ${el.name} = ${+val.toFixed(2)}` : `${el.name} = ${+val.toFixed(2)}`;
+          const _title = el.quantity
+            ? `${_quantity}x ${el.name} = ${+val.toFixed(2)}`
+            : `${el.name} = ${+val.toFixed(2)}`;
+
+          const classNames = cssJoin([
+            "pointer",
+            i === highlighted?.index ? "highlighted" : "",
+          ]);
+
+          const _style = {
+            color: _color,
+            fontWeight: 600,
+            "--color": _color.replace(")", ", 0.5)"),
+          } as React.CSSProperties;
 
           return (
             <span
               title={_title}
               key={`${i}-${el.name}`}
-              onMouseOver={() => setHighlighted(el)}
-              onClick={() => setHighlighted(el)}
-              className="pointer"
+              onMouseOver={() => setHighlighted({ ...el, index: i })}
+              onClick={() => setHighlighted({ ...el, index: i })}
+              className={classNames}
             >
-              <span tabIndex={0} style={{ color: _color, fontWeight: 600 }}>
+              <span tabIndex={0} style={_style}>
                 {(el?.quantity || 1) !== 1 ? `${_quantity}×` : ""}
                 {Math.abs(displayValue)}
               </span>

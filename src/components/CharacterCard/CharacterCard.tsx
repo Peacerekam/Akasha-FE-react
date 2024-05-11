@@ -1979,7 +1979,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                     calcOptions.length === 0 ? "no-calcs" : ""
                   }`}
                 >
-                  <span className="card-select-label">Highlighed ranking</span>
+                  <span className="card-select-label">Highlighted ranking</span>
                   <div className="card-select ">
                     <div className="react-select-calcs-wrapper">
                       <ReactSelect
