@@ -91,21 +91,8 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
     [allDamageData, variantlessId]
   );
 
-  const getDamageDistribution = async () => {
-    if (!row.md5) return;
-
-    const _uid = encodeURIComponent(row.uid);
-    const _md5 = encodeURIComponent(row.md5);
-    const dmgDistributionURL = `/api/damageDistribution/${variantlessId}/${_uid}/${_md5}`;
-    const { data } = await axios.get(dmgDistributionURL);
-
-    setAllDamageData(data.data);
-
-    const toHighlight: DamageData = data.data.find(
-      (x: DamageData) => x.id === variantlessId
-    );
-
-    if (!toHighlight.additional) return;
+  const setLargestValueAsHighlighted = (toHighlight?: DamageData) => {
+    if (!toHighlight?.additional) return;
 
     const indexOfLargestValue = toHighlight.additional.reduce(
       (max: number, curr: Additional, currIndex: number, arr: Additional[]) => {
@@ -122,6 +109,23 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
     });
   };
 
+  const getDamageDistribution = async () => {
+    if (!row.md5) return;
+
+    const _uid = encodeURIComponent(row.uid);
+    const _md5 = encodeURIComponent(row.md5);
+    const dmgDistributionURL = `/api/damageDistribution/${variantlessId}/${_uid}/${_md5}`;
+    const { data } = await axios.get(dmgDistributionURL);
+
+    setAllDamageData(data.data);
+
+    const toHighlight: DamageData = data.data.find(
+      (x: DamageData) => x.id === variantlessId
+    );
+
+    setLargestValueAsHighlighted(toHighlight);
+  };
+
   useEffect(() => {
     if (show && !damageData) {
       getDamageDistribution();
@@ -129,13 +133,8 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
   }, [show]);
 
   useEffect(() => {
-    if (!damageData?.additional?.[0]) return;
-
-    setHighlighted({
-      ...damageData?.additional?.[0],
-      index: 0,
-    });
-  }, [variantlessId]);
+    setLargestValueAsHighlighted(damageData);
+  }, [variantlessId, damageData]);
 
   const displayHighligted = useMemo(() => {
     if (!highlighted?.name || !damageData) {
