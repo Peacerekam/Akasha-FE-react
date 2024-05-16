@@ -36,6 +36,53 @@ export const NewsDisplay: React.FC = () => {
     };
   }, []);
 
+  const maybeTimestampToRelative = (val: string) => {
+    if (!val.startsWith("<t:") && !val.endsWith(":R>")) {
+      return val;
+    }
+
+    const formatter = new Intl.RelativeTimeFormat(`en`, { style: "long" });
+    const now = +new Date() / 1000 / 60 / 60 / 24;
+    const _timestamp = +("" + val).slice(3, -3);
+    const then = _timestamp / 60 / 60 / 24;
+    const days = then - now;
+    const absDays = Math.abs(days);
+
+    let output = ""
+
+    if (absDays > 1) {
+      output = formatter.format(+days.toFixed(0), "days");
+    }
+
+    if (absDays * 24 < 1) {
+      output = formatter.format(+(days * 24 * 60).toFixed(0), "minutes");
+    }
+
+    if (absDays < 1) {
+      output = formatter.format(+(days * 24).toFixed(0), "hours");
+    }
+
+    const staticTimestamp = new Intl.DateTimeFormat("en", {
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true
+    });
+
+    const statisTimestampDisplay = staticTimestamp.format(_timestamp * 1000);
+
+    output = formatter.format(+days.toFixed(0), "days");
+    output += ` (${statisTimestampDisplay})`;
+
+    return `\`${output}\``;
+  };
+
+  const maybeRelatifyTimestamps = (acc: string, val: string) => {
+    val = maybeTimestampToRelative(val);
+    return acc + ` ${val}`;
+  };
+  
   const displayDiscordLikeMessage = (message: any) => {
     const avatarBaseURL = `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}`;
 
@@ -45,8 +92,11 @@ export const NewsDisplay: React.FC = () => {
 
     const createdAt = timeAgo(message.createdAt);
     const editedAt = timeAgo(message.editedAt);
-    const content = message.content; //.replaceAll("~~", "~");
     const profileLink = "/profile/701464050";
+
+    const content = message?.content
+      ?.split(" ")
+      .reduce(maybeRelatifyTimestamps, "");
 
     return (
       <div className="discord-like-msg" key={message.messageID}>

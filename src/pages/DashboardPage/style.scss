@@ -138,6 +138,20 @@
             margin-left: 5px;
             display: none;
           }
+
+          a {
+            color: orange;
+          }
+
+          hr {
+            margin: 20px;
+          }
+
+          code {
+            background-color: rgb(56, 56, 56);
+            padding: 2px;
+            border-radius: 2px;
+          }
         }
       }
     }
