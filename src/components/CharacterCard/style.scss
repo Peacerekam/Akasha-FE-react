@@ -169,7 +169,7 @@ $hardcoded-scale: 1;
       .compact-artifact-metric-container,
       .compact-artifact-icon-container {
         .compact-artifact-crit-value {
-          max-width: 40px * $hardcoded-scale;
+          max-width: 45px * $hardcoded-scale;
         }
       }
     }
@@ -181,7 +181,7 @@ $hardcoded-scale: 1;
       margin-right: 10px * $hardcoded-scale;
       .compact-artifact-crit-value {
         font-size: 12px * $hardcoded-scale;
-        max-width: 50px * $hardcoded-scale;
+        max-width: 55px * $hardcoded-scale;
       }
       .compact-artifact-main-stat {
         left: -2px * $hardcoded-scale;
@@ -634,7 +634,7 @@ $hardcoded-scale: 1;
       // width: fit-content;
       position: relative;
       > div {
-        max-width: 400px * $hardcoded-scale;
+        max-width: 385px * $hardcoded-scale;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
