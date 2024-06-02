@@ -211,8 +211,23 @@ export const REAL_SUBSTAT_VALUES: {
   900009: { value: 19.82, type: "FIGHT_PROP_ELEMENT_MASTERY" },
 };
 
+export const ROUNDED_REAL_SUBSTAT_VALUES: {
+  [id: number]: { value: number; type: string };
+} = Object.keys(REAL_SUBSTAT_VALUES).reduce((acc: any, key: any) => {
+  const multiplier = 1000000;
+  const roundedVal = +(
+    +(REAL_SUBSTAT_VALUES[key].value * multiplier).toFixed(0) / multiplier
+  ).toFixed(4);
+
+  acc[key] = {
+    type: REAL_SUBSTAT_VALUES[key].type,
+    value: roundedVal,
+  };
+  return acc;
+}, {});
+
 export const MAX_ROLLS = Object.keys(STAT_NAMES).reduce((acc: any, val) => {
-  const allPossibleRolls = Object.values(REAL_SUBSTAT_VALUES).filter(
+  const allPossibleRolls = Object.values(ROUNDED_REAL_SUBSTAT_VALUES).filter(
     (x) => x.type === val
   );
   const highestPossibleRoll = Math.max(
@@ -229,4 +244,22 @@ export const MAX_ROLLS = Object.keys(STAT_NAMES).reduce((acc: any, val) => {
 export const getSubstatEfficiency = (value: number, key: string) => {
   const max = MAX_ROLLS[key];
   return Math.round((value / max) * 20) * 5;
+};
+
+export const fixCritValue = (row: any) => {
+  if (!row.substatsIdList) {
+    return +(+(row.critValue * 100).toFixed(0) / 100).toFixed(1);
+  }
+
+  let critValue = 0;
+
+  row.substatsIdList.forEach((id: number) => {
+    if (REAL_SUBSTAT_VALUES[id].type === "FIGHT_PROP_CRITICAL") {
+      critValue += 2 * ROUNDED_REAL_SUBSTAT_VALUES[id].value;
+    } else if (REAL_SUBSTAT_VALUES[id].type === "FIGHT_PROP_CRITICAL_HURT") {
+      critValue += ROUNDED_REAL_SUBSTAT_VALUES[id].value;
+    }
+  });
+
+  return +critValue.toFixed(1);
 };

@@ -69,6 +69,7 @@ import { SettingsContext } from "../../context/SettingsProvider/SettingsProvider
 import { TableColumn } from "../../types/TableColumn";
 import { TitleContext } from "../../context/TitleProvider/TitleProviderContext";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import { fixCritValue } from "../../utils/substats";
 import { getSessionIdFromCookie } from "../../utils/helpers";
 
 type TitleAndDescription = {
@@ -240,7 +241,7 @@ export const ProfilePage: React.FC = () => {
   useEffect(() => {
     fetchInOrder();
     setIsFetchingProfiles(true);
-    setInitialLoad(false)
+    setInitialLoad(false);
 
     if (!initialLoad) {
       navigate("", { replace: true, state: location.state }); // clear URL filters
@@ -372,7 +373,8 @@ export const ProfilePage: React.FC = () => {
             style.color = textColor;
           }
 
-          return <span style={style}>{row.critValue.toFixed(1)}</span>;
+          const critValue = fixCritValue(row);
+          return <span style={style}>{critValue}</span>;
         },
       },
     ],

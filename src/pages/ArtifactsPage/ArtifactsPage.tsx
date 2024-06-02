@@ -25,6 +25,7 @@ import DomainBackground from "../../assets/images/Tenshukaku_Concept_Art.webp";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { TableColumn } from "../../types/TableColumn";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import { fixCritValue } from "../../utils/substats";
 import { useNavigate } from "react-router-dom";
 
 export type ArtifactColumns = {
@@ -196,7 +197,8 @@ export const ArtifactsPage: React.FC = () => {
             style.color = textColor;
           }
 
-          return <span style={style}>{row.critValue.toFixed(1)}</span>;
+          const critValue = fixCritValue(row);
+          return <span style={style}>{critValue}</span>;
         },
       },
     ],

@@ -5,6 +5,7 @@ import {
 } from "../../components/RollList/defaultFilters";
 
 import { UseState } from "../../hooks/";
+import { fixCritValue } from "../../utils/substats";
 import { getSummedArtifactRolls } from "../../utils/helpers";
 
 export type Metric = "RV" | "CV";
@@ -109,7 +110,7 @@ const SettingsContextProvider: React.FC<{ children: any }> = ({ children }) => {
       const _metric = overrideMetric || metric;
 
       if (_metric === "CV") {
-        const critValue = +artifact.critValue.toFixed(1);
+        const critValue = fixCritValue(artifact);
         return critValue;
       }
 

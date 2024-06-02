@@ -3,6 +3,7 @@ import "./style.scss";
 import {
   REAL_SUBSTAT_VALUES,
   STAT_NAMES,
+  fixCritValue,
   getSubstatEfficiency,
 } from "../../utils/substats";
 import React, { useContext } from "react";
@@ -96,6 +97,8 @@ export const Artifact: React.FC<ArtifactProps> = ({
     ? Math.round(artifact.mainStatValue * 10) / 10
     : Math.round(artifact.mainStatValue);
 
+  const critValue = fixCritValue(artifact);
+
   return (
     <div
       style={style}
@@ -103,7 +106,7 @@ export const Artifact: React.FC<ArtifactProps> = ({
     >
       <div className="artifact-name">{translate(artifact.name)}</div>
       <div className="artifact-crit-value">
-        {artifact.critValue > 0 ? `${artifact.critValue.toFixed(1)} cv` : ""}
+        {critValue > 0 ? `${critValue} cv` : ""}
       </div>
       <div className="artifact-stat-name">{translate(mainStatKey)}</div>
       <div className="artifact-stat-value">
