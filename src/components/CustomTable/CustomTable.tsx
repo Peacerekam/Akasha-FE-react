@@ -79,7 +79,7 @@ const getFixedSortKey = (key: string, fetchURL?: string | null) => {
     {
       characters: "Character",
       artifacts: "Artifact",
-      leaderboards: "Leaderboard"
+      leaderboards: "Leaderboard",
     }[collectionName] || "";
 
   const fixKeyMap: { [key: string]: string } = {
@@ -106,7 +106,7 @@ const getFixedSortKey = (key: string, fetchURL?: string | null) => {
     lastBuildUpdate: "Last Build Update",
     characterName: "Character Name",
     element: "Character Element",
-    c6: "C6"
+    c6: "C6",
   };
 
   return fixKeyMap[key] || key;
@@ -191,9 +191,17 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     const tmp: string[] = [];
     const ignoredParams = ["fromId", "page"];
     for (const key of Object.keys(params)) {
+      const value = (params as any)?.[key];
+
+      // do not append if its ignored key
       if (ignoredParams.includes(key)) continue;
-      const value = (params as any)[key];
+
+      // do not append if its a default value
       if ((defaultParams as any)[key] === value) continue;
+
+      // do not append page pointers if it's the first page
+      if (key === "p" && params.page === 1 && !unknownPage) continue;
+
       tmp.push(`${key}=${value}`);
     }
 
