@@ -245,6 +245,30 @@
           background-color: transparent;
         }
       }
+
+      .enka-profile-tab {
+        &::after {
+          content: "\e93a";
+          font-family: "shicon";
+          font-size: 15px;
+          position: relative;
+          top: 1px;
+          pointer-events: none;
+          margin-left: 7px;
+          color: #719bd4;
+        }
+
+        + span::after {
+          margin-left: 2px;
+        }
+
+        &.akasha-icon {
+          &::after {
+            content: "" !important; // akasha icon
+            color: #5db0c5;
+          }
+        }
+      }
     }
     > div:last-child {
       margin-bottom: 40px;

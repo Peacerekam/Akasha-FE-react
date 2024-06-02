@@ -48,7 +48,7 @@ export const NewsDisplay: React.FC = () => {
     const days = then - now;
     const absDays = Math.abs(days);
 
-    let output = ""
+    let output = "";
 
     if (absDays > 1) {
       output = formatter.format(+days.toFixed(0), "days");
@@ -67,13 +67,11 @@ export const NewsDisplay: React.FC = () => {
       day: "numeric",
       hour: "numeric",
       minute: "2-digit",
-      hour12: true
+      hour12: true,
     });
 
-    const statisTimestampDisplay = staticTimestamp.format(_timestamp * 1000);
-
-    output = formatter.format(+days.toFixed(0), "days");
-    output += ` (${statisTimestampDisplay})`;
+    const staticTimestampDisplay = staticTimestamp.format(_timestamp * 1000);
+    output += ` (${staticTimestampDisplay})`;
 
     return `\`${output}\``;
   };
@@ -82,7 +80,7 @@ export const NewsDisplay: React.FC = () => {
     val = maybeTimestampToRelative(val);
     return acc + ` ${val}`;
   };
-  
+
   const displayDiscordLikeMessage = (message: any) => {
     const avatarBaseURL = `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}`;
 

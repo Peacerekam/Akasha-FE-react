@@ -156,6 +156,9 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
                 isFav ? "is-favourited" : "",
               ]);
 
+              const isEnkaProfile = isNaN(+uid);
+              const isCombined = uid.startsWith("@");
+
               return (
                 <div
                   key={`hamburger-tab-${uid}-${nickname}`}
@@ -176,6 +179,31 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
                   >
                     {isFav && <FontAwesomeIcon icon={faStar} size="1x" />}
                     {nickname ?? uid}
+
+                    {!isCombined && (
+                      <span
+                        className={`enka-profile-tab ${
+                          !isEnkaProfile ? "akasha-icon" : ""
+                        }`}
+                        title={
+                          isEnkaProfile
+                            ? "Enka.Network Profile"
+                            : "Akasha Profile"
+                        }
+                      />
+                    )}
+                    {isCombined && (
+                      <>
+                        <span
+                          className={`enka-profile-tab akasha-icon`}
+                          title="Akasha Profile"
+                        />
+                        <span
+                          className={`enka-profile-tab`}
+                          title="Enka.Network Profile"
+                        />
+                      </>
+                    )}
                   </a>
                   {/* <span
                     className="close-tab"
