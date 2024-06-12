@@ -332,7 +332,7 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
 
       const isEnka = isNaN(+char.uid);
       const isNew = isBuildNew(char?.lastBuildUpdate);
-      
+
       return (
         <div key={buildId} className={rowClassnames}>
           <div
@@ -348,7 +348,7 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
               />
             )}
             <img className="table-icon" src={char.icon} alt={char.icon} />
-            {isNew && <div className="new-lb-badge"/>}
+            {isNew && <div className="new-lb-badge" />}
             <div className="compact-table-name">
               {selectedBuildId === buildId ? (
                 <BuildNameInput
@@ -473,6 +473,11 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
                     <ConfirmTooltip
                       text="Delete background image?"
                       onConfirm={handleDeleteBackground}
+                      className={
+                        !selectedBuild?.customNamecard
+                          ? "pointer-events-none"
+                          : ""
+                      }
                     >
                       <button
                         title="Delete background image"

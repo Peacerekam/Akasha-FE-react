@@ -10,6 +10,7 @@ type ConfirmTooltipProps = {
   onConfirm: any;
   children: JSX.Element;
   className?: string;
+  disabled?: boolean;
 };
 
 export const ConfirmTooltip: React.FC<ConfirmTooltipProps> = ({
@@ -17,10 +18,14 @@ export const ConfirmTooltip: React.FC<ConfirmTooltipProps> = ({
   onConfirm,
   children,
   className = "",
+  disabled = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleOpen = () => setIsOpen(true);
+  const handleOpen = () => {
+    if (disabled) return;
+    setIsOpen(true);
+  };
 
   const handleClose = useCallback(() => {
     setIsOpen(false);
