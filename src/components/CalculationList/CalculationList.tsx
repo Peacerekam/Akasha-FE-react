@@ -9,6 +9,7 @@ import { SettingsContext } from "../../context/SettingsProvider/SettingsProvider
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { roundToFixed } from "../../utils/substats";
 import { useNavigate } from "react-router-dom";
 
 type CalculationResponse = {
@@ -160,7 +161,7 @@ export const CalculationList: React.FC<CalculationListProps> = ({
                   {name}
                 </a>
               </td>
-              <td>{result?.toFixed(0)}</td>
+              <td>{roundToFixed(result, 0)}</td>
             </tr>
           );
         }),

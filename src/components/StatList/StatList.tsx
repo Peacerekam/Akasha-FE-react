@@ -10,6 +10,7 @@ import {
 import { StatIcon } from "../StatIcon";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import { getPercentageStat } from "../StatListCard";
+import { roundToFixed } from "../../utils/substats";
 import { useContext } from "react";
 
 type StatListProps = {
@@ -20,50 +21,49 @@ type StatListProps = {
   strikethrough?: boolean;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const getStatsFromCalculation = (row: any, currentCategory: string) => {
-  const stats = row?.calculations?.[currentCategory]?.stats;
-  if (!stats) return null;
+// const getStatsFromCalculation = (row: any, currentCategory: string) => {
+//   const stats = row?.calculations?.[currentCategory]?.stats;
+//   if (!stats) return null;
 
-  const hp = stats.maxHP.toFixed(0);
-  const atk = stats.maxATK.toFixed(0);
-  const def = stats.maxDEF.toFixed(0);
-  const cr = stats.critRate.toFixed(1);
-  const cd = stats.critDMG.toFixed(1);
-  const er = (100 + stats.energyRecharge).toFixed(1);
-  const em = stats.elementalMastery.toFixed(0) | 0;
+//   const hp = stats.maxHP.toFixed(0);
+//   const atk = stats.maxATK.toFixed(0);
+//   const def = stats.maxDEF.toFixed(0);
+//   const cr = stats.critRate.toFixed(1);
+//   const cd = stats.critDMG.toFixed(1);
+//   const er = (100 + stats.energyRecharge).toFixed(1);
+//   const em = stats.elementalMastery.toFixed(0) | 0;
 
-  return {
-    hp,
-    atk,
-    def,
-    cr,
-    cd,
-    er,
-    em,
-    pyroDMG: stats.pyroDMG,
-    hydroDMG: stats.hydroDMG,
-    cryoDMG: stats.cryoDMG,
-    dendroDMG: stats.dendroDMG,
-    electroDMG: stats.electroDMG,
-    anemoDMG: stats.anemoDMG,
-    geoDMG: stats.geoDMG,
-    physicalDMG: stats.physicalDMG,
-  };
-};
+//   return {
+//     hp,
+//     atk,
+//     def,
+//     cr,
+//     cd,
+//     er,
+//     em,
+//     pyroDMG: stats.pyroDMG,
+//     hydroDMG: stats.hydroDMG,
+//     cryoDMG: stats.cryoDMG,
+//     dendroDMG: stats.dendroDMG,
+//     electroDMG: stats.electroDMG,
+//     anemoDMG: stats.anemoDMG,
+//     geoDMG: stats.geoDMG,
+//     physicalDMG: stats.physicalDMG,
+//   };
+// };
 
 export const getStatsFromRow = (row: any) => {
   const stats = row.stats;
   if (!stats) return null;
 
-  const hp = stats.maxHp.value.toFixed(0);
-  const atk = stats.atk.value.toFixed(0);
-  const def = stats.def.value.toFixed(0);
+  const hp = roundToFixed(stats.maxHp.value, 0);
+  const atk = roundToFixed(stats.atk.value, 0);
+  const def = roundToFixed(stats.def.value, 0);
 
   const cr = getPercentageStat(stats.critRate, 1);
   const cd = getPercentageStat(stats.critDamage, 1);
   const er = getPercentageStat(stats.energyRecharge, 1);
-  const em = +stats.elementalMastery?.value.toFixed(0) || 0;
+  const em = roundToFixed(stats.elementalMastery?.value, 0);
 
   const healBonus = getPercentageStat(stats.healingBonus, 1);
 
@@ -142,7 +142,7 @@ export const StatList: React.FC<StatListProps> = ({
           <StatIcon name={dmgStat.name} />
           <span>{translate(dmgStat.name)}</span>
         </div>
-        <div>{(+dmgStat.value).toFixed(1)}%</div>
+        <div>{roundToFixed(dmgStat.value, 1).toFixed(1)}%</div>
       </div>
     ));
   };

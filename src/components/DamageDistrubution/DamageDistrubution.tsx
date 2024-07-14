@@ -12,6 +12,7 @@ import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import axios from "axios";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { reactSelectCustomFilterTheme } from "../../utils/reactSelectCustomFilterTheme";
+import { roundToFixed } from "../../utils/substats";
 
 type Additional = {
   name: string;
@@ -147,13 +148,13 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
       ? _MAP[highlighted.type.slice(0, 1)] || "gray"
       : "gray";
 
-    const _value = +highlighted.value.toFixed(0);
+    const _value = roundToFixed(highlighted.value, 0);
 
     const total = damageData.result;
     const val = highlighted.value;
     const totalVal = val * (highlighted.quantity || 1);
     const _p = (totalVal / total) * 100;
-    const _quantity = +(highlighted?.quantity || 1)?.toFixed(2);
+    const _quantity = roundToFixed(highlighted?.quantity || 1, 2);
 
     return (
       <div className="highlighted-damage-source">
@@ -182,12 +183,12 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
               <tr>
                 <td>Total Value</td>
                 <td style={{ color: _color }}>
-                  {_quantity}×{_value} = {+totalVal.toFixed(0)}
+                  {_quantity}×{_value} = {roundToFixed(totalVal, 0)}
                 </td>
               </tr>
               <tr>
                 <td>% of Result</td>
-                <td style={{ color: _color }}>{+_p.toFixed(2)}%</td>
+                <td style={{ color: _color }}>{roundToFixed(_p, 2)}%</td>
               </tr>
             </tbody>
           </table>
@@ -213,10 +214,10 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
             if (_p < 2) _p = 2;
 
             // const displayValue = +val.toFixed(0);
-            const _quantity = +(el?.quantity || 1)?.toFixed(2);
+            const _quantity = roundToFixed(el?.quantity || 1, 2);
             const _title =
               (el?.quantity ? `${_quantity}x ${el.name}` : el.name) +
-              ` = ${+val.toFixed(2)}`;
+              ` = ${roundToFixed(val, 2)}`;
 
             const _MAP = isReaction(el.name) ? VAPE_COLORS_MAP : COLORS_MAP;
 
@@ -270,11 +271,11 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
           const _color = el.type ? _MAP[el.type.slice(0, 1)] || "gray" : "gray";
 
           const nextValue = instances[i + 1]?.value;
-          const displayValue = +val.toFixed(0);
-          const _quantity = +(el?.quantity || 1)?.toFixed(2);
+          const displayValue = roundToFixed(val, 0);
+          const _quantity = roundToFixed(el?.quantity || 1, 2);
           const _title = el.quantity
-            ? `${_quantity}x ${el.name} = ${+val.toFixed(2)}`
-            : `${el.name} = ${+val.toFixed(2)}`;
+            ? `${_quantity}x ${el.name} = ${roundToFixed(val, 2)}`
+            : `${el.name} = ${roundToFixed(val, 2)}`;
 
           const classNames = cssJoin([
             "pointer",
@@ -304,7 +305,7 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
           );
         })}
         {" = "}
-        <span className="final-result">{+total.toFixed(0)}</span>
+        <span className="final-result">{roundToFixed(total, 0)}</span>
       </div>
     );
   }, [damageData, highlighted]);

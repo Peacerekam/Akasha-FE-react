@@ -1,11 +1,5 @@
 import "./style.scss";
 
-import {
-  REAL_SUBSTAT_VALUES,
-  STAT_NAMES,
-  fixCritValue,
-  getSubstatEfficiency,
-} from "../../utils/substats";
 import React, { useContext } from "react";
 import {
   cssJoin,
@@ -13,6 +7,7 @@ import {
   getCharacterCvColor,
   getInGameSubstatValue,
   getSubstatPercentageEfficiency,
+  getSummedArtifactRolls,
   isPercent,
   normalizeText,
 } from "../../utils/helpers";
@@ -22,6 +17,7 @@ import ArtifactBackground from "../../assets/images/artifact-5star-bg.png";
 import NoArtifact from "../../assets/images/no-artifact.png";
 import RarityStar from "../../assets/images/star.png";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import { fixCritValue } from "../../utils/substats";
 
 type ArtifactProps = {
   artifact: {
@@ -76,22 +72,7 @@ export const Artifact: React.FC<ArtifactProps> = ({
     artifact.mainStatKey?.endsWith("Bonus") ||
     ["Energy Recharge", "Crit RATE", "Crit DMG"].includes(artifact.mainStatKey);
 
-  const summedArtifactRolls: {
-    [key: string]: { count: number; sum: number; rv: number };
-  } = artifact.substatsIdList.reduce((acc: any, id: number) => {
-    const { value, type } = REAL_SUBSTAT_VALUES[id];
-    const realStatName = STAT_NAMES[type];
-    return {
-      ...acc,
-      [realStatName]: {
-        count: (acc[realStatName]?.count ?? 0) + 1,
-        sum: (acc[realStatName]?.sum ?? 0) + value,
-        rv:
-          (acc[realStatName]?.rv ?? 0) +
-          getSubstatEfficiency(value, realStatName),
-      },
-    };
-  }, {});
+  const summedArtifactRolls = getSummedArtifactRolls(artifact);
 
   const mainStatValue = isPercenrage
     ? Math.round(artifact.mainStatValue * 10) / 10

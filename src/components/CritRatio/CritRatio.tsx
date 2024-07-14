@@ -2,6 +2,8 @@ import "./style.scss";
 
 import { getCharacterCvColor, getRainbowTextStyle } from "../../utils/helpers";
 
+import { roundToFixed } from "../../utils/substats";
+
 type CritRatioProps = {
   row: any;
   overrideCV?: number;
@@ -20,7 +22,7 @@ export const CritRatio: React.FC<CritRatioProps> = ({ row, overrideCV }) => {
     : stats.critDMG;
 
   // const cv = 2 * cr + cd;
-  const cv = offset + stats.critValue || overrideCV || 0;
+  const cv = offset + (stats.critValue || overrideCV || 0);
   const textColor = getCharacterCvColor(cv);
 
   let style = {} as React.CSSProperties;
@@ -34,9 +36,9 @@ export const CritRatio: React.FC<CritRatioProps> = ({ row, overrideCV }) => {
   return (
     <div className="table-crits-display">
       <div>
-        {cr.toFixed(1)} : {cd.toFixed(1)}{" "}
+        {roundToFixed(cr, 1).toFixed(1)} : {roundToFixed(cd, 1).toFixed(1)}{" "}
       </div>
-      {cv ? <div style={style}>{cv.toFixed(1)} cv</div> : ""}
+      {cv ? <div style={style}>{roundToFixed(cv, 1).toFixed(1)} cv</div> : ""}
       {/* <div onClick={() => console.log("test")} className="cv-details"></div> */}
     </div>
   );

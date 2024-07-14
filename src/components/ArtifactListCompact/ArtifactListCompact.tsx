@@ -25,6 +25,7 @@ import { StatIcon } from "../StatIcon";
 import { TalentsDisplay } from "../TalentsDisplay";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import { getDefaultRvFilters } from "../RollList/defaultFilters";
+import { roundToFixed } from "../../utils/substats";
 
 type ArtifactListCompactProps = {
   row: any;
@@ -104,7 +105,7 @@ export const CompactArtifact: React.FC<CompactArtifactProps> = ({
             normalizeText(normSubName),
             isCV ? "critvalue" : "",
             isFactored ? "rv-relevant" : "rv-not-relevant",
-          ])
+          ]);
 
           const opacity = getSubstatPercentageEfficiency(
             normSubName,
@@ -157,8 +158,8 @@ export const ArtifactMetricDisplay: React.FC<{
   const characterRvStats =
     customRvFilter[row.name] || getDefaultRvFilters(row.name);
 
-  const critRate = +(artifact.substats?.["Crit RATE"]?.toFixed(1) || 0);
-  const critDmg = +(artifact.substats?.["Crit DMG"]?.toFixed(1) || 0);
+  const critRate = roundToFixed(artifact.substats?.["Crit RATE"] || 0, 1);
+  const critDmg = roundToFixed(artifact.substats?.["Crit DMG"] || 0, 1);
   const iconSize = 16;
 
   const metricMathDisplay = (
@@ -334,7 +335,13 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
       <>
         <div className="artifacts-row">
           {reordered.map((artifact: any) => {
-            return <CompactArtifact key={artifact._id} artifact={artifact} row={row} />;
+            return (
+              <CompactArtifact
+                key={artifact._id}
+                artifact={artifact}
+                row={row}
+              />
+            );
           })}
         </div>
         <RollList artifacts={reordered} character={row.name} />

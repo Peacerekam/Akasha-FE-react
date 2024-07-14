@@ -198,7 +198,7 @@ export const ArtifactsPage: React.FC = () => {
           }
 
           const critValue = fixCritValue(row);
-          return <span style={style}>{critValue}</span>;
+          return <span style={style}>{critValue.toFixed(1)}</span>;
         },
       },
     ],

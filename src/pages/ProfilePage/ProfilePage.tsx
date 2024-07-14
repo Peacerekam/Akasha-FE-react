@@ -69,7 +69,7 @@ import { SettingsContext } from "../../context/SettingsProvider/SettingsProvider
 import { TableColumn } from "../../types/TableColumn";
 import { TitleContext } from "../../context/TitleProvider/TitleProviderContext";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
-import { fixCritValue } from "../../utils/substats";
+import { fixCritValue } from '../../utils/substats';
 import { getSessionIdFromCookie } from "../../utils/helpers";
 
 type TitleAndDescription = {
@@ -374,7 +374,7 @@ export const ProfilePage: React.FC = () => {
           }
 
           const critValue = fixCritValue(row);
-          return <span style={style}>{critValue}</span>;
+          return <span style={style}>{critValue.toFixed(1)}</span>;
         },
       },
     ],

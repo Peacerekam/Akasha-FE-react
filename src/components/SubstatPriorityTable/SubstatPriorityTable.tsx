@@ -12,6 +12,7 @@ import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import axios from "axios";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { reactSelectCustomFilterTheme } from "../../utils/reactSelectCustomFilterTheme";
+import { roundToFixed } from "../../utils/substats";
 
 type SubstatPriority = {
   calculation: {
@@ -294,7 +295,7 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
 
       return (
         <td style={cellStyle} key={`${name}-val`}>
-          {value.toFixed(0)}
+          {roundToFixed(value, 0)}
         </td>
       );
     });
@@ -396,7 +397,7 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
       const relativeValue =
         (value * 100) / selectedPriorityData.substats["Base"].result - 100;
 
-      const roundedVal = +dmgGainValue.toFixed(0);
+      const roundedVal = roundToFixed(dmgGainValue, 0);
       const revRGB = 255 - (relativeValue / highestPercentage) * 255;
       const cellStyle = {
         color: `rgba(${revRGB}, 255,${revRGB}, 1)`,
@@ -445,7 +446,7 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
       const relativeValue =
         (value * 100) / selectedPriorityData.substats["Base"].result - 100;
 
-      const roundedVal = +relativeValue.toFixed(2);
+      const roundedVal = roundToFixed(relativeValue, 2);
       const revRGB = 255 - (relativeValue / highestPercentage) * 255;
       const cellStyle = {
         color: `rgba(${revRGB}, 255,${revRGB}, 1)`,
@@ -494,7 +495,7 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
           ? 0
           : ((dmgGainValue - dmgRelToGainValue) / dmgRelToGainValue) * 100;
 
-      const roundedVal = +relativeValue.toFixed(2);
+      const roundedVal = roundToFixed(relativeValue, 2);
       const revRGB =
         roundedVal === 0 ? 0 : 255 - Math.abs(relativeValue / 50) * 255;
 

@@ -211,13 +211,19 @@ export const REAL_SUBSTAT_VALUES: {
   900009: { value: 19.82, type: "FIGHT_PROP_ELEMENT_MASTERY" },
 };
 
+export const roundToFixed = (n: number | string, decimals: number) => {
+  const multiplier = 10 ** decimals;
+  return Math.round(+n * multiplier) / multiplier;
+};
+
 export const ROUNDED_REAL_SUBSTAT_VALUES: {
   [id: number]: { value: number; type: string };
 } = Object.keys(REAL_SUBSTAT_VALUES).reduce((acc: any, key: any) => {
   const multiplier = 1000000;
-  const roundedVal = +(
-    +(REAL_SUBSTAT_VALUES[key].value * multiplier).toFixed(0) / multiplier
-  ).toFixed(4);
+  const roundedVal = roundToFixed(
+    roundToFixed(REAL_SUBSTAT_VALUES[key].value * multiplier, 0) / multiplier,
+    4
+  );
 
   acc[key] = {
     type: REAL_SUBSTAT_VALUES[key].type,
@@ -248,7 +254,8 @@ export const getSubstatEfficiency = (value: number, key: string) => {
 
 export const fixCritValue = (row: any) => {
   if (!row.substatsIdList) {
-    return +(+(row.critValue * 100).toFixed(0) / 100).toFixed(1);
+    // return +(+(row.critValue * 100).toFixed(0) / 10).toFixed(0) / 10;
+    return roundToFixed(row.critValue, 1);
   }
 
   let critValue = 0;
@@ -261,5 +268,6 @@ export const fixCritValue = (row: any) => {
     }
   });
 
-  return +critValue.toFixed(1);
+  // return +(critValue * 10).toFixed(0) / 10;
+  return roundToFixed(critValue, 1);
 };

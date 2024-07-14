@@ -9,8 +9,10 @@ type StatListProps = {
   row: any;
 };
 
-export const getPercentageStat = (stat: any, toFixed: number) =>
-  ((stat?.value || 0) * 100).toFixed(toFixed);
+export const getPercentageStat = (stat: any, toFixed: number) => {
+  const result = Math.round((stat?.value || 0) * 1000) / 10;
+  return result.toFixed(toFixed);
+};
 
 const getStatsFromRow = (row: any) => {
   const stats = row.stats;

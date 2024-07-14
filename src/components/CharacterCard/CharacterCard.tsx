@@ -41,6 +41,7 @@ import {
   faPlus,
   faRefresh,
 } from "@fortawesome/free-solid-svg-icons";
+import { fixCritValue, roundToFixed } from "../../utils/substats";
 import html2canvas, { Options } from "html2canvas";
 
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
@@ -606,9 +607,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
               const statName = getReadableStatText(obj.label);
               const calcStat = calcStatVals(obj.label, true);
 
-              const calculatedVal = calcStat
-                .value(obj.dataset.vals[obj.dataIndex])
-                .toFixed(1);
+              const calculatedVal = roundToFixed(
+                calcStat.value(obj.dataset.vals[obj.dataIndex]),
+                1
+              );
 
               return `${statName}: ${calculatedVal}`;
             },
@@ -1523,7 +1525,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           <img alt="friendship" src={FriendshipIcon} />{" "}
           {row.fetterInfo.expLevel}
         </div>
-        <div className="character-cv">{row.critValue.toFixed(1)} cv</div>
+        <div className="character-cv">{fixCritValue(row)} cv</div>
         {!privacyFlag && (
           <div key="character-uid" className="character-uid">
             {row.uid}

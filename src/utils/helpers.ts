@@ -2,6 +2,7 @@ import {
   REAL_SUBSTAT_VALUES,
   STAT_NAMES,
   getSubstatEfficiency,
+  roundToFixed,
 } from "./substats";
 
 import { IHash } from "../types/IHash";
@@ -189,7 +190,7 @@ export const getArtifactCvColor = (artifact?: any) => {
 
   if (isCritCirclet) cv += 7.77;
 
-  if (+cv.toFixed(1) >= 54.4) return "rainbow";
+  if (roundToFixed(cv, 1) >= 54.4) return "rainbow";
 
   const _cv = cv + 0.05;
   if (_cv >= 50) return "cyan";
@@ -210,7 +211,7 @@ export const getArtifactCvClassName = (artifact?: any) => {
 
   if (isCritCirclet) cv += 7.77;
 
-  if (+cv.toFixed(1) >= 54.4) return "wtf-artifact";
+  if (roundToFixed(cv, 1) >= 54.4) return "wtf-artifact";
 
   const _cv = cv + 0.05;
   if (_cv >= 50) return "unicorn-artifact";
@@ -378,14 +379,9 @@ export const toShortThousands = (n: number) => {
     }
 
     // if below 100k then show one decimal ( e.g. 56.6k )
-    const rounded = thousands.toFixed(1);
+    const rounded = roundToFixed(thousands, 1);
 
-    // if number is even then dont show unnecesary .0 decimal
-    const adjusted = rounded.endsWith(".0")
-      ? rounded.replace(".0", "")
-      : rounded;
-
-    return `${adjusted}k`;
+    return `${rounded}k`;
   }
   return n;
 };
