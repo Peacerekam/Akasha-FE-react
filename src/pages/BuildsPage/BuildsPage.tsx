@@ -149,8 +149,10 @@ export const BuildsPage: React.FC = () => {
         sortable: false,
         sortField: "weapon.name",
         cell: (row) => {
+          
           const refinement =
             (row.weapon.weaponInfo?.refinementLevel?.value ?? 0) + 1;
+            
           return (
             <WeaponMiniDisplay icon={row.weapon.icon} refinement={refinement} />
           );

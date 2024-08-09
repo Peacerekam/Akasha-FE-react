@@ -1367,7 +1367,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             <div className="weapon-name">{translate(row.weapon.name)}</div>
             <div className="weapon-stats">
               <div className="weapon-refinement">
-                R{row.weapon.weaponInfo.refinementLevel.value + 1}
+                R{(row.weapon.weaponInfo?.refinementLevel?.value ?? 0) + 1}
               </div>
               <div>
                 <span>

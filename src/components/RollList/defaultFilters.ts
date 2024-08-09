@@ -36,7 +36,7 @@ const PYRO_RV_LIST = {
   Amber: [CRate, CDMG, ATK_, ER],
   Chevreuse: [CRate, CDMG, ATK_, HP_, ER],
   Gaming: [CRate, CDMG, ATK_, EM],
-  Arlecchino: [CRate, CDMG, ATK_, EM, ER],
+  Arlecchino: [CRate, CDMG, ATK_, EM],
 };
 
 const HYDRO_RV_LIST = {
@@ -44,7 +44,7 @@ const HYDRO_RV_LIST = {
   Xingqiu: [CRate, CDMG, ATK_, ER],
   Mona: [CRate, CDMG, ER, EM, ATK_],
   Tartaglia: [CRate, CDMG, ATK_, EM, ER],
-  "Sangonomiya Kokomi": [HP, HP_, ER],
+  "Sangonomiya Kokomi": [HP, HP_, ER, ATK_],
   "Kamisato Ayato": [CRate, CDMG, ER, ATK_],
   Yelan: [CRate, CDMG, HP_, ER],
   Furina: [CRate, CDMG, HP_, ER],
@@ -79,6 +79,7 @@ const ELECTRO_RV_LIST = {
   Lisa: [CRate, CDMG, ATK_, EM],
   Fischl: [ATK_, EM, CRate, CDMG],
   Keqing: [CRate, CDMG, ATK_, EM],
+  Clorinde: [CRate, CDMG, ATK_, EM],
   Beidou: [ER, ATK_, CRate, CDMG],
   "Yae Miko": [ER, ATK_, CRate, CDMG, EM],
   "Raiden Shogun": [CRate, CDMG, ATK_, ER],
@@ -94,6 +95,7 @@ const DENDRO_RV_LIST = {
   Tighnari: [CRate, CDMG, ATK_, EM, ER],
   Yaoyao: [CRate, CDMG, ATK_, EM, ER],
   Collei: [CRate, CDMG, ATK_, EM, ER],
+  Emilie: [CRate, CDMG, ATK_],
 };
 
 const defaultRvFilter = [CRate, CDMG];
