@@ -300,7 +300,9 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
                 {(el?.quantity || 1) !== 1 ? `${_quantity}×` : ""}
                 {Math.abs(displayValue)}
               </span>
-              {!!nextValue && <span>{nextValue > 0 ? " + " : " - "}</span>}
+              {nextValue !== undefined && (
+                <span>{nextValue >= 0 ? " + " : " - "}</span>
+              )}
             </span>
           );
         })}

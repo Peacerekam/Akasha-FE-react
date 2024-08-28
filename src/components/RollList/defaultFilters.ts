@@ -13,7 +13,7 @@ const ANEMO_RV_LIST = {
   Sayu: [EM, ER],
   Venti: [CRate, CDMG, ATK_, EM, ER],
   Xiao: [CRate, CDMG, ATK_, ER],
-  Jean: [CRate, CDMG, ATK_, ER, EM],
+  Jean: [CRate, CDMG, ATK_, ER],
   Faruzan: [CRate, CDMG, ATK_, ER],
   Wanderer: [CRate, CDMG, ATK_, ER],
   "Kaedehara Kazuha": [CRate, CDMG, ATK_, EM, ER],
