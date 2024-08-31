@@ -87,10 +87,12 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
     [calculationId]
   );
 
-  const damageData = useMemo(
-    () => allDamageData?.find((x) => x.id === variantlessId),
-    [allDamageData, variantlessId]
-  );
+  const damageData = useMemo(() => {
+    // .findIndex(
+    //   (x: any) => x.name === "Time" || x.type === "Time"
+    // ) || -1;
+    return allDamageData?.find((x) => x.id === variantlessId);
+  }, [allDamageData, variantlessId]);
 
   const setLargestValueAsHighlighted = (toHighlight?: DamageData) => {
     if (!toHighlight?.additional) return;
@@ -138,7 +140,7 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
   }, [variantlessId, damageData]);
 
   const displayHighligted = useMemo(() => {
-    if (!highlighted?.name || !damageData) {
+    if (!highlighted?.name || !damageData?.additional) {
       return <div className="highlighted-damage-source" />;
     }
 
@@ -150,7 +152,20 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
 
     const _value = roundToFixed(highlighted.value, 0);
 
-    const total = damageData.result;
+    const timeIndex = damageData.additional.findIndex((x) => x.name === "Time");
+    const instances = [...damageData.additional];
+
+    if (timeIndex > -1) {
+      instances.splice(timeIndex, 1);
+    }
+
+    const total =
+      timeIndex > -1
+        ? instances.reduce((acc, val) => {
+            return acc + val.value * (val?.quantity || 1);
+          }, 0)
+        : damageData.result;
+
     const val = highlighted.value;
     const totalVal = val * (highlighted.quantity || 1);
     const _p = (totalVal / total) * 100;
@@ -200,8 +215,14 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
   const displayProportions = useMemo(() => {
     if (!damageData?.additional) return <></>;
 
-    const instances = damageData.additional;
     const total = damageData.result;
+
+    const timeIndex = damageData.additional.findIndex((x) => x.name === "Time");
+    const instances = [...damageData.additional];
+
+    if (timeIndex > -1) {
+      instances.splice(timeIndex, 1);
+    }
 
     return (
       <>
@@ -259,8 +280,22 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
   const displayFormula = useMemo(() => {
     if (!damageData?.additional) return <></>;
 
-    const instances = damageData.additional;
-    const total = damageData.result;
+    const timeIndex = damageData.additional.findIndex((x) => x.name === "Time");
+    const time = timeIndex > -1 ? damageData.additional[timeIndex].value : null;
+    const instances = [...damageData.additional];
+
+    if (timeIndex > -1) {
+      instances.splice(timeIndex, 1);
+    }
+
+    const total =
+      timeIndex > -1
+        ? instances.reduce((acc, val) => {
+            return acc + val.value * (val?.quantity || 1);
+          }, 0)
+        : damageData.result;
+
+    const roundedTotal = roundToFixed(total, 0);
 
     return (
       <div className="display-formula">
@@ -307,7 +342,31 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
           );
         })}
         {" = "}
-        <span className="final-result">{roundToFixed(total, 0)}</span>
+        <span className={time ? "" : "final-result"}>{roundedTotal}</span>
+
+        {/* refactor a bit? */}
+        {time && (
+          <div style={{ marginTop: 10 }}>
+            <span>{roundedTotal}</span>
+            <span
+              style={{
+                fontSize: 14,
+                color: "white",
+                position: "relative",
+                bottom: 1,
+              }}
+            >
+              {" / "}
+            </span>
+            <span>{time}</span>
+            {" seconds = "}
+            <span className="final-result">
+              {/* @TODO: this should show actual DPS later */}
+              {roundToFixed(damageData.result, 0)}
+            </span>
+            {" DPS"}
+          </div>
+        )}
       </div>
     );
   }, [damageData, highlighted]);

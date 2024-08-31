@@ -371,8 +371,8 @@ export const Pagination: React.FC<PaginationProps> = ({
             {showPageNumbers ? (
               displayPageRange
             ) : (
-              <span className="relative button-wrapper default-cursor">
-                <button>{unknownPage ? "??" : pageNumber}</button>
+              <span className="relative button-wrapper">
+                <button style={{ cursor: "default" }}>{unknownPage ? "??" : pageNumber}</button>
               </span>
             )}
 

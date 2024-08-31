@@ -358,10 +358,13 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const calculationIds = useMemo(
     () =>
       Object.keys(calculations ?? [])
-        .filter((c: any) => !c.hidden)
+        .filter((c: any) => !calculations[c].hidden)
         .sort((a: any, b: any) => {
-          const _aRank = ("" + calculations[a].ranking)?.replace("~", "");
-          const _bRank = ("" + calculations[b].ranking)?.replace("~", "");
+          const _a = calculations[a];
+          const _b = calculations[b];
+
+          const _aRank = ("" + _a.ranking)?.replace("~", "");
+          const _bRank = ("" + _b.ranking)?.replace("~", "");
 
           const _aVal = _aRank.startsWith("(")
             ? _aRank.slice(1, _aRank.length - 1)
@@ -370,9 +373,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           const _bVal = _bRank.startsWith("(")
             ? _bRank.slice(1, _bRank.length - 1)
             : _bRank;
-
-          const _a = calculations[a];
-          const _b = calculations[b];
 
           const topA_ = +_aVal / _a.outOf;
           const topB_ = +_bVal / _b.outOf;

@@ -110,22 +110,22 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
       )}
       <div>
         {selectedCalculationId && (
-          <DamageDistrubution
-            row={row}
-            selectedCalculationId={selectedCalculationId}
-          />
+          <>
+            <DamageDistrubution
+              row={row}
+              selectedCalculationId={selectedCalculationId}
+            />
+            <SubstatPriorityTable
+              row={row}
+              selectedCalculationId={selectedCalculationId}
+            />
+            <CalculationList
+              row={row}
+              calculations={_calculations.calculations}
+              selectedCalculationId={selectedCalculationId}
+            />
+          </>
         )}
-        {selectedCalculationId && (
-          <SubstatPriorityTable
-            row={row}
-            selectedCalculationId={selectedCalculationId}
-          />
-        )}
-        <CalculationList
-          row={row}
-          calculations={_calculations.calculations}
-          selectedCalculationId={selectedCalculationId}
-        />
       </div>
     </>
   );
