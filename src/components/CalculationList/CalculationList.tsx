@@ -217,6 +217,10 @@ export const CalculationList: React.FC<CalculationListProps> = ({
   //   [calculationIds]
   // );
 
+  if (compactList.length === 0) {
+    return <></>;
+  }
+
   const iconClassNames = cssJoin([
     "sort-direction-icon",
     !show ? "rotate-180deg" : "",
