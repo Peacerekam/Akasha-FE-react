@@ -1,0 +1,8 @@
+.theater-cell,
+.theater-cell > span {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}

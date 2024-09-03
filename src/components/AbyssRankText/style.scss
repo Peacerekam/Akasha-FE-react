@@ -1,0 +1,17 @@
+.abyss-star {
+  height: 16px;
+  width: 16px;
+}
+
+.abyss-separator {
+  height: 10px;
+  width: 10px;
+}
+
+.abyss-cell {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}

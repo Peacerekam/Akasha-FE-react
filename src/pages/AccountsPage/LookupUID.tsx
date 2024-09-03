@@ -20,20 +20,22 @@ import React, {
   useState,
 } from "react";
 
+import { AbyssRankText } from "../../components/AbyssRankText";
 import Achievevement from "../../assets/icons/Achievement.webp";
 import { BuildsColumns } from "../BuildsPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import FriendshipIcon from "../../assets/icons/Item_Companionship_EXP.png";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
 import { TableColumn } from "../../types/TableColumn";
+import { TheaterRankTextText } from "../../components/TheaterRankText";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
-import { abyssProgressToColor } from "./AccountsPage";
 import debounce from "lodash/debounce";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 export const LookupUID: React.FC = () => {
   const navigate = useNavigate();
   const { lastProfiles } = useContext(LastProfilesContext);
-  const { language } = useContext(TranslationContext);
+  const { language, translate } = useContext(TranslationContext);
 
   const [inputUID, setInputUID] = useState<string>("");
   const [lookupUID, setLookupUID] = useState<string>("");
@@ -120,10 +122,10 @@ export const LookupUID: React.FC = () => {
         },
       },
       {
-        name: "Adventure Rank",
+        name: "",
         sortable: true,
         sortField: "playerInfo.level",
-        width: "100px",
+        width: "50px",
         cell: (row) => {
           const adventureRank = row?.playerInfo.level || 0;
           return (
@@ -156,33 +158,62 @@ export const LookupUID: React.FC = () => {
           );
         },
       },
+      // {
+      //   name: "Characters",
+      //   sortable: false,
+      //   sortField: "ownedCharacters",
+      //   width: "80px",
+      //   cell: (row) => {
+      //     const ownedCharacters = row?.ownedCharacters || "";
+      //     return (
+      //       <div style={{ color: ownedCharacters?.length === 0 ? "gray" : "" }}>
+      //         {ownedCharacters?.length || "-"}
+      //       </div>
+      //     );
+      //   },
+      // },
       {
-        name: "Characters",
+        name: "",
         sortable: false,
-        sortField: "ownedCharacters",
+        sortField: "playerInfo.towerFloorIndex",
         width: "80px",
         cell: (row) => {
-          const ownedCharacters = row?.ownedCharacters || "";
-          return (
-            <div style={{ color: ownedCharacters?.length === 0 ? "gray" : "" }}>
-              {ownedCharacters?.length || "-"}
-            </div>
-          );
+          return <AbyssRankText row={row} />;
         },
       },
       {
-        name: "Spiral Abyss",
+        name: "",
         sortable: false,
-        sortField: "playerInfo.towerFloorIndex",
-        width: "70px",
+        sortField: "playerInfo.theater.stars",
+        width: "60px",
         cell: (row) => {
-          const floor = row?.playerInfo?.towerFloorIndex || "";
-          const chamber = row?.playerInfo?.towerLevelIndex || "";
+          return <TheaterRankTextText row={row} />;
+        },
+      },
+      {
+        name: "",
+        sortable: true,
+        sortField: "playerInfo.maxFriendshipCount",
+        width: "20px",
+        cell: (row) => {
+          const count = row?.playerInfo?.maxFriendshipCount || 0;
 
-          const abyssProgress = floor && chamber ? `${floor}-${chamber}` : "";
-          const color = abyssProgressToColor(floor, chamber)
-
-          return <div style={{ color }}>{abyssProgress}</div>;
+          return (
+            <span
+              className="abyss-cell"
+              title={
+                translate("Characters at maximum Friendship Level") +
+                ` - ${count}`
+              }
+            >
+              {count ? (
+                <img alt="F." width={16} height={16} src={FriendshipIcon} />
+              ) : (
+                ""
+              )}
+              {count || <span style={{ color: "gray" }}>-</span>}
+            </span>
+          );
         },
       },
       {
@@ -225,7 +256,7 @@ export const LookupUID: React.FC = () => {
       //   },
       // },
     ],
-    [lookupUID, language]
+    [lookupUID, language, translate]
   );
 
   const uidsQuery = useMemo(

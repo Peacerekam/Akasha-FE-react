@@ -14,42 +14,25 @@ import {
 } from "../../utils/helpers";
 import React, { useContext, useMemo } from "react";
 
+import { AbyssRankText } from "../../components/AbyssRankText";
 import Achievevement from "../../assets/icons/Achievement.webp";
 import { AdsComponentManager } from "../../components/AdsComponentManager";
 import { BuildsColumns } from "../BuildsPage";
 import DomainBackground from "../../assets/images/Grand_Narukami_Shrine_Concept_Art.webp";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import FriendshipIcon from "../../assets/icons/Item_Companionship_EXP.png";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { LookupUID } from "./LookupUID";
 import { TableColumn } from "../../types/TableColumn";
+import { TheaterRankTextText } from "../../components/TheaterRankText";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 
-export const abyssProgressToColor = (floor: number, chamber: number) => {
-  if (floor === 10) {
-    return "rgb(102, 163, 255)";
-  }
-  if (floor === 11) {
-    return "rgb(194, 102, 255)";
-  }
-  if (floor === 11 && chamber === 3) {
-    return "orange";
-  }
-  if (floor === 12) {
-    return "rgb(255, 217, 0)";
-  }
-  if (floor === 12 && chamber === 3) {
-    return "cyan";
-  }
-
-  return "gray";
-};
-
 export const AccountsPage: React.FC = () => {
   const navigate = useNavigate();
   const { hoverElement } = useContext(HoverElementContext);
-  const { language } = useContext(TranslationContext);
+  const { language, translate } = useContext(TranslationContext);
 
   const ACCOUNTS_COLUMNS: TableColumn<BuildsColumns>[] = useMemo(
     () => [
@@ -128,10 +111,10 @@ export const AccountsPage: React.FC = () => {
         },
       },
       {
-        name: "Adventure Rank",
+        name: "",
         sortable: true,
         sortField: "playerInfo.level",
-        width: "100px",
+        width: "50px",
         cell: (row) => {
           const adventureRank = row?.playerInfo.level || 0;
           return (
@@ -164,33 +147,62 @@ export const AccountsPage: React.FC = () => {
           );
         },
       },
+      // {
+      //   name: "Characters",
+      //   sortable: false,
+      //   sortField: "ownedCharacters",
+      //   width: "80px",
+      //   cell: (row) => {
+      //     const ownedCharacters = row?.ownedCharacters || "";
+      //     return (
+      //       <div style={{ color: ownedCharacters?.length === 0 ? "gray" : "" }}>
+      //         {ownedCharacters?.length || "-"}
+      //       </div>
+      //     );
+      //   },
+      // },
       {
-        name: "Characters",
+        name: "",
         sortable: false,
-        sortField: "ownedCharacters",
+        sortField: "playerInfo.towerFloorIndex",
         width: "80px",
         cell: (row) => {
-          const ownedCharacters = row?.ownedCharacters || "";
-          return (
-            <div style={{ color: ownedCharacters?.length === 0 ? "gray" : "" }}>
-              {ownedCharacters?.length || "-"}
-            </div>
-          );
+          return <AbyssRankText row={row} />;
         },
       },
       {
-        name: "Spiral Abyss",
+        name: "",
         sortable: false,
-        sortField: "playerInfo.towerFloorIndex",
-        width: "70px",
+        sortField: "playerInfo.theater.stars",
+        width: "55px",
         cell: (row) => {
-          const floor = row?.playerInfo?.towerFloorIndex || "";
-          const chamber = row?.playerInfo?.towerLevelIndex || "";
+          return <TheaterRankTextText row={row} />;
+        },
+      },
+      {
+        name: "",
+        sortable: true,
+        sortField: "playerInfo.maxFriendshipCount",
+        width: "35px",
+        cell: (row) => {
+          const count = row?.playerInfo?.maxFriendshipCount || 0;
 
-          const abyssProgress = floor && chamber ? `${floor}-${chamber}` : "";
-          const color = abyssProgressToColor(floor, chamber)
-
-          return <div style={{ color }}>{abyssProgress}</div>;
+          return (
+            <span
+              className="abyss-cell"
+              title={
+                translate("Characters at maximum Friendship Level") +
+                ` - ${count}`
+              }
+            >
+              {count ? (
+                <img alt="F." width={16} height={16} src={FriendshipIcon} />
+              ) : (
+                ""
+              )}
+              {count || <span style={{ color: "gray" }}>-</span>}
+            </span>
+          );
         },
       },
       {
@@ -233,7 +245,7 @@ export const AccountsPage: React.FC = () => {
       //   },
       // },
     ],
-    [language]
+    [language, translate]
   );
 
   return (
