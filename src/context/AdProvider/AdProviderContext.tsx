@@ -117,6 +117,9 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
   useEffect(() => {
     setAdsDisabled(false); // reset disable state -> used on patreon profiles for now
     handleReloadAds(); // reload ads -> used all pages
+    
+    _setContentWidth(1100);
+    _setPreventContentShrinking([]);
   }, [location.pathname]);
 
   const disableAdsForThisPage = () => setAdsDisabled(true);
