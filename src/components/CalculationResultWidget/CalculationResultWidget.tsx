@@ -12,6 +12,7 @@ import { ConfirmTooltip } from "../ConfirmTooltip";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { SettingsContext } from "../../context/SettingsProvider/SettingsProvider";
 import { Spinner } from "../Spinner";
+import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 // import { Timer } from "../Timer";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import { useNavigate } from "react-router-dom";
@@ -38,6 +39,7 @@ export const CalculationResultWidget: React.FC<
   const navigate = useNavigate();
 
   const { getTopRanking } = useContext(SettingsContext);
+  const { translate } = useContext(TranslationContext);
 
   const fetchCalcData = async (
     uid: string,
@@ -214,7 +216,7 @@ export const CalculationResultWidget: React.FC<
             <div key={`${name}-${weapon.name}`} className={weaponMatchClass}>
               <ConfirmTooltip
                 adjustOffsets
-                text={`Open ${calc.characterName} leaderboard?`}
+                text={`Open ${translate(calc.characterName)} leaderboard?`}
                 onConfirm={() => {
                   navigate(`/leaderboards/${id}/${variant?.name || ""}`);
                 }}
@@ -271,7 +273,7 @@ export const CalculationResultWidget: React.FC<
             </div>
           );
         }),
-    [resultsArray, getTopRanking]
+    [resultsArray, getTopRanking, translate]
   );
 
   // useEffect(() => {
