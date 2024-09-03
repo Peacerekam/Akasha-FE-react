@@ -8,6 +8,7 @@ import {
 } from "../../utils/helpers";
 import axios, { AxiosRequestConfig } from "axios";
 
+import { ConfirmTooltip } from "../ConfirmTooltip";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { SettingsContext } from "../../context/SettingsProvider/SettingsProvider";
 import { Spinner } from "../Spinner";
@@ -211,48 +212,62 @@ export const CalculationResultWidget: React.FC<
 
           return (
             <div key={`${name}-${weapon.name}`} className={weaponMatchClass}>
-              <a
-                title={`${weaponMatchString}\n${calc.name} - ${weapon.name} R${
-                  weapon?.refinement || 1
-                }`}
-                className={`highlight-tile ${
-                  noLinks ? "pointer-events-none" : ""
-                }`}
-                onClick={(event) => {
-                  event.preventDefault();
+              <ConfirmTooltip
+                adjustOffsets
+                text={`Open ${calc.characterName} leaderboard?`}
+                onConfirm={() => {
                   navigate(`/leaderboards/${id}/${variant?.name || ""}`);
                 }}
-                href={`/leaderboards/${id}/${variant?.name || ""}`}
               >
-                {/* <div className="highlight-tile-pill">{shortName}</div> */}
-                {variant?.displayName ? (
-                  <div className="highlight-tile-pill stacked">
-                    <div className="stacked-top">{short}</div>
-                    <div className="stacked-bottom">{variant?.displayName}</div>
-                  </div>
-                ) : (
-                  <div className="highlight-tile-pill">{shortName}</div>
-                )}
-                <div className="flex">
-                  <img
-                    alt="Icon"
-                    className="table-icon"
-                    src={calc.characterIcon}
-                  />
-                  <WeaponMiniDisplay
-                    icon={weapon.icon}
-                    refinement={weapon?.refinement || 1}
-                    // style={{ boxShadow: `0 0 0px 2px ${weaponColor}20` }}
-                  />
-                </div>
-                <div>{_top}</div>
-                <span>
-                  {ranking ?? "---"}
-                  <span className="opacity-5">
-                    /{toShortThousands(outOf) ?? "---"}
-                  </span>
-                </span>
-              </a>
+                <a
+                  title={`${weaponMatchString}\n${calc.name} - ${
+                    weapon.name
+                  } R${weapon?.refinement || 1}`}
+                  className={`highlight-tile ${
+                    noLinks ? "pointer-events-none" : ""
+                  }`}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    navigate(`?build=${calc.md5}`);
+                    // navigate(`/leaderboards/${id}/${variant?.name || ""}`);
+                  }}
+                  // href={`/profile/${uid}?build=${calc.md5}`}
+                  href={`/leaderboards/${id}/${variant?.name || ""}`}
+                >
+                  <>
+                    {/* <div className="highlight-tile-pill">{shortName}</div> */}
+                    {variant?.displayName ? (
+                      <div className="highlight-tile-pill stacked">
+                        <div className="stacked-top">{short}</div>
+                        <div className="stacked-bottom">
+                          {variant?.displayName}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="highlight-tile-pill">{shortName}</div>
+                    )}
+                    <div className="flex">
+                      <img
+                        alt="Icon"
+                        className="table-icon"
+                        src={calc.characterIcon}
+                      />
+                      <WeaponMiniDisplay
+                        icon={weapon.icon}
+                        refinement={weapon?.refinement || 1}
+                        // style={{ boxShadow: `0 0 0px 2px ${weaponColor}20` }}
+                      />
+                    </div>
+                    <div>{_top}</div>
+                    <span>
+                      {ranking ?? "---"}
+                      <span className="opacity-5">
+                        /{toShortThousands(outOf) ?? "---"}
+                      </span>
+                    </span>
+                  </>
+                </a>
+              </ConfirmTooltip>
             </div>
           );
         }),
@@ -281,11 +296,6 @@ export const CalculationResultWidget: React.FC<
       </>
     );
   }
-
-  // const handleFinishTimer = async () => {
-  //   if (uid) await fetchCalcData(uid);
-  //   setRetryTimer(0);
-  // };
 
   return (
     <>

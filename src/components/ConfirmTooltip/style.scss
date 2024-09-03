@@ -17,6 +17,12 @@
   padding-left: 10px;
   box-shadow: 0 0 50px 0px black;
 
+  &.flex-row-reverse {
+    flex-direction: row-reverse;
+    padding-left: 0;
+    padding-right: 10px;
+  }
+
   .confirm-tooltip-text {
     transform: skewX(-7deg);
     opacity: 0.85;
@@ -28,7 +34,7 @@
       text-transform: uppercase;
       padding: 10px;
       &:nth-child(1) {
-        color: lighten(rgb(144, 238, 144),15);
+        color: lighten(rgb(144, 238, 144), 15);
         &:hover {
           color: lime;
         }

@@ -17,6 +17,7 @@ type AdProviderContextType = {
   screenWidth: number;
   contentWidth: number;
   setContentWidth: (_: number) => void;
+  setPreventContentShrinking: (_: string, mode: "add" | "remove") => void;
 };
 
 const defaultValue = {
@@ -29,6 +30,7 @@ const defaultValue = {
   screenWidth: 1024,
   contentWidth: 1100,
   setContentWidth: () => {},
+  setPreventContentShrinking: () => {},
 } as AdProviderContextType;
 
 const AdProviderContext = createContext(defaultValue);
@@ -42,7 +44,10 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
   const [adsDisabled, setAdsDisabled] = useState(false);
   const [adProvider, setAdProvider] = useState<AdProviders>(null);
   const [width, setWidth] = useState<number>(window.innerWidth);
-  const [contentWidth, setContentWidth] = useState<number>(1100);
+  const [contentWidth, _setContentWidth] = useState<number>(1100);
+  const [_preventContentShrinking, _setPreventContentShrinking] = useState<
+    string[]
+  >([]);
   const [reloadAds, setReloadAds] = useState(false);
   const location = useLocation();
 
@@ -116,6 +121,28 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
 
   const disableAdsForThisPage = () => setAdsDisabled(true);
 
+  const setPreventContentShrinking = (key: string, mode: "add" | "remove") => {
+    _setPreventContentShrinking((arr) => {
+      const index = arr.indexOf(key);
+      if (mode === "remove" && index > -1) {
+        arr.splice(index, 1);
+      } else if (mode === "add" && index === -1) {
+        arr.push(key);
+      }
+      return arr;
+    });
+  };
+
+  const setContentWidth = (num: number) => {
+    const preventContentShrinking = _preventContentShrinking.length > 0;
+
+    if (preventContentShrinking && num <= contentWidth) {
+      return;
+    }
+
+    _setContentWidth(num);
+  };
+
   const value = {
     adProvider,
     setAdProvider,
@@ -126,6 +153,7 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
     isMobile,
     contentWidth,
     setContentWidth,
+    setPreventContentShrinking,
   };
 
   return (

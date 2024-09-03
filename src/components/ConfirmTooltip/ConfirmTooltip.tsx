@@ -4,6 +4,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { cssJoin } from "../../utils/helpers";
+import { getRelativeCoords } from "../CustomTable/Filters";
 
 type ConfirmTooltipProps = {
   text: string;
@@ -11,6 +13,7 @@ type ConfirmTooltipProps = {
   children: JSX.Element;
   className?: string;
   disabled?: boolean;
+  adjustOffsets?: boolean;
 };
 
 export const ConfirmTooltip: React.FC<ConfirmTooltipProps> = ({
@@ -19,11 +22,20 @@ export const ConfirmTooltip: React.FC<ConfirmTooltipProps> = ({
   children,
   className = "",
   disabled = false,
+  adjustOffsets = true,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [justify, setJustify] = useState<"left" | "right">("right");
 
-  const handleOpen = () => {
+  const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     if (disabled) return;
+
+    if (adjustOffsets) {
+      const offsets = getRelativeCoords(event);
+      const newJustify = offsets.offsetX > 0 ? "left" : "right";
+      setJustify(newJustify);
+    }
+
     setIsOpen(true);
   };
 
@@ -50,6 +62,8 @@ export const ConfirmTooltip: React.FC<ConfirmTooltipProps> = ({
     };
   }, []);
 
+  const justifyRight = justify === "right";
+
   return (
     <div>
       <div className={className} onClick={handleOpen}>
@@ -57,7 +71,13 @@ export const ConfirmTooltip: React.FC<ConfirmTooltipProps> = ({
       </div>
       {isOpen && (
         <div className="relative">
-          <div className="confirm-tooltip">
+          <div
+            className={cssJoin([
+              "confirm-tooltip",
+              justifyRight ? "flex-row-reverse" : "",
+            ])}
+            style={{ left: justifyRight ? 0 : "unset" }}
+          >
             <div className="confirm-tooltip-text">{text}</div>
             <div
               className="flex confirm-buttons"

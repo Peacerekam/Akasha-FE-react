@@ -58,6 +58,7 @@ import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 import { AdsComponentManager } from "../../components/AdsComponentManager";
 import { ArtifactColumns } from "../ArtifactsPage";
 import { ArtifactSettingsModal } from "./ArtifactSettingsModal";
+import { BuildPreview } from "./BuildPreview";
 import { BuildSettingsModal } from "./BuildSettingsModal";
 import { BuildsColumns } from "../BuildsPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -69,7 +70,7 @@ import { SettingsContext } from "../../context/SettingsProvider/SettingsProvider
 import { TableColumn } from "../../types/TableColumn";
 import { TitleContext } from "../../context/TitleProvider/TitleProviderContext";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
-import { fixCritValue } from '../../utils/substats';
+import { fixCritValue } from "../../utils/substats";
 import { getSessionIdFromCookie } from "../../utils/helpers";
 
 type TitleAndDescription = {
@@ -463,7 +464,6 @@ export const ProfilePage: React.FC = () => {
         sortable: true,
         sortField: "weapon.name",
         cell: (row) => {
-
           const refinement =
             (row.weapon.weaponInfo?.refinementLevel?.value ?? 0) + 1;
 
@@ -863,6 +863,15 @@ export const ProfilePage: React.FC = () => {
     return uidsToQuery(_uids);
   }, [JSON.stringify(relevantProfiles)]);
 
+  const hideSelector = useMemo(() => {
+    const profilesWithBuilds = relevantProfiles.filter((profile) => {
+      const _count = profile.buildsCount || 0;
+      return _count > 0;
+    });
+
+    return profilesWithBuilds.length < 3;
+  }, [uid, relevantProfiles]);
+
   if (responseData.error) {
     return (
       <div className="error-msg">
@@ -978,7 +987,7 @@ export const ProfilePage: React.FC = () => {
         )}
       </div>
 
-      {(relevantProfiles?.length || 0) > 1 ? (
+      {!hideSelector && (relevantProfiles?.length || 0) > 1 ? (
         <div className={contentBlockClassNames}>
           <StylizedContentBlock
             variant="gradient-reverse"
@@ -1049,6 +1058,7 @@ export const ProfilePage: React.FC = () => {
                     <CalculationResultWidgetExpander />
                   </div>
                 )}
+                {responseData?.account && <BuildPreview />}
               </div>
 
               <AdsComponentManager adType="Video" />

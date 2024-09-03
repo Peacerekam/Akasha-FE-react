@@ -153,7 +153,8 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   const [paramsProjection, setParamsProjection] = useState(false);
   const [unknownPage, setUnknownPage] = useState(false);
   const { updateTableHoverElement } = useContext(HoverElementContext);
-  const { adProvider, setContentWidth } = useContext(AdProviderContext);
+  const { adProvider, setContentWidth, setPreventContentShrinking } =
+    useContext(AdProviderContext);
   const { translate } = useContext(TranslationContext);
   const location = useLocation();
   const navigate = useNavigate();
@@ -326,8 +327,11 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     const isFlexibleContent = growContentOnExpandedRow; // && adProvider === "playwire";
 
     if (isFlexibleContent) {
-      const newContentWidth = expandedRows.length > 0 ? 1280 : 1100;
-      setContentWidth(newContentWidth);
+      const hasExpandedRows = expandedRows.length > 0;
+      setPreventContentShrinking(
+        "custom-table",
+        hasExpandedRows ? "add" : "remove"
+      );
     }
 
     return () => {
@@ -335,7 +339,17 @@ export const CustomTable: React.FC<CustomTableProps> = ({
         setContentWidth(1100);
       }
     };
-  }, [JSON.stringify(expandedRows), growContentOnExpandedRow, adProvider]);
+  }, [expandedRows.length, growContentOnExpandedRow, adProvider]);
+
+  useEffect(() => {
+    const isFlexibleContent = growContentOnExpandedRow; // && adProvider === "playwire";
+
+    if (isFlexibleContent) {
+      const hasExpandedRows = expandedRows.length > 0;
+      const newContentWidth = hasExpandedRows ? 1280 : 1100;
+      setContentWidth(newContentWidth);
+    }
+  }, [rows]);
 
   const handleFetch = async (abortController: AbortController) => {
     if (!fetchURL) return;

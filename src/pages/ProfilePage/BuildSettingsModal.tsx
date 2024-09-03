@@ -65,6 +65,10 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     abortController?: AbortController
   ) => {
     const _uid = encodeURIComponent(uid);
+    // @TODO: remake this into proper table with pagination later
+    // @TODO: remake this into proper table with pagination later
+    // @TODO: remake this into proper table with pagination later
+    // @TODO: remake this into proper table with pagination later
     const fetchURL = `/api/builds/${_uid}`;
     const opts: AxiosRequestConfig<any> = {
       signal: abortController?.signal,

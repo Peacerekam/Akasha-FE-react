@@ -14,21 +14,23 @@ export const CalculationResultWidgetExpander: React.FC<
   const { showcaseState, setShowcaseState } = useContext(SettingsContext);
 
   return (
-    <div
-      style={style}
-      className="showcase-expand-wrapper"
-      onClick={() => setShowcaseState((x) => !x)}
-      title={`${showcaseState ? "Fold" : "Expand"} rankings showcase`}
-    >
-      {/* expand */}
-      <FontAwesomeIcon
-        className={cssJoin([
-          "chevron-down-icon",
-          showcaseState ? "rotate-180deg" : "",
-        ])}
-        icon={faChevronDown}
-        size="1x"
-      />
+    <div className="showcase-expand-wrapper">
+      <div
+        style={style}
+        className="showcase-expand-button"
+        onClick={() => setShowcaseState((x) => !x)}
+        title={`${showcaseState ? "Fold" : "Expand"} rankings showcase`}
+      >
+        {/* expand */}
+        <FontAwesomeIcon
+          className={cssJoin([
+            "chevron-down-icon",
+            showcaseState ? "rotate-180deg" : "",
+          ])}
+          icon={faChevronDown}
+          size="1x"
+        />
+      </div>
     </div>
   );
 };

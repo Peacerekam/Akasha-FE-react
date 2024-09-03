@@ -118,7 +118,7 @@ $characterStats: "hp", "atk", "def", "hydrodmgbonus", "geodmgbonus",
 .custom-table-wrapper {
   // overflow: auto;
   &.disable-table {
-    table.custom-table {
+    .custom-table {
       overflow: unset;
       min-height: 64px;
       tbody {
@@ -152,13 +152,16 @@ $characterStats: "hp", "atk", "def", "hydrodmgbonus", "geodmgbonus",
     overflow-x: auto;
   }
 
-  table.custom-table {
+  .custom-table {
     width: 100%;
     text-align: left;
     // border: 0;
     font-size: 13px;
     position: relative;
-    background-color: rgba(black, 0.1);
+
+    &:is(table) {
+      background-color: rgba(black, 0.1);
+    }
 
     .expanded-row {
       width: 100%;
