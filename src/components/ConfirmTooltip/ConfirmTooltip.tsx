@@ -22,10 +22,10 @@ export const ConfirmTooltip: React.FC<ConfirmTooltipProps> = ({
   children,
   className = "",
   disabled = false,
-  adjustOffsets = true,
+  adjustOffsets = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [justify, setJustify] = useState<"left" | "right">("right");
+  const [justify, setJustify] = useState<"left" | "right">("left");
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     if (disabled) return;
