@@ -47,7 +47,7 @@ export const AbyssRankText: React.FC<AbyssRankTextProps> = ({ row }) => {
 
   return (
     <div style={{ color }} className="abyss-cell" title={title}>
-      {stars ? (
+      {stars !== undefined ? (
         <>
           <img
             className="abyss-star"
