@@ -50,6 +50,7 @@ const HYDRO_RV_LIST = {
   Furina: [CRate, CDMG, HP_, ER],
   Neuvillette: [CRate, CDMG, HP_, ER],
   Barbara: [CRate, CDMG, ATK_, HP_, ER],
+  Mualani: [CRate, CDMG, HP_, EM],
 };
 
 const CRYO_RV_LIST = {

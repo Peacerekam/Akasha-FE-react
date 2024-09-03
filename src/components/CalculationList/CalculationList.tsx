@@ -5,6 +5,7 @@ import React, { useContext, useMemo, useState } from "react";
 import { cssJoin, toShortThousands } from "../../utils/helpers";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IS_PRODUCATION } from "../../utils/maybeEnv";
 import { SettingsContext } from "../../context/SettingsProvider/SettingsProvider";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
@@ -66,7 +67,7 @@ export const CalculationList: React.FC<CalculationListProps> = ({
   const compactList = useMemo(
     () =>
       calculationIds
-        .filter((id: any) => !calculations[id]?.hidden)
+        .filter((id: any) => !IS_PRODUCATION || !calculations[id]?.hidden)
         .map((id: any, index) => {
           const calc: CalculationResponse = calculations[id];
           const {
