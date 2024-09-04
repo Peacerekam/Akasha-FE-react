@@ -17,6 +17,12 @@ $hardcoded-scale: 1;
       touch-action: none !important;
     }
   }
+  .build-preview {
+    .card-wrapper-height-fix {
+      position: sticky !important;
+      left: 0px !important;
+    }
+  }
 }
 
 .character-card-container {
