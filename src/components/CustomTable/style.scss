@@ -509,5 +509,10 @@ $characterStats: "hp", "atk", "def", "hydrodmgbonus", "geodmgbonus",
   @media (max-width: 1000px) {
     position: relative;
     left: calc(-50% + 50vw) !important;
+
+    .clickable ~ * {
+      position: relative;
+      left: calc(50% - 50vw + 10px) !important;
+    }
   }
 }
