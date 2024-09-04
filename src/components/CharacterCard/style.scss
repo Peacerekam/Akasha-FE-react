@@ -18,9 +18,9 @@ $hardcoded-scale: 1;
     }
   }
   .build-preview {
-    .card-wrapper-height-fix {
-      position: sticky !important;
-      left: 0px !important;
+    .card-wrapper {
+      position: absolute !important;
+      left: 0 !important;
     }
   }
 }
@@ -324,7 +324,21 @@ $hardcoded-scale: 1;
   }
 }
 
-.custom-table-wrapper .custom-table tbody {
+.build-preview {
+  .toggled-conf-btn {
+    background-color: #282e2e !important;
+    transition: background-color 0.6s;
+    color: orange;
+  }
+  .toggle-config {
+    background-color: #282e2e !important;
+    padding: 5px 15px 15px;
+    margin-top: 0 !important;
+    width: auto;
+  }
+}
+
+.custom-table-wrapper .custom-table {
   .toggled-conf-btn {
     background-color: #202525;
     transition: background-color 0.6s;
