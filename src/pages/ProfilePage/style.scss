@@ -554,6 +554,19 @@
     right: 0px;
     z-index: 999;
     font-size: 16px;
+    width: 10px;
+
+    @media (max-width: 1000px) {
+      left: calc(-20px + 95vw) !important;
+    }
+
+    @media (max-width: 600px) {
+      left: 90vw !important;
+    }
+
+    @media (max-width: 500px) {
+      left: 85vw !important;
+    }
 
     &:hover {
       color: red;

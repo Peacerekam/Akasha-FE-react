@@ -1,10 +1,11 @@
+import { FETCH_BUILDS_URL, cssJoin } from "../../utils/helpers";
 import { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 import { ExpandedRowBuilds } from "../../components/ExpandedRowBuilds";
+import PerfectScrollbar from "react-perfect-scrollbar";
 import axios from "axios";
-import { cssJoin } from "../../utils/helpers";
 
 export const BuildPreview: React.FC = () => {
   const location = useLocation();
@@ -24,22 +25,28 @@ export const BuildPreview: React.FC = () => {
 
     if (!md5 || !uid) return;
 
+    setContentWidth(1280); // instead of isLoading state
+
     const _uid = encodeURIComponent(uid);
     const _md5 = encodeURIComponent(md5);
 
-    const fetchURL = `/api/builds`;
-    const response = await axios.get(fetchURL, {
-      params: {
-        uid: _uid,
-        md5: _md5,
-      },
-    });
+    try {
+      const response = await axios.get(FETCH_BUILDS_URL, {
+        params: {
+          uid: _uid,
+          md5: _md5,
+        },
+      });
 
-    if (!response?.data?.data?.[0]) return;
-
-    setBuildData(response.data.data?.[0]);
-    setContentWidth(1280);
-    setPreventContentShrinking("showcase-details", "add");
+      if (response?.data?.data?.[0]) {
+        setBuildData(response.data.data?.[0]);
+        setContentWidth(1280);
+        setPreventContentShrinking("showcase-details", "add");
+      }
+    } catch (err) {
+      setContentWidth(1100);
+      console.log(err);
+    }
   };
 
   useEffect(() => {
@@ -66,18 +73,29 @@ export const BuildPreview: React.FC = () => {
         buildData ? "mt-10 build-preview profile-highlights" : "",
       ])}
     >
-      {buildData ? (
-        <div className="custom-table">
-          <div
-            className="close-build"
-            onClick={handleClose}
-            title="Close build card"
+      <div>
+        {buildData ? (
+          <PerfectScrollbar
+            options={{
+              suppressScrollY: true,
+              // suppressScrollX: false,
+            }}
           >
-            ×
-          </div>
-          <ExpandedRowBuilds row={buildData} isProfile={true} />
-        </div>
-      ) : null}
+            <div className="custom-table">
+              <div>
+                <div
+                  className="close-build"
+                  onClick={handleClose}
+                  title="Close build card"
+                >
+                  ×
+                </div>
+                <ExpandedRowBuilds row={buildData} isProfile={true} />
+              </div>
+            </div>
+          </PerfectScrollbar>
+        ) : null}
+      </div>
     </div>
   );
 };

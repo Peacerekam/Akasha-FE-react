@@ -153,11 +153,12 @@ $characterStats: "hp", "atk", "def", "hydrodmgbonus", "geodmgbonus",
   }
 
   .custom-table {
+    display: table; // for the haxy display showcase
     width: 100%;
     text-align: left;
-    // border: 0;
     font-size: 13px;
     position: relative;
+    // border: 0;
 
     &:is(table) {
       background-color: rgba(black, 0.1);
@@ -502,4 +503,11 @@ $characterStats: "hp", "atk", "def", "hydrodmgbonus", "geodmgbonus",
 
 .stat-icon-wrapper {
   margin-right: 3px;
+}
+
+.responsive-components {
+  @media (max-width: 1000px) {
+    position: relative;
+    left: calc(-50% + 50vw) !important;
+  }
 }

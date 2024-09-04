@@ -108,7 +108,7 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
       ) : (
         <ArtifactListCompact row={row} artifacts={artifacts} />
       )}
-      <div>
+      <div className="responsive-components">
         {selectedCalculationId && (
           <>
             <DamageDistrubution
