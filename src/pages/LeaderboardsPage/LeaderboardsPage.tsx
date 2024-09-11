@@ -35,7 +35,6 @@ import React, {
 import axios, { AxiosRequestConfig } from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
-// import { AdsComponentManager } from "../../components/AdsComponentManager";
 import { BuildsColumns } from "../BuildsPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
@@ -47,6 +46,8 @@ import { TitleContext } from "../../context/TitleProvider/TitleProviderContext";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import debounce from "lodash/debounce";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+
+// import { AdsComponentManager } from "../../components/AdsComponentManager";
 
 ChartJS.register(...registerables);
 
@@ -202,11 +203,7 @@ export const LeaderboardsPage: React.FC = () => {
               <span style={{ opacity: 0.25 }}>{characterName}</span>
             );
 
-          return (
-            <div className="table-icon-text-pair">
-              {_content}
-            </div>
-          );
+          return <div className="table-icon-text-pair">{_content}</div>;
         },
       },
       {
@@ -377,7 +374,12 @@ export const LeaderboardsPage: React.FC = () => {
   const [chartData, setChartData] = useState<any[]>([]);
 
   const uidsQuery = useMemo(
-    () => uidsToQuery(lastProfiles.map((a) => a.uid)),
+    () =>
+      uidsToQuery(
+        lastProfiles.map((a) =>
+          a.uid?.startsWith("@") ? a.uid.slice(1) : a.uid
+        )
+      ),
     [lastProfiles.length]
   );
 
