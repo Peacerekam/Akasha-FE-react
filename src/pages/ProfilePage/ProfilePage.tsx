@@ -1058,10 +1058,12 @@ export const ProfilePage: React.FC = () => {
                     <CalculationResultWidgetExpander />
                   </div>
                 )}
-                {responseData?.account && <BuildPreview />}
               </div>
 
               <AdsComponentManager adType="Video" />
+
+              {responseData?.account && <BuildPreview />}
+              
             </div>
             {responseData.account && (
               <CustomTable

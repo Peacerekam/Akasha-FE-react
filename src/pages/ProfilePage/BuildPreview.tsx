@@ -70,7 +70,7 @@ export const BuildPreview: React.FC = () => {
       style={{ display: buildData ? "block" : "none" }}
       className={cssJoin([
         "relative w-100 custom-table-wrapper",
-        buildData ? "mt-10 build-preview profile-highlights" : "",
+        buildData ? "mt-20 build-preview profile-highlights" : "",
       ])}
     >
       <div>
