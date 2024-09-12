@@ -515,5 +515,9 @@ $characterStats: "hp", "atk", "def", "hydrodmgbonus", "geodmgbonus",
       position: relative;
       left: calc(50% - 50vw + 10px) !important;
     }
+
+    > .expanded-row {
+      overflow: inherit !important;
+    }
   }
 }
