@@ -128,7 +128,7 @@ export const setGradientFromImage = (
   const outputColors = [];
 
   for (let i = 0; i <= steps; i++) {
-    const targetY = Math.floor(((canvasHeight - 1) / steps) * i);
+    const targetY = Math.floor((canvasHeight / steps - 1) * i);
     const targetX = 0;
     const pixel = targetY + targetX;
 

@@ -16,8 +16,6 @@ import {
   PageMessage,
 } from "./components";
 import { BASENAME, IS_PRODUCATION, MAINTENANCE_MODE } from "./utils/maybeEnv";
-// import CookieConsent from "react-cookie-consent";
-// import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import React, { useEffect } from "react";
 
@@ -25,7 +23,6 @@ import { AdProviderContextProvider } from "./context/AdProvider/AdProviderContex
 import { ContentWrapper } from "./components/ContentWrapper";
 import { HoverElementContextProvider } from "./context/HoverElement/HoverElementContext";
 import { LastProfilesContextProvider } from "./context/LastProfiles/LastProfilesContext";
-import { NotificationsContextProvider } from "./context/Notifications/NotificationsContext";
 import { PrivacyPolicyPage } from "./pages/PrivacyPolicy";
 import { SessionDataContextProvider } from "./context/SessionData/SessionDataContext";
 import { SettingsContextProvider } from "./context/SettingsProvider/SettingsProvider";
@@ -34,6 +31,9 @@ import { TitleContextProvider } from "./context/TitleProvider/TitleProviderConte
 import { TranslationContextProvider } from "./context/TranslationProvider/TranslationProviderContext";
 import axios from "axios";
 import { domainRedirect } from "./utils/helpers";
+
+// import CookieConsent from "react-cookie-consent";
+// import { QueryClient, QueryClientProvider } from "react-query";
 
 // @TODO: env variables later on...
 const urls = {
@@ -157,58 +157,58 @@ const App = () => {
     <LastProfilesContextProvider>
       <SessionDataContextProvider>
         <BrowserRouter basename={BASENAME}>
-          <NotificationsContextProvider>
-            <AdProviderContextProvider>
-              <TitleContextProvider>
-                <TranslationContextProvider>
-                  <div id="top-of-the-page">
-                    {/* <NotificationBar /> */}
-                    <Navbar />
-                  </div>
-                  <NavbarTabs />
+          {/* <NotificationsContextProvider> */}
+          <AdProviderContextProvider>
+            <TitleContextProvider>
+              <TranslationContextProvider>
+                <div id="top-of-the-page">
+                  {/* <NotificationBar /> */}
+                  <Navbar />
+                </div>
+                <NavbarTabs />
 
-                  <div className="flex-special-container mt-10">
+                <div className="flex-special-container mt-10">
+                  <AdsComponentManager
+                    adType="LeaderboardATF"
+                    dataAdSlot="6204085735"
+                    hybrid="desktop"
+                  />
+                </div>
+
+                <ContentWrapper>
+                  <SettingsContextProvider>
+                    <HoverElementContextProvider>
+                      <Routes>
+                        {appRoutes.map((route) => {
+                          const { Element, path } = route;
+
+                          return (
+                            <Route
+                              key={path}
+                              path={path}
+                              element={<Element {...route?.props} />}
+                            />
+                          );
+                        })}
+                      </Routes>
+                    </HoverElementContextProvider>
+                  </SettingsContextProvider>
+
+                  <div className="flex-special-container">
                     <AdsComponentManager
-                      adType="LeaderboardATF"
+                      adType="LeaderboardBTF"
                       dataAdSlot="6204085735"
-                      hybrid="desktop"
+                      hybrid="mobile"
                     />
+                    <AdsComponentManager adType="RichMedia" />
                   </div>
+                </ContentWrapper>
 
-                  <ContentWrapper>
-                    <SettingsContextProvider>
-                      <HoverElementContextProvider>
-                        <Routes>
-                          {appRoutes.map((route) => {
-                            const { Element, path } = route;
-
-                            return (
-                              <Route
-                                key={path}
-                                path={path}
-                                element={<Element {...route?.props} />}
-                              />
-                            );
-                          })}
-                        </Routes>
-                      </HoverElementContextProvider>
-                    </SettingsContextProvider>
-
-                    <div className="flex-special-container">
-                      <AdsComponentManager
-                        adType="LeaderboardBTF"
-                        dataAdSlot="6204085735"
-                        hybrid="mobile"
-                      />
-                      <AdsComponentManager adType="RichMedia" />
-                    </div>
-                  </ContentWrapper>
-
-                  <Footer />
-                </TranslationContextProvider>
-              </TitleContextProvider>
-            </AdProviderContextProvider>
-          </NotificationsContextProvider>
+                <Footer />
+              </TranslationContextProvider>
+            </TitleContextProvider>
+          </AdProviderContextProvider>
+          {/* </NotificationsContextProvider> */}
         </BrowserRouter>
       </SessionDataContextProvider>
     </LastProfilesContextProvider>

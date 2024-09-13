@@ -2,7 +2,6 @@ import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { LookupUID } from "../AccountsPage/LookupUID";
 import { NewsDisplay } from "./NewsDisplay";
-import { NotificationBar } from "../../components";
 import React from "react";
 import { StylizedContentBlock } from "../../components/StylizedContentBlock";
 import { faHashtag } from "@fortawesome/free-solid-svg-icons";
@@ -26,11 +25,11 @@ export const DashboardPage: React.FC = () => {
   return (
     <div className="flex">
       <div className="content-block w-100" id="content-container">
-        <NotificationBar />
+        {/* <NotificationBar /> */}
         <StylizedContentBlock overrideImage={DomainBackground} />
         <div className="relative">
           <LookupUID />
-          
+
           <div className="block-highlight news-section">
             {newsHeader}
             <NewsDisplay />
