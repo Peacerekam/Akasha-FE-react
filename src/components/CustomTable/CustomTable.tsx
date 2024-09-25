@@ -67,6 +67,7 @@ export type FetchParams = {
   uids?: string;
   p?: string;
   fromId?: string;
+  li?: number | string;
 };
 
 const getFixedSortKey = (key: string, fetchURL?: string | null) => {
@@ -168,6 +169,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     uids: "",
     p: "",
     fromId: "",
+    li: "",
   };
   const [params, setParams] = useState<FetchParams>(defaultParams);
 
@@ -190,7 +192,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
   const appendParamsToURL = () => {
     const tmp: string[] = [];
-    const ignoredParams = ["fromId", "page"];
+    const ignoredParams = ["fromId", "page", "li"];
     for (const key of Object.keys(params)) {
       const value = (params as any)?.[key];
 

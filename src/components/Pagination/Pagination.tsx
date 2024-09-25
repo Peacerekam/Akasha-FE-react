@@ -80,7 +80,6 @@ export const Pagination: React.FC<PaginationProps> = ({
     if (!setParams || isDataLoading) return;
 
     const nextValue = accessFieldByString(lastItem, sort);
-    // const smallerNextValue = isNaN(+nextValue) ? nextValue : (+nextValue).toFixed(2);
 
     const prefix = order === -1 ? "lt" : "gt";
     const p = nextValue !== "" ? `${prefix}|${nextValue || 0}` : "";
@@ -90,11 +89,14 @@ export const Pagination: React.FC<PaginationProps> = ({
       setUnknownPage(false);
     }
 
+    const lastIndex = "" + accessFieldByString(lastItem, "index");
+
     setParams((prev: FetchParams) => ({
       ...prev,
       page: p ? prev.page + 1 : 1,
       p,
       fromId: lastItem?._id,
+      li: lastIndex,
     }));
   };
 
@@ -112,11 +114,14 @@ export const Pagination: React.FC<PaginationProps> = ({
       setUnknownPage(false);
     }
 
+    const lastIndex = "" + accessFieldByString(firstItem, "index");
+
     setParams((prev: FetchParams) => ({
       ...prev,
       page: Math.max(1, prev.page - 1),
       p,
       fromId: firstItem?._id,
+      li: lastIndex,
     }));
   };
 
@@ -133,6 +138,7 @@ export const Pagination: React.FC<PaginationProps> = ({
       page: 1,
       p: "",
       fromId: "",
+      li: "",
     }));
   };
 
@@ -152,6 +158,7 @@ export const Pagination: React.FC<PaginationProps> = ({
       page: lastPage,
       p,
       fromId: "",
+      li: "",
     }));
   };
 
@@ -235,11 +242,13 @@ export const Pagination: React.FC<PaginationProps> = ({
 
   // if (totalRows === 0) return null;
 
-  const to =
-    totalRows !== 0
-      ? Math.min(pageNumber * pageSize, totalRows)
-      : Math.max(pageNumber * pageSize, totalRows);
-  const from = Math.max(to - pageSize + 1, 1);
+  const _to = pageNumber * pageSize;
+  const _mathFunc = totalRows !== 0 ? Math.min : Math.max;
+
+  const to = unknownPage ? _mathFunc(_to, totalRows) : lastItem?.index;
+  const from = unknownPage
+    ? Math.max(to - pageSize + 1, 1)
+    : firstItem?.index;
 
   const handleSkipToValue = (value: number, dir?: "<" | ">") => {
     if (!setParams || !setHideIndexColumn || !setUnknownPage) return;
@@ -372,7 +381,9 @@ export const Pagination: React.FC<PaginationProps> = ({
               displayPageRange
             ) : (
               <span className="relative button-wrapper">
-                <button style={{ cursor: "default" }}>{unknownPage ? "??" : pageNumber}</button>
+                <button style={{ cursor: "default" }}>
+                  {unknownPage ? "??" : pageNumber}
+                </button>
               </span>
             )}
 

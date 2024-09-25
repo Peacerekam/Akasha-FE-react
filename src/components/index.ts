@@ -26,6 +26,7 @@ export * from "./HelpBox";
 export * from "./AdsComponent";
 export * from "./PageMessage";
 export * from "./ARBadge";
+export * from "./RowIndex";
 export * from "./RegionBadge";
 export * from "./FancyBuildBorder";
 export * from "./AdsComponent";

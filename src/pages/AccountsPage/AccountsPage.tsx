@@ -6,6 +6,7 @@ import {
   HelpBox,
   LastUpdated,
   RegionBadge,
+  RowIndex,
   StylizedContentBlock,
 } from "../../components";
 import {
@@ -40,7 +41,7 @@ export const AccountsPage: React.FC = () => {
         name: "#",
         width: "0px",
         cell: (row) => {
-          return <div>{row.index}</div>;
+          return <RowIndex index={row.index} />;
         },
       },
       {

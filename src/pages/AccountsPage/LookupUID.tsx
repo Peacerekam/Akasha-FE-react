@@ -5,6 +5,7 @@ import {
   CustomTable,
   LastUpdated,
   RegionBadge,
+  RowIndex,
 } from "../../components";
 import {
   FETCH_ACCOUNTS_FILTERS_URL,
@@ -51,7 +52,7 @@ export const LookupUID: React.FC = () => {
         name: "#",
         width: "0px",
         cell: (row) => {
-          return <div>{row.index}</div>;
+          return <RowIndex index={row.index} />;
         },
       },
       {

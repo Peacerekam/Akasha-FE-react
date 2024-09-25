@@ -5,6 +5,7 @@ import {
   HelpBox,
   RegionBadge,
   ReplaceRowDataOnHover,
+  RowIndex,
   StatIcon,
   StylizedContentBlock,
   WeaponMiniDisplay,
@@ -50,7 +51,7 @@ export const BuildsPage: React.FC = () => {
         name: "#",
         width: "0px",
         cell: (row) => {
-          return <div>{row.index}</div>;
+          return <RowIndex index={row.index} />;
         },
       },
       {

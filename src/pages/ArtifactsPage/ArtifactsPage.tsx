@@ -2,6 +2,7 @@ import {
   CustomTable,
   HelpBox,
   RegionBadge,
+  RowIndex,
   StatIcon,
   StylizedContentBlock,
 } from "../../components";
@@ -52,11 +53,7 @@ export const ArtifactsPage: React.FC = () => {
         name: "#",
         width: "0px",
         cell: (row) => {
-          return (
-            <div className="hide-on-custom">
-              <span>{row.index}</span>
-            </div>
-          );
+          return <RowIndex index={row.index} />;
         },
       },
       {

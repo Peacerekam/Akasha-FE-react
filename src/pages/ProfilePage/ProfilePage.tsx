@@ -10,6 +10,7 @@ import {
   GenshinUserCard,
   LastUpdated,
   ReplaceRowDataOnHover,
+  RowIndex,
   StatIcon,
   StylizedContentBlock,
   Timer,
@@ -264,7 +265,7 @@ export const ProfilePage: React.FC = () => {
         name: "#",
         width: "0px",
         cell: (row) => {
-          return <span>{row.index}</span>;
+          return <RowIndex index={row.index} />;
         },
       },
       {
@@ -389,7 +390,7 @@ export const ProfilePage: React.FC = () => {
         name: "#",
         width: "0px",
         cell: (row) => {
-          return <span>{row.index}</span>;
+          return <RowIndex index={row.index} />;
         },
       },
       {
@@ -1063,7 +1064,6 @@ export const ProfilePage: React.FC = () => {
               <AdsComponentManager adType="Video" />
 
               {responseData?.account && <BuildPreview />}
-              
             </div>
             {responseData.account && (
               <CustomTable
