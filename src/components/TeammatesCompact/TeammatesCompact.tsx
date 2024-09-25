@@ -56,7 +56,7 @@ const getBgColor = (teammate: CalculationTeammate) => {
 
   if (!teammate.character.rarity) {
     const col = elementColor || "gray";
-    return ["rgb(81, 81, 81)", col, `${col}85`];
+    return ["rgb(81, 81, 81)", col, `${col}85`, null, shadeColor(col, -30)];
 
     // const col =
     //   ELEMENT_TO_COLOR[teammate?.character?.element || ""] || "transparent";
@@ -205,6 +205,13 @@ export const TeammatesCompact: React.FC<TeammatesCompactProps> = ({
       innerElement = teammateIcon(teammate);
     } else {
       title = `Any ${teammate.character?.element} teammate`;
+      if (teammate.character?.artifactSet) {
+        const rawSetNum = teammate.character?.artifactSet?.slice(0, 3);
+        const rawSetName = teammate.character?.artifactSet?.slice(3);
+        const translatedArtifactSet = translate(rawSetName || "");
+        title += ` - ${rawSetNum}${translatedArtifactSet}`;
+      }
+
       innerElement = <StatIcon name={teammate.character?.element || ""} />;
       // innerElement = <div className="table-icon" />
     }
@@ -255,7 +262,7 @@ export const TeammatesCompact: React.FC<TeammatesCompactProps> = ({
             ) : (
               ""
             )}
-            {isNonFill && teammate.character?.artifactSet ? (
+            {teammate.character?.artifactSet ? (
               <div className="overlay-artifact-wrapper">
                 <img
                   alt=" "

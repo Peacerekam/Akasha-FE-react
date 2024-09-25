@@ -27,7 +27,8 @@ export const BuildPreview: React.FC = () => {
 
     setContentWidth(1280); // instead of isLoading state
 
-    const _uid = encodeURIComponent(uid);
+    const isCombined = uid.startsWith("@");
+    const _uid = encodeURIComponent(isCombined ? uid.slice(1) : uid);
     const _md5 = encodeURIComponent(md5);
 
     try {

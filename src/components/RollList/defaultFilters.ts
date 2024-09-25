@@ -97,6 +97,7 @@ const DENDRO_RV_LIST = {
   Yaoyao: [CRate, CDMG, ATK_, EM, ER],
   Collei: [CRate, CDMG, ATK_, EM, ER],
   Emilie: [CRate, CDMG, ATK_],
+  Kinich: [CRate, CDMG, ATK_],
 };
 
 const defaultRvFilter = [CRate, CDMG];
