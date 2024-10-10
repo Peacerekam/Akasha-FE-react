@@ -73,6 +73,7 @@ const GEO_RV_LIST = {
   "Arataki Itto": [CRate, CDMG, ER, DEF_, ATK_],
   Navia: [CRate, CDMG, ATK_, ER],
   Chiori: [CRate, CDMG, ATK_, DEF_],
+  Xilonen: [CRate, CDMG, ER, DEF_],
 };
 
 const ELECTRO_RV_LIST = {
