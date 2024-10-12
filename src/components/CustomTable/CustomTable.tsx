@@ -56,6 +56,7 @@ type CustomTableProps = {
   ignoreEmptyUidsArray?: boolean;
   alwaysShowIndexColumn?: boolean;
   growContentOnExpandedRow?: boolean;
+  warningMessage?: any;
 };
 
 export type FetchParams = {
@@ -143,6 +144,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   ignoreEmptyUidsArray = false,
   alwaysShowIndexColumn = false,
   growContentOnExpandedRow = false,
+  warningMessage,
 }) => {
   const [isFetchingPagination, setIsFetchingPagination] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -153,6 +155,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   const [hideIndexColumn, setHideIndexColumn] = useState(false);
   const [paramsProjection, setParamsProjection] = useState(false);
   const [unknownPage, setUnknownPage] = useState(false);
+  const [warningText, setWarningText] = useState(warningMessage);
   const { updateTableHoverElement } = useContext(HoverElementContext);
   const { adProvider, setContentWidth, setPreventContentShrinking } =
     useContext(AdProviderContext);
@@ -814,6 +817,15 @@ export const CustomTable: React.FC<CustomTableProps> = ({
       >
         <table className={tableClassNames} cellSpacing={0}>
           <thead>
+            {warningText && (
+              <tr
+                className="warning-message"
+                onClick={() => setWarningText(undefined)}
+              >
+                <td className="text">{warningMessage}</td>
+                <td className="backdrop"></td>
+              </tr>
+            )}
             <tr>{renderHeaders}</tr>
           </thead>
           <tbody>

@@ -4,14 +4,16 @@ type ARBadgeProps = {
 
 export const RowIndex: React.FC<ARBadgeProps> = ({ index }) => {
   if (index !== +index) {
+    const _index = ("" + index).slice(1);
+
     return (
       <div
         style={{
           color: "orange",
-          transform: `rotate(${+(Math.random() * 60).toFixed(0) - 30}deg)`,
+          transform: `rotate(${+(Math.random() * 20).toFixed(0) - 10}deg)`,
         }}
       >
-        {index}
+        {_index}
       </div>
     );
   }

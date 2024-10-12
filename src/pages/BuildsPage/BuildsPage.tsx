@@ -20,6 +20,7 @@ import {
   normalizeText,
   timeAgo,
 } from "../../utils/helpers";
+import { Link, useNavigate } from "react-router-dom";
 import React, { useContext, useMemo } from "react";
 
 import { AdsComponentManager } from "../../components/AdsComponentManager";
@@ -27,7 +28,6 @@ import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp"
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { TableColumn } from "../../types/TableColumn";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
-import { useNavigate } from "react-router-dom";
 
 export type BuildsColumns = {
   _id: string;
@@ -39,6 +39,19 @@ export type BuildsColumns = {
   constellation: number;
   [key: string]: any;
 };
+
+const BUILDS_PAGE_WARNING = (
+  <div>
+    <div>
+      This table does <b>NOT</b> show leaderboards or rankings!
+    </div>
+    <div>
+      Character rankings can be seen only on the <b>leaderboard pages</b> found{" "}
+      <Link to={"/leaderboards"}>here</Link>.
+    </div>
+    <div>Click anywhere around this message to uncover the builds table.</div>
+  </div>
+);
 
 export const BuildsPage: React.FC = () => {
   const { hoverElement } = useContext(HoverElementContext);
@@ -150,10 +163,9 @@ export const BuildsPage: React.FC = () => {
         sortable: false,
         sortField: "weapon.name",
         cell: (row) => {
-          
           const refinement =
             (row.weapon.weaponInfo?.refinementLevel?.value ?? 0) + 1;
-            
+
           return (
             <WeaponMiniDisplay icon={row.weapon.icon} refinement={refinement} />
           );
@@ -345,6 +357,7 @@ export const BuildsPage: React.FC = () => {
           defaultSort="critValue"
           expandableRows
           projectParamsToPath
+          warningMessage={BUILDS_PAGE_WARNING}
         />
       </div>
     </div>

@@ -45,6 +45,11 @@
   // background-image: var(--name-card-url);
   // background-size: cover;
 
+  .block-highlight {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   .profile-label {
     opacity: 0.5;
   }

@@ -104,7 +104,7 @@ export const ProfileSelector: React.FC<ProfileSelectorProps> = ({
                       <img
                         alt="pfp"
                         className="profile-pfp"
-                        src={profile?.enkaAvatar || displayAvatarLink}
+                        src={profile?.enkaAvatar || profile?.uidAvatar || displayAvatarLink}
                       />
                     </div>
                   ) : (
@@ -148,7 +148,9 @@ export const ProfileSelector: React.FC<ProfileSelectorProps> = ({
     <div className="flex">
       <div className="profile-selection-wrapper">
         {isFetchingProfiles && !state?.preventSpinner ? (
-          <Spinner />
+          <div className="block-highlight w-100">
+            <Spinner />
+          </div>
         ) : (
           profiles.map(renderLink)
         )}
