@@ -410,6 +410,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
         order: sortField === prev.sort ? prev.order * -1 : -1,
         page: 1,
         p: "",
+        li: "",
       }));
     };
 
