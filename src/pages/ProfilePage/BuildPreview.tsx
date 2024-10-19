@@ -15,38 +15,49 @@ export const BuildPreview: React.FC = () => {
     useContext(AdProviderContext);
 
   const [buildData, setBuildData] = useState<any>();
+  const [seed, setSeed] = useState("");
 
-  const fetchData = async () => {
-    if (!location.search) return;
-
+  const getParams = () => {
     const searchQuery = location.search;
     const query = new URLSearchParams(searchQuery);
     const md5 = query.get("build");
 
-    if (!md5 || !uid) return;
+    const _uid = encodeURIComponent(uid || "");
+    const _md5 = encodeURIComponent(md5 || "");
 
-    setContentWidth(1280); // instead of isLoading state
+    return {
+      uid: _uid,
+      md5: _md5,
+    };
+  };
 
-    const _uid = encodeURIComponent(uid);
-    const _md5 = encodeURIComponent(md5);
+  const fetchData = async () => {
+    if (!location.search) return;
 
     try {
+      const { md5, uid } = getParams();
+      if (!md5 || !uid) return;
+      setContentWidth(1280); // instead of isLoading state
+
       const response = await axios.get(FETCH_BUILDS_URL, {
-        params: {
-          uid: _uid,
-          md5: _md5,
-        },
+        params: { uid, md5, seed },
       });
 
-      if (response?.data?.data?.[0]) {
-        setBuildData(response.data.data?.[0]);
-        setContentWidth(1280);
-        setPreventContentShrinking("showcase-details", "add");
-      }
+      const data = response?.data?.data?.[0];
+      if (!data) return;
+
+      setBuildData(data);
+      setContentWidth(1280);
+      setPreventContentShrinking("showcase-details", "add");
     } catch (err) {
       setContentWidth(1100);
       console.log(err);
     }
+  };
+
+  const invalidateCache = async () => {
+    const q = Math.random().toString().slice(2);
+    setSeed(q)
   };
 
   useEffect(() => {
@@ -90,7 +101,11 @@ export const BuildPreview: React.FC = () => {
                 >
                   ×
                 </div>
-                <ExpandedRowBuilds row={buildData} isProfile={true} />
+                <ExpandedRowBuilds
+                  row={buildData}
+                  isProfile={true}
+                  invalidateCache={invalidateCache}
+                />
               </div>
             </div>
           </PerfectScrollbar>

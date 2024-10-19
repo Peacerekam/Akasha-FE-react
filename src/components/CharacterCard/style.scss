@@ -393,11 +393,29 @@ $hardcoded-scale: 1;
       cursor: pointer;
       color: white;
       padding: 10px;
+      position: relative;
+      
       &:hover {
         color: orange;
       }
       svg {
         margin-right: 10px;
+      }
+      &:disabled {
+        opacity: 0.5;
+        cursor: no-drop;
+        &:hover {
+          color: red;
+        }
+      }
+      span {
+        font-size: 11px;
+        opacity: 0.5;
+        margin-left: 10px;
+        left: 25px;
+        position: absolute;
+        top: -10px;
+        pointer-events: none !important;
       }
     }
     .card-configuration {

@@ -13,11 +13,13 @@ import { useParams } from "react-router-dom";
 type ExpandedRowBuildsProps = {
   row: any;
   isProfile: boolean;
+  invalidateCache?: () => void;
 };
 
 export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
   row,
   isProfile,
+  invalidateCache,
 }) => {
   const [isFetching, setIsFetching] = useState(true);
   const [disableAnimations, setDisableAnimations] = useState(false);
@@ -104,6 +106,7 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
           _calculations={_calculations}
           setSelectedCalculationId={setSelectedCalculationId}
           errorCallback={errorCallback}
+          invalidateCache={invalidateCache}
         />
       ) : (
         <ArtifactListCompact row={row} artifacts={artifacts} />

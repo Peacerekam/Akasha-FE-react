@@ -1,6 +1,6 @@
 @use "sass:map";
 
-$patreon-colors: cyan, lime, red, white, orange, fuchsia, gold, silver, brown;
+$patreon-colors: lime, red, white, orange, fuchsia, gold, silver, brown, cyan;
 
 .custom-table-wrapper {
   .custom-table {
@@ -66,8 +66,7 @@ $patreon-colors: cyan, lime, red, white, orange, fuchsia, gold, silver, brown;
 
 @keyframes patreonBoxShadowFadeIn {
   0% {
-    box-shadow: rgba(0, 255, 255, 0) 0 0 0 1px,
-      rgba(0, 0, 0, 0) 0px 3px 8px;
+    box-shadow: rgba(0, 255, 255, 0) 0 0 0 1px, rgba(0, 0, 0, 0) 0px 3px 8px;
   }
   100% {
     box-shadow: rgba(0, 255, 255, 0.341) 0 0 0 1px,

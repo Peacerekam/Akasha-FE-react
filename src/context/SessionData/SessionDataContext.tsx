@@ -7,6 +7,7 @@ type SessionProfile = {
   username?: string;
   profilePicture?: string;
   isPatreon?: boolean;
+  isEnkaPatreon?: boolean;
 };
 
 type SessionDataContextType = {
@@ -73,11 +74,12 @@ const SessionDataContextProvider: React.FC<{ children: any }> = ({
 
       if (data.username) {
         setIsAuthenticated(true);
-        const { username, profilePicture, isPatreon } = data;
+        const { username, profilePicture, isPatreon, isEnkaPatreon } = data;
         setProfileObject({
           username,
           profilePicture,
           isPatreon,
+          isEnkaPatreon
         });
       }
       setIsFetchingIfTrue(modifyIsFetching, false);

@@ -24,8 +24,10 @@ import {
   delay,
   getArtifactsInOrder,
   getGenderFromIcon,
+  getSessionIdFromCookie,
   toEnkaUrl,
 } from "../../utils/helpers";
+import axios, { AxiosRequestConfig } from "axios";
 import {
   faArrowDown,
   faArrowLeft,
@@ -40,9 +42,12 @@ import {
   faMinus,
   faPlus,
   faRefresh,
+  faUpload,
+  faX,
 } from "@fortawesome/free-solid-svg-icons";
 import { fixCritValue, roundToFixed } from "../../utils/substats";
 import html2canvas, { Options } from "html2canvas";
+import { useLocation, useParams } from "react-router-dom";
 
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 import { CompactArtifact } from "../ArtifactListCompact";
@@ -53,6 +58,7 @@ import { Radar } from "react-chartjs-2";
 import RarityStar from "../../assets/images/star.png";
 import ReactSelect from "react-select";
 import { RollList } from "../RollList";
+import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
 import { SettingsContext } from "../../context/SettingsProvider/SettingsProvider";
 import { Spinner } from "../Spinner";
 import { StatListCard } from "../StatListCard";
@@ -63,7 +69,6 @@ import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import { reactSelectCustomFilterTheme } from "../../utils/reactSelectCustomFilterTheme";
 import throttle from "lodash/throttle";
 import { useCardSettings } from "../../hooks/";
-import { useLocation } from "react-router-dom";
 
 // import imglyRemoveBackground, { Config } from "@imgly/background-removal";
 
@@ -77,6 +82,7 @@ type CharacterCardProps = {
   _calculations: any;
   setSelectedCalculationId?: any;
   errorCallback?: () => {};
+  invalidateCache?: () => void;
 };
 
 type Coords = {
@@ -164,6 +170,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   _calculations,
   setSelectedCalculationId,
   errorCallback,
+  invalidateCache,
 }) => {
   // states
   const [width, setWidth] = useState<number>(window.innerWidth);
@@ -171,6 +178,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const [imagePreviewBlob, setImagePreviewBlob] = useState<Blob>();
   const [filteredLeaderboards, setFilteredLeaderboards] = useState<any[]>([]);
   const [adaptiveColors, setAdaptiveColors] = useState<[string[], string[]]>();
+  const [customCardPic, setCustomCardPic] = useState(row?.customCardPic);
 
   // flags
   const [toggleConfigure, setToggleConfigure] = useState(false);
@@ -178,6 +186,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const [isLoadingImage, setIsLoadingImage] = useState(false);
   const [generating, setGenerating] = useState<OpenDownloadingFalse>(false);
   const [hasCustomBg, setHasCustomBg] = useState<VerticalOrHorizontal>("");
+  const [skipGradient, setSkipGradient] = useState(false);
+  const [picLoaded, setPicLoaded] = useState(false);
 
   // dragging related
   const [compressedImage, setCompressedImage] = useState<string>();
@@ -195,6 +205,14 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const { translate } = useContext(TranslationContext);
   const { contentWidth, isMobile } = useContext(AdProviderContext);
   const { metric, customRvFilter, getTopRanking } = useContext(SettingsContext);
+  const { profileObject, isAuthenticated, boundAccounts, isBound } =
+    useContext(SessionDataContext);
+
+  const { uid } = useParams();
+  const isAccountOwner = useMemo(
+    () => isBound(uid),
+    [uid, isAuthenticated, boundAccounts]
+  );
 
   const {
     displayBuildName,
@@ -209,12 +227,30 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     setPrivacyFlag,
   } = useCardSettings();
 
+  const [_adaptiveBgColor, _setAdaptiveBgColor] = useState(
+    !!row.adaptiveBg || !!adaptiveBgColor
+  );
+
+  useEffect(() => {
+    if (customCardPic || adaptiveBgColor === undefined) return;
+    _setAdaptiveBgColor(!!adaptiveBgColor);
+  }, [adaptiveBgColor]);
+
+  useEffect(() => {
+    if (!customCardPic) return;
+    _setAdaptiveBgColor(!!row.adaptiveBg || !!adaptiveBgColor);
+  }, [customCardPic]);
+
   const location = useLocation();
   const DEBUG_MODE = location.search?.includes("debug");
 
   const buildId = `${row.md5}`;
   const calculations = _calculations.calculations;
   const chartsData = _calculations.chartsData;
+  const showPicSaveButton =
+    profileObject?.isEnkaPatreon || profileObject?.isPatreon;
+
+  const cardPicUrl = `${axios.defaults.baseURL}/public/cardpics/${customCardPic}`;
 
   const canvasPixelDensity = 2; // helps when exporting at higher scale
   const maxScale = contentWidth ? contentWidth / 1280 : 1;
@@ -313,9 +349,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   // canvas re-painting
   useEffect(() => {
     if (!backgroundPictureRef.current) return;
-    if (adaptiveBgColor === undefined || namecardBg === undefined) return;
+    if (_adaptiveBgColor === undefined || namecardBg === undefined) return;
 
-    const paintMode = !uploadPictureInputRef?.current?.files?.[0] && "gacha";
+    const paintMode =
+      !customCardPic && !uploadPictureInputRef?.current?.files?.[0] && "gacha";
     const coldStart = true;
 
     const maybePaintImageToCanvas = async (i = 0) => {
@@ -334,6 +371,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           false
         );
         setCompressedImage(compressedImage || backgroundPictureRef.current.src);
+        setPicLoaded(!!uploadPictureInputRef?.current?.files?.[0]);
       } catch (err) {
         // second time's a charm
         await delay(10);
@@ -348,11 +386,14 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       setIsLoadingImage(false);
     });
   }, [
+    cardPicUrl,
+    customCardPic,
     backgroundPictureRef,
-    adaptiveBgColor,
+    _adaptiveBgColor,
     namecardBg,
     zoomLevel,
     compressedImage,
+    skipGradient,
   ]);
 
   const calculationIds = useMemo(
@@ -409,7 +450,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   }, [calculationIds]);
 
   const displayCharts = useCallback(
-    (chartData: any, calculationId: string) => {
+    (chartData: any, calculationId: string, calcOverride?: any) => {
       if (!chartData?.avgStats) return <></>;
 
       const {
@@ -490,8 +531,9 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       let percentagesArray = relevantStatNames.map((statName: string) => {
         const calcStat = calcStatVals(statName);
 
+        const relevantCalc = calcOverride || calculations[calculationId];
         const calculatedVal = calcStat.value(
-          calculations[calculationId]?.stats?.[calcStat.key]
+          relevantCalc?.stats?.[calcStat.key]
         );
 
         const calcStatPercentage = calculatedVal / chartData.avgStats[statName];
@@ -678,9 +720,41 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     [row, calculations, chartsData, filteredLeaderboards, generating, translate]
   );
 
+  const hasLeaderboardsColumn =
+    filteredLeaderboards.length > 0 && filteredLeaderboards[0] !== "hide";
+
+  /*
+  const fillerChart = () => {
+    const thisChartData = {
+      avgStats: {
+        atk: 2000,
+        critDamage: 1.5,
+        critRate: 0.75,
+        def: 650,
+        electroDamageBonus: 0.46,
+        elementalMastery: 200,
+        energyRecharge: 1.1,
+        healingBonus: 0,
+        maxHp: 15000,
+        physicalDamageBonus: 0.0010121457489878543,
+      },
+    };
+
+    // const row.stats needs to be translated to the other format
+    const characterStats = row;
+
+    return (
+      <div>
+        <div>{displayCharts(thisChartData, "", characterStats)}</div>
+      </div>
+    );
+  };
+  */
+
   const leaderboardHighlighs = useMemo(() => {
     return (
       <div className="card-leaderboards relative">
+        {/* {!hasLeaderboardsColumn && fillerChart()} */}
         {filteredLeaderboards.map((id: any) => {
           const calc = calculations[id];
           if (!calc) return <div key={id} />;
@@ -790,7 +864,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                 row={row}
                 canvasBgProps={{
                   backgroundImage: actualBgUrl,
-                  adaptiveBgColor,
+                  adaptiveBgColor: _adaptiveBgColor,
                   namecardBg,
                   adaptiveColors,
                   hardcodedScale,
@@ -807,7 +881,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     chartsData,
     namecardBg,
     simplifyColors,
-    adaptiveBgColor,
+    _adaptiveBgColor,
     customRvFilter[row.name]?.length,
     JSON.stringify(reorderedArtifacts),
     JSON.stringify(adaptiveColors),
@@ -963,7 +1037,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       characterCtx!.clearRect(0, 0, canvasWidth, canvasHeight);
 
       // Fill with gradient
-      characterCtx!.fillStyle = gradientMask;
+      characterCtx!.fillStyle = skipGradient ? "black" : gradientMask;
       characterCtx!.fillRect(0, 0, canvasWidth, canvasHeight);
 
       // get the top left position of the image
@@ -1020,7 +1094,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       characterCtx!.globalCompositeOperation = "source-in";
       characterCtx!.drawImage(characterImg, x, y, newWidth, newHeight);
 
-      if (!adaptiveBgColor) return;
+      if (!_adaptiveBgColor) return;
 
       const getRightEdgeData = async (i = 0) => {
         if (i > 5) {
@@ -1109,11 +1183,12 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       canvasBgRef,
       backgroundPictureRef,
       chartsData,
-      adaptiveBgColor,
+      _adaptiveBgColor,
       hasCustomBg,
       namecardBg,
       dragOffset,
       zoomLevel,
+      skipGradient,
     ]
   );
 
@@ -1148,7 +1223,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       charImgUrl ? "" : "disable-input",
     ]);
 
-    const paintMode = !uploadPictureInputRef?.current?.files?.[0] && "gacha";
+    const paintMode =
+      !customCardPic && !uploadPictureInputRef?.current?.files?.[0] && "gacha";
 
     const onContainerMouseDown = (event: MouseOrTouchEvent) => {
       if (!toggleConfigure) return;
@@ -1319,7 +1395,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             className={charImgUrl ? "" : "invalid-picture"}
             style={{ display: "none" }}
             ref={backgroundPictureRef}
-            src={charImgUrl}
+            src={customCardPic ? cardPicUrl : charImgUrl}
           />
         </div>
       </div>
@@ -1340,6 +1416,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     zoomLevel,
     dragOffset,
     toggleConfigure,
+    customCardPic,
   ]);
 
   const characterStats = useMemo(
@@ -1580,7 +1657,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   ]);
 
   const cardOverlayWrapper = useMemo(() => {
-    const paintMode = !uploadPictureInputRef?.current?.files?.[0] && "gacha";
+    const paintMode =
+      !customCardPic && !uploadPictureInputRef?.current?.files?.[0] && "gacha";
     const zoomIncrement = 1.05;
     const arrowSize = 2;
 
@@ -1731,6 +1809,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     uploadPictureInputRef,
     imgDimensions, // ?
     translate,
+    customCardPic,
   ]);
 
   const handleSelectChange = (option: any) => {
@@ -1841,9 +1920,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
   const charImgUrl = toEnkaUrl(chartsData?.assets?.gachaIcon);
 
-  const hasLeaderboardsColumn =
-    filteredLeaderboards.length > 0 && filteredLeaderboards[0] !== "hide";
-
   const cardContainerClassNames = cssJoin([
     "character-card-container",
     !namecardBg ? "elemental-bg-wrap" : "",
@@ -1858,6 +1934,63 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     "--element-color": elementalColor || noElementColor,
     "--element-color-2": `${elementalColor || noElementColor}70`,
   } as React.CSSProperties;
+
+  const handleCardPicUpload = async (clear: boolean = false) => {
+    if (!clear) setSkipGradient(true);
+    await delay(150);
+
+    canvasRef.current?.toBlob(async (blob) => {
+      if (!blob) return;
+      if (!clear) setSkipGradient(false);
+
+      const { uid, md5 } = row;
+      const _uid = encodeURIComponent(uid);
+      const _md5 = encodeURIComponent(md5);
+
+      const formData = new FormData();
+      formData.append("file", blob, "cardpic.png");
+
+      const postNamecardURL = `/api/user/cardpic/${_uid}/${_md5}`;
+
+      try {
+        let _formData: any = formData;
+        const opts: AxiosRequestConfig<any> = {
+          headers: {
+            Authorization: `Bearer ${getSessionIdFromCookie()}`,
+            "Content-Type": "multipart/form-data",
+          },
+          params: {
+            variant: _adaptiveBgColor ? "adaptiveBg" : "",
+          },
+        };
+
+        if (clear) {
+          _formData = null;
+          delete opts.headers?.["Content-Type"];
+        }
+
+        const response = await axios.post(postNamecardURL, _formData, opts);
+
+        setCustomCardPic(response?.data?.filename);
+        setPicLoaded(false);
+
+        // clear image from the input
+        if (uploadPictureInputRef.current) {
+          uploadPictureInputRef.current.value = "";
+        }
+
+        // clear the file from input element
+        if (clear) {
+          setCompressedImage("");
+        }
+
+        // invalidate cache
+        invalidateCache && invalidateCache();
+      } catch (err) {
+        console.log(err);
+      }
+    });
+  };
 
   return (
     <div
@@ -1954,7 +2087,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                     className="filter-icon hoverable-icon"
                     icon={faMagnifyingGlass}
                     size="1x"
-                    title="Open in new tab"
+                    title="Open"
                   />
                   Open
                 </button>
@@ -1973,7 +2106,40 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                 />
                 Configure Image
               </button>
+
+              {isAccountOwner && (
+                <>
+                  {picLoaded && (
+                    <button
+                      onClick={() => handleCardPicUpload(false)}
+                      title={showPicSaveButton ? "" : "Patreon only feature"}
+                      disabled={!showPicSaveButton}
+                    >
+                      <FontAwesomeIcon
+                        className="filter-icon hoverable-icon"
+                        icon={faUpload}
+                        size="1x"
+                        title="Upload"
+                      />
+                      Upload image to Akasha{" "}
+                      <span>Note: images must be SFW</span>
+                    </button>
+                  )}
+                  {showPicSaveButton && customCardPic && (
+                    <button onClick={() => handleCardPicUpload(true)}>
+                      <FontAwesomeIcon
+                        className="filter-icon hoverable-icon"
+                        icon={faX}
+                        size="1x"
+                        title="Delete"
+                      />
+                      Delete image from Akasha
+                    </button>
+                  )}
+                </>
+              )}
             </div>
+
             {toggleConfigure ? (
               <div className="expanded-row toggle-config">
                 <div
@@ -2042,10 +2208,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                     <input
                       id={`${buildId}-abg`}
                       type="checkbox"
-                      checked={adaptiveBgColor}
-                      onChange={(e: any) =>
-                        setAdaptiveBgColor(!!e.target.checked)
-                      }
+                      checked={_adaptiveBgColor}
+                      onChange={(e: any) => {
+                        _setAdaptiveBgColor(!!e.target.checked);
+                        setAdaptiveBgColor(!!e.target.checked);
+                      }}
                     />
                   </div>
                   <div>

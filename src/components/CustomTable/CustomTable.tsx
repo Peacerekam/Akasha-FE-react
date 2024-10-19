@@ -174,7 +174,47 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     fromId: "",
     li: "",
   };
+
   const [params, setParams] = useState<FetchParams>(defaultParams);
+  const [seed, setSeed] = useState("");
+
+  const invalidateCache = async () => {
+    const q = Math.random().toString().slice(2);
+    setSeed(q);
+
+    if (!fetchURL) return;
+
+    try {
+      const opts: AxiosRequestConfig<any> = {
+        params: {
+          ...params,
+          ...fetchParams,
+          seed,
+        },
+      };
+
+      const response = await axios.get(fetchURL, opts);
+      const { data } = response.data;
+
+      const newRows = rows.map((row) => {
+        const newDataIndex = data.findIndex(
+          (x: any) => x._id === row._id && !x.isExpandRow
+        );
+        const newData = newDataIndex > -1 ? data[newDataIndex] : {};
+        const isExpandRow = !!row.isExpandRow;
+
+        return {
+          ...row,
+          ...newData,
+          isExpandRow,
+        };
+      });
+
+      setRows(newRows);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   // @TODO: react-query
   // @FIX react-query
@@ -637,11 +677,15 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
       return (
         <>
-          <ExpandedRowBuilds row={row} isProfile={!!fetchParams.uid} />
+          <ExpandedRowBuilds
+            row={row}
+            isProfile={!!fetchParams.uid}
+            invalidateCache={invalidateCache}
+          />
         </>
       );
     },
-    [translate]
+    [translate, rows]
   );
 
   const shouldHighlightRows = useMemo(
@@ -670,12 +714,18 @@ export const CustomTable: React.FC<CustomTableProps> = ({
       // @TODO: patreon
       const patreonObj = row.owner?.patreon || row.patreon;
 
+      const isEnkaPatreon =
+        (row?.playerInfo?.enkaOwner?.profile?.level || 0) !== 0;
+
       const rowClassNames = cssJoin([
         expandableRows ? "pointer" : "",
-        shouldHighlightRows && !!patreonObj?.active ? "decorate-row" : "",
+        shouldHighlightRows && (!!patreonObj?.active || isEnkaPatreon)
+          ? "decorate-row"
+          : "",
         shouldHighlightRows && !!patreonObj?.active
           ? `patreon-${patreonObj?.color || "cyan"}` // default to cyan
           : "",
+        shouldHighlightRows && isEnkaPatreon ? "patreon-orange" : "",
         // {
         //   1: "decorate-row patreon-gold",
         //   2: "decorate-row patreon-white",
