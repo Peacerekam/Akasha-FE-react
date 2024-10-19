@@ -185,6 +185,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [isLoadingImage, setIsLoadingImage] = useState(false);
   const [generating, setGenerating] = useState<OpenDownloadingFalse>(false);
+  const [uploading, setUploading] = useState(false);
   const [hasCustomBg, setHasCustomBg] = useState<VerticalOrHorizontal>("");
   const [skipGradient, setSkipGradient] = useState(false);
   const [picLoaded, setPicLoaded] = useState(false);
@@ -1936,6 +1937,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   } as React.CSSProperties;
 
   const handleCardPicUpload = async (clear: boolean = false) => {
+    setUploading(true);
     if (!clear) setSkipGradient(true);
     await delay(150);
 
@@ -1973,6 +1975,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
         setCustomCardPic(response?.data?.filename);
         setPicLoaded(false);
+        setUploading(false);
 
         // clear image from the input
         if (uploadPictureInputRef.current) {
@@ -1988,6 +1991,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         invalidateCache && invalidateCache();
       } catch (err) {
         console.log(err);
+        setUploading(false);
       }
     });
   };
@@ -2109,33 +2113,44 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
               {isAccountOwner && (
                 <>
-                  {picLoaded && (
-                    <button
-                      onClick={() => handleCardPicUpload(false)}
-                      title={showPicSaveButton ? "" : "Patreon only feature"}
-                      disabled={!showPicSaveButton}
-                    >
-                      <FontAwesomeIcon
-                        className="filter-icon hoverable-icon"
-                        icon={faUpload}
-                        size="1x"
-                        title="Upload"
-                      />
-                      Upload image to Akasha{" "}
-                      <span>Note: images must be SFW</span>
-                    </button>
-                  )}
-                  {showPicSaveButton && customCardPic && (
-                    <button onClick={() => handleCardPicUpload(true)}>
-                      <FontAwesomeIcon
-                        className="filter-icon hoverable-icon"
-                        icon={faX}
-                        size="1x"
-                        title="Delete"
-                      />
-                      Delete image from Akasha
-                    </button>
-                  )}
+                  {picLoaded &&
+                    (uploading ? (
+                      <>
+                        <Spinner />
+                      </>
+                    ) : (
+                      <button
+                        onClick={() => handleCardPicUpload(false)}
+                        title={showPicSaveButton ? "" : "Patreon only feature"}
+                        disabled={!showPicSaveButton}
+                      >
+                        <FontAwesomeIcon
+                          className="filter-icon hoverable-icon"
+                          icon={faUpload}
+                          size="1x"
+                          title="Upload"
+                        />
+                        Upload image to Akasha{" "}
+                        <span>Note: images must be SFW</span>
+                      </button>
+                    ))}
+                  {showPicSaveButton &&
+                    customCardPic &&
+                    (uploading ? (
+                      <>
+                        <Spinner />
+                      </>
+                    ) : (
+                      <button onClick={() => handleCardPicUpload(true)}>
+                        <FontAwesomeIcon
+                          className="filter-icon hoverable-icon"
+                          icon={faX}
+                          size="1x"
+                          title="Delete"
+                        />
+                        Delete image from Akasha
+                      </button>
+                    ))}
                 </>
               )}
             </div>
