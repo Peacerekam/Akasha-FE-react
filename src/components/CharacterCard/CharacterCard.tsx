@@ -2111,14 +2111,12 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                 Configure Image
               </button>
 
-              {isAccountOwner && (
-                <>
-                  {picLoaded &&
-                    (uploading ? (
-                      <>
-                        <Spinner />
-                      </>
-                    ) : (
+              {isAccountOwner &&
+                (uploading ? (
+                  <Spinner />
+                ) : (
+                  <>
+                    {picLoaded && (
                       <button
                         onClick={() => handleCardPicUpload(false)}
                         title={showPicSaveButton ? "" : "Patreon only feature"}
@@ -2133,14 +2131,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                         Upload image to Akasha{" "}
                         <span>Note: images must be SFW</span>
                       </button>
-                    ))}
-                  {showPicSaveButton &&
-                    customCardPic &&
-                    (uploading ? (
-                      <>
-                        <Spinner />
-                      </>
-                    ) : (
+                    )}
+                    {showPicSaveButton && customCardPic && (
                       <button onClick={() => handleCardPicUpload(true)}>
                         <FontAwesomeIcon
                           className="filter-icon hoverable-icon"
@@ -2150,9 +2142,9 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                         />
                         Delete image from Akasha
                       </button>
-                    ))}
-                </>
-              )}
+                    )}
+                  </>
+                ))}
             </div>
 
             {toggleConfigure ? (
