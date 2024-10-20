@@ -714,8 +714,8 @@ export const CustomTable: React.FC<CustomTableProps> = ({
       // @TODO: patreon
       const patreonObj = row.owner?.patreon || row.patreon;
 
-      const isEnkaPatreon =
-        (row?.playerInfo?.enkaOwner?.profile?.level || 0) !== 0;
+      const enkaOwner = row?.playerInfo?.enkaOwner || row?.owner?.enkaOwner;
+      const isEnkaPatreon = (enkaOwner?.profile?.level || 0) !== 0;
 
       const rowClassNames = cssJoin([
         expandableRows ? "pointer" : "",
@@ -725,7 +725,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
         shouldHighlightRows && !!patreonObj?.active
           ? `patreon-${patreonObj?.color || "cyan"}` // default to cyan
           : "",
-        shouldHighlightRows && isEnkaPatreon ? "patreon-orange" : "",
+        shouldHighlightRows && isEnkaPatreon ? "patreon-royalblue" : "",
         // {
         //   1: "decorate-row patreon-gold",
         //   2: "decorate-row patreon-white",
