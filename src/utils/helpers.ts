@@ -40,7 +40,13 @@ export const _getEncodeURIComponents = (input: IHash): IHash => {
 };
 
 export const getSessionIdFromCookie = () => {
-  return document.cookie?.split("connect.sid=s%3A")?.[1]?.split(".")?.[0] ?? "";
+  if (!document.cookie) return "";
+  const toParam = new URLSearchParams(document.cookie.replace(/; /g, "&"));
+  const cookie = Object.fromEntries(toParam);
+  return cookie.akasha_session_id;
+
+  // old:
+  // return document.cookie?.split("connect.sid=s%3A")?.[1]?.split(".")?.[0] ?? "";
 };
 
 export const optsHeadersSessionID = () => {
