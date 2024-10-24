@@ -48,7 +48,7 @@ export const Footer: React.FC = () => {
             <img alt="Akasha" src={AkashaLogo} className="tilted-logo" />
             <span className="logo-text">
               Akasha System
-              <span className="annotation">Work still in progress</span>
+              <span className="annotation">Genshin Leaderboards</span>
             </span>
           </span>
           <a target="_blank" rel="noreferrer" href="https://enka.network/">

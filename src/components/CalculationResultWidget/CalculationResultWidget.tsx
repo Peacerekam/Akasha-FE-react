@@ -13,7 +13,6 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import { SettingsContext } from "../../context/SettingsProvider/SettingsProvider";
 import { Spinner } from "../Spinner";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
-// import { Timer } from "../Timer";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
 import { useNavigate } from "react-router-dom";
 
@@ -216,6 +215,7 @@ export const CalculationResultWidget: React.FC<
             <div key={`${name}-${weapon.name}`} className={weaponMatchClass}>
               <ConfirmTooltip
                 adjustOffsets
+                disabled={noLinks}
                 text={`Open ${translate(calc.characterName)} leaderboard?`}
                 onConfirm={() => {
                   navigate(`/leaderboards/${id}/${variant?.name || ""}`);
