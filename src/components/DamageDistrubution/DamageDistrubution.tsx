@@ -46,6 +46,7 @@ const isReaction = (str: string) => {
 
   return (
     str.includes("vape") ||
+    str.includes("vaporize") ||
     str.includes("melt") ||
     str.includes("spread") ||
     str.includes("aggr")

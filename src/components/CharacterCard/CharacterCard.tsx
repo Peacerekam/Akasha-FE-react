@@ -17,6 +17,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { STAT_NAMES, fixCritValue, roundToFixed } from "../../utils/substats";
 import { applyModalBodyStyle, getRelativeCoords } from "../CustomTable/Filters";
 import {
   ascensionToLevel,
@@ -25,6 +26,7 @@ import {
   getArtifactsInOrder,
   getGenderFromIcon,
   getSessionIdFromCookie,
+  isPercent,
   toEnkaUrl,
 } from "../../utils/helpers";
 import axios, { AxiosRequestConfig } from "axios";
@@ -45,7 +47,6 @@ import {
   faUpload,
   faX,
 } from "@fortawesome/free-solid-svg-icons";
-import { fixCritValue, roundToFixed } from "../../utils/substats";
 import html2canvas, { Options } from "html2canvas";
 import { useLocation, useParams } from "react-router-dom";
 
@@ -61,6 +62,7 @@ import { RollList } from "../RollList";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
 import { SettingsContext } from "../../context/SettingsProvider/SettingsProvider";
 import { Spinner } from "../Spinner";
+import { StatIcon } from "../StatIcon";
 import { StatListCard } from "../StatListCard";
 import { TalentDisplay } from "./TalentDisplay";
 import { TeammatesCompact } from "../TeammatesCompact";
@@ -1429,9 +1431,20 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     [row]
   );
 
-  const characterMiddle = useMemo(
-    () => (
-      <div>
+  const characterMiddle = useMemo(() => {
+    const baseAttack = chartsData?.weaponMetadata?.baseAttack || 0;
+    const mainstat = chartsData?.weaponMetadata?.mainstat;
+    const mainstatName = STAT_NAMES[mainstat?.name];
+    const isPercentage = isPercent(mainstatName);
+
+    const weaponName = translate(row.weapon.name);
+    const refinementValue =
+      (row.weapon.weaponInfo?.refinementLevel?.value ?? 0) + 1;
+
+    const statIconSize = 16;
+
+    return (
+      <div className="character-middle-fix">
         <div className="character-weapon relative">
           <div className="weapon-icon">
             <img alt="" src={row.weapon.icon} />
@@ -1442,11 +1455,19 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             </div>
           </div>
           <div className="weapon-data">
-            <div className="weapon-name">{translate(row.weapon.name)}</div>
-            <div className="weapon-stats">
-              <div className="weapon-refinement">
-                R{(row.weapon.weaponInfo?.refinementLevel?.value ?? 0) + 1}
+            <div className="weapon-name">{weaponName}</div>
+            <div className="weapon-stats lighter-color">
+              <div className="weapon-stat-with-icon">
+                <StatIcon sizeOverride={statIconSize} name="ATK" /> {baseAttack}
               </div>
+              <div className="weapon-stat-with-icon">
+                <StatIcon sizeOverride={statIconSize} name={mainstatName} />{" "}
+                {mainstat?.value}
+                {isPercentage ? "%" : ""}
+              </div>
+            </div>
+            <div className="weapon-stats">
+              <div className="weapon-refinement">R{refinementValue}</div>
               <div>
                 <span>
                   {translate("Lv.")} {row.weapon.weaponInfo.level}
@@ -1466,9 +1487,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         {characterStats}
         {/* <div className="card-leaderboards relative">{leaderboardHighlighs}</div> */}
       </div>
-    ),
-    [row, chartsData, translate]
-  );
+    );
+  }, [row, chartsData, translate]);
 
   const renderOptions = useCallback(
     (calcId: any) => {

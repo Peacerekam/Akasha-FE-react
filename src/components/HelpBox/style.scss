@@ -25,16 +25,21 @@
 .page-description-wrapper {
   margin: 10px;
   margin-bottom: 0;
-  
+
   .help-box-header {
     font-size: 30px;
     margin: 10px;
   }
   .help-box-p {
     margin: 5px 10px 10px 10px;
-    .stat-icon, .table-icon {
+    .stat-icon,
+    .table-icon {
       vertical-align: sub;
       margin: 0 3px;
+    }
+    .table-icon {
+      position: relative;
+      bottom: -2px;
     }
   }
   .hide-help-box {

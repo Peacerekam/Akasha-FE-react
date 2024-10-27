@@ -28,20 +28,20 @@ export const helpContentBuilds = (
           What weapons are popular on {getIconElement("Ayaka")} Ayaka?
         </div>
         <div className="list-element">
-          What artifact sets are most commonly used for {getIconElement("Yae")}{" "}
-          Yae Miko ?
+          What artifact sets are most commonly used on {getIconElement("Chiori")}{" "}
+          Chiori ?
         </div>
         <div className="list-element">
           How popular is
           {getIconElement("Shougun")} Raiden Shogun in comparison to{" "}
-          {getIconElement("Keqing")}
-          Keqing ?
+          {getIconElement("Clorinde")}
+          Clorinde ?
         </div>
         <div className="list-element">
           What is the highest
-          <StatIcon name="HP" />
-          HP on
-          {getIconElement("Zhongli")} Zhongli or <StatIcon name="Crit DMG" />
+          <StatIcon name="Crit Rate" />
+          Crit Rate on
+          {getIconElement("Kokomi")} Kokomi or <StatIcon name="Crit DMG" />
           Crit DMG on
           {getIconElement("Hutao")} Hu Tao anyone has ever reached?
         </div>

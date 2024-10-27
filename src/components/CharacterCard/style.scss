@@ -394,7 +394,7 @@ $hardcoded-scale: 1;
       color: white;
       padding: 10px;
       position: relative;
-      
+
       &:hover {
         color: orange;
       }
@@ -686,6 +686,9 @@ $hardcoded-scale: 1;
       margin-top: 5px * $hardcoded-scale;
       font-size: 16px * $hardcoded-scale;
       // width: fit-content;
+      .opacity-5 {
+        margin-left: 2px * $hardcoded-scale;
+      }
     }
     .character-friendship {
       margin-top: 5px * $hardcoded-scale;
@@ -1116,6 +1119,14 @@ $hardcoded-scale: 1;
       justify-content: center;
     }
   }
+
+  .character-middle-fix {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 385px * $hardcoded-scale;
+  }
+
   .character-middle {
     z-index: 2;
     @include shadow03();
@@ -1124,51 +1135,79 @@ $hardcoded-scale: 1;
 
     .character-stats-inside {
       margin-left: 20px * $hardcoded-scale;
+      margin-bottom: auto;
+      margin-top: auto;
       .table-stat-row {
         white-space: nowrap;
       }
     }
     .character-weapon {
-      margin-top: 15px * $hardcoded-scale;
-      margin-bottom: 15px * $hardcoded-scale;
+      margin-left: 20px * $hardcoded-scale;
       font-family: "GenshinFont";
-      font-size: 20px * $hardcoded-scale;
-      text-shadow: 0 0.08em 0.1em black, 0 0.1em 0.3em rgba(0, 0, 0, 0.4);
+      font-size: 16px * $hardcoded-scale; // used to be 20px
       z-index: 2;
-      display: flex;
-      justify-content: center;
-      gap: 10px * $hardcoded-scale;
       width: 100%;
+      display: flex;
+      gap: 10px * $hardcoded-scale;
+      min-height: 80px * $hardcoded-scale;
+      margin-top: auto;
 
       .weapon-name {
-        // margin-top: 10px * $hardcoded-scale;
-        // width: 180px * $hardcoded-scale;
-        max-width: 260px * $hardcoded-scale;
+        text-shadow: 0 0.08em 0.1em black, 0 0.1em 0.3em rgba(0, 0, 0, 0.4);
+        max-width: 300px * $hardcoded-scale;
+        margin-top: 5px * $hardcoded-scale;
       }
       .weapon-data {
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-end;
       }
       .weapon-stats {
-        margin-top: 5px * $hardcoded-scale;
+        margin-top: 4px * $hardcoded-scale;
         display: flex;
-        gap: 20px * $hardcoded-scale;
-        font-size: 16px * $hardcoded-scale;
+        font-size: 14px * $hardcoded-scale;
+        gap: 10px * $hardcoded-scale;
+
+        > div {
+          background-color: rgba(black, 0.4);
+          padding: 3px 6px;
+          border-radius: 5px;
+        }
+        &.lighter-color {
+          > div {
+            background-color: rgba(white, 0.15);
+          }
+        }
+        .weapon-stat-with-icon {
+          display: flex;
+          gap: 5px;
+          justify-content: center;
+          align-items: center;
+        }
+
+        .opacity-5 {
+          margin-left: 2px * $hardcoded-scale;
+        }
       }
       .weapon-icon {
         display: flex;
-        justify-content: center;
+        flex-direction: column;
         align-items: center;
+        justify-content: center;
+
         img {
           width: 75px * $hardcoded-scale;
           height: 75px * $hardcoded-scale;
+          bottom: -6px * $hardcoded-scale;
+          position: relative;
         }
+
         .weapon-rarity {
-          position: absolute;
+          position: relative;
           display: flex;
           flex-direction: row;
-          bottom: -4px * $hardcoded-scale;
+          bottom: 8px * $hardcoded-scale;
+
           img {
             width: 13px * $hardcoded-scale;
             height: 13px * $hardcoded-scale;
@@ -1281,6 +1320,10 @@ $hardcoded-scale: 1;
 
     > div {
       text-shadow: 0 0.08em 0.1em black, 0 0.1em 0.3em rgba(0, 0, 0, 0.4);
+    }
+
+    .opacity-5 {
+      margin-left: 2px * $hardcoded-scale;
     }
 
     .under-chart-badges {
