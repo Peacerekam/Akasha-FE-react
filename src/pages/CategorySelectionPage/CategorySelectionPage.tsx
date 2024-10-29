@@ -14,10 +14,12 @@ import {
 import React, { useContext, useMemo } from "react";
 
 import { AdsComponentManager } from "../../components/AdsComponentManager";
-import DomainBackground from "../../assets/images/Depths_of_Mt._Yougou_Concept_Art.webp";
+import DomainBackground from "../../assets/images/Grand_Narukami_Shrine_Concept_Art.webp";
 import { TableColumn } from "../../types/TableColumn";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import { useNavigate } from "react-router-dom";
+
+// import DomainBackground from "../../assets/images/Depths_of_Mt._Yougou_Concept_Art.webp";
 
 export type TransformedCategories = {
   characterName: string;
@@ -105,7 +107,10 @@ export const CategorySelectionPage: React.FC = () => {
           const isNiche = row.label === "niche";
 
           return (
-            <div className="flex nowrap" style={{ justifyContent: "space-between" }}>
+            <div
+              className="flex nowrap"
+              style={{ justifyContent: "space-between" }}
+            >
               <div className="table-icon-text-pair">
                 <StatIcon name={element} />
                 <img
@@ -139,7 +144,9 @@ export const CategorySelectionPage: React.FC = () => {
                     </div>
                   )}
                   {lbName}{" "}
-                  <span style={{ color: "gray", fontSize: 11, margin: '0px 10px' }}>
+                  <span
+                    style={{ color: "gray", fontSize: 11, margin: "0px 10px" }}
+                  >
                     {translate(row?.characterName)}
                   </span>
                 </a>

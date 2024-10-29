@@ -336,6 +336,17 @@ $hardcoded-scale: 1;
     margin-top: 0 !important;
     width: auto;
   }
+
+  $bg-0: #2c3333;
+  $default-bg: rgba(0, 0, 0, 0.3);
+  $faded-bg-2: darken($bg-0, 5);
+  background: linear-gradient(
+    0deg,
+    $default-bg 0%,
+    $faded-bg-2 180px,
+    $faded-bg-2 calc(100% - 400px),
+    $default-bg 100%
+  ) !important;
 }
 
 .custom-table-wrapper .custom-table {

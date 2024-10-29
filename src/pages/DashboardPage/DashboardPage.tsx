@@ -1,4 +1,6 @@
-import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
+// import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
+
+import DomainBackground from "../../assets/images/Grand_Narukami_Shrine_Concept_Art.webp";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { LookupUID } from "../AccountsPage/LookupUID";
 import { NewsDisplay } from "./NewsDisplay";

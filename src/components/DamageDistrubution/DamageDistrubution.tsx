@@ -100,8 +100,8 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
 
     const indexOfLargestValue = toHighlight.additional.reduce(
       (max: number, curr: Additional, currIndex: number, arr: Additional[]) => {
-        const totalValue_A = arr[max].value * (arr[max].quantity || 1);
-        const totalValue_B = curr.value * (curr.quantity || 1);
+        const totalValue_A = arr[max].value * (arr[max].quantity ?? 1);
+        const totalValue_B = curr.value * (curr.quantity ?? 1);
         return totalValue_B > totalValue_A ? currIndex : max;
       },
       0
@@ -163,14 +163,14 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
     const total =
       timeIndex > -1
         ? instances.reduce((acc, val) => {
-            return acc + val.value * (val?.quantity || 1);
+            return acc + val.value * (val?.quantity ?? 1);
           }, 0)
         : damageData.result;
 
     const val = highlighted.value;
-    const totalVal = val * (highlighted.quantity || 1);
+    const totalVal = val * (highlighted.quantity ?? 1);
     const _p = (totalVal / total) * 100;
-    const _quantity = roundToFixed(highlighted?.quantity || 1, 2);
+    const _quantity = roundToFixed(highlighted?.quantity ?? 1, 2);
 
     return (
       <div className="highlighted-damage-source">
@@ -229,17 +229,18 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
       <>
         <div className="damage-distribution-container">
           {instances.map((el, i) => {
-            const val = el.value * (el.quantity || 1);
+            const val = el.value * (el.quantity ?? 1);
             let _p = (val / total) * 100;
 
             if (_p < 0) _p = Math.abs(_p);
             if (_p < 2) _p = 2;
 
             // const displayValue = +val.toFixed(0);
-            const _quantity = roundToFixed(el?.quantity || 1, 2);
+            const _quantity = roundToFixed(el?.quantity ?? 1, 2);
             const _title =
-              (el?.quantity ? `${_quantity}x ${el.name}` : el.name) +
-              ` = ${roundToFixed(val, 2)}`;
+              (el?.quantity || el.quantity === 0
+                ? `${_quantity}x ${el.name}`
+                : el.name) + ` = ${roundToFixed(val, 2)}`;
 
             const _MAP = isReaction(el.name) ? VAPE_COLORS_MAP : COLORS_MAP;
 
@@ -292,7 +293,7 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
     const total =
       timeIndex > -1
         ? instances.reduce((acc, val) => {
-            return acc + val.value * (val?.quantity || 1);
+            return acc + val.value * (val?.quantity ?? 1);
           }, 0)
         : damageData.result;
 
@@ -308,10 +309,11 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
 
           const nextValue = instances[i + 1]?.value;
           const displayValue = roundToFixed(val, 0);
-          const _quantity = roundToFixed(el?.quantity || 1, 2);
-          const _title = el.quantity
-            ? `${_quantity}x ${el.name} = ${roundToFixed(val, 2)}`
-            : `${el.name} = ${roundToFixed(val, 2)}`;
+          const _quantity = roundToFixed(el?.quantity ?? 1, 2);
+          const _title =
+            _quantity || _quantity === 0
+              ? `${_quantity}x ${el.name} = ${_quantity === 0 ? 0 : roundToFixed(val, 2)}`
+              : `${el.name} = ${roundToFixed(val, 2)}`;
 
           const classNames = cssJoin([
             "pointer",
@@ -333,7 +335,7 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
               className={classNames}
             >
               <span tabIndex={0} style={_style}>
-                {(el?.quantity || 1) !== 1 ? `${_quantity}×` : ""}
+                {(el?.quantity ?? 1) !== 1 ? `${_quantity}×` : ""}
                 {Math.abs(displayValue)}
               </span>
               {nextValue !== undefined && (

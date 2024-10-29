@@ -737,7 +737,7 @@ export const LeaderboardsPage: React.FC = () => {
         >
           {/* <NotificationBar /> */}
           <StylizedContentBlock
-            variant="gradient"
+            variant="gradient-low-height"
             revealCondition={!!calculationInfo}
             overrideImage={blockBackgroundImage}
           />

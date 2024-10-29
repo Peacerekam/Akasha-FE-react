@@ -111,6 +111,7 @@ export const allRvFilters: Record<string, string[]> = {
   ...GEO_RV_LIST,
   ...ELECTRO_RV_LIST,
   ...DENDRO_RV_LIST,
+  Traveler: [CRate, CDMG, ER, ATK_], // Traveler can have different RV filter depending on the element?
 };
 
 export const getDefaultRvFilters = (character: string) => {

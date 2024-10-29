@@ -3,7 +3,10 @@ import "./style.scss";
 import { cssJoin } from "../../utils/helpers";
 import { useMemo } from "react";
 
-type StylizedBlockTypes = "gradient" | "gradient-reverse";
+type StylizedBlockTypes =
+  | "gradient"
+  | "gradient-reverse"
+  | "gradient-low-height";
 
 type StylizedContentBlockProps = {
   variant?: StylizedBlockTypes;

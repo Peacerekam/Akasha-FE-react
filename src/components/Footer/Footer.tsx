@@ -4,10 +4,11 @@ import React, { useContext } from "react";
 
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 import AkashaLogo from "../../assets/images/favicon.svg";
-import DomainBackground from "../../assets/images/Grand_Narukami_Shrine_Concept_Art.webp";
 import { Link } from "react-router-dom";
 import PoweredByEnka from "../../assets/images/enka.png";
-import { StylizedContentBlock } from "../StylizedContentBlock";
+
+// import DomainBackground from "../../assets/images/Grand_Narukami_Shrine_Concept_Art.webp";
+// import { StylizedContentBlock } from "../StylizedContentBlock";
 
 export const Footer: React.FC = () => {
   const { adProvider } = useContext(AdProviderContext);
@@ -42,7 +43,7 @@ export const Footer: React.FC = () => {
   return (
     <div className="footer-wrapper">
       <div className="footer">
-        <StylizedContentBlock overrideImage={DomainBackground} />
+        {/* <StylizedContentBlock overrideImage={DomainBackground} /> */}
         <div className="footer-main">
           <span style={{ cursor: "default", paddingLeft: 30 }}>
             <img alt="Akasha" src={AkashaLogo} className="tilted-logo" />

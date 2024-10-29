@@ -300,11 +300,33 @@ $characterStats: "hp", "atk", "def", "hydrodmgbonus", "geodmgbonus",
 
     tbody {
       tr {
+        $bg-0: darken(#2c3333, 5);
+        $lighten-bg: lighten($bg-0, 3);
+        $darker-tr-color: rgba(0, 0, 0, 0.212);
+
         &:not(.expanded-tr):not(.dark-overlay-table-only):hover {
           background-color: rgba(0, 0, 0, 0.333);
         }
         &:nth-child(2n) {
-          background-color: rgba(0, 0, 0, 0.212);
+          background-color: $darker-tr-color;
+        }
+        &.expanded-tr {
+          background: linear-gradient(
+            0deg,
+            transparent 0%,
+            $lighten-bg 180px,
+            $lighten-bg calc(100% - 400px),
+            transparent 100%
+          );
+          &:nth-child(2n) {
+            background: linear-gradient(
+              0deg,
+              $darker-tr-color 0%,
+              $bg-0 180px,
+              $bg-0 calc(100% - 400px),
+              $darker-tr-color 100%
+            );
+          }
         }
       }
     }
