@@ -741,122 +741,119 @@ export const LeaderboardsPage: React.FC = () => {
             revealCondition={!!calculationInfo}
             overrideImage={blockBackgroundImage}
           />
-          <div
-            className="relative block-highlight"
-            style={{
-              whiteSpace: "break-spaces",
-              margin: "10px",
-            }}
-          >
-            <div style={{ marginBottom: 20 }}>
-              <a
-                className="pointer back-btn"
-                href="/leaderboards"
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigate("/leaderboards");
-                }}
-              >
-                <FontAwesomeIcon icon={faChevronLeft} size="1x" /> GO BACK
-              </a>
-            </div>
-            <div className="flex">
-              {displayChart}
-              {/* {displayPodium} */}
-              {thisCalc && (
-                <div
-                  style={{
-                    width: "calc(100% - 500px)",
-                    minWidth: 300,
-                    flexGrow: 1,
+          <div className="flex-special-container">
+            <div className="relative block-highlight">
+              <div style={{ padding: "10px 0px 0px 10px", marginBottom: 20 }}>
+                <a
+                  className="pointer back-btn"
+                  href="/leaderboards"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate("/leaderboards");
                   }}
                 >
-                  <div style={{ margin: 10 }}>
-                    <div
-                      className="flex gap-10 flex-wrap-no-wrap"
-                      style={{
-                        fontSize: 30,
-                        // borderBottom: "1px solid white",
-                      }}
-                    >
-                      <img
-                        alt={thisCalc.name}
-                        style={{ width: 40, height: 40, marginBottom: 15 }}
-                        src={thisCalc.characterIcon}
-                      />
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                        }}
-                      >
-                        {translate(thisCalc.characterName)} - {thisCalc.name}
-                      </div>
-                    </div>
-                    <div>{thisWeaponCalc?.details}</div>
-                  </div>
-                  <div style={{ margin: "20px 10px" }}>
-                    <div>
-                      <span
-                        className="flex gap-10"
-                        style={{ flexWrap: "inherit" }}
-                      >
-                        Weapon:
-                        <WeaponMiniDisplay
-                          icon={thisWeaponCalc?.icon || ""}
-                          refinement={thisWeaponCalc?.refinement || 1}
-                        />
-                        {translate(thisWeaponCalc?.name || "")}
-                      </span>
-                    </div>
-                  </div>
+                  <FontAwesomeIcon icon={faChevronLeft} size="1x" /> GO BACK
+                </a>
+              </div>
+              <div className="flex" style={{ margin: 10 }}>
+                {displayChart}
+                {/* {displayPodium} */}
+                {thisCalc && (
                   <div
-                    className="lb-team-display-wrapper"
-                    style={{ margin: "20px 10px" }}
+                    style={{
+                      width: "calc(100% - 500px)",
+                      minWidth: 300,
+                      flexGrow: 1,
+                    }}
                   >
-                    <div>Team:</div>
-                    <TeammatesCompact
-                      teammates={thisWeaponCalc?.teammates}
-                      scale={2.75}
-                    />
-                  </div>
-                  <div>
-                    {isNiche && (
+                    <div style={{ margin: 10 }}>
                       <div
+                        className="flex gap-10 flex-wrap-no-wrap"
                         style={{
-                          marginTop: 25,
-                          color: "gray",
-                          fontSize: 14,
-                          marginLeft: 10,
-                          marginBottom: 10,
+                          fontSize: 30,
+                          // borderBottom: "1px solid white",
                         }}
                       >
-                        This leaderboard was marked as
-                        <span
-                          style={{ width: "auto", display: "inline" }}
-                          className="c-badge-wrapper"
-                          title="This leaderboard will not be prioritized on profile highlights"
+                        <img
+                          alt={thisCalc.name}
+                          style={{ width: 40, height: 40, marginBottom: 15 }}
+                          src={thisCalc.characterIcon}
+                        />
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                          }}
                         >
-                          <span
-                            style={{
-                              width: "auto",
-                              fontSize: 11,
-                              marginLeft: 5,
-                              marginRight: 5,
-                              display: "inline",
-                              color: "white",
-                            }}
-                            className={`c-badge c-0-badge`}
-                          >
-                            {thisCalc.label?.toUpperCase()}
-                          </span>
-                        </span>
-                        and will <b>not</b> be prioritized on profile highlights
+                          {translate(thisCalc.characterName)} - {thisCalc.name}
+                        </div>
                       </div>
-                    )}
+                      <div>{thisWeaponCalc?.details}</div>
+                    </div>
+                    <div style={{ margin: "20px 10px" }}>
+                      <div>
+                        <span
+                          className="flex gap-10"
+                          style={{ flexWrap: "inherit" }}
+                        >
+                          Weapon:
+                          <WeaponMiniDisplay
+                            icon={thisWeaponCalc?.icon || ""}
+                            refinement={thisWeaponCalc?.refinement || 1}
+                          />
+                          {translate(thisWeaponCalc?.name || "")}
+                        </span>
+                      </div>
+                    </div>
+                    <div
+                      className="lb-team-display-wrapper"
+                      style={{ margin: "20px 10px" }}
+                    >
+                      <div>Team:</div>
+                      <TeammatesCompact
+                        teammates={thisWeaponCalc?.teammates}
+                        scale={2.75}
+                      />
+                    </div>
+                    <div>
+                      {isNiche && (
+                        <div
+                          style={{
+                            marginTop: 25,
+                            color: "gray",
+                            fontSize: 14,
+                            marginLeft: 10,
+                            marginBottom: 10,
+                          }}
+                        >
+                          This leaderboard was marked as
+                          <span
+                            style={{ width: "auto", display: "inline" }}
+                            className="c-badge-wrapper"
+                            title="This leaderboard will not be prioritized on profile highlights"
+                          >
+                            <span
+                              style={{
+                                width: "auto",
+                                fontSize: 11,
+                                marginLeft: 5,
+                                marginRight: 5,
+                                display: "inline",
+                                color: "white",
+                              }}
+                              className={`c-badge c-0-badge`}
+                            >
+                              {thisCalc.label?.toUpperCase()}
+                            </span>
+                          </span>
+                          and will <b>not</b> be prioritized on profile
+                          highlights
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
 

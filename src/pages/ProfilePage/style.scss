@@ -576,3 +576,34 @@
     margin-top: 15px;
   }
 }
+
+.profile-charts {
+  padding: 10px;
+  text-align: center;
+
+  $bg-0: #2c3333;
+  $default-bg: rgba(0, 0, 0, 0.3);
+  $faded-bg-2: darken($bg-0, 5);
+  background: linear-gradient(
+    0deg,
+    $default-bg 0%,
+    $faded-bg-2 50%,
+    $default-bg 100%
+  ) !important;
+
+  .charts-grid {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 20px 0;
+  }
+
+  .chart-subtext {
+    margin-top: 20px;
+  }
+
+  // .charts-column {
+  //   display: flex;
+  //   flex-direction: column;
+  //   gap: 10px;
+  // }
+}

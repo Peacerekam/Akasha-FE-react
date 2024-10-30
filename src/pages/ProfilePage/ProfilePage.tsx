@@ -1064,6 +1064,8 @@ export const ProfilePage: React.FC = () => {
               <AdsComponentManager adType="Video" />
 
               {responseData?.account && <BuildPreview />}
+
+              {/* {responseData?.account && <ProfileCharts />} */}
             </div>
             {responseData.account && (
               <CustomTable
