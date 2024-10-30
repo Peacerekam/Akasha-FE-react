@@ -742,7 +742,7 @@ export const LeaderboardsPage: React.FC = () => {
             overrideImage={blockBackgroundImage}
           />
           <div className="flex-special-container">
-            <div className="relative block-highlight">
+            <div className="relative block-highlight w-100">
               <div style={{ padding: "10px 0px 0px 10px", marginBottom: 20 }}>
                 <a
                   className="pointer back-btn"
