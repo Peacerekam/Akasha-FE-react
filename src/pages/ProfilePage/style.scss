@@ -578,9 +578,7 @@
 }
 
 .profile-charts {
-  padding: 10px;
   text-align: center;
-
   $bg-0: #2c3333;
   $default-bg: rgba(0, 0, 0, 0.3);
   $faded-bg-2: darken($bg-0, 5);
@@ -591,19 +589,45 @@
     $default-bg 100%
   ) !important;
 
+  .charts-tabs {
+    padding: 10px 10px 0 10px;
+  }
+
   .charts-grid {
     display: flex;
     justify-content: space-evenly;
-    padding: 20px 0;
-  }
+    gap: 15px;
+    padding: 20px 15px;
+    width: max(100%, 10000px);
 
-  .chart-subtext {
-    margin-top: 20px;
-  }
+    .scrollbar-container {
+      width: 100%;
+    }
 
-  // .charts-column {
-  //   display: flex;
-  //   flex-direction: column;
-  //   gap: 10px;
-  // }
+    .chart-result-wrapper {
+      display: flex;
+      position: relative;
+      justify-content: center;
+      height: 185px;
+    }
+
+    .charts-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+      td img {
+        display: flex;
+        margin-right: 2px;
+      }
+      .chart-container {
+        // width: min(max(130px, 28vw), 250px);
+        width: min(max(150px, 28vw), 250px);
+      }
+      .chart-text {
+        margin: 10px 0px;
+      }
+    }
+  }
 }

@@ -531,74 +531,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           )
       );
 
-      let percentagesArray = relevantStatNames.map((statName: string) => {
-        const calcStat = calcStatVals(statName);
-
-        const relevantCalc = calcOverride || calculations[calculationId];
-        const calculatedVal = calcStat.value(
-          relevantCalc?.stats?.[calcStat.key]
-        );
-
-        const calcStatPercentage = calculatedVal / chartData.avgStats[statName];
-
-        const getExtragrated = (weight: number) => {
-          const _a =
-            {
-              maxDEF: calculatedVal + 750,
-              elementalMastery:
-                calculatedVal > chartData.avgStats[statName]
-                  ? calculatedVal + 150
-                  : calculatedVal,
-              critRate:
-                chartData.avgStats[statName] < 0
-                  ? Math.abs(chartData.avgStats[statName]) * 2
-                  : calculatedVal,
-            }[calcStat.key] || calculatedVal;
-
-          const _b =
-            {
-              maxDEF: chartData.avgStats[statName] + 750,
-              elementalMastery:
-                calculatedVal > chartData.avgStats[statName]
-                  ? chartData.avgStats[statName] + 150
-                  : chartData.avgStats[statName],
-              critRate:
-                chartData.avgStats[statName] < 0
-                  ? Math.abs(chartData.avgStats[statName] + calculatedVal)
-                  : chartData.avgStats[statName],
-            }[calcStat.key] || chartData.avgStats[statName];
-
-          const _rel = _a - _b;
-          return (_rel * weight + _b) / _b;
-        };
-
-        const percentAdjustment = statName.endsWith("DamageBonus")
-          ? getExtragrated(1.5)
-          : {
-              critRate: getExtragrated(2),
-              critDamage: getExtragrated(2),
-              maxHp: getExtragrated(2.5),
-              atk: getExtragrated(3),
-              def: getExtragrated(3),
-              elementalMastery: getExtragrated(2),
-              energyRecharge: getExtragrated(3),
-            }[statName] || calcStatPercentage;
-
-        const _percent = percentAdjustment * 100;
-        // return _percent;
-        return {
-          _p: Math.max(10, Math.min(170, _percent)),
-          calculatedVal,
-          avg: chartData.avgStats[statName],
-          statName,
-        };
-      });
-
-      const neutralWhiteColor = "rgba(255, 255, 255, 0.35)";
-      const elementColor =
-        ELEMENT_TO_COLOR[chartsData?.characterMetadata?.element];
-
-      percentagesArray = percentagesArray.filter((x) => {
+      const getMeaningfulValues = (x: any) => {
         // const isZero = 0 === x.calculatedVal && 0 === x.avg;
         const isNearZero =
           x.avg >= 0 &&
@@ -606,7 +539,77 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           x.calculatedVal >= 0 &&
           x.calculatedVal <= 0.001;
         return !isNearZero;
-      });
+      };
+
+      const percentagesArray = relevantStatNames
+        .map((statName: string) => {
+          const calcStat = calcStatVals(statName);
+
+          const relevantCalc = calcOverride || calculations[calculationId];
+          const calculatedVal = calcStat.value(
+            relevantCalc?.stats?.[calcStat.key]
+          );
+
+          const calcStatPercentage =
+            calculatedVal / chartData.avgStats[statName];
+
+          const getExtragrated = (weight: number) => {
+            const _a =
+              {
+                maxDEF: calculatedVal + 750,
+                elementalMastery:
+                  calculatedVal > chartData.avgStats[statName]
+                    ? calculatedVal + 150
+                    : calculatedVal,
+                critRate:
+                  chartData.avgStats[statName] < 0
+                    ? Math.abs(chartData.avgStats[statName]) * 2
+                    : calculatedVal,
+              }[calcStat.key] || calculatedVal;
+
+            const _b =
+              {
+                maxDEF: chartData.avgStats[statName] + 750,
+                elementalMastery:
+                  calculatedVal > chartData.avgStats[statName]
+                    ? chartData.avgStats[statName] + 150
+                    : chartData.avgStats[statName],
+                critRate:
+                  chartData.avgStats[statName] < 0
+                    ? Math.abs(chartData.avgStats[statName] + calculatedVal)
+                    : chartData.avgStats[statName],
+              }[calcStat.key] || chartData.avgStats[statName];
+
+            const _rel = _a - _b;
+            return (_rel * weight + _b) / _b;
+          };
+
+          const percentAdjustment = statName.endsWith("DamageBonus")
+            ? getExtragrated(1.5)
+            : {
+                critRate: getExtragrated(2),
+                critDamage: getExtragrated(2),
+                maxHp: getExtragrated(2.5),
+                atk: getExtragrated(3),
+                def: getExtragrated(3),
+                elementalMastery: getExtragrated(2),
+                energyRecharge: getExtragrated(3),
+              }[statName] || calcStatPercentage;
+
+          const _percent = percentAdjustment * 100;
+          // return _percent;
+          return {
+            _p: Math.max(10, Math.min(170, _percent)),
+            calculatedVal,
+            avg: chartData.avgStats[statName],
+            statName,
+          };
+        })
+        .filter(getMeaningfulValues);
+
+      const neutralWhiteColor = "rgba(255, 255, 255, 0.35)";
+      const elementColor =
+        ELEMENT_TO_COLOR[chartsData?.characterMetadata?.element];
 
       const data = {
         labels: percentagesArray.map((x) => x.statName),

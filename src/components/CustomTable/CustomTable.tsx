@@ -235,7 +235,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
   const appendParamsToURL = () => {
     const tmp: string[] = [];
-    const ignoredParams = ["fromId", "page", "li"];
+    const ignoredParams = ["fromId", "page", "li", "build"]; // @TODO: test if this is ok
     for (const key of Object.keys(params)) {
       const value = (params as any)?.[key];
 

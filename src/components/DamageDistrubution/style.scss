@@ -39,8 +39,8 @@
       font-weight: 600;
       font-size: 20px;
     }
-    .pointer {
-      
+
+    .formula-part {
       &.highlighted {
         > span:first-child {
           outline: 1px solid var(--color) !important;
@@ -109,7 +109,6 @@
       }
 
       &.highlighted {
-
         .damage-data-content::before {
           content: "";
           position: absolute;
@@ -117,9 +116,8 @@
           left: 50%;
           transform: translateX(-50%);
 
-
-          width: 0; 
-          height: 0; 
+          width: 0;
+          height: 0;
           border-left: 6px solid transparent;
           border-right: 6px solid transparent;
           border-top: 6px solid black;
@@ -133,10 +131,10 @@
         justify-content: center;
         align-items: center;
         position: relative;
-        cursor: pointer;
+        // cursor: pointer;
         font-weight: 600;
         text-shadow: 0 0 0.3em rgba(0, 0, 0, 0.6), 0 0 1em rgba(0, 0, 0, 1);
-        
+
         &:focus,
         &:focus-within,
         &:hover {

@@ -26,7 +26,7 @@ import React from "react";
 
 type StatIconProps = { name: string; sizeOverride?: number };
 
-const statKeys: {
+export const STAT_KEYS: {
   [key: string]: any;
 } = {
   "Crit Rate": CritRate,
@@ -91,13 +91,13 @@ const statKeys: {
   },
 };
 
-export const isIcon = (name: string) => !!statKeys[name];
+export const isIcon = (name: string) => !!STAT_KEYS[name];
 
 export const StatIcon: React.FC<StatIconProps> = ({
   name,
   sizeOverride = null,
 }) => {
-  const asset = statKeys[name];
+  const asset = STAT_KEYS[name];
   if (!asset) return null;
 
   if (asset.type === "faIcon") {
@@ -119,5 +119,25 @@ export const StatIcon: React.FC<StatIconProps> = ({
     styleObj.height = sizeOverride;
   }
 
-  return <img alt="" width={18} height={18} className="stat-icon" src={asset} style={styleObj} />;
+  return (
+    <img
+      alt=""
+      width={18}
+      height={18}
+      className="stat-icon"
+      src={asset}
+      style={styleObj}
+    />
+  );
+};
+
+export const statIconImgElement = (name: string) => {
+  const asset = STAT_KEYS[name];
+  if (!asset) return null;
+
+  const img = new Image();
+  img.crossOrigin = "anonymous";
+  img.src = asset;
+
+  return img;
 };

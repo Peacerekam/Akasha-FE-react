@@ -678,12 +678,19 @@ $hardcoded-scale: 1;
     .character-name {
       font-size: 22px * $hardcoded-scale;
       display: flex;
-      align-items: center;
-      gap: 30px * $hardcoded-scale;
-      // width: fit-content;
+      // justify-content: space-between;
+      // align-items: flex-start;
+      // gap: 30px * $hardcoded-scale;
       position: relative;
-      > div {
-        max-width: 385px * $hardcoded-scale;
+      width: 480px * $hardcoded-scale;
+      flex-wrap: wrap;
+      align-items: center;
+      column-gap: 30px * $hardcoded-scale;
+      row-gap: 6px * $hardcoded-scale;
+      margin-bottom: 6px * $hardcoded-scale;
+
+      > div:not(.character-nickname) {
+        max-width: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;

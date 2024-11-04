@@ -316,7 +316,7 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
               : `${el.name} = ${roundToFixed(val, 2)}`;
 
           const classNames = cssJoin([
-            "pointer",
+            "formula-part",
             i === highlighted?.index ? "highlighted" : "",
           ]);
 
