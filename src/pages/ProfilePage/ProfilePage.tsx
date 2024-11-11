@@ -65,7 +65,6 @@ import { BuildsColumns } from "../BuildsPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
-import { ProfileCharts } from "./ProfileCharts";
 import { ProfileSelector } from "../../components/ProfileSelector";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
 import { SettingsContext } from "../../context/SettingsProvider/SettingsProvider";

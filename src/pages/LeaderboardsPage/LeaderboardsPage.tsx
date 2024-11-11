@@ -177,9 +177,9 @@ export const LeaderboardsPage: React.FC = () => {
               ])}
               onClick={(event) => {
                 event.preventDefault();
-                navigate(`/profile/${row.uid}`);
+                navigate(`/profile/${row.uid}?build=${row.md5}`);
               }}
-              href={`/profile/${row.uid}`}
+              href={`/profile/${row.uid}?build=${row.md5}`}
             >
               {/* <ARBadge adventureRank={row.owner?.adventureRank} /> */}
               <RegionBadge region={row.owner?.region} />
