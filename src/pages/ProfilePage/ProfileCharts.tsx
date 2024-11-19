@@ -3,9 +3,11 @@ import { useEffect, useMemo, useState } from "react";
 
 import { Doughnut } from "react-chartjs-2";
 import { ELEMENT_TO_COLOR } from "../../components/CharacterCard/cardHelpers";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import axios from "axios";
 import { cssJoin } from "../../utils/helpers";
+import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 
 const defaultDataset = {
@@ -16,8 +18,25 @@ const defaultDataset = {
   // rotation: 0, // can be animated
   // hoverOffset: 4,
   data: [],
-  backgroundColor: Object.values(ELEMENT_TO_COLOR).map((x) => `${x}bb`),
+  // backgroundColor: Object.values(ELEMENT_TO_COLOR).map((x) => `${x}77`),
+  backgroundColor: ["#99999977"],
 };
+
+export const STAT_TO_COLOR = {
+  "Crit RATE": "#ffffff",
+  "Crit DMG": "#ffffff",
+  "Elemental Mastery": "#cccccc",
+  "Energy Recharge": "#cccccc",
+  "Flat HP": "#666666",
+  "Flat ATK": "#666666",
+  "Flat DEF": "#666666",
+  "HP%": "#999999",
+  "ATK%": "#999999",
+  "DEF%": "#999999",
+  "Healing Bonus": "#eeeeee",
+  "Physical DMG Bonus": "#ffffff",
+  ...ELEMENT_TO_COLOR,
+} as any;
 
 const getImgElement = (url: string) => {
   const img = new Image();
@@ -36,16 +55,6 @@ const drawBlurred = (img: any) => {
   c.drawImage(img, 0, 0, 35, 35);
   return c; // returns the context
 };
-
-// function draw(img: any) {
-//   var canvas = document.createElement("canvas");
-//   var c: any = canvas.getContext("2d");
-//   c.width = canvas.width = img.width;
-//   c.height = canvas.height = img.height;
-//   c.clearRect(0, 0, c.width, c.height);
-//   c.drawImage(img, 0, 0, img.width, img.height);
-//   return c; // returns the context
-// }
 
 // returns a map counting the frequency of each color
 // in the image on the canvas
@@ -73,11 +82,155 @@ function rgbToHex(r: any, g: any, b: any) {
   if (r > 255 || g > 255 || b > 255) throw new Error("Invalid color component");
   return ((r << 16) | (g << 8) | b).toString(16);
 }
+
+type ChartLabelsTableProps = {
+  chart: any;
+  images: any[];
+  chartNum: number;
+};
+
+export const ChartLabelsTable: React.FC<ChartLabelsTableProps> = ({
+  chart,
+  images,
+  chartNum,
+}) => {
+  const [show, setShow] = useState(false);
+
+  const labels = chart.data.labels;
+  if (labels.length === 0) return null;
+
+  const iconClassNames = cssJoin([
+    "sort-direction-icon",
+    !show ? "rotate-180deg" : "",
+  ]);
+
+  const lastLabel = labels[labels.length - 1];
+  const hasGroupedLabels = lastLabel?.includes(" - ");
+
+  const groupedLabels = hasGroupedLabels ? lastLabel.split("\n") : [];
+
+  const chartLabelsCombined = hasGroupedLabels
+    ? [...labels.slice(0, -1), ...groupedLabels]
+    : labels;
+
+  return (
+    <>
+      <div className="clickable mt-10" onClick={() => setShow((prev) => !prev)}>
+        {show ? "Hide" : "Show"} legend
+        <FontAwesomeIcon
+          className={iconClassNames}
+          icon={faChevronUp}
+          size="1x"
+        />
+      </div>
+
+      {show && (
+        <PerfectScrollbar
+          className="mt-10"
+          options={{
+            suppressScrollY: false,
+            suppressScrollX: true,
+          }}
+        >
+          <div className="chart-result-wrapper">
+            <table
+              cellSpacing="0"
+              className="chart-labels"
+              style={{
+                textAlign: "left",
+              }}
+            >
+              <tbody>
+                {chartLabelsCombined.map((label: string, i: number) => {
+                  const isGrouped =
+                    hasGroupedLabels && i >= chart.data.labels.length - 1;
+
+                  const separator = " - ";
+
+                  const chartData = isGrouped
+                    ? label.split(separator)[0]
+                    : chart.data.datasets[0].data[i];
+
+                  const chartLabel = isGrouped
+                    ? label.split(separator)[1]
+                    : label;
+
+                  const chartImgEl = images?.[chartNum]?.[i]?.src ? (
+                    <img
+                      alt={"-"}
+                      className="table-icon"
+                      src={images?.[chartNum]?.[i]?.src}
+                    />
+                  ) : (
+                    ""
+                  );
+
+                  const iconName = isGrouped
+                    ? label.split(" (")[0].split(separator)[1]
+                    : label.split(" (")[0];
+
+                  const chartIcon = STAT_KEYS[iconName] ? (
+                    <StatIcon name={iconName} />
+                  ) : (
+                    chartImgEl
+                  );
+
+                  return (
+                    <tr
+                      key={label}
+                      style={{
+                        opacity: isGrouped ? "0.5" : "1",
+                      }}
+                    >
+                      <td>{chartIcon}</td>
+                      <td
+                        style={{
+                          textAlign: "right",
+                          paddingRight: 5,
+                        }}
+                      >
+                        {chartData}
+                      </td>
+                      <td>{chartLabel}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </PerfectScrollbar>
+      )}
+    </>
+  );
+};
+
 export const ProfileCharts: React.FC = () => {
   const { uid } = useParams();
 
   const [chartsData, setChartsData] = useState<any[]>([]);
   const [images, setImages] = useState<HTMLImageElement[][]>([]);
+
+  const fetchData = async () => {
+    try {
+      if (!uid) return;
+
+      const _uid = encodeURIComponent(uid || "");
+      const chartsURL = `/api/charts/user`;
+      const response = await axios.get(chartsURL, {
+        params: {
+          uid: _uid,
+          variant: "overview", // @TODO: change this
+        },
+      });
+
+      const data = response?.data?.data;
+      if (!data) return;
+
+      setChartsData(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const loadImages = async () => {
     const resolveImage = (img: HTMLImageElement) => {
@@ -96,8 +249,18 @@ export const ProfileCharts: React.FC = () => {
     const structured = [];
 
     for (let i = 0; i < chartsData.length; i++) {
+      // const sum = chartsData[i].data.reduce(
+      //   (acc: number, x: any) => acc + x.value,
+      //   0
+      // );
+
       const _images = chartsData[i].data
-        .filter((x: any) => x.icon)
+        .filter((x: any) => {
+          // const sliceDeg = (360 * (x.value / 2)) / sum;
+          // const minDeg = 5;
+          // console.log(x.label, x.icon && sliceDeg > minDeg)
+          return x.icon; //&& sliceDeg > minDeg;
+        })
         .map((x: any) => getImgElement(x.icon));
 
       allPromises.push(..._images.map(resolveImage));
@@ -107,6 +270,10 @@ export const ProfileCharts: React.FC = () => {
     await Promise.all(allPromises);
     setImages(structured);
   };
+
+  useEffect(() => {
+    fetchData();
+  }, [uid]);
 
   useEffect(() => {
     loadImages();
@@ -123,7 +290,10 @@ export const ProfileCharts: React.FC = () => {
       for (let i = 0; i < icons?.length; i++) {
         if (!icons[i]) continue;
 
-        const colors = getColors(drawBlurred(icons[i])); // @TODO: test the fancy color getting library
+        // @TODO: test the fancy color getting library
+        // @TODO: test the fancy color getting library
+        // @TODO: test the fancy color getting library
+        const colors = getColors(drawBlurred(icons[i]));
         const keys = Object.keys(colors);
         const middlePixel = keys[+(keys.length / 2).toFixed()];
         const hex = `#${middlePixel}`;
@@ -132,10 +302,57 @@ export const ProfileCharts: React.FC = () => {
 
       // if labels are color names
       for (let i = 0; i < labels.length; i++) {
-        if (!ELEMENT_TO_COLOR[labels[i]]) continue;
-
-        backgroundColor.push(`${ELEMENT_TO_COLOR[labels[i]]}77`);
+        const _label = labels[i].split(" DMG Bonus")[0];
+        if (!STAT_TO_COLOR[_label]) continue;
+        backgroundColor.push(`${STAT_TO_COLOR[_label]}77`);
       }
+
+      const sum = data.reduce((acc: number, val: number) => acc + val, 0);
+
+      const ungroupedData: any[] = [];
+      const groupedData: any[] = [];
+
+      data.forEach((val: any) => {
+        const sliceDeg = (360 * (val / 2)) / sum;
+        const minDeg = 2;
+
+        if (sliceDeg < minDeg) {
+          groupedData.push(val);
+        } else {
+          ungroupedData.push(val);
+        }
+      });
+
+      const groupedSum = groupedData.reduce((acc, val) => (acc += val), 0);
+      const displayGrouped = groupedData.length > 0;
+
+      const finalData = displayGrouped
+        ? [...ungroupedData, groupedSum]
+        : ungroupedData;
+
+      if (displayGrouped) {
+        const otherLabel = groupedData.map((x, i) => {
+          const labelIndex = i + ungroupedData.length;
+          const percent = ((x / sum) * 100).toFixed(1);
+          return `${x} - ${labels[labelIndex]} (${percent}%)`;
+        });
+
+        labels[ungroupedData.length] = otherLabel;
+        labels.length = finalData.length;
+        // backgroundColor[ungroupedData.length] = "gray"
+      }
+
+      labels.forEach((x: any, i: number) => {
+        const val = finalData[i];
+        const percent = ((val / sum) * 100).toFixed(1);
+        const isLast = i === labels.length - 1;
+
+        if (isLast && displayGrouped) {
+          labels[i] = labels[i].join("\n");
+        } else {
+          labels[i] = `${x} (${percent}%)`;
+        }
+      });
 
       return {
         text: x.text,
@@ -145,7 +362,8 @@ export const ProfileCharts: React.FC = () => {
             {
               ...defaultDataset,
               label: "Value",
-              data,
+              data: finalData,
+              // data,
               icons,
               ...(backgroundColor.length > 0 ? { backgroundColor } : {}),
             },
@@ -154,32 +372,6 @@ export const ProfileCharts: React.FC = () => {
       };
     });
   }, [chartsData, images]);
-
-  const fetchData = async () => {
-    try {
-      if (!uid) return;
-
-      const _uid = encodeURIComponent(uid || "");
-      const chartsURL = `/api/charts/user`;
-      const response = await axios.get(chartsURL, {
-        params: {
-          uid: _uid,
-          variant: "overview", // @TODO:
-        },
-      });
-
-      const data = response?.data?.data;
-      if (!data) return;
-
-      setChartsData(data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   const chartPadding = 0;
 
@@ -198,6 +390,18 @@ export const ProfileCharts: React.FC = () => {
         text: "...",
       },
     },
+    animation: {
+      // onComplete: function (context: any) {
+      //   if (context.initial) {
+      //     console.log("Initial animation finished");
+      //     const drawImgs = (chart: any) => handleDrawDonutOverlay(chart);
+      //     context.chart.config.plugins[0].afterDatasetsDraw = drawImgs;
+      //     context.chart.update();
+      //   } else {
+      //     console.log("animation finished");
+      //   }
+      // },
+    },
   };
 
   const handleDrawDonutOverlay = (chart: any) => {
@@ -212,9 +416,10 @@ export const ProfileCharts: React.FC = () => {
     const imgs =
       dataset.icons.length > 0
         ? dataset.icons
-        : chart.config._config.data.labels.map((x: string) =>
-            statIconImgElement(x)
-          );
+        : chart.config._config.data.labels.map((label: string) => {
+            const iconName = label.split(" (")[0];
+            return statIconImgElement(iconName);
+          });
 
     if (imgs.length === 0) return;
 
@@ -225,29 +430,29 @@ export const ProfileCharts: React.FC = () => {
     const chartData = dataset.data;
     const sum = chartData.reduce((acc: number, val: number) => acc + val, 0);
 
-    const imageHeight = 35 * (chart.chartArea?.width / 250);
-    const imageWidth = 35 * (chart.chartArea?.width / 250);
+    const imageSize = 36;
+    const imageSizeSmaller = 28;
 
-    const centerX = chartPadding + chart.chartArea?.width / 2 - imageWidth / 2;
-    const centerY =
-      chartPadding + chart.chartArea?.height / 2 - imageHeight / 2;
-
+    let imageHeight = imageSize * (chart.chartArea?.width / 250);
+    let imageWidth = imageSize * (chart.chartArea?.width / 250);
+    let centerX = chartPadding + chart.chartArea?.width / 2 - imageWidth / 2;
+    let centerY = chartPadding + chart.chartArea?.height / 2 - imageHeight / 2;
     let accumulator = 0;
+
+    const lastLabel = chart.data.labels[chart.data.labels.length - 1];
+    const hasGroupedLabels = lastLabel?.includes("\n");
 
     imgs.forEach((img: any, i: number) => {
       if (!img) return;
       if (!chart.chartArea?.height) return;
       if (!chart.chartArea?.width) return;
 
+      const isGrouped = hasGroupedLabels && i >= chart.data.labels.length - 1;
+      if (isGrouped) return;
+
       const thisCount = chartData[i];
       accumulator += thisCount;
 
-      // @TODO: maybe use this to group up results with less than 5deg
-      // @TODO: maybe use this to group up results with less than 5deg
-      // @TODO: maybe use this to group up results with less than 5deg
-      // grouped up result could show all included artifact sets on the tooltip in separate lines
-      // grouped up result could show all included artifact sets on the tooltip in separate lines
-      // grouped up result could show all included artifact sets on the tooltip in separate lines
       const sliceDeg = (360 * (thisCount / 2)) / sum;
       const minDeg = 5;
 
@@ -255,34 +460,43 @@ export const ProfileCharts: React.FC = () => {
       if (sliceDeg < minDeg) return;
 
       const degrees = (360 * (accumulator - thisCount / 2)) / sum - 90;
-      const distance = chart.chartArea?.height / 2.7;
-
-      const imgX = centerX + Math.cos((degrees * Math.PI) / 180) * distance;
-      const imgY = centerY + Math.sin((degrees * Math.PI) / 180) * distance;
-
-      // @TODO: dynamically calc imageWidth and imageHeight based on thisCount
-      // @TODO: dynamically calc imageWidth and imageHeight based on thisCount
-      // @TODO: dynamically calc imageWidth and imageHeight based on thisCount
+      const distance = chart.chartArea?.height / 2.75;
 
       ctx.shadowColor = "black";
       ctx.shadowBlur = 3;
       ctx.shadowOffsetX = 0;
       ctx.shadowOffsetY = 0;
 
-      // draw original image in normal mode
+      if (STAT_KEYS[chart.data.labels[i].split(" (")[0]]) {
+        imageHeight = imageSizeSmaller * (chart.chartArea?.width / 250);
+        imageWidth = imageSizeSmaller * (chart.chartArea?.width / 250);
+        centerX = chartPadding + chart.chartArea?.width / 2 - imageWidth / 2;
+        centerY = chartPadding + chart.chartArea?.height / 2 - imageHeight / 2;
+      }
+
+      const imgX = centerX + Math.cos((degrees * Math.PI) / 180) * distance;
+      const imgY = centerY + Math.sin((degrees * Math.PI) / 180) * distance;
+
+      // draw original image
+      // ctx.save();
+      // ctx.globalAlpha = 0.5;
       ctx.drawImage(img, imgX, imgY, imageWidth, imageHeight);
+      // ctx.restore();
 
       ctx.shadowBlur = 0;
-      ctx.restore();
+      // ctx.restore();
     });
   };
 
   const plugins = [
     {
-      id: "pluginId",
-      // beforeDraw: (chart: any) => handleDrawImage(chart),
-      afterDatasetsDraw: (chart: any) => handleDrawDonutOverlay(chart), // imgs over the chart, but below the tooltip
-      resize: (chart: any) => handleDrawDonutOverlay(chart),
+      id: "profile-charts-plugins",
+      // beforeDraw: (chart: any) => {},
+      // resize: (chart: any) => {},
+      // afterRender: (chart: any) => {},
+      afterDatasetsDraw: (chart: any) => {
+        handleDrawDonutOverlay(chart);
+      },
     },
   ];
 
@@ -320,60 +534,17 @@ export const ProfileCharts: React.FC = () => {
                         <div className="chart-text">{chart.text}</div>
                         <div className="chart-container">
                           <Doughnut
-                            // key={images.length} // @TODO: dirty way of refreshing
+                            // key={`donut-${chartsAnimEnd}`} // @TODO: dirty way of refreshing
                             data={chart.data}
                             options={options}
                             plugins={plugins} // @TODO: this should be included only to relevant charts?
                           />
                         </div>
-                        <PerfectScrollbar
-                          options={{
-                            suppressScrollY: false,
-                            suppressScrollX: false,
-                          }}
-                        >
-                          <div className="chart-result-wrapper">
-                            <table
-                              cellSpacing="0"
-                              className="chart-labels"
-                              style={{
-                                textAlign: "left",
-                              }}
-                            >
-                              <tbody>
-                                {chart.data.labels.map(
-                                  (x: string, i: number) => (
-                                    <tr key={x}>
-                                      {images?.[chartNum]?.[i]?.src && (
-                                        <td>
-                                          <img
-                                            alt={x}
-                                            className="table-icon"
-                                            src={images?.[chartNum]?.[i]?.src}
-                                          />
-                                        </td>
-                                      )}
-                                      {STAT_KEYS[x] && (
-                                        <td>
-                                          <StatIcon name={x} />
-                                        </td>
-                                      )}
-                                      <td
-                                        style={{
-                                          textAlign: "right",
-                                          paddingRight: 5,
-                                        }}
-                                      >
-                                        {chart.data.datasets[0].data[i]}
-                                      </td>
-                                      <td>{x}</td>
-                                    </tr>
-                                  )
-                                )}
-                              </tbody>
-                            </table>
-                          </div>
-                        </PerfectScrollbar>
+                        <ChartLabelsTable
+                          chart={chart}
+                          images={images}
+                          chartNum={chartNum}
+                        />
                       </div>
                     );
                   })}

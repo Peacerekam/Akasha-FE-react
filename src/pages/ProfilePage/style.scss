@@ -628,6 +628,26 @@
       .chart-text {
         margin: 10px 0px;
       }
+
+      .clickable {
+        cursor: pointer;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        &:hover {
+          color: orange;
+        }
+      }
+      .sort-direction-icon {
+        color: orange;
+        margin-top: 1px;
+        transform: rotate(0deg);
+        transition: transform 0.3s;
+        margin-left: auto;
+        &.rotate-180deg {
+          transform: rotate(180deg);
+        }
+      }
     }
   }
 }

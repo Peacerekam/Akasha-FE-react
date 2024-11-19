@@ -83,6 +83,26 @@ export const STAT_KEYS: {
     type: "faIcon",
     value: faCirclet,
   },
+  "Flower of Life": {
+    type: "faIcon",
+    value: faFlower,
+  },
+  "Plume of Death": {
+    type: "faIcon",
+    value: faPlume,
+  },
+  "Sands of Eon": {
+    type: "faIcon",
+    value: faSands,
+  },
+  "Goblet of Eonothem": {
+    type: "faIcon",
+    value: faGoblet,
+  },
+  "Circlet of Logos": {
+    type: "faIcon",
+    value: faCirclet,
+  },
   "Crit Value": {
     type: "empty",
   },

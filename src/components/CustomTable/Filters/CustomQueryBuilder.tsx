@@ -41,8 +41,8 @@ export const CustomQueryBuilder = ({
             label: o.fieldName,
             options: o.options.map((opt) => {
               const iconName = opt.name?.split(" - ")[0];
-              const isStatIcon = isIcon(iconName);
 
+              const isStatIcon = isIcon(iconName);
               const prefix =
                 {
                   "artifactSets.$1": "1p ",

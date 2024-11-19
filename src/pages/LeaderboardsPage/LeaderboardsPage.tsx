@@ -775,9 +775,9 @@ export const LeaderboardsPage: React.FC = () => {
                         }}
                       >
                         <img
-                          alt={thisCalc.name}
                           style={{ width: 40, height: 40, marginBottom: 15 }}
                           src={thisCalc.characterIcon}
+                          alt={thisCalc.characterName}
                         />
                         <div
                           style={{

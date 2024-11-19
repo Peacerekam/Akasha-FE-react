@@ -65,6 +65,7 @@ import { BuildsColumns } from "../BuildsPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
+import { ProfileCharts } from "./ProfileCharts";
 import { ProfileSelector } from "../../components/ProfileSelector";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
 import { SettingsContext } from "../../context/SettingsProvider/SettingsProvider";
@@ -1065,7 +1066,8 @@ export const ProfilePage: React.FC = () => {
 
               {responseData?.account && <BuildPreview />}
 
-              {/* {responseData?.account && <ProfileCharts />} */}
+              {/* uid === "701464050" */}
+              {responseData?.account && <ProfileCharts />}
             </div>
             {responseData.account && (
               <CustomTable
