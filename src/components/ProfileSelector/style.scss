@@ -162,6 +162,7 @@
       margin-right: 10px;
       .last-profile-update {
         color: lightgray;
+        justify-content: center;
       }
     }
     .responsive-p3 {
@@ -194,6 +195,8 @@
       align-items: center;
       gap: 5px;
       margin-top: 5px;
+      word-wrap: anywhere;
+      max-width: 170px;
 
       &.current-profile {
         color: orange;

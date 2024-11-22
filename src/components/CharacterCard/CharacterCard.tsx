@@ -785,7 +785,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
           const _top = ranking ? `TOP ${_percentage || "?"}%` : "";
 
-          const topBadge = (
+          const brokenRanking = false; // outOf < 10000;
+
+          const topBadge = brokenRanking ? (
+            ""
+          ) : (
             <span className="lb-badge" style={{ marginRight: 5 }}>
               <span>{_top}</span>
             </span>
@@ -805,6 +809,19 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             (x: any) => x.calculationId === id
           );
 
+          const rankingPill = brokenRanking ? (
+            <div>rank unavailable</div>
+          ) : (
+            <div>
+              {ranking ?? (
+                <span title="Rankings are cached. If you see this you need to refresh the page">
+                  -
+                </span>
+              )}
+              <span className="opacity-5">/{outOf || "???"}</span>
+            </div>
+          );
+
           return (
             <div key={id}>
               <div>{displayCharts(thisChartData, id)}</div>
@@ -822,18 +839,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                   </div>
                 </span>
                 {/* <div>{shorterName}</div> */}
-                {privacyFlag ? (
-                  ""
-                ) : (
-                  <div>
-                    {ranking ?? (
-                      <span title="Rankings are cached. If you see this you need to refresh the page">
-                        -
-                      </span>
-                    )}
-                    <span className="opacity-5">/{outOf || "???"}</span>
-                  </div>
-                )}
+                {privacyFlag ? "" : rankingPill}
               </div>
             </div>
           );

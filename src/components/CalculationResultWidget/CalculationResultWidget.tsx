@@ -102,8 +102,9 @@ export const CalculationResultWidget: React.FC<
             calculationId,
             // variant
           } = _calc;
+
           // const calcKey = `${calculationId}${variant?.name || ""}`;
-          if (!calc?.ranking) continue;
+          if (!calc?.ranking || !calc?.outOf) continue;
 
           calcArray.push({
             ...calc,
@@ -211,8 +212,17 @@ export const CalculationResultWidget: React.FC<
           const _percentage = getTopRanking(_ranking, outOf);
           const _top = ranking ? `top ${_percentage || "?"}%` : "";
 
+          const brokenRanking = false; // outOf < 10000;
+
           return (
-            <div key={`${name}-${weapon.name}`} className={weaponMatchClass}>
+            <div
+              key={`${name}-${weapon.name}`}
+              className={weaponMatchClass}
+              style={{
+                opacity: brokenRanking ? 0.33 : 1,
+                filter: brokenRanking ? "blur(1px)" : "",
+              }}
+            >
               <ConfirmTooltip
                 adjustOffsets
                 disabled={noLinks}
@@ -238,15 +248,23 @@ export const CalculationResultWidget: React.FC<
                 >
                   <>
                     {/* <div className="highlight-tile-pill">{shortName}</div> */}
-                    {variant?.displayName ? (
-                      <div className="highlight-tile-pill stacked">
-                        <div className="stacked-top">{short}</div>
-                        <div className="stacked-bottom">
-                          {variant?.displayName}
-                        </div>
-                      </div>
+                    {brokenRanking ? (
+                      <>
+                        <div className="highlight-tile-pill">{"---"}</div>
+                      </>
                     ) : (
-                      <div className="highlight-tile-pill">{shortName}</div>
+                      <>
+                        {variant?.displayName ? (
+                          <div className="highlight-tile-pill stacked">
+                            <div className="stacked-top">{short}</div>
+                            <div className="stacked-bottom">
+                              {variant?.displayName}
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="highlight-tile-pill">{shortName}</div>
+                        )}
+                      </>
                     )}
                     <div className="flex">
                       <img
@@ -260,13 +278,23 @@ export const CalculationResultWidget: React.FC<
                         // style={{ boxShadow: `0 0 0px 2px ${weaponColor}20` }}
                       />
                     </div>
-                    <div>{_top}</div>
-                    <span>
-                      {ranking ?? "---"}
-                      <span className="opacity-5">
-                        /{toShortThousands(outOf) ?? "---"}
-                      </span>
-                    </span>
+
+                    {brokenRanking ? (
+                      <>
+                        <div>rank</div>
+                        <div>unavailable</div>
+                      </>
+                    ) : (
+                      <>
+                        <div>{_top}</div>
+                        <span>
+                          {ranking ?? "---"}
+                          <span className="opacity-5">
+                            /{toShortThousands(outOf) ?? "---"}
+                          </span>
+                        </span>
+                      </>
+                    )}
                   </>
                 </a>
               </ConfirmTooltip>

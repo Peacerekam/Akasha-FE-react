@@ -186,7 +186,7 @@ export const ChartLabelsTable: React.FC<ChartLabelsTableProps> = ({
                       <td
                         style={{
                           textAlign: "right",
-                          paddingRight: 5,
+                          padding: "0 5px",
                         }}
                       >
                         {chartData}
@@ -204,7 +204,7 @@ export const ChartLabelsTable: React.FC<ChartLabelsTableProps> = ({
   );
 };
 
-export const ProfileCharts: React.FC = () => {
+export const ProfileCharts: React.FC<{ debug?: boolean }> = ({ debug }) => {
   const { uid } = useParams();
 
   const [chartsData, setChartsData] = useState<any[]>([]);
@@ -506,6 +506,7 @@ export const ProfileCharts: React.FC = () => {
       className={cssJoin([
         "relative w-100 custom-table-wrapper",
         chartsData ? "mt-20 profile-charts profile-highlights" : "",
+        debug ? "debug-mode" : ""
       ])}
     >
       <div>

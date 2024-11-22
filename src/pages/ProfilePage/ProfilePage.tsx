@@ -1066,8 +1066,9 @@ export const ProfilePage: React.FC = () => {
 
               {responseData?.account && <BuildPreview />}
 
-              {/* uid === "701464050" */}
-              {responseData?.account && <ProfileCharts />}
+              {responseData?.account && DEBUG_MODE && (
+                <ProfileCharts debug={DEBUG_MODE} />
+              )}
             </div>
             {responseData.account && (
               <CustomTable

@@ -10,7 +10,7 @@ import { getDefaultRvFilters } from "../components/RollList/defaultFilters";
 import { getStatsFromRow } from "../components";
 
 export const PATREON_URL = "https://www.patreon.com/mimee";
-export const DISCORD_URL = "https://discord.gg/vmdPppZVa8";
+export const DISCORD_URL = "https://discord.gg/akasha";
 
 export const FETCH_ARTIFACTS_URL = `/api/artifacts`;
 export const FETCH_BUILDS_URL = `/api/builds/`;
@@ -788,6 +788,9 @@ export const domainRedirect = () => {
     case "146.59.86.233":
       _from = "146.59.86.233";
       break;
+    case "148.113.178.222":
+      _from = "148.113.178.222";
+      break;
     case "54.39.29.82":
       _from = "54.39.29.82";
       break;
@@ -796,6 +799,8 @@ export const domainRedirect = () => {
   if (currentHref.includes(_from) || currentHref.startsWith("www.")) {
     // startsWith ?? includes ??
     const _to = "akasha.cv";
+    // const _to = "ns5032948.ip-148-113-178.net";
+
     const newHref = currentHref
       .replace("www.", "")
       .replace(_from, _to) // change domain

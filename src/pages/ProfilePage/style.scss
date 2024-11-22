@@ -589,6 +589,18 @@
     $default-bg 100%
   ) !important;
 
+  &.debug-mode::after {
+    content: "DEBUG";
+    font-size: 250px;
+    position: absolute;
+    top: 40px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    pointer-events: none;
+    color: rgba(magenta, 0.4);
+  }
+
   .charts-tabs {
     padding: 10px 10px 0 10px;
   }
@@ -608,6 +620,7 @@
       display: flex;
       position: relative;
       justify-content: center;
+      align-items: flex-start;
       height: 185px;
     }
 
