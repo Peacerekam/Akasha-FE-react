@@ -48,8 +48,8 @@ const urls = {
 
 const getApiBaseURL = () => {
   if (IS_PRODUCATION) {
-    return urls["tmp-ovh"];
-    // return urls["prod-akasha-cv"];
+    // return urls["tmp-ovh"];
+    return urls["prod-akasha-cv"];
   }
 
   return urls["localhost80"];
