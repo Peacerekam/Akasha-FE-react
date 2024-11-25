@@ -130,12 +130,18 @@ body:not(.overflow-hidden) {
 }
 
 body.ads-disabled {
+  iframe:not(.html2canvas-container),
   #bgdiv,
   #tyche_trendi_video_container,
   #tyche_trendi_video,
   #pw-oop-flex_leaderboard_container,
+  #pw-oop-bottom_rail,
   #corner_ad_video,
+  #aniBox,
+  .sprkflw_main,
+  .ut_container,
   .is-docked,
+  .pw-oop-tag,
   .pw-pos-bottom-right,
   .pw-corner-ad-video,
   .pw-container,
