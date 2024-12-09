@@ -27,9 +27,16 @@ $hardcoded-scale: 1;
 
 .character-card-container {
   &.is-generating {
+    .compact-artifact-crit-value,
     .character-showcase-pic-container,
     .compact-artifact-metric-container {
       pointer-events: none !important;
+    }
+    span.compact-artifact-crit-value.compact-artifact-crit-value {
+      box-shadow: none !important;
+    }
+    .metric-formula {
+      display: none !important;
     }
   }
 

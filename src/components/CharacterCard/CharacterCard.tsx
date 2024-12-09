@@ -818,7 +818,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                   -
                 </span>
               )}
-              <span className="opacity-5">/{outOf || "???"}</span>
+              <span className="opacity-5">/</span>
+              <span className="opacity-5">{outOf || "???"}</span>
             </div>
           );
 
@@ -1481,8 +1482,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                 <span>
                   {translate("Lv.")} {row.weapon.weaponInfo.level}
                 </span>
+                <span className="opacity-5">/</span>
                 <span className="opacity-5">
-                  /
                   {ascensionToLevel(
                     row.weapon.weaponInfo?.promoteLevel,
                     "weapon",
@@ -1624,8 +1625,9 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           */}
         <div className="character-level">
           {translate("Lv.")} {row.propMap.level.val}
+          <span className="opacity-5">/</span>
           <span className="opacity-5">
-            /{ascensionToLevel(row.propMap.ascension.val, "character")}
+            {ascensionToLevel(row.propMap.ascension.val, "character")}
           </span>
         </div>
         <div className="character-friendship">

@@ -34,7 +34,7 @@ import React, {
   useState,
 } from "react";
 import axios, { AxiosRequestConfig } from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { BuildsColumns } from "../BuildsPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -96,6 +96,7 @@ export const LeaderboardsPage: React.FC = () => {
     useState<CalculationInfoResponse[]>();
   const [inputUID, setInputUID] = useState<string>("");
   const [lookupUID, setLookupUID] = useState<string>("");
+  const [rerender, setRerender] = useState<string>("");
 
   // context
   const { setTitle } = useContext(TitleContext);
@@ -107,6 +108,7 @@ export const LeaderboardsPage: React.FC = () => {
   const { calculationId, variant } = useParams();
   const characterId = calculationId?.slice(0, -2);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const currentCategory = calculationId ?? "";
   const calculationSortKey = currentCategory
@@ -633,14 +635,13 @@ export const LeaderboardsPage: React.FC = () => {
       tooltip: {
         callbacks: {
           title: function (a: any[]) {
-            return a[0] ? `top ${a[0].label}%` : "";
+            return a[0] ? `top ${a[0].label}% - Click to navigate` : "";
           },
-          // label: (a: any) => {
-          //   if (!a || !a.dataset) return "";
-          //   const max = a.dataset.data[a.dataIndex].max
-          //   const min = a.dataset.data[a.dataIndex].min
-          //   return [`${a.formattedValue}`, '', `max: ${max.toFixed(3)}`, `min: ${min.toFixed(3)}`]
-          // },
+          label: (a: any) => {
+            if (!a || !a.dataset) return "";
+            const value = a.dataset.data[a.dataIndex].y;
+            return value.toFixed(2);
+          },
         },
       },
       legend: {
@@ -683,6 +684,21 @@ export const LeaderboardsPage: React.FC = () => {
     animation: {
       duration: 0,
     },
+    onClick: (event: any, elements: any) => {
+      if (elements.length === 0) return;
+
+      const el = chartData[elements[0].index];
+      const dest = `${location.pathname}?p=lt|${el.avg}`;
+
+      navigate(dest);
+      setRerender(dest);
+
+      setTimeout(() => {
+        document
+          .querySelector(".custom-table-wrapper:last-child")
+          ?.scrollIntoView({ behavior: "smooth" });
+      }, 500);
+    },
   };
 
   const displayChart = useMemo(() => {
@@ -695,6 +711,8 @@ export const LeaderboardsPage: React.FC = () => {
 
     const datasets = [
       {
+        pointHoverBackgroundColor: `red`,
+        pointHoverBorderColor: `white`,
         data: formattedData,
       },
     ];
@@ -944,6 +962,7 @@ export const LeaderboardsPage: React.FC = () => {
               <div style={{ marginTop: "30px" }} />
 
               <CustomTable
+                key={`ct-lb-${rerender}`}
                 fetchURL={FETCH_LEADERBOARDS_URL}
                 fetchParams={{ variant, calculationId: currentCategory }}
                 filtersURL={`${FETCH_CHARACTER_FILTERS_URL}?type=leaderboards`}

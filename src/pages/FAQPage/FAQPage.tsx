@@ -167,7 +167,7 @@ export const FAQPage: React.FC = () => {
       },
       {
         id: 3,
-        question: "My profile has old data | is not updating",
+        question: "My profile has old data | My profile is not updating",
         answer: (searchText: string) => (
           <div className="faq-grid">
             <div className="faq-split">
@@ -206,7 +206,7 @@ export const FAQPage: React.FC = () => {
                       searchText={searchText}
                       textCallback={handleTextCallback}
                       textToHighlight={`
-                  Only UP TO 8 currently showcased characters can be fetched (Akasha only sees what Enka sees)`}
+                  Only up to 12 currently showcased characters can be fetched (Akasha only sees what Enka sees)`}
                     />
                   </li>
                   <li>
@@ -272,10 +272,7 @@ export const FAQPage: React.FC = () => {
                   <i>
                     <Link
                       to={`?${new URLSearchParams([
-                        [
-                          "q",
-                          "How do I bind my account?",
-                        ],
+                        ["q", "How do I bind my account?"],
                       ])}`}
                     >
                       {/* onClick={() => setSearchTest("How do I bind my account")} */}
@@ -406,9 +403,7 @@ export const FAQPage: React.FC = () => {
                     textCallback={handleTextCallback}
                     textToHighlight={`List of currently available leaderboards can be found here: `}
                   />
-                  <a href="https://akasha.cv/leaderboards">
-                    https://akasha.cv/leaderboards
-                  </a>
+                  <Link to="/leaderboards">https://akasha.cv/leaderboards</Link>
                 </p>
                 <p>
                   <FAQHighlighter

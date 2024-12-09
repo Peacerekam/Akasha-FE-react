@@ -43,18 +43,17 @@ export const FAQBrowser: React.FC<FAQBrowserProps> = ({
   );
 
   useEffect(() => {
-    if (location.search) {
-      const query = new URLSearchParams(location.search);
-      query.forEach((val, key) => {
-        if (key !== "q") return;
-        clearWordHits();
-        setSearchText(val);
+    if (!location.search) return;
+    const query = new URLSearchParams(location.search);
+    query.forEach((val, key) => {
+      if (key !== "q") return;
+      clearWordHits();
+      setSearchText(val);
 
-        document
-          .querySelector(".faq-browser")
-          ?.scrollIntoView({ behavior: "smooth" });
-      });
-    }
+      document
+        .querySelector(".faq-browser")
+        ?.scrollIntoView({ behavior: "smooth" });
+    });
   }, [location.search]);
 
   useEffect(() => {
