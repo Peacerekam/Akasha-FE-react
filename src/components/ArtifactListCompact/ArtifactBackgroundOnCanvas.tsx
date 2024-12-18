@@ -4,16 +4,18 @@ export type ArtifactBgOnCanvasProps = {
   backgroundImage: string;
   adaptiveBgColor?: boolean;
   namecardBg?: boolean;
-  hardcodedScale?: number;
   adaptiveColors?: [string[], string[]];
+  hardcodedScale?: number;
+  offsetIndex?: number;
 };
 
 export const ArtifactBackgroundOnCanvas: React.FC<ArtifactBgOnCanvasProps> = ({
   backgroundImage,
   adaptiveBgColor,
   namecardBg,
-  hardcodedScale = 1,
   adaptiveColors,
+  hardcodedScale = 1,
+  offsetIndex = 0,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -34,7 +36,7 @@ export const ArtifactBackgroundOnCanvas: React.FC<ArtifactBgOnCanvasProps> = ({
 
       // get the scale
       // it is the min of the 2 ratios
-      const scaleFactor = 1;
+      const scaleFactor = namecardBg ? 2: 1;
 
       // clear canvas
       ctx!.globalCompositeOperation = "source-out";
@@ -42,17 +44,18 @@ export const ArtifactBackgroundOnCanvas: React.FC<ArtifactBgOnCanvasProps> = ({
 
       // doesnt work on safari iOS?
       // ctx!.filter = `brightness(${adaptiveBgColor ? 50 : 65}%)`;
-      ctx!.filter = `blur(${namecardBg ? 1 : 0}px)`;
+      ctx!.filter = namecardBg ? `blur(2px) brightness(0.75)` : "";
 
       ctx!.scale(scaleFactor, scaleFactor);
       ctx!.globalCompositeOperation = "source-over";
 
       const conditionalScale = namecardBg ? 0.65 : 0.41;
+      const offset = offsetIndex * -55;
 
       ctx!.drawImage(
         img,
-        namecardBg ? -25 : -128,
-        namecardBg ? -70 : -23,
+        (namecardBg ? 0 : -128) + offset,
+        namecardBg ? -125 : -23,
         (namecardBg ? canvasWidth : img.width) * conditionalScale,
         (namecardBg ? canvasHeight : img.height) * conditionalScale
       );

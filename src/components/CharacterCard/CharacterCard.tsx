@@ -869,7 +869,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     return (
       <div className="mobile-fix w-100 justify-content-center">
         <div className="mobile-fix">
-          {reorderedArtifacts.map((artifact: any) => {
+          {reorderedArtifacts.map((artifact: any, offsetIndex: number) => {
             return (
               <CompactArtifact
                 key={artifact._id}
@@ -881,6 +881,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                   namecardBg,
                   adaptiveColors,
                   hardcodedScale,
+                  offsetIndex,
                 }}
               />
             );
@@ -891,13 +892,16 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   }, [
     row,
     metric,
-    chartsData,
     namecardBg,
     simplifyColors,
     _adaptiveBgColor,
     customRvFilter[row.name]?.length,
+    chartsData,
+    chartsData?.characterMetadata?.namecard,
+    chartsData?.characterMetadata?.element,
     JSON.stringify(reorderedArtifacts),
     JSON.stringify(adaptiveColors),
+    // @TODO: more in here to make sure it changes colors
   ]);
 
   const paintImageToCanvas = useCallback(

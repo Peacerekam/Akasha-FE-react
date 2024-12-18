@@ -62,7 +62,7 @@ export const CompactArtifact: React.FC<CompactArtifactProps> = ({
 
   return (
     <div
-      key={artifact._id}
+      key={`${artifact._id}-${JSON.stringify(canvasBgProps)}`}
       className={`compact-artifact ${className} metric-${_metric}`}
     >
       {!!canvasBgProps && <ArtifactBackgroundOnCanvas {...canvasBgProps} />}
@@ -334,7 +334,7 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
     return (
       <>
         <div className="artifacts-row">
-          {reordered.map((artifact: any) => {
+          {reordered.map((artifact: any, i: number) => {
             return (
               <CompactArtifact
                 key={artifact._id}

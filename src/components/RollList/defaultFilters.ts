@@ -19,6 +19,7 @@ const ANEMO_RV_LIST = {
   "Kaedehara Kazuha": [CRate, CDMG, ATK_, EM, ER],
   Sucrose: [CRate, CDMG, ATK_, EM, ER],
   Xianyun: [CRate, CDMG, ATK_, ER],
+  Chasca: [CRate, CDMG, ATK_, EM],
 };
 
 const PYRO_RV_LIST = {

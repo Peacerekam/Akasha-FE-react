@@ -376,7 +376,16 @@ export const abortSignalCatcher = async (cb: any, onError?: any) => {
 };
 
 export const toShortThousands = (n: number) => {
-  if (n > 9999) {
+  if (n > 999_999) {
+    const millions = n / 1_000_000;
+
+    // e.g.  1m  or  1.2m
+    const rounded = roundToFixed(millions, 2);
+
+    return `${rounded}m`;
+  }
+
+  if (n > 9_999) {
     const thousands = n / 1000;
 
     // if above 100k then dont show decimals ( e.g. 107k )

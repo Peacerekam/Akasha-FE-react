@@ -130,7 +130,7 @@ body:not(.overflow-hidden) {
 }
 
 body.ads-disabled {
-  iframe:not(.html2canvas-container),
+  iframe:not(.html2canvas-container):not(#similarweb-outer-content),
   #bgdiv,
   #tyche_trendi_video_container,
   #tyche_trendi_video,
