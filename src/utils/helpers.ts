@@ -10,7 +10,8 @@ import { getDefaultRvFilters } from "../components/RollList/defaultFilters";
 import { getStatsFromRow } from "../components";
 
 export const PATREON_URL = "https://www.patreon.com/mimee";
-export const DISCORD_URL = "https://discord.gg/akasha";
+// export const DISCORD_URL = "https://discord.gg/akasha";
+export const DISCORD_URL = "https://discord.gg/9ceBwBuy";
 
 export const FETCH_ARTIFACTS_URL = `/api/artifacts`;
 export const FETCH_BUILDS_URL = `/api/builds/`;

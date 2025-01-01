@@ -38,6 +38,7 @@ const PYRO_RV_LIST = {
   Chevreuse: [CRate, CDMG, ATK_, HP_, ER],
   Gaming: [CRate, CDMG, ATK_, EM],
   Arlecchino: [CRate, CDMG, ATK_, EM],
+  Mavuika: [CRate, CDMG, ATK_, EM],
 };
 
 const HYDRO_RV_LIST = {
@@ -64,6 +65,7 @@ const CRYO_RV_LIST = {
   Wriothesley: [CRate, CDMG, EM, ER, ATK_],
   Charlotte: [CRate, CDMG, ER, ATK_],
   Mika: [CRate, CDMG, HP_, ER, ATK_],
+  Citlali: [CRate, CDMG, ATK_, EM, ER],
 };
 
 const GEO_RV_LIST = {
