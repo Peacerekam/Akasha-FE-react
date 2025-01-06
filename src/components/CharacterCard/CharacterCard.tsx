@@ -1474,11 +1474,13 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
               <div className="weapon-stat-with-icon">
                 <StatIcon sizeOverride={statIconSize} name="ATK" /> {baseAttack}
               </div>
-              <div className="weapon-stat-with-icon">
-                <StatIcon sizeOverride={statIconSize} name={mainstatName} />{" "}
-                {mainstat?.value}
-                {isPercentage ? "%" : ""}
-              </div>
+              {mainstat?.value && (
+                <div className="weapon-stat-with-icon">
+                  <StatIcon sizeOverride={statIconSize} name={mainstatName} />{" "}
+                  {mainstat?.value}
+                  {isPercentage ? "%" : ""}
+                </div>
+              )}
             </div>
             <div className="weapon-stats">
               <div className="weapon-refinement">R{refinementValue}</div>

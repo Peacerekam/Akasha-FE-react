@@ -52,6 +52,7 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
   const [isPending, setIsPending] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const uploadInput = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const { profileObject } = useContext(SessionDataContext);
   const { translate } = useContext(TranslationContext);
@@ -115,6 +116,10 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     if (builds.length === 0 || selectedBuildId) return;
     const buildId = getBuildId(builds[0]);
     setSelectedBuildId(buildId);
+
+    if (inputRef?.current) {
+      inputRef.current.focus();
+    }
   }, [selectedBuildId, builds, isOpen]);
 
   const handleCloseModal = (
@@ -416,6 +421,7 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     ]);
 
     const statListPlaceholder = <div style={{ width: 342, height: 394 }} />;
+
     return (
       <div className="compact-table-wrapper">
         {selectedBuild?._id ? (
@@ -503,6 +509,7 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
         <div className="perfect-scroll-wrapper">
           <div className="build-search-input relative">
             <input
+              ref={inputRef}
               onChange={(event) => {
                 setSearchText(event.target.value);
                 setSelectedBuildId("-1");
