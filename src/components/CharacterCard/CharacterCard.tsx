@@ -173,7 +173,7 @@ const GACHA_CHAR_OFFESET: { [char: string]: { x: number; y: number } } = {
   },
   Xiao: {
     x: 0,
-    y: -55,
+    y: -75,
   },
   Shenhe: {
     x: 0,
@@ -213,7 +213,7 @@ const GACHA_CHAR_OFFESET: { [char: string]: { x: number; y: number } } = {
   },
   Sigewinne: {
     x: 20,
-    y: -80,
+    y: -90,
   },
 };
 
