@@ -166,6 +166,57 @@ const getCoordsFromEvent = (event: MouseOrTouchEvent) => {
 type OpenDownloadingFalse = "opening" | "downloading" | false;
 type VerticalOrHorizontal = "vertical" | "horizontal" | "";
 
+const GACHA_CHAR_OFFESET: { [char: string]: { x: number; y: number } } = {
+  Mavuika: {
+    x: 16,
+    y: -100,
+  },
+  Xiao: {
+    x: 0,
+    y: -55,
+  },
+  Shenhe: {
+    x: 0,
+    y: 15,
+  },
+  Diluc: {
+    x: 0,
+    y: 20,
+  },
+  Nahida: {
+    x: 0,
+    y: -90,
+  },
+  Ningguang: {
+    x: 0,
+    y: 10,
+  },
+  Klee: {
+    x: 0,
+    y: -50,
+  },
+  Dori: {
+    x: 0,
+    y: -30,
+  },
+  Qiqi: {
+    x: 0,
+    y: -35,
+  },
+  Sayu: {
+    x: -50,
+    y: -25,
+  },
+  Chevreuse: {
+    x: 0,
+    y: -70,
+  },
+  Sigewinne: {
+    x: 20,
+    y: -80,
+  },
+};
+
 export const CharacterCard: React.FC<CharacterCardProps> = ({
   row,
   artifacts,
@@ -1070,6 +1121,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           x = x - 130 * hardcodedScale;
           y = y - 82 * hardcodedScale;
         }
+      }
+
+      if (GACHA_CHAR_OFFESET[row.name]) {
+        x += GACHA_CHAR_OFFESET[row.name].x;
+        y += GACHA_CHAR_OFFESET[row.name].y;
       }
 
       if (!noDrag && !pointerPos && dragOffset) {

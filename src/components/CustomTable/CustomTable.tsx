@@ -679,7 +679,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
         <>
           <ExpandedRowBuilds
             row={row}
-            isProfile={!!fetchParams.uid}
+            isProfile={!!fetchParams.uid && !fetchParams.calculationId}
             invalidateCache={invalidateCache}
           />
         </>
