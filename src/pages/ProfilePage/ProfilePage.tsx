@@ -715,6 +715,8 @@ export const ProfilePage: React.FC = () => {
 
       const showBindAccBtn = isAuthenticated && !isAccountOwner;
       const showLockAccBtn = isAuthenticated && isAccountOwner;
+      
+      const isAccountLoaded = !!responseData?.account;
       const isAccountLocked = !!responseData?.account?.locked;
 
       const getTimestamp = () => {
@@ -725,7 +727,7 @@ export const ProfilePage: React.FC = () => {
       };
 
       const refreshButton =
-        !isAccountLocked && refresh ? (
+        !isAccountLocked && isAccountLoaded && refresh ? (
           <>
             {refreshTime && getTimestamp() > 0 ? (
               <Timer
@@ -750,65 +752,67 @@ export const ProfilePage: React.FC = () => {
           </>
         ) : null;
 
-      const bindingButton = bind ? (
-        <>
-          {showBindAccBtn && (
-            <>
-              {bindTime ? (
-                <Timer until={bindTime} onFinish={handleBindTimerFinish} />
-              ) : null}
-              <ConfirmTooltip
-                text="Do you want to bind this account?"
-                onConfirm={bindAccount}
-                className={
-                  !enableBindBtn || DISABLE_FLOATING_BUTTONS
-                    ? "pointer-events-none"
-                    : ""
-                }
-              >
-                <div
-                  title="Bind account"
-                  className={bindBtnClassName}
-                  key={`bind-${uid}-${defaultBtnClassName}`}
+      const bindingButton =
+        isAccountLoaded && bind ? (
+          <>
+            {showBindAccBtn && (
+              <>
+                {bindTime ? (
+                  <Timer until={bindTime} onFinish={handleBindTimerFinish} />
+                ) : null}
+                <ConfirmTooltip
+                  text="Do you want to bind this account?"
+                  onConfirm={bindAccount}
+                  className={
+                    !enableBindBtn || DISABLE_FLOATING_BUTTONS
+                      ? "pointer-events-none"
+                      : ""
+                  }
                 >
-                  <FontAwesomeIcon icon={faKey} size="1x" />
-                </div>
-              </ConfirmTooltip>
-            </>
-          )}
-        </>
-      ) : null;
+                  <div
+                    title="Bind account"
+                    className={bindBtnClassName}
+                    key={`bind-${uid}-${defaultBtnClassName}`}
+                  >
+                    <FontAwesomeIcon icon={faKey} size="1x" />
+                  </div>
+                </ConfirmTooltip>
+              </>
+            )}
+          </>
+        ) : null;
 
-      const lockButton = lock ? (
-        <>
-          {showLockAccBtn && (
-            <>
-              <ConfirmTooltip
-                text={`Do you want to ${
-                  isAccountLocked ? "unlock" : "lock"
-                } this account?`}
-                onConfirm={toggleLockAccount}
-                className={
-                  !enableBindBtn || DISABLE_FLOATING_BUTTONS
-                    ? "pointer-events-none"
-                    : ""
-                }
-              >
-                <div
-                  title={isAccountLocked ? "Unlock account" : "Lock account"}
-                  className={bindBtnClassName}
-                  key={`lock-${uid}-${defaultBtnClassName}`}
+      const lockButton =
+        isAccountLoaded && lock ? (
+          <>
+            {showLockAccBtn && (
+              <>
+                <ConfirmTooltip
+                  text={`Do you want to ${
+                    isAccountLocked ? "unlock" : "lock"
+                  } this account?`}
+                  onConfirm={toggleLockAccount}
+                  className={
+                    !enableBindBtn || DISABLE_FLOATING_BUTTONS
+                      ? "pointer-events-none"
+                      : ""
+                  }
                 >
-                  <FontAwesomeIcon
-                    icon={isAccountLocked ? faLockOpen : faLock}
-                    size="1x"
-                  />
-                </div>
-              </ConfirmTooltip>
-            </>
-          )}
-        </>
-      ) : null;
+                  <div
+                    title={isAccountLocked ? "Unlock account" : "Lock account"}
+                    className={bindBtnClassName}
+                    key={`lock-${uid}-${defaultBtnClassName}`}
+                  >
+                    <FontAwesomeIcon
+                      icon={isAccountLocked ? faLockOpen : faLock}
+                      size="1x"
+                    />
+                  </div>
+                </ConfirmTooltip>
+              </>
+            )}
+          </>
+        ) : null;
 
       const enkaButton = enkaLink ? (
         <div
