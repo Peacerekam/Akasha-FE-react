@@ -2,7 +2,9 @@ import "./style.scss";
 
 import {
   abortSignalCatcher,
+  applyModalBodyStyle,
   filtersQueryToArray,
+  getRelativeCoords,
 } from "../../../utils/helpers";
 import axios, { AxiosRequestConfig } from "axios";
 import { useEffect, useMemo, useState } from "react";
@@ -31,21 +33,6 @@ export type OptionsResponse = {
   fieldKey: string;
   options: FilterOption[];
 }[];
-
-export const getRelativeCoords = (event: React.MouseEvent<HTMLElement>) => {
-  const { innerWidth, innerHeight } = window;
-  const offsetX = event.clientX - innerWidth / 2;
-  const offsetY = event.clientY - innerHeight / 2;
-  return { offsetY, offsetX };
-};
-
-export const applyModalBodyStyle = ({ offsetX, offsetY }: any) => {
-  const _body = document.querySelector("body");
-  if (!_body) return; // lol
-  _body.style.setProperty("--modal-offset-x", `${offsetX}px`);
-  _body.style.setProperty("--modal-offset-y", `${offsetY}px`);
-  _body?.classList.add("overflow-hidden");
-};
 
 export const FiltersContainer = ({
   onFiltersChange,

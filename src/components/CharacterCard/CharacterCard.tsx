@@ -18,13 +18,14 @@ import React, {
   useState,
 } from "react";
 import { STAT_NAMES, fixCritValue, roundToFixed } from "../../utils/substats";
-import { applyModalBodyStyle, getRelativeCoords } from "../CustomTable/Filters";
 import {
+  applyModalBodyStyle,
   ascensionToLevel,
   cssJoin,
   delay,
   getArtifactsInOrder,
   getGenderFromIcon,
+  getRelativeCoords,
   getSessionIdFromCookie,
   isPercent,
   toEnkaUrl,

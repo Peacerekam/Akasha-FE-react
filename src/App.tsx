@@ -14,7 +14,6 @@ import {
   Navbar,
   NavbarTabs,
   PageMessage,
-  StylizedContentBlock,
 } from "./components";
 import { BASENAME, IS_PRODUCATION, MAINTENANCE_MODE } from "./utils/maybeEnv";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -22,7 +21,6 @@ import React, { useEffect } from "react";
 
 import { AdProviderContextProvider } from "./context/AdProvider/AdProviderContext";
 import { ContentWrapper } from "./components/ContentWrapper";
-import DomainBackground from "./assets/images/Concept_Art_Liyue_Harbor.webp";
 import { HoverElementContextProvider } from "./context/HoverElement/HoverElementContext";
 import { LastProfilesContextProvider } from "./context/LastProfiles/LastProfilesContext";
 import { PrivacyPolicyPage } from "./pages/PrivacyPolicy";
@@ -179,31 +177,6 @@ const App = () => {
                 </div>
 
                 <ContentWrapper>
-                  {false && (
-                    <div className="content-block w-100">
-                      {/* <NotificationBar /> */}
-                      <StylizedContentBlock overrideImage={DomainBackground} />
-                      <div className="relative">
-                        <div
-                          style={{
-                            textAlign: "center",
-                            fontSize: 24,
-                            fontWeight: 600,
-                            margin: "20px 0",
-                            color: "red",
-                          }}
-                        >
-                          <div style={{ fontSize: 36 }}>
-                            MIGRATING THE DATABASE TO A NEW SERVER
-                          </div>
-                          <div>
-                            <u>PROFILE REFRESHES</u> AND <u>BUILD MANAGEMENT</u>{" "}
-                            ARE <u>OFF</u> FOR TIME BEING
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
                   <SettingsContextProvider>
                     <HoverElementContextProvider>
                       <Routes>

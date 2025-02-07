@@ -7,6 +7,7 @@ import ReactSelect from "react-select";
 import { StatIcon } from "../../StatIcon/StatIcon";
 import { isIcon } from "../../StatIcon";
 import { reactSelectDarkTheme } from "../../../utils/reactSelectDarkTheme";
+import { revertModalBodyStyle } from "../../../utils/helpers";
 
 type FiltersModalProps = {
   filtersArray: FilterOption[];
@@ -38,8 +39,7 @@ export const FiltersModal = ({
     if (!allowChildren && event.target !== event.currentTarget) return;
     setFilterSelectFocus(undefined);
     toggleModal(event);
-    const _body = document.querySelector("body");
-    _body?.classList.remove("overflow-hidden");
+    revertModalBodyStyle();
   };
 
   const [modalContainerRef, setModalContainerRef] = useState<HTMLDivElement>();

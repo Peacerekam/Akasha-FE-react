@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
+import { revertModalBodyStyle } from "../../utils/helpers";
 
 type PreviewModalProps = {
   isOpen: boolean;
@@ -20,8 +21,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   ) => {
     if (!allowChildren && event.target !== event.currentTarget) return;
     toggleModal(event);
-    const _body = document.querySelector("body");
-    _body?.classList.remove("overflow-hidden");
+    revertModalBodyStyle();
   };
 
   if (!isOpen) return null;

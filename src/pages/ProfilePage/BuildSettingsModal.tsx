@@ -5,6 +5,7 @@ import {
   cssJoin,
   getSessionIdFromCookie,
   isBuildNew,
+  revertModalBodyStyle,
 } from "../../utils/helpers";
 import axios, { AxiosRequestConfig } from "axios";
 import {
@@ -131,12 +132,12 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     clearBgImage();
     setSelectedBuildId("");
     setSearchText("");
+    revertModalBodyStyle();
+
     if (isDirty) {
       parentRefetchData();
       setIsDirty(false);
     }
-    const _body = document.querySelector("body");
-    _body?.classList.remove("overflow-hidden");
   };
 
   const modalHeader = (

@@ -956,3 +956,36 @@ export const isBuildNew = (lastBuildUpdate?: number) => {
   const isNew = !!minutesSince && minutesSince < 30;
   return isNew;
 };
+
+export const getRelativeCoords = (event: React.MouseEvent<HTMLElement>) => {
+  const { innerWidth, innerHeight } = window;
+  const offsetX = event.clientX - innerWidth / 2;
+  const offsetY = event.clientY - innerHeight / 2;
+  return { offsetY, offsetX };
+};
+
+export const applyModalBodyStyle = ({ offsetX, offsetY }: any) => {
+  const _body = document.querySelector("body");
+  if (!_body) return; // lol
+
+  _body.style.setProperty("--modal-offset-x", `${offsetX}px`);
+  _body.style.setProperty("--modal-offset-y", `${offsetY}px`);
+  _body?.classList.add("overflow-hidden");
+
+  // const _tableWrapper = document.querySelectorAll(".custom-table-wrapper");
+  // _tableWrapper.forEach((el: any, index) => {
+  //   el.style = `z-index: -${index}`;
+  // });
+};
+
+export const revertModalBodyStyle = () => {
+  const _body = document.querySelector("body");
+  if (!_body) return; // lol
+
+  _body?.classList.remove("overflow-hidden");
+
+  // const _tableWrapper = document.querySelectorAll(".custom-table-wrapper");
+  // _tableWrapper.forEach((el: any, index) => {
+  //   el.style = ``;
+  // });
+};

@@ -1,11 +1,10 @@
 import "./style.scss";
 
 import React, { useCallback, useEffect, useState } from "react";
+import { cssJoin, getRelativeCoords } from "../../utils/helpers";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { cssJoin } from "../../utils/helpers";
-import { getRelativeCoords } from "../CustomTable/Filters";
 
 type ConfirmTooltipProps = {
   text: string;

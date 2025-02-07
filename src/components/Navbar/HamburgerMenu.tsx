@@ -1,3 +1,4 @@
+import { cssJoin, revertModalBodyStyle } from "../../utils/helpers";
 import { faStar, faX } from "@fortawesome/free-solid-svg-icons";
 import { useContext, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -6,7 +7,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { LanguageSwitcher } from "../LanguageSwitcher";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
 import { NavElement } from "./Navbar";
-import { cssJoin } from "../../utils/helpers";
 
 type HamburgerMenuProps = {
   isOpen: boolean;
@@ -56,8 +56,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
   ) => {
     if (!allowChildren && event.target !== event.currentTarget) return;
     toggleHamburger();
-    const _body = document.querySelector("body");
-    _body?.classList.remove("overflow-hidden");
+    revertModalBodyStyle();
   };
 
   const closeDelay = 50; // honestly it might be useless anyways

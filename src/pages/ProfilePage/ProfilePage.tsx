@@ -23,11 +23,13 @@ import {
   FETCH_CHARACTER_FILTERS_URL,
   abortSignalCatcher,
   allSubstatsInOrder,
+  applyModalBodyStyle,
   cssJoin,
   getArtifactCvColor,
   getGenderFromIcon,
   getInGameSubstatValue,
   getRainbowTextStyle,
+  getRelativeCoords,
   getRelevantCharacterStats,
   getSubstatsInOrder,
   isBuildNew,
@@ -43,14 +45,12 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import {
-  applyModalBodyStyle,
-  getRelativeCoords,
-} from "../../components/CustomTable/Filters";
 import axios, { AxiosRequestConfig } from "axios";
 import {
   faGear,
   faKey,
+  faLock,
+  faLockOpen,
   faRotateRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -652,12 +652,14 @@ export const ProfilePage: React.FC = () => {
     ({
       refresh = false,
       bind = false,
+      lock = false,
       buildSettings = false,
       artifactSettings = false,
       enkaLink = false,
     }: {
       refresh?: boolean;
       bind?: boolean;
+      lock?: boolean;
       buildSettings?: boolean;
       artifactSettings?: boolean;
       enkaLink?: boolean;
@@ -682,6 +684,8 @@ export const ProfilePage: React.FC = () => {
         enableBindBtn ? "" : "disable-btn",
       ]);
 
+      // /api/user/toggleLockProfile/:uid
+
       const bindAccount = async () => {
         if (!uid) return;
         setEnableBindBtn(false);
@@ -696,7 +700,22 @@ export const ProfilePage: React.FC = () => {
         await fetchProfile();
       };
 
+      const toggleLockAccount = async () => {
+        if (!uid) return;
+        const _uid = encodeURIComponent(uid);
+        const lockAccountURL = `/api/user/toggleLockProfile/${_uid}`;
+        const { data } = await axios.post(lockAccountURL, null, {
+          headers: {
+            Authorization: `Bearer ${getSessionIdFromCookie()}`,
+          },
+        });
+        console.log(data);
+        await fetchProfile();
+      };
+
       const showBindAccBtn = isAuthenticated && !isAccountOwner;
+      const showLockAccBtn = isAuthenticated && isAccountOwner;
+      const isAccountLocked = !!responseData?.account?.locked;
 
       const getTimestamp = () => {
         if (!refreshTime) return 0;
@@ -705,30 +724,31 @@ export const ProfilePage: React.FC = () => {
         return then;
       };
 
-      const refreshButton = refresh ? (
-        <>
-          {refreshTime && getTimestamp() > 0 ? (
-            <Timer
-              until={refreshTime}
-              label={"refresh cooldown:"}
-              onFinish={handleTimerFinish}
-            />
-          ) : (
-            <LastUpdated
-              label="last update"
-              lastProfileUpdate={responseData.account?.lastProfileUpdate}
-            />
-          )}
-          <div
-            title="Refresh builds"
-            className={refreshBtnClassName}
-            onClick={() => abortSignalCatcher(handleRefreshData)}
-            key={`refresh-${uid}-${!!enableRefreshBtn}`}
-          >
-            <FontAwesomeIcon icon={faRotateRight} size="1x" />
-          </div>
-        </>
-      ) : null;
+      const refreshButton =
+        !isAccountLocked && refresh ? (
+          <>
+            {refreshTime && getTimestamp() > 0 ? (
+              <Timer
+                until={refreshTime}
+                label={"refresh cooldown:"}
+                onFinish={handleTimerFinish}
+              />
+            ) : (
+              <LastUpdated
+                label="last update"
+                lastProfileUpdate={responseData.account?.lastProfileUpdate}
+              />
+            )}
+            <div
+              title="Refresh builds"
+              className={refreshBtnClassName}
+              onClick={() => abortSignalCatcher(handleRefreshData)}
+              key={`refresh-${uid}-${!!enableRefreshBtn}`}
+            >
+              <FontAwesomeIcon icon={faRotateRight} size="1x" />
+            </div>
+          </>
+        ) : null;
 
       const bindingButton = bind ? (
         <>
@@ -752,6 +772,37 @@ export const ProfilePage: React.FC = () => {
                   key={`bind-${uid}-${defaultBtnClassName}`}
                 >
                   <FontAwesomeIcon icon={faKey} size="1x" />
+                </div>
+              </ConfirmTooltip>
+            </>
+          )}
+        </>
+      ) : null;
+
+      const lockButton = lock ? (
+        <>
+          {showLockAccBtn && (
+            <>
+              <ConfirmTooltip
+                text={`Do you want to ${
+                  isAccountLocked ? "unlock" : "lock"
+                } this account?`}
+                onConfirm={toggleLockAccount}
+                className={
+                  !enableBindBtn || DISABLE_FLOATING_BUTTONS
+                    ? "pointer-events-none"
+                    : ""
+                }
+              >
+                <div
+                  title={isAccountLocked ? "Unlock account" : "Lock account"}
+                  className={bindBtnClassName}
+                  key={`lock-${uid}-${defaultBtnClassName}`}
+                >
+                  <FontAwesomeIcon
+                    icon={isAccountLocked ? faLockOpen : faLock}
+                    size="1x"
+                  />
                 </div>
               </ConfirmTooltip>
             </>
@@ -807,6 +858,7 @@ export const ProfilePage: React.FC = () => {
         <div className="floating-profile-buttons-wrapper">
           <div className="floating-profile-buttons">
             {!isCombined && refreshButton}
+            {!isCombined && lockButton}
             {!isCombined && enkaButton}
             {!isCombined && bindingButton}
             {buildSettingsButton}
@@ -1005,6 +1057,7 @@ export const ProfilePage: React.FC = () => {
 
       {displayFloatingButtons({
         bind: true,
+        lock: true,
         refresh: true,
         buildSettings: true,
         enkaLink: true,

@@ -49,6 +49,9 @@
       height: 100%;
       width: 100%;
       z-index: 1;
+      // @TODO: extend the gradient to hide all the repeat stitches?
+      // @TODO: extend the gradient to hide all the repeat stitches?
+      // @TODO: extend the gradient to hide all the repeat stitches?
       background: linear-gradient(
         180deg,
         transparent 50px,
@@ -87,6 +90,7 @@
     background-image: var(--name-card-url);
     background-size: contain;
     background-repeat: repeat;
+    // @TODO: if i extend the gradient fade-outs then this should be reset a bit
     background-position-y: -24px;
     top: 0;
     // bottom: 0;
@@ -100,6 +104,9 @@
     pointer-events: none !important;
     content: "";
     position: absolute;
+    // @TODO: extend the gradient to hide all the repeat stitches?
+    // @TODO: extend the gradient to hide all the repeat stitches?
+    // @TODO: extend the gradient to hide all the repeat stitches?
     background: linear-gradient(0deg, $bg-0 0%, $bg-1 300px, $bg-1-5 850px);
     background-position-y: top;
     left: 0;
@@ -112,6 +119,7 @@
 
 // background changes fixes for some browsers
 .stylized-content-block-wrapper {
+  z-index: 0;
   &,
   .stylized-content-block {
     pointer-events: none;
@@ -119,6 +127,6 @@
 
   ~ * {
     position: relative;
-    z-index: 2;
+    // z-index: 2;
   }
 }

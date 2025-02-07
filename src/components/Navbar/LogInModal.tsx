@@ -5,6 +5,10 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { faDiscord, faPatreon } from "@fortawesome/free-brands-svg-icons";
+import {
+  optsHeadersSessionID,
+  revertModalBodyStyle,
+} from "../../utils/helpers";
 
 import { ARBadge } from "../ARBadge";
 import { ConfirmTooltip } from "../ConfirmTooltip";
@@ -12,7 +16,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { RegionBadge } from "../RegionBadge";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
 import axios from "axios";
-import { optsHeadersSessionID } from "../../utils/helpers";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -35,8 +38,7 @@ export const LogInModal: React.FC<LogInModalProps> = ({
   ) => {
     if (!allowChildren && event.target !== event.currentTarget) return;
     toggleModal(event);
-    const _body = document.querySelector("body");
-    _body?.classList.remove("overflow-hidden");
+    revertModalBodyStyle();
   };
 
   if (!isOpen) return null;

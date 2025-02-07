@@ -25,6 +25,7 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
   const [disableAnimations, setDisableAnimations] = useState(false);
   const [iterator, setIterator] = useState(1);
   const [artifacts, setArtifacts] = useState<any[]>([]);
+  const [error, setError] = useState<string>();
   const [_calculations, setCalculations] = useState<{
     calculations: any;
     chartsData: any;
@@ -62,6 +63,8 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
     };
     const { data } = await axios.get(calcDetailsURL, opts);
     setCalculations(data.data);
+
+    if (data.error) setError(data.error);
   };
 
   const getArtifactsAndCalculations = async () => {
@@ -97,7 +100,9 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
 
   // const hasLeaderboards = Object.keys(_calculations.calculations).length > 0;
 
-  const content = (
+  const content = error ? (
+    <span className="mt-10">{error}</span>
+  ) : (
     <>
       {isProfile ? (
         <CharacterCard

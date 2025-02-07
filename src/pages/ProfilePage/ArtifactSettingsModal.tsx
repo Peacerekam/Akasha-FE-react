@@ -2,6 +2,7 @@ import { Artifact, ConfirmTooltip, Spinner } from "../../components";
 import {
   abortSignalCatcher,
   getSessionIdFromCookie,
+  revertModalBodyStyle,
 } from "../../utils/helpers";
 import axios, { AxiosRequestConfig } from "axios";
 import { faTrash, faX } from "@fortawesome/free-solid-svg-icons";
@@ -78,12 +79,12 @@ export const ArtifactSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     if (!allowChildren && event.target !== event.currentTarget) return;
     toggleModal(event);
     setSearchText("");
+    revertModalBodyStyle();
+    
     if (isDirty) {
       parentRefetchData();
       setIsDirty(false);
     }
-    const _body = document.querySelector("body");
-    _body?.classList.remove("overflow-hidden");
   };
 
   const modalHeader = (
