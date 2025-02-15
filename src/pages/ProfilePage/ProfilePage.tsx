@@ -715,7 +715,7 @@ export const ProfilePage: React.FC = () => {
 
       const showBindAccBtn = isAuthenticated && !isAccountOwner;
       const showLockAccBtn = isAuthenticated && isAccountOwner;
-      
+
       const isAccountLoaded = !!responseData?.account;
       const isAccountLocked = !!responseData?.account?.locked;
 
@@ -761,7 +761,7 @@ export const ProfilePage: React.FC = () => {
                   <Timer until={bindTime} onFinish={handleBindTimerFinish} />
                 ) : null}
                 <ConfirmTooltip
-                  text="Do you want to bind this account?"
+                  text="Do you want to bind this profile?"
                   onConfirm={bindAccount}
                   className={
                     !enableBindBtn || DISABLE_FLOATING_BUTTONS
@@ -790,7 +790,7 @@ export const ProfilePage: React.FC = () => {
                 <ConfirmTooltip
                   text={`Do you want to ${
                     isAccountLocked ? "unlock" : "lock"
-                  } this account?`}
+                  } this profile?`}
                   onConfirm={toggleLockAccount}
                   className={
                     !enableBindBtn || DISABLE_FLOATING_BUTTONS
@@ -799,7 +799,7 @@ export const ProfilePage: React.FC = () => {
                   }
                 >
                   <div
-                    title={isAccountLocked ? "Unlock account" : "Lock account"}
+                    title={isAccountLocked ? "Unlock profile" : "Lock profile"}
                     className={bindBtnClassName}
                     key={`lock-${uid}-${defaultBtnClassName}`}
                   >

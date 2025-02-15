@@ -261,12 +261,7 @@ export const LookupUID: React.FC = () => {
   );
 
   const uidsQuery = useMemo(
-    () =>
-      uidsToQuery(
-        lastProfiles.map((a) =>
-          a.uid?.startsWith("@") ? a.uid.slice(1) : a.uid
-        )
-      ),
+    () => uidsToQuery(lastProfiles.map((a) => a.uid)),
     [lastProfiles.length]
   );
 

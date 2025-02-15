@@ -8,7 +8,7 @@ import { StylizedContentBlock } from "../../components/StylizedContentBlock";
 
 export const PrivacyPolicyPage: React.FC = () => {
   const { adProvider } = useContext(AdProviderContext);
-  
+
   const advertismentsText =
     adProvider === "playwire" ? (
       <>
@@ -73,7 +73,10 @@ export const PrivacyPolicyPage: React.FC = () => {
               <li>
                 akasha.cv will store your public Genshin account, character and
                 artifact information. You can contact @mimee (previously
-                Mimee#1111) on Discord if you wish to delete your profile.
+                Mimee#1111) on Discord if you wish to delete your profile. If
+                you want to prevent people from refreshing your profile there is
+                a refresh lock setting available after binding your akasha
+                profile to Discord or Patreon.
               </li>
               <li>
                 When binding profile page to a UID, akasha.cv will save your

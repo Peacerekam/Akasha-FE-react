@@ -123,35 +123,6 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     }
   }, [selectedBuildId, builds, isOpen]);
 
-  const handleCloseModal = (
-    event: React.MouseEvent<HTMLElement>,
-    allowChildren = false
-  ) => {
-    if (!allowChildren && event.target !== event.currentTarget) return;
-    toggleModal(event);
-    clearBgImage();
-    setSelectedBuildId("");
-    setSearchText("");
-    revertModalBodyStyle();
-
-    if (isDirty) {
-      parentRefetchData();
-      setIsDirty(false);
-    }
-  };
-
-  const modalHeader = (
-    <div className="modal-header">
-      <span className="modal-title">Builds settings</span>
-      <button
-        className="close-btn"
-        onClick={(event) => handleCloseModal(event, true)}
-      >
-        <FontAwesomeIcon className="filter-icon" icon={faX} size="1x" />
-      </button>
-    </div>
-  );
-
   const clearBgImage = () => {
     setBackgroundPreview("");
     setFileData(null);
@@ -539,19 +510,36 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     isPending,
   ]);
 
-  // const modalButtons = (
-  //   <div className="modal-buttons">
-  //     <button
-  //       className="apply-btn"
-  //       onClick={(event) => handleCloseModal(event, true)}
-  //     >
-  //       <FontAwesomeIcon className="filter-icon" icon={faCheck} size="1x" />
-  //       OK
-  //     </button>
-  //   </div>
-  // );
-
   if (!isOpen) return null;
+
+  const handleCloseModal = (
+    event: React.MouseEvent<HTMLElement>,
+    allowChildren = false
+  ) => {
+    if (!allowChildren && event.target !== event.currentTarget) return;
+    toggleModal(event);
+    clearBgImage();
+    setSelectedBuildId("");
+    setSearchText("");
+    revertModalBodyStyle();
+
+    if (isDirty) {
+      parentRefetchData();
+      setIsDirty(false);
+    }
+  };
+
+  const modalHeader = (
+    <div className="modal-header">
+      <span className="modal-title">Builds settings</span>
+      <button
+        className="close-btn"
+        onClick={(event) => handleCloseModal(event, true)}
+      >
+        <FontAwesomeIcon className="filter-icon" icon={faX} size="1x" />
+      </button>
+    </div>
+  );
 
   return (
     <>

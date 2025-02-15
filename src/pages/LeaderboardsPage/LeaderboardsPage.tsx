@@ -377,12 +377,7 @@ export const LeaderboardsPage: React.FC = () => {
   const [chartData, setChartData] = useState<any[]>([]);
 
   const uidsQuery = useMemo(
-    () =>
-      uidsToQuery(
-        lastProfiles.map((a) =>
-          a.uid?.startsWith("@") ? a.uid.slice(1) : a.uid
-        )
-      ),
+    () => uidsToQuery(lastProfiles.map((a) => a.uid)),
     [lastProfiles.length]
   );
 
@@ -942,7 +937,7 @@ export const LeaderboardsPage: React.FC = () => {
                 // wont work because of how I handle fetchParams.filter
                 // filtersURL={`${FETCH_CHARACTER_FILTERS_URL}?type=leaderboards`}
                 fetchParams={{
-                  uids: uidsToQuery(lastProfiles.map((a) => a.uid)),
+                  uids: uidsQuery,
                   uid: lookupUID,
                   variant,
                   filter: "[all]1",

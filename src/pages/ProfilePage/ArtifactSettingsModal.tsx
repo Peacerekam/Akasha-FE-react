@@ -72,33 +72,6 @@ export const ArtifactSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     }
   }, [isOpen]);
 
-  const handleCloseModal = (
-    event: React.MouseEvent<HTMLElement>,
-    allowChildren = false
-  ) => {
-    if (!allowChildren && event.target !== event.currentTarget) return;
-    toggleModal(event);
-    setSearchText("");
-    revertModalBodyStyle();
-    
-    if (isDirty) {
-      parentRefetchData();
-      setIsDirty(false);
-    }
-  };
-
-  const modalHeader = (
-    <div className="modal-header">
-      <span className="modal-title">Artifact settings</span>
-      <button
-        className="close-btn"
-        onClick={(event) => handleCloseModal(event, true)}
-      >
-        <FontAwesomeIcon className="filter-icon" icon={faX} size="1x" />
-      </button>
-    </div>
-  );
-
   const filteredArtifacts = useMemo(() => {
     const filterFunc = (a: any) => {
       const buildType = a.setName?.toLowerCase();
@@ -255,6 +228,33 @@ export const ArtifactSettingsModal: React.FC<ProfileSettingsModalProps> = ({
   }, [accountData?.uid, filteredArtifacts, searchText, isPending, errorMsg]);
 
   if (!isOpen) return null;
+
+  const handleCloseModal = (
+    event: React.MouseEvent<HTMLElement>,
+    allowChildren = false
+  ) => {
+    if (!allowChildren && event.target !== event.currentTarget) return;
+    toggleModal(event);
+    setSearchText("");
+    revertModalBodyStyle();
+    
+    if (isDirty) {
+      parentRefetchData();
+      setIsDirty(false);
+    }
+  };
+
+  const modalHeader = (
+    <div className="modal-header">
+      <span className="modal-title">Artifact settings</span>
+      <button
+        className="close-btn"
+        onClick={(event) => handleCloseModal(event, true)}
+      >
+        <FontAwesomeIcon className="filter-icon" icon={faX} size="1x" />
+      </button>
+    </div>
+  );
 
   return (
     <>

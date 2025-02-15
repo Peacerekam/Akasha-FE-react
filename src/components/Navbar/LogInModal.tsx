@@ -32,6 +32,11 @@ export const LogInModal: React.FC<LogInModalProps> = ({
   const { profileObject, isAuthenticated, boundAccounts } =
     useContext(SessionDataContext);
 
+  if (!isOpen) return null;
+
+  const patreonAuthLink = `${axios.defaults.baseURL}/auth/patreon`;
+  const discordAuthLink = `${axios.defaults.baseURL}/auth/discord`;
+
   const handleCloseModal = (
     event: React.MouseEvent<HTMLElement>,
     allowChildren = false
@@ -40,11 +45,6 @@ export const LogInModal: React.FC<LogInModalProps> = ({
     toggleModal(event);
     revertModalBodyStyle();
   };
-
-  if (!isOpen) return null;
-
-  const patreonAuthLink = `${axios.defaults.baseURL}/auth/patreon`;
-  const discordAuthLink = `${axios.defaults.baseURL}/auth/discord`;
 
   const handleLogout = async () => {
     try {

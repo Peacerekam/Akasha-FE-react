@@ -9,6 +9,7 @@ import {
   arrayPushOrSplice,
   cssJoin,
   normalizeText,
+  uidsToQuery,
 } from "../../utils/helpers";
 import {
   FETCH_ARTIFACTS_URL,
@@ -38,6 +39,7 @@ import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 import { ExpandedRowBuilds } from "../ExpandedRowBuilds";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
+import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
@@ -156,10 +158,13 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   const [paramsProjection, setParamsProjection] = useState(false);
   const [unknownPage, setUnknownPage] = useState(false);
   const [warningText, setWarningText] = useState(warningMessage);
+
   const { updateTableHoverElement } = useContext(HoverElementContext);
+  const { translate } = useContext(TranslationContext);
+  const { lastProfiles } = useContext(LastProfilesContext);
   const { adProvider, setContentWidth, setPreventContentShrinking } =
     useContext(AdProviderContext);
-  const { translate } = useContext(TranslationContext);
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -235,7 +240,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
   const appendParamsToURL = () => {
     const tmp: string[] = [];
-    const ignoredParams = ["fromId", "page", "li", "build"]; // @TODO: test if this is ok
+    const ignoredParams = ["fromId", "page", "li", "build", "lastProfiles"]; // @TODO: test if this is ok
     for (const key of Object.keys(params)) {
       const value = (params as any)?.[key];
 
@@ -823,17 +828,25 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
   const handleChangeFilters = (filters: FilterOption[]) => {
     let stringified = "";
+    let uids = "";
 
     filters.forEach((f) => {
-      if (f.name !== "" && f.value !== "") {
+      if (params.uids) {
+        const searchQuery = location.search;
+        const query = new URLSearchParams(searchQuery);
+        uids = query.get("uids") || "";
+      } else if (f.name === "lastProfiles" && !params.uids) {
+        uids = uidsToQuery(lastProfiles.map((x) => x.uid));
+      } else if (f.name !== "" && f.value !== "") {
         stringified += `[${f.name}]${f.value}`;
       }
     });
 
-    if (params.filter === stringified) return;
+    if (params.filter === stringified && params.uids === uids) return;
 
     setParams((prev) => ({
       ...prev,
+      uids,
       page: 1,
       p: "",
       filter: stringified,

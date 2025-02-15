@@ -15,6 +15,8 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   blob,
   dataURL,
 }) => {
+  if (!isOpen) return null;
+
   const handleCloseModal = (
     event: React.MouseEvent<HTMLElement>,
     allowChildren = false
@@ -23,8 +25,6 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
     toggleModal(event);
     revertModalBodyStyle();
   };
-
-  if (!isOpen) return null;
 
   const imageData = blob ? URL.createObjectURL(blob) : dataURL || "";
 
