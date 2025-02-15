@@ -831,12 +831,14 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     let uids = "";
 
     filters.forEach((f) => {
-      if (params.uids) {
-        const searchQuery = location.search;
-        const query = new URLSearchParams(searchQuery);
-        uids = query.get("uids") || "";
-      } else if (f.name === "lastProfiles" && !params.uids) {
-        uids = uidsToQuery(lastProfiles.map((x) => x.uid));
+      if (f.name === "lastProfiles") {
+        if (params.uids) {
+          const searchQuery = location.search;
+          const query = new URLSearchParams(searchQuery);
+          uids = query.get("uids") || "";
+        } else {
+          uids = uidsToQuery(lastProfiles.map((x) => x.uid));
+        }
       } else if (f.name !== "" && f.value !== "") {
         stringified += `[${f.name}]${f.value}`;
       }
