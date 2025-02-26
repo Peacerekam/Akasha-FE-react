@@ -25,7 +25,7 @@ import FriendshipIcon from "../../assets/icons/Item_Companionship_EXP.png";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { LookupUID } from "./LookupUID";
 import { TableColumn } from "../../types/TableColumn";
-import { TheaterRankTextText } from "../../components/TheaterRankText";
+import { TheaterRankText } from "../../components/TheaterRankText";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
@@ -177,7 +177,7 @@ export const AccountsPage: React.FC = () => {
         sortField: "playerInfo.theater.stars",
         width: "55px",
         cell: (row) => {
-          return <TheaterRankTextText row={row} />;
+          return <TheaterRankText row={row} />;
         },
       },
       {

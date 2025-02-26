@@ -1,36 +1,56 @@
 import "./style.scss";
 
-// import Separator from "../../assets/icons/abyss_separator.png";
 import Star from "../../assets/icons/abyss_star.png";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import { cssJoin } from "../../utils/helpers";
 import { useContext } from "react";
 
-export const abyssProgressToColor = (floor: number, chamber: number) => {
+// import Separator from "../../assets/icons/abyss_separator.png";
+
+export const DIFF_COLORS = {
+  0: "rgb(168, 120, 31)",
+  1: "rgb(168, 154, 31)",
+  2: "rgb(0, 122, 122)",
+  3: "rgb(128, 45, 136)",
+  4: "rgb(128, 128, 128)",
+};
+
+export const abyssProgressToColor = (
+  floor: number,
+  chamber: number,
+  badge?: boolean
+) => {
   // if (floor === 10) {
   //   return "gray";
   // }
 
   if (floor === 11 && chamber === 3) {
+    if (badge) return DIFF_COLORS[2];
     return "rgb(102, 163, 255)"; // III - purple
   }
   if (floor === 11) {
+    if (badge) return DIFF_COLORS[3];
     return "rgb(194, 102, 255)"; // IV - blue
   }
   if (floor === 12 && chamber === 3) {
+    if (badge) return DIFF_COLORS[0];
     return "rgb(255, 217, 0)"; // I - gold
   }
   if (floor === 12) {
+    if (badge) return DIFF_COLORS[1];
     return "orange"; // II - orange
   }
 
+  if (badge) return DIFF_COLORS[4];
   return "gray";
 };
 
 type AbyssRankTextProps = {
   row?: any;
+  badge?: boolean;
 };
 
-export const AbyssRankText: React.FC<AbyssRankTextProps> = ({ row }) => {
+export const AbyssRankText: React.FC<AbyssRankTextProps> = ({ row, badge }) => {
   const { translate } = useContext(TranslationContext);
 
   const floor = row?.playerInfo?.towerFloorIndex || "";
@@ -38,15 +58,21 @@ export const AbyssRankText: React.FC<AbyssRankTextProps> = ({ row }) => {
   const stars = row?.playerInfo?.towerStarIndex;
 
   const abyssProgress = floor && chamber ? `${floor}-${chamber}` : "";
-  const color = abyssProgressToColor(floor, chamber);
+  const color = abyssProgressToColor(floor, chamber, badge);
 
   const title =
     `${translate("Spiral Abyss")}: ` +
     `Floor ${floor} Chamber ${chamber}` +
     (stars !== undefined ? ` - ${stars} Stars` : "");
 
+  const classNames = cssJoin(["abyss-cell", badge ? "abyss-badge" : ""]);
+
   return (
-    <div style={{ color }} className="abyss-cell" title={title}>
+    <div
+      style={{ "--color": color } as React.CSSProperties}
+      className={classNames}
+      title={title}
+    >
       {stars !== undefined ? (
         <>
           <img

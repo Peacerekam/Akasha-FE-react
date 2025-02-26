@@ -139,6 +139,10 @@ export const SettingsPage: React.FC = () => {
           </div>
         </div>
       </div>
+      {/* @TODO: enable/disable hover previews */}
+      {/* <div>
+        disabled by default
+      </div> */}
     </div>
   );
 

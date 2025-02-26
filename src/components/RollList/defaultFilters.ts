@@ -31,7 +31,7 @@ const PYRO_RV_LIST = {
   Yanfei: [CRate, CDMG, ATK_, EM, ER],
   Yoimiya: [CRate, CDMG, ATK_, EM],
   Xiangling: [CRate, CDMG, ATK_, EM, ER],
-  "Hu Tao": [CRate, CDMG, ATK_, HP_, EM],
+  "Hu Tao": [CRate, CDMG, HP_, EM],
   Lyney: [CRate, CDMG, ATK_, ER],
   Xinyan: [CRate, CDMG, ATK_, ER],
   Thoma: [CRate, CDMG, ATK_, ER],

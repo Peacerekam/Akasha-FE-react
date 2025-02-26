@@ -34,16 +34,10 @@
   flex-wrap: wrap;
   justify-content: center;
   text-align: center;
-  // align-items: flex-end;
-  // margin: 15px 0px;
-  // gap: 5px;
   width: 100%;
-  min-height: 100px;
-
+  min-height: 111px;
   position: relative;
   justify-content: space-evenly;
-  // background-image: var(--name-card-url);
-  // background-size: cover;
 
   .block-highlight {
     display: flex;
@@ -70,6 +64,10 @@
           color: #719bd4;
         }
       }
+    }
+    img {
+      margin-top: 5px;
+      height: 15px;
     }
   }
 

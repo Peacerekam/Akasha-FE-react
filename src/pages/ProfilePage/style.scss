@@ -11,7 +11,7 @@
   // box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   max-width: 100%;
   // width: calc(100% - 475px);
-  width: calc(100% - 620px);
+  width: calc(100% - 640px);
   min-width: 200px;
   flex-grow: 1;
   // height: 100px;
@@ -32,7 +32,7 @@
     .profile-highlights {
       // min-width: min(100%, 370px);
       // min-width: min(100%, 500px);
-      min-width: min(100%, 600px);
+      min-width: min(100%, 580px);
     }
   }
   .vm-container {
@@ -663,4 +663,146 @@
       }
     }
   }
+}
+
+.hoyolab-highlights-container {
+  .scrollbar-container {
+    width: 100%;
+  }
+
+  &.w-100 .hoyolab-highlights {
+    width: unset;
+    .hoyo-highlight-tile {
+      background-color: rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  .hoyolab-highlights {
+    width: 1600px;
+    .hoyo-highlight-tile {
+      background-color: rgba(0, 0, 0, 0.25);
+      color: rgb(215, 215, 215);
+    }
+  }
+}
+
+.hoyolab-highlights {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(130px, 100%), 1fr));
+
+  .hoyo-highlight-tile {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: rgb(155, 155, 155);
+    font-size: 14px;
+    text-align: center;
+    justify-content: center;
+
+    background-color: rgba(0, 0, 0, 0.15);
+    height: 60px;
+    padding-bottom: 5px;
+
+    text-shadow: 0px 0px 10px #000;
+
+    box-shadow: inset 0 0 0px 1px rgba(rgba(0, 255, 0, 0.1254901961), 0.1254901961);
+
+    &::after {
+      pointer-events: none;
+      position: absolute;
+      content: "";
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background: linear-gradient(
+        0deg,
+        rgba(0, 255, 0, 0.1254901961) 0%,
+        transparent 80%
+      );
+    }
+
+    &.chests-highlight {
+      box-shadow: inset 0 0 0px 1px rgba(magenta, 0.1254901961);
+      &::after {
+        background: linear-gradient(
+          0deg,
+          rgba(magenta, 0.1254901961) 0%,
+          transparent 80%
+        );
+      }
+    }
+
+    &.oculi-highlight {
+      box-shadow: inset 0 0 0px 1px rgba(cyan, 0.1254901961);
+      &::after {
+        background: linear-gradient(
+          0deg,
+          rgba(cyan, 0.1254901961) 0%,
+          transparent 80%
+        );
+      }
+    }
+
+    &.endgame-highlight {
+      box-shadow: inset 0 0 0px 1px rgba(orange, 0.1254901961);
+      &::after {
+        background: linear-gradient(
+          0deg,
+          rgba(orange, 0.1254901961) 0%,
+          transparent 80%
+        );
+      }
+    }
+
+    .hoyo-highlight-tile-value {
+      color: white;
+      font-size: 20px;
+      font-weight: 600;
+    }
+  }
+}
+
+.enemies-and-materials {
+  display: flex;
+  gap: 10px;
+
+  .big-grid {
+    flex: 1;
+    font-size: 16px;
+    font-weight: 600;
+    text-shadow: 0 0.08em 0.1em black, 0 0.1em 0.3em rgba(0, 0, 0, 0.4);
+    padding: 10px;
+    height: 100%;
+
+    $height: 240px;
+    height: $height;
+
+    img {
+      width: 30px;
+      height: 30px;
+    }
+
+    .hoyo-header {
+      font-size: 20px;
+      width: 100%;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .scrollbar-container  {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(90px, 100%), 1fr));
+      row-gap: 10px;
+      height: $height - 47px;
+    }
+
+    & > div > div > div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+  
 }

@@ -506,18 +506,17 @@ export const ProfileCharts: React.FC<{ debug?: boolean }> = ({ debug }) => {
       className={cssJoin([
         "relative w-100 custom-table-wrapper",
         chartsData ? "mt-20 profile-charts profile-highlights" : "",
-        debug ? "debug-mode" : ""
       ])}
     >
       <div>
         {formattedData ? (
           <>
-            <div className="charts-tabs flex gap-10">
+            {/* <div className="charts-tabs flex gap-10">
               <div>Overview</div>
               <div>Rankings</div>
               <div>Builds</div>
               <div>Artifacts</div>
-            </div>
+            </div> */}
             <PerfectScrollbar
               options={{
                 suppressScrollY: true,

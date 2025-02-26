@@ -40,3 +40,4 @@ export * from "./AchievementsBadge";
 export * from "./LanguageSwitcher";
 export * from "./LastUpdated";
 export * from "./DamageDistrubution";
+export * from "./AbyssSchedule";

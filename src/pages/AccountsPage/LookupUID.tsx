@@ -28,7 +28,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FriendshipIcon from "../../assets/icons/Item_Companionship_EXP.png";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
 import { TableColumn } from "../../types/TableColumn";
-import { TheaterRankTextText } from "../../components/TheaterRankText";
+import { TheaterRankText } from "../../components/TheaterRankText";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import debounce from "lodash/debounce";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
@@ -188,7 +188,7 @@ export const LookupUID: React.FC = () => {
         sortField: "playerInfo.theater.stars",
         width: "60px",
         cell: (row) => {
-          return <TheaterRankTextText row={row} />;
+          return <TheaterRankText row={row} />;
         },
       },
       {

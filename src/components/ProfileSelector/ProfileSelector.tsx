@@ -2,6 +2,7 @@ import "./style.scss";
 
 import { Link, useLocation } from "react-router-dom";
 
+import HoYoLAB from "../../assets/images/hoyolab_logo.png";
 import { LastUpdated } from "../LastUpdated";
 import { PatreonBorderInside } from "../FancyBuildBorder";
 import React from "react";
@@ -33,8 +34,10 @@ export const ProfileSelector: React.FC<ProfileSelectorProps> = ({
     const isDefault = profileUID === defaultUID;
 
     const isCombined = ("" + handle).startsWith("@");
-    const isEnkaProfile = !isCombined && isNaN(+handle);
-    const isAkashaProfile = !isEnkaProfile && !isCombined;
+    const isHoyolab = ("" + handle).startsWith("!");
+
+    const isEnkaProfile = !isCombined && !isHoyolab && isNaN(+handle);
+    const isAkashaProfile = !isEnkaProfile && !isCombined && !isHoyolab;
     const isPatreon = profile?.patreon?.active;
 
     const classNamesItemWrapper = cssJoin([
@@ -104,7 +107,11 @@ export const ProfileSelector: React.FC<ProfileSelectorProps> = ({
                       <img
                         alt="pfp"
                         className="profile-pfp"
-                        src={profile?.enkaAvatar || profile?.uidAvatar || displayAvatarLink}
+                        src={
+                          profile?.enkaAvatar ||
+                          profile?.uidAvatar ||
+                          displayAvatarLink
+                        }
                       />
                     </div>
                   ) : (
@@ -116,7 +123,7 @@ export const ProfileSelector: React.FC<ProfileSelectorProps> = ({
                   )}
                 </div>
               )}
-              {label}
+              {isHoyolab ? "" : label}
             </div>
           </div>
           <div className="responsive-p2">
@@ -128,9 +135,12 @@ export const ProfileSelector: React.FC<ProfileSelectorProps> = ({
             <div className={classNamesLabel}>
               {isCombined ? "Combined" : ""}
               {isEnkaProfile ? "Enka.Network" : ""}
-              {!isEnkaProfile && !isCombined ? "Akasha System" : ""}
+              {isAkashaProfile ? "Akasha System" : ""}
+              {isHoyolab ? <img alt="HoYoLAB" src={HoYoLAB} /> : ""}
             </div>
-            <div className="profile-type">{_buildsStr}</div>
+            {profile?.buildsCount !== null && (
+              <div className="profile-type">{_buildsStr}</div>
+            )}
             {/* <div className="profile-type">99 artifacts</div> */}
           </div>
           {/* @TODO: */}

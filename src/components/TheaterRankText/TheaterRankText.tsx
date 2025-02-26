@@ -1,39 +1,41 @@
 import "./style.scss";
 
+import { DIFF_COLORS } from "../AbyssRankText";
 import Star from "../../assets/icons/theater_star.png";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import { cssJoin } from "../../utils/helpers";
 import { useContext } from "react";
 
-const theaterProgressToColor = (stars: number, chamber?: number) => {
+const theaterProgressToColor = (stars: number, badge?: boolean) => {
   if (stars >= 10) {
+    if (badge) return DIFF_COLORS[0];
     return "rgb(255, 217, 0)"; // I - gold
   }
   if (stars >= 8) {
+    if (badge) return DIFF_COLORS[1];
     return "orange"; // II - orange
   }
   if (stars >= 6) {
+    if (badge) return DIFF_COLORS[2];
     return "rgb(102, 163, 255)"; // III - purple
   }
   if (stars >= 3) {
+    if (badge) return DIFF_COLORS[3];
     return "rgb(194, 102, 255)"; // IV - blue
   }
 
+  if (badge) return DIFF_COLORS[4];
   return "gray";
 };
 
-// const theaterModeMap: { [key: string]: string } = {
-//   "5": "Easy",
-//   "6": "Normal",
-//   "7": "Hard",
-//   "11": "Visionary",
-// };
-
 type TheaterRankTextProps = {
   row?: any;
+  badge?: boolean;
 };
 
-export const TheaterRankTextText: React.FC<TheaterRankTextProps> = ({
+export const TheaterRankText: React.FC<TheaterRankTextProps> = ({
   row,
+  badge,
 }) => {
   const { translate } = useContext(TranslationContext);
 
@@ -41,14 +43,20 @@ export const TheaterRankTextText: React.FC<TheaterRankTextProps> = ({
   const stars = row?.playerInfo?.theater?.stars;
   // const mode = theaterModeMap[row?.playerInfo?.theater?.modeIndex] || "...";
 
-  const color = theaterProgressToColor(stars);
+  const color = theaterProgressToColor(stars, badge);
   const title =
     `${translate("Imaginarium Theater")}: ` +
     `Act ${act} - ${stars || 0} Stars`;
   // const title = `${mode} Mode: Act ${act} - ${stars} Stars`;
 
+  const classNames = cssJoin(["theater-cell", badge ? "theater-badge" : ""]);
+
   return (
-    <div style={{ color }} className="theater-cell" title={title}>
+    <div
+      style={{ "--color": color } as React.CSSProperties}
+      className={classNames}
+      title={title}
+    >
       {stars !== undefined ? (
         <>
           <img
