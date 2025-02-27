@@ -433,7 +433,7 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
                       htmlFor="namecard-upload"
                       className="custom-file-upload"
                     >
-                      <div>Choose background file </div>
+                      <div>Choose background file</div>
                       <div>{fileData ? fileData.name : ""}</div>
                     </label>
                     <input
@@ -471,6 +471,20 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
                       </button>
                     </ConfirmTooltip>
                   </>
+                )}
+                {!isPending && selectedBuild?.customCardPic && (
+                  <div
+                    style={{
+                      textAlign: "center",
+                      margin: "10px auto auto",
+                      width: 250,
+                      fontStyle: "italic",
+                      color: "orange",
+                      fontWeight: 600,
+                    }}
+                  >
+                    Uploaded Character Card image will override this image
+                  </div>
                 )}
               </div>
             )}

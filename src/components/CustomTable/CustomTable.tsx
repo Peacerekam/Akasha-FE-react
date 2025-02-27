@@ -591,6 +591,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
                       event.preventDefault();
                       navigate(`/profile/${row.uid}`);
                     }}
+                    showcaseOverride={true}
                   />
                 </a>
               </div>

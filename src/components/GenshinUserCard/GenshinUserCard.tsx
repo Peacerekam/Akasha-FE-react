@@ -51,6 +51,7 @@ type GenshinUserCardProps = {
   accountData: {
     account: AccountDataForUserCard;
   };
+  showcaseOverride?: boolean;
 };
 
 export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
@@ -58,6 +59,7 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
   isAccountOwner = false,
   handleToggleModal,
   accountData,
+  showcaseOverride,
 }) => {
   const { showcaseState } = useContext(SettingsContext);
   const { favouriteTab, lastProfiles } = useContext(LastProfilesContext);
@@ -168,7 +170,11 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
         "genshin-user-card-wrapper",
         isAccountOwner ? "pointer clickable-card" : "",
         isHoyolab ? "hoyolab-card" : "",
-        showcaseState ? "expanded" : "",
+        showcaseOverride !== undefined
+          ? showcaseOverride
+          : showcaseState
+          ? "expanded"
+          : "",
       ])}
     >
       {displayFavBtn}

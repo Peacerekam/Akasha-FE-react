@@ -111,7 +111,7 @@ export const TableHoverElement: React.FC<TableHoverElementProps> = ({
     return (
       <FollowCursor
         data={{
-          offsetX: 230,
+          offsetX: 265,
           offsetY: 50,
         }}
       >
@@ -120,6 +120,7 @@ export const TableHoverElement: React.FC<TableHoverElementProps> = ({
             accountData={{ account: rowData }}
             isAccountOwner
             showBackgroundImage
+            showcaseOverride={true}
           />
         </div>
       </FollowCursor>
@@ -128,6 +129,10 @@ export const TableHoverElement: React.FC<TableHoverElementProps> = ({
 
   // @TODO: patreon
   const patreonObj = rowData?.owner?.patreon;
+
+  const cardPicUrl = rowData?.customCardPic
+    ? `${axios.defaults.baseURL}/public/cardpics/${rowData?.customCardPic}`
+    : undefined;
 
   return (
     <FollowCursor
@@ -140,6 +145,7 @@ export const TableHoverElement: React.FC<TableHoverElementProps> = ({
         hide={hide ?? false}
         rowData={rowData}
         patreonObj={patreonObj}
+        overwriteBackground={cardPicUrl}
       >
         <StatList
           row={rowData}
