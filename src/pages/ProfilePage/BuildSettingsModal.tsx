@@ -417,61 +417,64 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
                 to customize this background image
               </div>
             ) : (
-              <div className="custom-namecard-upload">
-                {isPending ? (
-                  <Spinner />
-                ) : (
-                  <>
-                    <button
-                      disabled={!backgroundPreview || !patreonObj}
-                      className={uploadBtnClassNames}
-                      onClick={handleSubmitNamecard}
-                    >
-                      <FontAwesomeIcon icon={faUpload} size="1x" />
-                    </button>
-                    <label
-                      htmlFor="namecard-upload"
-                      className="custom-file-upload"
-                    >
-                      <div>Choose background file</div>
-                      <div>{fileData ? fileData.name : ""}</div>
-                    </label>
-                    <input
-                      id="namecard-upload"
-                      disabled={!patreonObj}
-                      ref={uploadInput}
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => handleAddPreviewImage(e.target.files)}
-                    />
-                    <button
-                      title="Clear background preview"
-                      disabled={!backgroundPreview}
-                      className="remove-btn"
-                      onClick={clearBgImage}
-                    >
-                      <FontAwesomeIcon icon={faX} size="1x" />
-                    </button>
-                    <ConfirmTooltip
-                      text="Delete background image?"
-                      onConfirm={handleDeleteBackground}
-                      className={
-                        !selectedBuild?.customNamecard
-                          ? "pointer-events-none"
-                          : ""
-                      }
-                    >
+              <>
+                <div className="custom-namecard-upload">
+                  {isPending ? (
+                    <Spinner />
+                  ) : (
+                    <>
                       <button
-                        title="Delete background image"
-                        disabled={!selectedBuild?.customNamecard}
-                        className="remove-btn"
-                        // onClick={handleDeleteBackground}
+                        disabled={!backgroundPreview || !patreonObj}
+                        className={uploadBtnClassNames}
+                        onClick={handleSubmitNamecard}
                       >
-                        <FontAwesomeIcon icon={faTrash} size="1x" />
+                        <FontAwesomeIcon icon={faUpload} size="1x" />
                       </button>
-                    </ConfirmTooltip>
-                  </>
-                )}
+                      <label
+                        htmlFor="namecard-upload"
+                        className="custom-file-upload"
+                      >
+                        <div>Choose background file</div>
+                        <div>{fileData ? fileData.name : ""}</div>
+                      </label>
+                      <input
+                        id="namecard-upload"
+                        disabled={!patreonObj}
+                        ref={uploadInput}
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleAddPreviewImage(e.target.files)}
+                      />
+                      <button
+                        title="Clear background preview"
+                        disabled={!backgroundPreview}
+                        className="remove-btn"
+                        onClick={clearBgImage}
+                      >
+                        <FontAwesomeIcon icon={faX} size="1x" />
+                      </button>
+                      <ConfirmTooltip
+                        text="Delete background image?"
+                        onConfirm={handleDeleteBackground}
+                        className={
+                          !selectedBuild?.customNamecard
+                            ? "pointer-events-none"
+                            : ""
+                        }
+                      >
+                        <button
+                          title="Delete background image"
+                          disabled={!selectedBuild?.customNamecard}
+                          className="remove-btn"
+                          // onClick={handleDeleteBackground}
+                        >
+                          <FontAwesomeIcon icon={faTrash} size="1x" />
+                        </button>
+                      </ConfirmTooltip>
+                    </>
+                  )}
+                </div>
+
                 {!isPending && selectedBuild?.customCardPic && (
                   <div
                     style={{
@@ -486,7 +489,7 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
                     Uploaded Character Card image will override this image
                   </div>
                 )}
-              </div>
+              </>
             )}
           </div>
         ) : (
