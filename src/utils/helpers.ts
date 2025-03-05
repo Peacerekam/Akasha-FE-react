@@ -876,12 +876,7 @@ function getFormattedDate(
   const month = MONTH_NAMES[date.getMonth()];
   const year = date.getFullYear();
   const hours = date.getHours();
-  let minutes = date.getMinutes();
-
-  if (minutes < 10) {
-    // Adding leading zero to minutes
-    minutes = `0${minutes}`;
-  }
+  const minutes = date.getMinutes().toString().padStart(2, "0");
 
   if (prefomattedDate) {
     // Today at 10:20

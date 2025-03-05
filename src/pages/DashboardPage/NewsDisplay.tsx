@@ -98,7 +98,7 @@ export const NewsDisplay: React.FC = () => {
 
     return (
       <div className="discord-like-msg" key={message.messageID}>
-        <div className="discord-like-left">
+        <div className={`discord-like-left ${isAnimated ? "is-animated" : ""}`}>
           <Link to={profileLink}>
             <img src={avatarURL} className="static-pfp" alt="pfp" />
             {isAnimated && (

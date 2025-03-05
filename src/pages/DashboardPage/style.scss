@@ -61,17 +61,20 @@
       &:hover {
         background-color: rgba(black, 0.15);
 
-        .static-pfp {
-          display: none;
-        }
-        .animated-pfp {
-          display: block;
+        .is-animated {
+          .static-pfp {
+            display: none;
+          }
+          .animated-pfp {
+            display: block;
+          }
         }
       }
 
       .discord-like-left {
         top: 2px;
         $pfp-size: 40px;
+
         @media (max-width: 800px) {
           $pfp-size: 35px;
         }
