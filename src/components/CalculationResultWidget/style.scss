@@ -14,6 +14,22 @@
     grid-template-columns: repeat(auto-fit, minmax(min(80px, 100%), 1fr));
   }
 
+  .is-new {
+    box-shadow: inset 0 0 0 1px #40839b !important;
+    background: linear-gradient(0deg, #40839b66 0%, transparent 80%);
+  }
+
+  .new-lb-badge {
+    &::before {
+      position: absolute;
+      top: -5px;
+      right: -10px;
+      box-shadow: 0 0 5px 2px rgba(black, 0.5);
+      scale: 0.8;
+      z-index: 2;
+    }
+  }
+
   .mismatching-weapon {
     // opacity: 0.85;
     // background-color: #ff000020;

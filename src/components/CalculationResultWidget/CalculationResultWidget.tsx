@@ -4,6 +4,7 @@ import React, { useContext, useEffect, useMemo, useState } from "react";
 import {
   abortSignalCatcher,
   cssJoin,
+  isBuildNew,
   toShortThousands,
 } from "../../utils/helpers";
 import axios, { AxiosRequestConfig } from "axios";
@@ -112,6 +113,7 @@ export const CalculationResultWidget: React.FC<
             characterName: build.name,
             characterIcon: build.icon,
             priority: calc?.priority,
+            lastBuildUpdate: build?.lastBuildUpdate,
           });
         }
       }
@@ -213,11 +215,12 @@ export const CalculationResultWidget: React.FC<
           const _top = ranking ? `top ${_percentage || "?"}%` : "";
 
           const brokenRanking = false; // outOf < 10000;
+          const isNew = isBuildNew(calc.lastBuildUpdate);
 
           return (
             <div
               key={`${name}-${weapon.name}`}
-              className={weaponMatchClass}
+              className={cssJoin([weaponMatchClass, isNew ? "is-new" : ""])}
               style={{
                 opacity: brokenRanking ? 0.33 : 1,
                 filter: brokenRanking ? "blur(1px)" : "",
@@ -231,72 +234,77 @@ export const CalculationResultWidget: React.FC<
                   navigate(`/leaderboards/${id}/${variant?.name || ""}`);
                 }}
               >
-                <a
-                  title={`${weaponMatchString}\n${calc.name} - ${
-                    weapon.name
-                  } R${weapon?.refinement || 1}`}
-                  className={`highlight-tile ${
-                    noLinks ? "pointer-events-none" : ""
-                  }`}
-                  onClick={(event) => {
-                    event.preventDefault();
-                    navigate(`?build=${calc.md5}`);
-                    // navigate(`/leaderboards/${id}/${variant?.name || ""}`);
-                  }}
-                  // href={`/profile/${uid}?build=${calc.md5}`}
-                  href={`/leaderboards/${id}/${variant?.name || ""}`}
-                >
-                  <>
-                    {/* <div className="highlight-tile-pill">{shortName}</div> */}
-                    {brokenRanking ? (
-                      <>
-                        <div className="highlight-tile-pill">{"---"}</div>
-                      </>
-                    ) : (
-                      <>
-                        {variant?.displayName ? (
-                          <div className="highlight-tile-pill stacked">
-                            <div className="stacked-top">{short}</div>
-                            <div className="stacked-bottom">
-                              {variant?.displayName}
+                <>
+                  {isNew ? <span className="new-lb-badge" /> : ""}
+                  <a
+                    title={`${weaponMatchString}\n${calc.name} - ${
+                      weapon.name
+                    } R${weapon?.refinement || 1}`}
+                    className={`highlight-tile ${
+                      noLinks ? "pointer-events-none" : ""
+                    }`}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      navigate(`?build=${calc.md5}`);
+                      // navigate(`/leaderboards/${id}/${variant?.name || ""}`);
+                    }}
+                    // href={`/profile/${uid}?build=${calc.md5}`}
+                    href={`/leaderboards/${id}/${variant?.name || ""}`}
+                  >
+                    <>
+                      {/* <div className="highlight-tile-pill">{shortName}</div> */}
+                      {brokenRanking ? (
+                        <>
+                          <div className="highlight-tile-pill">{"---"}</div>
+                        </>
+                      ) : (
+                        <>
+                          {variant?.displayName ? (
+                            <div className="highlight-tile-pill stacked">
+                              <div className="stacked-top">{short}</div>
+                              <div className="stacked-bottom">
+                                {variant?.displayName}
+                              </div>
                             </div>
-                          </div>
-                        ) : (
-                          <div className="highlight-tile-pill">{shortName}</div>
-                        )}
-                      </>
-                    )}
-                    <div className="flex">
-                      <img
-                        alt="Icon"
-                        className="table-icon"
-                        src={calc.characterIcon}
-                      />
-                      <WeaponMiniDisplay
-                        icon={weapon.icon}
-                        refinement={weapon?.refinement || 1}
-                        // style={{ boxShadow: `0 0 0px 2px ${weaponColor}20` }}
-                      />
-                    </div>
+                          ) : (
+                            <div className="highlight-tile-pill">
+                              {shortName}
+                            </div>
+                          )}
+                        </>
+                      )}
+                      <div className="flex">
+                        <img
+                          alt="Icon"
+                          className="table-icon"
+                          src={calc.characterIcon}
+                        />
+                        <WeaponMiniDisplay
+                          icon={weapon.icon}
+                          refinement={weapon?.refinement || 1}
+                          // style={{ boxShadow: `0 0 0px 2px ${weaponColor}20` }}
+                        />
+                      </div>
 
-                    {brokenRanking ? (
-                      <>
-                        <div>rank</div>
-                        <div>unavailable</div>
-                      </>
-                    ) : (
-                      <>
-                        <div>{_top}</div>
-                        <span>
-                          {ranking ?? "---"}
-                          <span className="opacity-5">
-                            /{toShortThousands(outOf) ?? "---"}
+                      {brokenRanking ? (
+                        <>
+                          <div>rank</div>
+                          <div>unavailable</div>
+                        </>
+                      ) : (
+                        <>
+                          <div>{_top}</div>
+                          <span>
+                            {ranking ?? "---"}
+                            <span className="opacity-5">
+                              /{toShortThousands(outOf) ?? "---"}
+                            </span>
                           </span>
-                        </span>
-                      </>
-                    )}
-                  </>
-                </a>
+                        </>
+                      )}
+                    </>
+                  </a>
+                </>
               </ConfirmTooltip>
             </div>
           );
