@@ -31,7 +31,7 @@ export const BuildPreview: React.FC = () => {
     };
   };
 
-  const fetchData = async () => {
+  const fetchData = async (abortController: AbortController) => {
     if (!location.search) return;
 
     try {
@@ -41,6 +41,7 @@ export const BuildPreview: React.FC = () => {
 
       const response = await axios.get(FETCH_BUILDS_URL, {
         params: { uid, md5, seed },
+        signal: abortController.signal,
       });
 
       const data = response?.data?.data?.[0];
@@ -57,11 +58,16 @@ export const BuildPreview: React.FC = () => {
 
   const invalidateCache = async () => {
     const q = Math.random().toString().slice(2);
-    setSeed(q)
+    setSeed(q);
   };
 
   useEffect(() => {
-    fetchData();
+    const abortController = new AbortController();
+    fetchData(abortController);
+
+    return () => {
+      abortController.abort();
+    };
   }, [location.search]);
 
   const handleClose = () => {

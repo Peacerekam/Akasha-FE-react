@@ -42,21 +42,25 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
   const [selectedCalculationId, setSelectedCalculationId] =
     useState<string>(calculationIdFromUrl);
 
-  const getArtifacts = async () => {
+  const getArtifacts = async (abortController: AbortController) => {
     if (!row.md5) return;
     const _uid = encodeURIComponent(row.uid);
     const _md5 = encodeURIComponent(row.md5);
     const artDetailsURL = `/api/artifacts/${_uid}/${_md5}`;
-    const { data } = await axios.get(artDetailsURL);
+    const opts: AxiosRequestConfig<any> = {
+      signal: abortController.signal,
+    };
+    const { data } = await axios.get(artDetailsURL, opts);
     setArtifacts(data.data);
   };
 
-  const getCalculations = async () => {
+  const getCalculations = async (abortController: AbortController) => {
     if (!row.md5) return;
     const _uid = encodeURIComponent(row.uid);
     const _md5 = encodeURIComponent(row.md5);
     const calcDetailsURL = `/api/leaderboards/${_uid}/${_md5}`;
     const opts: AxiosRequestConfig<any> = {
+      signal: abortController.signal,
       params: {
         variant: isProfile ? "profilePage" : "",
       },
@@ -67,12 +71,14 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
     if (data.error) setError(data.error);
   };
 
-  const getArtifactsAndCalculations = async () => {
+  const getArtifactsAndCalculations = async (
+    abortControllers: AbortController[]
+  ) => {
     const tasks = [getCalculations, getArtifacts];
-    const allPromises = tasks.map((task: any) => {
+    const allPromises = tasks.map((task: any, i) => {
       return new Promise(async (resolve) => {
         try {
-          await task();
+          await task(abortControllers[i]);
         } catch (err) {
           console.log(err);
         }
@@ -86,7 +92,14 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
   };
 
   useEffect(() => {
-    getArtifactsAndCalculations();
+    const abortController_1 = new AbortController();
+    const abortController_2 = new AbortController();
+    getArtifactsAndCalculations([abortController_1, abortController_2]);
+
+    return () => {
+      abortController_1.abort();
+      abortController_2.abort();
+    };
   }, []);
 
   const errorCallback = async () => {
