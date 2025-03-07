@@ -30,23 +30,19 @@ import { SettingsPage } from "./pages/SettingsPage";
 import { TitleContextProvider } from "./context/TitleProvider/TitleProviderContext";
 import { TranslationContextProvider } from "./context/TranslationProvider/TranslationProviderContext";
 import axios from "axios";
+import axiosRetry from "axios-retry";
 import { domainRedirect } from "./utils/helpers";
 
-// import CookieConsent from "react-cookie-consent";
 // import { QueryClient, QueryClientProvider } from "react-query";
 
-// @TODO: env variables later on...
 const urls = {
   "prod-mimee-ovh": "https://mimee.ovh",
   "prod-akasha-cv": "https://akasha.cv",
-  "tmp-ovh": "https://ns5032948.ip-148-113-178.net",
-  localhost5033: "http://localhost:5033",
   localhost80: "http://localhost:80",
 };
 
 const getApiBaseURL = () => {
   if (IS_PRODUCATION) {
-    // return urls["tmp-ovh"];
     return urls["prod-akasha-cv"];
   }
 
@@ -55,6 +51,22 @@ const getApiBaseURL = () => {
 
 axios.defaults.baseURL = getApiBaseURL();
 axios.defaults.withCredentials = true;
+
+// handle weird 404 backend errors that started happening after implementing pm2 cluster mode \_(ツ)_/¯
+axiosRetry(axios, {
+  retries: 3, // number of retries
+  retryDelay: (retryCount) => {
+    console.log(
+      `%cA wild 404 error occured. Current retry count: #${retryCount}`,
+      "color: orange;"
+    );
+    return retryCount * 1000; // time interval between retries
+  },
+  retryCondition: (error: any) => {
+    // if retry condition is not specified, by default idempotent requests are retried
+    return error.response.status === 404;
+  },
+});
 
 // Add a request interceptor
 axios.interceptors.request.use(

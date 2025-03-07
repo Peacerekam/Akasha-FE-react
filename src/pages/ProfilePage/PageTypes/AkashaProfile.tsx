@@ -107,8 +107,8 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
   const [bindTime, setBindTime] = useState<number>();
   const [refreshTime, setRefreshTime] = useState<number>();
   const [enkaError, setEnkaError] = useState<TitleAndDescription>();
-  const [relevantProfiles, _setRelevantProfiles] = useState<any[]>([]);
-  const [isFetchingProfiles, _setIsFetchingProfiles] = useState(false);
+  const [_relevantProfiles, _setRelevantProfiles] = useState<any[]>([]);
+  const [_isFetchingProfiles, _setIsFetchingProfiles] = useState(false);
   const [responseData, _setResponseData] = useState<ResponseData>({
     account: null,
   });
@@ -241,7 +241,7 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
 
   useEffect(() => {
     _setIsFetchingProfiles(false);
-  }, [relevantProfiles]);
+  }, [_relevantProfiles]);
 
   useEffect(() => {
     // no need to fetch on initial page load
@@ -882,11 +882,11 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
   );
 
   const relevantProfilesQuery = useMemo(() => {
-    const _uids = relevantProfiles
+    const _uids = _relevantProfiles
       .map((x) => x.uid)
       .filter((x) => !x.startsWith("@"));
     return uidsToQuery(_uids);
-  }, [JSON.stringify(relevantProfiles)]);
+  }, [JSON.stringify(_relevantProfiles)]);
 
   const triggerRefetch = () => setFetchCount((prev) => prev + 1);
 
@@ -962,13 +962,13 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
   }, [displayBindMessage]);
 
   useEffect(() => {
-    if (relevantProfiles.length === 0) return;
-    setRelevantProfiles(relevantProfiles);
-  }, [relevantProfiles]);
+    // if (relevantProfiles.length === 0) return;
+    setRelevantProfiles(_relevantProfiles);
+  }, [_relevantProfiles]);
 
   useEffect(() => {
-    setIsFetchingProfiles(isFetchingProfiles);
-  }, [isFetchingProfiles]);
+    setIsFetchingProfiles(_isFetchingProfiles);
+  }, [_isFetchingProfiles]);
 
   useEffect(() => {
     setResponseData(responseData);

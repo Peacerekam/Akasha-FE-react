@@ -20,6 +20,7 @@
   }
 
   .new-lb-badge {
+    pointer-events: none;
     &::before {
       position: absolute;
       top: -5px;
