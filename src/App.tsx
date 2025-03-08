@@ -18,6 +18,7 @@ import {
 import { BASENAME, IS_PRODUCATION, MAINTENANCE_MODE } from "./utils/maybeEnv";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import React, { useEffect } from "react";
+import { clearFiltersFromLS, domainRedirect } from "./utils/helpers";
 
 import { AdProviderContextProvider } from "./context/AdProvider/AdProviderContext";
 import { ContentWrapper } from "./components/ContentWrapper";
@@ -31,7 +32,6 @@ import { TitleContextProvider } from "./context/TitleProvider/TitleProviderConte
 import { TranslationContextProvider } from "./context/TranslationProvider/TranslationProviderContext";
 import axios from "axios";
 import axiosRetry from "axios-retry";
-import { domainRedirect } from "./utils/helpers";
 
 // import { QueryClient, QueryClientProvider } from "react-query";
 
@@ -54,17 +54,31 @@ axios.defaults.withCredentials = true;
 
 // handle weird 404 backend errors that started happening after implementing pm2 cluster mode \_(ツ)_/¯
 axiosRetry(axios, {
-  retries: 3, // number of retries
-  retryDelay: (retryCount) => {
-    console.log(
-      `%cA wild 404 error occured. Current retry count: #${retryCount}`,
-      "color: orange;"
-    );
-    return retryCount * 1000; // time interval between retries
+  retries: 10, // number of retries
+  retryDelay: () => 100,
+  // retryDelay: (retryCount) => {
+  //   const retryTime = 500 + retryCount * 250;
+  //   return retryTime; // time interval between retries
+  // },
+  onRetry: (retryCount, error, requestConfig) => {
+    // const retryTime = 500 + retryCount * 250;
+    // const baseURL = getApiBaseURL();
+    const responseURL = error?.request?.responseURL;
+
+    console.table({
+      error: error?.response?.status || "404",
+      url: responseURL,
+      retry: `${retryCount} / 10`,
+    });
+
+    // `%cA wild 404 error at: %c${_404url}%c\nCurrent retry count: ${retryCount}/10`,
+    // "color: unset;",
+    // "color: orange;",
+    // "color: unset;"
   },
   retryCondition: (error: any) => {
     // if retry condition is not specified, by default idempotent requests are retried
-    return error.response.status === 404;
+    return error?.response?.status === 404;
   },
 });
 
@@ -134,6 +148,7 @@ const appRoutes: {
 const App = () => {
   useEffect(() => {
     domainRedirect();
+    clearFiltersFromLS();
   }, []);
 
   if (MAINTENANCE_MODE) {

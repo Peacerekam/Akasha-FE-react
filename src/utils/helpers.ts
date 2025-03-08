@@ -986,3 +986,8 @@ export const revertModalBodyStyle = () => {
   //   el.style = ``;
   // });
 };
+
+export const clearFiltersFromLS = () => {
+  const lsKeyFilters = "table-filters";
+  localStorage.setItem(lsKeyFilters, "{}");
+};

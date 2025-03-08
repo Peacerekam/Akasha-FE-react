@@ -57,12 +57,12 @@ export const AbyssRankText: React.FC<AbyssRankTextProps> = ({ row, badge }) => {
   const chamber = row?.playerInfo?.towerLevelIndex || "";
   const stars = row?.playerInfo?.towerStarIndex;
 
-  const abyssProgress = floor && chamber ? `${floor}-${chamber}` : "";
+  const abyssProgress = floor && chamber ? `${floor}-${chamber}` : "-";
   const color = abyssProgressToColor(floor, chamber, badge);
 
   const title =
     `${translate("Spiral Abyss")}: ` +
-    `Floor ${floor} Chamber ${chamber}` +
+    `Floor ${floor || 0} Chamber ${chamber || 0}` +
     (stars !== undefined ? ` - ${stars} Stars` : "");
 
   const classNames = cssJoin(["abyss-cell", badge ? "abyss-badge" : ""]);

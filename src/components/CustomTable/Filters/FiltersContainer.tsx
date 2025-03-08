@@ -46,6 +46,14 @@ export const FiltersContainer = ({
     fetchURL: string,
     abortController: AbortController
   ) => {
+    const lsKeyFilters = "table-filters";
+    const filtersLS = JSON.parse(localStorage.getItem(lsKeyFilters) ?? "{}");
+
+    if (filtersLS[fetchURL]) {
+      setOptionGroups(filtersLS[fetchURL]);
+      return;
+    }
+
     const opts: AxiosRequestConfig<any> = {
       signal: abortController?.signal,
     };
@@ -53,6 +61,9 @@ export const FiltersContainer = ({
     const getSetData = async () => {
       const { data } = await axios.get(fetchURL, opts);
       setOptionGroups(data.data);
+
+      filtersLS[fetchURL] = data.data;
+      localStorage.setItem(lsKeyFilters, JSON.stringify(filtersLS));
     };
 
     await abortSignalCatcher(getSetData);

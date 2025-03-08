@@ -138,11 +138,11 @@ const TranslationContextProvider: React.FC<{ children: any }> = ({
     }
 
     if (outdated) {
-      console.log(`[Akasha-${language}] New translation version detected`);
+      console.log(`[${language}] New translation version detected`);
       setTextMap({});
     } else {
       console.log(
-        `[Akasha-${language}] Loading translation from local storage`
+        `Loading translation from local storage`
       );
       setTextMap(textMapFromLS);
     }
