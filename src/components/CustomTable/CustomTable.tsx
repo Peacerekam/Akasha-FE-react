@@ -239,6 +239,11 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   );
 
   const appendParamsToURL = () => {
+    if (!paramsProjection) return;
+
+    const build = location.search.startsWith("?build=");
+    if (build) return; // do not append params if BuildPreview component is active
+
     const tmp: string[] = [];
     const ignoredParams = ["fromId", "page", "li", "build", "lastProfiles"]; // @TODO: test if this is ok
     for (const key of Object.keys(params)) {
@@ -260,8 +265,6 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     const toAppend = tmp.join("&");
     const hash = location.hash || "";
     const suffix = `${toAppend}${hash}`;
-    if (!paramsProjection) return;
-
     const newURL = suffix ? `?${suffix}` : "";
     navigate(newURL, { replace: true, state: location.state });
   };

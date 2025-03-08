@@ -63,18 +63,12 @@ axiosRetry(axios, {
   onRetry: (retryCount, error, requestConfig) => {
     // const retryTime = 500 + retryCount * 250;
     // const baseURL = getApiBaseURL();
-    const responseURL = error?.request?.responseURL;
+    const responseURL = error?.request?.responseURL || "---";
 
-    console.table({
-      error: error?.response?.status || "404",
-      url: responseURL,
-      retry: `${retryCount} / 10`,
-    });
-
-    // `%cA wild 404 error at: %c${_404url}%c\nCurrent retry count: ${retryCount}/10`,
-    // "color: unset;",
-    // "color: orange;",
-    // "color: unset;"
+    console.log(
+      `%c(${retryCount}/10) A wild 404 error at: ${responseURL}`,
+      "color: orange;"
+    );
   },
   retryCondition: (error: any) => {
     // if retry condition is not specified, by default idempotent requests are retried
