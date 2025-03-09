@@ -5,4 +5,4 @@ export const SHOW_ADS = true;
 
 // probably change
 export const IS_PRODUCATION = true; // set false to use localhost endpoints
-export const TRANSLATION_VERSION = 0.311; // increment this when translation keys are outdated
+export const TRANSLATION_VERSION = 0.312; // increment this when translation keys are outdated

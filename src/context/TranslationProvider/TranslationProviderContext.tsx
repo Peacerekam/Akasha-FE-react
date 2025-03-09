@@ -96,10 +96,15 @@ const TranslationContextProvider: React.FC<{ children: any }> = ({
         );
 
         if (responseHasNewTranslations) {
+          const lowerCased = Object.keys(requestedWords).reduce((acc, val) => {
+            acc[val.toLowerCase()] = requestedWords[val];
+            return acc;
+          }, {} as Hashmap);
+
           setTextMap((prev) => ({
             ...prev,
             [language]: {
-              ...requestedWords,
+              ...lowerCased,
               ...prev[language],
               ...data.translation,
             },
@@ -141,9 +146,7 @@ const TranslationContextProvider: React.FC<{ children: any }> = ({
       console.log(`[${language}] New translation version detected`);
       setTextMap({});
     } else {
-      console.log(
-        `Loading translation from local storage`
-      );
+      console.log(`Loading translation from local storage`);
       setTextMap(textMapFromLS);
     }
 
