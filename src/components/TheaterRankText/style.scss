@@ -8,7 +8,8 @@
   color: var(--color);
 }
 
-.theater-badge {
+.theater-badge {  
+  min-width: 30px;
   font-family: "GenshinFont";
   display: inline-block;
   white-space: nowrap;

@@ -13,7 +13,7 @@ export const ARBadge: React.FC<ARBadgeProps> = ({ adventureRank }) => {
 
   const className = roundedAR
     ? `ar-${Math.floor(roundedAR / 5) * 5}-badge`
-    : "ar-60-badge";
+    : "ar-0-badge";
 
   return (
     <span

@@ -3,6 +3,7 @@ import "./style.scss";
 import {
   ARBadge,
   CustomTable,
+  GenshinUserCard,
   LastUpdated,
   RegionBadge,
   RowIndex,
@@ -10,6 +11,7 @@ import {
 import {
   FETCH_ACCOUNTS_FILTERS_URL,
   FETCH_ACCOUNTS_URL,
+  uidToRegion,
   uidsToQuery,
 } from "../../utils/helpers";
 import { Link, useNavigate } from "react-router-dom";
@@ -29,9 +31,28 @@ import FriendshipIcon from "../../assets/icons/Item_Companionship_EXP.png";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
 import { TableColumn } from "../../types/TableColumn";
 import { TheaterRankText } from "../../components/TheaterRankText";
+import { TitleAndDescription } from "../ProfilePage/PageTypes/AkashaProfile";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import axios from "axios";
 import debounce from "lodash/debounce";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
+
+const getEmptyAccountObj = (region?: string) => {
+  return {
+    uid: "",
+    profilePictureLink: undefined,
+    nameCardLink: undefined,
+    playerInfo: {
+      region: region || undefined,
+      level: undefined,
+      nickname: undefined,
+      signature: undefined,
+      finishAchievementNum: undefined,
+    },
+    achievements: undefined,
+    hoyolab: undefined,
+  };
+};
 
 export const LookupUID: React.FC = () => {
   const navigate = useNavigate();
@@ -40,7 +61,10 @@ export const LookupUID: React.FC = () => {
 
   const [inputUID, setInputUID] = useState<string>("");
   const [lookupUID, setLookupUID] = useState<string>("");
+  const [queryUID, setQueryUID] = useState<string>("");
   const debouncedSetLookupUID = useCallback(debounce(setLookupUID, 350), []);
+  const [accountData, setAccountData] = useState<any>(getEmptyAccountObj());
+  const [error, setError] = useState<TitleAndDescription | null>(null);
 
   useEffect(() => {
     debouncedSetLookupUID(inputUID);
@@ -265,6 +289,63 @@ export const LookupUID: React.FC = () => {
     [lastProfiles.length]
   );
 
+  const validRegion = uidToRegion(lookupUID);
+
+  const handleRefreshData = async (uid: string) => {
+    const refreshURL = `/api/user/refresh/${uid}`;
+    return await axios.get(refreshURL);
+  };
+
+  const _setErrorFromData = (data: any) => {
+    if (!data?.data?.error) {
+      setError(null);
+      return;
+    }
+    setError(
+      data.data.error?.title
+        ? data.data.error
+        : { title: data.data.error, description: "" }
+    );
+  };
+
+  const fetchAccountData = async () => {
+    if (!validRegion) return;
+
+    const url = `/api/user/${lookupUID}`;
+    const { data } = await axios.get(url);
+
+    if (!data?.data?.account?.playerInfo?.region && !data?.data.error) {
+      const { data: refreshData } = await handleRefreshData(lookupUID);
+
+      if (refreshData.data?.error) {
+        _setErrorFromData(refreshData);
+      } else {
+        fetchAccountData();
+      }
+    } else if (data?.data?.error) {
+      _setErrorFromData(data);
+      setAccountData(getEmptyAccountObj());
+    } else if (data?.data?.account?.playerInfo?.region) {
+      setAccountData(data?.data?.account);
+      setError(null);
+    }
+    setQueryUID(lookupUID);
+  };
+
+  useEffect(() => {
+    setError(null);
+    const emptyAccountObj = getEmptyAccountObj(validRegion);
+
+    if (!validRegion) {
+      setQueryUID(lookupUID);
+      setAccountData(emptyAccountObj);
+      return;
+    }
+
+    setAccountData(emptyAccountObj);
+    fetchAccountData();
+  }, [validRegion, lookupUID]);
+
   return (
     <div className="lookup-uid-wrapper">
       <div className="relative search-input-wrapper">
@@ -283,17 +364,45 @@ export const LookupUID: React.FC = () => {
           </div>
         </div>
       </div>
-      {lookupUID && (
+      {error && (
         <div className="lookup-not-found-prompt">
-          <div>
-            Don't see <i>"{lookupUID}"</i> on the list? Click{" "}
-            <Link to={`/profile/${lookupUID}`}>here</Link> to load the profile
-            into Akasha System.
-          </div>{" "}
-          Make sure your data is available on Enka.Network first:{" "}
-          <a href={`https://enka.network/u/${lookupUID}/`}>
-            https://enka.network/u/{lookupUID}/
-          </a>
+          <div>{error?.title}</div>
+          {error?.description}
+        </div>
+      )}
+      {lookupUID && !error && (
+        <div>
+          {accountData.playerInfo.region && (
+            <div className="uid-lookup-result expanded-row">
+              <a
+                className="uid-result"
+                href={`/profile/${lookupUID}`}
+                onClick={(event) => event.preventDefault()}
+              >
+                <GenshinUserCard
+                  isAccountOwner
+                  showBackgroundImage
+                  handleToggleModal={(event: any) => {
+                    event.preventDefault();
+                    navigate(`/profile/${lookupUID}`);
+                  }}
+                  showcaseOverride={true}
+                  accountData={{ account: accountData }}
+                />
+              </a>
+            </div>
+          )}
+          {!validRegion && (
+            <div className="lookup-not-found-prompt">
+              <div>
+                <i>"{lookupUID}"</i> doesn't appear to be a valid in-game UID.
+              </div>
+              <div>
+                If you're trying to load Enka profile into Akasha then click{" "}
+                <Link to={`/profile/${lookupUID}`}>here</Link>.
+              </div>
+            </div>
+          )}
         </div>
       )}
       <div>
@@ -302,7 +411,7 @@ export const LookupUID: React.FC = () => {
           filtersURL={FETCH_ACCOUNTS_FILTERS_URL}
           fetchParams={{
             uids: uidsQuery,
-            uid: lookupUID,
+            uid: queryUID,
             // variant,
             // filter: "[all]1",
             // calculationId: currentCategory,

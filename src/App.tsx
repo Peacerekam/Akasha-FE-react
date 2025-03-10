@@ -54,19 +54,19 @@ axios.defaults.withCredentials = true;
 
 // handle weird 404 backend errors that started happening after implementing pm2 cluster mode \_(ツ)_/¯
 axiosRetry(axios, {
-  retries: 10, // number of retries
-  retryDelay: () => 100,
-  // retryDelay: (retryCount) => {
-  //   const retryTime = 500 + retryCount * 250;
-  //   return retryTime; // time interval between retries
-  // },
+  retries: 100, // number of retries
+  // retryDelay: () => 100,
+  retryDelay: (retryCount) => {
+    const retryTime = retryCount * 5;
+    return retryTime; // time interval between retries
+  },
   onRetry: (retryCount, error, requestConfig) => {
     // const retryTime = 500 + retryCount * 250;
     // const baseURL = getApiBaseURL();
     const responseURL = error?.request?.responseURL || "---";
 
     console.log(
-      `%c(${retryCount}/10) A wild 404 error at: ${responseURL}`,
+      `%c(${retryCount}/100) A wild 404 error at: ${responseURL}`,
       "color: orange;"
     );
   },

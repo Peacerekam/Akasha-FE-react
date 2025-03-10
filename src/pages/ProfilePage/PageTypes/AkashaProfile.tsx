@@ -74,7 +74,7 @@ import { TranslationContext } from "../../../context/TranslationProvider/Transla
 import { fixCritValue } from "../../../utils/substats";
 import { getSessionIdFromCookie } from "../../../utils/helpers";
 
-type TitleAndDescription = {
+export type TitleAndDescription = {
   title: string;
   description: string;
 };
@@ -1032,7 +1032,8 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
 
               {responseData?.account &&
                 (DEBUG_MODE ||
-                  ["701464050", "mimee", "@mimee"].includes(uid || "")) && (
+                  (["701464050", "mimee", "@mimee"].includes(uid || "") &&
+                    false)) && ( // @TODO: false :)
                   <ProfileCharts debug={DEBUG_MODE} />
                 )}
             </div>

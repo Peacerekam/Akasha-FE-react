@@ -13,4 +13,16 @@
   > div {
     padding: 10px 0;
   }
+  .uid-lookup-result {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+
+    .uid-result {
+      width: 530px;
+    }
+    .fav-btn {
+      display: none !important;
+    }
+  }
 }

@@ -991,3 +991,28 @@ export const clearFiltersFromLS = () => {
   const lsKeyFilters = "table-filters";
   localStorage.setItem(lsKeyFilters, "{}");
 };
+
+export const getIsValidNumericUID = (uid: string) => {
+  // len < 9      -> false
+  // len > 10     -> false
+  // val === NaN  -> false
+
+  const asString = "" + uid;
+  const asNumber = +uid;
+
+  // (uid?.length === 9 || uid?.length === 10) && !isNaN(uid)
+  return [9, 10].includes(asString?.length) && !isNaN(asNumber);
+};
+
+export const uidToRegion = (uid: string) => {
+  const isValidUID = getIsValidNumericUID(uid);
+  if (!isValidUID) return "";
+
+  // ignore first digit (currently ASIA accounts - 1_8xx_xxx_xxx)
+  const asString = "" + uid;
+  const relevantDigits = asString.slice(-9);
+  const regionNum = +relevantDigits[0];
+
+  //            1     2     3        5     6     7       8     9
+  return ["", "CN", "CN", "CN", "", "B", "NA", "EU", "ASIA", "TW"][regionNum];
+};
