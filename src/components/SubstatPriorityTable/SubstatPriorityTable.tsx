@@ -67,6 +67,9 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
     const calcDetailsURL = `/api/substatPriority/${_uid}/${_md5}`;
     const { data } = await axios.get(calcDetailsURL);
     setPriorityData(data.data);
+
+    // @TODO: in the future make it fetch only the data for currently selected calculationId
+    // @TODO: needs a small rewrite on the backend
   };
 
   useEffect(() => {

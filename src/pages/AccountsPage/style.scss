@@ -14,15 +14,30 @@
     padding: 10px 0;
   }
   .uid-lookup-result {
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: center;
+    padding: 10px;
+    overflow: hidden;
+
+    .scrollbar-container {
+      width: 100%;
+      display: grid;
+      place-items: center;
+    }
 
     .uid-result {
       width: 530px;
+
+      .genshin-user-card {
+        min-height: 102px;
+      }
     }
+
     .fav-btn {
       display: none !important;
     }
   }
+}
+
+.justify-content-center {
+  display: flex;
+  justify-content: center;
 }

@@ -919,7 +919,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     const actualBgUrl = namecardBg ? namecardBgUrl : elementalBgUrl;
 
     return (
-      <div className="mobile-fix w-100 justify-content-center">
+      <div className="mobile-fix w-100">
         <div className="mobile-fix">
           {reorderedArtifacts.map((artifact: any, offsetIndex: number) => {
             return (

@@ -29,6 +29,7 @@ import { BuildsColumns } from "../BuildsPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FriendshipIcon from "../../assets/icons/Item_Companionship_EXP.png";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
+import PerfectScrollbar from "react-perfect-scrollbar";
 import { TableColumn } from "../../types/TableColumn";
 import { TheaterRankText } from "../../components/TheaterRankText";
 import { TitleAndDescription } from "../ProfilePage/PageTypes/AkashaProfile";
@@ -371,25 +372,27 @@ export const LookupUID: React.FC = () => {
         </div>
       )}
       {lookupUID && !error && (
-        <div>
+        <div className="justify-content-center">
           {accountData.playerInfo.region && (
-            <div className="uid-lookup-result expanded-row">
-              <a
-                className="uid-result"
-                href={`/profile/${lookupUID}`}
-                onClick={(event) => event.preventDefault()}
-              >
-                <GenshinUserCard
-                  isAccountOwner
-                  showBackgroundImage
-                  handleToggleModal={(event: any) => {
-                    event.preventDefault();
-                    navigate(`/profile/${lookupUID}`);
-                  }}
-                  showcaseOverride={true}
-                  accountData={{ account: accountData }}
-                />
-              </a>
+            <div className="uid-lookup-result expanded-row block-highlight">
+              <PerfectScrollbar>
+                <a
+                  className="uid-result"
+                  href={`/profile/${lookupUID}`}
+                  onClick={(event) => event.preventDefault()}
+                >
+                  <GenshinUserCard
+                    isAccountOwner
+                    showBackgroundImage
+                    handleToggleModal={(event: any) => {
+                      event.preventDefault();
+                      navigate(`/profile/${lookupUID}`);
+                    }}
+                    showcaseOverride={true}
+                    accountData={{ account: accountData }}
+                  />
+                </a>
+              </PerfectScrollbar>
             </div>
           )}
           {!validRegion && (
