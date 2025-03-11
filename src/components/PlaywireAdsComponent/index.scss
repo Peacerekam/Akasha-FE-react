@@ -5,6 +5,7 @@
     &.video-ad-container {
       @media (max-width: 800px) {
         margin-top: 10px;
+        width: 100%;
       }
       .playwire-ad-unit {
         .pw-tag > div > * {
