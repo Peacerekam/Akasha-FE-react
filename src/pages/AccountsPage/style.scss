@@ -9,10 +9,17 @@
   }
 }
 
-.lookup-uid-wrapper {
+.input-and-card-result {
+  min-width: min(100%, 550px);
+  max-width: 100%;
+  flex-grow: 1;
+
   > div {
     padding: 10px 0;
   }
+}
+
+.lookup-uid-wrapper {
   .uid-lookup-result {
     padding: 10px;
     overflow: hidden;

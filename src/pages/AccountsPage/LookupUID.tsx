@@ -2,6 +2,7 @@ import "./style.scss";
 
 import {
   ARBadge,
+  AdsComponentManager,
   CustomTable,
   GenshinUserCard,
   LastUpdated,
@@ -55,7 +56,9 @@ const getEmptyAccountObj = (region?: string) => {
   };
 };
 
-export const LookupUID: React.FC = () => {
+type LookupUIDProps = { disableAd?: boolean };
+
+export const LookupUID: React.FC<LookupUIDProps> = ({ disableAd }) => {
   const navigate = useNavigate();
   const { lastProfiles } = useContext(LastProfilesContext);
   const { language, translate } = useContext(TranslationContext);
@@ -347,8 +350,8 @@ export const LookupUID: React.FC = () => {
     fetchAccountData();
   }, [validRegion, lookupUID]);
 
-  return (
-    <div className="lookup-uid-wrapper">
+  const inputAndCardResult = (
+    <div className="input-and-card-result">
       <div className="relative search-input-wrapper">
         Enter UID / nickname
         <div>
@@ -408,6 +411,15 @@ export const LookupUID: React.FC = () => {
           )}
         </div>
       )}
+    </div>
+  );
+
+  return (
+    <div className="lookup-uid-wrapper">
+      <div className="flex-special-container">
+        {!disableAd && <AdsComponentManager adType="Video" />}
+        {inputAndCardResult}
+      </div>
       <div>
         <CustomTable
           fetchURL={FETCH_ACCOUNTS_URL}

@@ -266,7 +266,7 @@ export const AccountsPage: React.FC = () => {
           hideOnDesktop
         /> */}
         <div>
-          <LookupUID />
+          <LookupUID disableAd />
 
           {/* spacer */}
           <div style={{ marginTop: "30px" }} />

@@ -157,3 +157,11 @@ body.ads-disabled {
     min-height: 0px !important;
   }
 }
+
+@media (max-width: 1300px) {
+  #pw-oop-left_rail,
+  #pw-oop-right_rail {
+    // playwire should make sure this is not needed, but in practice it can be wonky
+    display: none;
+  }
+}
