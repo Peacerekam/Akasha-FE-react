@@ -8,7 +8,7 @@
   color: var(--color);
 }
 
-.theater-badge {  
+.theater-badge {
   min-width: 30px;
   font-family: "GenshinFont";
   display: inline-block;
@@ -21,25 +21,12 @@
   display: flex;
   justify-content: center;
   gap: 3px;
-
-  // background-color: rgb(168, 120, 31);
-  // border-color: rgb(168, 120, 31);
   background-color: var(--color);
   border-color: var(--color);
 
-  &:first-child {
-    width: 33%;
-  }
-  &:last-child {
-    width: 67%;
-  }
-
-  &, & > span {
+  &,
+  & > span {
     color: white !important;
     text-shadow: none;
   }
-
-  // img {
-  //   // filter: drop-shadow(0 0 2px rgba(black, 0.7));
-  // }
 }

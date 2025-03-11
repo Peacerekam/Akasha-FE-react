@@ -217,6 +217,10 @@
       // margin-top: 10px;
       margin-top: 5px;
       justify-content: flex-end;
+
+      > div {
+        flex-grow: 1;
+      }
     }
 
     &:not(.endgame) {
