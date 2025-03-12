@@ -407,6 +407,7 @@ export const LookupUID: React.FC<LookupUIDProps> = ({ disableAd }) => {
                 If you're trying to load Enka profile into Akasha then click{" "}
                 <Link to={`/profile/${lookupUID}`}>here</Link>.
               </div>
+              <div>If it's a nickname search then check the table below.</div>
             </div>
           )}
         </div>

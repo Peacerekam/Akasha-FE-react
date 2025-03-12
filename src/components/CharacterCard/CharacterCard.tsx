@@ -216,6 +216,26 @@ const GACHA_CHAR_OFFESET: { [char: string]: { x: number; y: number } } = {
     x: 20,
     y: -90,
   },
+  Xiangling: {
+    x: 2,
+    y: -5,
+  },
+  Kinich: {
+    x: 10,
+    y: -15,
+  },
+  Zhongli: {
+    x: 20,
+    y: 0,
+  },
+  Tighnari: {
+    x: -7,
+    y: 18,
+  },
+  Candace: {
+    x: -65,
+    y: -5,
+  },
 };
 
 export const CharacterCard: React.FC<CharacterCardProps> = ({
@@ -1003,6 +1023,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           if (namecardBg) {
             const namecardHeight = canvasPixelDensity * 572;
             const yOffset = -(namecardHeight - bgHeight);
+
             backgroundCtx!.drawImage(
               elementalOrNamecardBgImg,
               0,
@@ -1049,6 +1070,16 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
       await Promise.all(allPromises);
       await drawBackground();
+
+      if (namecardBg) {
+        // Fill with gradient
+        backgroundCtx!.globalCompositeOperation = "overlay";
+        backgroundCtx!.fillStyle = "rgba(0, 0, 0, 0.15)";
+        backgroundCtx!.fillRect(0, 0, 3 * bgWidth, bgHeight);
+        backgroundCtx!.globalCompositeOperation = "darken";
+        backgroundCtx!.fillStyle = "rgba(0, 0, 0, 0.15)";
+        backgroundCtx!.fillRect(0, 0, 3 * bgWidth, bgHeight);
+      }
 
       if (coldStart) {
         await delay(10);
@@ -2120,9 +2151,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                 <RollList artifacts={reorderedArtifacts} character={row.name} />
               </div>
               <div
-                className={`character-card-background ${
-                  !namecardBg ? "elemental-bg" : ""
-                }`}
+                className={cssJoin([
+                  "character-card-background",
+                  !namecardBg ? "elemental-bg" : "",
+                ])}
               >
                 <canvas
                   key={`canvas-${buildId}`} // just to make sure

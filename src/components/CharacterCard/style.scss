@@ -308,11 +308,6 @@ $hardcoded-scale: 1;
       filter: none !important;
     }
   }
-  .elemental-bg-wrap .compact-artifact {
-    .compact-artifact-bg {
-      filter: none !important;
-    }
-  }
 }
 
 .card-preview-modal {
@@ -1308,22 +1303,9 @@ $hardcoded-scale: 1;
       //   margin-right: auto;
       // }
 
-      .compact-artifact-bg {
-        position: absolute;
-        // content: "";
-        height: 100%;
-        width: 100%;
-        // background-image: var(--elemental-bg);
-        // background-image: var(--character-namecard-url);
-        background-position-y: bottom;
-        background-repeat: repeat;
-        // filter: brightness(0.55) blur(15px * $hardcoded-scale);
-        opacity: 0.35;
-        // background-size: 10000%;
-        background-size: initial !important;
-      }
       .compact-artifact-bg-canvas {
         position: absolute;
+        opacity: 0.9 !important;
       }
     }
   }
@@ -1427,15 +1409,16 @@ $hardcoded-scale: 1;
     }
   }
 
-  &.elemental-bg-wrap {
-    .compact-artifact-bg {
-      // filter: contrast(0.75) brightness(1.6) sepia(1)
-      //   hue-rotate(var(--hue-rotate)) saturate(3) brightness(0.65) !important; // blur(15px * $hardcoded-scale) !important;
-      opacity: 0.66 !important;
-      background-size: unset !important;
-      background-position-y: center !important;
-    }
-  }
+  // &:not(.elemental-bg-wrap) {
+  //   .compact-artifact-bg-canvas {
+  //     opacity: 0.75 !important;
+  //   }
+  // }
+  // &.elemental-bg-wrap {
+  //   .compact-artifact-bg-canvas {
+  //     opacity: 0.9 !important;
+  //   }
+  // }
 
   .character-card-background {
     //   &::before {
@@ -1458,6 +1441,7 @@ $hardcoded-scale: 1;
     // box-shadow: 0 0 0 1px * $hardcoded-scale var(--element-color);
 
     &::before {
+      $bg-card-shadow: rgba(0, 0, 0, 0.35);
       content: "";
       width: 100%;
       height: 100%;
@@ -1466,11 +1450,21 @@ $hardcoded-scale: 1;
       background: linear-gradient(
         90deg,
         transparent 336px * $hardcoded-scale,
-        rgba(0, 0, 0, 0.35) 480px * $hardcoded-scale,
-        rgba(0, 0, 0, 0.35)
+        $bg-card-shadow 480px * $hardcoded-scale,
+        $bg-card-shadow
       );
       display: block;
     }
+
+    // &:not(.elemental-bg)::before {
+    //   $bg-card-shadow: rgba(0, 0, 0, 0.35);
+    //   background: linear-gradient(
+    //     90deg,
+    //     transparent 336px * $hardcoded-scale,
+    //     $bg-card-shadow 480px * $hardcoded-scale,
+    //     $bg-card-shadow
+    //   );
+    // }
 
     &::after {
       content: "";
