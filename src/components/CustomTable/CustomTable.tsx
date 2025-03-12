@@ -857,6 +857,10 @@ export const CustomTable: React.FC<CustomTableProps> = ({
       p: "",
       filter: stringified,
     }));
+
+    if (warningText) {
+      setWarningText(undefined);
+    }
   };
 
   // hardcoded last column

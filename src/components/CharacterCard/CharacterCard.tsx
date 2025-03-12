@@ -236,6 +236,10 @@ const GACHA_CHAR_OFFESET: { [char: string]: { x: number; y: number } } = {
     x: -65,
     y: -5,
   },
+  Citlali: {
+    x: 6,
+    y: 5,
+  }
 };
 
 export const CharacterCard: React.FC<CharacterCardProps> = ({

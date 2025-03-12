@@ -166,6 +166,7 @@ $characterStats: "hp", "atk", "def", "hydrodmgbonus", "geodmgbonus",
 
     .warning-message {
       cursor: pointer;
+      z-index: 2;
 
       &,
       td {
