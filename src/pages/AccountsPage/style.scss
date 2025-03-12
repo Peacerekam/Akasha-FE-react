@@ -3,6 +3,14 @@
   color: orange;
   text-align: center;
 
+  code {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    color: rgb(255, 60, 0);
+    font-size: 16px;
+    padding: 1px 5px 2px;
+  }
+
   a {
     color: rgb(255, 60, 0);
     font-weight: 600;

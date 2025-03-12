@@ -401,7 +401,7 @@ export const LookupUID: React.FC<LookupUIDProps> = ({ disableAd }) => {
           {!validRegion && (
             <div className="lookup-not-found-prompt">
               <div>
-                <i>"{lookupUID}"</i> doesn't appear to be a valid in-game UID.
+                "<code>{lookupUID}</code>" doesn't appear to be a valid in-game UID.
               </div>
               <div>
                 If you're trying to load Enka profile into Akasha then click{" "}
