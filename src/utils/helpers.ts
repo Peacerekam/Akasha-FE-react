@@ -379,7 +379,7 @@ export const abortSignalCatcher = async (cb: any, onError?: any) => {
 };
 
 export const toShortThousands = (n: number) => {
-  if (n > 999_999) {
+  if (n > 999_499) {
     const millions = n / 1_000_000;
 
     // e.g.  1m  or  1.2m

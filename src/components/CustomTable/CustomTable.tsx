@@ -428,6 +428,10 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
     await abortSignalCatcher(getSetData);
     setIsLoading(false);
+    
+    if (params.page !== 1) {
+      setWarningText(undefined);
+    }
   };
 
   const tableClassNames = useMemo(

@@ -37,7 +37,10 @@ export const BuildPreview: React.FC = () => {
     try {
       const { md5, uid } = getParams();
       if (!md5 || !uid) return;
-      setContentWidth(1280); // instead of isLoading state
+
+      setTimeout(() => {
+        setContentWidth(1280); // instead of isLoading state
+      }, 50);
 
       const response = await axios.get(FETCH_BUILDS_URL, {
         params: { uid, md5, seed },
