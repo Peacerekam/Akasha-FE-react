@@ -31,7 +31,6 @@ import { SettingsPage } from "./pages/SettingsPage";
 import { TitleContextProvider } from "./context/TitleProvider/TitleProviderContext";
 import { TranslationContextProvider } from "./context/TranslationProvider/TranslationProviderContext";
 import axios from "axios";
-import axiosRetry from "axios-retry";
 
 // import { QueryClient, QueryClientProvider } from "react-query";
 
@@ -51,30 +50,6 @@ const getApiBaseURL = () => {
 
 axios.defaults.baseURL = getApiBaseURL();
 axios.defaults.withCredentials = true;
-
-// handle weird 404 backend errors that started happening after implementing pm2 cluster mode \_(ツ)_/¯
-axiosRetry(axios, {
-  retries: 100, // number of retries
-  // retryDelay: () => 100,
-  retryDelay: (retryCount) => {
-    const retryTime = retryCount * 5;
-    return retryTime; // time interval between retries
-  },
-  onRetry: (retryCount, error, requestConfig) => {
-    // const retryTime = 500 + retryCount * 250;
-    // const baseURL = getApiBaseURL();
-    const responseURL = error?.request?.responseURL || "---";
-
-    console.log(
-      `%c(${retryCount}/100) A wild 404 error at: ${responseURL}`,
-      "color: orange;"
-    );
-  },
-  retryCondition: (error: any) => {
-    // if retry condition is not specified, by default idempotent requests are retried
-    return error?.response?.status === 404;
-  },
-});
 
 // Add a request interceptor
 axios.interceptors.request.use(
