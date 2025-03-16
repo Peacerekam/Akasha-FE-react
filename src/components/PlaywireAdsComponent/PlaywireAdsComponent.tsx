@@ -2,10 +2,9 @@ import "./index.scss";
 
 import * as React from "react";
 
-import RampUnit from "../../utils/PlaywireRamp/RampUnit";
 import { cssJoin } from "../../utils/helpers";
 
-// const { RampUnit } = require("@playwire/pw-react-component");
+const { RampUnit } = require("@playwire/pw-react-component");
 
 export type PlaywireAdsComponentProps = {
   adType: PlaywireAdTypes;
