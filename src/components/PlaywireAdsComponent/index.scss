@@ -162,6 +162,8 @@ body.ads-disabled {
 //   #pw-oop-left_rail,
 //   #pw-oop-right_rail {
 //     // playwire should make sure this is not needed, but in practice it can be wonky
-//     display: none;
+//     display: none !important;
+//     opacity: 0 !important;
+//     pointer-events: none !important;
 //   }
 // }

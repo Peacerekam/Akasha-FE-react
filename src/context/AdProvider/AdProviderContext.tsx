@@ -1,9 +1,10 @@
 import React, { createContext, useEffect, useState } from "react";
 
+import Ramp from "../../utils/PlaywireRamp/Ramp";
 import { useLocation } from "react-router-dom";
 
 // import { Ramp } from "@playwire/pw-react-component";
-const { Ramp } = require("@playwire/pw-react-component");
+// const { Ramp } = require("@playwire/pw-react-component");
 
 type AdProviders = null | "google" | "venatus" | "playwire";
 
@@ -117,7 +118,7 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
   useEffect(() => {
     setAdsDisabled(false); // reset disable state -> used on patreon profiles for now
     handleReloadAds(); // reload ads -> used all pages
-    
+
     _setContentWidth(1100);
     _setPreventContentShrinking([]);
   }, [location.pathname]);

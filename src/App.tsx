@@ -118,6 +118,11 @@ const App = () => {
   useEffect(() => {
     domainRedirect();
     clearFiltersFromLS();
+
+    // const _body = document.querySelector("body");
+    // _body?.style.setProperty("--pixel-density", "" + window.devicePixelRatio);
+    // const isRetina = window.devicePixelRatio > 1;
+    // const isNarrow = window.innerWidth <= 1450;
   }, []);
 
   if (MAINTENANCE_MODE) {
