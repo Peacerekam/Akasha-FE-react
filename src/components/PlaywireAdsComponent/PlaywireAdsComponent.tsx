@@ -94,7 +94,11 @@ export default class PlaywireAdsComponent extends React.Component<
     return (
       <div className={classNamesContainer}>
         <span className="ad-debug">{adID || adType}</span>
+        {/* old */}
         <RampUnit type={adID} cssClass={classNamesAd} />
+
+        {/* new */}
+        {/* <div id={`pw-${adID}`} className={classNamesAd} /> */}
       </div>
     );
   }
