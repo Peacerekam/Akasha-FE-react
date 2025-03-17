@@ -1,9 +1,10 @@
 import React, { createContext, useEffect, useState } from "react";
 
+import Ramp from "../../components/PlaywireAdsComponent/Ramp";
 import { useLocation } from "react-router-dom";
 
 // import { Ramp } from "@playwire/pw-react-component";
-const { Ramp } = require("@playwire/pw-react-component");
+// const { Ramp } = require("@playwire/pw-react-component");
 
 type AdProviders = null | "google" | "venatus" | "playwire";
 
@@ -49,7 +50,6 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
     string[]
   >([]);
   const [reloadAds, setReloadAds] = useState(false);
-  const [rails, setRails] = useState<HTMLElement[]>([]);
 
   const location = useLocation();
 
@@ -109,76 +109,12 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
     // }
   }, [location.search]);
 
-  const setRailsElement = (id: string) => {
-    const divElement = document.getElementById(id);
-    if (divElement) {
-      setRails((prev) => [...prev, divElement]);
-    } else {
-      const observer = new MutationObserver(() => {
-        const iframeElement = document.querySelector(`#${id} iframe`);
-        const divElement = document.getElementById(id);
-
-        if (iframeElement && divElement) {
-          setRails((prev) => [...prev, divElement]);
-          observer.disconnect();
-        }
-      });
-
-      observer.observe(document, { subtree: true, childList: true });
-    }
-  };
-
   useEffect(() => {
     const _body = document.querySelector("body");
     if (!adProvider) return;
 
     _body?.classList.add(`ad-provider-${adProvider}`);
-
-    if (adProvider === "playwire") {
-      setRailsElement("pw-oop-left_rail");
-      setRailsElement("pw-oop-right_rail");
-    }
   }, [adProvider]);
-
-  useEffect(() => {
-    if (rails.length === 0) return;
-
-    const spaceForRail = Math.max(
-      0,
-      Math.floor((width - contentWidth) / 2) - 10
-    );
-
-    rails.forEach((r) => {
-      const styleArr = r.getAttribute("style")?.split(";");
-      let newStyle = "";
-      let hasOverflow = false;
-
-      styleArr?.forEach((x) => {
-        const [key, val] = x.split(":");
-        if (!key || !val) return;
-
-        const keyTrim = key?.trim();
-        const valTrim = val?.trim();
-
-        if (keyTrim === "overflow") {
-          hasOverflow = true;
-        }
-
-        if (keyTrim === "max-width") {
-          newStyle += `max-width:${spaceForRail}px;`;
-        } else {
-          newStyle += `${keyTrim}:${valTrim};`;
-        }
-      });
-
-      if (!hasOverflow) {
-        newStyle +=
-          "overflow:hidden !important; display: flex; justify-content: center;";
-      }
-
-      r.setAttribute("style", newStyle);
-    });
-  }, [rails, width, contentWidth]);
 
   useEffect(() => {
     setAdsDisabled(false); // reset disable state -> used on patreon profiles for now
@@ -245,7 +181,14 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
             <div>PLAYWIRE_WEBSITE_ID: {PLAYWIRE_WEBSITE_ID}</div>
           </div> */}
           {/* Only load this component once, at the top most level of your app */}
-          <Ramp publisherId={PLAYWIRE_PUBLISHER_ID} id={PLAYWIRE_WEBSITE_ID} />
+
+          {/* this used to work... */}
+          {/* <Ramp publisherId={PLAYWIRE_PUBLISHER_ID} id={PLAYWIRE_WEBSITE_ID} /> */}
+
+          <Ramp
+            PUB_ID={PLAYWIRE_PUBLISHER_ID}
+            WEBSITE_ID={PLAYWIRE_WEBSITE_ID}
+          />
         </>
       )}
       {children}
