@@ -3,15 +3,11 @@ import React, { createContext, useEffect, useState } from "react";
 import Ramp from "../../components/PlaywireAdsComponent/Ramp";
 import { useLocation } from "react-router-dom";
 
-// import { Ramp } from "@playwire/pw-react-component";
-// const { Ramp } = require("@playwire/pw-react-component");
-
 type AdProviders = null | "google" | "venatus" | "playwire";
 
 type AdProviderContextType = {
   adProvider: AdProviders;
   setAdProvider: (_: AdProviders) => void;
-  reloadAds: boolean;
   adsDisabled: boolean;
   disableAdsForThisPage: () => void;
   isMobile: boolean;
@@ -24,7 +20,6 @@ type AdProviderContextType = {
 const defaultValue = {
   adProvider: "google",
   setAdProvider: () => {},
-  reloadAds: false,
   adsDisabled: false,
   disableAdsForThisPage: () => {},
   isMobile: false,
@@ -49,7 +44,6 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
   const [_preventContentShrinking, _setPreventContentShrinking] = useState<
     string[]
   >([]);
-  const [reloadAds, setReloadAds] = useState(false);
 
   const location = useLocation();
 
@@ -57,28 +51,6 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
 
   const handleWindowSizeChange = () => {
     setWidth(window.innerWidth);
-  };
-
-  const handleReloadAds = () => {
-    setReloadAds(true);
-
-    // if (location.pathname.startsWith("/leaderboards/1000000603")) {
-    //   console.log(`%c\n\n [!] DISABLED AD-TAKEOVER WORKAROUND`, "color: red; font-size: 20px;");
-    // } else {
-    //   document.querySelector("#top-of-the-page")?.classList.remove("anim");
-    //   document.querySelector(".navbar-tabs")?.classList.remove("anim");
-    // }
-
-    setTimeout(() => {
-      setReloadAds(false);
-
-      // if (location.pathname.startsWith("/leaderboards/1000000603")) {
-      //   // ... lisa
-      // } else {
-      //   document.querySelector("#top-of-the-page")?.classList.add("anim");
-      //   document.querySelector(".navbar-tabs")?.classList.add("anim");
-      // }
-    }, 100);
   };
 
   useEffect(() => {
@@ -90,23 +62,10 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
   }, []);
 
   useEffect(() => {
-    handleReloadAds();
-  }, [isMobile]);
-
-  useEffect(() => {
     if (adProvider) return;
 
     setAdProvider("playwire");
     setContentWidth(1100);
-
-    // if (location.search.includes("playwire-test")) {
-    //   setAdProvider("playwire");
-    //   setContentWidth(1100);
-    // } else {
-    //   setAdProvider("venatus");
-    //   setContentWidth(1100); // embrace new site width early
-    //   // setContentWidth(1280);
-    // }
   }, [location.search]);
 
   useEffect(() => {
@@ -118,7 +77,6 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
 
   useEffect(() => {
     setAdsDisabled(false); // reset disable state -> used on patreon profiles for now
-    handleReloadAds(); // reload ads -> used all pages
 
     _setContentWidth(1100);
     _setPreventContentShrinking([]);
@@ -151,7 +109,6 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
   const value = {
     adProvider,
     setAdProvider,
-    reloadAds,
     adsDisabled,
     disableAdsForThisPage,
     screenWidth: width,

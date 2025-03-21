@@ -1,7 +1,6 @@
 import "./style.scss";
 
 import {
-  AdsComponentManager,
   CalculationResultWidget,
   CalculationResultWidgetExpander,
   CompactArtifact,
@@ -140,6 +139,9 @@ export const SettingsPage: React.FC = () => {
         </div>
       </div>
       {/* @TODO: enable/disable hover previews */}
+      {/* @TODO: enable/disable hover previews */}
+      {/* @TODO: enable/disable hover previews */}
+      {/* @TODO: enable/disable hover previews */}
       {/* <div>
         disabled by default
       </div> */}
@@ -151,7 +153,7 @@ export const SettingsPage: React.FC = () => {
       <div className="content-block w-100" id="content-container">
         <StylizedContentBlock overrideImage={DomainBackground} />
         <div className="relative settings-page-content-wrapper">
-          <AdsComponentManager adType="Video" />
+          {/* <AdsComponentManager adType="Video" /> */}
 
           <div className="relative block-highlight">
             <div className="settings-page-header">

@@ -2,9 +2,10 @@ import "./index.scss";
 
 import * as React from "react";
 
-import { cssJoin } from "../../utils/helpers";
+import { useContext, useEffect, useRef } from "react";
 
-const { RampUnit } = require("@playwire/pw-react-component");
+import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
+import { cssJoin } from "../../utils/helpers";
 
 export type PlaywireAdsComponentProps = {
   adType: PlaywireAdTypes;
@@ -22,84 +23,39 @@ type PlaywireAdTypes =
 const AD_TYPE_TO_KEY: { [key: string]: string } = {
   LeaderboardATF: "leaderboard_atf",
   LeaderboardBTF: "leaderboard_btf",
-  Video: "med_rect_atf", // not video?
-  // MobileLeaderboardATF: "647dac8af97ba856bd4b7f5d",
-  // MobileLeaderboardBTF: "647dac98cf4d572f0c0f54f7",
-  // RichMedia: "richmedia??", // display: none; ??
+  Video: "med_rect_atf",
 };
 
-export default class PlaywireAdsComponent extends React.Component<
-  PlaywireAdsComponentProps,
-  { width: number }
-> {
-  constructor(props: PlaywireAdsComponentProps) {
-    super(props);
-    this.state = {
-      width: window.innerWidth,
-    };
-  }
+export const PlaywireAdsComponent: React.FC<PlaywireAdsComponentProps> = ({
+  adType,
+  hideOnDesktop,
+  hideOnMobile,
+}) => {
+  const { isMobile } = useContext(AdProviderContext);
+  const divElement = useRef<HTMLDivElement>(null);
 
-  componentDidMount() {
-    const { adType, hideOnDesktop, hideOnMobile } = this.props;
-    const { width } = this.state;
-    const isMobile = width <= 800; // 768;
-    if (!isMobile && hideOnDesktop) return;
-    if (isMobile && hideOnMobile) return;
+  if (!adType) return null;
+  if (!isMobile && hideOnDesktop) return null;
+  if (isMobile && hideOnMobile) return null;
 
-    const adID = AD_TYPE_TO_KEY[adType];
-    if (!adID) return;
+  const adID = AD_TYPE_TO_KEY[adType];
+  if (!adID) return null;
 
-    // console.log(`%c  > Mount: ${adID}`, "color: green;");
-  }
+  const classNamesContainer = cssJoin([
+    "pw-container",
+    adType === "Video" ? "video-ad-container" : "",
+  ]);
 
-  componentWillUnmount() {
-    const { adType, hideOnDesktop, hideOnMobile } = this.props;
-    const { width } = this.state;
-    const isMobile = width <= 800; // 768;
-    if (!isMobile && hideOnDesktop) return;
-    if (isMobile && hideOnMobile) return;
+  const classNamesAd = cssJoin(["playwire-ad-unit", `ad-${adID}`]);
 
-    const adID = AD_TYPE_TO_KEY[adType];
-    if (!adID) return;
+  return (
+    <div className={classNamesContainer}>
+      <span className="ad-debug">{adID || adType}</span>
+      {/* old */}
+      {/* <RampUnit type={adID} cssClass={classNamesAd} /> */}
 
-    // console.log(`%c  > Unmount: ${adID}`, "color: red;");
-  }
-
-  render() {
-    const { adType, hideOnDesktop, hideOnMobile } = this.props;
-    if (!adType) return null;
-
-    const { width } = this.state;
-    const isMobile = width <= 800; // 768;
-    if (!isMobile && hideOnDesktop) return null;
-    if (isMobile && hideOnMobile) return null;
-
-    // const mobileAdType: string = isMobile ? `Mobile${adType}` : adType;
-
-    // const adID = AD_TYPE_TO_KEY[mobileAdType] || AD_TYPE_TO_KEY[adType];
-    const adID = AD_TYPE_TO_KEY[adType];
-    if (!adID) return null;
-
-    // const isHybridBanner =
-    //   mobileAdType === "MobileLeaderboardBTF" ||
-    //   mobileAdType === "LeaderboardATF";
-
-    const classNamesContainer = cssJoin([
-      "pw-container",
-      adType === "Video" ? "video-ad-container" : "",
-    ]);
-
-    const classNamesAd = cssJoin(["playwire-ad-unit", `ad-${adID}`]);
-
-    return (
-      <div className={classNamesContainer}>
-        <span className="ad-debug">{adID || adType}</span>
-        {/* old */}
-        <RampUnit type={adID} cssClass={classNamesAd} />
-
-        {/* new */}
-        {/* <div id={`pw-${adID}`} className={classNamesAd} /> */}
-      </div>
-    );
-  }
-}
+      {/* new */}
+      <div ref={divElement} id={`pw-${adID}`} className={classNamesAd} />
+    </div>
+  );
+};

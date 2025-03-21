@@ -1,5 +1,6 @@
 import { AdsComponent, AdsComponentProps } from "../AdsComponent";
-import PlaywireAdsComponent, {
+import {
+  PlaywireAdsComponent,
   PlaywireAdsComponentProps,
 } from "../PlaywireAdsComponent/PlaywireAdsComponent";
 import React, { useContext } from "react";
@@ -18,7 +19,7 @@ export const AdsComponentManager: React.FC<AdsComponentManagerProps> = (
   props
 ) => {
   const { profileObject } = useContext(SessionDataContext);
-  const { adProvider, reloadAds, adsDisabled } = useContext(AdProviderContext);
+  const { adProvider, adsDisabled } = useContext(AdProviderContext);
 
   // console.log({
   //   adProvider,
@@ -34,7 +35,7 @@ export const AdsComponentManager: React.FC<AdsComponentManagerProps> = (
     document.querySelector("body")?.classList.remove("ads-disabled");
   }
 
-  if (!SHOW_ADS || reloadAds || adsDisabled || profileObject.isPatreon) {
+  if (!SHOW_ADS || profileObject.isPatreon) {
     return <></>;
   }
 

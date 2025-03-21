@@ -35,7 +35,7 @@ const Ramp: React.FC<RampProps> = ({ PUB_ID, WEBSITE_ID }) => {
       configScript.onload = () => {
         (window as any).ramp.que.push(() => {
           console.log(
-            `%c\n [onload] window.ramp.spaNewPage("${location.pathname}")`,
+            `%c[onload] window.ramp.spaNewPage("${location.pathname}")`,
             "color: green;"
           );
           (window as any).ramp.spaNewPage(location.pathname);
@@ -54,7 +54,7 @@ const Ramp: React.FC<RampProps> = ({ PUB_ID, WEBSITE_ID }) => {
     return () => {
       (window as any).ramp.que.push(() => {
         console.log(
-          `%c\n [unmount] window.ramp.spaNewPage("${location.pathname}")`,
+          `%c[unmount] window.ramp.spaNewPage("${location.pathname}")`,
           "color: red;"
         );
         (window as any).ramp.spaNewPage(location.pathname);
@@ -151,12 +151,12 @@ const Ramp: React.FC<RampProps> = ({ PUB_ID, WEBSITE_ID }) => {
     // Handle page navigation
     (window as any).ramp.que.push(() => {
       console.log(
-        `%c\n [navigation] window.ramp.spaNewPage("${location.pathname}")`,
+        `%c[navigation] window.ramp.spaNewPage("${location.pathname}")`,
         "color: orange;"
       );
-      (window as any).ramp.spaNewPage(location.pathname);
       setRailsElement("pw-oop-left_rail");
       setRailsElement("pw-oop-right_rail");
+      (window as any).ramp.spaNewPage(location.pathname);
     });
   }, [location.pathname]);
 
