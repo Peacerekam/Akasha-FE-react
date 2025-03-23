@@ -62,7 +62,7 @@ export const CompactArtifact: React.FC<CompactArtifactProps> = ({
 
   return (
     <div
-      key={`${artifact._id}-${JSON.stringify(canvasBgProps)}`}
+      key={`${artifact._id}-${canvasBgProps?.adaptiveBgColor}-${canvasBgProps?.namecardBg}`}
       className={`compact-artifact ${className} metric-${_metric}`}
     >
       {!!canvasBgProps && <ArtifactBackgroundOnCanvas {...canvasBgProps} />}

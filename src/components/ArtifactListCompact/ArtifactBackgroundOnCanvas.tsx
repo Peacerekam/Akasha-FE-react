@@ -36,7 +36,7 @@ export const ArtifactBackgroundOnCanvas: React.FC<ArtifactBgOnCanvasProps> = ({
 
       // get the scale
       // it is the min of the 2 ratios
-      const scaleFactor = namecardBg ? 2: 1;
+      const scaleFactor = namecardBg ? 2 : 1;
 
       // clear canvas
       ctx!.globalCompositeOperation = "source-out";
@@ -83,10 +83,10 @@ export const ArtifactBackgroundOnCanvas: React.FC<ArtifactBgOnCanvasProps> = ({
         ctx!.fillStyle = adaptiveGradientSolid;
         ctx!.fillRect(0, 0, canvasWidth, canvasHeight);
 
-        ctx!.globalCompositeOperation = "hard-light";
-        ctx!.fillStyle = adaptiveGradient;
-        ctx!.filter = "contrast(150%)"; // 1.2 ? 120% ?
-        ctx!.fillRect(0, 0, canvasWidth, canvasHeight);
+        // ctx!.globalCompositeOperation = "hard-light";
+        // ctx!.fillStyle = adaptiveGradient;
+        // ctx!.filter = "contrast(150%)"; // 1.2 ? 120% ?
+        // ctx!.fillRect(0, 0, canvasWidth, canvasHeight);
       }
 
       // brightness hack for safari iOS

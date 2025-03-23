@@ -239,7 +239,7 @@ const GACHA_CHAR_OFFESET: { [char: string]: { x: number; y: number } } = {
   Citlali: {
     x: 6,
     y: 5,
-  }
+  },
 };
 
 export const CharacterCard: React.FC<CharacterCardProps> = ({
@@ -975,9 +975,9 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     chartsData,
     chartsData?.characterMetadata?.namecard,
     chartsData?.characterMetadata?.element,
-    JSON.stringify(reorderedArtifacts),
-    JSON.stringify(adaptiveColors),
-    // @TODO: more in here to make sure it changes colors
+    reorderedArtifacts,
+    adaptiveColors, // make sure it changes colors
+    // isDragging
   ]);
 
   const paintImageToCanvas = useCallback(
