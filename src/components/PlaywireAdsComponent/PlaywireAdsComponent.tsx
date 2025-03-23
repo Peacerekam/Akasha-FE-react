@@ -2,10 +2,9 @@ import "./index.scss";
 
 import * as React from "react";
 
-import { useContext, useEffect, useRef } from "react";
-
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 import { cssJoin } from "../../utils/helpers";
+import { useContext } from "react";
 
 export type PlaywireAdsComponentProps = {
   adType: PlaywireAdTypes;
@@ -32,7 +31,6 @@ export const PlaywireAdsComponent: React.FC<PlaywireAdsComponentProps> = ({
   hideOnMobile,
 }) => {
   const { isMobile } = useContext(AdProviderContext);
-  const divElement = useRef<HTMLDivElement>(null);
 
   if (!adType) return null;
   if (!isMobile && hideOnDesktop) return null;
@@ -55,7 +53,7 @@ export const PlaywireAdsComponent: React.FC<PlaywireAdsComponentProps> = ({
       {/* <RampUnit type={adID} cssClass={classNamesAd} /> */}
 
       {/* new */}
-      <div ref={divElement} id={`pw-${adID}`} className={classNamesAd} />
+      <div id={`pw-${adID}`} className={classNamesAd} />
     </div>
   );
 };

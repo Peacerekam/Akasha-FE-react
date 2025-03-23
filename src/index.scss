@@ -8,6 +8,33 @@
   src: url("./assets/fonts/shicon.woff");
 }
 
+@font-face {
+  font-family: SegoeUI;
+  src: local("Segoe UI"), url("./assets/fonts/segoeui.ttf") format("truetype");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: SegoeUI;
+  src: local("Segoe UI Semibold"),
+    url("./assets/fonts/seguisb.ttf") format("truetype");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: SegoeUI;
+  src: local("Segoe UI Bold"),
+    url("./assets/fonts/segoeuib.ttf") format("truetype");
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: SegoeUI;
+  src: local("Segoe UI Black"),
+    url("./assets/fonts/seguibl.ttf") format("truetype");
+  font-weight: 800;
+}
+
 html,
 body {
   height: 100%;
@@ -17,9 +44,10 @@ body {
   background-color: darken(#2c3333, 5);
   color: #e7f6f2;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+
+  font-family: "SegoeUI", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
