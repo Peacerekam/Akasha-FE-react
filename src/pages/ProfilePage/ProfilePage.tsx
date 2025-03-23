@@ -98,7 +98,7 @@ export const ProfilePage: React.FC = () => {
       {enkaErrorMessage}
       {bindMessage}
 
-      {!hideSelector && (relevantProfiles?.length || 0) > 1 ? (
+      {!hideSelector ? (
         <div className={contentBlockClassNames}>
           <StylizedContentBlock
             variant="gradient-reverse"
@@ -110,7 +110,9 @@ export const ProfilePage: React.FC = () => {
             isFetchingProfiles={isFetchingProfiles}
           />
         </div>
-      ) : null}
+      ) : (
+        <div style={{ marginTop: 30 }} />
+      )}
 
       {isHoyolab ? (
         <HoyolabProfile {...profilePageProps} />
