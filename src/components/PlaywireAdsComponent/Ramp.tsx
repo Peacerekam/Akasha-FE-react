@@ -43,6 +43,11 @@ const Ramp: React.FC<RampProps> = ({ PUB_ID, WEBSITE_ID }) => {
           setRailsElement("pw-oop-right_rail");
         });
       };
+
+      configScript.onerror = () => {
+        console.error("Ramp.js loading error");
+        document.querySelector("body")?.classList.add("ramp-js-error");
+      };
     }
 
     // Handle page navigation

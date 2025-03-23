@@ -143,6 +143,7 @@ body:not(.overflow-hidden) {
   }
 }
 
+body.ramp-js-error,
 body.ads-disabled {
   iframe:not(.html2canvas-container):not(#similarweb-outer-content),
   #bgdiv,
