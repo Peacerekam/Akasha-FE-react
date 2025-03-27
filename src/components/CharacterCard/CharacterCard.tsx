@@ -257,6 +257,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const [filteredLeaderboards, setFilteredLeaderboards] = useState<any[]>([]);
   const [adaptiveColors, setAdaptiveColors] = useState<[string[], string[]]>();
   const [customCardPic, setCustomCardPic] = useState(row?.customCardPic);
+  const [initialized, setInitialized] = useState(false);
 
   // flags
   const [toggleConfigure, setToggleConfigure] = useState(false);
@@ -421,9 +422,13 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   // canvas pixel density
   useEffect(() => {
     if (!canvasRef.current || !backgroundPictureRef.current) return;
+    if (initialized) return;
+
     const ctx = canvasRef.current.getContext("2d");
     ctx!.scale(canvasPixelDensity, canvasPixelDensity);
-  }, [canvasRef, backgroundPictureRef]);
+
+    setInitialized(true);
+  }, [canvasRef, backgroundPictureRef, initialized]);
 
   // canvas re-painting
   useEffect(() => {

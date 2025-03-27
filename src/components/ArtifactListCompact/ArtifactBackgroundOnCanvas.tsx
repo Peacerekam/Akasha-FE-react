@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export type ArtifactBgOnCanvasProps = {
   backgroundImage: string;
@@ -18,9 +18,23 @@ export const ArtifactBackgroundOnCanvas: React.FC<ArtifactBgOnCanvasProps> = ({
   offsetIndex = 0,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [initialized, setInitialized] = useState(false);
 
   const canvasWidth = 420 * hardcodedScale;
   const canvasHeight = 280 * hardcodedScale;
+
+  // canvas pixel density
+  useEffect(() => {
+    if (!canvasRef.current) return;
+    if (initialized) return;
+
+    const scaleFactor = namecardBg ? 2 : 1;
+
+    const ctx = canvasRef.current.getContext("2d");
+    ctx!.scale(scaleFactor, scaleFactor);
+
+    setInitialized(true);
+  }, [canvasRef, initialized, namecardBg]);
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -34,10 +48,6 @@ export const ArtifactBackgroundOnCanvas: React.FC<ArtifactBgOnCanvasProps> = ({
     img.onload = () => {
       if (!canvasRef.current) return;
 
-      // get the scale
-      // it is the min of the 2 ratios
-      const scaleFactor = namecardBg ? 2 : 1;
-
       // clear canvas
       ctx!.globalCompositeOperation = "source-out";
       ctx!.clearRect(0, 0, canvasWidth, canvasHeight);
@@ -46,7 +56,6 @@ export const ArtifactBackgroundOnCanvas: React.FC<ArtifactBgOnCanvasProps> = ({
       // ctx!.filter = `brightness(${adaptiveBgColor ? 50 : 65}%)`;
       ctx!.filter = namecardBg ? `blur(2px) brightness(0.75)` : "";
 
-      ctx!.scale(scaleFactor, scaleFactor);
       ctx!.globalCompositeOperation = "source-over";
 
       const conditionalScale = namecardBg ? 0.65 : 0.41;
