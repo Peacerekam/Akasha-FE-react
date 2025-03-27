@@ -942,12 +942,12 @@ export const cssJoin = (classes: Record<string, any> | string[]) => {
     .join(" ");
 };
 
-export const isBuildNew = (lastBuildUpdate?: number) => {
-  if (!lastBuildUpdate) return false;
+export const isEntryNew = (lastUpdate?: number) => {
+  if (!lastUpdate) return false;
 
   const now = new Date().getTime();
-  const minutesSince = lastBuildUpdate
-    ? (now - lastBuildUpdate) / 1000 / 60
+  const minutesSince = lastUpdate
+    ? (now - lastUpdate) / 1000 / 60
     : null;
 
   const isNew = !!minutesSince && minutesSince < 30;

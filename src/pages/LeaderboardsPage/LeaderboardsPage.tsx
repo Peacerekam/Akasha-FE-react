@@ -21,7 +21,7 @@ import {
   getGenderFromIcon,
   getRelevantCharacterStats,
   iconUrlToNamecardUrl,
-  isBuildNew,
+  isEntryNew,
   normalizeText,
   timeAgo,
   uidsToQuery,
@@ -168,7 +168,7 @@ export const LeaderboardsPage: React.FC = () => {
               ? row.owner?.nickname
               : `${row.owner?.nickname} - ${timeAgo(row?.lastBuildUpdate)}`;
 
-          const isNew = isBuildNew(row?.lastBuildUpdate);
+          const isNew = isEntryNew(row?.lastBuildUpdate);
 
           return (
             <a

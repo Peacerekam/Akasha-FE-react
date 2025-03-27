@@ -4,7 +4,7 @@ import {
   abortSignalCatcher,
   cssJoin,
   getSessionIdFromCookie,
-  isBuildNew,
+  isEntryNew,
   revertModalBodyStyle,
 } from "../../utils/helpers";
 import axios, { AxiosRequestConfig } from "axios";
@@ -312,7 +312,7 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       ]);
 
       const isEnka = isNaN(+char.uid);
-      const isNew = isBuildNew(char?.lastBuildUpdate);
+      const isNew = isEntryNew(char?.lastBuildUpdate);
 
       return (
         <div key={buildId} className={rowClassnames}>

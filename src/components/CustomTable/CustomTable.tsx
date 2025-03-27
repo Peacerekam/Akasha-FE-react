@@ -108,6 +108,7 @@ const getFixedSortKey = (key: string, fetchURL?: string | null) => {
     name: `${collectionPrefix} Name`.trim(),
     sortableType: "Build Name",
     lastBuildUpdate: "Last Build Update",
+    lastArtifactUpdate: "Last artifact update",
     characterName: "Character Name",
     element: "Character Element",
     c6: "C6",
@@ -428,7 +429,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
     await abortSignalCatcher(getSetData);
     setIsLoading(false);
-    
+
     if (params.page !== 1) {
       setWarningText(undefined);
     }

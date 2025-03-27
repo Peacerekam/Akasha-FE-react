@@ -12,6 +12,7 @@ import {
   getArtifactCvColor,
   getInGameSubstatValue,
   getSubstatsInOrder,
+  isEntryNew,
   isPercent,
   normalizeText,
 } from "../../utils/helpers";
@@ -86,33 +87,42 @@ export const ArtifactsPage: React.FC = () => {
         name: "Name",
         sortable: false,
         sortField: "name",
+        // sortFields: ["name", "lastArtifactUpdate"],
         width: "300px",
         cell: (row) => {
+          const isNew = isEntryNew(row?.lastArtifactUpdate);
+
+          const _content = (
+            <span
+              style={{
+                color: {
+                  5: "orange",
+                  4: "blueviolet",
+                  3: "cornflowerblue",
+                  2: "greenyellow",
+                  1: "gray",
+                }[row.stars],
+              }}
+            >
+              {/* <div style={{ marginBottom: '5px'}}>{"⭐".repeat(row.stars)}</div> */}
+              <div>
+                {translate(row.name)}
+                {/* {row.level ? `+${row.level - 1}` : ""} */}
+              </div>
+            </span>
+          );
+
           return (
             <div className="table-icon-text-pair">
-              <img
-                alt=" "
-                className="table-icon"
-                src={row.icon}
-                title={row.name}
-              />{" "}
-              <span
-                style={{
-                  color: {
-                    5: "orange",
-                    4: "blueviolet",
-                    3: "cornflowerblue",
-                    2: "greenyellow",
-                    1: "gray",
-                  }[row.stars],
-                }}
-              >
-                {/* <div style={{ marginBottom: '5px'}}>{"⭐".repeat(row.stars)}</div> */}
-                <div>
-                  {translate(row.name)}
-                  {/* {row.level ? `+${row.level - 1}` : ""} */}
-                </div>
-              </span>
+              <img alt=" " className="table-icon" src={row.icon} />{" "}
+              {isNew ? (
+                <>
+                  <span className="new-lb-badge" />
+                  {_content}
+                </>
+              ) : (
+                _content
+              )}
             </div>
           );
         },

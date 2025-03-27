@@ -304,6 +304,7 @@ export const Pagination: React.FC<PaginationProps> = ({
     "playerInfo.level": "Adventure Rank",
     lastProfileUpdate: "Last profile update",
     lastBuildUpdate: "Last build update",
+    lastArtifactUpdate: "Last artifact update",
     constellation: "Constellation",
     _id: "_id",
     // crappy columns

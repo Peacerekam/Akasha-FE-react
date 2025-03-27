@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useMemo, useState } from "react";
 import {
   abortSignalCatcher,
   cssJoin,
-  isBuildNew,
+  isEntryNew,
   toShortThousands,
 } from "../../utils/helpers";
 import axios, { AxiosRequestConfig } from "axios";
@@ -215,7 +215,7 @@ export const CalculationResultWidget: React.FC<
           const _top = ranking ? `top ${_percentage || "?"}%` : "";
 
           const brokenRanking = false; // outOf < 10000;
-          const isNew = isBuildNew(calc.lastBuildUpdate);
+          const isNew = isEntryNew(calc.lastBuildUpdate);
 
           return (
             <div

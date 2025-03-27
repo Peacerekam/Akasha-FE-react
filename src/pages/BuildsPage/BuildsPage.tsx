@@ -16,7 +16,7 @@ import {
   cssJoin,
   getGenderFromIcon,
   getRelevantCharacterStats,
-  isBuildNew,
+  isEntryNew,
   normalizeText,
   timeAgo,
 } from "../../utils/helpers";
@@ -81,7 +81,7 @@ export const BuildsPage: React.FC = () => {
               ? row.owner?.nickname
               : `${row.owner?.nickname} - ${timeAgo(row?.lastBuildUpdate)}`;
 
-          const isNew = isBuildNew(row?.lastBuildUpdate);
+          const isNew = isEntryNew(row?.lastBuildUpdate);
 
           return (
             <a
