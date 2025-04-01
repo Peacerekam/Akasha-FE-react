@@ -412,9 +412,10 @@ export const iconUrlToNamecardUrl = (url: string) => {
     .replace(".png", `${iDontFuckingEven}_P.png`);
 };
 
-export const toEnkaUrl = (assetName?: string) => {
+export const toEnkaUrl = (assetName?: string, aprilFools?: boolean) => {
   if (!assetName) return "";
-  return `https://enka.network/ui/${assetName}.png`;
+  const prefix = aprilFools ? "a/" : "";
+  return `https://enka.network/ui/${prefix}${assetName}.png`;
 };
 
 export const shadeColor = (color: string, percent: number) => {
@@ -946,9 +947,7 @@ export const isEntryNew = (lastUpdate?: number) => {
   if (!lastUpdate) return false;
 
   const now = new Date().getTime();
-  const minutesSince = lastUpdate
-    ? (now - lastUpdate) / 1000 / 60
-    : null;
+  const minutesSince = lastUpdate ? (now - lastUpdate) / 1000 / 60 : null;
 
   const isNew = !!minutesSince && minutesSince < 30;
   return isNew;

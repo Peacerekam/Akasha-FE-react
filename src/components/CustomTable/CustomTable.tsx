@@ -108,7 +108,7 @@ const getFixedSortKey = (key: string, fetchURL?: string | null) => {
     name: `${collectionPrefix} Name`.trim(),
     sortableType: "Build Name",
     lastBuildUpdate: "Last Build Update",
-    lastArtifactUpdate: "Last artifact update",
+    lastArtifactUpdate: "Last Artifact Update",
     characterName: "Character Name",
     element: "Character Element",
     c6: "C6",

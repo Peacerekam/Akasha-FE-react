@@ -51,6 +51,7 @@ import {
 import html2canvas, { Options } from "html2canvas";
 import { useLocation, useParams } from "react-router-dom";
 
+import { APRIL_FOOLS } from "../../utils/maybeEnv";
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 import { CompactArtifact } from "../ArtifactListCompact";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -1326,7 +1327,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   );
 
   const characterShowcase = useMemo(() => {
-    const charImgUrl = toEnkaUrl(chartsData?.assets?.gachaIcon);
+    const charImgUrl = toEnkaUrl(chartsData?.assets?.gachaIcon, APRIL_FOOLS);
     const showcaseContainerClassNames = cssJoin([
       "character-showcase-pic-container",
       toggleConfigure ? "editable" : "",

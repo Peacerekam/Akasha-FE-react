@@ -2,6 +2,7 @@
 export const BASENAME = "/";
 export const MAINTENANCE_MODE = false;
 export const SHOW_ADS = true;
+export const APRIL_FOOLS = true;
 
 // probably change
 export const IS_PRODUCATION = true; // set false to use localhost endpoints
