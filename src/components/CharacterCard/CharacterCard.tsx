@@ -267,7 +267,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const [generating, setGenerating] = useState<OpenDownloadingFalse>(false);
   const [uploading, setUploading] = useState(false);
   const [hasCustomBg, setHasCustomBg] = useState<VerticalOrHorizontal>("");
-  const [skipGradient, setSkipGradient] = useState(false);
   const [picLoaded, setPicLoaded] = useState(false);
 
   // dragging related
@@ -280,6 +279,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const uploadPictureInputRef = useRef<HTMLInputElement>(null);
   const backgroundPictureRef = useRef<HTMLImageElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasRef_2 = useRef<HTMLCanvasElement>(null);
   const canvasBgRef = useRef<HTMLCanvasElement>(null);
 
   // context
@@ -331,7 +331,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const showPicSaveButton =
     profileObject?.isEnkaPatreon || profileObject?.isPatreon;
 
-  const cardPicUrl = `${axios.defaults.baseURL}/public/cardpics/${customCardPic}`;
+  const cardPicUrl = `${axios.defaults.baseURL}/public/cardpics/${customCardPic}?card=true`;
 
   const canvasPixelDensity = 2; // helps when exporting at higher scale
   const maxScale = contentWidth ? contentWidth / 1280 : 1;
@@ -422,11 +422,22 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
   // canvas pixel density
   useEffect(() => {
-    if (!canvasRef.current || !backgroundPictureRef.current) return;
     if (initialized) return;
 
-    const ctx = canvasRef.current.getContext("2d");
-    ctx!.scale(canvasPixelDensity, canvasPixelDensity);
+    if (
+      !backgroundPictureRef.current ||
+      !canvasRef.current ||
+      !canvasRef_2.current
+    ) {
+      return;
+    }
+
+    const ctx_1 = canvasRef.current.getContext("2d");
+    const ctx_2 = canvasRef_2.current.getContext("2d");
+
+    [ctx_1, ctx_2].forEach((ctx) => {
+      ctx!.scale(canvasPixelDensity, canvasPixelDensity);
+    });
 
     setInitialized(true);
   }, [canvasRef, backgroundPictureRef, initialized]);
@@ -478,7 +489,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     namecardBg,
     zoomLevel,
     compressedImage,
-    skipGradient,
   ]);
 
   const calculationIds = useMemo(
@@ -1147,7 +1157,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       characterCtx!.clearRect(0, 0, canvasWidth, canvasHeight);
 
       // Fill with gradient
-      characterCtx!.fillStyle = skipGradient ? "black" : gradientMask;
+      characterCtx!.fillStyle = gradientMask;
       characterCtx!.fillRect(0, 0, canvasWidth, canvasHeight);
 
       // get the top left position of the image
@@ -1208,6 +1218,21 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
       characterCtx!.globalCompositeOperation = "source-in";
       characterCtx!.drawImage(characterImg, x, y, newWidth, newHeight);
+
+      if (canvasRef_2.current) {
+        const characterCtx_2 = canvasRef_2.current.getContext("2d");
+
+        // clear canvas
+        characterCtx_2!.globalCompositeOperation = "source-out";
+        characterCtx_2!.clearRect(0, 0, canvasWidth, canvasHeight);
+
+        // Fill with gradient
+        characterCtx_2!.fillStyle = "black";
+        characterCtx_2!.fillRect(0, 0, canvasWidth, canvasHeight);
+
+        characterCtx_2!.globalCompositeOperation = "source-in";
+        characterCtx_2!.drawImage(characterImg, x, y, newWidth, newHeight);
+      }
 
       if (!_adaptiveBgColor) return;
 
@@ -1303,7 +1328,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       namecardBg,
       dragOffset,
       zoomLevel,
-      skipGradient,
     ]
   );
 
@@ -1490,8 +1514,9 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             style={{ display: "none", pointerEvents: "all" }}
             onChange={onFileUpload}
           />
+          {/* visible canvas */}
           <canvas
-            key={`canvas-img-${buildId}`} // just to make sure
+            key={`canvas-img-${buildId}`}
             width={canvasWidth * canvasPixelDensity}
             height={canvasHeight * canvasPixelDensity}
             style={{
@@ -1499,6 +1524,18 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
               height: canvasHeight,
             }}
             ref={canvasRef}
+          />
+          {/* canvas used for uploading the picture */}
+          <canvas
+            key={`canvas-img-${buildId}-gradientless`}
+            width={canvasWidth * canvasPixelDensity}
+            height={canvasHeight * canvasPixelDensity}
+            style={{
+              width: canvasWidth,
+              height: canvasHeight,
+              display: "none",
+            }}
+            ref={canvasRef_2}
           />
           {isLoadingImage && (
             <div className="image-loading-wrapper">
@@ -2073,12 +2110,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
   const handleCardPicUpload = async (clear: boolean = false) => {
     setUploading(true);
-    if (!clear) setSkipGradient(true);
-    await delay(150);
 
-    canvasRef.current?.toBlob(async (blob) => {
+    // canvasRef_2 is the one without gradient mask
+    canvasRef_2.current?.toBlob(async (blob) => {
       if (!blob) return;
-      if (!clear) setSkipGradient(false);
 
       const { uid, md5 } = row;
       const _uid = encodeURIComponent(uid);
