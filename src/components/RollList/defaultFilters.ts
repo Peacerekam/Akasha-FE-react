@@ -94,7 +94,7 @@ const ELECTRO_RV_LIST = {
   Cyno: [CRate, CDMG, ATK_, EM, ER],
   "Kujou Sara": [CRate, CDMG, ATK_, ER],
   Dori: [CRate, CDMG, HP_, ATK_, ER],
-  Varesa: [CRate, CDMG, ATK_],
+  Varesa: [CRate, CDMG, ATK_, ER],
   Iansan: [CRate, CDMG, ATK_, ER],
 };
 
