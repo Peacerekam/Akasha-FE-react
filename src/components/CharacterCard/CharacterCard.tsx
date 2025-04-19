@@ -268,6 +268,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const [uploading, setUploading] = useState(false);
   const [hasCustomBg, setHasCustomBg] = useState<VerticalOrHorizontal>("");
   const [picLoaded, setPicLoaded] = useState(false);
+  const [pastedImage, setPastedImage] = useState(false);
 
   // dragging related
   const [compressedImage, setCompressedImage] = useState<string>();
@@ -406,7 +407,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       if (isFocused) {
         const fileList = event.clipboardData.files;
         uploadPictureInputRef.current.files = fileList;
-        onFileUpload();
+        handleFileUpload(true);
       }
     },
     [uploadPictureInputRef, cardRef, document]
@@ -476,8 +477,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     if (!backgroundPictureRef.current) return;
     if (_adaptiveBgColor === undefined || namecardBg === undefined) return;
 
-    const paintMode =
-      !customCardPic && !uploadPictureInputRef?.current?.files?.[0] && "gacha";
+    const paintMode = pastedImage
+      ? false
+      : !customCardPic &&
+        !uploadPictureInputRef?.current?.files?.[0] &&
+        "gacha";
     const coldStart = true;
 
     const maybePaintImageToCanvas = async (i = 0) => {
@@ -490,13 +494,18 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       try {
         paintImageToCanvas(
           compressedImage || backgroundPictureRef.current.src,
-          paintMode,
+          pastedImage ? false : paintMode,
           coldStart,
           null,
           false
         );
         setCompressedImage(compressedImage || backgroundPictureRef.current.src);
-        setPicLoaded(!!uploadPictureInputRef?.current?.files?.[0]);
+
+        setPicLoaded(
+          !!uploadPictureInputRef?.current?.files?.[0] ||
+            !compressedImage ||
+            pastedImage
+        );
       } catch (err) {
         // second time's a charm
         await delay(10);
@@ -518,6 +527,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     namecardBg,
     zoomLevel,
     compressedImage,
+    pastedImage,
   ]);
 
   const calculationIds = useMemo(
@@ -1379,42 +1389,50 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     [paintImageToCanvas, isMobile]
   );
 
-  const onFileUpload = useCallback(() => {
-    const file = uploadPictureInputRef?.current?.files?.[0];
-    if (!file) return;
+  const handleFileUpload = useCallback(
+    (pasteFlag = false) => {
+      const file = uploadPictureInputRef?.current?.files?.[0];
+      if (!file) return;
 
-    // const mp4blob = URL.createObjectURL(file);
+      // const mp4blob = URL.createObjectURL(file);
 
-    try {
-      setIsLoadingImage(true);
-      const reader = new FileReader();
+      try {
+        setIsLoadingImage(true);
+        const reader = new FileReader();
 
-      reader.addEventListener(
-        "load",
-        async () => {
-          const dataURL = await compressPNG(
-            reader.result + "",
-            canvasWidth,
-            canvasHeight,
-            2
-          );
+        reader.addEventListener(
+          "load",
+          async () => {
+            const dataURL = await compressPNG(
+              reader.result + "",
+              canvasWidth,
+              canvasHeight,
+              2
+            );
 
-          setDragOffset(null);
-          setZoomLevel(1);
-          setCompressedImage(dataURL);
-          paintImageToCanvas(dataURL, false, false, null, true);
-          setHasCustomBg("horizontal");
-          setIsLoadingImage(false);
-        },
-        false
-      );
+            setDragOffset(null);
+            setZoomLevel(1);
+            setCompressedImage(dataURL);
+            paintImageToCanvas(dataURL, false, false, null, true);
+            setHasCustomBg("horizontal");
+            setIsLoadingImage(false);
+            setPicLoaded(true);
 
-      reader.readAsDataURL(file);
-    } catch (err) {
-      console.log(err);
-      setIsLoadingImage(false);
-    }
-  }, [uploadPictureInputRef?.current, canvasWidth, canvasHeight]);
+            if (pasteFlag) {
+              setPastedImage(true);
+            }
+          },
+          false
+        );
+
+        reader.readAsDataURL(file);
+      } catch (err) {
+        console.log(err);
+        setIsLoadingImage(false);
+      }
+    },
+    [uploadPictureInputRef?.current, canvasWidth, canvasHeight]
+  );
 
   const characterShowcase = useMemo(() => {
     const charImgUrl = toEnkaUrl(chartsData?.assets?.gachaIcon, APRIL_FOOLS);
@@ -1428,8 +1446,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       charImgUrl ? "" : "disable-input",
     ]);
 
-    const paintMode =
-      !customCardPic && !uploadPictureInputRef?.current?.files?.[0] && "gacha";
+    const paintMode = pastedImage
+      ? false
+      : !customCardPic &&
+        !uploadPictureInputRef?.current?.files?.[0] &&
+        "gacha";
 
     const onContainerMouseDown = (event: MouseOrTouchEvent) => {
       if (!toggleConfigure) return;
@@ -1543,7 +1564,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             type="file"
             name="filename"
             style={{ display: "none", pointerEvents: "all" }}
-            onChange={onFileUpload}
+            onChange={() => handleFileUpload()}
           />
           {/* visible canvas */}
           <canvas
@@ -1600,6 +1621,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     dragOffset,
     toggleConfigure,
     customCardPic,
+    pastedImage,
   ]);
 
   const characterStats = useMemo(
@@ -1861,8 +1883,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   ]);
 
   const cardOverlayWrapper = useMemo(() => {
-    const paintMode =
-      !customCardPic && !uploadPictureInputRef?.current?.files?.[0] && "gacha";
+    const paintMode = pastedImage
+      ? false
+      : !customCardPic &&
+        !uploadPictureInputRef?.current?.files?.[0] &&
+        "gacha";
     const zoomIncrement = 1.05;
     const arrowSize = 2;
 
@@ -2014,6 +2039,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     imgDimensions, // ?
     translate,
     customCardPic,
+    pastedImage,
   ]);
 
   const handleSelectChange = (option: any) => {
