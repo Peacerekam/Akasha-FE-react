@@ -282,7 +282,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvasRef_2 = useRef<HTMLCanvasElement>(null);
   const canvasBgRef = useRef<HTMLCanvasElement>(null);
-  const cardRef = useRef<HTMLDivElement>(null);
 
   // context
   const { translate } = useContext(TranslationContext);
@@ -402,7 +401,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     (event: any) => {
       if (!uploadPictureInputRef?.current) return;
 
-      const isFocused = cardRef?.current === document?.activeElement;
+      const isFocused = canvasRef?.current === document?.activeElement;
 
       if (isFocused) {
         const fileList = event.clipboardData.files;
@@ -410,7 +409,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         handleFileUpload(true);
       }
     },
-    [uploadPictureInputRef, cardRef, document]
+    [uploadPictureInputRef, canvasRef, document]
   );
 
   // paste img handler
@@ -1543,8 +1542,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         {/* <div className="column-shadow-gradient" /> */}
 
         <div
-          ref={cardRef}
-          tabIndex={-1}
           style={{ pointerEvents: "all" }}
           className={showcaseContainerClassNames}
           // desktop support
@@ -1568,6 +1565,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           />
           {/* visible canvas */}
           <canvas
+            tabIndex={-1}
+            ref={canvasRef}
             key={`canvas-img-${buildId}`}
             width={canvasWidth * canvasPixelDensity}
             height={canvasHeight * canvasPixelDensity}
@@ -1575,7 +1574,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
               width: canvasWidth,
               height: canvasHeight,
             }}
-            ref={canvasRef}
           />
           {/* canvas used for uploading the picture */}
           <canvas
