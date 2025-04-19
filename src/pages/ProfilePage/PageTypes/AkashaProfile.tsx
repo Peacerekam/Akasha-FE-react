@@ -118,7 +118,7 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
   const { uid } = useParams();
   const { showcaseState } = useContext(SettingsContext);
   const { disableAdsForThisPage, adProvider } = useContext(AdProviderContext);
-  const { addTab, lastProfiles } = useContext(LastProfilesContext);
+  const { addTab, removeTab, lastProfiles } = useContext(LastProfilesContext);
   const { setTitle } = useContext(TitleContext);
   const { translate } = useContext(TranslationContext);
   const { isAuthenticated, isBound, fetchSessionData, boundAccounts } =
@@ -614,6 +614,7 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
 
     if (data?.data?.error) {
       setEnkaError(data.data.error);
+      removeTab(uid);
     }
 
     const getTime = new Date().getTime();

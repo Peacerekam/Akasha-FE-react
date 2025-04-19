@@ -281,6 +281,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvasRef_2 = useRef<HTMLCanvasElement>(null);
   const canvasBgRef = useRef<HTMLCanvasElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   // context
   const { translate } = useContext(TranslationContext);
@@ -362,9 +363,9 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     applyModalBodyStyle(offsets);
   };
 
-  const handleWindowSizeChange = () => {
+  const handleWindowSizeChange = useCallback(() => {
     setWidth(window.innerWidth);
-  };
+  }, []);
 
   const getReadableStatText = (_statName: string) => {
     const textMap: any = {
@@ -395,6 +396,34 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     console.log("\nRerendering character card...", row.name, row.type);
     errorCallback();
   };
+
+  const handlePasteImage = useCallback(
+    (event: any) => {
+      if (!uploadPictureInputRef?.current) return;
+
+      const isFocused = cardRef?.current === document?.activeElement;
+
+      if (isFocused) {
+        const fileList = event.clipboardData.files;
+        uploadPictureInputRef.current.files = fileList;
+        onFileUpload();
+      }
+    },
+    [uploadPictureInputRef, cardRef, document]
+  );
+
+  // paste img handler
+  useEffect(() => {
+    if (toggleConfigure) {
+      window.addEventListener("paste", handlePasteImage);
+    } else {
+      window.removeEventListener("paste", handlePasteImage);
+    }
+
+    return () => {
+      window.removeEventListener("paste", handlePasteImage);
+    };
+  }, [toggleConfigure]);
 
   // resize handler
   useEffect(() => {
@@ -1350,6 +1379,43 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     [paintImageToCanvas, isMobile]
   );
 
+  const onFileUpload = useCallback(() => {
+    const file = uploadPictureInputRef?.current?.files?.[0];
+    if (!file) return;
+
+    // const mp4blob = URL.createObjectURL(file);
+
+    try {
+      setIsLoadingImage(true);
+      const reader = new FileReader();
+
+      reader.addEventListener(
+        "load",
+        async () => {
+          const dataURL = await compressPNG(
+            reader.result + "",
+            canvasWidth,
+            canvasHeight,
+            2
+          );
+
+          setDragOffset(null);
+          setZoomLevel(1);
+          setCompressedImage(dataURL);
+          paintImageToCanvas(dataURL, false, false, null, true);
+          setHasCustomBg("horizontal");
+          setIsLoadingImage(false);
+        },
+        false
+      );
+
+      reader.readAsDataURL(file);
+    } catch (err) {
+      console.log(err);
+      setIsLoadingImage(false);
+    }
+  }, [uploadPictureInputRef?.current, canvasWidth, canvasHeight]);
+
   const characterShowcase = useMemo(() => {
     const charImgUrl = toEnkaUrl(chartsData?.assets?.gachaIcon, APRIL_FOOLS);
     const showcaseContainerClassNames = cssJoin([
@@ -1448,43 +1514,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       setToggleConfigure(true); // enable zoom and upload pic buttons
     };
 
-    const onFileUpload = () => {
-      const file = uploadPictureInputRef?.current?.files?.[0];
-      if (!file) return;
-
-      // const mp4blob = URL.createObjectURL(file);
-
-      try {
-        setIsLoadingImage(true);
-        const reader = new FileReader();
-
-        reader.addEventListener(
-          "load",
-          async () => {
-            const dataURL = await compressPNG(
-              reader.result + "",
-              canvasWidth,
-              canvasHeight,
-              2
-            );
-
-            setDragOffset(null);
-            setZoomLevel(1);
-            setCompressedImage(dataURL);
-            paintImageToCanvas(dataURL, false, false, null, true);
-            setHasCustomBg("horizontal");
-            setIsLoadingImage(false);
-          },
-          false
-        );
-
-        reader.readAsDataURL(file);
-      } catch (err) {
-        console.log(err);
-        setIsLoadingImage(false);
-      }
-    };
-
     return (
       <div>
         <div className="column-shadow-gradient-top" />
@@ -1493,6 +1522,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         {/* <div className="column-shadow-gradient" /> */}
 
         <div
+          ref={cardRef}
+          tabIndex={-1}
           style={{ pointerEvents: "all" }}
           className={showcaseContainerClassNames}
           // desktop support

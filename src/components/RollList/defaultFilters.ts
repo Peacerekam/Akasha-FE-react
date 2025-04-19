@@ -10,10 +10,10 @@ const DEF = "Flat DEF";
 const HP = "Flat HP";
 
 const ANEMO_RV_LIST = {
-  Sayu: [EM, ER],
+  Sayu: [CRate, CDMG, EM, ER],
   Venti: [CRate, CDMG, ATK_, EM, ER],
   Xiao: [CRate, CDMG, ATK_, ER],
-  Jean: [CRate, CDMG, ATK_, ER],
+  Jean: [CRate, CDMG, ATK_, EM, ER],
   Faruzan: [CRate, CDMG, ATK_, ER],
   Wanderer: [CRate, CDMG, ATK_, ER],
   "Kaedehara Kazuha": [CRate, CDMG, ATK_, EM, ER],
@@ -58,7 +58,7 @@ const HYDRO_RV_LIST = {
 };
 
 const CRYO_RV_LIST = {
-  Diona: [HP_, ER],
+  Diona: [CRate, CDMG, HP_, ER],
   Qiqi: [CRate, CDMG, ATK_],
   Eula: [CRate, CDMG, ER, ATK_],
   Ganyu: [CRate, CDMG, ATK_, EM],
