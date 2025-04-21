@@ -163,12 +163,12 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
       const { data } = await axios.get(url, opts);
 
       _setResponseData(data.data);
+      handleAddNewTab(data.data);
 
-      if (data?.data?.account?.playerInfo?.nickname) {
-        handleAddNewTab(data.data);
-      }
-
-      if (!data?.data?.account?.playerInfo?.nickname) {
+      if (
+        !data?.data?.account?.playerInfo?.nickname &&
+        !data?.data?.account?.playerInfo?.level
+      ) {
         await handleRefreshData();
       }
 
@@ -221,9 +221,14 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
 
   const handleAddNewTab = ({ account }: any) => {
     if (!uid) return;
-    const nickname = account?.playerInfo?.nickname || "???";
-    addTab(uid, nickname);
-    setTitle(`${nickname}'s Profile | Akasha System`);
+    const nickname = account?.playerInfo?.nickname;
+
+    if (nickname) {
+      addTab(uid, nickname);
+      setTitle(`${nickname}'s Profile | Akasha System`);
+    } else {
+      setTitle(`Unknown Profile | Akasha System`);
+    }
   };
 
   const fetchInOrder = async () => {
@@ -608,13 +613,13 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
       // message,
     } = data;
 
-    if (ttl === 0) {
-      await fetchProfile();
-    }
-
     if (data?.data?.error) {
       setEnkaError(data.data.error);
       removeTab(uid);
+    }
+
+    if (ttl === 0) {
+      await fetchProfile();
     }
 
     const getTime = new Date().getTime();
@@ -718,12 +723,11 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
         if (!uid) return;
         const _uid = encodeURIComponent(uid);
         const lockAccountURL = `/api/user/toggleLockProfile/${_uid}`;
-        const { data } = await axios.post(lockAccountURL, null, {
+        await axios.post(lockAccountURL, null, {
           headers: {
             Authorization: `Bearer ${getSessionIdFromCookie()}`,
           },
         });
-        console.log(data);
         await fetchProfile();
       };
 

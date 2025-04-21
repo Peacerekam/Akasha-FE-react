@@ -100,7 +100,7 @@ const ELECTRO_RV_LIST = {
 };
 
 const DENDRO_RV_LIST = {
-  Nahida: [CRate, CDMG, EM],
+  Nahida: [CRate, CDMG, ATK_, EM],
   Alhaitham: [CRate, CDMG, ATK_, EM, ER],
   Tighnari: [CRate, CDMG, ATK_, EM, ER],
   Yaoyao: [CRate, CDMG, ATK_, EM, ER],
