@@ -21,6 +21,7 @@ const ANEMO_RV_LIST = {
   Xianyun: [CRate, CDMG, ATK_, ER],
   Chasca: [CRate, CDMG, ATK_, EM],
   "Yumemizuki Mizuki": [CRate, CDMG, ATK_, EM, ER],
+  Ifa: [CRate, CDMG, ATK_, EM, ER],
 };
 
 const PYRO_RV_LIST = {
@@ -68,6 +69,7 @@ const CRYO_RV_LIST = {
   Charlotte: [CRate, CDMG, ER, ATK_],
   Mika: [CRate, CDMG, HP_, ER, ATK_],
   Citlali: [CRate, CDMG, ATK_, EM, ER],
+  Escoffier: [CRate, CDMG, ATK_, ER],
 };
 
 const GEO_RV_LIST = {

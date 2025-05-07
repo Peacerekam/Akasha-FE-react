@@ -12,6 +12,8 @@ import { getStatsFromRow } from "../components";
 export const PATREON_URL = "https://www.patreon.com/mimee";
 // export const DISCORD_URL = "https://discord.gg/akasha";
 export const DISCORD_URL = "https://discord.gg/jNM9HpaW2p";
+export const LOOTBAR_URL =
+  "https://lootbar.gg/top-up/genshin-impact-top-up?aff_short=akasha";
 
 export const FETCH_ARTIFACTS_URL = `/api/artifacts`;
 export const FETCH_BUILDS_URL = `/api/builds/`;

@@ -3,6 +3,7 @@ import "./style.scss";
 import React, { useContext } from "react";
 
 import AnemoBg from "../../assets/images/teammates/anemo-team-bg.png";
+import { AssetFallback } from "..";
 import CryoBg from "../../assets/images/teammates/cryo-team-bg.png";
 import DendroBg from "../../assets/images/teammates/dendro-team-bg.png";
 import { ELEMENT_TO_COLOR } from "../CharacterCard/cardHelpers";
@@ -173,7 +174,11 @@ export const TeammatesCompact: React.FC<TeammatesCompactProps> = ({
 
   const teammateIcon = (teammate: CalculationTeammate) => {
     return (
-      <img alt=" " className="table-icon" src={teammate.character?.icon} />
+      <AssetFallback
+        alt=" "
+        className="table-icon"
+        src={teammate.character?.icon}
+      />
     );
   };
 
@@ -253,7 +258,7 @@ export const TeammatesCompact: React.FC<TeammatesCompactProps> = ({
           <div className="overlay-icons-container">
             {isNonFill && teammate.weapon?.icon ? (
               <div className="overlay-weapon-wrapper">
-                <img
+                <AssetFallback
                   alt=" "
                   className="table-icon overlay-icon"
                   src={teammate.weapon?.icon}
@@ -264,7 +269,7 @@ export const TeammatesCompact: React.FC<TeammatesCompactProps> = ({
             )}
             {teammate.character?.artifactSet ? (
               <div className="overlay-artifact-wrapper">
-                <img
+                <AssetFallback
                   alt=" "
                   className="table-icon overlay-icon"
                   src={teammate.character?.artifactSetIcon}

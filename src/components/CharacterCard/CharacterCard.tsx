@@ -53,6 +53,7 @@ import { useLocation, useParams } from "react-router-dom";
 
 import { APRIL_FOOLS } from "../../utils/maybeEnv";
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
+import { AssetFallback } from "../AssetFallback";
 import { CompactArtifact } from "../ArtifactListCompact";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FriendshipIcon from "../../assets/icons/Item_Companionship_EXP.png";
@@ -927,7 +928,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
           const lbBadge = (
             <span className="lb-badge with-icon">
-              <img alt="" className="weapon-icon" src={calc.weapon.icon} />
+              <AssetFallback alt="" className="weapon-icon" src={calc.weapon.icon} />
               <span>
                 {short}{" "}
                 {variant?.displayName?.replace("C6", "").replace("C2", "")}
@@ -1647,7 +1648,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       <div className="character-middle-fix">
         <div className="character-weapon relative">
           <div className="weapon-icon">
-            <img alt="" src={row.weapon.icon} />
+            <AssetFallback alt="" src={row.weapon.icon} />
             <div className="weapon-rarity">
               {[...Array(chartsData?.weaponMetadata?.rarity)].map((e, i) => (
                 <img alt="*" key={`star-${i}`} src={RarityStar} />
@@ -1747,7 +1748,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
               {shorterName}
             </span>
             <span className="for-pills">
-              <img alt="" src={c.weapon.icon} />
+              <AssetFallback alt="" src={c.weapon.icon} />
               {translate(c.weapon.name)} - top {_top}{" "}
               {c.variant?.displayName ? `(${c.variant?.displayName}) ` : " "}
               {c.short}

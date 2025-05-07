@@ -1,4 +1,5 @@
 import {
+  AssetFallback,
   CritRatio,
   CustomTable,
   DisplaySets,
@@ -115,7 +116,7 @@ export const BuildsPage: React.FC = () => {
 
           return (
             <div className="table-icon-text-pair">
-              <img
+              <AssetFallback
                 alt=" "
                 className="table-icon"
                 src={row.icon}

@@ -7,6 +7,7 @@ import {
   getRelevantDmgBonuses,
 } from "../../utils/helpers";
 
+import { AssetFallback } from "../AssetFallback";
 import { StatIcon } from "../StatIcon";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import { getPercentageStat } from "../StatListCard";
@@ -124,7 +125,7 @@ export const StatList: React.FC<StatListProps> = ({
       return (
         <div key={name} className="table-stat-row green-tint">
           <div className="flex gap-5 w-100">
-            <img alt="" className="stat-icon" src={icon} />
+            <AssetFallback alt="" className="stat-icon" src={icon} />
             <span>{translate(name)}</span>
           </div>
           <div>×{Math.floor(count / 2) * 2}</div>
@@ -181,7 +182,7 @@ export const StatList: React.FC<StatListProps> = ({
   const displayWeapon = showWeapon && row.weapon && (
     <div className="table-stat-row">
       <div className="flex gap-5">
-        <img
+        <AssetFallback
           alt=""
           className={cssJoin([
             "stat-icon",
@@ -221,7 +222,7 @@ export const StatList: React.FC<StatListProps> = ({
   const displayCharacter = showCharacter && (
     <div className="table-stat-row">
       <div className="flex gap-5">
-        <img alt="" className="stat-icon" src={row.icon} />
+        <AssetFallback alt="" className="stat-icon" src={row.icon} />
         <span>{translate(row.name, gender)}</span>
         <div className="relative">
           <span className="refinement-display">

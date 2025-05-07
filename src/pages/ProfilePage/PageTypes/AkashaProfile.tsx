@@ -1,6 +1,7 @@
 import "../style.scss";
 
 import {
+  AssetFallback,
   CalculationResultWidget,
   CalculationResultWidgetExpander,
   ConfirmTooltip,
@@ -310,7 +311,7 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
 
           return (
             <div className="table-icon-text-pair">
-              <img alt=" " className="table-icon" src={row.icon} />{" "}
+              <AssetFallback alt=" " className="table-icon" src={row.icon} />{" "}
               {isNew ? (
                 <>
                   <span className="new-lb-badge" />
@@ -447,7 +448,7 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
 
           return (
             <div className={"table-icon-text-pair"} title={updatedAtLabel}>
-              <img
+              <AssetFallback
                 alt=" "
                 title={updatedAtLabel}
                 className="table-icon"

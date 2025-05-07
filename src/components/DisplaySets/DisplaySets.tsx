@@ -1,5 +1,7 @@
 import "./style.scss";
 
+import { AssetFallback } from "../AssetFallback";
+
 type DisplaySetsProps = {
   artifactSets: any;
 };
@@ -16,7 +18,7 @@ export const DisplaySets: React.FC<DisplaySetsProps> = ({ artifactSets }) => {
           const { icon, count } = artifactSets[name];
           return (
             <div key={name} className="table-icon-text-pair relative">
-              <img alt="" className="table-icon" src={icon} />
+              <AssetFallback alt="" className="table-icon" src={icon} />
               <span className="bottom-right-absolute">
                 {Math.floor(count / 2) * 2}
               </span>

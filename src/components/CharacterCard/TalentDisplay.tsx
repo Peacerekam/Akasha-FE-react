@@ -1,3 +1,4 @@
+import { AssetFallback } from "../AssetFallback";
 import CrownOfInsight from "../../assets/images/Crown_of_Insight.webp";
 
 type TalentProps = {
@@ -23,7 +24,7 @@ export const TalentDisplay: React.FC<TalentProps> = ({ talent }) => {
     >
       {talent?.icon ? (
         <span>
-          <img alt="" src={talent?.icon} />
+          <AssetFallback alt="" src={talent?.icon} />
         </span>
       ) : (
         <span>

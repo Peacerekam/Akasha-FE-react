@@ -3,6 +3,7 @@ import ReactSelect, { MultiValue } from "react-select";
 import { StatIcon, isIcon } from "../../StatIcon";
 import { useContext, useMemo, useState } from "react";
 
+import { AssetFallback } from "../../AssetFallback";
 import Highlighter from "react-highlight-words";
 import { TranslationContext } from "../../../context/TranslationProvider/TranslationProviderContext";
 import { getGenderFromIcon } from "../../../utils/helpers";
@@ -64,7 +65,7 @@ export const CustomQueryBuilder = ({
                         {isStatIcon ? (
                           <StatIcon name={iconName ?? ""} />
                         ) : (
-                          <img alt="" src={opt.icon} />
+                          <AssetFallback alt="" src={opt.icon} />
                         )}
                         <Highlighter
                           highlightClassName="text-highlight-class"

@@ -27,7 +27,7 @@ export const SettingsPage: React.FC = () => {
   const { metric, setMetric, topDecimals, setTopDecimals, showcaseState } =
     useContext(SettingsContext);
 
-  const uid = boundAccounts?.[0]?.uid || "700181030";
+  const uid = boundAccounts?.[0]?.uid || "701464050";
   const availableMetrics: Metric[] = ["RV", "CV"];
   const availableDecimals = [0, 1, 2, 3];
 

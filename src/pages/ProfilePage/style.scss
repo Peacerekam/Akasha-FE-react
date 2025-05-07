@@ -760,6 +760,7 @@
 
 .enemies-and-materials {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
 
   .big-grid {
@@ -772,6 +773,12 @@
 
     $height: 240px;
     height: $height;
+    
+    min-width: 200px;
+
+    @media (max-width: 800px) {
+      min-width: calc(100% - 20px); // @TODO: do this without calc somehow
+    }
 
     img {
       width: 30px;

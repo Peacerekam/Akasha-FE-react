@@ -12,8 +12,8 @@ import {
   normalizeText,
 } from "../../utils/helpers";
 
-// img assets
 import ArtifactBackground from "../../assets/images/artifact-5star-bg.png";
+import { AssetFallback } from "../AssetFallback";
 import NoArtifact from "../../assets/images/no-artifact.png";
 import RarityStar from "../../assets/images/star.png";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
@@ -100,7 +100,7 @@ export const Artifact: React.FC<ArtifactProps> = ({
           <img alt="*" key={`star-${i}`} src={RarityStar} />
         ))}
       </div>
-      <img alt="" className="artifact-icon" src={artifact.icon} />
+      <AssetFallback alt="" className="artifact-icon" src={artifact.icon} />
       <div className="substats">
         {Object.keys(artifact.substats).map((key: any) => {
           const substatName = key.replace("%", "").replace("RATE", "Rate");
@@ -153,7 +153,7 @@ export const Artifact: React.FC<ArtifactProps> = ({
             } as React.CSSProperties;
 
             return (
-              <img
+              <AssetFallback
                 alt=""
                 key={`${build.characterId}-${index}`}
                 src={build.icon}

@@ -39,7 +39,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
   );
 
   const socialsNav = useMemo(
-    () => navigation.slice(spacerIndex + 2, navigation.length - 1),
+    () => navigation.filter((x) => x.hideName).reverse(),
     [spacerIndex, navigation]
   );
 
@@ -92,7 +92,8 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
           }, ms);
         }}
       >
-        {nav.icon ? <>{nav.icon}</> : ""} {nav.name}
+        {nav.icon ? <>{nav.icon}</> : ""}{" "}
+        {nav.name.includes("LootBar") ? "" : nav.name}
       </a>
     );
   };

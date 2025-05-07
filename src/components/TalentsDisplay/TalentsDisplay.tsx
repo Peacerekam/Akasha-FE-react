@@ -1,5 +1,6 @@
 import "./style.scss";
 
+import { AssetFallback } from "../AssetFallback";
 import CrownOfInsight from "../../assets/images/Crown_of_Insight.webp";
 import { cssJoin } from "../../utils/helpers";
 
@@ -35,7 +36,7 @@ const TalentDisplay: React.FC<TalentProps> = ({
       title={`${title} - ${talent?.level}${isCrowned ? " - Crowned" : ""}`}
     >
       {talent?.icon ? (
-        <img alt="" src={talent?.icon} />
+        <AssetFallback alt="" src={talent?.icon} />
       ) : (
         <div className="talent-icon-placeholder opacity-5">?</div>
       )}

@@ -1,4 +1,5 @@
 import {
+  AssetFallback,
   CustomTable,
   HelpBox,
   RowIndex,
@@ -113,7 +114,7 @@ export const CategorySelectionPage: React.FC = () => {
             >
               <div className="table-icon-text-pair">
                 <StatIcon name={element} />
-                <img
+                <AssetFallback
                   alt=" "
                   className="table-icon"
                   width={25}

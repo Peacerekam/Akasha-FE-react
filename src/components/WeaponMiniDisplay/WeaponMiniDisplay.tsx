@@ -1,3 +1,5 @@
+import { AssetFallback } from "..";
+
 type WeaponMiniDisplayProps = {
   icon: string;
   refinement: number | null;
@@ -16,7 +18,7 @@ export const WeaponMiniDisplay: React.FC<WeaponMiniDisplayProps> = ({
 
   return (
     <div className="table-icon-text-pair relative" style={_style}>
-      <img alt=" " src={icon} className="table-icon" />
+      <AssetFallback alt=" " src={icon} className="table-icon" />
       <span className="bottom-right-absolute">
         {refinement ? `R${refinement}` : "?"}
       </span>

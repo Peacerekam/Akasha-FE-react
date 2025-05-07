@@ -41,3 +41,4 @@ export * from "./LanguageSwitcher";
 export * from "./LastUpdated";
 export * from "./DamageDistrubution";
 export * from "./AbyssSchedule";
+export * from "./AssetFallback";

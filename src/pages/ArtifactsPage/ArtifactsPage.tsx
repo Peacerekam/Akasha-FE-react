@@ -1,4 +1,5 @@
 import {
+  AssetFallback,
   CustomTable,
   HelpBox,
   RegionBadge,
@@ -114,7 +115,7 @@ export const ArtifactsPage: React.FC = () => {
 
           return (
             <div className="table-icon-text-pair">
-              <img alt=" " className="table-icon" src={row.icon} />{" "}
+              <AssetFallback alt=" " className="table-icon" src={row.icon} />{" "}
               {isNew ? (
                 <>
                   <span className="new-lb-badge" />

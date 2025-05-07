@@ -9,6 +9,7 @@ import {
 } from "../../utils/helpers";
 import axios, { AxiosRequestConfig } from "axios";
 
+import { AssetFallback } from "../AssetFallback";
 import { ConfirmTooltip } from "../ConfirmTooltip";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { SettingsContext } from "../../context/SettingsProvider/SettingsProvider";
@@ -274,7 +275,7 @@ export const CalculationResultWidget: React.FC<
                         </>
                       )}
                       <div className="flex">
-                        <img
+                        <AssetFallback
                           alt="Icon"
                           className="table-icon"
                           src={calc.characterIcon}

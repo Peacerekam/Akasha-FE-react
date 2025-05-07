@@ -100,7 +100,10 @@ export const AbyssSchedule: React.FC<AbyssScheduleProps> = ({ uid }) => {
            > */}
             {abyssData.map((x) => {
               return (
-                <div key={x.schedule_id} style={{ margin: 20, width: 400 }}>
+                <div
+                  key={`${x.schedule_id}-${x.floorData.index}`}
+                  style={{ margin: 20, width: 400 }}
+                >
                   <div>Schedule: {x.schedule_id}</div>
                   <div>
                     Floor {x.floorIndex} - {x.floorData.star}/
@@ -140,9 +143,9 @@ export const AbyssSchedule: React.FC<AbyssScheduleProps> = ({ uid }) => {
                                       gap: 2,
                                     }}
                                   >
-                                    {battle.avatars.map((av) => {
+                                    {battle.avatars.map((av, j) => {
                                       return (
-                                        <div key={av.icon}>
+                                        <div key={`${av.icon}-${j}`}>
                                           {/* {av.id} */}
                                           <img
                                             style={{ width: 40 }}
@@ -155,15 +158,16 @@ export const AbyssSchedule: React.FC<AbyssScheduleProps> = ({ uid }) => {
                                     {battle.avatars.length < 4 &&
                                       Array(4 - battle.avatars.length)
                                         .fill(null)
-                                        .map((_) => (
+                                        .map((_, k) => (
                                           <div
+                                            key={`fill-${k}`}
                                             style={{
                                               width: 40,
                                               height: 40,
                                               opacity: 0.33,
                                               border: "1px solid darkgray",
                                               background: "#00000090",
-                                              borderRadius: 10,
+                                              borderRadius: 6,
                                             }}
                                           ></div>
                                         ))}

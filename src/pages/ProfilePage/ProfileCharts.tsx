@@ -1,4 +1,4 @@
-import { STAT_KEYS, StatIcon, statIconImgElement } from "../../components";
+import { AssetFallback, STAT_KEYS, StatIcon, statIconImgElement } from "../../components";
 import { useEffect, useMemo, useState } from "react";
 
 import { Doughnut } from "react-chartjs-2";
@@ -156,7 +156,7 @@ export const ChartLabelsTable: React.FC<ChartLabelsTableProps> = ({
                     : label;
 
                   const chartImgEl = images?.[chartNum]?.[i]?.src ? (
-                    <img
+                    <AssetFallback
                       alt={"-"}
                       className="table-icon"
                       src={images?.[chartNum]?.[i]?.src}

@@ -1,4 +1,4 @@
-import { ConfirmTooltip, Spinner, StatList } from "../../components";
+import { AssetFallback, ConfirmTooltip, Spinner, StatList } from "../../components";
 import {
   PATREON_URL,
   abortSignalCatcher,
@@ -328,7 +328,7 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
                 className={isEnka ? "enka-icon" : "enka-icon akasha-icon"}
               />
             )}
-            <img className="table-icon" src={char.icon} alt={char.icon} />
+            <AssetFallback className="table-icon" src={char.icon} alt={char.icon} />
             {isNew && <div className="new-lb-badge" />}
             <div className="compact-table-name">
               {selectedBuildId === buildId ? (

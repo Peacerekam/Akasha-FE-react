@@ -1,6 +1,7 @@
 import "./style.scss";
 
 import {
+  AssetFallback,
   CalculationTeammate,
   CritRatio,
   CustomTable,
@@ -303,7 +304,7 @@ export const LeaderboardsPage: React.FC = () => {
       {
         name: (
           <span className="table-icon-text-pair" style={{ gap: 5 }}>
-            <img
+            <AssetFallback
               className="table-icon small"
               src={thisWeaponCalc?.icon}
               alt={thisWeaponCalc?.name}
@@ -787,7 +788,7 @@ export const LeaderboardsPage: React.FC = () => {
                           // borderBottom: "1px solid white",
                         }}
                       >
-                        <img
+                        <AssetFallback
                           style={{ width: 40, height: 40, marginBottom: 15 }}
                           src={thisCalc.characterIcon}
                           alt={thisCalc.characterName}

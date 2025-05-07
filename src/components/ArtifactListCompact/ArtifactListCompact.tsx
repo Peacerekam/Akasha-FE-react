@@ -18,6 +18,7 @@ import {
 } from "../../utils/helpers";
 
 import { ARBadge } from "../ARBadge";
+import { AssetFallback } from "../AssetFallback";
 import { RegionBadge } from "../RegionBadge";
 import { RollList } from "../RollList";
 import { SettingsContext } from "../../context/SettingsProvider/SettingsProvider";
@@ -353,7 +354,7 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
     <div className="flex expanded-row">
       <div className="character-preview">
         <div className="character-type-preview">
-          <img alt="" className="table-icon" src={row.icon} title={row?.name} />
+          <AssetFallback alt="" className="table-icon" src={row.icon} title={row?.name} />
           {translate("Lv.")} {row?.propMap?.level?.val || "??"}
           {" - "}
           {row.type === "current" ? row.name : row.type}

@@ -1,5 +1,6 @@
 import "./style.scss";
 
+import { AssetFallback } from "../AssetFallback";
 import { StatIcon } from "../StatIcon";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import { getRelevantDmgBonuses } from "../../utils/helpers";
@@ -77,7 +78,7 @@ export const StatListCard: React.FC<StatListProps> = ({ row }) => {
       return (
         <div key={name} className="table-stat-row green-tint">
           <div className="flex gap-5 w-100">
-            <img alt="" className="stat-icon" src={icon} />
+            <AssetFallback alt="" className="stat-icon" src={icon} />
             <span>{translate(name)}</span>
           </div>
           <div>×{Math.floor(count / 2) * 2}</div>

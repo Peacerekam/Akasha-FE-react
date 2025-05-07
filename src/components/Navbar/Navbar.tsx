@@ -1,6 +1,12 @@
 import "./style.scss";
 
-import { DISCORD_URL, PATREON_URL, applyModalBodyStyle, getRelativeCoords } from "../../utils/helpers";
+import {
+  DISCORD_URL,
+  LOOTBAR_URL,
+  PATREON_URL,
+  applyModalBodyStyle,
+  getRelativeCoords,
+} from "../../utils/helpers";
 import React, { useContext, useMemo, useState } from "react";
 import { faBars, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { faDiscord, faPatreon } from "@fortawesome/free-brands-svg-icons";
@@ -12,6 +18,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { HamburgerMenu } from "./HamburgerMenu";
 import { LanguageSwitcher } from "../LanguageSwitcher";
 import { LogInModal } from "./LogInModal";
+import LootbarLogo from "../../assets/images/lootbar.png";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
 import { Spinner } from "../Spinner";
 
@@ -21,6 +28,7 @@ export type NavElement = {
   icon?: JSX.Element;
   external?: boolean;
   onClick?: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+  hideName?: boolean;
 };
 
 export const Navbar: React.FC = () => {
@@ -86,18 +94,36 @@ export const Navbar: React.FC = () => {
         path: "spacer",
       },
       {
+        icon: (
+          <div className="navbar-lootbar-wrapper">
+            <img
+              className="navbar-lootbar"
+              alt="LootBar.gg"
+              title="LootBar.gg"
+              src={LootbarLogo}
+            />
+          </div>
+        ),
+        name: "LootBar.gg",
+        hideName: true,
+        path: LOOTBAR_URL,
+        external: true,
+      },
+      {
         name: "language",
         path: "language",
       },
       {
         icon: <FontAwesomeIcon icon={faPatreon} size="1x" />,
         name: "Patreon",
+        hideName: true,
         path: PATREON_URL,
         external: true,
       },
       {
         icon: <FontAwesomeIcon icon={faDiscord} size="1x" />,
         name: "Discord",
+        hideName: true,
         path: DISCORD_URL,
         external: true,
       },
@@ -127,6 +153,7 @@ export const Navbar: React.FC = () => {
             ? "active-tab"
             : ""
         }
+        title={nav.icon ? nav.name : undefined}
         target={nav.external ? "_blank" : undefined}
         rel="noreferrer"
         href={nav.external ? nav.path : `${nav.path}`}
@@ -137,7 +164,7 @@ export const Navbar: React.FC = () => {
           if (nav.onClick) nav.onClick(event);
         }}
       >
-        {nav.icon ? <>{nav.icon}</> : ""} {nav.name}
+        {nav.icon ? <>{nav.icon}</> : ""} {nav.hideName ? "" : nav.name}
       </a>
     );
   };
