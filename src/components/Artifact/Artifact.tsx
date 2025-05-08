@@ -100,7 +100,12 @@ export const Artifact: React.FC<ArtifactProps> = ({
           <img alt="*" key={`star-${i}`} src={RarityStar} />
         ))}
       </div>
-      <AssetFallback alt="" className="artifact-icon" src={artifact.icon} />
+      <AssetFallback
+        alt=""
+        className="artifact-icon"
+        src={artifact.icon}
+        key={artifact.icon}
+      />
       <div className="substats">
         {Object.keys(artifact.substats).map((key: any) => {
           const substatName = key.replace("%", "").replace("RATE", "Rate");
