@@ -128,6 +128,7 @@ export const SettingsPage: React.FC = () => {
         <div className="highlights-mock-up">
           <div className="w-100">
             <CalculationResultWidget
+              key={uid}
               uid={uid}
               noLinks
               expanded={showcaseState}

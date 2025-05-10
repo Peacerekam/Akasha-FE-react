@@ -357,7 +357,7 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
           <AssetFallback alt="" className="table-icon" src={row.icon} title={row?.name} />
           {translate("Lv.")} {row?.propMap?.level?.val || "??"}
           {" - "}
-          {row.type === "current" ? row.name : row.type}
+          {row.type === "current" ? translate(row.name) : row.type}
         </div>
         <TalentsDisplay row={row} strikethrough={false} />
         <div className="character-owner-preview">
