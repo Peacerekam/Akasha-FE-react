@@ -88,97 +88,90 @@ export const CalculationResultWidget: React.FC<
   }, []);
 
   const resultsArray = useMemo(() => {
-    if (data.length > 0) {
-      const calcArray = [];
-      for (const build of data) {
-        const calcsArr = build?.calculations?.fit
-          ? [
-              build.calculations.fit,
-              // build.calculations.best
-            ]
-          : [];
+    if (data.length === 0) return [];
 
-        for (const calc of calcsArr) {
-          const _calc = calc as any;
-          const {
-            calculationId,
-            // variant
-          } = _calc;
+    const calcArray = [];
+    for (const build of data) {
+      const calcsArr = build?.calculations?.fit
+        ? [
+            build.calculations.fit,
+            // build.calculations.best
+          ]
+        : [];
 
-          // const calcKey = `${calculationId}${variant?.name || ""}`;
-          if (!calc?.ranking || !calc?.outOf) continue;
+      for (const calc of calcsArr) {
+        const _calc = calc as any;
+        const {
+          calculationId,
+          // variant
+        } = _calc;
 
-          calcArray.push({
-            ...calc,
-            id: calculationId,
-            characterName: build.name,
-            characterIcon: build.icon,
-            priority: calc?.priority,
-            lastBuildUpdate: build?.lastBuildUpdate,
-          });
-        }
+        // const calcKey = `${calculationId}${variant?.name || ""}`;
+        if (!calc?.ranking || !calc?.outOf) continue;
+
+        calcArray.push({
+          ...calc,
+          id: calculationId,
+          characterName: build.name,
+          characterIcon: build.icon,
+          priority: calc?.priority,
+          lastBuildUpdate: build?.lastBuildUpdate,
+        });
       }
-
-      const sortFn = (a: any, b: any) =>
-        // (a.ranking > b.ranking ? 1 : -1)
-        {
-          const leaveOnlyNumbersRegex = /\D+/g;
-          const _rankingA = +(a.ranking + "")?.replace(
-            leaveOnlyNumbersRegex,
-            ""
-          );
-          const _rankingB = +(b.ranking + "")?.replace(
-            leaveOnlyNumbersRegex,
-            ""
-          );
-
-          const topA_ = _rankingA / a.outOf;
-          const topB_ = _rankingB / b.outOf;
-
-          const isTop1_a = Math.min(100, Math.ceil(topA_ * 100)) === 1;
-          const isTop1_b = Math.min(100, Math.ceil(topB_ * 100)) === 1;
-
-          if (isTop1_a && isTop1_b) {
-            return _rankingA - _rankingB;
-          }
-
-          return topA_ > topB_ ? 1 : -1;
-
-          // return isTop1_a && isTop1_b
-          //   ? _rankingA - _rankingB
-          //   : topA_ > topB_
-          //   ? 1
-          //   : -1;
-
-          // return _rankingA > _rankingB ? 1 : -1;
-        };
-
-      const sorted = calcArray.sort(sortFn);
-
-      // group by character name instead
-      // on hover show other results
-      const finalArr: any[] = [];
-      const tmpIncludeCheck: { [key: string]: number } = {};
-
-      for (let i = 0; i < sorted.length; i++) {
-        const calc = sorted[i];
-        const index = finalArr.findIndex(
-          (c) => c.characterName === calc.characterName
-        );
-
-        if (index > -1) {
-          if (calc.priority <= tmpIncludeCheck[calc.characterName]) continue;
-          finalArr[index] = calc;
-        } else {
-          finalArr.push(calc);
-        }
-
-        tmpIncludeCheck[calc.characterName] = calc.priority;
-      }
-
-      return finalArr.sort(sortFn);
     }
-    return [];
+
+    const sortFn = (a: any, b: any) =>
+      // (a.ranking > b.ranking ? 1 : -1)
+      {
+        const leaveOnlyNumbersRegex = /\D+/g;
+        const _rankingA = +(a.ranking + "")?.replace(leaveOnlyNumbersRegex, "");
+        const _rankingB = +(b.ranking + "")?.replace(leaveOnlyNumbersRegex, "");
+
+        const topA_ = _rankingA / a.outOf;
+        const topB_ = _rankingB / b.outOf;
+
+        const isTop1_a = Math.min(100, Math.ceil(topA_ * 100)) === 1;
+        const isTop1_b = Math.min(100, Math.ceil(topB_ * 100)) === 1;
+
+        if (isTop1_a && isTop1_b) {
+          return _rankingA - _rankingB;
+        }
+
+        return topA_ > topB_ ? 1 : -1;
+
+        // return isTop1_a && isTop1_b
+        //   ? _rankingA - _rankingB
+        //   : topA_ > topB_
+        //   ? 1
+        //   : -1;
+
+        // return _rankingA > _rankingB ? 1 : -1;
+      };
+
+    const sorted = calcArray.sort(sortFn);
+
+    // group by character name instead
+    // on hover show other results
+    const finalArr: any[] = [];
+    const tmpIncludeCheck: { [key: string]: number } = {};
+
+    for (let i = 0; i < sorted.length; i++) {
+      const calc = sorted[i];
+      const index = finalArr.findIndex(
+        (c) => c.characterName === calc.characterName
+      );
+
+      if (index > -1) {
+        if (calc.priority <= tmpIncludeCheck[calc.characterName]) continue;
+        finalArr[index] = calc;
+      } else {
+        finalArr.push(calc);
+      }
+
+      tmpIncludeCheck[calc.characterName] = calc.priority;
+    }
+
+    return finalArr.sort(sortFn);
   }, [data]);
 
   const tilesList = useMemo(

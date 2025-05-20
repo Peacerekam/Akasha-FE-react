@@ -772,7 +772,7 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
         ) : null;
 
       const bindingButton =
-        isAccountLoaded && bind ? (
+        !isAccountLocked && isAccountLoaded && bind ? (
           <>
             {showBindAccBtn && (
               <>
@@ -994,6 +994,17 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
     setResponseData(responseData);
   }, [responseData]);
 
+  const isZy0x = uid === "603089931";
+  const zy0xVid = (
+    <div className="zy0x-lol">
+      <video
+        src={`${axios.defaults.baseURL}/public/xiao_nudes_lmao.mp4`}
+        controls
+      />
+      <div>{":-)"}</div>
+    </div>
+  );
+
   return (
     <div>
       {displayFloatingButtons({
@@ -1046,7 +1057,7 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
                 )}
               </div>
 
-              <AdsComponentManager adType="Video" />
+              {isZy0x ? zy0xVid : <AdsComponentManager adType="Video" />}
 
               {responseData?.account && <BuildPreview />}
 

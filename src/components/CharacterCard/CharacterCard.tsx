@@ -520,8 +520,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       setIsLoadingImage(false);
     });
   }, [
-    cardPicUrl,
-    customCardPic,
+    // cardPicUrl, // caused weird bug on img upload
+    // customCardPic, // caused weird bug on img upload
     backgroundPictureRef,
     _adaptiveBgColor,
     namecardBg,
@@ -928,7 +928,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
           const lbBadge = (
             <span className="lb-badge with-icon">
-              <AssetFallback alt="" className="weapon-icon" src={calc.weapon.icon} />
+              <AssetFallback
+                alt=""
+                className="weapon-icon"
+                src={calc.weapon.icon}
+              />
               <span>
                 {short}{" "}
                 {variant?.displayName?.replace("C6", "").replace("C2", "")}

@@ -773,7 +773,7 @@
 
     $height: 240px;
     height: $height;
-    
+
     min-width: 200px;
 
     @media (max-width: 800px) {
@@ -803,6 +803,27 @@
       display: flex;
       justify-content: center;
       align-items: center;
+    }
+  }
+}
+
+.zy0x-lol {
+  margin-left: 10px;
+
+  @media (max-width: 900px) {
+    margin-left: 0px;
+  }
+
+  > div {
+    text-align: center;
+  }
+
+  video {
+    max-width: 400px;
+    height: fit-content;
+
+    @media (max-width: 900px) {
+      max-width: 100%;
     }
   }
 }

@@ -101,7 +101,6 @@ export const Artifact: React.FC<ArtifactProps> = ({
         ))}
       </div>
       <AssetFallback
-        alt=""
         className="artifact-icon"
         src={artifact.icon}
         key={artifact.icon}
