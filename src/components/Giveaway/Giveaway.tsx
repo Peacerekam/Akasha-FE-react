@@ -64,8 +64,9 @@ export const Giveaway: React.FC<GiveawayProps> = ({ TEST_MODE = false }) => {
     };
   };
 
-  const inGameUidFirst = (a: any, b: any) => (isNaN(a.uid) ? 1 : -1);
-  const firstUID = boundAccounts.sort(inGameUidFirst)?.[0]?.uid;
+  const relevantUID = boundAccounts.find(
+    (acc) => acc?.discord?.id || acc?.patreon?.id
+  )?.uid;
 
   const handleParticipate = async () => {
     if (!canParticipate || participated) return;
@@ -73,13 +74,14 @@ export const Giveaway: React.FC<GiveawayProps> = ({ TEST_MODE = false }) => {
     try {
       setIsLoading(true);
       let reqUrl = `${JOIN_URL}/${giveawayInfo?.id}`;
-      if (firstUID) reqUrl += `?uid=${firstUID}`;
+      if (relevantUID) reqUrl += `?uid=${relevantUID}`;
 
       const { data } = await axios.post(reqUrl, null, getHeaders());
 
-      if (data?.message === "Something went wrong") {
-        setIsLoading(false);
-      } else {
+      // @TODO: test this logic
+      // @TODO: test this logic
+      // @TODO: test this logic
+      if (data?.message === "Success") {
         videoRef?.current?.play();
 
         setTimeout(() => {
@@ -91,6 +93,9 @@ export const Giveaway: React.FC<GiveawayProps> = ({ TEST_MODE = false }) => {
             count: (prev?.count || 0) + 1,
           }));
         }, 2500);
+      } else {
+        console.log(data);
+        setIsLoading(false);
       }
     } catch (err) {
       console.log(err);
@@ -101,7 +106,7 @@ export const Giveaway: React.FC<GiveawayProps> = ({ TEST_MODE = false }) => {
   const handleGetInfo = async () => {
     try {
       let reqUrl = `${INFO_URL}`;
-      if (firstUID) reqUrl += `?uid=${firstUID}`;
+      if (relevantUID) reqUrl += `?uid=${relevantUID}`;
 
       const { data } = await axios.get(reqUrl, getHeaders());
 
@@ -128,7 +133,7 @@ export const Giveaway: React.FC<GiveawayProps> = ({ TEST_MODE = false }) => {
     if (!giveawayInfo?.id) {
       handleGetInfo();
     }
-  }, [firstUID, sessionFetched, giveawayInfo, location.pathname]);
+  }, [relevantUID, sessionFetched, giveawayInfo, location.pathname]);
 
   const DEBUG_MODE = location.search?.includes("debug");
   // if (!DEBUG_MODE) return <></>;
@@ -262,11 +267,13 @@ export const Giveaway: React.FC<GiveawayProps> = ({ TEST_MODE = false }) => {
                 <b>{giveawayInfo.count}</b>.
               </div>
               <div>
-                <b>{wCount} winner{wCount === 1 ? "" : "s"}</b> will be selected
-                randomly. If you're in Akasha Discord or Patreon member you will
-                be contacted shortly after the giveaway ends, if contact cannot
-                be established then Welkin Moon will be given automatically
-                through{" "}
+                <b>
+                  {wCount} winner{wCount === 1 ? "" : "s"}
+                </b>{" "}
+                will be selected randomly. If you're in Akasha Discord or
+                Patreon member you will be contacted shortly after the giveaway
+                ends, if contact cannot be established then Welkin Moon will be
+                given automatically through{" "}
                 <a href={LOOTBAR_URL} target="_blank" rel="noreferrer">
                   Lootbar.gg
                 </a>
