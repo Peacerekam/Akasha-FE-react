@@ -33,6 +33,7 @@ type GiveawayInfo = {
   count?: number;
   participated?: boolean;
   winnersList?: string[];
+  winnersThisGiveaway?: number;
 };
 
 type GiveawayProps = {
@@ -148,6 +149,8 @@ export const Giveaway: React.FC<GiveawayProps> = ({ TEST_MODE = false }) => {
       ""
     );
 
+  const wCount = giveawayInfo?.winnersThisGiveaway || 1;
+
   return (
     <div className="relative content-block patreon-profile giveaway-wrapper">
       <StylizedContentBlock overrideImage={GiveawayBg} />
@@ -259,10 +262,11 @@ export const Giveaway: React.FC<GiveawayProps> = ({ TEST_MODE = false }) => {
                 <b>{giveawayInfo.count}</b>.
               </div>
               <div>
-                Winner will be selected randomly. If you're in Akasha Discord or
-                Patreon member you will be contacted shortly after the giveaway
-                ends, if contact cannot be established then Welkin Moon will be
-                given automatically through{" "}
+                <b>{wCount} winner{wCount === 1 ? "" : "s"}</b> will be selected
+                randomly. If you're in Akasha Discord or Patreon member you will
+                be contacted shortly after the giveaway ends, if contact cannot
+                be established then Welkin Moon will be given automatically
+                through{" "}
                 <a href={LOOTBAR_URL} target="_blank" rel="noreferrer">
                   Lootbar.gg
                 </a>
