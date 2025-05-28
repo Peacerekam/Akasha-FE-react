@@ -34,7 +34,11 @@ type GiveawayInfo = {
   winnersList?: string[];
 };
 
-export const Giveaway: React.FC = () => {
+type GiveawayProps = {
+  TEST_MODE?: boolean;
+};
+
+export const Giveaway: React.FC<GiveawayProps> = ({ TEST_MODE = false }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [giveawayInfo, setGiveawayInfo] = useState<GiveawayInfo>({});
   const [participated, setParticipated] = useState(false);
@@ -45,9 +49,9 @@ export const Giveaway: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const isBound = boundAccounts.length > 0;
 
-  const canParticipate = giveawayInfo?.participated
-    ? false
-    : isAuthenticated && isBound;
+  const canParticipate =
+    TEST_MODE ||
+    (giveawayInfo?.participated ? false : isAuthenticated && isBound);
 
   const getHeaders = (): AxiosRequestConfig<any> => {
     return {
@@ -68,8 +72,13 @@ export const Giveaway: React.FC = () => {
       let reqUrl = `${JOIN_URL}/${giveawayInfo?.id}`;
       if (firstUID) reqUrl += `?uid=${firstUID}`;
 
-      await axios.post(reqUrl, null, getHeaders());
-      videoRef?.current?.play();
+      const { data } = await axios.post(reqUrl, null, getHeaders());
+
+      if (data?.message === "Something went wrong") {
+        setIsLoading(false);
+      } else {
+        videoRef?.current?.play();
+      }
     } catch (err) {
       console.log(err);
       setIsLoading(false);
@@ -108,8 +117,8 @@ export const Giveaway: React.FC = () => {
     }
   }, [firstUID, sessionFetched, giveawayInfo, location.pathname]);
 
-  const DEBUG_MODE = location.search?.includes("debug");
-  if (!DEBUG_MODE) return <></>;
+  // const DEBUG_MODE = location.search?.includes("debug");
+  // if (!DEBUG_MODE) return <></>;
 
   if (!giveawayInfo?.id || !giveawayInfo?.until) {
     return <></>;
@@ -149,11 +158,10 @@ export const Giveaway: React.FC = () => {
               className="relative"
               // autoPlay={participated}
               src={welkinGirlURL}
-              // onClick={() => {
-              //   // easter egg?
-              //   if (!participated) return;
-              //   videoRef?.current?.play();
-              // }}
+              onClick={() => {
+                if (!TEST_MODE) return;
+                videoRef?.current?.play();
+              }}
               onEnded={() => {
                 if (participated) return;
                 if (canParticipate) setParticipated(true);
@@ -178,43 +186,51 @@ export const Giveaway: React.FC = () => {
                 <Spinner />
               </div>
             )}
-            {participated && (
-              <div className="visible">
+            {participated ? (
+              <div>
                 <div>You have succefully participated in the giveaway</div>
-                <div>Current participants: {giveawayInfo.count}</div>
                 {winnersEl}
               </div>
+            ) : (
+              <div>
+                <ol>
+                  <li
+                    className={
+                      TEST_MODE || isAuthenticated ? "strike-through" : ""
+                    }
+                  >
+                    <div>
+                      Authenticate with{" "}
+                      <FontAwesomeIcon icon={faDiscord} size="1x" /> Discord or{" "}
+                      <FontAwesomeIcon icon={faPatreon} size="1x" /> Patreon.
+                    </div>
+                  </li>
+                  <li
+                    className={
+                      TEST_MODE || isBound ? "strike-through clickable" : ""
+                    }
+                  >
+                    <div>
+                      Bind <FontAwesomeIcon icon={faKey} size="1x" /> your
+                      Akasha profile.
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      Confirm participation by{" "}
+                      <span
+                        className={
+                          canParticipate ? "enabled-btn" : "disabled-btn"
+                        }
+                      >
+                        clicking here
+                      </span>
+                      .
+                    </div>
+                  </li>
+                </ol>
+              </div>
             )}
-            <div style={{ marginBottom: 20 }}>
-              <ol>
-                <li className={isAuthenticated ? "strike-through" : ""}>
-                  <div>
-                    Authenticate with{" "}
-                    <FontAwesomeIcon icon={faDiscord} size="1x" /> Discord or{" "}
-                    <FontAwesomeIcon icon={faPatreon} size="1x" /> Patreon.
-                  </div>
-                </li>
-                <li className={isBound ? "strike-through clickable" : ""}>
-                  <div>
-                    Bind <FontAwesomeIcon icon={faKey} size="1x" /> your Akasha
-                    profile.
-                  </div>
-                </li>
-                <li>
-                  <div>
-                    Confirm participation by{" "}
-                    <span
-                      className={
-                        canParticipate ? "enabled-btn" : "disabled-btn"
-                      }
-                    >
-                      clicking here
-                    </span>
-                    .
-                  </div>
-                </li>
-              </ol>
-            </div>
 
             <div className="disclaimers">
               <div>
