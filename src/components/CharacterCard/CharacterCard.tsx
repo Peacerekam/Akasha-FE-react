@@ -2350,8 +2350,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                     {picLoaded && (
                       <button
                         onClick={() => handleCardPicUpload(false)}
-                        title={showPicSaveButton ? "" : "Patreon only feature"}
                         disabled={!showPicSaveButton}
+                        title={showPicSaveButton ? "Images must be SFW" : "Patreon only feature"}
                       >
                         <FontAwesomeIcon
                           className="filter-icon hoverable-icon"
@@ -2359,8 +2359,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                           size="1x"
                           title="Upload"
                         />
-                        Upload image to Akasha{" "}
-                        <span>Note: images must be SFW</span>
+                        Upload image to Akasha
+                        <span>Note: {showPicSaveButton ? "images must be SFW" : "Patreon only feature"}</span>
                       </button>
                     )}
                     {showPicSaveButton && customCardPic && (

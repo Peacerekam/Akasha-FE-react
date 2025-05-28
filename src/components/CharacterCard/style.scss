@@ -167,22 +167,26 @@ $hardcoded-scale: 1;
   .compact-artifact {
     height: 135px * $hardcoded-scale;
 
-    &:nth-child(1) {
-      .compact-artifact-main-stat {
-        max-width: 42px * $hardcoded-scale !important;
-      }
-    }
-    &:nth-child(2) {
-      .compact-artifact-main-stat {
-        max-width: 33px * $hardcoded-scale !important;
-      }
-    }
+    // Flower
+    // &:nth-child(1) {
+    //   .compact-artifact-main-stat {
+    //     max-width: 42px * $hardcoded-scale !important;
+    //   }
+    // }
+
+    // Feather
+    // &:nth-child(2) {
+    //   .compact-artifact-main-stat {
+    //     max-width: 33px * $hardcoded-scale !important;
+    //   }
+    // }
 
     &.metric-CV {
       .compact-artifact-metric-container,
       .compact-artifact-icon-container {
         .compact-artifact-crit-value {
           max-width: 45px * $hardcoded-scale;
+          height: 14px * $hardcoded-scale;
         }
       }
     }
@@ -199,13 +203,21 @@ $hardcoded-scale: 1;
       .compact-artifact-main-stat {
         left: -2px * $hardcoded-scale;
         bottom: 1px * $hardcoded-scale;
-        max-width: 50px * $hardcoded-scale;
+        max-width: 70px * $hardcoded-scale;
         height: 24px * $hardcoded-scale;
-        padding-left: 30px * $hardcoded-scale;
+
+        display: flex;
+        justify-content: space-between;
+        gap: 5px;
+
+        padding: (3px * $hardcoded-scale) (6px * $hardcoded-scale)
+          (3px * $hardcoded-scale) (4px * $hardcoded-scale);
+
         .stat-icon {
           width: 22px * $hardcoded-scale;
           height: 22px * $hardcoded-scale;
-          left: 4px * $hardcoded-scale;
+          left: 0px;
+          position: relative;
         }
       }
       .compact-artifact-icon.compact-artifact-icon {
@@ -415,7 +427,7 @@ $hardcoded-scale: 1;
         margin-right: 10px;
       }
       &:disabled {
-        opacity: 0.5;
+        opacity: 0.35;
         cursor: no-drop;
         &:hover {
           color: red;
@@ -427,7 +439,7 @@ $hardcoded-scale: 1;
         margin-left: 10px;
         left: 25px;
         position: absolute;
-        top: -10px;
+        top: -6px;
         pointer-events: none !important;
       }
     }

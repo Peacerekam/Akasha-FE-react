@@ -2,6 +2,7 @@ import "../style.scss";
 
 import {
   AbyssSchedule,
+  AdsComponentManager,
   CalculationResultWidgetExpander,
   GenshinUserCard,
   LastUpdated,
@@ -20,7 +21,6 @@ import axios, { AxiosRequestConfig } from "axios";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { AdProviderContext } from "../../../context/AdProvider/AdProviderContext";
-import { AdsComponentManager } from "../../../components/AdsComponentManager";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { LastProfilesContext } from "../../../context/LastProfiles/LastProfilesContext";
 import PerfectScrollbar from "react-perfect-scrollbar";
@@ -632,7 +632,9 @@ export const HoyolabProfile: React.FC<AkashaProfileProps> = ({
             {responseData.account && (
               <div className="enemies-and-materials">
                 <div className="big-grid block-highlight">
-                  <div className="hoyo-header">Boss Kills ({responseData?.bosses?.totalBossKills} total)</div>
+                  <div className="hoyo-header">
+                    Boss Kills ({responseData?.bosses?.totalBossKills} total)
+                  </div>
                   <PerfectScrollbar>
                     {/* <div className="flex gap-10">
                       <div
@@ -666,7 +668,10 @@ export const HoyolabProfile: React.FC<AkashaProfileProps> = ({
                 </div>
 
                 <div className="big-grid block-highlight">
-                  <div className="hoyo-header">Materials ({responseData?.inventory?.totalInventoryCount} total)</div>
+                  <div className="hoyo-header">
+                    Materials ({responseData?.inventory?.totalInventoryCount}{" "}
+                    total)
+                  </div>
                   <PerfectScrollbar>
                     {/* <div className="flex gap-5">
                       <div

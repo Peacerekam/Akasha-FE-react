@@ -1,6 +1,7 @@
 import "../style.scss";
 
 import {
+  AdsComponentManager,
   AssetFallback,
   CalculationResultWidget,
   CalculationResultWidgetExpander,
@@ -57,7 +58,6 @@ import {
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { AdProviderContext } from "../../../context/AdProvider/AdProviderContext";
-import { AdsComponentManager } from "../../../components/AdsComponentManager";
 import { ArtifactColumns } from "../../ArtifactsPage";
 import { ArtifactSettingsModal } from "../ArtifactSettingsModal";
 import { BuildPreview } from "../BuildPreview";

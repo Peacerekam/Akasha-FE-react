@@ -1017,3 +1017,16 @@ export const uidToRegion = (uid: string) => {
   //            1     2     3        5     6     7       8     9
   return ["", "CN", "CN", "CN", "", "B", "NA", "EU", "ASIA", "TW"][regionNum];
 };
+
+export const supportsHEVCAlpha = () => {
+  const navigator = window.navigator;
+  const ua = navigator.userAgent.toLowerCase();
+  const hasMediaCapabilities = !!(
+    navigator.mediaCapabilities && navigator.mediaCapabilities.decodingInfo
+  );
+  const isSafari =
+    ua.indexOf("safari") !== -1 &&
+    !(ua.indexOf("chrome") !== -1) &&
+    ua.indexOf("version/") !== -1;
+  return isSafari && hasMediaCapabilities;
+};

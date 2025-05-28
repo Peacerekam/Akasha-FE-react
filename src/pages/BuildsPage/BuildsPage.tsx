@@ -1,4 +1,5 @@
 import {
+  AdsComponentManager,
   AssetFallback,
   CritRatio,
   CustomTable,
@@ -24,7 +25,6 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import React, { useContext, useMemo } from "react";
 
-import { AdsComponentManager } from "../../components/AdsComponentManager";
 import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { TableColumn } from "../../types/TableColumn";

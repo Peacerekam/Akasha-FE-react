@@ -17,6 +17,7 @@ type SessionDataContextType = {
   isFetching: boolean;
   isBound: (uid?: string) => boolean;
   fetchSessionData: (modifyIsFetching?: boolean) => void;
+  sessionFetched: boolean;
 };
 
 const defaultValue = {
@@ -26,6 +27,7 @@ const defaultValue = {
   isFetching: false,
   isBound: () => false,
   fetchSessionData: () => {},
+  sessionFetched: false,
 } as SessionDataContextType;
 
 const SessionDataContext = createContext(defaultValue);
@@ -36,6 +38,7 @@ const SessionDataContextProvider: React.FC<{ children: any }> = ({
   const [isFetching, setIsFetching] = useState(true);
   const [boundAccounts, setBoundAccounts] = useState<any[]>([]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [sessionFetched, setSessionFetched] = useState(false);
   const [profileObject, setProfileObject] = useState<SessionProfile>({});
 
   const isBound = useCallback(
@@ -71,6 +74,7 @@ const SessionDataContextProvider: React.FC<{ children: any }> = ({
       };
 
       console.table(debugDisplay);
+      setSessionFetched(true);
 
       if (data.username) {
         setIsAuthenticated(true);
@@ -100,6 +104,7 @@ const SessionDataContextProvider: React.FC<{ children: any }> = ({
     isAuthenticated,
     isFetching,
     isBound,
+    sessionFetched
   };
 
   return (

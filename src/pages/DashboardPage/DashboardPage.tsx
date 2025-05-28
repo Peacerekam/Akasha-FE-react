@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { LookupUID } from "../AccountsPage/LookupUID";
 import { NewsDisplay } from "./NewsDisplay";
 import React from "react";
-import { StylizedContentBlock } from "../../components/StylizedContentBlock";
+import { StylizedContentBlock } from "../../components";
 import { faHashtag } from "@fortawesome/free-solid-svg-icons";
 
 // import { useNavigate } from "react-router-dom";

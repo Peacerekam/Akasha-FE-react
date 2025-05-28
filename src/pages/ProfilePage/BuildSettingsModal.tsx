@@ -1,4 +1,10 @@
-import { AssetFallback, ConfirmTooltip, Spinner, StatList } from "../../components";
+import {
+  AssetFallback,
+  ConfirmTooltip,
+  FancyBuildBorder,
+  Spinner,
+  StatList,
+} from "../../components";
 import {
   PATREON_URL,
   abortSignalCatcher,
@@ -18,7 +24,6 @@ import {
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 
 import { BuildNameInput } from "./BuildNameInput";
-import { FancyBuildBorder } from "../../components/FancyBuildBorder";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Highlighter from "react-highlight-words";
 import PerfectScrollbar from "react-perfect-scrollbar";
@@ -328,7 +333,11 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
                 className={isEnka ? "enka-icon" : "enka-icon akasha-icon"}
               />
             )}
-            <AssetFallback className="table-icon" src={char.icon} alt={char.icon} />
+            <AssetFallback
+              className="table-icon"
+              src={char.icon}
+              alt={char.icon}
+            />
             {isNew && <div className="new-lb-badge" />}
             <div className="compact-table-name">
               {selectedBuildId === buildId ? (

@@ -49,8 +49,6 @@ import { TranslationContext } from "../../context/TranslationProvider/Translatio
 import debounce from "lodash/debounce";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 
-// import { AdsComponentManager } from "../../components/AdsComponentManager";
-
 ChartJS.register(...registerables);
 
 type CategoryWeaponInfo = {

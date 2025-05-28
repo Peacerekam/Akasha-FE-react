@@ -1,4 +1,5 @@
 import {
+  AdsComponentManager,
   AssetFallback,
   CustomTable,
   HelpBox,
@@ -14,7 +15,6 @@ import {
 } from "../../utils/helpers";
 import React, { useContext, useMemo } from "react";
 
-import { AdsComponentManager } from "../../components/AdsComponentManager";
 import DomainBackground from "../../assets/images/Grand_Narukami_Shrine_Concept_Art.webp";
 import { TableColumn } from "../../types/TableColumn";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";

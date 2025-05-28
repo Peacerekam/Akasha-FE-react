@@ -2,12 +2,14 @@ import "./style.scss";
 
 import {
   ARBadge,
+  AbyssRankText,
   AdsComponentManager,
   CustomTable,
   GenshinUserCard,
   LastUpdated,
   RegionBadge,
   RowIndex,
+  TheaterRankText,
 } from "../../components";
 import {
   FETCH_ACCOUNTS_FILTERS_URL,
@@ -24,7 +26,6 @@ import React, {
   useState,
 } from "react";
 
-import { AbyssRankText } from "../../components/AbyssRankText";
 import Achievevement from "../../assets/icons/Achievement.webp";
 import { BuildsColumns } from "../BuildsPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -32,7 +33,6 @@ import FriendshipIcon from "../../assets/icons/Item_Companionship_EXP.png";
 import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesContext";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { TableColumn } from "../../types/TableColumn";
-import { TheaterRankText } from "../../components/TheaterRankText";
 import { TitleAndDescription } from "../ProfilePage/PageTypes/AkashaProfile";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import axios from "axios";
@@ -401,7 +401,8 @@ export const LookupUID: React.FC<LookupUIDProps> = ({ disableAd }) => {
           {!validRegion && (
             <div className="lookup-not-found-prompt">
               <div>
-                "<code>{lookupUID}</code>" doesn't appear to be a valid in-game UID.
+                "<code>{lookupUID}</code>" doesn't appear to be a valid in-game
+                UID.
               </div>
               <div>
                 If you're trying to load Enka profile into Akasha then click{" "}

@@ -10,7 +10,9 @@ import {
 } from "./pages";
 import {
   AdsComponentManager,
+  ContentWrapper,
   Footer,
+  Giveaway,
   Navbar,
   NavbarTabs,
   PageMessage,
@@ -21,7 +23,6 @@ import React, { useEffect } from "react";
 import { clearFiltersFromLS, domainRedirect } from "./utils/helpers";
 
 import { AdProviderContextProvider } from "./context/AdProvider/AdProviderContext";
-import { ContentWrapper } from "./components/ContentWrapper";
 import { HoverElementContextProvider } from "./context/HoverElement/HoverElementContext";
 import { LastProfilesContextProvider } from "./context/LastProfiles/LastProfilesContext";
 import { PrivacyPolicyPage } from "./pages/PrivacyPolicy";
@@ -180,6 +181,8 @@ const App = () => {
                 <ContentWrapper>
                   <SettingsContextProvider>
                     <HoverElementContextProvider>
+                      <Giveaway />
+
                       <Routes>
                         {appRoutes.map((route) => {
                           const { Element, path } = route;

@@ -1,12 +1,11 @@
 import "./style.scss";
 
+import { ProfileSelector, StylizedContentBlock } from "../../components";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 
 import { AkashaProfile } from "./PageTypes/AkashaProfile";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { HoyolabProfile } from "./PageTypes/HoyolabProfile";
-import { ProfileSelector } from "../../components/ProfileSelector";
-import { StylizedContentBlock } from "../../components";
 import { cssJoin } from "../../utils/helpers";
 import { useParams } from "react-router-dom";
 

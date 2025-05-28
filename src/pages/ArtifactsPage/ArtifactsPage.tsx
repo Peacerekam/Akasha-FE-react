@@ -1,4 +1,5 @@
 import {
+  AdsComponentManager,
   AssetFallback,
   CustomTable,
   HelpBox,
@@ -23,7 +24,6 @@ import {
 } from "../../utils/helpers";
 import React, { useContext, useMemo } from "react";
 
-import { AdsComponentManager } from "../../components/AdsComponentManager";
 import DomainBackground from "../../assets/images/Tenshukaku_Concept_Art.webp";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { TableColumn } from "../../types/TableColumn";

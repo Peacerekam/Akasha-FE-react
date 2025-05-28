@@ -8,6 +8,7 @@ import {
   toShortThousands,
 } from "../../utils/helpers";
 import axios, { AxiosRequestConfig } from "axios";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { AssetFallback } from "../AssetFallback";
 import { ConfirmTooltip } from "../ConfirmTooltip";
@@ -16,7 +17,6 @@ import { SettingsContext } from "../../context/SettingsProvider/SettingsProvider
 import { Spinner } from "../Spinner";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
-import { useNavigate } from "react-router-dom";
 
 type CalculationResultWidgetProps = {
   uid?: string;
@@ -37,6 +37,7 @@ export const CalculationResultWidget: React.FC<
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<any[]>([]);
+  const location = useLocation();
   const navigate = useNavigate();
 
   const { getTopRanking } = useContext(SettingsContext);
@@ -86,6 +87,13 @@ export const CalculationResultWidget: React.FC<
       };
     }
   }, []);
+
+  const selectedBuildId = useMemo(() => {
+    const searchQuery = location.search;
+    const query = new URLSearchParams(searchQuery);
+    const md5 = query.get("build");
+    return md5;
+  }, [location.search]);
 
   const resultsArray = useMemo(() => {
     if (data.length === 0) return [];
@@ -214,7 +222,12 @@ export const CalculationResultWidget: React.FC<
           return (
             <div
               key={`${name}-${weapon.name}`}
-              className={cssJoin([weaponMatchClass, isNew ? "is-new" : ""])}
+              className={cssJoin([
+                weaponMatchClass,
+                isNew ? "is-new" : "",
+                calc.md5 === selectedBuildId ? "selected-build" : "",
+                // selectedBuildId ? "opacity-5" : ""
+              ])}
               style={{
                 opacity: brokenRanking ? 0.33 : 1,
                 filter: brokenRanking ? "blur(1px)" : "",
@@ -303,7 +316,7 @@ export const CalculationResultWidget: React.FC<
             </div>
           );
         }),
-    [resultsArray, getTopRanking, translate]
+    [resultsArray, getTopRanking, translate, selectedBuildId]
   );
 
   // useEffect(() => {

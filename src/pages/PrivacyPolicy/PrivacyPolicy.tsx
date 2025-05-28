@@ -4,7 +4,7 @@ import React, { useContext } from "react";
 
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
-import { StylizedContentBlock } from "../../components/StylizedContentBlock";
+import { StylizedContentBlock } from "../../components";
 
 export const PrivacyPolicyPage: React.FC = () => {
   const { adProvider } = useContext(AdProviderContext);

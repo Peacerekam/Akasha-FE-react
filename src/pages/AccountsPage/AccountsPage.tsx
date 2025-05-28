@@ -2,12 +2,15 @@ import "./style.scss";
 
 import {
   ARBadge,
+  AbyssRankText,
+  AdsComponentManager,
   CustomTable,
   HelpBox,
   LastUpdated,
   RegionBadge,
   RowIndex,
   StylizedContentBlock,
+  TheaterRankText,
 } from "../../components";
 import {
   FETCH_ACCOUNTS_FILTERS_URL,
@@ -15,9 +18,7 @@ import {
 } from "../../utils/helpers";
 import React, { useContext, useMemo } from "react";
 
-import { AbyssRankText } from "../../components/AbyssRankText";
 import Achievevement from "../../assets/icons/Achievement.webp";
-import { AdsComponentManager } from "../../components/AdsComponentManager";
 import { BuildsColumns } from "../BuildsPage";
 import DomainBackground from "../../assets/images/Grand_Narukami_Shrine_Concept_Art.webp";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -25,7 +26,6 @@ import FriendshipIcon from "../../assets/icons/Item_Companionship_EXP.png";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { LookupUID } from "./LookupUID";
 import { TableColumn } from "../../types/TableColumn";
-import { TheaterRankText } from "../../components/TheaterRankText";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";

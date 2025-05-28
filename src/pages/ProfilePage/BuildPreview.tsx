@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
-import { ExpandedRowBuilds } from "../../components/ExpandedRowBuilds";
+import { ExpandedRowBuilds } from "../../components";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import axios from "axios";
 

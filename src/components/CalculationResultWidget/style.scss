@@ -19,6 +19,16 @@
     background: linear-gradient(0deg, #40839b66 0%, transparent 80%);
   }
 
+  .selected-build {
+    box-shadow: inset 0 0 0 1px rgba(orange, 0.5) !important;
+    // background: linear-gradient(0deg, rgba(orange, 0.2) 0%, transparent 50%);
+  }
+
+  .opacity-5:not(.selected-build) {
+    opacity: 0.75 !important;
+    filter: grayscale(0.75);
+  }
+
   .new-lb-badge {
     pointer-events: none;
     &::before {
