@@ -10,6 +10,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import { faDiscord, faPatreon } from "@fortawesome/free-brands-svg-icons";
 import { useContext, useEffect, useRef, useState } from "react";
 
+import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import GiveawayBg from "../../assets/images/welkinbg.jpg";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
@@ -42,6 +43,7 @@ export const Giveaway: React.FC<GiveawayProps> = ({ TEST_MODE = false }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [giveawayInfo, setGiveawayInfo] = useState<GiveawayInfo>({});
   const [participated, setParticipated] = useState(false);
+  const { isMobile } = useContext(AdProviderContext);
   const { isAuthenticated, boundAccounts, sessionFetched } =
     useContext(SessionDataContext);
 
@@ -78,6 +80,16 @@ export const Giveaway: React.FC<GiveawayProps> = ({ TEST_MODE = false }) => {
         setIsLoading(false);
       } else {
         videoRef?.current?.play();
+
+        setTimeout(() => {
+          if (participated) return;
+          if (canParticipate) setParticipated(true);
+          setIsLoading(false);
+          setGiveawayInfo((prev) => ({
+            ...prev,
+            count: (prev?.count || 0) + 1,
+          }));
+        }, 2500);
       }
     } catch (err) {
       console.log(err);
@@ -117,7 +129,7 @@ export const Giveaway: React.FC<GiveawayProps> = ({ TEST_MODE = false }) => {
     }
   }, [firstUID, sessionFetched, giveawayInfo, location.pathname]);
 
-  // const DEBUG_MODE = location.search?.includes("debug");
+  const DEBUG_MODE = location.search?.includes("debug");
   // if (!DEBUG_MODE) return <></>;
 
   if (!giveawayInfo?.id || !giveawayInfo?.until) {
@@ -125,9 +137,8 @@ export const Giveaway: React.FC<GiveawayProps> = ({ TEST_MODE = false }) => {
   }
 
   const playHEVC = supportsHEVCAlpha();
-  const welkinGirlURL = `${axios.defaults.baseURL}/public/welkin-transparent${
-    playHEVC ? ".mov" : ".webm"
-  }`;
+  const extension = playHEVC && isMobile ? ".gif" : playHEVC ? ".mov" : ".webm";
+  const welkinGirlURL = `${axios.defaults.baseURL}/public/welkin-transparent${extension}`;
 
   const winners = giveawayInfo?.winnersList || [];
   const winnersEl =
@@ -152,29 +163,40 @@ export const Giveaway: React.FC<GiveawayProps> = ({ TEST_MODE = false }) => {
           ])}
         >
           <div className="relative">
-            <video
-              muted
-              ref={videoRef}
-              className="relative"
-              // autoPlay={participated}
-              src={welkinGirlURL}
-              onClick={() => {
-                if (!TEST_MODE) return;
-                videoRef?.current?.play();
-              }}
-              onEnded={() => {
-                if (participated) return;
-                if (canParticipate) setParticipated(true);
-                setIsLoading(false);
-                setGiveawayInfo((prev) => ({
-                  ...prev,
-                  count: (prev?.count || 0) + 1,
-                }));
-              }}
-            />
-            {/* <img alt="Welkin Moon" src={WelkinMoon1} /> */}
+            {playHEVC && isMobile ? (
+              <img alt="Welkin Moon" src={welkinGirlURL} />
+            ) : (
+              <video
+                muted
+                ref={videoRef}
+                className="relative"
+                // autoPlay={participated}
+                src={welkinGirlURL}
+                onClick={() => {
+                  if (!TEST_MODE) return;
+                  videoRef?.current?.play();
+                }}
+                // onEnded={() => {
+                //   if (participated) return;
+                //   if (canParticipate) setParticipated(true);
+                //   setIsLoading(false);
+                //   setGiveawayInfo((prev) => ({
+                //     ...prev,
+                //     count: (prev?.count || 0) + 1,
+                //   }));
+                // }}
+              />
+            )}
           </div>
           <div className="relative" style={{ maxWidth: 560 }}>
+            {DEBUG_MODE ? (
+              <div>
+                <div>playHEVC: {playHEVC + ""}</div>
+                <div>{welkinGirlURL}</div>
+              </div>
+            ) : (
+              ""
+            )}
             <h2>
               <div>Welkin Moon giveaway ends</div>
               <div>
@@ -189,7 +211,6 @@ export const Giveaway: React.FC<GiveawayProps> = ({ TEST_MODE = false }) => {
             {participated ? (
               <div>
                 <div>You have succefully participated in the giveaway</div>
-                {winnersEl}
               </div>
             ) : (
               <div>
