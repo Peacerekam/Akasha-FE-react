@@ -27,7 +27,7 @@ import { useLocation } from "react-router-dom";
 const INFO_URL = "/api/giveaway/info";
 const JOIN_URL = "/api/giveaway/join";
 
-type Winner = { uid: string; date: number };
+type Winner = { uid: string; date: number; isRequestedUID: boolean };
 type GiveawayInfo = {
   id?: string;
   until?: number;
@@ -153,8 +153,13 @@ export const Giveaway: React.FC<GiveawayProps> = ({ TEST_MODE = false }) => {
         <div className="relative content-block patreon-profile giveaway-wrapper">
           <StylizedContentBlock overrideImage={GiveawayBg} />
           <div className="giveaway-container show-winners">
-            <img alt="Welkin Moon" className="welkin-girl" src={WelkinMoon} />
-            <div>
+            <img
+              alt="Welkin Moon"
+              className="welkin-girl"
+              src={WelkinMoon}
+              width={150}
+            />
+            <div className="show-winners-child">
               <h2>Welkin Moon giveaway is over</h2>
               <div>
                 Congratulations to the winners, you will be contacted soon
@@ -166,7 +171,13 @@ export const Giveaway: React.FC<GiveawayProps> = ({ TEST_MODE = false }) => {
                 If you didn't win, you can look forward to future giveaways!
               </div>
               <div className="winners">
-                Past winners: {winnersList.map((x) => x.uid).join(", ")}
+                <span>Past winners: </span>
+                {winnersList.map((x, i) => (
+                  <span key={x.uid} className={x.isRequestedUID ? "highlight" : ""}>
+                    {x.uid}
+                    {i !== winnersList.length - 1 ? ", " : ""}
+                  </span>
+                ))}
               </div>
             </div>
           </div>

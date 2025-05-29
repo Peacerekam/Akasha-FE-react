@@ -4,11 +4,36 @@
     text-align: center;
 
     .winners {
-      opacity: 0.5;
-      margin-top: 20px;
       font-style: italic;
       font-size: 12px;
-      // text-align: right;
+      max-width: 500px;
+      width: 100%;
+      margin: 20px auto 20px;
+
+      > span {
+        line-height: 28px;
+      }
+
+      > span:not(.highlight) {
+        opacity: 0.5;
+      }
+
+      > span.highlight {
+        margin: 0 5px;
+        font-weight: 600;
+        font-size: 18px;
+        color: orange;
+        position: relative;
+
+        &::after {
+          content: "This is you!";
+          position: absolute;
+          font-size: 12px;
+          width: 100%;
+          top: -15px;
+          left: 0;
+        }
+      }
     }
 
     &.show-winners {
@@ -17,6 +42,7 @@
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
+
       h2 {
         margin-top: 0;
       }
