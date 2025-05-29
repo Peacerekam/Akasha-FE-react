@@ -8,7 +8,7 @@
       font-size: 12px;
       max-width: 500px;
       width: 100%;
-      margin: 20px auto 20px;
+      margin: 20px auto 10px;
 
       > span {
         line-height: 28px;
@@ -44,7 +44,10 @@
       flex-wrap: wrap;
 
       h2 {
-        margin-top: 0;
+        margin-top: 10px;
+        @media (max-width: 810px) {
+          margin-top: 0px;
+        }
       }
       .welkin-girl {
         max-width: 150px;

@@ -153,6 +153,8 @@ export const Giveaway: React.FC<GiveawayProps> = ({ TEST_MODE = false }) => {
         <div className="relative content-block patreon-profile giveaway-wrapper">
           <StylizedContentBlock overrideImage={GiveawayBg} />
           <div className="giveaway-container show-winners">
+            {/* <div className="block-highlight w-100 flex">  */}
+
             <img
               alt="Welkin Moon"
               className="welkin-girl"
@@ -171,15 +173,20 @@ export const Giveaway: React.FC<GiveawayProps> = ({ TEST_MODE = false }) => {
                 If you didn't win, you can look forward to future giveaways!
               </div>
               <div className="winners">
-                <span>Past winners: </span>
+                <span>Past {winnersList.length} winners: </span>
                 {winnersList.map((x, i) => (
-                  <span key={x.uid} className={x.isRequestedUID ? "highlight" : ""}>
+                  <span
+                    key={x.uid}
+                    className={x.isRequestedUID ? "highlight" : ""}
+                  >
                     {x.uid}
                     {i !== winnersList.length - 1 ? ", " : ""}
                   </span>
                 ))}
               </div>
             </div>
+
+            {/* </div> */}
           </div>
         </div>
       );
@@ -194,8 +201,13 @@ export const Giveaway: React.FC<GiveawayProps> = ({ TEST_MODE = false }) => {
   const winnersEl =
     winnersList.length > 0 ? (
       <div className="winners">
-        Past {winnersList.length} winners:{" "}
-        {winnersList.map((x) => x.uid).join(", ")}
+        <span>Past {winnersList.length} winners: </span>
+        {winnersList.map((x, i) => (
+          <span key={x.uid} className={x.isRequestedUID ? "highlight" : ""}>
+            {x.uid}
+            {i !== winnersList.length - 1 ? ", " : ""}
+          </span>
+        ))}
       </div>
     ) : (
       ""
