@@ -11,8 +11,26 @@
       // text-align: right;
     }
 
+    &.show-winners {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      h2 {
+        margin-top: 0;
+      }
+      .welkin-girl {
+        max-width: 150px;
+      }
+    }
+
     .disclaimers {
       font-size: 12px;
+    }
+
+    svg {
+      margin: 0 5px;
     }
 
     > .block-highlight {
@@ -240,10 +258,6 @@
         //   color: orange;
         //   font-weight: 600;
         // }
-      }
-
-      svg {
-        margin: 0 5px;
       }
 
       a {

@@ -17,22 +17,23 @@ import { SessionDataContext } from "../../context/SessionData/SessionDataContext
 import { Spinner } from "../Spinner";
 import { StylizedContentBlock } from "../StylizedContentBlock";
 import { Timer } from "../Timer";
+import WelkinMoon from "../../assets/images/WelkinMoon.webp";
 import { faKey } from "@fortawesome/free-solid-svg-icons";
 import { useLocation } from "react-router-dom";
 
 // import WelkinMoon1 from "../../assets/images/WelkinMoon.png";
 // import DomainBackground from "../../assets/images/Concept_Art_Liyue_Harbor.webp";
-// import WelkinMoon2 from "../../assets/images/WelkinMoon.webp";
 
 const INFO_URL = "/api/giveaway/info";
 const JOIN_URL = "/api/giveaway/join";
 
+type Winner = { uid: string; date: number };
 type GiveawayInfo = {
   id?: string;
   until?: number;
   count?: number;
   participated?: boolean;
-  winnersList?: string[];
+  winnersList?: Winner[];
   winnersThisGiveaway?: number;
 };
 
@@ -43,6 +44,7 @@ type GiveawayProps = {
 export const Giveaway: React.FC<GiveawayProps> = ({ TEST_MODE = false }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [giveawayInfo, setGiveawayInfo] = useState<GiveawayInfo>({});
+  const [winnersList, setWinnersList] = useState<Winner[]>([]);
   const [participated, setParticipated] = useState(false);
   const { isMobile } = useContext(AdProviderContext);
   const { isAuthenticated, boundAccounts, sessionFetched } =
@@ -78,9 +80,6 @@ export const Giveaway: React.FC<GiveawayProps> = ({ TEST_MODE = false }) => {
 
       const { data } = await axios.post(reqUrl, null, getHeaders());
 
-      // @TODO: test this logic
-      // @TODO: test this logic
-      // @TODO: test this logic
       if (data?.message === "Success") {
         videoRef?.current?.play();
 
@@ -112,11 +111,15 @@ export const Giveaway: React.FC<GiveawayProps> = ({ TEST_MODE = false }) => {
 
       if (data.error) {
         console.log(data.error);
+        if (data?.winnersList) {
+          setWinnersList(data?.winnersList);
+        }
         return;
       }
 
       setGiveawayInfo(data.data);
       setParticipated(data.data.participated);
+      setWinnersList(data.data.winnersList);
 
       // hides the giveaway when it ends
       if (data.data?.until) {
@@ -139,6 +142,37 @@ export const Giveaway: React.FC<GiveawayProps> = ({ TEST_MODE = false }) => {
   // if (!DEBUG_MODE) return <></>;
 
   if (!giveawayInfo?.id || !giveawayInfo?.until) {
+    const now = new Date().getTime();
+    const _24h = 1000 * 60 * 60 * 24;
+    const _24hAfterEvent = winnersList?.[winnersList.length - 1]?.date + _24h;
+
+    if (now > _24hAfterEvent) return <></>;
+
+    if (winnersList.length > 0) {
+      return (
+        <div className="relative content-block patreon-profile giveaway-wrapper">
+          <StylizedContentBlock overrideImage={GiveawayBg} />
+          <div className="giveaway-container show-winners">
+            <img alt="Welkin Moon" className="welkin-girl" src={WelkinMoon} />
+            <div>
+              <h2>Welkin Moon giveaway is over</h2>
+              <div>
+                Congratulations to the winners, you will be contacted soon
+                through <FontAwesomeIcon icon={faDiscord} size="1x" />
+                Discord or <FontAwesomeIcon icon={faPatreon} size="1x" />
+                Patreon.
+              </div>
+              <div>
+                If you didn't win, you can look forward to future giveaways!
+              </div>
+              <div className="winners">
+                Past winners: {winnersList.map((x) => x.uid).join(", ")}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
     return <></>;
   }
 
@@ -146,10 +180,12 @@ export const Giveaway: React.FC<GiveawayProps> = ({ TEST_MODE = false }) => {
   const extension = playHEVC && isMobile ? ".gif" : playHEVC ? ".mov" : ".webm";
   const welkinGirlURL = `${axios.defaults.baseURL}/public/welkin-transparent${extension}`;
 
-  const winners = giveawayInfo?.winnersList || [];
   const winnersEl =
-    winners.length > 0 ? (
-      <div className="winners">Past winners: {winners.join(", ")}</div>
+    winnersList.length > 0 ? (
+      <div className="winners">
+        Past {winnersList.length} winners:{" "}
+        {winnersList.map((x) => x.uid).join(", ")}
+      </div>
     ) : (
       ""
     );
