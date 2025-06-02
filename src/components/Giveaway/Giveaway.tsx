@@ -277,7 +277,7 @@ export const Giveaway: React.FC<GiveawayProps> = ({ TEST_MODE = false }) => {
             )}
             {participated ? (
               <div>
-                <div>You have succefully participated in the giveaway</div>
+                <div>You have successfully participated in the giveaway</div>
               </div>
             ) : (
               <div>

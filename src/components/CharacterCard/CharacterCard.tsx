@@ -2657,7 +2657,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                       >
                         <button>
                           <FontAwesomeIcon
-                            className="filter-icon hoverable-icon"
+                            className="filter-icon hoverable-icon remove-btn"
                             icon={faX}
                             size="1x"
                             title="Delete"

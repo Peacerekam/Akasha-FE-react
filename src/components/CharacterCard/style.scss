@@ -399,6 +399,10 @@ $hardcoded-scale: 1;
     .buttons-row {
       display: flex;
       gap: 5px;
+
+      button:not(.dl-button) {
+        padding: 10px 15px;
+      }
       .lds-ellipsis,
       .dl-button {
         width: 105px;
@@ -422,6 +426,9 @@ $hardcoded-scale: 1;
 
       &:hover {
         color: orange;
+      }
+      &.remove-btn:hover {
+        color: red;
       }
       svg {
         margin-right: 10px;
