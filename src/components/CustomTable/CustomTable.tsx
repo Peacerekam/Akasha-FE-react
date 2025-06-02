@@ -8,6 +8,7 @@ import {
   abortSignalCatcher,
   arrayPushOrSplice,
   cssJoin,
+  getSessionIdFromCookie,
   normalizeText,
   uidsToQuery,
 } from "../../utils/helpers";
@@ -198,6 +199,9 @@ export const CustomTable: React.FC<CustomTableProps> = ({
           seed,
           md5,
         },
+        headers: {
+          Authorization: `Bearer ${getSessionIdFromCookie()}`,
+        },
       };
 
       const response = await axios.get(fetchURL, opts);
@@ -233,7 +237,6 @@ export const CustomTable: React.FC<CustomTableProps> = ({
         if (!closeExpandRow) return;
         setExpandedRows((prev) => arrayPushOrSplice(prev, row._id));
       });
-      
     } catch (err) {
       console.log(err);
     }
@@ -429,6 +432,9 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
     const opts: AxiosRequestConfig<any> = {
       signal: abortController.signal,
+      headers: {
+        Authorization: `Bearer ${getSessionIdFromCookie()}`,
+      },
       params: {
         ...params,
         ...fetchParams,

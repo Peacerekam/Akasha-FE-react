@@ -1,4 +1,8 @@
-import { FETCH_BUILDS_URL, cssJoin } from "../../utils/helpers";
+import {
+  FETCH_BUILDS_URL,
+  cssJoin,
+  getSessionIdFromCookie,
+} from "../../utils/helpers";
 import { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
@@ -51,6 +55,9 @@ export const BuildPreview: React.FC = () => {
       const response = await axios.get(FETCH_BUILDS_URL, {
         params: { uid, md5, seed },
         signal: abortController.signal,
+        headers: {
+          Authorization: `Bearer ${getSessionIdFromCookie()}`,
+        },
       });
 
       const data = response?.data?.data?.[0];

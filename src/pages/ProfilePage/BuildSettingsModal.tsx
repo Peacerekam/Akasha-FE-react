@@ -80,6 +80,9 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     const fetchURL = `/api/builds/${_uid}`;
     const opts: AxiosRequestConfig<any> = {
       signal: abortController?.signal,
+      headers: {
+        Authorization: `Bearer ${getSessionIdFromCookie()}`,
+      },
     };
 
     if (uids) opts.params = { uids };
