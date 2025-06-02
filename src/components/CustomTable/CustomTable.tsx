@@ -184,7 +184,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   const [params, setParams] = useState<FetchParams>(defaultParams);
   const [seed, setSeed] = useState("");
 
-  const invalidateCache = async () => {
+  const invalidateCache = async (md5?: string) => {
     const q = Math.random().toString().slice(2);
     setSeed(q);
 
@@ -196,6 +196,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
           ...params,
           ...fetchParams,
           seed,
+          md5,
         },
       };
 
@@ -207,16 +208,32 @@ export const CustomTable: React.FC<CustomTableProps> = ({
           (x: any) => x._id === row._id && !x.isExpandRow
         );
         const newData = newDataIndex > -1 ? data[newDataIndex] : {};
+        const isDeleted = !!(md5 === row.md5 && data.length === 0);
         const isExpandRow = !!row.isExpandRow;
 
+        if (newData?.index) {
+          delete newData.index;
+        }
+
         return {
+          isDeleted,
           ...row,
           ...newData,
           isExpandRow,
+          ...(isDeleted ? { isDeleted: true } : {}),
         };
       });
 
       setRows(newRows);
+
+      newRows.forEach((row, rowIndex) => {
+        const closeExpandRow =
+          row?.isExpandRow && newRows[rowIndex - 1]?.isDeleted;
+
+        if (!closeExpandRow) return;
+        setExpandedRows((prev) => arrayPushOrSplice(prev, row._id));
+      });
+      
     } catch (err) {
       console.log(err);
     }
@@ -711,6 +728,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
   const renderRows = useMemo(() => {
     const handleClickRow = (row: any) => {
+      if (row?.isDeleted) return;
       if (!expandableRows) return;
       setExpandedRows((prev) => arrayPushOrSplice(prev, row._id));
     };
@@ -732,7 +750,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
       const isEnkaPatreon = (enkaOwner?.profile?.level || 0) !== 0;
 
       const rowClassNames = cssJoin([
-        expandableRows ? "pointer" : "",
+        expandableRows && !row?.isDeleted ? "pointer" : "",
         shouldHighlightRows && (!!patreonObj?.active || isEnkaPatreon)
           ? "decorate-row"
           : "",
@@ -778,6 +796,8 @@ export const CustomTable: React.FC<CustomTableProps> = ({
               getDynamicTdClassName ? getDynamicTdClassName(row) : "",
               !hideIndexColumn && column.name === "#" ? "first-column" : "",
               hideIndexColumn && index === 1 ? "first-column" : "",
+              row.isDeleted ? "strike-through" : "",
+              row.isHidden ? "opacity-5" : "",
             ]);
 
             return (

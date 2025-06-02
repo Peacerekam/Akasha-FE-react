@@ -39,22 +39,27 @@ import {
   faCheck,
   faCog,
   faDownload,
+  faEye,
+  faEyeSlash,
   faImage,
   faLock,
   faMagnifyingGlass,
   faMinus,
+  faPaintBrush,
   faPlus,
   faRefresh,
+  faTrash,
   faUpload,
   faX,
 } from "@fortawesome/free-solid-svg-icons";
 import html2canvas, { Options } from "html2canvas";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { APRIL_FOOLS } from "../../utils/maybeEnv";
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 import { AssetFallback } from "../AssetFallback";
 import { CompactArtifact } from "../ArtifactListCompact";
+import { ConfirmTooltip } from "..";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FriendshipIcon from "../../assets/icons/Item_Companionship_EXP.png";
 import { PreviewModal } from "./PreviewModal";
@@ -87,7 +92,7 @@ type CharacterCardProps = {
   _calculations: any;
   setSelectedCalculationId?: any;
   errorCallback?: () => {};
-  invalidateCache?: () => void;
+  invalidateCache?: (md5?: string) => void;
 };
 
 type Coords = {
@@ -244,6 +249,8 @@ const GACHA_CHAR_OFFESET: { [char: string]: { x: number; y: number } } = {
   },
 };
 
+type Toggles = "build" | "card" | null;
+
 export const CharacterCard: React.FC<CharacterCardProps> = ({
   row,
   artifacts,
@@ -262,7 +269,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const [initialized, setInitialized] = useState(false);
 
   // flags
-  const [toggleConfigure, setToggleConfigure] = useState(false);
+  const [toggleConfigure, setToggleConfigure] = useState<Toggles>(null);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [isLoadingImage, setIsLoadingImage] = useState(false);
   const [generating, setGenerating] = useState<OpenDownloadingFalse>(false);
@@ -325,6 +332,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   }, [customCardPic]);
 
   const location = useLocation();
+  const navigate = useNavigate();
   const DEBUG_MODE = location.search?.includes("debug");
 
   const buildId = `${row.md5}`;
@@ -415,7 +423,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
   // paste img handler
   useEffect(() => {
-    if (toggleConfigure) {
+    if (toggleConfigure === "card") {
       window.addEventListener("paste", handlePasteImage);
     } else {
       window.removeEventListener("paste", handlePasteImage);
@@ -1442,7 +1450,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     const charImgUrl = toEnkaUrl(chartsData?.assets?.gachaIcon, APRIL_FOOLS);
     const showcaseContainerClassNames = cssJoin([
       "character-showcase-pic-container",
-      toggleConfigure ? "editable" : "",
+      toggleConfigure === "card" ? "editable" : "",
       isDragging ? "is-dragging" : "",
       hasCustomBg, // "horizontal", "vertical" or ""
       row.name === "Traveler" ? "is-traveler" : "",
@@ -1457,7 +1465,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         "gacha";
 
     const onContainerMouseDown = (event: MouseOrTouchEvent) => {
-      if (!toggleConfigure) return;
+      if (toggleConfigure !== "card") return;
 
       setIsDragging(true);
       const { x, y } = getCoordsFromEvent(event);
@@ -1469,7 +1477,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     };
 
     const onContainerMouseUp = (event: MouseOrTouchEvent) => {
-      if (!isDragging || !toggleConfigure || !compressedImage) return;
+      if (!isDragging || toggleConfigure !== "card" || !compressedImage) return;
 
       setIsDragging(false);
       const { x, y } = getCoordsFromEvent(event);
@@ -1529,14 +1537,14 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     };
 
     const onContainerMouseMove = (event: MouseOrTouchEvent) => {
-      if (!isDragging || !toggleConfigure || !compressedImage) return;
+      if (!isDragging || toggleConfigure !== "card" || !compressedImage) return;
 
       const pos = getCoordsFromEvent(event);
       throttledPaintImageToCanvas(compressedImage, paintMode, false, pos);
     };
 
     const onContainerClick = () => {
-      setToggleConfigure(true); // enable zoom and upload pic buttons
+      setToggleConfigure("card"); // enable zoom and upload pic buttons
     };
 
     return (
@@ -1994,7 +2002,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           className="single-config-button"
           title="Exit edit mode"
           onClick={() => {
-            setToggleConfigure(false);
+            setToggleConfigure(null);
           }}
         >
           <FontAwesomeIcon icon={faCheck} size={`1x`} />
@@ -2004,7 +2012,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
     return (
       <>
-        {toggleConfigure && (
+        {toggleConfigure === "card" && (
           <div
             className="config-overlay"
             style={{
@@ -2021,7 +2029,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         <div
           className="absolute-overlay"
           style={{
-            opacity: toggleConfigure && !generating ? 0.33 : 1,
+            opacity: toggleConfigure === "card" && !generating ? 0.33 : 1,
           }}
         >
           {cardOverlay}
@@ -2159,7 +2167,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     simplifyColors ? "simplify-colors" : "",
     hasLeaderboardsColumn ? "" : "no-leaderboards",
     charImgUrl ? "" : "disable-input",
-    toggleConfigure ? "editable" : "",
+    toggleConfigure === "card" ? "editable" : "",
     generating ? "is-generating" : "",
   ]);
 
@@ -2218,13 +2226,259 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         }
 
         // invalidate cache
-        invalidateCache && invalidateCache();
+        invalidateCache && invalidateCache(row.md5);
       } catch (err) {
         console.log(err);
         setUploading(false);
       }
     });
   };
+
+  // @TODO: ...
+  // @TODO: ...
+  // @TODO: ...
+  // @TODO: ...
+  // @TODO: ...
+  // @TODO: ...
+
+  const handleToggleBuildVisibility = async (char: any) => {
+    if (!char?.md5) return;
+
+    const { uid, md5 } = char;
+    const _uid = encodeURIComponent(uid);
+    const _md5 = encodeURIComponent(md5);
+    const toggleVisibilityURL = `/api/user/toggleBuildVisibility/${_uid}/${_md5}`;
+    const opts: AxiosRequestConfig<any> = {
+      headers: {
+        Authorization: `Bearer ${getSessionIdFromCookie()}`,
+      },
+    };
+    await axios.post(toggleVisibilityURL, null, opts);
+
+    // invalidate cache
+    invalidateCache && invalidateCache(row.md5);
+  };
+
+  const handleDeleteBuild = async (char: any) => {
+    if (!char?.md5) return;
+
+    const { uid, md5 } = char;
+    const _uid = encodeURIComponent(uid);
+    const _md5 = encodeURIComponent(md5);
+    const deleteBuildURL = `/api/user/deleteBuild/${_uid}/${_md5}`;
+    const opts: AxiosRequestConfig<any> = {
+      headers: {
+        Authorization: `Bearer ${getSessionIdFromCookie()}`,
+      },
+    };
+    await axios.post(deleteBuildURL, null, opts);
+
+    // invalidate cache
+    invalidateCache && invalidateCache(row.md5);
+
+    const searchQuery = location.search;
+    const query = new URLSearchParams(searchQuery);
+    const buildMd5 = query.get("build");
+
+    if (md5 === buildMd5) {
+      navigate(`/profile/${uid}`, { state: { close: true }});
+    }
+  };
+
+  const handleChangeBuildName = async (event: any) => {
+    let newBuildName = event?.target?.value?.trim()?.slice(0, 40);
+
+    if (newBuildName === translate(row.name, getGenderFromIcon(row.icon))) {
+      newBuildName = "current";
+    }
+    if (newBuildName === row.type || !newBuildName || !row?.md5) {
+      return;
+    }
+
+    const { uid, md5 } = row;
+    const _uid = encodeURIComponent(uid);
+    const _md5 = encodeURIComponent(md5);
+
+    const postBuildNameURL = `/api/user/setBuildName/${_uid}/${_md5}`;
+    const opts: AxiosRequestConfig<any> = {
+      params: {
+        buildName: newBuildName,
+      },
+      headers: {
+        Authorization: `Bearer ${getSessionIdFromCookie()}`,
+      },
+    };
+    const response = await axios.post(postBuildNameURL, null, opts); // no formData attached
+    if (response.data.error) return;
+
+    invalidateCache && invalidateCache(row.md5);
+  };
+
+  const displayName =
+    row.type === "current"
+      ? translate(row.name, getGenderFromIcon(row.icon))
+      : row.type;
+
+  const manageBuildDiv =
+    toggleConfigure === "build" ? (
+      <div className="expanded-row toggle-config narrow">
+        <div className="card-checkboxes narrow" style={{ marginTop: 10 }}>
+          <div className="stylized-text-input-wrapper">
+            <label className="card-select-label" htmlFor={`${buildId}-rename`}>
+              Build name
+            </label>
+            <img src={row.icon} alt="" />
+            <input
+              id={`${buildId}-rename`}
+              className="stylized-text-input"
+              defaultValue={displayName}
+              onBlur={handleChangeBuildName}
+              onKeyDown={(e) => e.key === "Enter" && handleChangeBuildName(e)}
+            />
+          </div>
+          <div>
+            <label
+              className="card-select-label"
+              htmlFor={`${buildId}-visibility`}
+            >
+              Build visibility
+            </label>
+
+            <button
+              id={`${buildId}-visibility`}
+              className="regular-btn"
+              title="Toggle build visibility"
+              onClick={() => handleToggleBuildVisibility(row)}
+            >
+              <FontAwesomeIcon
+                icon={row.isHidden ? faEyeSlash : faEye}
+                size="1x"
+              />
+            </button>
+            <span className="manage-build-explain">
+              {row.isHidden
+                ? "This build is currently hidden"
+                : "This build is currently public"}
+            </span>
+          </div>
+          <div>
+            <label className="card-select-label" htmlFor={`${buildId}-delete`}>
+              Delete build
+            </label>
+
+            <ConfirmTooltip
+              overrideJustify="right"
+              wrapperClassName="confirm-delete"
+              text={`Delete "${displayName}"?`}
+              onConfirm={() => handleDeleteBuild(row)}
+            >
+              <button
+                id={`${buildId}-delete`}
+                className="remove-btn"
+                title="Delete build"
+              >
+                <FontAwesomeIcon icon={faTrash} size="1x" />
+              </button>
+            </ConfirmTooltip>
+            <span className="manage-build-explain">
+              This will delete "{displayName}" from the profile
+            </span>
+          </div>
+        </div>
+      </div>
+    ) : (
+      ""
+    );
+
+  const configureImgDiv =
+    toggleConfigure === "card" ? (
+      <div className="expanded-row toggle-config">
+        <div
+          className={`card-select-wrapper ${
+            calcOptions.length === 0 ? "no-calcs" : ""
+          }`}
+        >
+          <label className="card-select-label">Highlighted ranking</label>
+          <div className="card-select ">
+            <div className="react-select-calcs-wrapper">
+              <ReactSelect
+                isDisabled={calcOptions.length === 0}
+                // isMulti
+                options={calcOptions}
+                menuPortalTarget={document.body}
+                styles={reactSelectCustomFilterTheme}
+                maxMenuHeight={450}
+                menuPlacement="auto"
+                getOptionValue={(option: any) => option.rawLabel}
+                placeholder={
+                  calcOptions.length === 0
+                    ? "No leaderboards available"
+                    : "Choose leaderboards"
+                }
+                value={selectedOptions?.[0]}
+                defaultValue={selectedOptions?.[0]}
+                onChange={(options) => {
+                  if (!options) return;
+                  handleSelectChange(options);
+                }}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="card-checkboxes">
+          <div>
+            <label htmlFor={`${buildId}-bname`}>Display build name</label>
+            <input
+              id={`${buildId}-bname`}
+              type="checkbox"
+              checked={displayBuildName}
+              onChange={(e: any) => setDisplayBuildName(!!e.target.checked)}
+            />
+          </div>
+          <div>
+            <label htmlFor={`${buildId}-sc`}>Simplify border colors</label>
+            <input
+              id={`${buildId}-sc`}
+              type="checkbox"
+              checked={simplifyColors}
+              onChange={(e: any) => setSimplifyColors(!!e.target.checked)}
+            />
+          </div>
+          <div>
+            <label htmlFor={`${buildId}-abg`}>Adaptive background</label>
+            <input
+              id={`${buildId}-abg`}
+              type="checkbox"
+              checked={_adaptiveBgColor}
+              onChange={(e: any) => {
+                _setAdaptiveBgColor(!!e.target.checked);
+                setAdaptiveBgColor(!!e.target.checked);
+              }}
+            />
+          </div>
+          <div>
+            <label htmlFor={`${buildId}-nb`}>Namecard background</label>
+            <input
+              id={`${buildId}-nb`}
+              checked={namecardBg}
+              type="checkbox"
+              onChange={(e: any) => setNamecardBg(!!e.target.checked)}
+            />
+          </div>
+          <div>
+            <label htmlFor={`${buildId}-hr`}>Hide UID & ranking</label>
+            <input
+              id={`${buildId}-hr`}
+              checked={privacyFlag}
+              type="checkbox"
+              onChange={(e: any) => setPrivacyFlag(!!e.target.checked)}
+            />
+          </div>
+        </div>
+      </div>
+    ) : (
+      ""
+    );
 
   return (
     <div
@@ -2328,19 +2582,42 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                 </button>
               )}
               <button
-                className={toggleConfigure ? "toggled-conf-btn" : ""}
+                className={toggleConfigure === "card" ? "toggled-conf-btn" : ""}
                 onClick={() => {
-                  setToggleConfigure((prev) => !prev);
+                  setToggleConfigure((prev) =>
+                    prev !== "card" ? "card" : null
+                  );
                 }}
               >
                 <FontAwesomeIcon
                   className="filter-icon hoverable-icon"
-                  icon={faCog}
+                  icon={faPaintBrush}
                   size="1x"
                   title="Configure"
                 />
                 Configure Image
               </button>
+
+              {isAccountOwner && (
+                <button
+                  className={
+                    toggleConfigure === "build" ? "toggled-conf-btn" : ""
+                  }
+                  onClick={() => {
+                    setToggleConfigure((prev) =>
+                      prev !== "build" ? "build" : null
+                    );
+                  }}
+                >
+                  <FontAwesomeIcon
+                    className="filter-icon hoverable-icon"
+                    icon={faCog}
+                    size="1x"
+                    title="Configure"
+                  />
+                  Manage Build
+                </button>
+              )}
 
               {isAccountOwner &&
                 (uploading ? (
@@ -2351,7 +2628,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                       <button
                         onClick={() => handleCardPicUpload(false)}
                         disabled={!showPicSaveButton}
-                        title={showPicSaveButton ? "Images must be SFW" : "Patreon only feature"}
+                        title={
+                          showPicSaveButton
+                            ? "Images must be SFW"
+                            : "Patreon only feature"
+                        }
                       >
                         <FontAwesomeIcon
                           className="filter-icon hoverable-icon"
@@ -2360,122 +2641,36 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                           title="Upload"
                         />
                         Upload image to Akasha
-                        <span>Note: {showPicSaveButton ? "images must be SFW" : "Patreon only feature"}</span>
+                        <span>
+                          Note:{" "}
+                          {showPicSaveButton
+                            ? "images must be SFW"
+                            : "Patreon only feature"}
+                        </span>
                       </button>
                     )}
                     {showPicSaveButton && customCardPic && (
-                      <button onClick={() => handleCardPicUpload(true)}>
-                        <FontAwesomeIcon
-                          className="filter-icon hoverable-icon"
-                          icon={faX}
-                          size="1x"
-                          title="Delete"
-                        />
-                        Delete image from Akasha
-                      </button>
+                      <ConfirmTooltip
+                        overrideJustify="right"
+                        text={`Delete image from Akasha?`}
+                        onConfirm={() => handleCardPicUpload(true)}
+                      >
+                        <button>
+                          <FontAwesomeIcon
+                            className="filter-icon hoverable-icon"
+                            icon={faX}
+                            size="1x"
+                            title="Delete"
+                          />
+                          Delete image from Akasha
+                        </button>
+                      </ConfirmTooltip>
                     )}
                   </>
                 ))}
             </div>
-
-            {toggleConfigure ? (
-              <div className="expanded-row toggle-config">
-                <div
-                  className={`card-select-wrapper ${
-                    calcOptions.length === 0 ? "no-calcs" : ""
-                  }`}
-                >
-                  <span className="card-select-label">Highlighted ranking</span>
-                  <div className="card-select ">
-                    <div className="react-select-calcs-wrapper">
-                      <ReactSelect
-                        isDisabled={calcOptions.length === 0}
-                        // isMulti
-                        options={calcOptions}
-                        menuPortalTarget={document.body}
-                        styles={reactSelectCustomFilterTheme}
-                        maxMenuHeight={450}
-                        menuPlacement="auto"
-                        getOptionValue={(option: any) => option.rawLabel}
-                        placeholder={
-                          calcOptions.length === 0
-                            ? "No leaderboards available"
-                            : "Choose leaderboards"
-                        }
-                        value={selectedOptions?.[0]}
-                        defaultValue={selectedOptions?.[0]}
-                        onChange={(options) => {
-                          if (!options) return;
-                          handleSelectChange(options);
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="card-checkboxes">
-                  <div>
-                    <label htmlFor={`${buildId}-bname`}>
-                      Display build name
-                    </label>
-                    <input
-                      id={`${buildId}-bname`}
-                      type="checkbox"
-                      checked={displayBuildName}
-                      onChange={(e: any) =>
-                        setDisplayBuildName(!!e.target.checked)
-                      }
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor={`${buildId}-sc`}>
-                      Simplify border colors
-                    </label>
-                    <input
-                      id={`${buildId}-sc`}
-                      type="checkbox"
-                      checked={simplifyColors}
-                      onChange={(e: any) =>
-                        setSimplifyColors(!!e.target.checked)
-                      }
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor={`${buildId}-abg`}>
-                      Adaptive background
-                    </label>
-                    <input
-                      id={`${buildId}-abg`}
-                      type="checkbox"
-                      checked={_adaptiveBgColor}
-                      onChange={(e: any) => {
-                        _setAdaptiveBgColor(!!e.target.checked);
-                        setAdaptiveBgColor(!!e.target.checked);
-                      }}
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor={`${buildId}-nb`}>Namecard background</label>
-                    <input
-                      id={`${buildId}-nb`}
-                      checked={namecardBg}
-                      type="checkbox"
-                      onChange={(e: any) => setNamecardBg(!!e.target.checked)}
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor={`${buildId}-hr`}>Hide UID & ranking</label>
-                    <input
-                      id={`${buildId}-hr`}
-                      checked={privacyFlag}
-                      type="checkbox"
-                      onChange={(e: any) => setPrivacyFlag(!!e.target.checked)}
-                    />
-                  </div>
-                </div>
-              </div>
-            ) : (
-              ""
-            )}
+            {manageBuildDiv}
+            {configureImgDiv}
           </div>
         </div>
       </div>

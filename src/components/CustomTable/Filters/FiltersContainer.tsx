@@ -3,6 +3,7 @@ import "./style.scss";
 import {
   abortSignalCatcher,
   filtersQueryToArray,
+  getSessionIdFromCookie,
 } from "../../../utils/helpers";
 import axios, { AxiosRequestConfig } from "axios";
 import { useEffect, useMemo, useState } from "react";
@@ -56,6 +57,9 @@ export const FiltersContainer = ({
 
     const opts: AxiosRequestConfig<any> = {
       signal: abortController?.signal,
+      headers: {
+        Authorization: `Bearer ${getSessionIdFromCookie()}`,
+      },
     };
 
     const getSetData = async () => {

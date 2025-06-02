@@ -4,6 +4,7 @@ import React, { useContext, useEffect, useMemo, useState } from "react";
 import {
   abortSignalCatcher,
   cssJoin,
+  getSessionIdFromCookie,
   isEntryNew,
   toShortThousands,
 } from "../../utils/helpers";
@@ -43,6 +44,13 @@ export const CalculationResultWidget: React.FC<
   const { getTopRanking } = useContext(SettingsContext);
   const { translate } = useContext(TranslationContext);
 
+  const selectedBuildId = useMemo(() => {
+    const searchQuery = location.search;
+    const query = new URLSearchParams(searchQuery);
+    const md5 = query.get("build");
+    return md5;
+  }, [location.search]);
+
   const fetchCalcData = async (
     uid: string,
     abortController?: AbortController
@@ -51,16 +59,31 @@ export const CalculationResultWidget: React.FC<
     const fetchURL = `/api/getCalculationsForUser/${_uid}`;
     const opts: AxiosRequestConfig<any> = {
       signal: abortController?.signal,
+      headers: {
+        Authorization: `Bearer ${getSessionIdFromCookie()}`,
+      },
     };
 
-    if (uids) opts.params = { uids };
+    if (uids) {
+      if (!opts.params) opts.params = {};
+      opts.params.uids = uids;
+    }
+
+    if (selectedBuildId) {
+      if (!opts.params) opts.params = {};
+      opts.params.md5 = selectedBuildId;
+    }
 
     const getSetData = async () => {
-      setIsLoading(true);
+      if (location.state?.reload !== true) {
+        setIsLoading(true);
+      }
       const response = await axios.get(fetchURL, opts);
       const { data } = response.data;
       setData(data);
-      setIsLoading(false);
+      if (location.state?.reload !== true) {
+        setIsLoading(false);
+      }
 
       if (!abortController) return;
 
@@ -86,14 +109,7 @@ export const CalculationResultWidget: React.FC<
         abortController.abort();
       };
     }
-  }, []);
-
-  const selectedBuildId = useMemo(() => {
-    const searchQuery = location.search;
-    const query = new URLSearchParams(searchQuery);
-    const md5 = query.get("build");
-    return md5;
-  }, [location.search]);
+  }, [location.state]);
 
   const resultsArray = useMemo(() => {
     if (data.length === 0) return [];
@@ -124,6 +140,7 @@ export const CalculationResultWidget: React.FC<
           characterIcon: build.icon,
           priority: calc?.priority,
           lastBuildUpdate: build?.lastBuildUpdate,
+          isBuildHidden: build?.isHidden,
         });
       }
     }
@@ -218,6 +235,7 @@ export const CalculationResultWidget: React.FC<
 
           const brokenRanking = false; // outOf < 10000;
           const isNew = isEntryNew(calc.lastBuildUpdate);
+          const isBuildHidden = calc.isBuildHidden;
 
           return (
             <div
@@ -226,7 +244,7 @@ export const CalculationResultWidget: React.FC<
                 weaponMatchClass,
                 isNew ? "is-new" : "",
                 calc.md5 === selectedBuildId ? "selected-build" : "",
-                // selectedBuildId ? "opacity-5" : ""
+                isBuildHidden ? "opacity-5" : "",
               ])}
               style={{
                 opacity: brokenRanking ? 0.33 : 1,
@@ -235,7 +253,7 @@ export const CalculationResultWidget: React.FC<
             >
               <ConfirmTooltip
                 adjustOffsets
-                disabled={noLinks}
+                disabled={isBuildHidden ? true : noLinks}
                 text={`Open ${translate(calc.characterName)} leaderboard?`}
                 onConfirm={() => {
                   navigate(`/leaderboards/${id}/${variant?.name || ""}`);

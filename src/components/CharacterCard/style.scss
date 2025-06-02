@@ -478,6 +478,32 @@ $hardcoded-scale: 1;
         gap: 12px;
         justify-content: space-between;
         flex-direction: column;
+
+        &.narrow {
+          label {
+            width: 145px;
+            margin-left: 0px;
+          }
+          button {
+            padding-top: 4px;
+            padding-bottom: 4px;
+            padding-left: 5px;
+            padding-right: 1px;
+            margin-left: 0;
+            width: 35px;
+          }
+          input {
+            margin-left: 0px;
+          }
+          .confirm-delete {
+            display: inline-block;
+          }
+        }
+        .remove-btn {
+          &:not(.disabled):not(:disabled):not([disabled]):hover {
+            color: red;
+          }
+        }
         label {
           display: inline-block;
           width: $label-width;
@@ -487,6 +513,34 @@ $hardcoded-scale: 1;
         }
         button {
           margin-left: 5px;
+        }
+        .stylized-text-input-wrapper {
+          position: relative;
+          img {
+            position: absolute;
+            top: 5px;
+            left: 130px + 15px + 6px;
+            width: 20px;
+            height: 20px;
+            pointer-events: none;
+          }
+          .stylized-text-input {
+            background-color: rgba(0, 0, 0, 0.4);
+            border: none;
+            padding: 8px 10px 8px 35px;
+            font-size: 13px;
+            width: 265px;
+            color: rgba(white, 0.5);
+            &:hover {
+              color: rgba(white, 0.8);
+              outline: 1px solid rgba(white, 0.5);
+              background-color: rgba(0, 0, 0, 0.5);
+            }
+            &:focus {
+              color: white;
+              outline: 1px solid orange;
+            }
+          }
         }
         .disabled {
           opacity: 0.5;
@@ -1532,5 +1586,12 @@ $hardcoded-scale: 1;
   * {
     filter: none !important;
     box-shadow: none !important;
+  }
+}
+
+.toggle-config {
+  .manage-build-explain {
+    opacity: 0.5;
+    font-size: 12px;
   }
 }

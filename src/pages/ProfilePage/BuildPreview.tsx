@@ -32,6 +32,12 @@ export const BuildPreview: React.FC = () => {
   };
 
   const fetchData = async (abortController: AbortController) => {
+    if (location?.state?.close === true) {
+      setBuildData(undefined);
+      setContentWidth(1100);
+      return;
+    }
+
     if (!location.search) return;
 
     try {
@@ -62,6 +68,9 @@ export const BuildPreview: React.FC = () => {
   const invalidateCache = async () => {
     const q = Math.random().toString().slice(2);
     setSeed(q);
+
+    const { md5, uid } = getParams();
+    navigate(`/profile/${uid}?build=${md5}`, { state: { reload: true } });
   };
 
   useEffect(() => {
@@ -71,7 +80,7 @@ export const BuildPreview: React.FC = () => {
     return () => {
       abortController.abort();
     };
-  }, [location.search]);
+  }, [location.search, location.state]);
 
   const handleClose = () => {
     navigate(`/profile/${uid}`);

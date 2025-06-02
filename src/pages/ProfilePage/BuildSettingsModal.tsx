@@ -9,6 +9,7 @@ import {
   PATREON_URL,
   abortSignalCatcher,
   cssJoin,
+  getGenderFromIcon,
   getSessionIdFromCookie,
   isEntryNew,
   revertModalBodyStyle,
@@ -306,7 +307,9 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     const displayBuildSettingsRow = (char: any) => {
       const buildId = getBuildId(char);
       const displayName =
-        char.type === "current" ? translate(char.name) : char.type;
+        char.type === "current"
+          ? translate(char.name, getGenderFromIcon(char.icon))
+          : char.type;
 
       const isHidden = char.isHidden;
       const rowClassnames = cssJoin([

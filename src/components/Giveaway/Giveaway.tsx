@@ -145,6 +145,7 @@ export const Giveaway: React.FC<GiveawayProps> = ({ TEST_MODE = false }) => {
     const now = new Date().getTime();
     const _24h = 1000 * 60 * 60 * 24;
     const _24hAfterEvent = winnersList?.[winnersList.length - 1]?.date + _24h;
+    // const _36hAfterEvent = 1.5 * _24hAfterEvent;
 
     if (now > _24hAfterEvent) return <></>;
 
@@ -194,10 +195,6 @@ export const Giveaway: React.FC<GiveawayProps> = ({ TEST_MODE = false }) => {
     return <></>;
   }
 
-  const playHEVC = supportsHEVCAlpha();
-  const extension = playHEVC && isMobile ? ".gif" : playHEVC ? ".mov" : ".webm";
-  const welkinGirlURL = `${axios.defaults.baseURL}/public/welkin-transparent${extension}`;
-
   const winnersEl =
     winnersList.length > 0 ? (
       <div className="winners">
@@ -213,6 +210,9 @@ export const Giveaway: React.FC<GiveawayProps> = ({ TEST_MODE = false }) => {
       ""
     );
 
+  const playHEVC = supportsHEVCAlpha();
+  const extension = playHEVC && isMobile ? ".gif" : playHEVC ? ".mov" : ".webm";
+  const welkinGirlURL = `${axios.defaults.baseURL}/public/welkin-transparent${extension}`;
   const wCount = giveawayInfo?.winnersThisGiveaway || 1;
 
   return (

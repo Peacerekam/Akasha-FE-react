@@ -49,11 +49,13 @@ import React, {
 } from "react";
 import axios, { AxiosRequestConfig } from "axios";
 import {
+  faEyeSlash,
   faGear,
   faKey,
   faLock,
   faLockOpen,
   faRotateRight,
+  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
@@ -417,6 +419,14 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
         name: "#",
         width: "0px",
         cell: (row) => {
+          if (row.isDeleted) {
+            return <FontAwesomeIcon icon={faTrash} size="1x" />;
+          }
+
+          if (row.isHidden) {
+            return <FontAwesomeIcon icon={faEyeSlash} size="1x" />;
+          }
+
           return <RowIndex index={row.index} />;
         },
       },
@@ -1074,7 +1084,9 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
                 growContentOnExpandedRow
                 fetchURL={FETCH_BUILDS_URL}
                 columns={BUILDS_COLUMNS}
-                filtersURL={`${FETCH_CHARACTER_FILTERS_URL}?type=profile`}
+                filtersURL={`${FETCH_CHARACTER_FILTERS_URL}?type=profile&uid=${
+                  isCombined ? uid?.slice(1) : uid
+                }`}
                 defaultSort="critValue"
                 expandableRows
                 fetchParams={{

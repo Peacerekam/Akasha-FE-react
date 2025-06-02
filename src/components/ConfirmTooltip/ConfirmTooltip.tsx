@@ -6,13 +6,17 @@ import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+type Justify = "right" | "left" | null;
+
 type ConfirmTooltipProps = {
   text: string;
   onConfirm: any;
   children: JSX.Element;
   className?: string;
+  wrapperClassName?: string;
   disabled?: boolean;
   adjustOffsets?: boolean;
+  overrideJustify?: Justify;
 };
 
 export const ConfirmTooltip: React.FC<ConfirmTooltipProps> = ({
@@ -20,16 +24,20 @@ export const ConfirmTooltip: React.FC<ConfirmTooltipProps> = ({
   onConfirm,
   children,
   className = "",
+  wrapperClassName = "",
   disabled = false,
   adjustOffsets = false,
+  overrideJustify = null,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [justify, setJustify] = useState<"left" | "right">("left");
+  const [justify, setJustify] = useState<Justify>(overrideJustify || "left");
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     if (disabled) return;
 
-    if (adjustOffsets) {
+    if (overrideJustify) {
+      setJustify(overrideJustify);
+    } else if (adjustOffsets) {
       const offsets = getRelativeCoords(event);
       const newJustify = offsets.offsetX > 0 ? "left" : "right";
       setJustify(newJustify);
@@ -64,7 +72,7 @@ export const ConfirmTooltip: React.FC<ConfirmTooltipProps> = ({
   const justifyRight = justify === "right";
 
   return (
-    <div>
+    <div className={wrapperClassName}>
       <div className={className} onClick={handleOpen}>
         {children}
       </div>

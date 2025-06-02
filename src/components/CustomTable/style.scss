@@ -164,6 +164,10 @@ $characterStats: "hp", "atk", "def", "hydrodmgbonus", "geodmgbonus",
       background-color: rgba(black, 0.1);
     }
 
+    td.strike-through {
+      opacity: 0.5;
+    }
+
     .warning-message {
       cursor: pointer;
       z-index: 2;
