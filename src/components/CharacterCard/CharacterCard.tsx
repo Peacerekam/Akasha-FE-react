@@ -2655,9 +2655,9 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                         text={`Delete image from Akasha?`}
                         onConfirm={() => handleCardPicUpload(true)}
                       >
-                        <button>
+                        <button className="remove-btn">
                           <FontAwesomeIcon
-                            className="filter-icon hoverable-icon remove-btn"
+                            className="filter-icon hoverable-icon"
                             icon={faX}
                             size="1x"
                             title="Delete"
