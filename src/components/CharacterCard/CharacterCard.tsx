@@ -2281,7 +2281,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     const buildMd5 = query.get("build");
 
     if (md5 === buildMd5) {
-      navigate(`/profile/${uid}`, { state: { close: true }});
+      navigate(`/profile/${uid}`, { state: { close: true } });
     }
   };
 
@@ -2346,9 +2346,12 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
             <button
               id={`${buildId}-visibility`}
-              className="regular-btn"
               title="Toggle build visibility"
               onClick={() => handleToggleBuildVisibility(row)}
+              className={cssJoin([
+                "regular-btn",
+                row.isHidden ? "opacity-5" : "",
+              ])}
             >
               <FontAwesomeIcon
                 icon={row.isHidden ? faEyeSlash : faEye}
