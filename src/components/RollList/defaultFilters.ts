@@ -70,6 +70,7 @@ const CRYO_RV_LIST = {
   Mika: [CRate, CDMG, HP_, ER, ATK_],
   Citlali: [CRate, CDMG, ATK_, EM, ER],
   Escoffier: [CRate, CDMG, ATK_, ER],
+  Skirk: [CRate, CDMG, ATK_],
 };
 
 const GEO_RV_LIST = {

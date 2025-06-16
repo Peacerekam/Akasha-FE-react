@@ -2368,7 +2368,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             <label className="card-select-label" htmlFor={`${buildId}-rename`}>
               Build name
             </label>
-            <img src={row.icon} alt="" />
+            <AssetFallback src={row.icon} alt="" />
             <input
               id={`${buildId}-rename`}
               className="stylized-text-input"
