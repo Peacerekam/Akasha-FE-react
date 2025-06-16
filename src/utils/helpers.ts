@@ -1,3 +1,4 @@
+import { AMBR_ASSETS, ENKA_ASSETS, getStatsFromRow } from "../components";
 import {
   REAL_SUBSTAT_VALUES,
   STAT_NAMES,
@@ -7,7 +8,6 @@ import {
 
 import { IHash } from "../types/IHash";
 import { getDefaultRvFilters } from "../components/RollList/defaultFilters";
-import { getStatsFromRow } from "../components";
 
 export const PATREON_URL = "https://www.patreon.com/mimee";
 // export const DISCORD_URL = "https://discord.gg/akasha";
@@ -414,10 +414,19 @@ export const iconUrlToNamecardUrl = (url: string) => {
     .replace(".png", `${iDontFuckingEven}_P.png`);
 };
 
-export const toEnkaUrl = (assetName?: string, aprilFools?: boolean) => {
+export const toEnkaUrl = (
+  assetName?: string,
+  aprilFools?: boolean,
+  fallback?: boolean,
+  namecard?: boolean
+) => {
   if (!assetName) return "";
+  if (fallback) {
+    return `${AMBR_ASSETS}${namecard ? "namecard/" : ""}${assetName}.png`;
+  }
+
   const prefix = aprilFools ? "a/" : "";
-  return `https://enka.network/ui/${prefix}${assetName}.png`;
+  return `${ENKA_ASSETS}/${prefix}${assetName}.png`;
 };
 
 export const shadeColor = (color: string, percent: number) => {

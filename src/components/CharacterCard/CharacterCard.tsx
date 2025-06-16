@@ -247,6 +247,10 @@ const GACHA_CHAR_OFFESET: { [char: string]: { x: number; y: number } } = {
     x: 6,
     y: 5,
   },
+  Skirk: {
+    x: -5,
+    y: 25,
+  },
 };
 
 type Toggles = "build" | "card" | null;
@@ -267,6 +271,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const [adaptiveColors, setAdaptiveColors] = useState<[string[], string[]]>();
   const [customCardPic, setCustomCardPic] = useState(row?.customCardPic);
   const [initialized, setInitialized] = useState(false);
+  const [useFallback, setUseFallback] = useState(false);
 
   // flags
   const [toggleConfigure, setToggleConfigure] = useState<Toggles>(null);
@@ -340,6 +345,12 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const chartsData = _calculations.chartsData;
   const showPicSaveButton =
     profileObject?.isEnkaPatreon || profileObject?.isPatreon;
+
+  const charImgUrl = toEnkaUrl(
+    _calculations.chartsData?.assets?.gachaIcon,
+    APRIL_FOOLS,
+    useFallback
+  );
 
   const cardPicUrl = `${axios.defaults.baseURL}/public/cardpics/${customCardPic}?card=true`;
 
@@ -457,6 +468,12 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       document.body!.classList.remove("lock-viewport");
     };
   }, [isDragging, isMobile]);
+
+  // set character picture
+  useEffect(() => {
+    if (!backgroundPictureRef?.current) return;
+    backgroundPictureRef.current.src = customCardPic ? cardPicUrl : charImgUrl;
+  }, [backgroundPictureRef]);
 
   // canvas pixel density
   useEffect(() => {
@@ -1005,7 +1022,12 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   );
 
   const compactList = useMemo(() => {
-    const namecardBgUrl = toEnkaUrl(chartsData?.characterMetadata?.namecard);
+    const namecardBgUrl = toEnkaUrl(
+      chartsData?.characterMetadata?.namecard,
+      false,
+      useFallback,
+      true
+    );
     const elementalBgUrl = `/elementalBackgrounds/${chartsData?.characterMetadata?.element}-bg.jpg`;
     const actualBgUrl = namecardBg ? namecardBgUrl : elementalBgUrl;
 
@@ -1044,6 +1066,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     chartsData?.characterMetadata?.element,
     reorderedArtifacts,
     adaptiveColors, // make sure it changes colors
+    useFallback,
     // isDragging
   ]);
 
@@ -1065,7 +1088,12 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       const _result = result + "";
       characterImg.src = _result;
 
-      const namecardBgUrl = toEnkaUrl(chartsData?.characterMetadata?.namecard);
+      const namecardBgUrl = toEnkaUrl(
+        chartsData?.characterMetadata?.namecard,
+        false,
+        useFallback,
+        true
+      );
       const elementalBgUrl = `/elementalBackgrounds/${chartsData?.characterMetadata?.element}-bg.jpg`;
       const actualBgUrl = namecardBg ? namecardBgUrl : elementalBgUrl;
 
@@ -1379,6 +1407,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       namecardBg,
       dragOffset,
       zoomLevel,
+      useFallback,
     ]
   );
 
@@ -1398,7 +1427,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       // 17 ms = ~  60 fps
       // 33 ms = ~  30 fps
     ),
-    [paintImageToCanvas, isMobile]
+    [paintImageToCanvas, isMobile, useFallback]
   );
 
   const handleFileUpload = useCallback(
@@ -1447,7 +1476,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   );
 
   const characterShowcase = useMemo(() => {
-    const charImgUrl = toEnkaUrl(chartsData?.assets?.gachaIcon, APRIL_FOOLS);
     const showcaseContainerClassNames = cssJoin([
       "character-showcase-pic-container",
       toggleConfigure === "card" ? "editable" : "",
@@ -1610,7 +1638,20 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             className={charImgUrl ? "" : "invalid-picture"}
             style={{ display: "none" }}
             ref={backgroundPictureRef}
-            src={customCardPic ? cardPicUrl : charImgUrl}
+            // src={customCardPic ? cardPicUrl : charImgUrl}
+            onError={(err) => {
+              if (!backgroundPictureRef?.current) return;
+              if (backgroundPictureRef.current.src.includes("enka")) {
+                const fallbackURL = toEnkaUrl(
+                  chartsData?.assets?.gachaIcon,
+                  APRIL_FOOLS,
+                  true
+                );
+                backgroundPictureRef.current.src = fallbackURL;
+                setCompressedImage(fallbackURL);
+                setUseFallback(true);
+              }
+            }}
           />
         </div>
       </div>
@@ -1633,6 +1674,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     toggleConfigure,
     customCardPic,
     pastedImage,
+    charImgUrl,
+    useFallback,
   ]);
 
   const characterStats = useMemo(
@@ -1864,7 +1907,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                   </span>
                 )}
                 {constImg ? (
-                  <img
+                  <AssetFallback
                     alt=" "
                     key={`const-${i}`}
                     className={isActivated ? "activated" : ""}
@@ -2158,8 +2201,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     }
     setGenerating(false);
   };
-
-  const charImgUrl = toEnkaUrl(chartsData?.assets?.gachaIcon);
 
   const cardContainerClassNames = cssJoin([
     "character-card-container",

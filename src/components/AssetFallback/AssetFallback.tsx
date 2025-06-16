@@ -5,8 +5,8 @@ type AssetFallbackProps = DetailedHTMLProps<
   HTMLImageElement
 >;
 
-const ENKA_ASSETS = "https://enka.network/ui/";
-const AMBR_ASSETS = "https://gi.yatta.moe/assets/UI/";
+export const ENKA_ASSETS = "https://enka.network/ui/";
+export const AMBR_ASSETS = "https://gi.yatta.moe/assets/UI/";
 
 export const AssetFallback: React.FC<AssetFallbackProps> = (props) => {
   const [src, setSrc] = useState(props.src);

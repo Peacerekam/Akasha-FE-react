@@ -68,6 +68,7 @@ $hardcoded-scale: 1;
       flex-direction: column;
       align-items: flex-end;
       pointer-events: none;
+      user-select: none;
 
       .single-config-button {
         display: flex;
