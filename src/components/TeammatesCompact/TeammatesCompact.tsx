@@ -1,6 +1,7 @@
 import "./style.scss";
 
 import React, { useContext } from "react";
+import { artifactIdFromIcon, shadeColor } from "../../utils/helpers";
 
 import AnemoBg from "../../assets/images/teammates/anemo-team-bg.png";
 import { AssetFallback } from "..";
@@ -14,7 +15,6 @@ import HydroBg from "../../assets/images/teammates/hydro-team-bg.png";
 import PyroBg from "../../assets/images/teammates/pyro-team-bg.png";
 import { StatIcon } from "../StatIcon";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
-import { shadeColor } from "../../utils/helpers";
 
 export type Elements =
   | "Cryo"
@@ -40,6 +40,7 @@ export type CalculationTeammate = {
     rarity?: "5" | "4" | "3";
     icon?: string;
     refinement?: 1 | 2 | 3 | 4 | 5;
+    weaponId?: string;
   };
 };
 
@@ -123,7 +124,7 @@ export const TeammatesCompact: React.FC<TeammatesCompactProps> = ({
   coloredBackground = true,
   simplify = false,
 }) => {
-  const { translate } = useContext(TranslationContext);
+  const { translate, language } = useContext(TranslationContext);
 
   if (!teammates) return null;
 
@@ -206,16 +207,22 @@ export const TeammatesCompact: React.FC<TeammatesCompactProps> = ({
       title = `Any teammate`;
       innerElement = flexTeammateIcon();
     } else if (isNonFill) {
-      title = getCharacterTitle(teammate);
+      if (!teammate.character?.artifactSet && !teammate.weapon) {
+        title = getCharacterTitle(teammate);
+      }
       innerElement = teammateIcon(teammate);
     } else {
-      title = `Any ${teammate.character?.element} teammate`;
-      if (teammate.character?.artifactSet) {
-        const rawSetNum = teammate.character?.artifactSet?.slice(0, 3);
-        const rawSetName = teammate.character?.artifactSet?.slice(3);
-        const translatedArtifactSet = translate(rawSetName || "");
-        title += ` - ${rawSetNum}${translatedArtifactSet}`;
+      if (!teammate.character?.artifactSet && !teammate.weapon) {
+        title = `Any ${teammate.character?.element} teammate`;
       }
+
+      // title = `Any ${teammate.character?.element} teammate`;
+      // if (teammate.character?.artifactSet) {
+      //   const rawSetNum = teammate.character?.artifactSet?.slice(0, 3);
+      //   const rawSetName = teammate.character?.artifactSet?.slice(3);
+      //   const translatedArtifactSet = translate(rawSetName || "");
+      //   title += ` - ${rawSetNum}${translatedArtifactSet}`;
+      // }
 
       innerElement = <StatIcon name={teammate.character?.element || ""} />;
       // innerElement = <div className="table-icon" />
@@ -235,6 +242,21 @@ export const TeammatesCompact: React.FC<TeammatesCompactProps> = ({
     ) as React.CSSProperties;
 
     const constellation = teammate.character?.constellation;
+
+    const weaponTooltip = {
+      "data-gi-type": "weapon",
+      "data-gi-id": teammate.weapon?.weaponId,
+      "data-gi-level": 90, // it's always 90
+      "data-gi-index": teammate.weapon?.refinement,
+      "data-gi-lang": language,
+    };
+
+    const artifactTooltip = {
+      "data-gi-type": "artifact",
+      "data-gi-id": artifactIdFromIcon(teammate.character?.artifactSetIcon),
+      "data-gi-index": 0, // 0 = Flower
+      "data-gi-lang": language,
+    };
 
     return (
       <div
@@ -257,7 +279,7 @@ export const TeammatesCompact: React.FC<TeammatesCompactProps> = ({
         {!simplify && (
           <div className="overlay-icons-container">
             {isNonFill && teammate.weapon?.icon ? (
-              <div className="overlay-weapon-wrapper">
+              <div className="overlay-weapon-wrapper" {...weaponTooltip}>
                 <AssetFallback
                   alt=" "
                   className="table-icon overlay-icon"
@@ -268,7 +290,7 @@ export const TeammatesCompact: React.FC<TeammatesCompactProps> = ({
               ""
             )}
             {teammate.character?.artifactSet ? (
-              <div className="overlay-artifact-wrapper">
+              <div className="overlay-artifact-wrapper" {...artifactTooltip}>
                 <AssetFallback
                   alt=" "
                   className="table-icon overlay-icon"

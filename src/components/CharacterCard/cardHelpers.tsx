@@ -96,7 +96,7 @@ export const scales = {
   },
 };
 
-export const toTalentProps = (row: any, keys: string[], chartsData: any) => {
+export const toTalentProps = (row: any, keys: string[], chartsData: any, index?: number) => {
   const talent = row?.talentsLevelMap?.[keys[0]];
   if (!talent) return null;
 
@@ -107,6 +107,7 @@ export const toTalentProps = (row: any, keys: string[], chartsData: any) => {
   return {
     ...talent,
     icon,
+    index
   };
 };
 

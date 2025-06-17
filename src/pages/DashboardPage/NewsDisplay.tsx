@@ -36,11 +36,25 @@ export const NewsDisplay: React.FC = () => {
     };
   }, []);
 
-  const maybeTimestampToRelative = (val: string) => {
+  const maybeTransformWord = (val: string) => {
+    // handle emojis
+    if (val.startsWith("<") && val.endsWith(">")) {
+      const isAnimated = val.startsWith("<a:");
+      const emojiName = val.split(":")?.[1];
+      const emojiID = val.split(":")?.[2]?.slice(0, -1);
+      const emojiSize = 20;
+      const params = `?size=${emojiSize}${isAnimated ? "&animated=true" : ""}`;
+      const baseURL = `https://cdn.discordapp.com/emojis/`;
+      const emojiURL = `${baseURL}${emojiID}.webp${params}`;
+      return `![${emojiName}](${emojiURL})`;
+    }
+
+    // normal text
     if (!val.startsWith("<t:") && !val.endsWith(":R>")) {
       return val;
     }
 
+    // timestamp relative
     const formatter = new Intl.RelativeTimeFormat(`en`, { style: "long" });
     const now = +new Date() / 1000 / 60 / 60 / 24;
     const _timestamp = +("" + val).slice(3, -3);
@@ -77,7 +91,7 @@ export const NewsDisplay: React.FC = () => {
   };
 
   const maybeRelatifyTimestamps = (acc: string, val: string) => {
-    val = maybeTimestampToRelative(val);
+    val = maybeTransformWord(val);
     return acc + ` ${val}`;
   };
 

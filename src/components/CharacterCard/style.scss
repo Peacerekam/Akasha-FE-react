@@ -821,6 +821,7 @@ $hardcoded-scale: 1;
     }
     .character-constellations {
       // margin-top: 15px * $hardcoded-scale;
+      pointer-events: auto; // tooltips
       display: flex;
       flex-direction: column;
       gap: 13.5px * $hardcoded-scale;
@@ -912,6 +913,7 @@ $hardcoded-scale: 1;
       }
     }
     .character-talents {
+      pointer-events: auto; // tooltips
       position: absolute;
       bottom: 0;
       left: 420px * $hardcoded-scale;
@@ -1242,7 +1244,7 @@ $hardcoded-scale: 1;
       z-index: 2;
       width: 100%;
       display: flex;
-      gap: 10px * $hardcoded-scale;
+      // gap: 10px * $hardcoded-scale;
       min-height: 80px * $hardcoded-scale;
       margin-top: auto;
 
@@ -1255,6 +1257,7 @@ $hardcoded-scale: 1;
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
+        padding-left: 10px * $hardcoded-scale;
       }
       .weapon-stats {
         margin-top: 4px * $hardcoded-scale;
@@ -1338,6 +1341,8 @@ $hardcoded-scale: 1;
     bottom: 30px * $hardcoded-scale;
     z-index: 2;
 
+    pointer-events: none; // tooltips
+
     .mobile-fix {
       display: flex;
       gap: 15px * $hardcoded-scale;
@@ -1355,11 +1360,12 @@ $hardcoded-scale: 1;
     }
 
     .compact-artifact {
-      // overflow: hidden;
+      pointer-events: auto; // tooltips
       position: relative;
-      // min-width: 190px * $hardcoded-scale;
       width: 195px * $hardcoded-scale;
       background-color: black;
+      // overflow: hidden;
+      // min-width: 190px * $hardcoded-scale;
 
       // .substat {
       //   span:not(.roll-dots) {

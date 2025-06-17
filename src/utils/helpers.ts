@@ -1039,3 +1039,16 @@ export const supportsHEVCAlpha = () => {
     ua.indexOf("version/") !== -1;
   return isSafari && hasMediaCapabilities;
 };
+
+export const artifactIdFromIcon = (icon?: string) => {
+  if (!icon) return "";
+
+  // e.g. https://enka.network/ui/UI_RelicIcon_15019_4.png
+  if (icon.includes("enka.network")) {
+    const chunks = icon.split("/");
+    return chunks?.[chunks.length - 1]?.split("_")?.[2] || "";
+  }
+
+  // e.g. UI_RelicIcon_15019_4
+  return icon.split("_")?.[2] || "";
+};

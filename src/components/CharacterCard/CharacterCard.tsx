@@ -297,7 +297,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const canvasBgRef = useRef<HTMLCanvasElement>(null);
 
   // context
-  const { translate } = useContext(TranslationContext);
+  const { translate, language } = useContext(TranslationContext);
   const { contentWidth, isMobile } = useContext(AdProviderContext);
   const { metric, customRvFilter, getTopRanking } = useContext(SettingsContext);
   const { profileObject, isAuthenticated, boundAccounts, isBound } =
@@ -951,12 +951,21 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             </span>
           );
 
+          const weaponTooltip = {
+            "data-gi-type": "weapon",
+            "data-gi-id": calc.weapon.weaponId,
+            "data-gi-level": 90, // it's always 90
+            "data-gi-index": calc.weapon.refinement,
+            "data-gi-lang": language,
+          };
+
           const lbBadge = (
             <span className="lb-badge with-icon">
               <AssetFallback
                 alt=""
                 className="weapon-icon"
                 src={calc.weapon.icon}
+                {...weaponTooltip}
               />
               <span>
                 {short}{" "}
@@ -1699,10 +1708,20 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
     const statIconSize = 16;
 
+    const refinement = (row.weapon.weaponInfo?.refinementLevel?.value ?? 0) + 1;
+
+    const weaponTooltip = {
+      "data-gi-type": "weapon",
+      "data-gi-id": row.weapon.weaponId,
+      "data-gi-level": row.weapon.weaponInfo?.level ?? 1,
+      "data-gi-index": refinement,
+      "data-gi-lang": language,
+    };
+
     return (
       <div className="character-middle-fix">
         <div className="character-weapon relative">
-          <div className="weapon-icon">
+          <div className="weapon-icon" {...weaponTooltip}>
             <AssetFallback alt="" src={row.weapon.icon} />
             <div className="weapon-rarity">
               {[...Array(chartsData?.weaponMetadata?.rarity)].map((e, i) => (
@@ -1710,7 +1729,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
               ))}
             </div>
           </div>
-          <div className="weapon-data">
+          <div className="weapon-data" {...weaponTooltip}>
             <div className="weapon-name">{weaponName}</div>
             <div className="weapon-stats lighter-color">
               <div className="weapon-stat-with-icon">
@@ -1845,12 +1864,23 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   );
 
   const cardOverlay = useMemo(() => {
-    const talentSkillProps = toTalentProps(row, ["elementalSkill"], chartsData);
-    const talentBurstProps = toTalentProps(row, ["elementalBurst"], chartsData);
+    const talentSkillProps = toTalentProps(
+      row,
+      ["elementalSkill"],
+      chartsData,
+      1
+    );
+    const talentBurstProps = toTalentProps(
+      row,
+      ["elementalBurst"],
+      chartsData,
+      3
+    );
     const talentNAProps = toTalentProps(
       row,
       ["normalAttacks", "normalAttack"],
-      chartsData
+      chartsData,
+      0
     );
 
     return (
@@ -1891,11 +1921,21 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         <div className="character-constellations">
           {[0, 1, 2, 3, 4, 5].map((i) => {
             const constImg = chartsData?.assets?.constellations?.[i];
-            const isActivated = row.constellation >= i + 1;
+            const actualConst = i + 1;
+            const isActivated = row.constellation >= actualConst;
+
+            const constellationTooltip = {
+              "data-gi-type": "constellation",
+              "data-gi-id": row.characterId,
+              "data-gi-index": actualConst, // 1 - 6
+              "data-gi-lang": language,
+            };
+
             return (
               <div
                 key={`${constImg}-${i}`}
                 className={isActivated ? "activated" : ""}
+                {...constellationTooltip}
               >
                 {!isActivated && (
                   <span className="const-locked">
@@ -1921,9 +1961,15 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           })}
         </div>
         <div className="character-talents">
-          <TalentDisplay talent={talentNAProps} />
-          <TalentDisplay talent={talentSkillProps} />
-          <TalentDisplay talent={talentBurstProps} />
+          <TalentDisplay talent={talentNAProps} characterId={row.characterId} />
+          <TalentDisplay
+            talent={talentSkillProps}
+            characterId={row.characterId}
+          />
+          <TalentDisplay
+            talent={talentBurstProps}
+            characterId={row.characterId}
+          />
         </div>
       </>
     );
@@ -2263,7 +2309,24 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
         // clear the file from input element
         if (clear) {
-          setCompressedImage("");
+          setZoomLevel(1);
+          setDragOffset(null);
+          setCompressedImage(charImgUrl);
+
+          if (backgroundPictureRef?.current) {
+            backgroundPictureRef.current.src = charImgUrl;
+          }
+
+          // if zoomLevel doesn't change then force canvas re-paint
+          if (zoomLevel === 1 && compressedImage) {
+            const paintMode = pastedImage
+              ? false
+              : !customCardPic &&
+                !uploadPictureInputRef?.current?.files?.[0] &&
+                "gacha";
+
+            paintImageToCanvas(compressedImage, paintMode, false, null, true);
+          }
         }
 
         // invalidate cache
@@ -2274,13 +2337,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       }
     });
   };
-
-  // @TODO: ...
-  // @TODO: ...
-  // @TODO: ...
-  // @TODO: ...
-  // @TODO: ...
-  // @TODO: ...
 
   const handleToggleBuildVisibility = async (char: any) => {
     if (!char?.md5) return;

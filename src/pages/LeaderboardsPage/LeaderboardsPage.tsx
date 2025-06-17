@@ -63,6 +63,7 @@ type CategoryWeaponInfo = {
   details: string;
   teammates: CalculationTeammate[];
   short: string;
+  weaponId: string;
   filters?: {
     displayName: string;
     displayGroup: string;
@@ -101,7 +102,7 @@ export const LeaderboardsPage: React.FC = () => {
   const { setTitle } = useContext(TitleContext);
   const { lastProfiles } = useContext(LastProfilesContext);
   const { hoverElement } = useContext(HoverElementContext);
-  const { translate } = useContext(TranslationContext);
+  const { translate, language } = useContext(TranslationContext);
 
   // hooks
   const { calculationId, variant } = useParams();
@@ -738,6 +739,14 @@ export const LeaderboardsPage: React.FC = () => {
 
   const isNiche = thisCalc?.label === "niche";
 
+  const weaponTooltip = {
+    "data-gi-type": "weapon",
+    "data-gi-id": thisWeaponCalc?.weaponId,
+    "data-gi-level": 90, // it's always 90
+    "data-gi-index": thisWeaponCalc?.refinement,
+    "data-gi-lang": language,
+  };
+
   return (
     <div className="flex" key={calculationId}>
       {hoverElement}
@@ -807,6 +816,7 @@ export const LeaderboardsPage: React.FC = () => {
                         <span
                           className="flex gap-10"
                           style={{ flexWrap: "inherit" }}
+                          {...weaponTooltip} // @TODO: maybe move this to WeaponMiniDisplay in the future
                         >
                           Weapon:
                           <WeaponMiniDisplay

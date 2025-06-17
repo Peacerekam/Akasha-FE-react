@@ -1,9 +1,10 @@
 import "./style.scss";
 
+import { artifactIdFromIcon, getRelevantDmgBonuses } from "../../utils/helpers";
+
 import { AssetFallback } from "../AssetFallback";
 import { StatIcon } from "../StatIcon";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
-import { getRelevantDmgBonuses } from "../../utils/helpers";
 import { useContext } from "react";
 
 type StatListProps = {
@@ -60,7 +61,7 @@ const getStatsFromRow = (row: any) => {
 };
 
 export const StatListCard: React.FC<StatListProps> = ({ row }) => {
-  const { translate } = useContext(TranslationContext);
+  const { translate, language } = useContext(TranslationContext);
 
   const stats = getStatsFromRow(row);
 
@@ -75,8 +76,20 @@ export const StatListCard: React.FC<StatListProps> = ({ row }) => {
 
     return activeSets.map((name) => {
       const { icon, count } = artifactSets[name];
+
+      const artifactTooltip = {
+        "data-gi-type": "artifact",
+        "data-gi-id": artifactIdFromIcon(icon),
+        "data-gi-index": 0, // 0 = Flower
+        "data-gi-lang": language,
+      };
+
       return (
-        <div key={name} className="table-stat-row green-tint">
+        <div
+          key={name}
+          className="table-stat-row green-tint"
+          {...artifactTooltip}
+        >
           <div className="flex gap-5 w-100">
             <AssetFallback alt="" className="stat-icon" src={icon} />
             <span>{translate(name)}</span>
