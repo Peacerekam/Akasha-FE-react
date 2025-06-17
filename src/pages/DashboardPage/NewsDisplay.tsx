@@ -37,6 +37,11 @@ export const NewsDisplay: React.FC = () => {
   }, []);
 
   const maybeTransformWord = (val: string) => {
+    // normal text
+    if (!val.startsWith("<t:") && !val.endsWith(":R>")) {
+      return val;
+    }
+
     // handle emojis
     if (val.startsWith("<") && val.endsWith(">")) {
       const isAnimated = val.startsWith("<a:");
@@ -47,11 +52,6 @@ export const NewsDisplay: React.FC = () => {
       const baseURL = `https://cdn.discordapp.com/emojis/`;
       const emojiURL = `${baseURL}${emojiID}.webp${params}`;
       return `![${emojiName}](${emojiURL})`;
-    }
-
-    // normal text
-    if (!val.startsWith("<t:") && !val.endsWith(":R>")) {
-      return val;
     }
 
     // timestamp relative
