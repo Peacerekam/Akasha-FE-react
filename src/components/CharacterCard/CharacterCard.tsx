@@ -1467,10 +1467,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             setHasCustomBg("horizontal");
             setIsLoadingImage(false);
             setPicLoaded(true);
-
-            if (pasteFlag) {
-              setPastedImage(true);
-            }
+            setPastedImage(pasteFlag);
           },
           false
         );
@@ -2312,6 +2309,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           setZoomLevel(1);
           setDragOffset(null);
           setCompressedImage(charImgUrl);
+          setPastedImage(false);
 
           if (backgroundPictureRef?.current) {
             backgroundPictureRef.current.src = charImgUrl;

@@ -37,9 +37,42 @@ export const NewsDisplay: React.FC = () => {
   }, []);
 
   const maybeTransformWord = (val: string) => {
-    // normal text
-    if (!val.startsWith("<t:") && !val.endsWith(":R>")) {
-      return val;
+    // normal timestamp
+    if (val.startsWith("<t:") && val.endsWith(":R>")) {
+      // timestamp relative
+      const formatter = new Intl.RelativeTimeFormat(`en`, { style: "long" });
+      const now = +new Date() / 1000 / 60 / 60 / 24;
+      const _timestamp = +("" + val).slice(3, -3);
+      const then = _timestamp / 60 / 60 / 24;
+      const days = then - now;
+      const absDays = Math.abs(days);
+
+      let output = "";
+
+      if (absDays > 1) {
+        output = formatter.format(+days.toFixed(0), "days");
+      }
+
+      if (absDays * 24 < 1) {
+        output = formatter.format(+(days * 24 * 60).toFixed(0), "minutes");
+      }
+
+      if (absDays < 1) {
+        output = formatter.format(+(days * 24).toFixed(0), "hours");
+      }
+
+      const staticTimestamp = new Intl.DateTimeFormat("en", {
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      });
+
+      const staticTimestampDisplay = staticTimestamp.format(_timestamp * 1000);
+      output += ` (${staticTimestampDisplay})`;
+
+      return `\`${output}\``;
     }
 
     // handle emojis
@@ -54,40 +87,8 @@ export const NewsDisplay: React.FC = () => {
       return `![${emojiName}](${emojiURL})`;
     }
 
-    // timestamp relative
-    const formatter = new Intl.RelativeTimeFormat(`en`, { style: "long" });
-    const now = +new Date() / 1000 / 60 / 60 / 24;
-    const _timestamp = +("" + val).slice(3, -3);
-    const then = _timestamp / 60 / 60 / 24;
-    const days = then - now;
-    const absDays = Math.abs(days);
-
-    let output = "";
-
-    if (absDays > 1) {
-      output = formatter.format(+days.toFixed(0), "days");
-    }
-
-    if (absDays * 24 < 1) {
-      output = formatter.format(+(days * 24 * 60).toFixed(0), "minutes");
-    }
-
-    if (absDays < 1) {
-      output = formatter.format(+(days * 24).toFixed(0), "hours");
-    }
-
-    const staticTimestamp = new Intl.DateTimeFormat("en", {
-      month: "short",
-      day: "numeric",
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
-
-    const staticTimestampDisplay = staticTimestamp.format(_timestamp * 1000);
-    output += ` (${staticTimestampDisplay})`;
-
-    return `\`${output}\``;
+    // normal text
+    return val;
   };
 
   const maybeRelatifyTimestamps = (acc: string, val: string) => {
