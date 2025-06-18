@@ -119,6 +119,13 @@ $hardcoded-scale: 1;
       .character-left > div {
         cursor: grab;
       }
+      .absolute-overlay {
+        .talent-display,
+        .character-talents,
+        .character-constellations {
+          pointer-events: none;
+        }
+      }
     }
     .character-left > div {
       cursor: pointer;
