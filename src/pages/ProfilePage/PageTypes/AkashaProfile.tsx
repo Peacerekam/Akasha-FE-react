@@ -949,10 +949,12 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
             Add binding code to your in-game signature and press refresh button.
           </div>
           <div className="less-important">
+            If you get "contains illegal characters" message then you can
+            bypass it by separating the code with spaces (e.g. "123 45").
+          </div>
+          <div className="less-important">
             Be aware it might take around 5 minutes for in-game changes to be
-            reflected on the profile page. If the generated number "contains
-            illegal characters" then you can bypass it by separating it with
-            spaces.
+            reflected on the profile page.
           </div>
         </div>
       </div>
