@@ -404,7 +404,9 @@ export const HoyolabProfile: React.FC<AkashaProfileProps> = ({
           </div>
           <div className="less-important">
             Be aware it might take around 5 minutes for in-game changes to be
-            reflected on the profile page.
+            reflected on the profile page. If the generated number "contains
+            illegal characters" then you can bypass it by separating it with
+            spaces.
           </div>
         </div>
       </div>
