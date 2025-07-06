@@ -82,7 +82,7 @@ export const StygianRankText: React.FC<StygianRankTextProps> = ({
   const diffText = STYGIAN_DIFF_TO_NAME[diff] || "-";
   const diffRoman = NUM_TO_ROMAN[diff] || "-";
   const color = stygianProgressToColor(diff, badge);
-  const icon = STYGIAN_DIFF_TO_ICON[diff === 6 && seconds < 180 ? 7 : diff];
+  const icon = STYGIAN_DIFF_TO_ICON[diff === 6 && seconds <= 180 ? 7 : diff];
   const title = `${translate(
     "Stygian Onslaught"
   )} ${diffRoman} - ${diffText}: ${seconds}s`;
