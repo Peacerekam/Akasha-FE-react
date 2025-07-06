@@ -121,10 +121,18 @@ export const ArtifactsPage: React.FC = () => {
                 {/* {row.level ? `+${row.level - 1}` : ""} */}
               </span>
               {!!row.rerollNum && (
-                <FontAwesomeIcon
-                  icon={faRotateRight}
-                  style={{ top: -2, position: "relative", marginLeft: 5 }}
-                />
+                <span style={{ top: -2, position: "relative", marginLeft: 5 }}>
+                  <FontAwesomeIcon icon={faRotateRight} />
+                  {row.rerollNum > 1 && (
+                    <span
+                      style={{ top: -1, position: "relative" }}
+                      className="reroll-text"
+                    >
+                      {" "}
+                      ×{row.rerollNum}
+                    </span>
+                  )}
+                </span>
               )}
             </span>
           );

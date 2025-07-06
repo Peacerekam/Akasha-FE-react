@@ -309,10 +309,15 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
                 {/* {row.level ? `+${row.level - 1}` : ""} */}
               </span>
               {!!row.rerollNum && (
-                <FontAwesomeIcon
-                  icon={faRotateRight}
-                  style={{ position: "relative", marginLeft: 5 }}
-                />
+                <>
+                  <FontAwesomeIcon
+                    icon={faRotateRight}
+                    style={{ position: "relative", marginLeft: 5 }}
+                  />
+                  {row.rerollNum > 1 && (
+                    <span className="reroll-text"> ×{row.rerollNum}</span>
+                  )}
+                </>
               )}
             </span>
           );
