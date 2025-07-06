@@ -1,3 +1,16 @@
+.artifact-details-wrapper {
+  @media (max-width: 900px) {
+    justify-content: flex-start !important;
+    margin-left: 100px;
+  }
+  @media (max-width: 850px) {
+    margin-left: 40px;
+  }
+  @media (max-width: 750px) {
+    margin-left: 10px;
+  }
+}
+
 .artifact-details {
   margin: 10px 0;
 
@@ -58,7 +71,7 @@
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: translate(-50%, -50%);
+        transform: translate(-50%, -75%);
         opacity: 0.15;
         color: red;
         pointer-events: none;

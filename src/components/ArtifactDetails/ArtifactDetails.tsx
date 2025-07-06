@@ -39,6 +39,7 @@ export const ArtifactDetails: React.FC<ArtifactDetailsProps> = (row) => {
   return (
     <div className="expanded-row">
       <div
+        className="artifact-details-wrapper"
         style={{
           display: "flex",
           justifyContent: "center",
@@ -147,7 +148,7 @@ export const ArtifactDetails: React.FC<ArtifactDetailsProps> = (row) => {
                             >
                               {j === 0 && <StatIcon name={key} />}
                               {j !== 0 ? "- " : ""}
-                              
+
                               <div
                                 className="exact-substat"
                                 style={{ minWidth: cellWidth }}
