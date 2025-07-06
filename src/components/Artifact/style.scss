@@ -117,7 +117,7 @@
     opacity: 0.8;
     white-space: nowrap;
     > .substat {
-      width: calc(var(--artifact-width) / 1.095);
+      width: calc(var(--artifact-width) / 1.09);
       display: flex;
       > .substat-name {
         overflow: hidden;
@@ -126,9 +126,24 @@
       > .substat-value {
         margin-right: 5px;
       }
+
+      &.show-rolls-num {
+        &::before {
+          border-radius: 100px;
+          width: calc(var(--artifact-width) / 18);
+          height: calc(var(--artifact-width) / 18);
+          text-align: center;
+          font-size: calc(var(--artifact-width) / 21);
+          background: black;
+          color: #ece5d8;
+          position: relative;
+          top: 1px;
+        }
+      }
+
       &::before {
-        content: "·";
-        margin-right: calc(var(--artifact-width) / 200);
+        content: attr(data-rolls-num);
+        margin-right: calc(var(--artifact-width) / 80);
       }
     }
   }

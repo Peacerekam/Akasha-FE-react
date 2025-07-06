@@ -129,14 +129,19 @@ export const Artifact: React.FC<ArtifactProps> = ({
             artifact.substats[key]
           );
 
+          const showRollsNum = summedArtifactRolls[key].count > 1;
+          const rollsNum = showRollsNum ? summedArtifactRolls[key].count : "·";
+
           return (
             <div
-              style={{ opacity: opacity }}
+              data-rolls-num={rollsNum}
+              style={{ opacity }}
               key={normSubName}
               className={cssJoin([
                 "substat",
                 normSubName,
                 isCV ? "critvalue" : "",
+                showRollsNum ? "show-rolls-num" : ""
               ])}
             >
               <span className="substat-name">
