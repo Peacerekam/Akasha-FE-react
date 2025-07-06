@@ -25,9 +25,11 @@ import {
 import React, { useContext, useMemo } from "react";
 
 import DomainBackground from "../../assets/images/Tenshukaku_Concept_Art.webp";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { TableColumn } from "../../types/TableColumn";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
 import { fixCritValue } from "../../utils/substats";
 import { useNavigate } from "react-router-dom";
 
@@ -106,10 +108,24 @@ export const ArtifactsPage: React.FC = () => {
               }}
             >
               {/* <div style={{ marginBottom: '5px'}}>{"⭐".repeat(row.stars)}</div> */}
-              <div>
+              <span
+                style={{
+                  maxWidth: 245,
+                  textOverflow: "ellipsis",
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
+                  display: "inline-block",
+                }}
+              >
                 {translate(row.name)}
                 {/* {row.level ? `+${row.level - 1}` : ""} */}
-              </div>
+              </span>
+              {!!row.rerollNum && (
+                <FontAwesomeIcon
+                  icon={faRotateRight}
+                  style={{ top: -2, position: "relative", marginLeft: 5 }}
+                />
+              )}
             </span>
           );
 

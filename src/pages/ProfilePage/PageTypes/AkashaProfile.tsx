@@ -311,7 +311,7 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
               {!!row.rerollNum && (
                 <FontAwesomeIcon
                   icon={faRotateRight}
-                  style={{ top: 2, position: "relative", marginLeft: 5 }}
+                  style={{ position: "relative", marginLeft: 5 }}
                 />
               )}
             </span>
