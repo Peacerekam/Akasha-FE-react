@@ -1,6 +1,6 @@
 import "./style.scss";
 
-import { DIFF_COLORS } from "../AbyssRankText";
+import { ABYSS_COLORS } from "../AbyssRankText";
 import Star from "../../assets/icons/theater_star.png";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import { cssJoin } from "../../utils/helpers";
@@ -8,23 +8,23 @@ import { useContext } from "react";
 
 const theaterProgressToColor = (stars: number, badge?: boolean) => {
   if (stars >= 10) {
-    if (badge) return DIFF_COLORS[0];
+    if (badge) return ABYSS_COLORS[0];
     return "rgb(255, 217, 0)"; // I - gold
   }
   if (stars >= 8) {
-    if (badge) return DIFF_COLORS[1];
+    if (badge) return ABYSS_COLORS[1];
     return "orange"; // II - orange
   }
   if (stars >= 6) {
-    if (badge) return DIFF_COLORS[2];
+    if (badge) return ABYSS_COLORS[2];
     return "rgb(102, 163, 255)"; // III - purple
   }
   if (stars >= 3) {
-    if (badge) return DIFF_COLORS[3];
+    if (badge) return ABYSS_COLORS[3];
     return "rgb(194, 102, 255)"; // IV - blue
   }
 
-  if (badge) return DIFF_COLORS[4];
+  if (badge) return ABYSS_COLORS[4];
   return "gray";
 };
 

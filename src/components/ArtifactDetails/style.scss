@@ -1,0 +1,81 @@
+.artifact-details {
+  margin: 10px 0;
+
+  > div {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .arrow-right {
+    margin: 0 10px;
+    position: relative;
+    top: -35px;
+
+    @media (max-width: 1000px) {
+      margin: 0 8px;
+      svg {
+        width: 20px;
+      }
+    }
+  }
+
+  .display-rolls {
+    .roll-value {
+      display: none;
+    }
+    &:hover,
+    &:focus,
+    &:focus-within {
+      .exact-substat {
+        display: none;
+      }
+      .roll-value {
+        display: block;
+      }
+    }
+  }
+
+  .profile-page-artifact {
+    &::after,
+    &::before {
+      pointer-events: none !important;
+    }
+  }
+
+  &:not(.is-consumed) {
+    .profile-page-artifact {
+      --artifact-width: max(min(250px, 24vw), 210px) !important;
+    }
+  }
+
+  &.is-consumed {
+    > div {
+      position: relative;
+
+      .consume-icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0.15;
+        color: red;
+        pointer-events: none;
+      }
+
+      .profile-page-artifact {
+        opacity: 0.5;
+        pointer-events: all !important;
+
+        --artifact-width: max(min(210px, 20vw), 170px) !important;
+      }
+    }
+  }
+
+  &.selected-artifact {
+    .profile-page-artifact {
+      box-shadow: 0 0 0 6px #202525, 0 0 0 8px cyan !important;
+    }
+  }
+}

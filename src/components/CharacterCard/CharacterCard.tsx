@@ -2190,10 +2190,13 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         offsetElementBy(".lb-badge > span", -1);
         // offsetElementBy(".compact-artifact-crit-value > span", -2);
         // offsetElementBy(".compact-artifact-crit-value > .smol-percentage", -2);
-        offsetElementBy(
-          ".compact-artifact-crit-value > span:not(.metric-formula)",
-          -1
-        );
+        // offsetElementBy(
+        //   ".compact-artifact-crit-value > span:not(.metric-formula)",
+        //   -1
+        // );
+
+        offsetElementBy(".compact-artifact-crit-value .metric-text", -1);
+
         offsetElementBy(".table-stat-row span", -1);
         offsetElementBy(".table-stat-row > div:not(.flex)", -1);
 
@@ -2206,6 +2209,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           ".roll-dots",
           `translateX(calc(-100% - 3px)) translateY(-1px)`
         );
+
+        offsetElementBy(".reroll-text", -1);
       },
     };
 

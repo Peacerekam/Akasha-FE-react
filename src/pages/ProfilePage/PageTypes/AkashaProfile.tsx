@@ -304,10 +304,16 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
               }}
             >
               {/* <div style={{ marginBottom: '5px'}}>{"⭐".repeat(row.stars)}</div> */}
-              <div>
+              <span>
                 {translate(row.name)}
                 {/* {row.level ? `+${row.level - 1}` : ""} */}
-              </div>
+              </span>
+              {!!row.rerollNum && (
+                <FontAwesomeIcon
+                  icon={faRotateRight}
+                  style={{ top: 2, position: "relative", marginLeft: 5 }}
+                />
+              )}
             </span>
           );
 
@@ -949,8 +955,8 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
             Add binding code to your in-game signature and press refresh button.
           </div>
           <div className="less-important">
-            If you get "contains illegal characters" message then you can
-            bypass it by separating the code with spaces (e.g. "123 45").
+            If you get "contains illegal characters" message then you can bypass
+            it by separating the code with spaces (e.g. "123 45").
           </div>
           <div className="less-important">
             Be aware it might take around 5 minutes for in-game changes to be
@@ -1137,6 +1143,7 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
                   uid: isCombined ? uid?.slice(1) : uid,
                   uids: isCombined ? relevantProfilesQuery : "",
                 }}
+                expandableRows
               />
             )}
           </div>

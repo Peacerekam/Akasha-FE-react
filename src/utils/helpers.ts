@@ -1,4 +1,3 @@
-import { AMBR_ASSETS, ENKA_ASSETS, getStatsFromRow } from "../components";
 import {
   REAL_SUBSTAT_VALUES,
   STAT_NAMES,
@@ -8,6 +7,7 @@ import {
 
 import { IHash } from "../types/IHash";
 import { getDefaultRvFilters } from "../components/RollList/defaultFilters";
+import { getStatsFromRow } from "../components";
 
 export const PATREON_URL = "https://www.patreon.com/mimee";
 // export const DISCORD_URL = "https://discord.gg/akasha";
@@ -413,6 +413,9 @@ export const iconUrlToNamecardUrl = (url: string) => {
     .replace("UI_AvatarIcon", "UI_NameCardPic")
     .replace(".png", `${iDontFuckingEven}_P.png`);
 };
+
+export const ENKA_ASSETS = "https://enka.network/ui/";
+export const AMBR_ASSETS = "https://gi.yatta.moe/assets/UI/";
 
 export const toEnkaUrl = (
   assetName?: string,

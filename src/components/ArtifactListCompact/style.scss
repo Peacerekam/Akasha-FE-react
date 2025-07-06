@@ -6,8 +6,31 @@
   // overflow: hidden;
   min-width: 180px;
   flex-wrap: nowrap !important;
-
   height: 135px;
+
+  .reroll-indicator {
+    // position: absolute;
+    // text-align: center;
+    // font-family: "GenshinFont";
+    // width: 100%;
+    // z-index: 1;
+    // font-size: 10px;
+    // left: 3px;
+    // top: 25px;
+
+    svg {
+      font-size: 10px;
+    }
+
+    // > div {
+    //   // background-color: rgba(0, 0, 0, 0.75);
+    //   // padding: 2px 5px;
+    //   // border-radius: 6px;
+    //   // border-top-left-radius: 5px;
+    //   // margin: 0 auto;
+    //   // width: 80px;
+    // }
+  }
 
   .compact-artifact-metric-container,
   .compact-artifact-icon-container {
@@ -68,19 +91,20 @@
     }
     .compact-artifact-crit-value {
       z-index: 2;
-      background-color: #000000be;
-      border-radius: 6px;
-      padding: 3px 5px;
-      position: absolute;
-      top: 3px;
-      left: 3px;
+      // position: absolute;
+      // top: 3px;
+      // left: 3px;
+      margin-top: 3px;
+      margin-left: 3px;
+
       font-size: 12px;
       line-height: 14px;
-      height: 14px;
-      // display: flex;
+      height: 20px;
+      display: flex;
+      gap: 2px;
       // gap: 2px;
-      display: block;
-      max-width: 60px;
+      // display: block;
+      // max-width: 60px;
       text-align: center;
       text-wrap: nowrap !important;
       white-space: nowrap !important;
@@ -88,6 +112,13 @@
       > *:not(.metric-formula) * {
         text-wrap: nowrap !important;
         white-space: nowrap !important;
+      }
+
+      > span {
+        background-color: #000000be;
+        border-radius: 6px;
+        padding: 3px 5px;
+        max-width: 60px !important;
       }
     }
     .compact-artifact-main-stat {
@@ -306,11 +337,11 @@
 
 .metric-formula {
   position: absolute;
-  top: 20px;
-  left: 0px;
+  top: 23px;
+  left: 3px;
   font-size: 14px;
   background-color: rgba(0, 0, 0, 0.85);
-  border: 1.2px inset rgba(white, 0.5);
+  border: 1px solid rgba(white, 0.5);
   border-radius: 6px;
   min-width: 75px;
   max-width: 85px;

@@ -194,7 +194,7 @@ $hardcoded-scale: 1;
       .compact-artifact-icon-container {
         .compact-artifact-crit-value {
           max-width: 45px * $hardcoded-scale;
-          height: 14px * $hardcoded-scale;
+          // height: 14px * $hardcoded-scale;
         }
       }
     }
@@ -237,6 +237,7 @@ $hardcoded-scale: 1;
     }
     .compact-artifact-subs {
       margin: 15px * $hardcoded-scale;
+      margin-top: 17px * $hardcoded-scale;
       margin-left: 0;
       width: 70px * $hardcoded-scale;
       .substat {

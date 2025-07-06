@@ -19,12 +19,14 @@ import {
 
 import { ARBadge } from "../ARBadge";
 import { AssetFallback } from "../AssetFallback";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { RegionBadge } from "../RegionBadge";
 import { RollList } from "../RollList";
 import { SettingsContext } from "../../context/SettingsProvider/SettingsProvider";
 import { StatIcon } from "../StatIcon";
 import { TalentsDisplay } from "../TalentsDisplay";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
 import { getDefaultRvFilters } from "../RollList/defaultFilters";
 import { roundToFixed } from "../../utils/substats";
 
@@ -67,6 +69,7 @@ export const CompactArtifact: React.FC<CompactArtifactProps> = ({
       className={`compact-artifact ${className} metric-${_metric}`}
     >
       {!!canvasBgProps && <ArtifactBackgroundOnCanvas {...canvasBgProps} />}
+
       {artifact.icon !== null ? (
         <div className="compact-artifact-icon-container">
           <ArtifactOnCanvas icon={artifact.icon} />
@@ -222,6 +225,8 @@ export const ArtifactMetricDisplay: React.FC<{
       >
         {displayFormula ? metricMathDisplay : ""}
         <span>
+          <span className="metric-text">
+            
           {metricValue}{" "}
           {_metric === "CV" ? (
             "cv"
@@ -230,7 +235,18 @@ export const ArtifactMetricDisplay: React.FC<{
               <span className="smol-percentage">%</span> RV
             </>
           )}
+          </span>
         </span>
+        {artifact.rerollNum > 0 && (
+          <span>
+            <div className="reroll-indicator">
+              <span className="metric-text">
+                <FontAwesomeIcon icon={faRotateRight} />{" "}
+                <span className="reroll-text">×{artifact.rerollNum}</span>
+              </span>
+            </div>
+          </span>
+        )}
       </span>
     </div>
   );
@@ -354,7 +370,12 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
     <div className="flex expanded-row">
       <div className="character-preview">
         <div className="character-type-preview">
-          <AssetFallback alt="" className="table-icon" src={row.icon} title={row?.name} />
+          <AssetFallback
+            alt=""
+            className="table-icon"
+            src={row.icon}
+            title={row?.name}
+          />
           {translate("Lv.")} {row?.propMap?.level?.val || "??"}
           {" - "}
           {row.type === "current" ? translate(row.name) : row.type}

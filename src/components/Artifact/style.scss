@@ -67,6 +67,15 @@
     margin-left: calc(var(--artifact-width) / 14.3);
     font-size: calc(var(--artifact-width) / 20);
   }
+  .artifact-reroll-num {
+    // color: #b5a6a0;
+    color: black;
+    opacity: 0.75;
+    position: absolute;
+    top: calc(var(--artifact-width) / 1.615);
+    margin-left: calc(var(--artifact-width) / 1.2);
+    font-size: calc(var(--artifact-width) / 20);
+  }
   .artifact-stat-name {
     color: #b5a6a0;
     margin-left: calc(var(--artifact-width) / 14.3);
@@ -198,6 +207,9 @@
     z-index: 1;
   }
 
+  .reroll-indicator {
+    color: $color-1;
+  }
   .substat.rv-relevant {
     &::after {
       background: linear-gradient(
@@ -207,17 +219,17 @@
         transparent 90%
       ) !important;
       color: $color-1;
-      border-right-color: $color-1;
+      border-right-color: $color-1 !important;
     }
-    
+
     .stat-highlight.stat-highlight {
-      border-right-color: $color-1;
+      border-right-color: $color-1 !important;
     }
   }
 
   .compact-artifact-crit-value {
     color: $color-1;
-    &.pointer:hover {
+    &.pointer:hover > span:not(.metric-formula) {
       box-shadow: inset 0 0 0 1px $color-1 !important;
     }
   }
@@ -264,6 +276,9 @@
     z-index: 1;
   }
 
+  .reroll-indicator {
+    color: $color-1;
+  }
   .substat.rv-relevant {
     &::after {
       background: linear-gradient(
@@ -273,16 +288,16 @@
         transparent 90%
       ) !important;
       color: $color-1;
-      border-right-color: $color-1;
+      border-right-color: $color-1 !important;
     }
     .stat-highlight.stat-highlight {
-      border-right-color: $color-1;
+      border-right-color: $color-1 !important;
     }
   }
 
   .compact-artifact-crit-value {
     color: $color-1;
-    &.pointer:hover {
+    &.pointer:hover > span:not(.metric-formula) {
       box-shadow: inset 0 0 0 1px $color-1 !important;
     }
   }
@@ -319,6 +334,9 @@
     z-index: 1;
   }
 
+  .reroll-indicator {
+    color: $color-1;
+  }
   .substat.rv-relevant {
     &::after {
       background: linear-gradient(
@@ -328,16 +346,16 @@
         transparent 90%
       ) !important;
       color: $color-1;
-      border-right-color: $color-1;
+      border-right-color: $color-1 !important;
     }
     .stat-highlight.stat-highlight {
-      border-right-color: $color-1;
+      border-right-color: $color-1 !important;
     }
   }
 
   .compact-artifact-crit-value {
     color: $color-1;
-    &.pointer:hover {
+    &.pointer:hover > span:not(.metric-formula) {
       box-shadow: inset 0 0 0 1px $color-1 !important;
     }
   }
@@ -374,6 +392,9 @@
     z-index: 1;
   }
 
+  .reroll-indicator {
+    color: $color-1;
+  }
   .substat.rv-relevant {
     &::after {
       background: linear-gradient(
@@ -383,16 +404,16 @@
         transparent 90%
       ) !important;
       color: $color-1;
-      border-right-color: $color-1;
+      border-right-color: $color-1 !important;
     }
     .stat-highlight.stat-highlight {
-      border-right-color: $color-1;
+      border-right-color: $color-1 !important;
     }
   }
 
   .compact-artifact-crit-value {
     color: $color-1;
-    &.pointer:hover {
+    &.pointer:hover > span:not(.metric-formula) {
       box-shadow: inset 0 0 0 1px $color-1 !important;
     }
   }
@@ -418,6 +439,9 @@
     z-index: 1;
   }
 
+  .reroll-indicator {
+    color: $color-1;
+  }
   .substat.rv-relevant {
     &::after {
       background: linear-gradient(
@@ -427,16 +451,16 @@
         transparent 90%
       ) !important;
       color: $color-1;
-      border-right-color: $color-1;
+      border-right-color: $color-1 !important;
     }
     .stat-highlight.stat-highlight {
-      border-right-color: $color-1;
+      border-right-color: $color-1 !important;
     }
   }
 
   .compact-artifact-crit-value {
     color: $color-1;
-    &.pointer:hover {
+    &.pointer:hover > span:not(.metric-formula) {
       box-shadow: inset 0 0 0 1px rgb(194, 102, 255) !important;
     }
   }
@@ -462,6 +486,9 @@
     z-index: 1;
   }
 
+  .reroll-indicator {
+    color: $color-1;
+  }
   .substat.rv-relevant {
     &::after {
       background: linear-gradient(
@@ -471,16 +498,16 @@
         transparent 90%
       ) !important;
       color: $color-1;
-      border-right-color: $color-1;
+      border-right-color: $color-1 !important;
     }
     .stat-highlight.stat-highlight {
-      border-right-color: $color-1;
+      border-right-color: $color-1 !important;
     }
   }
 
   .compact-artifact-crit-value {
     color: $color-1;
-    &.pointer:hover {
+    &.pointer:hover > span:not(.metric-formula) {
       box-shadow: inset 0 0 0 1px $color-1 !important;
     }
   }
@@ -492,6 +519,9 @@
   position: relative;
   border: 1px solid $color-1;
 
+  .reroll-indicator {
+    color: $color-1;
+  }
   .substat.rv-relevant {
     &::after {
       background: linear-gradient(
@@ -501,16 +531,16 @@
         transparent 90%
       ) !important;
       color: $color-1;
-      border-right-color: $color-1;
+      border-right-color: $color-1 !important;
     }
     .stat-highlight.stat-highlight {
-      border-right-color: $color-1;
+      border-right-color: $color-1 !important;
     }
   }
 
   .compact-artifact-crit-value {
     color: $color-1;
-    &.pointer:hover {
+    &.pointer:hover > span:not(.metric-formula) {
       box-shadow: inset 0 0 0 1px $color-1 !important;
     }
   }

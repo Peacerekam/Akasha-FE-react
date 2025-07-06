@@ -9,6 +9,7 @@ import {
   LastUpdated,
   RegionBadge,
   RowIndex,
+  StygianRankText,
   StylizedContentBlock,
   TheaterRankText,
 } from "../../components";
@@ -94,13 +95,13 @@ export const AccountsPage: React.FC = () => {
         name: "Signature",
         sortable: false,
         sortField: "playerInfo.signature",
-        width: "285px",
+        width: "245px",
         cell: (row) => {
           const signature = row?.playerInfo?.signature || "";
           return (
             <div
               style={{
-                width: 285,
+                width: 245,
                 textOverflow: "ellipsis",
                 overflow: "hidden",
                 whiteSpace: "nowrap",
@@ -163,16 +164,26 @@ export const AccountsPage: React.FC = () => {
       //   },
       // },
       {
-        name: "",
-        sortable: false,
-        sortField: "playerInfo.towerFloorIndex",
-        width: "80px",
+        name: "Stygian",
+        sortable: true,
+        sortField: "playerInfo.stygianScore",
+        width: "70px",
         cell: (row) => {
-          return <AbyssRankText row={row} />;
+          return <StygianRankText row={row} />;
         },
       },
       {
-        name: "",
+        name: "Abyss",
+        sortable: false,
+        sortField: "playerInfo.towerFloorIndex",
+        // width: "80px",
+        width: "55px",
+        cell: (row) => {
+          return <AbyssRankText row={row} onlyStars />;
+        },
+      },
+      {
+        name: "Theater",
         sortable: false,
         sortField: "playerInfo.theater.stars",
         width: "55px",

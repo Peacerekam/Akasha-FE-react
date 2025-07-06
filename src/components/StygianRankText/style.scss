@@ -1,0 +1,35 @@
+.abyss-star {
+  height: 16px;
+  width: 16px;
+}
+
+.abyss-separator {
+  height: 10px;
+  width: 10px;
+}
+
+.abyss-cell {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  color: var(--color);
+}
+
+.abyss-badge {
+  font-family: "GenshinFont";
+  display: inline-block;
+  white-space: nowrap;
+  padding: 1px 4px;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  box-shadow: 0 0 3px rgba(black, 0.5);
+  display: flex;
+  justify-content: center;
+  gap: 3px;
+  background-color: var(--color);
+  border-color: var(--color);
+  color: white !important;
+  text-shadow: none;
+}

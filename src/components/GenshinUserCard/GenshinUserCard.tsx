@@ -12,6 +12,7 @@ import { LastProfilesContext } from "../../context/LastProfiles/LastProfilesCont
 import { RegionBadge } from "../RegionBadge";
 import { SettingsContext } from "../../context/SettingsProvider/SettingsProvider";
 import { Spinner } from "../Spinner";
+import { StygianRankText } from "../StygianRankText";
 import { TheaterRankText } from "../TheaterRankText";
 import { cssJoin } from "../../utils/helpers";
 import { faStar as faStarRegular } from "@fortawesome/free-regular-svg-icons";
@@ -220,8 +221,9 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
                 <ARBadge adventureRank={playerInfo.level} />
               </div>
               <div className="badges-container endgame">
+                <StygianRankText row={accountData.account} badge />
                 <TheaterRankText row={accountData.account} badge />
-                <AbyssRankText row={accountData.account} badge />
+                <AbyssRankText row={accountData.account} badge onlyStars />
               </div>
             </div>
           </div>

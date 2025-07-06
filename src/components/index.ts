@@ -48,3 +48,4 @@ export * from "./AbyssRankText";
 export * from "./TheaterRankText";
 export * from "./ProfileSelector";
 export * from "./ExpandedRowBuilds";
+export * from "./StygianRankText";

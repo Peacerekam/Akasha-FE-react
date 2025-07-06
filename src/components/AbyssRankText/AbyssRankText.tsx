@@ -7,7 +7,7 @@ import { useContext } from "react";
 
 // import Separator from "../../assets/icons/abyss_separator.png";
 
-export const DIFF_COLORS = {
+export const ABYSS_COLORS = {
   0: "rgb(168, 120, 31)",
   1: "rgb(168, 154, 31)",
   2: "rgb(0, 122, 122)",
@@ -25,32 +25,37 @@ export const abyssProgressToColor = (
   // }
 
   if (floor === 11 && chamber === 3) {
-    if (badge) return DIFF_COLORS[2];
+    if (badge) return ABYSS_COLORS[2];
     return "rgb(102, 163, 255)"; // III - purple
   }
   if (floor === 11) {
-    if (badge) return DIFF_COLORS[3];
+    if (badge) return ABYSS_COLORS[3];
     return "rgb(194, 102, 255)"; // IV - blue
   }
   if (floor === 12 && chamber === 3) {
-    if (badge) return DIFF_COLORS[0];
+    if (badge) return ABYSS_COLORS[0];
     return "rgb(255, 217, 0)"; // I - gold
   }
   if (floor === 12) {
-    if (badge) return DIFF_COLORS[1];
+    if (badge) return ABYSS_COLORS[1];
     return "orange"; // II - orange
   }
 
-  if (badge) return DIFF_COLORS[4];
+  if (badge) return ABYSS_COLORS[4];
   return "gray";
 };
 
 type AbyssRankTextProps = {
   row?: any;
   badge?: boolean;
+  onlyStars?: boolean;
 };
 
-export const AbyssRankText: React.FC<AbyssRankTextProps> = ({ row, badge }) => {
+export const AbyssRankText: React.FC<AbyssRankTextProps> = ({
+  row,
+  badge,
+  onlyStars,
+}) => {
   const { translate } = useContext(TranslationContext);
 
   const floor = row?.playerInfo?.towerFloorIndex || "";
@@ -82,9 +87,7 @@ export const AbyssRankText: React.FC<AbyssRankTextProps> = ({ row, badge }) => {
             alt="Star"
             src={Star}
           />
-          {stars}
-          {" • "}
-          {abyssProgress}
+          {onlyStars ? stars : `${stars} • ${abyssProgress}`}
         </>
       ) : (
         abyssProgress

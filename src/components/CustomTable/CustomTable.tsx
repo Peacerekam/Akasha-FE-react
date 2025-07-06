@@ -37,6 +37,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
+import { ArtifactDetails } from "../ArtifactDetails";
 import { ExpandedRowBuilds } from "../ExpandedRowBuilds";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
@@ -712,14 +713,18 @@ export const CustomTable: React.FC<CustomTableProps> = ({
         );
       }
 
+      const isArtifactRow = !!row.equipType;
+
+      if (isArtifactRow) {
+        return <ArtifactDetails uid={row.uid} artifactHash={row._id} />;
+      }
+
       return (
-        <>
-          <ExpandedRowBuilds
-            row={row}
-            isProfile={!!fetchParams.uid && !fetchParams.calculationId}
-            invalidateCache={invalidateCache}
-          />
-        </>
+        <ExpandedRowBuilds
+          row={row}
+          isProfile={!!fetchParams.uid && !fetchParams.calculationId}
+          invalidateCache={invalidateCache}
+        />
       );
     },
     [translate, rows]

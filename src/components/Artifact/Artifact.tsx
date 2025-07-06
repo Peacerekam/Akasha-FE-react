@@ -14,9 +14,11 @@ import {
 
 import ArtifactBackground from "../../assets/images/artifact-5star-bg.png";
 import { AssetFallback } from "../AssetFallback";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import NoArtifact from "../../assets/images/no-artifact.png";
 import RarityStar from "../../assets/images/star.png";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
 import { fixCritValue } from "../../utils/substats";
 
 type ArtifactProps = {
@@ -89,6 +91,14 @@ export const Artifact: React.FC<ArtifactProps> = ({
       <div className="artifact-crit-value">
         {critValue > 0 ? `${critValue} cv` : ""}
       </div>
+      {artifact.rerollNum ? (
+        <div className="artifact-reroll-num">
+          <FontAwesomeIcon icon={faRotateRight} />{" "}
+          <span className="reroll-text">×{artifact.rerollNum}</span>
+        </div>
+      ) : (
+        ""
+      )}
       <div className="artifact-stat-name">{translate(mainStatKey)}</div>
       <div className="artifact-stat-value">
         {mainStatValue}

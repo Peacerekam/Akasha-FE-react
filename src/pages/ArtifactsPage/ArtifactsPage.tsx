@@ -235,6 +235,7 @@ export const ArtifactsPage: React.FC = () => {
           columns={ARTIFACT_COLUMNS}
           defaultSort="critValue"
           projectParamsToPath
+          expandableRows
         />
       </div>
     </div>
