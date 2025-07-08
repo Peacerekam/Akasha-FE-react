@@ -83,14 +83,16 @@ export const StygianRankText: React.FC<StygianRankTextProps> = ({
   const diffRoman = NUM_TO_ROMAN[diff] || "-";
   const color = stygianProgressToColor(diff, badge);
   const icon = STYGIAN_DIFF_TO_ICON[diff === 6 && seconds <= 180 ? 7 : diff];
+  // const susLevel = row?.isCheating ? 2 : row?.susLevel || 0;
   const susLevel = row?.susLevel || 0;
-  const title = `${susLevel > 0 ? "SUSPICIOUS CLEAR - " : ""}${translate(
+  const isSuspicious = susLevel > 0;
+  const title = `${isSuspicious ? "SUSPICIOUS CLEAR - " : ""}${translate(
     "Stygian Onslaught"
   )} ${diffRoman} - ${diffText}: ${seconds}s`;
   const classNames = cssJoin([
     "abyss-cell",
     badge ? "abyss-badge" : "",
-    susLevel > 1 ? "strike-through" : "",
+    isSuspicious ? "strike-through" : "",
   ]);
 
   return (
@@ -98,7 +100,7 @@ export const StygianRankText: React.FC<StygianRankTextProps> = ({
       style={
         {
           "--color": color,
-          width: susLevel ? "fit-content" : "auto",
+          width: isSuspicious ? "fit-content" : "auto",
         } as React.CSSProperties
       }
       className={classNames}
