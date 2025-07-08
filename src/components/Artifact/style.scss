@@ -144,6 +144,7 @@
       &::before {
         content: attr(data-rolls-num);
         margin-right: calc(var(--artifact-width) / 80);
+        flex-shrink: 0;
       }
     }
   }

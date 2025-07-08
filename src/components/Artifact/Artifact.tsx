@@ -130,7 +130,9 @@ export const Artifact: React.FC<ArtifactProps> = ({
           );
 
           const showRollsNum = summedArtifactRolls[key].count > 1;
-          const rollsNum = showRollsNum ? summedArtifactRolls[key].count : "·";
+          const rollsNum = showRollsNum
+            ? summedArtifactRolls[key].count - 1
+            : "·";
 
           return (
             <div
@@ -141,7 +143,7 @@ export const Artifact: React.FC<ArtifactProps> = ({
                 "substat",
                 normSubName,
                 isCV ? "critvalue" : "",
-                showRollsNum ? "show-rolls-num" : ""
+                showRollsNum ? "show-rolls-num" : "",
               ])}
             >
               <span className="substat-name">

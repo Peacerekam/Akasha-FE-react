@@ -24,7 +24,6 @@
         white-space: nowrap;
       }
     }
-
   }
 }
 
@@ -40,6 +39,7 @@
   // text-decoration: line-through;
   position: relative;
   &::after {
+    pointer-events: none;
     content: "";
     position: absolute;
     background-color: red;
