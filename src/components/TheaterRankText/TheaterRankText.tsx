@@ -31,11 +31,13 @@ const theaterProgressToColor = (stars: number, badge?: boolean) => {
 type TheaterRankTextProps = {
   row?: any;
   badge?: boolean;
+  hideOutOf?: boolean;
 };
 
 export const TheaterRankText: React.FC<TheaterRankTextProps> = ({
   row,
   badge,
+  hideOutOf = false,
 }) => {
   const { translate } = useContext(TranslationContext);
 
@@ -69,7 +71,12 @@ export const TheaterRankText: React.FC<TheaterRankTextProps> = ({
           {stars !== act ? (
             <>
               {stars}
-              <span style={{ opacity: 0.55 }}>
+              <span
+                style={{
+                  opacity: 0.55,
+                  display: hideOutOf ? "none" : "flex",
+                }}
+              >
                 <span>/</span>
                 <span>{act}</span>
               </span>

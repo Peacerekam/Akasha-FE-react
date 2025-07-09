@@ -1,6 +1,6 @@
 import "./style.scss";
 
-import React, { useContext } from "react";
+import React, { useContext, useMemo, useRef } from "react";
 import { faStar, faUser } from "@fortawesome/free-solid-svg-icons";
 
 import { ARBadge } from "../ARBadge";
@@ -64,11 +64,22 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
 }) => {
   const { showcaseState } = useContext(SettingsContext);
   const { favouriteTab, lastProfiles } = useContext(LastProfilesContext);
-  const playerInfo = accountData.account?.playerInfo;
 
+  const badgesRef = useRef<HTMLDivElement>(null);
   const { uid: _uid } = useParams();
+
   const uid = _uid || accountData.account.uid;
   const isCombined = uid.startsWith("@");
+  const playerInfo = accountData.account?.playerInfo;
+
+  const hideOutOfStella = useMemo(() => {
+    if (showcaseState) return false;
+    const elWidthSum = (acc: number, val: Element) => acc + val.clientWidth;
+    const divArr = Array.from(badgesRef?.current?.children || []);
+    const totalBadgesWidth = divArr.reduce(elWidthSum, 0);
+    const flexGap = 5;
+    return flexGap + totalBadgesWidth > 370;
+  }, [badgesRef?.current, showcaseState]);
 
   if (!playerInfo) {
     return (
@@ -214,7 +225,7 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
               </div>
               <div className="card-signature">{playerInfo.signature || ""}</div>
             </div>
-            <div className="badges-container-outer">
+            <div className="badges-container-outer" ref={badgesRef}>
               <div className="badges-container">
                 <RegionBadge region={playerInfo.region} />
                 <AchievementsBadge count={playerInfo.finishAchievementNum} />
@@ -222,7 +233,11 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
               </div>
               <div className="badges-container endgame">
                 <StygianRankText row={accountData.account} badge />
-                <TheaterRankText row={accountData.account} badge />
+                <TheaterRankText
+                  hideOutOf={hideOutOfStella}
+                  row={accountData.account}
+                  badge
+                />
                 <AbyssRankText row={accountData.account} badge onlyStars />
               </div>
             </div>
