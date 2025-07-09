@@ -37,6 +37,9 @@ export type AccountDataForUserCard = {
     nickname?: string;
     signature?: string;
     finishAchievementNum?: number;
+    theater?: {
+      stars?: number;
+    };
   };
   achievements?: AkashaAchievement[];
   hoyolab?: {
@@ -176,6 +179,9 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
     ""
   );
 
+  const theaterStars = accountData?.account?.playerInfo?.theater?.stars || 0;
+  const badgesFontSize = theaterStars === 10 && hideOutOfStella ? 15 : 16;
+
   return (
     <div
       className={cssJoin([
@@ -225,7 +231,11 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
               </div>
               <div className="card-signature">{playerInfo.signature || ""}</div>
             </div>
-            <div className="badges-container-outer" ref={badgesRef}>
+            <div
+              className="badges-container-outer"
+              ref={badgesRef}
+              style={{ fontSize: badgesFontSize }}
+            >
               <div className="badges-container">
                 <RegionBadge region={playerInfo.region} />
                 <AchievementsBadge count={playerInfo.finishAchievementNum} />
