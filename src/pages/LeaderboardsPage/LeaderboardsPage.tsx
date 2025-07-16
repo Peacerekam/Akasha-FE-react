@@ -143,7 +143,7 @@ export const LeaderboardsPage: React.FC = () => {
   }, [thisCalc]);
 
   const thisVariant = thisWeaponCalc?.filters?.find((x) => x.name === variant);
-  // console.log("thisVariant", thisVariant);
+  const isNiche = thisCalc?.label === "niche";
 
   const LEADERBOARDS_COLUMNS: TableColumn<BuildsColumns>[] = useMemo(
     () => [
@@ -169,6 +169,9 @@ export const LeaderboardsPage: React.FC = () => {
               : `${row.owner?.nickname} - ${timeAgo(row?.lastBuildUpdate)}`;
 
           const isNew = isEntryNew(row?.lastBuildUpdate);
+          const suffix = isNiche
+            ? `&calcId=${thisWeaponCalc?.calculationId}`
+            : "";
 
           return (
             <a
@@ -179,9 +182,9 @@ export const LeaderboardsPage: React.FC = () => {
               ])}
               onClick={(event) => {
                 event.preventDefault();
-                navigate(`/profile/${row.uid}?build=${row.md5}`);
+                navigate(`/profile/${row.uid}?build=${row.md5}${suffix}`);
               }}
-              href={`/profile/${row.uid}?build=${row.md5}`}
+              href={`/profile/${row.uid}?build=${row.md5}${suffix}`}
             >
               {/* <ARBadge adventureRank={row.owner?.adventureRank} /> */}
               <RegionBadge region={row.owner?.region} />
@@ -336,6 +339,7 @@ export const LeaderboardsPage: React.FC = () => {
       variant,
       calculationSortKey,
       translate,
+      thisCalc,
       // FETCH_LEADERBOARDS_URL,
     ]
   );
@@ -547,13 +551,13 @@ export const LeaderboardsPage: React.FC = () => {
       <div className="other-calc-container">
         {calculationInfo?.map((_cat) => {
           const categoryName = _cat.name;
-          const isNiche = _cat.label === "niche";
+          const isCategoryNiche = _cat.label === "niche";
 
           return (
             <div
               key={_cat.name}
               style={{
-                opacity: isNiche ? 0.5 : 1,
+                opacity: isCategoryNiche ? 0.5 : 1,
                 outline:
                   !IS_PRODUCATION && _cat?.hidden ? "2px dashed #ff00ff44" : "",
                 display: IS_PRODUCATION
@@ -563,7 +567,7 @@ export const LeaderboardsPage: React.FC = () => {
                   : "block",
               }}
             >
-              {isNiche && (
+              {isCategoryNiche && (
                 <span
                   style={{ width: "auto", display: "inline-block" }}
                   className="c-badge-wrapper"
@@ -736,8 +740,6 @@ export const LeaderboardsPage: React.FC = () => {
       </div>
     );
   }, [chartData]);
-
-  const isNiche = thisCalc?.label === "niche";
 
   const weaponTooltip = {
     "data-gi-type": "weapon",

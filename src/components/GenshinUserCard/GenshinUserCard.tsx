@@ -183,14 +183,16 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
 
   const theaterStars = accountData?.account?.playerInfo?.theater?.stars || 0;
   const badgesFontSize = theaterStars === 10 && hideOutOfStella ? 15 : 16;
-  const _showcaseState =
-    showcaseOverride !== undefined ? showcaseOverride : showcaseState;
 
   const wrapperClassNames = cssJoin([
     "genshin-user-card-wrapper",
     isAccountOwner ? "pointer clickable-card" : "",
     isHoyolab ? "hoyolab-card" : "",
-    _showcaseState ? "expanded" : "",
+    showcaseOverride !== undefined
+      ? showcaseOverride
+      : showcaseState
+      ? "expanded"
+      : "",
   ]);
 
   return (
