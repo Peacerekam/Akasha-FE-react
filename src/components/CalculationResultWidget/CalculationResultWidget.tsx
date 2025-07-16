@@ -174,29 +174,30 @@ export const CalculationResultWidget: React.FC<
       };
 
     const sorted = calcArray.sort(sortFn);
+    return sorted;
 
     // group by character name instead
     // on hover show other results
-    const finalArr: any[] = [];
-    const tmpIncludeCheck: { [key: string]: number } = {};
+    // const finalArr: any[] = [];
+    // const tmpIncludeCheck: { [key: string]: number } = {};
 
-    for (let i = 0; i < sorted.length; i++) {
-      const calc = sorted[i];
-      const index = finalArr.findIndex(
-        (c) => c.characterName === calc.characterName
-      );
+    // for (let i = 0; i < sorted.length; i++) {
+    //   const calc = sorted[i];
+    //   const index = finalArr.findIndex(
+    //     (c) => c.characterName === calc.characterName
+    //   );
 
-      if (index > -1) {
-        if (calc.priority <= tmpIncludeCheck[calc.characterName]) continue;
-        finalArr[index] = calc;
-      } else {
-        finalArr.push(calc);
-      }
+    //   if (index > -1) {
+    //     if (calc.priority <= tmpIncludeCheck[calc.characterName]) continue;
+    //     finalArr[index] = calc;
+    //   } else {
+    //     finalArr.push(calc);
+    //   }
 
-      tmpIncludeCheck[calc.characterName] = calc.priority;
-    }
+    //   tmpIncludeCheck[calc.characterName] = calc.priority;
+    // }
 
-    return finalArr.sort(sortFn);
+    // return finalArr.sort(sortFn);
   }, [data]);
 
   const tilesList = useMemo(
@@ -213,7 +214,13 @@ export const CalculationResultWidget: React.FC<
           let weaponMatchClass = "";
           let weaponMatchString = "";
 
-          switch (priority) {
+          const brokenRanking = false; // outOf < 10000;
+          const isNew = isEntryNew(calc.lastBuildUpdate);
+          const isNiche = calc.label === "niche";
+          const isBuildHidden = calc.isBuildHidden;
+          const _priority = isNiche ? priority + 100 : priority;
+
+          switch (_priority) {
             case 2:
               weaponMatchClass = "matching-weapon";
               weaponMatchString = "Leaderboard weapon matches equipped weapon";
@@ -232,10 +239,6 @@ export const CalculationResultWidget: React.FC<
 
           const _percentage = getTopRanking(_ranking, outOf);
           const _top = ranking ? `top ${_percentage || "?"}%` : "";
-
-          const brokenRanking = false; // outOf < 10000;
-          const isNew = isEntryNew(calc.lastBuildUpdate);
-          const isBuildHidden = calc.isBuildHidden;
 
           return (
             <div
@@ -260,7 +263,13 @@ export const CalculationResultWidget: React.FC<
                 }}
               >
                 <>
-                  {isNew ? <span className="new-lb-badge" /> : ""}
+                  {!isNiche && isNew && <span className="new-lb-badge" />}
+                  {isNiche && !isNew && (
+                    <span className="new-lb-badge is-niche" />
+                  )}
+                  {isNiche && isNew && (
+                    <span className="new-lb-badge is-niche" />
+                  )}
                   <a
                     title={`${weaponMatchString}\n${calc.name} - ${
                       weapon.name
@@ -270,7 +279,8 @@ export const CalculationResultWidget: React.FC<
                     }`}
                     onClick={(event) => {
                       event.preventDefault();
-                      navigate(`?build=${calc.md5}`);
+                      const suffix = isNiche ? `&calcId=${id}` : "";
+                      navigate(`?build=${calc.md5}${suffix}`);
                       // navigate(`/leaderboards/${id}/${variant?.name || ""}`);
                     }}
                     // href={`/profile/${uid}?build=${calc.md5}`}

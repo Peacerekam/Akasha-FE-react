@@ -555,52 +555,62 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     pastedImage,
   ]);
 
-  const calculationIds = useMemo(
-    () =>
-      Object.keys(calculations ?? [])
-        .filter((c: any) => !calculations[c].hidden)
-        .sort((a: any, b: any) => {
-          const _a = calculations[a];
-          const _b = calculations[b];
+  const calculationIds = useMemo(() => {
+    let preSort = Object.keys(calculations ?? []).filter(
+      (c: any) => !calculations[c].hidden
+    );
 
-          const _aRank = ("" + _a.ranking)?.replace("~", "");
-          const _bRank = ("" + _b.ranking)?.replace("~", "");
+    const searchQuery = location.search;
+    const query = new URLSearchParams(searchQuery);
+    const calcId = query.get("calcId");
 
-          const _aVal = _aRank.startsWith("(")
-            ? _aRank.slice(1, _aRank.length - 1)
-            : _aRank;
+    if (calcId) {
+      preSort = preSort.filter((x) => x.startsWith(calcId));
+    }
 
-          const _bVal = _bRank.startsWith("(")
-            ? _bRank.slice(1, _bRank.length - 1)
-            : _bRank;
+    return preSort.sort((a: any, b: any) => {
+      if (calcId && !a.startsWith(calcId)) return -1;
 
-          const topA_ = +_aVal / _a.outOf;
-          const topB_ = +_bVal / _b.outOf;
+      const _a = calculations[a];
+      const _b = calculations[b];
 
-          const isTop1_a = Math.min(100, Math.ceil(topA_ * 100)) === 1;
-          const isTop1_b = Math.min(100, Math.ceil(topB_ * 100)) === 1;
+      const _aRank = ("" + _a.ranking)?.replace("~", "");
+      const _bRank = ("" + _b.ranking)?.replace("~", "");
 
-          const _priority = _b.priority - _a.priority;
+      const _aVal = _aRank.startsWith("(")
+        ? _aRank.slice(1, _aRank.length - 1)
+        : _aRank;
 
-          if (_priority !== 0) {
-            return _priority;
-          }
+      const _bVal = _bRank.startsWith("(")
+        ? _bRank.slice(1, _bRank.length - 1)
+        : _bRank;
 
-          if (isTop1_a && isTop1_b) {
-            return +_aVal - +_bVal;
-          }
+      const topA_ = +_aVal / _a.outOf;
+      const topB_ = +_bVal / _b.outOf;
 
-          return topA_ - topB_;
+      const isTop1_a = Math.min(100, Math.ceil(topA_ * 100)) === 1;
+      const isTop1_b = Math.min(100, Math.ceil(topB_ * 100)) === 1;
 
-          // return (
-          //   _b.priority - _a.priority ||
-          //   (isTop1_a && isTop1_b ? +_aVal - +_bVal : topA_ - topB_)
-          // );
+      const _priority = _b.priority - _a.priority;
 
-          // return +valA < +valB ? -1 : 1;
-        }),
-    [calculations]
-  );
+      if (_priority !== 0) {
+        return _priority;
+      }
+
+      if (isTop1_a && isTop1_b) {
+        return +_aVal - +_bVal;
+      }
+
+      return topA_ - topB_;
+
+      // return (
+      //   _b.priority - _a.priority ||
+      //   (isTop1_a && isTop1_b ? +_aVal - +_bVal : topA_ - topB_)
+      // );
+
+      // return +valA < +valB ? -1 : 1;
+    });
+  }, [calculations, location.search]);
 
   useEffect(() => {
     const _calculationId = calculationIds.slice(0, 1);

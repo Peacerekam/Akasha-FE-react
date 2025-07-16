@@ -83,7 +83,6 @@ export const BuildPreview: React.FC = () => {
   useEffect(() => {
     const abortController = new AbortController();
     fetchData(abortController);
-
     return () => {
       abortController.abort();
     };

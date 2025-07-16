@@ -451,6 +451,10 @@ $characterStats: "hp", "atk", "def", "hydrodmgbonus", "geodmgbonus",
     text-shadow: 0 0.08em 0.1em black, 0 0.1em 0.3em rgba(0, 0, 0, 0.4);
     display: block;
   }
+  &.is-niche::before {
+    content: "NICHE";
+    background-color: #9b8340;
+  }
 }
 
 .c-badge-wrapper {
