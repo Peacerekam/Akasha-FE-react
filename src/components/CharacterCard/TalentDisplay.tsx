@@ -1,6 +1,7 @@
 import { AssetFallback } from "../AssetFallback";
 import CrownOfInsight from "../../assets/images/Crown_of_Insight.webp";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import { cssJoin } from "../../utils/helpers";
 import { useContext } from "react";
 
 type TalentProps = {
@@ -34,13 +35,14 @@ export const TalentDisplay: React.FC<TalentProps> = ({
     "data-gi-lang": language,
   };
 
+  const classNames = cssJoin([
+    "talent-display",
+    isCrowned ? "talent-crowned" : "",
+    isBoosted ? "talent-boosted" : "",
+  ]);
+
   return (
-    <div
-      {...talentTooltip}
-      className={`talent-display ${isCrowned ? "talent-crowned" : ""} ${
-        isBoosted ? "talent-boosted" : ""
-      }`}
-    >
+    <div {...talentTooltip} className={classNames}>
       {talent?.icon ? (
         <span>
           <AssetFallback alt="" src={talent?.icon} />

@@ -147,9 +147,11 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
 
   const displayFavBtn = (
     <div
-      className={`fav-btn ${favourited ? "favourited" : ""} ${
-        disableNewFavs && !favourited ? "disabled" : ""
-      }`}
+      className={cssJoin([
+        "fav-btn",
+        favourited ? "favourited" : "",
+        disableNewFavs && !favourited ? "disabled" : "",
+      ])}
       title={
         favourited
           ? "Unmark as favourite"
@@ -181,20 +183,18 @@ export const GenshinUserCard: React.FC<GenshinUserCardProps> = ({
 
   const theaterStars = accountData?.account?.playerInfo?.theater?.stars || 0;
   const badgesFontSize = theaterStars === 10 && hideOutOfStella ? 15 : 16;
+  const _showcaseState =
+    showcaseOverride !== undefined ? showcaseOverride : showcaseState;
+
+  const wrapperClassNames = cssJoin([
+    "genshin-user-card-wrapper",
+    isAccountOwner ? "pointer clickable-card" : "",
+    isHoyolab ? "hoyolab-card" : "",
+    _showcaseState ? "expanded" : "",
+  ]);
 
   return (
-    <div
-      className={cssJoin([
-        "genshin-user-card-wrapper",
-        isAccountOwner ? "pointer clickable-card" : "",
-        isHoyolab ? "hoyolab-card" : "",
-        showcaseOverride !== undefined
-          ? showcaseOverride
-          : showcaseState
-          ? "expanded"
-          : "",
-      ])}
-    >
+    <div className={wrapperClassNames}>
       {displayFavBtn}
       {showBackgroundImage && <div className="card-background" style={style} />}
       <div

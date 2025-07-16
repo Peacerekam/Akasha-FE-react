@@ -208,6 +208,15 @@ export const ArtifactMetricDisplay: React.FC<{
     </span>
   );
 
+  const suffix =
+    _metric === "CV" ? (
+      "cv"
+    ) : (
+      <>
+        <span className="smol-percentage">%</span> RV
+      </>
+    );
+
   return (
     <div
       className="compact-artifact-metric-container"
@@ -215,9 +224,10 @@ export const ArtifactMetricDisplay: React.FC<{
       onMouseLeave={() => setDisplayFormula(false)}
     >
       <span
-        className={`compact-artifact-crit-value ${
-          overrideMetric ? "" : "pointer"
-        }`}
+        className={cssJoin([
+          "compact-artifact-crit-value",
+          overrideMetric ? "" : "pointer",
+        ])}
         onClick={() =>
           !overrideMetric && setMetric(_metric === "CV" ? "RV" : "CV")
         }
@@ -226,15 +236,7 @@ export const ArtifactMetricDisplay: React.FC<{
         {displayFormula ? metricMathDisplay : ""}
         <span>
           <span className="metric-text">
-            
-          {metricValue}{" "}
-          {_metric === "CV" ? (
-            "cv"
-          ) : (
-            <>
-              <span className="smol-percentage">%</span> RV
-            </>
-          )}
+            {metricValue} {suffix}
           </span>
         </span>
         {artifact.rerollNum > 0 && (

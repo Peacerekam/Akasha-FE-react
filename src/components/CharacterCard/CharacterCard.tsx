@@ -858,6 +858,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       scales.r.pointLabels.font.size = 9 * hardcodedScale;
 
       const radarOptions = {
+        animation: { duration: 0 },
         devicePixelRatio: 2,
         plugins,
         scales,

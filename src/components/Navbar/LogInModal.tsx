@@ -144,9 +144,7 @@ export const LogInModal: React.FC<LogInModalProps> = ({
                               />
                               <div
                                 style={{ flex: 1 }}
-                                className={`${
-                                  isEnkaProfile ? "enka-profile" : ""
-                                }`}
+                                className={isEnkaProfile ? "enka-profile" : ""}
                               >
                                 {nickname}
                               </div>
