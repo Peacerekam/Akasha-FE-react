@@ -25,6 +25,9 @@ body.ad-provider-snigel {
       .snigel-ad-unit {
         display: contents;
       }
+      div[id^=google_ads_iframe_] {
+        display: contents;
+      }
     }
   }
 
@@ -44,3 +47,11 @@ body.ad-provider-snigel {
     }
   }
 }
+
+div[id^=sp_message_container] {
+  z-index: 9999;
+}
+
+// iframe[id^=sp_message_iframe] {
+//   z-index: 9999;
+// }

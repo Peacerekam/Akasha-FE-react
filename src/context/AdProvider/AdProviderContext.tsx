@@ -86,7 +86,6 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
     _setPreventContentShrinking([]);
 
     if (adProvider === "snigel") {
-      console.log("(window as any)?.reloadAdSlots()", adProvider);
       try {
         (window as any).AdSlots.disableAds = false;
         (window as any)?.reloadAdSlots?.();

@@ -62,8 +62,11 @@ export const PrivacyPolicyPage: React.FC = () => {
               United Kingdom or Switzerland, you were presented with messaging
               from our Consent Management Platform (CMP) around your privacy
               choices as a user in regards to digital advertising, applicable
-              vendors, cookie usage and more. If you’d like to revisit the
-              choices you have made previously on this Website or App, please{" "}
+              vendors, cookie usage and more.
+            </p>
+            <p>
+              If you’d like to revisit the choices you have made previously on
+              this Website or App, please{" "}
               <a className="nn-cmp-show" href="?cmpscreen">
                 Manage Cookie Settings
               </a>

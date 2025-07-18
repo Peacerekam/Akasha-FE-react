@@ -144,34 +144,6 @@ body:not(.overflow-hidden) {
   }
 }
 
-body.ramp-js-error,
-body.ads-disabled {
-  iframe:not(.html2canvas-container):not(#similarweb-outer-content),
-  #bgdiv,
-  #tyche_trendi_video_container,
-  #tyche_trendi_video,
-  #pw-oop-flex_leaderboard_container,
-  #pw-oop-bottom_rail,
-  #corner_ad_video,
-  #aniBox,
-  .sprkflw_main,
-  .ut_container,
-  .is-docked,
-  .pw-oop-tag,
-  .pw-pos-bottom-right,
-  .pw-corner-ad-video,
-  .pw-container,
-  .pw-tag {
-    display: none !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-  }
-  .flex-special-container {
-    // display: none !important;
-    min-height: 0px !important;
-  }
-}
-
 // @media (max-width: 1300px) {
 //   #pw-oop-left_rail,
 //   #pw-oop-right_rail {
