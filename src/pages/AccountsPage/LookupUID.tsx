@@ -429,8 +429,8 @@ export const LookupUID: React.FC<LookupUIDProps> = ({ disableAd }) => {
   return (
     <div className="lookup-uid-wrapper">
       <div className="flex-special-container">
-        {!disableAd && <AdsComponentManager adType="Video" />}
         {inputAndCardResult}
+        {!disableAd && <AdsComponentManager adType="Video" />}
       </div>
       <div>
         <CustomTable

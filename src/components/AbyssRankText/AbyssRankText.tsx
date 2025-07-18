@@ -87,10 +87,10 @@ export const AbyssRankText: React.FC<AbyssRankTextProps> = ({
             alt="Star"
             src={Star}
           />
-          {onlyStars ? stars : `${stars} • ${abyssProgress}`}
+          {onlyStars ? `${stars || 0}` : `${stars || 0} • ${abyssProgress}`}
         </>
       ) : (
-        abyssProgress
+        abyssProgress || "-"
       )}
     </div>
   );

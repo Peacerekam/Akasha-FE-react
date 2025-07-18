@@ -3,7 +3,7 @@ import React, { createContext, useEffect, useState } from "react";
 import Ramp from "../../components/PlaywireAdsComponent/Ramp";
 import { useLocation } from "react-router-dom";
 
-type AdProviders = null | "google" | "venatus" | "playwire";
+type AdProviders = null | "google" | "venatus" | "playwire" | "snigel";
 
 type AdProviderContextType = {
   adProvider: AdProviders;
@@ -64,7 +64,12 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
   useEffect(() => {
     if (adProvider) return;
 
-    setAdProvider("playwire");
+    if (location.search.includes("test-page")) {
+      setAdProvider("snigel");
+    } else {
+      setAdProvider("playwire");
+    }
+
     setContentWidth(1100);
   }, [location.search]);
 
@@ -77,12 +82,26 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
 
   useEffect(() => {
     setAdsDisabled(false); // reset disable state -> used on patreon profiles for now
-
     _setContentWidth(1100);
     _setPreventContentShrinking([]);
+
+    if (adProvider === "snigel") {
+      console.log("(window as any)?.reloadAdSlots()", adProvider);
+      try {
+        (window as any).AdSlots.disableAds = false;
+        (window as any)?.reloadAdSlots?.();
+      } catch (err) {
+        console.log(err);
+      }
+    }
   }, [location.pathname]);
 
-  const disableAdsForThisPage = () => setAdsDisabled(true);
+  const disableAdsForThisPage = () => {
+    setAdsDisabled(true);
+    if (adProvider === "snigel") {
+      (window as any).AdSlots.disableAds = true;
+    }
+  };
 
   const setPreventContentShrinking = (key: string, mode: "add" | "remove") => {
     _setPreventContentShrinking((arr) => {
@@ -146,6 +165,12 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
             PUB_ID={PLAYWIRE_PUBLISHER_ID}
             WEBSITE_ID={PLAYWIRE_WEBSITE_ID}
           />
+        </>
+      )}
+      {adProvider === "snigel" && (
+        <>
+          <div id="nn_skinl"></div>
+          <div id="nn_skinr"></div>
         </>
       )}
       {children}

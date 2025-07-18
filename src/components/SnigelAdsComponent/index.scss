@@ -1,0 +1,46 @@
+body.ads-disabled {
+  .snigel-adhesive {
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+}
+
+body.ad-provider-snigel {
+  .flex-special-container {
+    gap: 10px;
+  }
+
+  .snigel-container {
+    .ad-debug {
+      display: none !important;
+    }
+
+    .close-adhesive {
+      border-radius: 100px;
+    }
+
+    &.video-ad-container {
+      display: contents;
+      .snigel-ad-unit {
+        display: contents;
+      }
+    }
+  }
+
+  .profile-header-wrapper {
+    gap: 10px;
+
+    @media (max-width: 700px) {
+      gap: 25px;
+    }
+  }
+
+  .snigel-adhesive.bottom {
+    pointer-events: none;
+    > div {
+      pointer-events: auto;
+      width: fit-content;
+    }
+  }
+}

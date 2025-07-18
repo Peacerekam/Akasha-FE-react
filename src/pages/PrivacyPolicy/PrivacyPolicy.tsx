@@ -9,44 +9,71 @@ import { StylizedContentBlock } from "../../components";
 export const PrivacyPolicyPage: React.FC = () => {
   const { adProvider } = useContext(AdProviderContext);
 
-  const advertismentsText =
-    adProvider === "playwire" ? (
-      <>
-        <p>
-          All or partial advertising on this Website or App is managed by
-          Playwire LLC. If Playwire publisher advertising services are used,
-          Playwire LLC may collect and use certain aggregated and anonymized
-          data for advertising purposes. To learn more about the types of data
-          collected, how data is used and your choices as a user, please visit{" "}
-          <a href="https://www.playwire.com/privacy-policy">
-            https://www.playwire.com/privacy-policy
-          </a>
-          .
-        </p>
-        <p>
-          <strong>For EU Users only:</strong> If you are located in countries
-          that are part of the European Economic Area, in the United Kingdom or
-          Switzerland, and publisher advertising services are being provided by
-          Playwire LLC, you were presented with messaging from our Consent
-          Management Platform (CMP) around your privacy choices as a user in
-          regards to digital advertising, applicable vendors, cookie usage and
-          more. If you’d like to revisit the choices you have made previously on
-          this Website or App, please{" "}
-          <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              (window as any).ramp.showCmpModal();
-            }}
-          >
-            click here
-          </a>
-          .
-        </p>
-      </>
-    ) : (
-      <p>akasha.cv uses ads from Venatus Media to support the site</p>
-    );
+  const advertismentsText = adProvider
+    ? {
+        playwire: (
+          <>
+            <p>
+              All or partial advertising on this Website or App is managed by
+              Playwire LLC. If Playwire publisher advertising services are used,
+              Playwire LLC may collect and use certain aggregated and anonymized
+              data for advertising purposes. To learn more about the types of
+              data collected, how data is used and your choices as a user,
+              please visit{" "}
+              <a href="https://www.playwire.com/privacy-policy">
+                https://www.playwire.com/privacy-policy
+              </a>
+              .
+            </p>
+            <p>
+              <strong>For EU Users only:</strong> If you are located in
+              countries that are part of the European Economic Area, in the
+              United Kingdom or Switzerland, and publisher advertising services
+              are being provided by Playwire LLC, you were presented with
+              messaging from our Consent Management Platform (CMP) around your
+              privacy choices as a user in regards to digital advertising,
+              applicable vendors, cookie usage and more. If you’d like to
+              revisit the choices you have made previously on this Website or
+              App, please{" "}
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  (window as any).ramp.showCmpModal();
+                }}
+              >
+                click here
+              </a>
+              .
+            </p>
+          </>
+        ),
+        google: (
+          <p>akasha.cv uses ads from Google Adsense to support the site</p>
+        ),
+        venatus: (
+          <p>akasha.cv uses ads from Venatus Media to support the site</p>
+        ),
+        snigel: (
+          <>
+            <p>
+              <strong>For EU Users only:</strong> If you are located in
+              countries that are part of the European Economic Area, in the
+              United Kingdom or Switzerland, you were presented with messaging
+              from our Consent Management Platform (CMP) around your privacy
+              choices as a user in regards to digital advertising, applicable
+              vendors, cookie usage and more. If you’d like to revisit the
+              choices you have made previously on this Website or App, please{" "}
+              <a className="nn-cmp-show" href="?cmpscreen">
+                Manage Cookie Settings
+              </a>
+              .
+            </p>
+          </>
+        ),
+      }[adProvider]
+    : "";
+
   return (
     <div className="flex ">
       <div className="content-block w-100" id="content-container">

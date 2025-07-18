@@ -4,26 +4,42 @@ import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 import { cssJoin } from "../../utils/helpers";
 import { useContext } from "react";
 
-export type PlaywireAdsComponentProps = {
-  adType: PlaywireAdTypes;
+type SnigelAdsComponentProps = {
+  adType: SnigelAdTypes;
   hybrid?: "desktop" | "mobile";
   hideOnDesktop?: boolean;
   hideOnMobile?: boolean;
 };
 
-type PlaywireAdTypes =
+type SnigelAdTypes =
   | "LeaderboardATF"
   | "LeaderboardBTF"
   | "RichMedia"
   | "Video";
 
 const AD_TYPE_TO_KEY: { [key: string]: string } = {
-  LeaderboardATF: "leaderboard_atf",
-  LeaderboardBTF: "leaderboard_btf",
-  Video: "med_rect_atf",
+  LeaderboardATF: "lb1",
+  LeaderboardBTF: "lb3",
+  Video: "mpu1",
 };
 
-export const PlaywireAdsComponent: React.FC<PlaywireAdsComponentProps> = ({
+// <!-- Desktop Tags -->
+// <div id="nn_lb1"></div>
+// <div id="nn_lb2"></div>
+// <div id="nn_lb3"></div>
+// <div id="nn_mpu1"></div>
+// <div id="nn_skinl"></div> <- anywhere in <body> tag
+// <div id="nn_skinr"></div> <- anywhere in <body> tag
+// <div id="nn_player"></div>
+
+// <!-- Mobile Tags -->
+// <div id="nn_mobile_lb1"></div>
+// <div id="nn_mobile_lb2"></div>
+// <div id="nn_mobile_lb3"></div>
+// <div id="nn_mobile_mpu1"></div>
+// <div id="nn_mobile_mpu2"></div>
+
+export const SnigelAdsComponent: React.FC<SnigelAdsComponentProps> = ({
   adType,
   hideOnDesktop,
   hideOnMobile,
@@ -38,11 +54,11 @@ export const PlaywireAdsComponent: React.FC<PlaywireAdsComponentProps> = ({
   if (!adID) return null;
 
   const classNamesContainer = cssJoin([
-    "pw-container",
+    "snigel-container",
     adType === "Video" ? "video-ad-container" : "",
   ]);
 
-  const classNamesAd = cssJoin(["playwire-ad-unit", `ad-${adID}`]);
+  const classNamesAd = cssJoin(["snigel-ad-unit", `ad-${adID}`]);
 
   return (
     <div className={classNamesContainer}>
@@ -51,7 +67,8 @@ export const PlaywireAdsComponent: React.FC<PlaywireAdsComponentProps> = ({
       {/* <RampUnit type={adID} cssClass={classNamesAd} /> */}
 
       {/* new */}
-      <div id={`pw-${adID}`} className={classNamesAd} />
+      <div id={`nn_${adID}`} className={classNamesAd} />
+      <div id={`nn_mobile_${adID}`} className={classNamesAd} />
     </div>
   );
 };

@@ -342,8 +342,8 @@ export const BuildsPage: React.FC = () => {
         {/* <NotificationBar /> */}
         <StylizedContentBlock overrideImage={DomainBackground} />
         <div className="flex-special-container">
-          <AdsComponentManager adType="Video" />
           <HelpBox page="builds" />
+          <AdsComponentManager adType="Video" />
         </div>
         {/* <AdsComponentManager
           adType="LeaderboardBTF"

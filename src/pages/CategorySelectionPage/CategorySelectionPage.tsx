@@ -320,8 +320,8 @@ export const CategorySelectionPage: React.FC = () => {
           // }
         />
         <div className="flex-special-container">
-          <AdsComponentManager adType="Video" />
           <HelpBox page="leaderboards" />
+          <AdsComponentManager adType="Video" />
         </div>
         {/* <AdsComponentManager
           adType="LeaderboardBTF"

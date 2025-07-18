@@ -31,6 +31,10 @@
 }
 
 .lookup-uid-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
   .uid-lookup-result {
     padding: 10px;
     overflow: hidden;

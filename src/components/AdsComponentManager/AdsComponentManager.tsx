@@ -8,6 +8,7 @@ import React, { useContext } from "react";
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 import { SHOW_ADS } from "../../utils/maybeEnv";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
+import { SnigelAdsComponent } from "../SnigelAdsComponent/SnigelAdsComponent";
 import VenatusAdsComponent from "../VenatusAdsComponent/VenatusAdsComponent";
 import { VenatusAdsComponentProps } from "../VenatusAdsComponent";
 
@@ -65,6 +66,18 @@ export const AdsComponentManager: React.FC<AdsComponentManagerProps> = (
       />
     );
   }
+
+  if (adProvider === "snigel") {
+    return (
+      <SnigelAdsComponent
+        adType={props.adType}
+        // hybrid={props.hybrid}
+        // hideOnDesktop={props.hideOnDesktop}
+        // hideOnMobile={props.hideOnMobile}
+      />
+    );
+  }
+
 
   return <></>;
 };

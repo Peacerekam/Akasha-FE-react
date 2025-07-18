@@ -244,8 +244,8 @@ export const ArtifactsPage: React.FC = () => {
         {/* <NotificationBar /> */}
         <StylizedContentBlock overrideImage={DomainBackground} />
         <div className="flex-special-container">
-          <AdsComponentManager adType="Video" />
           <HelpBox page="artifacts" />
+          <AdsComponentManager adType="Video" />
         </div>
         {/* <AdsComponentManager
           adType="LeaderboardBTF"
