@@ -1,4 +1,6 @@
 body.ads-disabled {
+  .snigel-container,
+  .snigel-ad-unit,
   .snigel-adhesive {
     display: none !important;
     opacity: 0 !important;
@@ -7,6 +9,13 @@ body.ads-disabled {
 }
 
 body.ad-provider-snigel {
+  // only the flex-special-container on top of the page
+  .navbar-tabs ~ .flex-special-container {
+    transition: 0.25s;
+    transition-delay: 0.5s;
+    align-items: center;
+  }
+
   .flex-special-container {
     gap: 10px;
   }
@@ -22,10 +31,9 @@ body.ad-provider-snigel {
 
     &.video-ad-container {
       display: contents;
+
+      div[id^="google_ads_iframe_"],
       .snigel-ad-unit {
-        display: contents;
-      }
-      div[id^=google_ads_iframe_] {
         display: contents;
       }
     }
@@ -48,7 +56,7 @@ body.ad-provider-snigel {
   }
 }
 
-div[id^=sp_message_container] {
+div[id^="sp_message_container"] {
   z-index: 9999;
 }
 

@@ -68,7 +68,9 @@ export const SnigelAdsComponent: React.FC<SnigelAdsComponentProps> = ({
 
       {/* new */}
       <div id={`nn_${adID}`} className={classNamesAd} />
-      <div id={`nn_mobile_${adID}`} className={classNamesAd} />
+      {adID !== "lb1" && (
+        <div id={`nn_mobile_${adID}`} className={classNamesAd} />
+      )}
     </div>
   );
 };
