@@ -16,8 +16,23 @@ body.ad-provider-snigel {
     align-items: center;
   }
 
+  &:not(.ads-disabled) {
+    .navbar-tabs ~ .flex-special-container {
+      margin-top: 25px !important;
+    }
+    @media (max-width: 800px) {
+      #root > .flex-special-container {
+        min-height: 130px;
+      }
+    }
+  }
+
   .flex-special-container {
     gap: 10px;
+  }
+
+  .close-adhesive {
+    border-radius: 100px;
   }
 
   .snigel-container {
@@ -25,8 +40,10 @@ body.ad-provider-snigel {
       display: none !important;
     }
 
-    .close-adhesive {
-      border-radius: 100px;
+    .snigel-ad-unit {
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     &.video-ad-container {

@@ -63,11 +63,17 @@ export const SnigelAdsComponent: React.FC<SnigelAdsComponentProps> = ({
   return (
     <div className={classNamesContainer}>
       <span className="ad-debug">{adID || adType}</span>
-      {/* old */}
-      {/* <RampUnit type={adID} cssClass={classNamesAd} /> */}
 
-      {/* new */}
+      {/* desktop */}
       <div id={`nn_${adID}`} className={classNamesAd} />
+
+      {/* lb1 is the top ad on Desktop */}
+      {/* lb2 is the top ad on Mobile */}
+      {adID === "lb1" && isMobile ? (
+        <div id={`nn_mobile_lb2`} className={classNamesAd} />
+      ) : null}
+
+      {/* desktop lb1 is auto-injected, do not place it */}
       {adID !== "lb1" && (
         <div id={`nn_mobile_${adID}`} className={classNamesAd} />
       )}
