@@ -31,8 +31,15 @@ body.ad-provider-snigel {
     gap: 10px;
   }
 
-  .close-adhesive {
-    border-radius: 100px;
+  .snigel-adhesive {
+    width: fit-content;
+    translate: calc(50vw - 50%);
+    // padding-top: 30px;
+
+    .close-adhesive {
+      border-radius: 100px;
+      top: -25px;
+    }
   }
 
   .snigel-container {
@@ -68,7 +75,7 @@ body.ad-provider-snigel {
     pointer-events: none;
     > div {
       pointer-events: auto;
-      width: fit-content;
+      // width: fit-content;
     }
   }
 }
