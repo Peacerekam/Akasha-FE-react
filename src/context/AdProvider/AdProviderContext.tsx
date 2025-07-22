@@ -166,13 +166,14 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
           />
         </>
       )}
+      {children}
       {adProvider === "snigel" && (
         <>
-          <div id="nn_skinl"></div>
-          <div id="nn_skinr"></div>
+          <div id="nn_skinl" />
+          <div id="nn_skinr" />
+          <div id="nn_player" />
         </>
       )}
-      {children}
     </AdProviderContext.Provider>
   );
 };
