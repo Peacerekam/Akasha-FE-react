@@ -1,4 +1,7 @@
 body.ads-disabled {
+  #nn_skinl,
+  #nn_skinr,
+  #nn_player,
   .snigel-container,
   .snigel-ad-unit,
   .snigel-adhesive {
@@ -25,6 +28,14 @@ body.ad-provider-snigel {
         min-height: 130px;
       }
     }
+  }
+
+  #nn_skinl {
+    left: auto;
+    margin-left: auto;
+
+    right: 50%;
+    margin-right: 650px;
   }
 
   .flex-special-container {
