@@ -64,12 +64,13 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
   useEffect(() => {
     if (adProvider) return;
 
-    if (location.search.includes("test-page")) {
-      setAdProvider("snigel");
-    } else {
-      setAdProvider("playwire");
-    }
+    // if (location.search.includes("test-page")) {
+    //   setAdProvider("snigel");
+    // } else {
+    //   setAdProvider("playwire");
+    // }
 
+    setAdProvider("snigel");
     setContentWidth(1100);
   }, [location.search]);
 

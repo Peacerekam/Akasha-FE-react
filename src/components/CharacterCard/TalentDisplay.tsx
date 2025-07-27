@@ -14,11 +14,15 @@ type TalentProps = {
     index?: number;
   };
   characterId?: string;
+  element?: string;
 };
+
+export const travelerIds = ["10000007", "10000005"];
 
 export const TalentDisplay: React.FC<TalentProps> = ({
   talent,
   characterId,
+  element,
 }) => {
   const { language } = useContext(TranslationContext);
 
@@ -27,13 +31,25 @@ export const TalentDisplay: React.FC<TalentProps> = ({
     ? talent?.rawLevel === 10
     : talent?.level === (isBoosted ? 13 : 10);
 
-  const talentTooltip = {
-    "data-gi-type": "talent",
-    "data-gi-id": characterId,
-    "data-gi-level": talent.level,
-    "data-gi-index": talent.index,
-    "data-gi-lang": language,
-  };
+  const isTraveler = characterId
+    ? travelerIds.includes("" + characterId)
+    : false;
+
+  const suffix = isTraveler
+    ? `-${element === "None" ? "Anemo" : element}`.toLowerCase()
+    : "";
+
+  const charId = `${characterId}${suffix}`;
+
+  const talentTooltip = talent?.level
+    ? {
+        "data-gi-type": "talent",
+        "data-gi-id": charId,
+        "data-gi-level": talent?.level,
+        "data-gi-index": talent?.index,
+        "data-gi-lang": language,
+      }
+    : {};
 
   const classNames = cssJoin([
     "talent-display",

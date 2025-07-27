@@ -18,6 +18,7 @@ import React, {
   useState,
 } from "react";
 import { STAT_NAMES, fixCritValue, roundToFixed } from "../../utils/substats";
+import { TalentDisplay, travelerIds } from "./TalentDisplay";
 import {
   applyModalBodyStyle,
   ascensionToLevel,
@@ -72,7 +73,6 @@ import { SettingsContext } from "../../context/SettingsProvider/SettingsProvider
 import { Spinner } from "../Spinner";
 import { StatIcon } from "../StatIcon";
 import { StatListCard } from "../StatListCard";
-import { TalentDisplay } from "./TalentDisplay";
 import { TeammatesCompact } from "../TeammatesCompact";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import { WeaponMiniDisplay } from "../WeaponMiniDisplay";
@@ -1927,56 +1927,70 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           </div>
         )}
         <div className="character-constellations">
-          {[0, 1, 2, 3, 4, 5].map((i) => {
-            const constImg = chartsData?.assets?.constellations?.[i];
-            const actualConst = i + 1;
-            const isActivated = row.constellation >= actualConst;
+          {elementKey !== "None" &&
+            [0, 1, 2, 3, 4, 5].map((i) => {
+              const constImg = chartsData?.assets?.constellations?.[i];
+              const actualConst = i + 1;
+              const isActivated = row.constellation >= actualConst;
 
-            const constellationTooltip = {
-              "data-gi-type": "constellation",
-              "data-gi-id": row.characterId,
-              "data-gi-index": actualConst, // 1 - 6
-              "data-gi-lang": language,
-            };
+              const isTraveler = row.characterId
+                ? travelerIds.includes("" + row.characterId)
+                : false;
 
-            return (
-              <div
-                key={`${constImg}-${i}`}
-                className={isActivated ? "activated" : ""}
-                {...constellationTooltip}
-              >
-                {!isActivated && (
-                  <span className="const-locked">
-                    <FontAwesomeIcon
-                      className="lock-icon"
-                      icon={faLock}
-                      size="1x"
+              const suffix = isTraveler ? `-${elementKey}`.toLowerCase() : "";
+              const charId = `${row.characterId}${suffix}`;
+
+              const constellationTooltip = {
+                "data-gi-type": "constellation",
+                "data-gi-id": charId,
+                "data-gi-index": actualConst, // 1 - 6
+                "data-gi-lang": language,
+              };
+
+              return (
+                <div
+                  key={`${constImg}-${i}`}
+                  className={isActivated ? "activated" : ""}
+                  {...constellationTooltip}
+                >
+                  {!isActivated && (
+                    <span className="const-locked">
+                      <FontAwesomeIcon
+                        className="lock-icon"
+                        icon={faLock}
+                        size="1x"
+                      />
+                    </span>
+                  )}
+                  {constImg ? (
+                    <AssetFallback
+                      alt=" "
+                      key={`const-${i}`}
+                      className={isActivated ? "activated" : ""}
+                      src={toEnkaUrl(constImg)}
                     />
-                  </span>
-                )}
-                {constImg ? (
-                  <AssetFallback
-                    alt=" "
-                    key={`const-${i}`}
-                    className={isActivated ? "activated" : ""}
-                    src={toEnkaUrl(constImg)}
-                  />
-                ) : (
-                  <div className="no-const" />
-                )}
-              </div>
-            );
-          })}
+                  ) : (
+                    <div className="no-const" />
+                  )}
+                </div>
+              );
+            })}
         </div>
         <div className="character-talents">
-          <TalentDisplay talent={talentNAProps} characterId={row.characterId} />
+          <TalentDisplay
+            talent={talentNAProps}
+            characterId={row.characterId}
+            element={elementKey}
+          />
           <TalentDisplay
             talent={talentSkillProps}
             characterId={row.characterId}
+            element={elementKey}
           />
           <TalentDisplay
             talent={talentBurstProps}
             characterId={row.characterId}
+            element={elementKey}
           />
         </div>
       </>
@@ -1988,6 +2002,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     displayBuildName,
     toggleConfigure,
     translate,
+    elementKey,
   ]);
 
   const cardOverlayWrapper = useMemo(() => {
