@@ -251,6 +251,10 @@ const GACHA_CHAR_OFFESET: { [char: string]: { x: number; y: number } } = {
     x: -5,
     y: 25,
   },
+  Ineffa: {
+    x: -10,
+    y: 10,
+  },
 };
 
 type Toggles = "build" | "card" | null;

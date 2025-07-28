@@ -57,6 +57,9 @@ export const PrivacyPolicyPage: React.FC = () => {
         snigel: (
           <>
             <p>
+              akasha.cv uses ads from Publisher Collective to support the site
+            </p>
+            <p>
               <strong>For EU Users only:</strong> If you are located in
               countries that are part of the European Economic Area, in the
               United Kingdom or Switzerland, you were presented with messaging
@@ -66,9 +69,9 @@ export const PrivacyPolicyPage: React.FC = () => {
             </p>
             <p>
               If you’d like to revisit the choices you have made previously on
-              this Website or App, please{" "}
+              this website you can manage your cookie settings{" "}
               <a className="nn-cmp-show" href="?cmpscreen">
-                Manage Cookie Settings
+                here
               </a>
               .
             </p>

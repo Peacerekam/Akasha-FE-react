@@ -8,10 +8,16 @@
   position: relative;
   box-shadow: rgba(0, 0, 0, 0.24) 0px -3px 8px, rgba(0, 0, 0, 0.24) 0px 3px 8px;
 
-  .footer-main {
-    padding-top: 20px;
-    padding-bottom: 100px;
+  padding-top: 20px;
+  padding-bottom: 100px;
 
+  .cookies-badge {
+    font-size: 12px;
+    text-wrap: wrap;
+    width: 130px;
+  }
+
+  .footer-main {
     text-align: center;
     font-family: "GenshinFont";
     position: relative;

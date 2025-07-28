@@ -40,6 +40,15 @@ export const Footer: React.FC = () => {
       </div>
     ) : null;
 
+  const snigelBadge =
+    adProvider === "snigel" ? (
+      <div className="cookies-badge">
+        <a className="nn-cmp-show" href="?cmpscreen">
+          Manage Cookie Settings
+        </a>
+      </div>
+    ) : null;
+
   return (
     <div className="footer-wrapper">
       <div className="footer">
@@ -57,6 +66,7 @@ export const Footer: React.FC = () => {
           </a>
           <Link to="/privacy-policy">Privacy Policy</Link>
           {playwireBadge}
+          {snigelBadge}
         </div>
       </div>
     </div>
