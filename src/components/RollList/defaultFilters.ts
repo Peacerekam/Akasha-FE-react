@@ -100,6 +100,7 @@ const ELECTRO_RV_LIST = {
   Varesa: [CRate, CDMG, ATK_, ER],
   Iansan: [CRate, CDMG, ATK_, ER],
   Ororon: [CRate, CDMG, ATK_, ER],
+  Ineffa: [CRate, CDMG, ATK_, ER],
 };
 
 const DENDRO_RV_LIST = {

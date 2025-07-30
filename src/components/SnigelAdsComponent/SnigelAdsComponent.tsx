@@ -30,7 +30,7 @@ const AD_TYPE_TO_KEY: { [key: string]: string } = {
 // <div id="nn_mpu1"></div>
 // <div id="nn_skinl"></div> <- anywhere in <body> tag
 // <div id="nn_skinr"></div> <- anywhere in <body> tag
-// <div id="nn_player"></div>
+// <div id="nn_player"></div> <- anywhere in <body> tag
 
 // <!-- Mobile Tags -->
 // <div id="nn_mobile_lb1"></div>

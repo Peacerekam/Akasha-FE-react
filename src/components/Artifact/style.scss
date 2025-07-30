@@ -81,6 +81,7 @@
     margin-left: calc(var(--artifact-width) / 14.3);
     margin-top: calc(var(--artifact-width) / 5.5);
     font-size: calc(var(--artifact-width) / 20);
+    line-height: calc(var(--artifact-width) / 15);
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: calc(var(--artifact-width) / 1.85);
@@ -90,13 +91,17 @@
     color: white;
     margin-left: calc(var(--artifact-width) / 14.3);
     font-size: calc(var(--artifact-width) / 9.09);
+    line-height: calc(var(--artifact-width) / 9.09);
   }
   .artifact-rarity {
     margin-left: calc(var(--artifact-width) / 14.3);
-    // font-size: calc($width / 20);
+    font-size: calc(var(--artifact-width) / 20);
+    top: calc(var(--artifact-width) / 55);
+    position: relative;
     img {
       width: calc(var(--artifact-width) / 17);
-      margin-right: 3px;
+      height: calc(var(--artifact-width) / 17);
+      margin-right: calc(var(--artifact-width) / 90);
     }
   }
   .artifact-level {
@@ -109,13 +114,14 @@
   .substats {
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: calc(var(--artifact-width) / 90);
     position: absolute;
     margin-left: calc(var(--artifact-width) / 18.2);
     font-size: calc(var(--artifact-width) / 19);
     top: calc(var(--artifact-width) / 1.39);
     opacity: 0.8;
     white-space: nowrap;
+    line-height: calc(var(--artifact-width) / 18.95);
     > .substat {
       width: calc(var(--artifact-width) / 1.09);
       display: flex;
@@ -124,7 +130,7 @@
         text-overflow: ellipsis;
       }
       > .substat-value {
-        margin-right: 5px;
+        margin-right: calc(var(--artifact-width) / 54);
       }
 
       &.show-rolls-num {
@@ -154,7 +160,8 @@
     font-size: calc(var(--artifact-width) / 23);
     font-family: Arial, Helvetica, sans-serif;
     background-color: black;
-    padding: 2px 4px 1px;
+    padding: calc(var(--artifact-width) / 135) calc(var(--artifact-width) / 67)
+      calc(var(--artifact-width) / 270);
     border-radius: 50px;
     color: white;
   }

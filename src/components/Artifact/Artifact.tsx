@@ -96,9 +96,7 @@ export const Artifact: React.FC<ArtifactProps> = ({
           <FontAwesomeIcon icon={faRotateRight} />{" "}
           <span className="reroll-text">×{artifact.rerollNum}</span>
         </div>
-      ) : (
-        ""
-      )}
+      ) : null}
       <div className="artifact-stat-name">{translate(mainStatKey)}</div>
       <div className="artifact-stat-value">
         {mainStatValue}
