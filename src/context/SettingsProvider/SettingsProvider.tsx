@@ -42,10 +42,12 @@ const defaultValue = {
 const SettingsContext = createContext(defaultValue);
 
 const SettingsContextProvider: React.FC<{ children: any }> = ({ children }) => {
+  // state for local-storage
   const [metric, setMetric] = useState<Metric>();
   const [topDecimals, setTopDecimals] = useState<number>();
   const [showcaseState, setShowcaseState] = useState<boolean>();
 
+  // state outside of local-storage
   const [customRvFilter, _setCustomRvFilter] =
     useState<Record<string, string[]>>(allRvFilters);
 

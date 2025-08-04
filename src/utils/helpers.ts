@@ -4,9 +4,12 @@ import {
   getSubstatEfficiency,
   roundToFixed,
 } from "./substats";
+import {
+  getDefaultRvFilters,
+  getOverrideRvFilters,
+} from "../components/RollList/defaultFilters";
 
 import { IHash } from "../types/IHash";
-import { getDefaultRvFilters } from "../components/RollList/defaultFilters";
 import { getStatsFromRow } from "../components";
 
 export const PATREON_URL = "https://www.patreon.com/mimee";
@@ -676,8 +679,12 @@ export const getRelevantEmErHb = (row: any) => {
 //   return relevantExtraStats;
 // };
 
-export const getRelevantStatFromRvFilter = (row: any) => {
-  const rvFilter = getDefaultRvFilters(row.name);
+export const getRelevantStatFromRvFilter = (
+  row: any,
+  calcId?: string | number
+) => {
+  const rvOverride = getOverrideRvFilters(calcId);
+  const rvFilter = rvOverride || getDefaultRvFilters(row.name);
   const formattedRvFilter = rvFilter
     .filter((x) => !(x.startsWith("Crit") || x.startsWith("Flat"))) // no crits, no flats
     .map((x) => x.replace("%", "")); // format properly
@@ -764,14 +771,17 @@ export const fillUpToFourStats = (stats: any[], row: any) => {
   return stats;
 };
 
-export const getRelevantCharacterStats = (row: any) => {
+export const getRelevantCharacterStats = (
+  row: any,
+  calcId?: string | number
+) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [mainDmgBonus, ...otherDmgBonuses] = getRelevantDmgBonuses(row);
 
   const prepStats = [
     mainDmgBonus, // only get 1st?
     ...getRelevantMainStats(row),
-    ...getRelevantStatFromRvFilter(row),
+    ...getRelevantStatFromRvFilter(row, calcId),
     ...getRelevantEmErHb(row),
     // ...getRelevantHpOrAtkOrDef(row),
     // get relevant from substats ?? (hp?)

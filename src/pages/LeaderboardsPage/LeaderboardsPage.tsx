@@ -266,7 +266,7 @@ export const LeaderboardsPage: React.FC = () => {
         //   return normalizeText(key);
         // },
         cell: (row: any) => {
-          const relevantStats = getRelevantCharacterStats(row);
+          const relevantStats = getRelevantCharacterStats(row, calculationId);
 
           const _stat = relevantStats?.[i];
           if (!_stat) return <></>;

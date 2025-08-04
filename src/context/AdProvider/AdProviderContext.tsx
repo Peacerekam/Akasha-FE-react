@@ -88,7 +88,9 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
 
     if (adProvider === "snigel") {
       try {
-        (window as any).AdSlots.disableAds = false;
+        if ((window as any)?.AdSlots?.disableAds) {
+          (window as any).AdSlots.disableAds = false;
+        }
         (window as any)?.reloadAdSlots?.();
       } catch (err) {
         console.log(err);
@@ -99,7 +101,9 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
   const disableAdsForThisPage = () => {
     setAdsDisabled(true);
     if (adProvider === "snigel") {
-      (window as any).AdSlots.disableAds = true;
+      if ((window as any)?.AdSlots?.disableAds) {
+        (window as any).AdSlots.disableAds = true;
+      }
     }
   };
 

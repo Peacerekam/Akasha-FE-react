@@ -90,6 +90,7 @@ type CharacterCardProps = {
   row: any;
   artifacts: any[];
   _calculations: any;
+  selectedCalculationId?: string;
   setSelectedCalculationId?: any;
   errorCallback?: () => {};
   invalidateCache?: (md5?: string) => void;
@@ -263,6 +264,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   row,
   artifacts,
   _calculations,
+  selectedCalculationId,
   setSelectedCalculationId,
   errorCallback,
   invalidateCache,
@@ -566,7 +568,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
     const searchQuery = location.search;
     const query = new URLSearchParams(searchQuery);
-    const calcId = query.get("calcId");
+    const calcId = !row?.isExpandRow && query.get("calcId");
 
     if (calcId) {
       preSort = preSort.filter((x) => x.startsWith(calcId));
@@ -621,6 +623,12 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     setFilteredLeaderboards(_calculationId);
     setSelectedCalculationId(_calculationId?.[0]);
   }, [calculationIds]);
+
+  useEffect(() => {
+    if (filteredLeaderboards?.length === 1) {
+      setSelectedCalculationId(filteredLeaderboards?.[0]);
+    }
+  }, [filteredLeaderboards]);
 
   const displayCharts = useCallback(
     (chartData: any, calculationId: string, calcOverride?: any) => {
@@ -1032,6 +1040,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       </div>
     );
   }, [
+    row,
     privacyFlag,
     chartsData,
     filteredLeaderboards,
@@ -2640,7 +2649,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
               <div className="character-right">{leaderboardHighlighs}</div>
               <div className="character-artifacts">{compactList}</div>
               <div className="character-artifacts-rv">
-                <RollList artifacts={reorderedArtifacts} character={row.name} />
+                <RollList
+                  artifacts={reorderedArtifacts}
+                  character={row.name}
+                  calculationId={selectedCalculationId}
+                />
               </div>
               <div
                 className={cssJoin([

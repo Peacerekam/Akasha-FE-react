@@ -10,20 +10,39 @@ import {
   getInGameSubstatValue,
   isPercent,
 } from "../../utils/helpers";
+import { getDefaultRvFilters, getOverrideRvFilters } from "./defaultFilters";
 
 import { SettingsContext } from "../../context/SettingsProvider/SettingsProvider";
 import { StatIcon } from "../StatIcon";
-import { getDefaultRvFilters } from "./defaultFilters";
+import { useParams } from "react-router-dom";
 
 type RollListProps = {
   artifacts: any[];
   character: string;
+  calculationId?: string;
 };
 
-export const RollList: React.FC<RollListProps> = ({ artifacts, character }) => {
+export const RollList: React.FC<RollListProps> = ({
+  artifacts,
+  character,
+  calculationId,
+}) => {
   const { customRvFilter, setCustomRvFilter } = useContext(SettingsContext);
 
   const filter = customRvFilter[character] || getDefaultRvFilters(character);
+  const { calculationId: _calculationId } = useParams();
+
+  useEffect(() => {
+    const calcId = _calculationId || calculationId;
+    const rv = getOverrideRvFilters(calcId);
+
+    if (rv) {
+      setCustomRvFilter(character, rv);
+      return;
+    }
+
+    setCustomRvFilter(character, getDefaultRvFilters(character));
+  }, [_calculationId, calculationId]);
 
   useEffect(() => {
     if (!customRvFilter[character]) {

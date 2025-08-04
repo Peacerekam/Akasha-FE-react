@@ -9,7 +9,95 @@ const ATK = "Flat ATK";
 const DEF = "Flat DEF";
 const HP = "Flat HP";
 
-const ANEMO_RV_LIST = {
+type Stats =
+  | "Elemental Mastery"
+  | "Energy Recharge"
+  | "Crit RATE"
+  | "Crit DMG"
+  | "ATK%"
+  | "DEF%"
+  | "HP%"
+  | "Flat ATK"
+  | "Flat DEF"
+  | "Flat HP";
+
+type OverrideRV = {
+  [characterName: string]: {
+    lbs?: number[]; // string?
+    rv?: Stats[];
+  };
+};
+
+type CharacterRVs = {
+  [characterName: string]: Stats[];
+};
+
+type OverrideRVs = {
+  [calculationId: number | string]: Stats[];
+};
+
+const OVERRIDE_RV_LIST: OverrideRV = {
+  Klee: {},
+  Fischl: {},
+  Yoimiya: {},
+  Mavuika: {},
+  Xiangling: {},
+  Furina: {
+    lbs: [
+      // vape
+      1000008910, 1000008911, 1000008912, 1000008913, 1000008914, 1000008915,
+      1000008916, 1000008917, 1000008918, 1000008919,
+    ],
+    rv: [CRate, CDMG, HP_, EM, ER],
+  },
+  Arlecchino: {
+    lbs: [
+      // overload
+      // mono pyro
+    ],
+    rv: [CRate, CDMG, ATK_],
+  },
+  Beidou: {
+    lbs: [
+      // aggravate
+      1000002412, 1000002413, 1000002414, 1000002415, 1000002416, 1000002417,
+    ],
+    rv: [CRate, CDMG, ATK_, EM, ER],
+  },
+  Ganyu: {
+    lbs: [
+      // freeze
+      1000003701, 1000003703, 1000003705, 1000003707, 1000003709,
+    ],
+    rv: [CRate, CDMG, ATK_],
+  },
+  Wriothesley: {
+    lbs: [
+      // solo?
+      // 1000008600, 1000008601, 1000008602,
+      // freeze
+      1000008603, 1000008604, 1000008605,
+    ],
+    rv: [CRate, CDMG, ATK_, ER],
+  },
+};
+
+const overrideRvFilter: OverrideRVs = Object.keys(OVERRIDE_RV_LIST).reduce(
+  (acc, val) => {
+    const lbs = OVERRIDE_RV_LIST[val].lbs;
+    const rv = OVERRIDE_RV_LIST[val].rv;
+    if (!lbs || !rv) return acc;
+
+    for (const calcId of lbs) {
+      acc[calcId] = rv;
+    }
+
+    return acc;
+  },
+  {} as OverrideRVs
+);
+
+const ANEMO_RV_LIST: CharacterRVs = {
   Sayu: [CRate, CDMG, EM, ER],
   Venti: [CRate, CDMG, ATK_, EM, ER],
   Xiao: [CRate, CDMG, ATK_, ER],
@@ -24,7 +112,7 @@ const ANEMO_RV_LIST = {
   Ifa: [CRate, CDMG, ATK_, EM, ER],
 };
 
-const PYRO_RV_LIST = {
+const PYRO_RV_LIST: CharacterRVs = {
   Klee: [CRate, CDMG, ATK_, EM],
   Diluc: [CRate, CDMG, ATK_, EM],
   Dehya: [CRate, CDMG, ATK_, ER, HP_],
@@ -43,7 +131,7 @@ const PYRO_RV_LIST = {
   Mavuika: [CRate, CDMG, ATK_, EM],
 };
 
-const HYDRO_RV_LIST = {
+const HYDRO_RV_LIST: CharacterRVs = {
   Nilou: [CRate, EM, ER, CDMG, HP_, HP],
   Xingqiu: [CRate, CDMG, ATK_, ER],
   Mona: [CRate, CDMG, ER, EM, ATK_],
@@ -58,7 +146,7 @@ const HYDRO_RV_LIST = {
   Mualani: [CRate, CDMG, HP_, EM],
 };
 
-const CRYO_RV_LIST = {
+const CRYO_RV_LIST: CharacterRVs = {
   Diona: [CRate, CDMG, HP_, ER],
   Qiqi: [CRate, CDMG, ATK_],
   Eula: [CRate, CDMG, ER, ATK_],
@@ -73,7 +161,7 @@ const CRYO_RV_LIST = {
   Skirk: [CRate, CDMG, ATK_],
 };
 
-const GEO_RV_LIST = {
+const GEO_RV_LIST: CharacterRVs = {
   Albedo: [CRate, CDMG, DEF_],
   Noelle: [CRate, CDMG, DEF_, ATK_, ER],
   Zhongli: [CRate, CDMG, ATK_, HP_],
@@ -84,7 +172,7 @@ const GEO_RV_LIST = {
   Xilonen: [CRate, CDMG, ER, DEF_],
 };
 
-const ELECTRO_RV_LIST = {
+const ELECTRO_RV_LIST: CharacterRVs = {
   Razor: [CRate, CDMG, ATK_],
   Lisa: [CRate, CDMG, ATK_, EM],
   Fischl: [ATK_, EM, CRate, CDMG],
@@ -103,7 +191,7 @@ const ELECTRO_RV_LIST = {
   Ineffa: [CRate, CDMG, ATK_, EM, ER],
 };
 
-const DENDRO_RV_LIST = {
+const DENDRO_RV_LIST: CharacterRVs = {
   Nahida: [CRate, CDMG, ATK_, EM],
   Alhaitham: [CRate, CDMG, ATK_, EM, ER],
   Tighnari: [CRate, CDMG, ATK_, EM, ER],
@@ -115,7 +203,7 @@ const DENDRO_RV_LIST = {
 
 const defaultRvFilter = [CRate, CDMG];
 
-export const allRvFilters: Record<string, string[]> = {
+export const allRvFilters: CharacterRVs = {
   ...ANEMO_RV_LIST,
   ...PYRO_RV_LIST,
   ...HYDRO_RV_LIST,
@@ -126,6 +214,17 @@ export const allRvFilters: Record<string, string[]> = {
   Traveler: [CRate, CDMG, ER, ATK_], // Traveler can have different RV filter depending on the element?
 };
 
-export const getDefaultRvFilters = (character: string) => {
-  return allRvFilters[character] || defaultRvFilter;
+export const getDefaultRvFilters = (characterName: string) => {
+  return allRvFilters[characterName] || defaultRvFilter;
+};
+
+export const getOverrideRvFilters = (calculationId?: string | number) => {
+  if (!calculationId) return;
+
+  if (calculationId) {
+    calculationId = (calculationId + "").slice(0, 10);
+  }
+
+  const override = overrideRvFilter[calculationId];
+  return override;
 };

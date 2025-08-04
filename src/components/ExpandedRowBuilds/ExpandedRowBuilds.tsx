@@ -122,6 +122,7 @@ export const ExpandedRowBuilds: React.FC<ExpandedRowBuildsProps> = ({
           row={row}
           artifacts={artifacts}
           _calculations={_calculations}
+          selectedCalculationId={selectedCalculationId}
           setSelectedCalculationId={setSelectedCalculationId}
           errorCallback={errorCallback}
           invalidateCache={invalidateCache}
