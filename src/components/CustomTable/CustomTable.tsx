@@ -5,6 +5,7 @@ import {
   FETCH_CATEGORIES_URL_V2,
   FETCH_COLLECTION_SIZE_URL,
   FETCH_SEARCH_USERS_URL,
+  FETCH_STYGIAN_LB_URL,
   abortSignalCatcher,
   arrayPushOrSplice,
   cssJoin,
@@ -126,6 +127,7 @@ const getCollectionName = (fetchURL: string = "") => {
 
   const collectionName = {
     [FETCH_ARTIFACTS_URL]: "artifacts",
+    [FETCH_STYGIAN_LB_URL]: "stygianLb",
     [FETCH_LEADERBOARDS_URL]: "charactersLb",
     [FETCH_BUILDS_URL]: "characters",
     [FETCH_ACCOUNTS_URL]: "accounts",
@@ -321,6 +323,10 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   };
 
   useEffect(() => {
+    setWarningText(warningMessage);
+  }, [warningMessage]);
+
+  useEffect(() => {
     if (projectParamsToPath) {
       readParamsFromURL();
     }
@@ -447,7 +453,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
       const { data, totalRowsHash } = response.data;
 
       setExpandedRows([]);
-      setRows(data);
+      setRows(data || []);
       setTotalRowsHash(totalRowsHash);
     };
 

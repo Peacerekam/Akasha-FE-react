@@ -17,6 +17,7 @@ import {
   FETCH_ACCOUNTS_FILTERS_URL,
   FETCH_ACCOUNTS_URL,
 } from "../../utils/helpers";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import React, { useContext, useMemo } from "react";
 
 import Achievevement from "../../assets/icons/Achievement.webp";
@@ -29,10 +30,29 @@ import { LookupUID } from "./LookupUID";
 import { TableColumn } from "../../types/TableColumn";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
+
+const STYGIAN_WARNING = (
+  <div>
+    <div>
+      This table does <b>NOT</b> show leaderboards or rankings!
+    </div>
+    <div>
+      Stygian Onslaught rankings can be seen only on the{" "}
+      <b>leaderboard pages</b> found{" "}
+      <Link to={"/leaderboards/stygian/5_7"}>here</Link>.
+      {/* @TODO: 5_7??? default to newest version !!! */}
+      {/* @TODO: 5_7??? default to newest version !!! */}
+      {/* @TODO: 5_7??? default to newest version !!! */}
+      {/* @TODO: 5_7??? default to newest version !!! */}
+    </div>
+    <div>Click anywhere around this message to uncover the profiles table.</div>
+  </div>
+);
 
 export const AccountsPage: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
   const { hoverElement } = useContext(HoverElementContext);
   const { language, translate } = useContext(TranslationContext);
 
@@ -260,6 +280,9 @@ export const AccountsPage: React.FC = () => {
     [language, translate]
   );
 
+  const stygianSort = location.search.includes("playerInfo.stygianScore");
+  const warningMessage = stygianSort ? STYGIAN_WARNING : false;
+
   return (
     <div className="flex">
       {hoverElement}
@@ -290,6 +313,7 @@ export const AccountsPage: React.FC = () => {
             // expandableRows
             projectParamsToPath
             expandableRows
+            warningMessage={warningMessage}
           />
         </div>
       </div>

@@ -22,6 +22,7 @@ export const FETCH_ARTIFACTS_URL = `/api/artifacts`;
 export const FETCH_BUILDS_URL = `/api/builds/`;
 export const FETCH_ACCOUNTS_URL = `/api/accounts`;
 export const FETCH_LEADERBOARDS_URL = `/api/leaderboards`;
+export const FETCH_STYGIAN_LB_URL = `/api/leaderboards/stygian`;
 export const FETCH_CATEGORIES_URL = `/api/leaderboards/categories`;
 export const FETCH_CATEGORIES_URL_V2 = `/api/v2/leaderboards/categories`;
 export const FETCH_SEARCH_USERS_URL = "/api/search/user/";

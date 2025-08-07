@@ -42,6 +42,13 @@ const OVERRIDE_RV_LIST: OverrideRV = {
   Yoimiya: {},
   Mavuika: {},
   Xiangling: {},
+  Arlecchino: {
+    lbs: [
+      // overload
+      // mono pyro
+    ],
+    rv: [CRate, CDMG, ATK_],
+  },
   Furina: {
     lbs: [
       // vape
@@ -49,13 +56,6 @@ const OVERRIDE_RV_LIST: OverrideRV = {
       1000008916, 1000008917, 1000008918, 1000008919,
     ],
     rv: [CRate, CDMG, HP_, EM, ER],
-  },
-  Arlecchino: {
-    lbs: [
-      // overload
-      // mono pyro
-    ],
-    rv: [CRate, CDMG, ATK_],
   },
   Beidou: {
     lbs: [

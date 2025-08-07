@@ -780,7 +780,6 @@ export const LeaderboardsPage: React.FC = () => {
               </div>
               <div className="flex" style={{ margin: 10 }}>
                 {displayChart}
-                {/* {displayPodium} */}
                 {thisCalc && (
                   <div
                     style={{

@@ -302,6 +302,7 @@ export const Pagination: React.FC<PaginationProps> = ({
     // accounts columns
     "playerInfo.finishAchievementNum": "Achievements",
     "playerInfo.stygianScore": "Stygian Score",
+    "stygianScore": "Stygian Score",
     "playerInfo.maxFriendshipCount": "Max Friendship Count",
     "playerInfo.level": "Adventure Rank",
     lastProfileUpdate: "Last profile update",
