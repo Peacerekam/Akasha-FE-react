@@ -49,15 +49,15 @@ export const PrivacyPolicyPage: React.FC = () => {
           </>
         ),
         google: (
-          <p>akasha.cv uses ads from Google Adsense to support the site</p>
+          <p>akasha.cv uses ads from Google Adsense to support the site.</p>
         ),
         venatus: (
-          <p>akasha.cv uses ads from Venatus Media to support the site</p>
+          <p>akasha.cv uses ads from Venatus Media to support the site.</p>
         ),
         snigel: (
           <>
             <p>
-              akasha.cv uses ads from Publisher Collective to support the site
+              akasha.cv uses ads from Publisher Collective to support the site.
             </p>
             <p>
               <strong>For EU Users only:</strong> If you are located in
@@ -74,6 +74,24 @@ export const PrivacyPolicyPage: React.FC = () => {
                 here
               </a>
               .
+            </p>
+          </>
+        ),
+        publift: (
+          <>
+            <p>akasha.cv uses ads from Publift to support the site.</p>
+            <p>
+              California Consumer Privacy Act (“CCPA”) Under CCPA, Californian
+              residents have the right to declare their preferences on the sale
+              of data for advertising and marketing purposes. If you wish to
+              change your preferences, click this link to launch our preference
+              portal:
+              <div id="fuse-privacy-tool" data-fuse-privacy-tool></div>
+            </p>
+            <p>
+              We use a third-party to provide monetisation technologies for our
+              site. You can review their privacy and cookie policy at
+              https://publift.com/privacy-policy/.
             </p>
           </>
         ),

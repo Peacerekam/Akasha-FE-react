@@ -2,13 +2,13 @@ import "./index.scss";
 
 import React, { useEffect } from "react";
 
-import { IS_PRODUCATION } from "../../utils/maybeEnv";
+import { IS_PRODUCATION } from "../../../utils/maybeEnv";
 
-export type AdsComponentProps = {
+export type GoogleAdsComponentProps = {
   dataAdSlot?: string;
 };
 
-export const AdsComponent: React.FC<AdsComponentProps> = ({ dataAdSlot }) => {
+export const GoogleAdsComponent: React.FC<GoogleAdsComponentProps> = ({ dataAdSlot }) => {
   useEffect(() => {
     try {
       ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push(

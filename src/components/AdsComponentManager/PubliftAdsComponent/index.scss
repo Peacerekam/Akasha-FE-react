@@ -1,0 +1,23 @@
+body.ads-disabled {
+  #sidebar_lhs,
+  #sidebar_rhs,
+  .publift-container,
+  .publift-ad-unit {
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+}
+
+body.ad-provider-publift {
+  // only the flex-special-container on top of the page
+  .navbar-tabs ~ .flex-special-container {
+    transition: 0.25s;
+    transition-delay: 0.5s;
+    align-items: center;
+  }
+
+  .ad-debug {
+    display: none !important;
+  }
+}

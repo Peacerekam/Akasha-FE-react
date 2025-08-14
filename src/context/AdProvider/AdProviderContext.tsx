@@ -1,9 +1,15 @@
 import React, { createContext, useEffect, useState } from "react";
 
-import Ramp from "../../components/PlaywireAdsComponent/Ramp";
+import Ramp from "../../components/AdsComponentManager/PlaywireAdsComponent/Ramp";
 import { useLocation } from "react-router-dom";
 
-type AdProviders = null | "google" | "venatus" | "playwire" | "snigel";
+type AdProviders =
+  | null
+  | "google"
+  | "venatus"
+  | "playwire"
+  | "snigel"
+  | "publift";
 
 type AdProviderContextType = {
   adProvider: AdProviders;
@@ -64,13 +70,22 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
   useEffect(() => {
     if (adProvider) return;
 
+    const adProviderMeta = document.querySelector("#adProvider");
+
+    if (adProviderMeta) {
+      const _adProvider = adProviderMeta.getAttribute("content") as AdProviders;
+      setAdProvider(_adProvider);
+    } else {
+      setAdProvider("snigel");
+    }
+
     // if (location.search.includes("test-page")) {
-    //   setAdProvider("snigel");
+    //   setAdProvider("publift");
     // } else {
-    //   setAdProvider("playwire");
+    //   setAdProvider("snigel");
     // }
 
-    setAdProvider("snigel");
+    // setAdProvider("snigel");
     setContentWidth(1100);
   }, [location.search]);
 
@@ -92,6 +107,25 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
           (window as any).AdSlots.disableAds = false;
         }
         (window as any)?.reloadAdSlots?.();
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    if (adProvider === "publift") {
+      try {
+        const fusetag =
+          (window as any).fusetag || ((window as any).fusetag = { que: [] });
+
+        fusetag.que.push(function () {
+          fusetag.pageInit({
+            blockingFuseIds: [
+              "header", // ATF
+              // "incontent_1", // Rect - not all pages have rect ad?
+              "incontent_2", // BTF
+            ],
+          });
+        });
       } catch (err) {
         console.log(err);
       }
@@ -145,26 +179,7 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
     <AdProviderContext.Provider value={value}>
       {adProvider === "playwire" && (
         <>
-          {/* <div
-            style={{
-              position: "absolute",
-              textAlign: "center",
-              width: "calc(100% - 25px)",
-              padding: 5,
-              color: "red",
-              fontSize: 12,
-              pointerEvents: "none",
-            }}
-          >
-            <div>PLAYWIRE RAMP COMPONENT</div>
-            <div>PLAYWIRE_PUBLISHER_ID: {PLAYWIRE_PUBLISHER_ID}</div>
-            <div>PLAYWIRE_WEBSITE_ID: {PLAYWIRE_WEBSITE_ID}</div>
-          </div> */}
           {/* Only load this component once, at the top most level of your app */}
-
-          {/* this used to work... */}
-          {/* <Ramp publisherId={PLAYWIRE_PUBLISHER_ID} id={PLAYWIRE_WEBSITE_ID} /> */}
-
           <Ramp
             PUB_ID={PLAYWIRE_PUBLISHER_ID}
             WEBSITE_ID={PLAYWIRE_WEBSITE_ID}
@@ -177,6 +192,14 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
           <div id="nn_skinl" />
           <div id="nn_skinr" />
           <div id="nn_player" />
+        </>
+      )}
+      {adProvider === "publift" && (
+        <>
+          {/* <!-- GAM 71161633/AKSHA_akashacv/sidebar_lhs --> */}
+          {/* <!-- GAM 71161633/AKSHA_akashacv/sidebar_rhs --> */}
+          <div id="sidebar_lhs" data-fuse="sidebar_lhs" />
+          <div id="sidebar_rhs" data-fuse="sidebar_rhs" />
         </>
       )}
     </AdProviderContext.Provider>

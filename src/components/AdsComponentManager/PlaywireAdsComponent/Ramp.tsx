@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 
-import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
+import { AdProviderContext } from "../../../context/AdProvider/AdProviderContext";
 import { useLocation } from "react-router-dom";
 
 type RampProps = {

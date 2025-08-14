@@ -1,7 +1,7 @@
 import "./index.scss";
 
-import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
-import { cssJoin } from "../../utils/helpers";
+import { AdProviderContext } from "../../../context/AdProvider/AdProviderContext";
+import { cssJoin } from "../../../utils/helpers";
 import { useContext } from "react";
 
 export type PlaywireAdsComponentProps = {

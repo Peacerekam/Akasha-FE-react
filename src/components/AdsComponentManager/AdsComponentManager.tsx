@@ -1,19 +1,20 @@
-import { AdsComponent, AdsComponentProps } from "../AdsComponent";
+import { GoogleAdsComponent, GoogleAdsComponentProps } from "./GoogleAdsComponent";
 import {
   PlaywireAdsComponent,
   PlaywireAdsComponentProps,
-} from "../PlaywireAdsComponent/PlaywireAdsComponent";
+} from "./PlaywireAdsComponent/PlaywireAdsComponent";
 import React, { useContext } from "react";
 
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
+import { PubliftAdsComponent } from "./PubliftAdsComponent";
 import { SHOW_ADS } from "../../utils/maybeEnv";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
-import { SnigelAdsComponent } from "../SnigelAdsComponent/SnigelAdsComponent";
-import VenatusAdsComponent from "../VenatusAdsComponent/VenatusAdsComponent";
-import { VenatusAdsComponentProps } from "../VenatusAdsComponent";
+import { SnigelAdsComponent } from "./SnigelAdsComponent/SnigelAdsComponent";
+import VenatusAdsComponent from "./VenatusAdsComponent/VenatusAdsComponent";
+import { VenatusAdsComponentProps } from "./VenatusAdsComponent";
 
 type AdsComponentManagerProps = VenatusAdsComponentProps &
-  AdsComponentProps &
+  GoogleAdsComponentProps &
   PlaywireAdsComponentProps;
 
 export const AdsComponentManager: React.FC<AdsComponentManagerProps> = (
@@ -42,7 +43,7 @@ export const AdsComponentManager: React.FC<AdsComponentManagerProps> = (
 
   if (adProvider === "google" && props.dataAdSlot) {
     if (props.hideOnDesktop) return <></>; // dont even bother if its adsense tbh
-    return <AdsComponent dataAdSlot={props.dataAdSlot} />;
+    return <GoogleAdsComponent dataAdSlot={props.dataAdSlot} />;
   }
 
   if (adProvider === "venatus" && props.adType) {
@@ -68,16 +69,12 @@ export const AdsComponentManager: React.FC<AdsComponentManagerProps> = (
   }
 
   if (adProvider === "snigel") {
-    return (
-      <SnigelAdsComponent
-        adType={props.adType}
-        // hybrid={props.hybrid}
-        // hideOnDesktop={props.hideOnDesktop}
-        // hideOnMobile={props.hideOnMobile}
-      />
-    );
+    return <SnigelAdsComponent adType={props.adType} />;
   }
 
+  if (adProvider === "publift") {
+    return <PubliftAdsComponent adType={props.adType} />;
+  }
 
   return <></>;
 };
