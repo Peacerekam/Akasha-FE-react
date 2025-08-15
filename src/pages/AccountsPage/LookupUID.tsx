@@ -171,7 +171,7 @@ export const LookupUID: React.FC<LookupUIDProps> = ({ disableAd }) => {
         sortField: "playerInfo.finishAchievementNum",
         cell: (row) => {
           const finishAchievementNum =
-            Math.round(row.playerInfo?.finishAchievementNum) ?? 0;
+            Math.round(row.playerInfo?.finishAchievementNum) || 0;
 
           return (
             // <div>

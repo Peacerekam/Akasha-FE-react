@@ -1,6 +1,9 @@
 body.ads-disabled {
   #sidebar_lhs,
   #sidebar_rhs,
+  .publift-widget-sticky_footer-container-background,
+  .publift-widget-sticky_footer-button,
+  .publift-widget-sticky_footer,
   .publift-container,
   .publift-ad-unit {
     display: none !important;
@@ -10,6 +13,17 @@ body.ads-disabled {
 }
 
 body.ad-provider-publift {
+  &:not(.ads-disabled) {
+    .navbar-tabs ~ .flex-special-container {
+      margin-top: 25px !important;
+    }
+    @media (max-width: 800px) {
+      #root > .flex-special-container {
+        min-height: 130px;
+      }
+    }
+  }
+
   // only the flex-special-container on top of the page
   .navbar-tabs ~ .flex-special-container {
     transition: 0.25s;
@@ -17,7 +31,71 @@ body.ad-provider-publift {
     align-items: center;
   }
 
-  .ad-debug {
-    display: none !important;
+  #sidebar_lhs,
+  #sidebar_rhs {
+    position: fixed;
+    top: 200px;
+    left: 50%;
+    display: block;
+    overflow: visible;
+  }
+
+  #sidebar_rhs {
+    // right sticky
+    margin-left: -950px;
+  }
+
+  #sidebar_lhs {
+    // left sticky
+    margin-left: 650px;
+  }
+
+  .flex-special-container {
+    gap: 10px;
+  }
+
+  .profile-header-wrapper {
+    gap: 10px;
+
+    @media (max-width: 700px) {
+      gap: 25px;
+    }
+  }
+
+  .publift-container {
+    .ad-debug {
+      display: none !important;
+    }
+
+    // .publift-ad-unit {
+    //   display: flex;
+    //   justify-content: center;
+    //   align-items: center;
+    // }
+    &.video-ad-container {
+      display: contents;
+
+      .publift-ad-unit {
+        display: contents;
+      }
+    }
+  }
+  .publift-widget-sticky_footer-container {
+    pointer-events: none;
+    .publift-widget-sticky_footer-container-background {
+      // default has white background
+      background: transparent;
+      pointer-events: none;
+    }
+    // .publift-widget-sticky_footer-button {
+    //   // idk
+    // }
+    .publift-widget-sticky_footer {
+      // actual ad
+      pointer-events: none;
+      > * {
+        pointer-events: all;
+      }
+    }
   }
 }

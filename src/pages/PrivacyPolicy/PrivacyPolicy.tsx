@@ -85,13 +85,32 @@ export const PrivacyPolicyPage: React.FC = () => {
               residents have the right to declare their preferences on the sale
               of data for advertising and marketing purposes. If you wish to
               change your preferences, click this link to launch our preference
-              portal:
-              <div id="fuse-privacy-tool" data-fuse-privacy-tool></div>
+              portal:{" "}
+              <a
+                href="#"
+                id="fuse-privacy-tool"
+                data-fuse-privacy-tool
+                onClick={(e) => {
+                  e.preventDefault();
+                  (window as any)?.__tcfapi?.("displayConsentUi", 2, () => {
+                    console.log("[CMP-V2]: GDPR Consent UI displayed");
+                  });
+                }}
+              >
+                Privacy Settings
+              </a>
+              {/* <div id="fuse-privacy-tool" data-fuse-privacy-tool /> */}
             </p>
             <p>
               We use a third-party to provide monetisation technologies for our
-              site. You can review their privacy and cookie policy at
-              https://publift.com/privacy-policy/.
+              site.
+            </p>
+            <p>
+              You can review their privacy and cookie policy at{" "}
+              <a href="https://publift.com/privacy-policy/">
+                https://publift.com/privacy-policy/
+              </a>
+              .
             </p>
           </>
         ),

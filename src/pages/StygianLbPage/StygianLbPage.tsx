@@ -14,7 +14,7 @@ import {
 import {
   FETCH_ACCOUNTS_FILTERS_URL,
   FETCH_STYGIAN_LB_URL,
-  isEntryNew,
+  uidToRegion,
   uidsToQuery,
 } from "../../utils/helpers";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -94,7 +94,7 @@ export const StygianLbPage: React.FC = () => {
         cell: (row) => {
           // if (!row.playerInfo?.level) return <></>;
           const isEnkaProfile = isNaN(+row.uid);
-          const isNew = isEntryNew(row?.lastProfileUpdate);
+          // const isNew = isEntryNew(row?.lastProfileUpdate);
 
           return (
             <a
@@ -108,7 +108,7 @@ export const StygianLbPage: React.FC = () => {
               href={`/profile/${row.uid}`}
             >
               {/* <ARBadge adventureRank={row.owner.adventureRank} /> */}
-              <RegionBadge region={row.playerInfo.region} />
+              <RegionBadge region={row.playerInfo?.region || uidToRegion(row.uid)} />
               {/* {isEnkaProfile ? <EnkaBadge /> : ""} */}
 
               <div className="table-icon-text-pair">
@@ -117,7 +117,7 @@ export const StygianLbPage: React.FC = () => {
                     alt=" "
                     className="table-icon"
                     src={row.profilePictureLink}
-                    title={row.playerInfo.nickname}
+                    title={row.playerInfo?.nickname}
                   />
                 ) : (
                   <FontAwesomeIcon
@@ -128,9 +128,9 @@ export const StygianLbPage: React.FC = () => {
                 )}
               </div>
 
-              {isNew && <div className="new-lb-badge mr-3" />}
+              {/* {isNew && <div className="new-lb-badge mr-3" />} */}
 
-              {row.playerInfo.nickname}
+              {row.playerInfo?.nickname}
             </a>
           );
         },
@@ -162,7 +162,7 @@ export const StygianLbPage: React.FC = () => {
         sortField: "playerInfo.level",
         width: "50px",
         cell: (row) => {
-          const adventureRank = row?.playerInfo.level || 0;
+          const adventureRank = row?.playerInfo?.level || 0;
           return (
             <div>
               <ARBadge adventureRank={adventureRank} />
@@ -176,7 +176,7 @@ export const StygianLbPage: React.FC = () => {
         sortField: "playerInfo.finishAchievementNum",
         cell: (row) => {
           const finishAchievementNum =
-            Math.round(row.playerInfo?.finishAchievementNum) ?? 0;
+            Math.round(row.playerInfo?.finishAchievementNum) || 0;
 
           return (
             // <div>
