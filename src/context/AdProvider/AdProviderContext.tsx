@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useMemo, useState } from "react";
 
 import Ramp from "../../components/AdsComponentManager/PlaywireAdsComponent/Ramp";
 import { useLocation } from "react-router-dom";
@@ -175,6 +175,11 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
     setPreventContentShrinking,
   };
 
+  const sidebarOffset = useMemo(
+    () => (adProvider === "publift" ? width / 2 + contentWidth / 2 + 10 : 0),
+    [adProvider, width, contentWidth]
+  );
+
   return (
     <AdProviderContext.Provider value={value}>
       {adProvider === "playwire" && (
@@ -198,8 +203,16 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
         <>
           {/* <!-- GAM 71161633/AKSHA_akashacv/sidebar_lhs --> */}
           {/* <!-- GAM 71161633/AKSHA_akashacv/sidebar_rhs --> */}
-          <div id="sidebar_lhs" data-fuse="sidebar_lhs" />
-          <div id="sidebar_rhs" data-fuse="sidebar_rhs" />
+          <div
+            id="sidebar_lhs"
+            data-fuse="sidebar_lhs"
+            style={{ right: sidebarOffset }}
+          />
+          <div
+            id="sidebar_rhs"
+            data-fuse="sidebar_rhs"
+            style={{ left: sidebarOffset }}
+          />
         </>
       )}
     </AdProviderContext.Provider>

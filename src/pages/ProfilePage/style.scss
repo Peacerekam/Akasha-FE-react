@@ -809,12 +809,6 @@
 }
 
 .zy0x-lol {
-  margin-left: 10px;
-
-  @media (max-width: 900px) {
-    margin-left: 0px;
-  }
-
   > div {
     text-align: center;
   }
@@ -825,7 +819,6 @@
 
     @media (max-width: 900px) {
       max-width: 100%;
-      margin-top: 20px;
     }
   }
 }

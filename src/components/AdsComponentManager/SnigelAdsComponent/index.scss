@@ -76,10 +76,7 @@ body.ad-provider-snigel {
 
   .profile-header-wrapper {
     gap: 10px;
-
-    @media (max-width: 700px) {
-      gap: 25px;
-    }
+    row-gap: 25px;
   }
 
   .snigel-adhesive.bottom {

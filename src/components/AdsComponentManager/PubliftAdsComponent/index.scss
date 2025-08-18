@@ -35,19 +35,10 @@ body.ad-provider-publift {
   #sidebar_rhs {
     position: fixed;
     top: 200px;
-    left: 50%;
     display: block;
     overflow: visible;
-  }
-
-  #sidebar_rhs {
-    // right sticky
-    margin-left: -950px;
-  }
-
-  #sidebar_lhs {
-    // left sticky
-    margin-left: 650px;
+    // left: 50%;
+    transition: 0.1s ease-in-out;
   }
 
   .flex-special-container {
@@ -56,10 +47,7 @@ body.ad-provider-publift {
 
   .profile-header-wrapper {
     gap: 10px;
-
-    @media (max-width: 700px) {
-      gap: 25px;
-    }
+    row-gap: 25px;
   }
 
   .publift-container {
@@ -67,11 +55,6 @@ body.ad-provider-publift {
       display: none !important;
     }
 
-    // .publift-ad-unit {
-    //   display: flex;
-    //   justify-content: center;
-    //   align-items: center;
-    // }
     &.video-ad-container {
       display: contents;
 
@@ -82,19 +65,74 @@ body.ad-provider-publift {
   }
   .publift-widget-sticky_footer-container {
     pointer-events: none;
+    overflow: visible;
+    z-index: 5 !important;
+    width: auto !important;
+    height: auto !important; // test this
+    left: 50% !important;
+    translate: -50% !important;
+    display: flex !important;
+    justify-content: center !important;
+    // flex-direction: row-reverse !important;
+
+    flex-direction: column !important;
+    align-items: flex-end !important;
+    gap: 2px !important;
+
+    &.closed.closed.closed {
+      overflow: hidden !important;
+      display: none !important;
+    }
+
     .publift-widget-sticky_footer-container-background {
       // default has white background
       background: transparent;
       pointer-events: none;
+
+      height: 0 !important;
+      width: 0 !important;
     }
-    // .publift-widget-sticky_footer-button {
-    //   // idk
-    // }
+    .publift-widget-sticky_footer-button {
+      cursor: pointer;
+      pointer-events: all;
+      border-radius: 100px !important;
+      height: 30px !important;
+      width: 30px !important;
+      display: flex !important;
+      position: revert !important;
+      border: 1px solid #202525 !important;
+
+      &:hover {
+        background-color: #ccc;
+      }
+
+      > div {
+        position: relative;
+        top: -3px;
+
+        &:first-child {
+          transform: rotate(45deg) translateX(4px) !important;
+        }
+        &:last-child {
+          transform: rotate(-45deg) translateX(-4px) !important;
+        }
+      }
+    }
     .publift-widget-sticky_footer {
       // actual ad
       pointer-events: none;
+      height: fit-content !important;
+      width: fit-content !important;
+
       > * {
         pointer-events: all;
+      }
+
+      .fuse-slot {
+        display: contents;
+        > div {
+          display: contents;
+        }
       }
     }
   }
