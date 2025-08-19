@@ -25,6 +25,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
+import axios, { AxiosRequestConfig } from "axios";
 import { faChevronLeft, faUser } from "@fortawesome/free-solid-svg-icons";
 
 import Achievevement from "../../assets/icons/Achievement.webp";
@@ -43,6 +44,7 @@ export const StygianLbPage: React.FC = () => {
   // state
   const [inputUID, setInputUID] = useState<string>("");
   const [lookupUID, setLookupUID] = useState<string>("");
+  const [stygianData, setStygianData] = useState<any>();
 
   // context
   const { setTitle } = useContext(TitleContext);
@@ -56,8 +58,18 @@ export const StygianLbPage: React.FC = () => {
 
   const _version = version?.replace("_", ".");
 
+  const fetchStygianInfo = async () => {
+    if (!version) return;
+
+    const opts: AxiosRequestConfig<any> = { params: { version } };
+    const stygianDataUrl = "/api/leaderboards/getStygianDetails";
+    const response = await axios.get(stygianDataUrl, opts);
+    const { data } = response.data;
+    setStygianData(data);
+  };
+
   useEffect(() => {
-    // fetchCalculationInfo();
+    fetchStygianInfo();
   }, [version]);
 
   // useEffect(() => {
@@ -108,7 +120,9 @@ export const StygianLbPage: React.FC = () => {
               href={`/profile/${row.uid}`}
             >
               {/* <ARBadge adventureRank={row.owner.adventureRank} /> */}
-              <RegionBadge region={row.playerInfo?.region || uidToRegion(row.uid)} />
+              <RegionBadge
+                region={row.playerInfo?.region || uidToRegion(row.uid)}
+              />
               {/* {isEnkaProfile ? <EnkaBadge /> : ""} */}
 
               <div className="table-icon-text-pair">
@@ -297,6 +311,8 @@ export const StygianLbPage: React.FC = () => {
     </>
   );
 
+  const enemiesArr = stygianData?.enemies || [];
+
   return (
     <div className="flex">
       {hoverElement}
@@ -306,8 +322,7 @@ export const StygianLbPage: React.FC = () => {
           style={{ display: "inline-block" }}
         >
           <StylizedContentBlock
-            // @TODO: ...............
-            revealCondition={true}
+            revealCondition={!!stygianData}
             overrideImage={DomainBackground}
             variant="gradient-low-height"
           />
@@ -336,9 +351,64 @@ export const StygianLbPage: React.FC = () => {
                     width: "100%",
                   }}
                 >
-                  <h2>Stygian Onslaught {_version} | Akasha System</h2>
-                  <div style={{ marginBottom: 20 }}>
-                    This page is a work in progress
+                  <h2>
+                    Stygian Onslaught {_version}: "{stygianData?.schedule?.name}
+                    "
+                  </h2>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      gap: 5,
+                    }}
+                  >
+                    <div>
+                      {new Date(
+                        +(stygianData?.schedule?.start_time || 0) * 1000
+                      )?.toLocaleString(language, {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })}
+                    </div>
+                    <div>-</div>
+                    <div>
+                      {new Date(
+                        +(stygianData?.schedule?.end_time || 0) * 1000
+                      )?.toLocaleString(language, {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })}
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      gap: 10,
+                      marginBottom: 20,
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    {enemiesArr.map((enemy: any) => {
+                      const _split = enemy.enemyName.split(":");
+                      return (
+                        <div key={enemy.icon} style={{ width: 300 }}>
+                          <img
+                            width={200}
+                            height={200}
+                            src={enemy.icon}
+                            alt={enemy.enemyName}
+                            style={{ width: 200 }}
+                          />
+                          <div style={{ fontWeight: 700, fontSize: 18 }}>
+                            {_split[0]}
+                          </div>
+                          <div style={{ fontSize: 14 }}>{_split[1]}</div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>

@@ -198,6 +198,7 @@ export const AbyssSchedule: React.FC<AbyssScheduleProps> = ({ uid }) => {
                                         style={{ width: 25 }}
                                         alt={mob.icon}
                                         src={mob.icon}
+                                        title={mob.name}
                                       />
                                     ))}
                                   </div>
