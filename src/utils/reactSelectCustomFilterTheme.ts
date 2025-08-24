@@ -6,6 +6,26 @@ export const reactSelectCustomFilterTheme = {
     // backg: 'black';
   }),
 
+  menuList: (provided: any) => {
+    return {
+      ...provided,
+      "::-webkit-scrollbar": {
+        width: "6px",
+        height: "0px",
+      },
+      "::-webkit-scrollbar-track": {
+        background: "#2c2c2c",
+      },
+      "::-webkit-scrollbar-thumb": {
+        background: "#9f9f9f",
+        borderRadius: "10px",
+      },
+      "::-webkit-scrollbar-thumb:hover": {
+        background: "#d1d1d1",
+      },
+    };
+  },
+
   control: (provided: any, state: any) => {
     return {
       ...provided,
