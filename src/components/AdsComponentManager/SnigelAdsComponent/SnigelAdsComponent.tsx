@@ -73,7 +73,7 @@ export const SnigelAdsComponent: React.FC<SnigelAdsComponentProps> = ({
         <div id={`nn_mobile_lb2`} className={classNamesAd} />
       ) : null}
 
-      {/* desktop lb1 is auto-injected, do not place it */}
+      {/* mobile lb1 is auto-injected, do not place it */}
       {adID !== "lb1" && (
         <div id={`nn_mobile_${adID}`} className={classNamesAd} />
       )}

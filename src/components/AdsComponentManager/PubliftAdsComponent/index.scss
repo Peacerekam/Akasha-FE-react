@@ -34,7 +34,8 @@ body.ad-provider-publift {
   #sidebar_lhs,
   #sidebar_rhs {
     position: fixed;
-    top: 200px;
+    // top: 200px;
+    top: 401px;
     display: block;
     overflow: visible;
     // left: 50%;
@@ -50,6 +51,10 @@ body.ad-provider-publift {
     row-gap: 25px;
   }
 
+  div.publift-container {
+    width: 100%;
+  }
+
   .publift-container {
     .ad-debug {
       display: none !important;
@@ -63,77 +68,116 @@ body.ad-provider-publift {
       }
     }
   }
-  .publift-widget-sticky_footer-container {
-    pointer-events: none;
-    overflow: visible;
-    z-index: 5 !important;
-    width: auto !important;
-    height: auto !important; // test this
-    left: 50% !important;
-    translate: -50% !important;
-    display: flex !important;
-    justify-content: center !important;
-    // flex-direction: row-reverse !important;
 
-    flex-direction: column !important;
-    align-items: flex-end !important;
-    gap: 2px !important;
+  // &.test-page-2 {
+  //   .publift-widget-sticky_footer-container {
+  //     pointer-events: none;
+  //     overflow: visible !important;
+  //   }
 
-    &.closed.closed.closed {
-      overflow: hidden !important;
-      display: none !important;
-    }
+  //   .publift-widget-sticky_footer-container-background {
+  //     opacity: 0 !important;
+  //   }
 
-    .publift-widget-sticky_footer-container-background {
-      // default has white background
-      background: transparent;
-      pointer-events: none;
+  //   .publift-widget-sticky_footer {
+  //     > * {
+  //       pointer-events: all;
+  //     }
+  //   }
 
-      height: 0 !important;
-      width: 0 !important;
-    }
-    .publift-widget-sticky_footer-button {
-      cursor: pointer;
-      pointer-events: all;
-      border-radius: 100px !important;
-      height: 30px !important;
-      width: 30px !important;
-      display: flex !important;
-      position: revert !important;
-      border: 1px solid #202525 !important;
+  //   .publift-widget-sticky_footer-button {
+  //     cursor: pointer;
+  //     pointer-events: all;
+  //     border-top-left-radius: 5px;
+  //     border-top-right-radius: 5px;
+  //     left: calc(50% - 20px);
+  //     top: -20px;
 
-      &:hover {
-        background-color: #ccc;
-      }
+  //     &:hover {
+  //       background-color: #ccc;
+  //     }
+  //   }
 
-      > div {
-        position: relative;
-        top: -3px;
+  //   &.closed.closed.closed {
+  //     .publift-widget-sticky_footer-button {
+  //       display: none !important;
+  //     }
+  //   }
+  // }
 
-        &:first-child {
-          transform: rotate(45deg) translateX(4px) !important;
-        }
-        &:last-child {
-          transform: rotate(-45deg) translateX(-4px) !important;
-        }
-      }
-    }
-    .publift-widget-sticky_footer {
-      // actual ad
-      pointer-events: none;
-      height: fit-content !important;
-      width: fit-content !important;
+  // &:not(.test-page):not(.test-page-2) {
+  //   .publift-widget-sticky_footer-container {
+  //     pointer-events: none;
+  //     overflow: visible;
+  //     z-index: 5 !important;
+  //     width: auto !important;
+  //     height: auto !important; // test this
+  //     left: 50% !important;
+  //     translate: -50% !important;
+  //     display: flex !important;
+  //     justify-content: center !important;
+  //     // flex-direction: row-reverse !important;
 
-      > * {
-        pointer-events: all;
-      }
+  //     flex-direction: column !important;
+  //     align-items: flex-end !important;
+  //     gap: 2px !important;
 
-      .fuse-slot {
-        display: contents;
-        > div {
-          display: contents;
-        }
-      }
-    }
-  }
+  //     &.closed.closed.closed {
+  //       overflow: hidden !important;
+  //       display: none !important;
+  //     }
+
+  //     .publift-widget-sticky_footer-container-background {
+  //       // default has white background
+  //       background: transparent;
+  //       pointer-events: none;
+
+  //       height: 0 !important;
+  //       width: 0 !important;
+  //     }
+  //     .publift-widget-sticky_footer-button {
+  //       cursor: pointer;
+  //       pointer-events: all;
+  //       border-radius: 100px !important;
+  //       height: 30px !important;
+  //       width: 30px !important;
+  //       display: flex !important;
+  //       position: revert !important;
+  //       border: 1px solid #202525 !important;
+
+  //       &:hover {
+  //         background-color: #ccc;
+  //       }
+
+  //       > div {
+  //         position: relative;
+  //         top: -3px;
+
+  //         &:first-child {
+  //           transform: rotate(45deg) translateX(4px) !important;
+  //         }
+  //         &:last-child {
+  //           transform: rotate(-45deg) translateX(-4px) !important;
+  //         }
+  //       }
+  //     }
+  //     .publift-widget-sticky_footer {
+  //       // actual ad
+  //       pointer-events: none;
+  //       height: fit-content !important;
+  //       width: fit-content !important;
+
+  //       > * {
+  //         pointer-events: all;
+  //       }
+
+  //       .fuse-slot {
+  //         display: contents;
+  //         > div {
+  //           display: contents;
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
 }

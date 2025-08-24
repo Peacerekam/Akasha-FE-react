@@ -77,9 +77,12 @@ export const StygianRankText: React.FC<StygianRankTextProps> = ({
 }) => {
   const { translate } = useContext(TranslationContext);
 
-  const diff = row?.playerInfo?.stygianIndex || row?.stygianIndex || "-";
+  const stygianIndex = row?.playerInfo?.stygianIndex || row?.stygianIndex;
   const stygianSeconds = row?.playerInfo?.stygianSeconds || row?.stygianSeconds;
+
   const seconds = stygianSeconds || "0";
+  const diff = stygianIndex || "-";
+
   const diffText = STYGIAN_DIFF_TO_NAME[diff] || "-";
   const diffRoman = NUM_TO_ROMAN[diff] || "-";
   const color = stygianProgressToColor(diff, badge);
@@ -90,6 +93,7 @@ export const StygianRankText: React.FC<StygianRankTextProps> = ({
   const title = `${isSuspicious ? "SUSPICIOUS CLEAR - " : ""}${translate(
     "Stygian Onslaught"
   )} ${diffRoman} - ${diffText}: ${seconds}s`;
+
   const classNames = cssJoin([
     "abyss-cell",
     badge ? "abyss-badge" : "",
@@ -107,7 +111,7 @@ export const StygianRankText: React.FC<StygianRankTextProps> = ({
       className={classNames}
       title={title}
     >
-      {!stygianSeconds ? (
+      {!stygianSeconds && !stygianIndex ? (
         "-"
       ) : (
         <>

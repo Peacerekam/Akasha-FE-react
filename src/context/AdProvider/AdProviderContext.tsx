@@ -79,6 +79,14 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
       setAdProvider("snigel");
     }
 
+    if (location.search.includes("test-page-2")) {
+      const _body = document.querySelector("body");
+      _body?.classList.add("test-page-2");
+    } else if (location.search.includes("test-page")) {
+      const _body = document.querySelector("body");
+      _body?.classList.add("test-page");
+    }
+
     // if (location.search.includes("test-page")) {
     //   setAdProvider("publift");
     // } else {

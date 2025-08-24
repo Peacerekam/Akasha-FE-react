@@ -30,6 +30,17 @@ body.ad-provider-snigel {
     }
   }
 
+  &.solar-loaded {
+    .navbar-tabs {
+      background-color: darken(#395b64, 20);
+    }
+
+    .footer-wrapper.footer-wrapper,
+    .content-wrapper.content-wrapper {
+      background: rgba(32, 37, 37, 0.5) !important;
+    }
+  }
+
   #nn_skinl {
     left: auto;
     margin-left: auto;
@@ -43,13 +54,32 @@ body.ad-provider-snigel {
   }
 
   .snigel-adhesive {
-    width: fit-content;
-    translate: calc(50vw - 50%);
     padding-bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    $close-btn-offset: 26px;
+
+    #nn_lb2 {
+      margin-left: $close-btn-offset;
+    }
 
     .close-adhesive {
       border-radius: 100px;
-      top: -25px;
+      border: 1px solid #202525;
+      translate: 0 -5px !important;
+      padding: 5px !important;
+
+      &:not(#nn_mobile_lb1-adhesive-close) {
+        position: relative !important;
+        top: -$close-btn-offset;
+        left: -$close-btn-offset;
+
+        &:hover {
+          background-color: #ccc;
+        }
+      }
     }
   }
 
