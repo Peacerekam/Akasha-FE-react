@@ -76,24 +76,9 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
       const _adProvider = adProviderMeta.getAttribute("content") as AdProviders;
       setAdProvider(_adProvider);
     } else {
-      setAdProvider("snigel");
+      setAdProvider("playwire");
     }
 
-    if (location.search.includes("test-page-2")) {
-      const _body = document.querySelector("body");
-      _body?.classList.add("test-page-2");
-    } else if (location.search.includes("test-page")) {
-      const _body = document.querySelector("body");
-      _body?.classList.add("test-page");
-    }
-
-    // if (location.search.includes("test-page")) {
-    //   setAdProvider("publift");
-    // } else {
-    //   setAdProvider("snigel");
-    // }
-
-    // setAdProvider("snigel");
     setContentWidth(1100);
   }, [location.search]);
 
