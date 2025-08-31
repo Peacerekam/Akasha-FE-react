@@ -60,7 +60,6 @@ export const StygianLbPage: React.FC = () => {
 
   const fetchStygianInfo = async () => {
     if (!version) return;
-
     const opts: AxiosRequestConfig<any> = { params: { version } };
     const stygianDataUrl = "/api/leaderboards/getStygianDetails";
     const response = await axios.get(stygianDataUrl, opts);
@@ -83,11 +82,12 @@ export const StygianLbPage: React.FC = () => {
   }, [inputUID]);
 
   useEffect(() => {
-    // @TODO: setTitle only after fetching initial data due to racing condition?
+    // @TODO: setTitle only after fetching initial data due to racing condition ???
     setTimeout(() => {
-      setTitle(`${_version} Stygian Onslaught | Akasha System`);
+      const apiVer = stygianData?.schedule?.version;
+      setTitle(`${apiVer || _version} Stygian Onslaught | Akasha System`);
     }, 500);
-  }, [version]);
+  }, [version, stygianData]);
 
   const STYGIAN_COLUMNS: TableColumn<BuildsColumns>[] = useMemo(
     () => [

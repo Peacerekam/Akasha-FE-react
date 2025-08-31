@@ -360,7 +360,10 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     ignoreEmptyUidsArray,
   ]);
 
-  const getSetTotalRows = async (totalRowsHash: string) => {
+  const getSetTotalRows = async (
+    totalRowsHash: string,
+    abortController: AbortController
+  ) => {
     if (!fetchURL) return;
 
     const collectionName = getCollectionName(fetchURL);
@@ -368,7 +371,8 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
     setIsFetchingPagination(true);
 
-    const totalRowsOpts = {
+    const totalRowsOpts: AxiosRequestConfig<any> = {
+      signal: abortController?.signal,
       params: {
         variant: collectionName,
         hash: totalRowsHash,
@@ -384,7 +388,12 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
   useEffect(() => {
     if (!totalRowsHash) return;
-    getSetTotalRows(totalRowsHash);
+    const abortController = new AbortController();
+    getSetTotalRows(totalRowsHash, abortController);
+
+    return () => {
+      abortController.abort();
+    };
   }, [totalRowsHash]);
 
   useEffect(() => {

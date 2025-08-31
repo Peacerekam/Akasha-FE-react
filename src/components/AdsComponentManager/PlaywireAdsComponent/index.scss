@@ -16,6 +16,31 @@ body.ad-provider-playwire {
     //   }
     // }
   }
+
+  // bottom rail
+  #pw-oop-bottom_rail {
+    // on desktop
+    @media (min-width: 800px) {
+      display: flex !important;
+      justify-content: center !important;
+
+      // ad
+      > div:first-child {
+        margin-left: 25px;
+      }
+
+      // collapse button (does not apply if ad isn't present)
+      > div:first-child ~ div {
+        position: relative !important;
+        top: -30px !important;
+        right: 25px !important;
+
+        &:hover {
+          background-color: #ccc !important;
+        }
+      }
+    }
+  }
 }
 
 .profile-header-wrapper.profile-header-wrapper {
@@ -48,31 +73,24 @@ body.ad-provider-playwire {
   margin: 0;
 
   &.video-ad-container {
-    &::before {
-      content: "";
-      position: relative;
-      width: 300px;
-      height: 0px;
-      display: block;
-      top: 0;
-      right: 0;
-      pointer-events: none;
-      z-index: 0;
-      // margin-left: 10px;
-    }
+    // &::before {
+    //   content: "";
+    //   position: relative;
+    //   width: 300px;
+    //   height: 0px;
+    //   display: block;
+    //   top: 0;
+    //   right: 0;
+    //   pointer-events: none;
+    //   z-index: 0;
+    //   // margin-left: 10px;
+    // }
 
-    .playwire-ad-unit {
-      .pw-tag > * {
-        // background-color: rgba(0, 0, 0, 0.3);
-        // box-shadow: inset 0 0 15px 15px rgba(0, 0, 0, 0.1);
-        // margin-left: 10px !important;
-
-        @media (max-width: 800px) {
-          margin-left: 0 !important;
-          margin-bottom: 10px !important;
-          display: block !important;
-        }
-      }
+    &,
+    .playwire-ad-unit,
+    .playwire-ad-unit .pw-tag,
+    .playwire-ad-unit .pw-tag > div {
+      display: contents;
     }
   }
 
