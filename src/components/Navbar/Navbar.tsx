@@ -5,6 +5,7 @@ import {
   LOOTBAR_URL,
   PATREON_URL,
   applyModalBodyStyle,
+  cssJoin,
   getRelativeCoords,
 } from "../../utils/helpers";
 import React, { useContext, useMemo, useState } from "react";
@@ -249,5 +250,10 @@ export const Navbar: React.FC = () => {
 
   const isTablet = screenWidth < 1000;
 
-  return <div className="navbar">{isTablet ? mobileNav : desktopNav}</div>;
+  const classNames = cssJoin([
+    "navbar",
+    isTablet ? "mobile-nav" : "desktop-nav",
+  ]);
+
+  return <div className={classNames}>{isTablet ? mobileNav : desktopNav}</div>;
 };
