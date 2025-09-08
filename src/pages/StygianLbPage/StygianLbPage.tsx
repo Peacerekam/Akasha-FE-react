@@ -6,6 +6,7 @@ import {
   CustomTable,
   HelpBox,
   RegionBadge,
+  ReplaceRowDataOnHover,
   RowIndex,
   StygianRankText,
   StylizedContentBlock,
@@ -90,13 +91,10 @@ export const StygianLbPage: React.FC = () => {
   }, [inputUID]);
 
   useEffect(() => {
-    // @TODO: setTitle only after fetching initial data due to racing condition ???
-    // @TODO: setTitle only after fetching initial data due to racing condition ???
-    // @TODO: setTitle only after fetching initial data due to racing condition ???
     setTimeout(() => {
-      setTitle(`${apiVer || _version} Stygian Onslaught | Akasha System`);
-    }, 500);
-  }, [version, stygianData]);
+      setTitle(`${_version} Stygian Onslaught | Akasha System`);
+    }, 0);
+  }, [_version]);
 
   const STYGIAN_COLUMNS: TableColumn<BuildsColumns>[] = useMemo(
     () => [
@@ -104,6 +102,15 @@ export const StygianLbPage: React.FC = () => {
         name: "#",
         width: "0px",
         cell: (row) => {
+          if (row.susLevel > 0) {
+            return (
+              <ReplaceRowDataOnHover
+                data={<RowIndex index={row.index} />}
+                onHoverData={<div className="opacity-5">-</div>}
+              />
+            );
+          }
+
           return <RowIndex index={row.index} />;
         },
       },

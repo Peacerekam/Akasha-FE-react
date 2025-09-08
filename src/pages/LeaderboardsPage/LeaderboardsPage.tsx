@@ -139,7 +139,9 @@ export const LeaderboardsPage: React.FC = () => {
   );
 
   useEffect(() => {
-    setTitle(`${thisCalc?.name} | Akasha System`);
+    setTimeout(() => {
+      setTitle(`${thisCalc?.name} | Akasha System`);
+    }, 0);
   }, [thisCalc]);
 
   const thisVariant = thisWeaponCalc?.filters?.find((x) => x.name === variant);
