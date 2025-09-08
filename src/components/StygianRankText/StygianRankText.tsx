@@ -3,6 +3,7 @@ import "./style.scss";
 import { cssJoin, toEnkaUrl } from "../../utils/helpers";
 
 import { ABYSS_COLORS } from "../AbyssRankText";
+import { ReplaceRowDataOnHover } from "../ReplaceRowDataOnHover";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import { useContext } from "react";
 
@@ -69,16 +70,19 @@ export const STYGIAN_DIFF_TO_ICON = [1, 2, 3, 4, 5, 6, 7].reduce(
 type StygianRankTextProps = {
   row?: any;
   badge?: boolean;
+  useReplaceRowDataOnHover?: boolean;
 };
 
 export const StygianRankText: React.FC<StygianRankTextProps> = ({
   row,
   badge,
+  useReplaceRowDataOnHover = false,
 }) => {
   const { translate } = useContext(TranslationContext);
 
   const stygianIndex = row?.playerInfo?.stygianIndex || row?.stygianIndex;
   const stygianSeconds = row?.playerInfo?.stygianSeconds || row?.stygianSeconds;
+  const stygianScore = row?.playerInfo?.stygianScore || row?.stygianScore;
 
   const seconds = stygianSeconds || "0";
   const diff = stygianIndex || "-";
@@ -87,12 +91,14 @@ export const StygianRankText: React.FC<StygianRankTextProps> = ({
   const diffRoman = NUM_TO_ROMAN[diff] || "-";
   const color = stygianProgressToColor(diff, badge);
   const icon = STYGIAN_DIFF_TO_ICON[diff === 6 && seconds <= 180 ? 7 : diff];
-  const susLevel = row?.isCheating ? 2 : row?.susLevel || 0;
-  // const susLevel = row?.susLevel || 0;
+  // const susLevel = row?.isCheating ? 2 : row?.susLevel || 0;
+  const susLevel = row?.susLevel || 0;
   const isSuspicious = susLevel > 0;
   const title = `${isSuspicious ? "SUSPICIOUS CLEAR - " : ""}${translate(
     "Stygian Onslaught"
-  )} ${diffRoman} - ${diffText}: ${seconds}s`;
+  )} ${diffRoman} - ${diffText}: ${seconds}s${
+    useReplaceRowDataOnHover ? ` (${stygianScore?.toFixed(0)} score)` : ""
+  }`;
 
   const classNames = cssJoin([
     "abyss-cell",
@@ -115,15 +121,34 @@ export const StygianRankText: React.FC<StygianRankTextProps> = ({
         "-"
       ) : (
         <>
-          <img
-            className="abyss-star"
-            width={16}
-            height={16}
-            alt={diffRoman}
-            src={icon}
-          />
-          {/* {`${diffRoman} • ${seconds}s`} */}
-          {seconds}s
+          {useReplaceRowDataOnHover ? (
+            <ReplaceRowDataOnHover
+              data={`${stygianScore?.toFixed(0)}`}
+              onHoverData={
+                <>
+                  <img
+                    className="abyss-star"
+                    width={16}
+                    height={16}
+                    alt={diffRoman}
+                    src={icon}
+                  />{" "}
+                  {seconds}s
+                </>
+              }
+            />
+          ) : (
+            <>
+              <img
+                className="abyss-star"
+                width={16}
+                height={16}
+                alt={diffRoman}
+                src={icon}
+              />{" "}
+              {seconds}s
+            </>
+          )}
         </>
       )}
     </div>

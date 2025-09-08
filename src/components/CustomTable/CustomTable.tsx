@@ -10,6 +10,7 @@ import {
   arrayPushOrSplice,
   cssJoin,
   getSessionIdFromCookie,
+  monthDayYear_shortNumNum,
   normalizeText,
   uidsToQuery,
 } from "../../utils/helpers";
@@ -165,7 +166,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
   const [warningText, setWarningText] = useState(warningMessage);
 
   const { updateTableHoverElement } = useContext(HoverElementContext);
-  const { translate } = useContext(TranslationContext);
+  const { translate, language } = useContext(TranslationContext);
   const { lastProfiles } = useContext(LastProfilesContext);
   const { adProvider, setContentWidth, setPreventContentShrinking } =
     useContext(AdProviderContext);
@@ -308,7 +309,9 @@ export const CustomTable: React.FC<CustomTableProps> = ({
         const invalidKey = !!(_arr[0] !== "lt" && _arr[0] !== "gt");
         const invalidValue = _arr[1] === "";
         if (invalidKey || invalidValue) return;
-        if (!fetchParams.calculationId) setHideIndexColumn(true);
+        if (!fetchParams.calculationId && !fetchParams.version) {
+          setHideIndexColumn(true);
+        }
         setUnknownPage(true);
       }
       if ((defaultParams as any)?.[key]?.toString() !== actualValue) {
@@ -728,6 +731,60 @@ export const CustomTable: React.FC<CustomTableProps> = ({
         );
       }
 
+      const isStygianRow = !!row.enemies;
+
+      if (isStygianRow) {
+        //  make a separate component for this?
+        return (
+          <div className="expanded-row">
+            <div className="stygian-expanded-row">
+              <div className="stygian-details-row">
+                <div>
+                  Stygian Onslaught {row.version}: "{row.name}"
+                </div>
+                <div>
+                  {new Date(+(`${row?.start_time}000` || 0))?.toLocaleString(
+                    language,
+                    monthDayYear_shortNumNum
+                  )}
+                  {" - "}
+                  {new Date(+(`${row?.end_time}000` || 0))?.toLocaleString(
+                    language,
+                    monthDayYear_shortNumNum
+                  )}
+                </div>
+              </div>
+              <div>
+                {row.enemies &&
+                  row.enemies.map((enemy: any) => {
+                    const baseName = enemy.enemyName.split(":")[0];
+                    const nameCont = enemy.enemyName.split(":")[1];
+                    return (
+                      <span
+                        className="table-icon-text-pair"
+                        key={enemy.enemyName}
+                        style={{ alignItems: "center" }}
+                      >
+                        <img
+                          style={{ height: 100, width: 100 }}
+                          src={enemy.icon}
+                          alt=" "
+                        />
+                        <div>
+                          <div style={{ fontSize: 18 }}>
+                            <b>{baseName}</b>
+                          </div>
+                          <div>{nameCont}</div>
+                        </div>
+                      </span>
+                    );
+                  })}
+              </div>
+            </div>
+          </div>
+        );
+      }
+
       const isArtifactRow = !!row.equipType;
 
       if (isArtifactRow) {
@@ -857,7 +914,10 @@ export const CustomTable: React.FC<CustomTableProps> = ({
     () => (
       <tr>
         <td colSpan={columns.length}>
-          <div style={{ textAlign: "center" }}>No data found</div>
+          <div className="no-data-row">
+            {/* <img alt="Qiqi's Dead" src={QiqiFallen100} /> */}
+            <div>No data found</div>
+          </div>
         </td>
       </tr>
     ),

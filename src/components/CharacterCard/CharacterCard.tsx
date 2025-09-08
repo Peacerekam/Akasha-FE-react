@@ -1885,6 +1885,12 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   );
 
   const cardOverlay = useMemo(() => {
+    const talentNAProps = toTalentProps(
+      row,
+      ["normalAttacks", "normalAttack"],
+      chartsData,
+      0
+    );
     const talentSkillProps = toTalentProps(
       row,
       ["elementalSkill"],
@@ -1895,13 +1901,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       row,
       ["elementalBurst"],
       chartsData,
-      3
-    );
-    const talentNAProps = toTalentProps(
-      row,
-      ["normalAttacks", "normalAttack"],
-      chartsData,
-      0
+      2
     );
 
     return (

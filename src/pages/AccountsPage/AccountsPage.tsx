@@ -37,13 +37,8 @@ const STYGIAN_WARNING = (
       This table does <b>NOT</b> show leaderboards or rankings!
     </div>
     <div>
-      Stygian Onslaught rankings can be seen only on the{" "}
-      <b>leaderboard pages</b> found{" "}
-      <Link to={"/leaderboards/stygian/5_7"}>here</Link>.
-      {/* @TODO: 5_7??? default to newest version !!! */}
-      {/* @TODO: 5_7??? default to newest version !!! */}
-      {/* @TODO: 5_7??? default to newest version !!! */}
-      {/* @TODO: 5_7??? default to newest version !!! */}
+      Stygian Onslaught rankings can be seen on the <b>leaderboard page</b>{" "}
+      found <Link to={"/leaderboards/stygian"}>here</Link>.
     </div>
     <div>Click anywhere around this message to uncover the profiles table.</div>
   </div>
@@ -152,7 +147,7 @@ export const AccountsPage: React.FC = () => {
         sortField: "playerInfo.finishAchievementNum",
         cell: (row) => {
           const finishAchievementNum =
-            Math.round(row.playerInfo?.finishAchievementNum) ?? 0;
+            Math.round(row.playerInfo?.finishAchievementNum) || 0;
 
           return (
             // <div>
@@ -310,7 +305,6 @@ export const AccountsPage: React.FC = () => {
             filtersURL={FETCH_ACCOUNTS_FILTERS_URL}
             columns={ACCOUNTS_COLUMNS}
             defaultSort="playerInfo.finishAchievementNum"
-            // expandableRows
             projectParamsToPath
             expandableRows
             warningMessage={warningMessage}

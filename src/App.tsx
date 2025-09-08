@@ -105,6 +105,7 @@ const appRoutes: {
   { path: "/profiles", Element: AccountsPage },
   { path: "/profile/:uid", Element: ProfilePage },
   { path: "/leaderboards", Element: CategorySelectionPage },
+  { path: "/leaderboards/stygian/", Element: StygianLbPage },
   { path: "/leaderboards/stygian/:version", Element: StygianLbPage },
   { path: "/leaderboards/:calculationId", Element: LeaderboardsPage },
   { path: "/leaderboards/:calculationId/:variant", Element: LeaderboardsPage },

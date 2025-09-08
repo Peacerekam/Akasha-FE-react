@@ -250,7 +250,20 @@ $characterStats: "hp", "atk", "def", "hydrodmgbonus", "geodmgbonus",
         position: relative;
         transform: scale(0.95);
       }
-      // }
+
+      .stygian-expanded-row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 10px 0;
+        gap: 20px;
+        .stygian-details-row {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
+        }
+      }
     }
 
     .categories-exanded-row {
@@ -372,6 +385,9 @@ $characterStats: "hp", "atk", "def", "hydrodmgbonus", "geodmgbonus",
         &.highlight-cell {
           background-color: rgba(0, 0, 0, 0.3);
           // font-weight: 600;
+        }
+        .no-data-row {
+          text-align: center;
         }
       }
     }

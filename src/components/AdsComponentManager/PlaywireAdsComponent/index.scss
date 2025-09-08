@@ -200,7 +200,7 @@ body:not(.overflow-hidden) {
 #pw-oop-right_rail2,
 #pw-oop-right_rail3,
 #pw-oop-right_rail4 {
-  transition: 0.1s ease-in-out;
+  transition: left 0.1s ease-in-out, right 0.1s ease-in-out;
 }
 
 #pw-oop-left_rail,

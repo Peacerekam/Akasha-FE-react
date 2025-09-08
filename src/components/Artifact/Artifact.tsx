@@ -2,7 +2,9 @@ import "./style.scss";
 
 import React, { useContext } from "react";
 import {
+  artifactIdFromIcon,
   cssJoin,
+  equipTypeOrder,
   getArtifactCvClassName,
   getCharacterCvColor,
   getInGameSubstatValue,
@@ -35,7 +37,7 @@ export const Artifact: React.FC<ArtifactProps> = ({
   width = 270,
   equipped,
 }) => {
-  const { translate } = useContext(TranslationContext);
+  const { translate, language } = useContext(TranslationContext);
 
   const artifactBg =
     {
@@ -82,6 +84,13 @@ export const Artifact: React.FC<ArtifactProps> = ({
 
   const critValue = fixCritValue(artifact);
 
+  const artifactTooltip = {
+    "data-gi-type": "artifact",
+    "data-gi-id": artifactIdFromIcon(artifact.icon),
+    "data-gi-index": equipTypeOrder.indexOf(artifact.equipType), // 0 = Flower
+    "data-gi-lang": language,
+  };
+
   return (
     <div
       style={style}
@@ -112,6 +121,7 @@ export const Artifact: React.FC<ArtifactProps> = ({
         className="artifact-icon"
         src={artifact.icon}
         key={artifact.icon}
+        {...artifactTooltip}
       />
       <div className="substats">
         {Object.keys(artifact.substats).map((key: any) => {
@@ -156,7 +166,9 @@ export const Artifact: React.FC<ArtifactProps> = ({
           );
         })}
       </div>
-      <div className="artifact-set-name">{translate(artifact.setName)}</div>
+      <div className="artifact-set-name" {...artifactTooltip}>
+        {translate(artifact.setName)}
+      </div>
       {equipped && equipped.length > 0 && (
         <div className="artifact-equipped-char">
           {equipped.map((build: any, index: number) => {

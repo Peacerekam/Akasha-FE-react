@@ -29,6 +29,7 @@ import { TranslationContext } from "../../context/TranslationProvider/Translatio
 import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
 import { getDefaultRvFilters } from "../RollList/defaultFilters";
 import { roundToFixed } from "../../utils/substats";
+import { travelerIds } from "../CharacterCard/TalentDisplay";
 
 type ArtifactListCompactProps = {
   row: any;
@@ -341,7 +342,7 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
   row,
   artifacts,
 }) => {
-  const { translate } = useContext(TranslationContext);
+  const { translate, language } = useContext(TranslationContext);
   const { metric, customRvFilter } = useContext(SettingsContext);
 
   const reordered = useMemo(
@@ -368,6 +369,17 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
     );
   }, [JSON.stringify(reordered), metric, customRvFilter[row.name]?.length]);
 
+  const isTraveler = row.characterId
+    ? travelerIds.includes("" + row.characterId)
+    : false;
+
+  const element = row?.characterMetadata?.element;
+  const suffix = isTraveler
+    ? `-${element === "None" ? "Anemo" : element}`.toLowerCase()
+    : "";
+
+  const characterId = `${row.characterId}${suffix}`;
+
   return (
     <div className="flex expanded-row">
       <div className="character-preview">
@@ -382,7 +394,12 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
           {" - "}
           {row.type === "current" ? translate(row.name) : row.type}
         </div>
-        <TalentsDisplay row={row} strikethrough={false} />
+        <TalentsDisplay
+          row={row}
+          strikethrough={false}
+          characterId={characterId}
+          language={language}
+        />
         <div className="character-owner-preview">
           {row.owner.nickname}
           <ARBadge adventureRank={row.owner.adventureRank} />

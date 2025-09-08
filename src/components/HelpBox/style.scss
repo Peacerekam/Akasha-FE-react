@@ -26,6 +26,12 @@
   margin: 10px;
   margin-bottom: 0;
 
+  &.hide-header {
+    .help-box-header {
+      display: none;
+    }
+  }
+
   .help-box-header {
     font-size: 30px;
     margin: 10px;

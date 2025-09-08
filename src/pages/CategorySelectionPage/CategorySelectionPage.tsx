@@ -12,6 +12,8 @@ import {
 import {
   FETCH_CATEGORIES_FILTERS_URL,
   FETCH_CATEGORIES_URL_V2,
+  monthDayYear_shortNumNum,
+  toEnkaUrl,
 } from "../../utils/helpers";
 import React, { useContext, useMemo } from "react";
 
@@ -83,7 +85,7 @@ export const CategorySelectionPage: React.FC = () => {
   const navigate = useNavigate();
   const { translate, language } = useContext(TranslationContext);
 
-  const CATEGORIES_COLUMNS: TableColumn<CategoriesColumns>[] = useMemo(
+  const CHAR_CATEGORIES_COLUMNS: TableColumn<CategoriesColumns>[] = useMemo(
     () => [
       {
         name: "#",
@@ -163,22 +165,6 @@ export const CategorySelectionPage: React.FC = () => {
           );
         },
       },
-      // {
-      //   name: "",
-      //   width: "0px",
-      //   sortable: true,
-      //   sortField: "c6",
-      //   cell: (row) => {
-      //     if (!row.c6) return "";
-      //     return (
-      //       <div className="table-icon-text-pair c-badge-wrapper">
-      //         <div style={{ width: 18 }} className={`c-badge c-6-badge`}>
-      //           C6
-      //         </div>
-      //       </div>
-      //     );
-      //   },
-      // },
       {
         name: "Weapons",
         // width: "100px",
@@ -230,40 +216,6 @@ export const CategorySelectionPage: React.FC = () => {
           );
         },
       },
-      // {
-      //   name: "Character",
-      //   sortable: true,
-      //   sortField: "characterName",
-      //   width: "0px",
-      //   cell: (row) => {
-      //     const characterName = row?.characterName || "";
-      //     // const lbName = row?.name || "";
-      //     // return <div>{lbName}</div>;
-
-      //     return (
-      //       <div className="table-icon-text-pair" style={{ color: "gray" }}>
-      //         <div>{translate(characterName)}</div>
-      //       </div>
-      //     );
-      //   },
-      // },
-      // {
-      //   name: "",
-      //   width: "80px",
-      //   sortable: false,
-      //   sortField: "",
-      //   cell: (row) => {
-      //     const filters = row?.filters;
-      //     return (
-      //       <div>
-      //         {filters ? `${filters.length} filters` : ""}
-      //         {/* {filters?.map((filter) => {
-      //           return <span>{filter.displayName}</span>;
-      //         })} */}
-      //       </div>
-      //     );
-      //   },
-      // },
       {
         name: "Count",
         width: "80px",
@@ -288,11 +240,129 @@ export const CategorySelectionPage: React.FC = () => {
         width: "140px",
         cell: (row) => {
           const addDate = new Date(row?.addDate || "");
-          const strDate = addDate.toLocaleString(language, {
-            month: "short",
-            day: "numeric",
-            year: "numeric",
-          });
+          const strDate = addDate.toLocaleString(
+            language,
+            monthDayYear_shortNumNum
+          );
+          return (
+            <div
+              style={{
+                whiteSpace: "nowrap",
+              }}
+            >
+              {strDate}
+            </div>
+          );
+        },
+      },
+    ],
+    [translate, language]
+  );
+
+  const STYGIAN_CATEGORIES_COLUMNS: TableColumn<CategoriesColumns>[] = useMemo(
+    () => [
+      {
+        name: "#",
+        width: "0px",
+        cell: (row) => {
+          return <RowIndex index={row.index} />;
+        },
+      },
+      {
+        name: "Stygian Onslaught",
+        sortable: true,
+        sortField: "name",
+        cell: (row) => {
+          const stName = row?.name || "";
+          const leaderboardPath = `leaderboards/${row?.lbURL}`;
+          const aClassName = row.new ? "new-lb-badge" : "";
+
+          return (
+            <div
+              className="flex nowrap"
+              style={{ justifyContent: "space-between" }}
+            >
+              <div className="table-icon-text-pair">
+                <AssetFallback
+                  alt=" "
+                  className="table-icon"
+                  title="Stygian Onslaught"
+                  width={16}
+                  height={16}
+                  src={toEnkaUrl("UI_LeyLineChallenge_Medal_6")}
+                />
+
+                <a
+                  className={`row-link-element ${aClassName}`}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    navigate(`/${leaderboardPath}`);
+                  }}
+                  href={`/${leaderboardPath}`}
+                >
+                  {row?.version}: {stName}
+                </a>
+              </div>
+            </div>
+          );
+        },
+      },
+
+      ...[0, 1, 2].map((i) => ({
+        name: <span className="weak-filler-line" />,
+        // name: `Boss #${i+1}`,
+        sortable: false,
+        colSpan: i === 0 ? 4 : 0,
+        cell: (row: any) => {
+          const enemy = row?.enemies?.[i];
+          if (!enemy) return <></>;
+
+          const baseName = enemy.enemyName.split(":")[0];
+
+          return (
+            <span
+              className="table-icon-text-pair"
+              key={enemy.enemyName}
+              style={{ alignItems: "center" }}
+            >
+              <img
+                className="table-icon"
+                src={enemy.icon}
+                title={enemy.enemyName}
+                alt=" "
+              />
+              <span>{baseName}</span>
+            </span>
+          );
+        },
+      })),
+      {
+        name: "Count",
+        width: "60px",
+        sortable: true,
+        sortField: "count",
+        cell: (row) => {
+          // const element = row?.element || "";
+          const count = row?.count || "";
+
+          return (
+            <div className="table-icon-text-pair">
+              {/* <StatIcon name={`${element} DMG Bonus`} /> */}
+              <div>{count || "-"}</div>
+            </div>
+          );
+        },
+      },
+      {
+        name: "Added",
+        sortable: true,
+        sortField: "addDate",
+        cell: (row) => {
+          const addDate = new Date(row?.addDate || "");
+          const strDate = addDate.toLocaleString(
+            language,
+            monthDayYear_shortNumNum
+          );
           return (
             <div
               style={{
@@ -311,45 +381,40 @@ export const CategorySelectionPage: React.FC = () => {
   return (
     <div className="flex">
       <div className="content-block w-100" id="content-container">
-        {/* <NotificationBar /> */}
-        <StylizedContentBlock
-          // variant="gradient"
-          overrideImage={DomainBackground}
-          // revealCondition={
-          //   categoriesTransformed && categoriesTransformed?.length > 0
-          // }
-        />
+        <StylizedContentBlock overrideImage={DomainBackground} />
+
         <div className="flex-special-container">
-          <HelpBox page="leaderboards" />
+          <HelpBox page="stygian" />
           <AdsComponentManager adType="Video" />
         </div>
-        {/* <AdsComponentManager
-          adType="LeaderboardBTF"
-          dataAdSlot="6204085735"
-          hybrid="mobile"
-          hideOnDesktop
-        /> */}
 
-        {/* <div className="relative">
-          <CustomTable
-            fetchURL={FETCH_CATEGORIES_URL_V2}
-            // filtersURL={FETCH_CATEGORIES_FILTERS_URL}
-            columns={CATEGORIES_COLUMNS}
-            defaultSort="addDate"
-            // expandableRows
-            // projectParamsToPath
-            expandableRows
-            hidePagination
-            fetchParams={{ new: 1 }}
-          />
-        </div> */}
+        {/* non-character leaderboards */}
         <div className="relative">
           <CustomTable
+            fetchParams={{ variant: "stygian" }}
+            fetchURL={FETCH_CATEGORIES_URL_V2}
+            columns={STYGIAN_CATEGORIES_COLUMNS}
+            defaultSort="addDate"
+            expandableRows
+            hidePagination
+          />
+        </div>
+
+        {/* spacer */}
+        <div />
+
+        <div className="flex-special-container">
+          <HelpBox page="leaderboards" />
+        </div>
+
+        {/* character leaderboards */}
+        <div className="relative">
+          <CustomTable
+            fetchParams={{ variant: "charactersLb" }}
             fetchURL={FETCH_CATEGORIES_URL_V2}
             filtersURL={FETCH_CATEGORIES_FILTERS_URL}
-            columns={CATEGORIES_COLUMNS}
+            columns={CHAR_CATEGORIES_COLUMNS}
             defaultSort="count"
-            // expandableRows
             projectParamsToPath
             expandableRows
             hidePagination

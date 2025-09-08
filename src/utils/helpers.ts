@@ -33,6 +33,7 @@ export const FETCH_CHARACTER_FILTERS_URL = `/api/filters/characters/`;
 export const FETCH_ACCOUNTS_FILTERS_URL = `/api/filters/accounts/`;
 export const FETCH_ARTIFACT_FILTERS_URL = `/api/filters/artifacts/`;
 export const FETCH_CATEGORIES_FILTERS_URL = `/api/filters/categories/`;
+export const FETCH_STYGIANLB_FILTERS_URL = `/api/filters/stygianLb/`;
 
 export const normalizeText = (test: string) => {
   const regex = /[^A-Za-z0-9%]/g;
@@ -106,6 +107,14 @@ const dummyArtifact = {
   _id: null,
 };
 
+export const equipTypeOrder = [
+  "EQUIP_BRACER", // flower
+  "EQUIP_NECKLACE", // feather
+  "EQUIP_SHOES", // sands
+  "EQUIP_RING", // cup
+  "EQUIP_DRESS", // circlet
+];
+
 export const getArtifactsInOrder = (
   artifacts: { equipType: string }[],
   fillEmpty?: boolean
@@ -113,13 +122,6 @@ export const getArtifactsInOrder = (
   if (!artifacts) return [];
 
   const reordered: any[] = [];
-  const customOrder = [
-    "EQUIP_BRACER", // flower
-    "EQUIP_NECKLACE", // feather
-    "EQUIP_SHOES", // sands
-    "EQUIP_RING", // cup
-    "EQUIP_DRESS", // circlet
-  ];
 
   const artifactsMapped = Object.values(artifacts).reduce(
     (acc: any, val: any) => {
@@ -129,7 +131,7 @@ export const getArtifactsInOrder = (
     {}
   );
 
-  customOrder.forEach((key) => {
+  equipTypeOrder.forEach((key) => {
     const desiredArtifact = artifactsMapped[key];
 
     if (desiredArtifact) {
@@ -1065,4 +1067,10 @@ export const artifactIdFromIcon = (icon?: string) => {
 
   // e.g. UI_RelicIcon_15019_4
   return icon.split("_")?.[2] || "";
+};
+
+export const monthDayYear_shortNumNum: Intl.DateTimeFormatOptions = {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
 };

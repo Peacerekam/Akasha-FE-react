@@ -189,6 +189,7 @@ const ELECTRO_RV_LIST: CharacterRVs = {
   Iansan: [CRate, CDMG, ATK_, ER],
   Ororon: [CRate, CDMG, ATK_, ER],
   Ineffa: [CRate, CDMG, ATK_, EM, ER],
+  Flins: [CRate, CDMG, ATK_, ER],
 };
 
 const DENDRO_RV_LIST: CharacterRVs = {
@@ -199,6 +200,7 @@ const DENDRO_RV_LIST: CharacterRVs = {
   Collei: [CRate, CDMG, ATK_, EM, ER],
   Emilie: [CRate, CDMG, ATK_],
   Kinich: [CRate, CDMG, ATK_],
+  Lauma: [CRate, CDMG, EM, ER],
 };
 
 const defaultRvFilter = [CRate, CDMG];

@@ -3,8 +3,8 @@ import "./style.scss";
 import {
   ARBadge,
   AbyssRankText,
-  AssetFallback,
   CustomTable,
+  HelpBox,
   RegionBadge,
   RowIndex,
   StygianRankText,
@@ -12,8 +12,9 @@ import {
   TheaterRankText,
 } from "../../components";
 import {
-  FETCH_ACCOUNTS_FILTERS_URL,
+  FETCH_STYGIANLB_FILTERS_URL,
   FETCH_STYGIAN_LB_URL,
+  monthDayYear_shortNumNum,
   uidToRegion,
   uidsToQuery,
 } from "../../utils/helpers";
@@ -57,9 +58,10 @@ export const StygianLbPage: React.FC = () => {
   const { version } = useParams();
 
   const _version = version?.replace("_", ".");
+  const apiVer = stygianData?.schedule?.version;
+  const isRealVersion = !_version || !isNaN(+_version);
 
   const fetchStygianInfo = async () => {
-    if (!version) return;
     const opts: AxiosRequestConfig<any> = { params: { version } };
     const stygianDataUrl = "/api/leaderboards/getStygianDetails";
     const response = await axios.get(stygianDataUrl, opts);
@@ -68,12 +70,18 @@ export const StygianLbPage: React.FC = () => {
   };
 
   useEffect(() => {
+    const invalidVer = !version || !isRealVersion;
+    const needsNewData = apiVer !== _version;
+
+    if (!invalidVer && !needsNewData) return;
     fetchStygianInfo();
   }, [version]);
 
-  // useEffect(() => {
-  //   fetchChartData();
-  // }, [calculationId, variant]);
+  useEffect(() => {
+    if ((!version || !isRealVersion) && apiVer) {
+      navigate(`/leaderboards/stygian/${apiVer.replace(".", "_")}`);
+    }
+  }, [stygianData]);
 
   const debouncedSetLookupUID = useCallback(debounce(setLookupUID, 350), []);
 
@@ -83,8 +91,9 @@ export const StygianLbPage: React.FC = () => {
 
   useEffect(() => {
     // @TODO: setTitle only after fetching initial data due to racing condition ???
+    // @TODO: setTitle only after fetching initial data due to racing condition ???
+    // @TODO: setTitle only after fetching initial data due to racing condition ???
     setTimeout(() => {
-      const apiVer = stygianData?.schedule?.version;
       setTitle(`${apiVer || _version} Stygian Onslaught | Akasha System`);
     }, 500);
   }, [version, stygianData]);
@@ -271,7 +280,7 @@ export const StygianLbPage: React.FC = () => {
               stygianScore: row.stygianScore,
             },
           };
-          return <StygianRankText row={profile} />;
+          return <StygianRankText row={profile} useReplaceRowDataOnHover />;
         },
       },
     ],
@@ -283,16 +292,12 @@ export const StygianLbPage: React.FC = () => {
     [lastProfiles.length]
   );
 
-  // @TODO: ...
-  // @TODO: ...
-  // @TODO: ...
-  // @TODO: ...
-  const calcVariants = ["5_7", "5_8"];
+  const stygianList = stygianData?.stygianList || [];
 
   const displayRelevantCategories = (
     <>
       <div className="other-calc-container">
-        {calcVariants.map((ver) => {
+        {stygianList.map((ver: string) => {
           const to = `/leaderboards/stygian/${ver}`;
           const _ver = ver.replace("_", ".");
           const isActive = version === ver;
@@ -352,56 +357,39 @@ export const StygianLbPage: React.FC = () => {
                   }}
                 >
                   <h2>
-                    Stygian Onslaught {_version}: "{stygianData?.schedule?.name}
-                    "
+                    Stygian Onslaught {apiVer || "??"}: "
+                    {stygianData?.schedule?.name || "..."}"
                   </h2>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      gap: 5,
-                    }}
-                  >
-                    <div>
-                      {new Date(
-                        +(stygianData?.schedule?.start_time || 0) * 1000
-                      )?.toLocaleString(language, {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                      })}
+                  {stygianData?.schedule?.start_time && (
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        gap: 5,
+                      }}
+                    >
+                      <div>
+                        {new Date(
+                          +(stygianData?.schedule?.start_time || 0) * 1000
+                        )?.toLocaleString(language, monthDayYear_shortNumNum)}
+                      </div>
+                      <div>-</div>
+                      <div>
+                        {new Date(
+                          +(stygianData?.schedule?.end_time || 0) * 1000
+                        )?.toLocaleString(language, monthDayYear_shortNumNum)}
+                      </div>
                     </div>
-                    <div>-</div>
-                    <div>
-                      {new Date(
-                        +(stygianData?.schedule?.end_time || 0) * 1000
-                      )?.toLocaleString(language, {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                      })}
-                    </div>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      gap: 10,
-                      marginBottom: 20,
-                      flexWrap: "wrap",
-                    }}
-                  >
+                  )}
+                  <div className="stygian-enemies-wrapper">
                     {enemiesArr.map((enemy: any) => {
                       const _split = enemy.enemyName.split(":");
                       return (
-                        <div key={enemy.icon} style={{ width: 300 }}>
-                          <img
-                            width={200}
-                            height={200}
-                            src={enemy.icon}
-                            alt={enemy.enemyName}
-                            style={{ width: 200 }}
-                          />
+                        <div
+                          key={enemy.icon}
+                          className="stygian-enemy-container"
+                        >
+                          <img src={enemy.icon} alt={enemy.enemyName} />
                           <div style={{ fontWeight: 700, fontSize: 18 }}>
                             {_split[0]}
                           </div>
@@ -413,11 +401,20 @@ export const StygianLbPage: React.FC = () => {
                 </div>
               </div>
             </div>
-          </div>
-
-          <div className="flex-special-container">
-            <div className="relative other-calculations-display block-highlight highlight-tile-container">
-              {displayRelevantCategories}
+            <div
+              className="relative block-highlight highlight-tile-container flex alternate-sizing"
+              style={{ flexWrap: "wrap" }}
+            >
+              <HelpBox page="stygian" hideHeader noBackground />
+              <div className="other-calculations-display">
+                <div
+                  className="flex w-100 mt-10"
+                  style={{ justifyContent: "center" }}
+                >
+                  <b>Stygian schedule:</b>
+                </div>
+                <div className="flex w-100">{displayRelevantCategories}</div>
+              </div>
             </div>
           </div>
         </div>
@@ -444,15 +441,14 @@ export const StygianLbPage: React.FC = () => {
               </div>
             </div>
           </div>
-          {/* @TODO: .......... */}
-          {true && (
+          {isRealVersion && (
             <div>
               <CustomTable
                 fetchURL={FETCH_STYGIAN_LB_URL}
                 fetchParams={{
                   uids: uidsQuery,
                   uid: lookupUID,
-                  filter: "[susLevel]1",
+                  filter: "[susLevel]1[all]1",
                   version,
                 }}
                 columns={STYGIAN_COLUMNS}
@@ -468,10 +464,10 @@ export const StygianLbPage: React.FC = () => {
 
               <CustomTable
                 // key={`ct-lb-${rerender}`}
+                key={`stygianLb-${version}-table`}
                 fetchURL={FETCH_STYGIAN_LB_URL}
                 fetchParams={{ version }}
-                // @TODO: new endpoint needed
-                filtersURL={FETCH_ACCOUNTS_FILTERS_URL}
+                filtersURL={FETCH_STYGIANLB_FILTERS_URL}
                 columns={STYGIAN_COLUMNS}
                 defaultSort={"stygianScore"}
                 expandableRows

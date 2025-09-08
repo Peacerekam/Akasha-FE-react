@@ -3,14 +3,18 @@ import "./style.scss";
 import React, { useEffect, useState } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { cssJoin } from "../../utils/helpers";
 import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 import { helpContentAccounts } from "./helpContentAccounts";
 import { helpContentArtifacts } from "./helpContentArtifacts";
 import { helpContentBuilds } from "./helpContentBuilds";
 import { helpContentLeaderboards } from "./helpContentLeaderboards";
+import { helpContentLeaderboardsStygian } from "./helpContentLeaderboardsStygian";
 
 type HelpBoxProps = {
-  page: "builds" | "leaderboards" | "artifacts" | "accounts";
+  page: "builds" | "leaderboards" | "artifacts" | "accounts" | "stygian";
+  hideHeader?: boolean;
+  noBackground?: boolean;
 };
 
 const helpBoxContents = {
@@ -18,9 +22,14 @@ const helpBoxContents = {
   leaderboards: helpContentLeaderboards,
   artifacts: helpContentArtifacts,
   accounts: helpContentAccounts,
+  stygian: helpContentLeaderboardsStygian,
 };
 
-export const HelpBox: React.FC<HelpBoxProps> = ({ page }) => {
+export const HelpBox: React.FC<HelpBoxProps> = ({
+  page,
+  hideHeader,
+  noBackground,
+}) => {
   const [isClosed, setIsClosed] = useState(false);
 
   const lsKey = "helpBox";
@@ -58,8 +67,14 @@ export const HelpBox: React.FC<HelpBoxProps> = ({ page }) => {
     );
   }
 
+  const classNames = cssJoin([
+    "relative page-description-wrapper",
+    hideHeader ? "hide-header" : "",
+    noBackground ? "" : "block-highlight",
+  ]);
+
   return (
-    <div className="relative block-highlight page-description-wrapper">
+    <div className={classNames}>
       {/* <div
         className="help-box-btn close-help-box"
         onClick={handleToggleHelpBox}

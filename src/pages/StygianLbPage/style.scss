@@ -127,3 +127,30 @@
   gap: 10px;
   align-items: flex-start;
 }
+
+.stygian-enemies-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+
+  .stygian-enemy-container {
+    width: 300px;
+    img {
+      width: 200px;
+      height: 200px;
+    }
+  }
+}
+
+.flex-special-container {
+  .alternate-sizing {
+    .page-description-wrapper {
+      min-width: min(730px, 100%);
+    }
+    .other-calculations-display {
+      min-width: min(250px, 100%);
+    }
+  }
+}
