@@ -19,12 +19,12 @@ export const helpContentLeaderboardsStygian = (
         Clears will be marked as suspicious based on characters and weapons you
         have displayed on your Akasha profile.
       </div>
-      </div>
+    </div>
     <div className="help-box-p">
       <div>
-        Dire clears with private showcases will are flagged automatically - in
-        order to participate you need to have at least <b>two characters</b>{" "}
-        on your profile.
+        Dire clears with private showcases are flagged automatically - in order
+        to participate you need to have at least <b>two characters</b> on your
+        profile.
       </div>
     </div>
   </>
