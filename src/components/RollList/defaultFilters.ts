@@ -144,6 +144,7 @@ const HYDRO_RV_LIST: CharacterRVs = {
   Neuvillette: [CRate, CDMG, HP_, ER],
   Barbara: [CRate, CDMG, ATK_, HP_, ER],
   Mualani: [CRate, CDMG, HP_, EM],
+  Aino: [CRate, CDMG, ATK_, ER],
 };
 
 const CRYO_RV_LIST: CharacterRVs = {
@@ -189,7 +190,7 @@ const ELECTRO_RV_LIST: CharacterRVs = {
   Iansan: [CRate, CDMG, ATK_, ER],
   Ororon: [CRate, CDMG, ATK_, ER],
   Ineffa: [CRate, CDMG, ATK_, EM, ER],
-  Flins: [CRate, CDMG, ATK_, ER],
+  Flins: [CRate, CDMG, ATK_, EM, ER],
 };
 
 const DENDRO_RV_LIST: CharacterRVs = {

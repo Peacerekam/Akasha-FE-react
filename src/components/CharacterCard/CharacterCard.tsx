@@ -256,6 +256,18 @@ const GACHA_CHAR_OFFESET: { [char: string]: { x: number; y: number } } = {
     x: -10,
     y: 10,
   },
+  Aino: {
+    x: 15,
+    y: -40,
+  },
+  Lauma: {
+    x: 0,
+    y: 10,
+  },
+  Flins: {
+    x: 0,
+    y: 35,
+  },
 };
 
 type Toggles = "build" | "card" | null;
@@ -1174,8 +1186,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           }
         } catch (err) {
           console.log(err);
-          await delay(10);
-          await drawBackground(i + 1);
+          // await delay(10);
+          // await drawBackground(i + 1);
         }
 
         // return backgroundCtx;
