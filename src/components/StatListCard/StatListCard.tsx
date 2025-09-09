@@ -91,7 +91,7 @@ export const StatListCard: React.FC<StatListProps> = ({ row }) => {
           {...artifactTooltip}
         >
           <div className="flex gap-5 w-100">
-            <AssetFallback alt="" className="stat-icon" src={icon} />
+            <AssetFallback alt="" className="stat-icon" src={icon} isArtifact />
             <span>{translate(name)}</span>
           </div>
           <div>×{Math.floor(count / 2) * 2}</div>

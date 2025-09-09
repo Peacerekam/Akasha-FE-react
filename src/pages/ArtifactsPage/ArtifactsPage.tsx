@@ -139,7 +139,12 @@ export const ArtifactsPage: React.FC = () => {
 
           return (
             <div className="table-icon-text-pair">
-              <AssetFallback alt=" " className="table-icon" src={row.icon} />{" "}
+              <AssetFallback
+                alt=" "
+                className="table-icon"
+                src={row.icon}
+                isArtifact
+              />{" "}
               {isNew ? (
                 <>
                   <span className="new-lb-badge" />

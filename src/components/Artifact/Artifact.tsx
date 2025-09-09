@@ -122,6 +122,7 @@ export const Artifact: React.FC<ArtifactProps> = ({
         src={artifact.icon}
         key={artifact.icon}
         {...artifactTooltip}
+        isArtifact
       />
       <div className="substats">
         {Object.keys(artifact.substats).map((key: any) => {

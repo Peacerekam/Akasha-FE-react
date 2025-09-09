@@ -18,7 +18,12 @@ export const DisplaySets: React.FC<DisplaySetsProps> = ({ artifactSets }) => {
           const { icon, count } = artifactSets[name];
           return (
             <div key={name} className="table-icon-text-pair relative">
-              <AssetFallback alt="" className="table-icon" src={icon} />
+              <AssetFallback
+                alt=""
+                className="table-icon"
+                src={icon}
+                isArtifact
+              />
               <span className="bottom-right-absolute">
                 {Math.floor(count / 2) * 2}
               </span>

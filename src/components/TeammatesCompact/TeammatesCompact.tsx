@@ -295,6 +295,7 @@ export const TeammatesCompact: React.FC<TeammatesCompactProps> = ({
                   alt=" "
                   className="table-icon overlay-icon"
                   src={teammate.character?.artifactSetIcon}
+                  isArtifact
                 />
               </div>
             ) : (

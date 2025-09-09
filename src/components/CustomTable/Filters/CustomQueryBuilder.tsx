@@ -65,7 +65,11 @@ export const CustomQueryBuilder = ({
                         {isStatIcon ? (
                           <StatIcon name={iconName ?? ""} />
                         ) : (
-                          <AssetFallback alt="" src={opt.icon} />
+                          <AssetFallback
+                            alt=""
+                            src={opt.icon}
+                            isArtifact={!!prefix} // only artifacts have a prefix
+                          />
                         )}
                         <Highlighter
                           highlightClassName="text-highlight-class"

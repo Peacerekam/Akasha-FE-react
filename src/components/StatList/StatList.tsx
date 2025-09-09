@@ -125,7 +125,13 @@ export const StatList: React.FC<StatListProps> = ({
       return (
         <div key={name} className="table-stat-row green-tint">
           <div className="flex gap-5 w-100">
-            <AssetFallback alt="" className="stat-icon" src={icon} key={icon} />
+            <AssetFallback
+              alt=""
+              className="stat-icon"
+              src={icon}
+              key={icon}
+              isArtifact
+            />
             <span>{translate(name)}</span>
           </div>
           <div>×{Math.floor(count / 2) * 2}</div>
