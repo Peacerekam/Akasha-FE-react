@@ -1938,7 +1938,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           {translate("Lv.")} {row.propMap.level.val}
           <span className="opacity-5">/</span>
           <span className="opacity-5">
-            {ascensionToLevel(row.propMap.ascension.val, "character", row.propMap.level.val)}
+            {ascensionToLevel(
+              row.propMap.ascension.val,
+              "character",
+              row.propMap.level.val
+            )}
           </span>
         </div>
         <div className="character-friendship">
