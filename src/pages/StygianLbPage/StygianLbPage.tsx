@@ -275,7 +275,7 @@ export const StygianLbPage: React.FC = () => {
         //     {_version} Score
         //   </span>
         // ),
-        name: `${_version} Score`,
+        name: `${apiVer || "??"} Score`,
         sortable: true,
         sortField: "stygianScore",
         cell: (row) => {
@@ -291,7 +291,7 @@ export const StygianLbPage: React.FC = () => {
         },
       },
     ],
-    [translate, language, version]
+    [translate, language, apiVer]
   );
 
   const uidsQuery = useMemo(
@@ -307,8 +307,7 @@ export const StygianLbPage: React.FC = () => {
         {stygianList.map((ver: string) => {
           const to = `/leaderboards/stygian/${ver}`;
           const _ver = ver.replace("_", ".");
-          const isActive = version === ver;
-
+          const isActive = apiVer === _ver;
           return (
             <Link
               className={isActive ? "current-selection" : ""}

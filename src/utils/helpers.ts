@@ -75,9 +75,13 @@ export const ascensionToLevel = (
   type: "weapon" | "character",
   levelFallback?: number
 ) => {
-  // this partially fixes my screw-up on the backend
-  // where promoteLevel is defaulted to a wrong value
-  if (type === "weapon" && levelFallback && levelFallback <= 20) return 20;
+  if (levelFallback) {
+    // this partially fixes my screw-up on the backend where promoteLevel is defaulted to a wrong value
+    if (type === "weapon" && levelFallback <= 20) return 20;
+
+    // handle lv 95 and lv 100 ascension
+    if (type === "character" && levelFallback > 90) return levelFallback;
+  }
 
   return (
     {
@@ -88,6 +92,8 @@ export const ascensionToLevel = (
       4: 70,
       5: 80,
       6: 90,
+      7: 95, // doesnt exist?
+      8: 100, // doesnt exist?
     }[ascension] ?? 20
   );
 };
