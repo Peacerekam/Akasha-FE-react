@@ -997,7 +997,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           const lbBadge = (
             <span className="lb-badge with-icon">
               <AssetFallback
-                alt=""
                 className="weapon-icon"
                 src={calc.weapon.icon}
                 {...weaponTooltip}
@@ -1755,7 +1754,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       <div className="character-middle-fix">
         <div className="character-weapon relative">
           <div className="weapon-icon" {...weaponTooltip}>
-            <AssetFallback alt="" src={row.weapon.icon} />
+            <AssetFallback src={row.weapon.icon} />
             <div className="weapon-rarity">
               {[...Array(chartsData?.weaponMetadata?.rarity)].map((e, i) => (
                 <img alt="*" key={`star-${i}`} src={RarityStar} />
@@ -1946,7 +1945,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           </span>
         </div>
         <div className="character-friendship">
-          <img alt="friendship" src={FriendshipIcon} />{" "}
+          <img alt="" src={FriendshipIcon} />{" "}
           {row.fetterInfo.expLevel}
         </div>
         <div className="character-cv">{fixCritValue(row)} cv</div>
@@ -2482,7 +2481,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             <label className="card-select-label" htmlFor={`${buildId}-rename`}>
               Build name
             </label>
-            <AssetFallback src={row.icon} alt="" />
+            <AssetFallback src={row.icon} />
             <input
               id={`${buildId}-rename`}
               className="stylized-text-input"

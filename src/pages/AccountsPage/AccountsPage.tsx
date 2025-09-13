@@ -87,7 +87,7 @@ export const AccountsPage: React.FC = () => {
               <div className="table-icon-text-pair">
                 {row.profilePictureLink ? (
                   <img
-                    alt=" "
+                    alt=""
                     className="table-icon"
                     src={row.profilePictureLink}
                     title={row.playerInfo.nickname}
@@ -156,7 +156,7 @@ export const AccountsPage: React.FC = () => {
             <div style={{ display: "flex", gap: 3 }}>
               <img
                 style={{ width: 20 }}
-                alt="Achievements"
+                alt=""
                 src={Achievevement}
               />
               {finishAchievementNum}

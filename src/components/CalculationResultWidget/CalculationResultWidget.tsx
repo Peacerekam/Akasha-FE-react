@@ -310,7 +310,6 @@ export const CalculationResultWidget: React.FC<
                       )}
                       <div className="flex">
                         <AssetFallback
-                          alt="Icon"
                           className="table-icon"
                           src={calc.characterIcon}
                         />

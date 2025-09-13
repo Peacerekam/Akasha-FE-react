@@ -23,7 +23,7 @@ export const AchievementsBadge: React.FC<AchievementsBadgeProps> = ({
       title={`${translate("Total Achievements")}: ${roundedCount}`}
       className={`achievement-badge ${className}`}
     >
-      <img alt="Achievements" src={Achievevement} />
+      <img alt="" src={Achievevement} />
       {roundedCount}
     </span>
   );

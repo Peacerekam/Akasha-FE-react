@@ -325,7 +325,7 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
           return (
             <div className="table-icon-text-pair">
               <AssetFallback
-                alt=" "
+                alt=""
                 className="table-icon"
                 src={row.icon}
                 isArtifact
@@ -475,7 +475,7 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
           return (
             <div className={"table-icon-text-pair"} title={updatedAtLabel}>
               <AssetFallback
-                alt=" "
+                alt=""
                 title={updatedAtLabel}
                 className="table-icon"
                 src={row.icon}

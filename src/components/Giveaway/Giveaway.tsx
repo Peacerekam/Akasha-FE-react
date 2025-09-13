@@ -147,7 +147,7 @@ export const Giveaway: React.FC<GiveawayProps> = ({ TEST_MODE = false }) => {
     const _48h = 2 * _24h;
 
     // const _24hAfterEvent = winnersList?.[winnersList.length - 1]?.date + _24h;
-    const _48hAfterEvent = winnersList?.[winnersList.length - 1]?.date + _48h;
+    const _48hAfterEvent = winnersList?.[0]?.date + _48h;
 
     if (now > _48hAfterEvent) return <></>;
 

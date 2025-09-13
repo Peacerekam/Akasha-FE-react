@@ -117,7 +117,7 @@ export const BuildsPage: React.FC = () => {
           return (
             <div className="table-icon-text-pair">
               <AssetFallback
-                alt=" "
+                alt=""
                 className="table-icon"
                 src={row.icon}
                 title={row?.name}

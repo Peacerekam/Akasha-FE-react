@@ -140,7 +140,7 @@ export const ArtifactsPage: React.FC = () => {
           return (
             <div className="table-icon-text-pair">
               <AssetFallback
-                alt=" "
+                alt=""
                 className="table-icon"
                 src={row.icon}
                 isArtifact

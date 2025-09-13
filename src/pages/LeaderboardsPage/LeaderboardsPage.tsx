@@ -311,7 +311,6 @@ export const LeaderboardsPage: React.FC = () => {
             <AssetFallback
               className="table-icon small"
               src={thisWeaponCalc?.icon}
-              alt={thisWeaponCalc?.name}
               title={thisWeaponCalc?.name}
             />
             {thisWeaponCalc?.short || "???"}{" "}
@@ -801,7 +800,6 @@ export const LeaderboardsPage: React.FC = () => {
                         <AssetFallback
                           style={{ width: 40, height: 40, marginBottom: 15 }}
                           src={thisCalc.characterIcon}
-                          alt={thisCalc.characterName}
                         />
                         <div
                           style={{

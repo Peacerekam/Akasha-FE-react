@@ -100,12 +100,12 @@ export const ProfileSelector: React.FC<ProfileSelectorProps> = ({
                   {isCombined ? (
                     <div className="combined-pfp">
                       <img
-                        alt="pfp"
+                        alt=""
                         className="profile-pfp"
                         src={profile?.uidAvatar || displayAvatarLink}
                       />
                       <img
-                        alt="pfp"
+                        alt=""
                         className="profile-pfp"
                         src={
                           profile?.enkaAvatar ||
@@ -116,7 +116,7 @@ export const ProfileSelector: React.FC<ProfileSelectorProps> = ({
                     </div>
                   ) : (
                     <img
-                      alt="pfp"
+                      alt=""
                       className="profile-pfp"
                       src={displayAvatarLink}
                     />

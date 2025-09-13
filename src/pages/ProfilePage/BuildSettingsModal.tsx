@@ -342,7 +342,6 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
             <AssetFallback
               className="table-icon"
               src={char.icon}
-              alt={char.icon}
             />
             {isNew && <div className="new-lb-badge" />}
             <div className="compact-table-name">

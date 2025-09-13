@@ -65,7 +65,7 @@ export const TheaterRankText: React.FC<TheaterRankTextProps> = ({
             className="abyss-star"
             width={16}
             height={16}
-            alt="Star"
+            alt=""
             src={Star}
           />
           {stars !== act ? (

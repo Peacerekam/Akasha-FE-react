@@ -22,8 +22,8 @@ export const AssetFallback: React.FC<AssetFallbackProps> = (props) => {
 
   return (
     <img
-      {...props}
       alt={""}
+      {...props}
       key={props.src}
       onError={handleError}
       ref={imgRef}

@@ -403,8 +403,8 @@ export const HoyolabProfile: React.FC<AkashaProfileProps> = ({
             Add binding code to your in-game signature and press refresh button.
           </div>
           <div className="less-important">
-            If you get "contains illegal characters" message then you can
-            bypass it by separating the code with spaces (e.g. "123 45").
+            If you get "contains illegal characters" message then you can bypass
+            it by separating the code with spaces (e.g. "123 45").
           </div>
           <div className="less-important">
             Be aware it might take around 5 minutes for in-game changes to be
@@ -659,8 +659,8 @@ export const HoyolabProfile: React.FC<AkashaProfileProps> = ({
                               <img
                                 src={boss.icon}
                                 title={boss.name}
-                                alt={boss.name}
                                 className="table-icon"
+                                alt=""
                               />
                             </div>
                             <div>{boss.kill_num}</div>
@@ -694,8 +694,8 @@ export const HoyolabProfile: React.FC<AkashaProfileProps> = ({
                               <img
                                 src={item.icon}
                                 title={item.name}
-                                alt={item.name}
                                 className="table-icon"
+                                alt=""
                               />
                             </div>
                             <div>{item.count}</div>

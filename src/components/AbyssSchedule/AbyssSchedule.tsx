@@ -149,7 +149,7 @@ export const AbyssSchedule: React.FC<AbyssScheduleProps> = ({ uid }) => {
                                           {/* {av.id} */}
                                           <img
                                             style={{ width: 40 }}
-                                            alt={av.icon}
+                                            alt=""
                                             src={av.icon}
                                           />
                                         </div>
@@ -196,7 +196,7 @@ export const AbyssSchedule: React.FC<AbyssScheduleProps> = ({ uid }) => {
                                       <img
                                         key={`${mob.icon}-${i}`}
                                         style={{ width: 25 }}
-                                        alt={mob.icon}
+                                        alt=""
                                         src={mob.icon}
                                         title={mob.name}
                                       />

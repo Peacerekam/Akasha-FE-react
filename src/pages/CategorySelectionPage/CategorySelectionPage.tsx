@@ -117,7 +117,6 @@ export const CategorySelectionPage: React.FC = () => {
               <div className="table-icon-text-pair">
                 <StatIcon name={element} />
                 <AssetFallback
-                  alt=" "
                   className="table-icon"
                   width={25}
                   height={25}
@@ -284,7 +283,6 @@ export const CategorySelectionPage: React.FC = () => {
             >
               <div className="table-icon-text-pair">
                 <AssetFallback
-                  alt=" "
                   className="table-icon"
                   title="Stygian Onslaught"
                   width={16}
@@ -329,7 +327,7 @@ export const CategorySelectionPage: React.FC = () => {
                 className="table-icon"
                 src={enemy.icon}
                 title={enemy.enemyName}
-                alt=" "
+                alt=""
               />
               <span>{baseName}</span>
             </span>

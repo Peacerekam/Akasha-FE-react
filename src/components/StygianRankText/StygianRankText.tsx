@@ -132,6 +132,7 @@ export const StygianRankText: React.FC<StygianRankTextProps> = ({
                     height={16}
                     alt={diffRoman}
                     src={icon}
+                    style={{ fontSize: 12 }}
                   />{" "}
                   {seconds}s
                 </>

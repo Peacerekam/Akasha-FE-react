@@ -51,6 +51,7 @@
     height: 22px;
     border-radius: 100px;
     box-shadow: rgba(black, 0.5) 0px 0px 3px 1px;
+    overflow: hidden;
   }
   .logo-wrapper {
     position: relative;
@@ -180,6 +181,7 @@
       align-items: center;
       .navbar-img {
         margin-right: 8px;
+        overflow: hidden;
       }
     }
     tr {

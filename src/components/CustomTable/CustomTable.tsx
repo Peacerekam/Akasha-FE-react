@@ -768,7 +768,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
                         <img
                           style={{ height: 100, width: 100 }}
                           src={enemy.icon}
-                          alt=" "
+                          alt=""
                         />
                         <div>
                           <div style={{ fontSize: 18 }}>

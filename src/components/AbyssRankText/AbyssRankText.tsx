@@ -84,7 +84,7 @@ export const AbyssRankText: React.FC<AbyssRankTextProps> = ({
             className="abyss-star"
             width={16}
             height={16}
-            alt="Star"
+            alt=""
             src={Star}
           />
           {onlyStars ? `${stars || 0}` : `${stars || 0} • ${abyssProgress}`}

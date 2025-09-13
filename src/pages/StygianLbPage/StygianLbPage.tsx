@@ -144,7 +144,7 @@ export const StygianLbPage: React.FC = () => {
               <div className="table-icon-text-pair">
                 {row.profilePictureLink ? (
                   <img
-                    alt=" "
+                    alt=""
                     className="table-icon"
                     src={row.profilePictureLink}
                     title={row.playerInfo?.nickname}
@@ -215,7 +215,7 @@ export const StygianLbPage: React.FC = () => {
             <div style={{ display: "flex", gap: 3 }}>
               <img
                 style={{ width: 20 }}
-                alt="Achievements"
+                alt=""
                 src={Achievevement}
               />
               {finishAchievementNum}
@@ -395,7 +395,7 @@ export const StygianLbPage: React.FC = () => {
                           key={enemy.icon}
                           className="stygian-enemy-container"
                         >
-                          <img src={enemy.icon} alt={enemy.enemyName} />
+                          <img src={enemy.icon} alt="" />
                           <div style={{ fontWeight: 700, fontSize: 18 }}>
                             {_split[0]}
                           </div>
