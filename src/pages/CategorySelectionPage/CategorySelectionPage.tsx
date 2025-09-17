@@ -315,14 +315,19 @@ export const CategorySelectionPage: React.FC = () => {
           const enemy = row?.enemies?.[i];
           if (!enemy) return <></>;
 
-          const baseName = enemy.enemyName.split(":")[0];
-          // const shorterName = baseName.replace("Battle-Hardened", "BH");
+          let baseName = enemy.enemyName.split(":")[0];
+          const _split = baseName.split(" ");
+          const hasPrefix = baseName.startsWith("Battle-");
+
+          if (hasPrefix) {
+            baseName = `${_split.slice(1).join(" ")}`;
+          }
 
           return (
             <span
               className="table-icon-text-pair"
               key={enemy.enemyName}
-              style={{ alignItems: "center" }}
+              style={{ alignItems: "center", maxWidth: 195 }}
             >
               <img
                 className="table-icon"
@@ -330,7 +335,31 @@ export const CategorySelectionPage: React.FC = () => {
                 title={enemy.enemyName}
                 alt=""
               />
-              <span style={{ maxWidth: 175 }}>{baseName}</span>
+              <span>
+                {hasPrefix && (
+                  <div
+                    style={{
+                      fontSize: hasPrefix ? 10 : 13,
+                      color: "gray",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      position: "relative",
+                      top: 0,
+                    }}
+                  >
+                    {_split[0]}
+                  </div>
+                )}
+                <span
+                  style={{
+                    fontSize: hasPrefix ? 12 : 13,
+                    position: "relative",
+                    top: hasPrefix ? -5 : 0,
+                  }}
+                >
+                  {baseName}
+                </span>
+              </span>
             </span>
           );
         },
