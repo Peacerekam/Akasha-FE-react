@@ -139,11 +139,11 @@ export const SubstatPriorityTable: React.FC<SubstatPriorityTableProps> = ({
                 </>
               );
 
-              const weaponName = _data.calculation.weapon.name;
-              const weaponRefinement = _data.calculation.weapon.refinement;
-              const calcName = _data.calculation.name;
+              const weaponName = calc.weapon.name;
+              const weaponRefinement = calc.weapon.refinement;
+              const calcName = calc.name;
               const calcVariant = calc.variant || "";
-              const rawLabel = `${weaponName} R${weaponRefinement} ${calcName} ${calcVariant}`;
+              const rawLabel = `${weaponName} R${weaponRefinement} ${calcName} ${calcVariant} ${calc.calculationId}`;
 
               const thisOpt = {
                 label,

@@ -249,7 +249,7 @@ export const CategorySelectionPage: React.FC = () => {
                 whiteSpace: "nowrap",
               }}
             >
-              {strDate}
+              {row?.addDate ? strDate : "-"}
             </div>
           );
         },
@@ -298,7 +298,7 @@ export const CategorySelectionPage: React.FC = () => {
                   }}
                   href={`/${leaderboardPath}`}
                 >
-                  {row?.version}: {stName}
+                  {row?.version}: {stName || "..."}
                 </a>
               </div>
             </div>
@@ -316,6 +316,7 @@ export const CategorySelectionPage: React.FC = () => {
           if (!enemy) return <></>;
 
           const baseName = enemy.enemyName.split(":")[0];
+          // const shorterName = baseName.replace("Battle-Hardened", "BH");
 
           return (
             <span
@@ -329,7 +330,7 @@ export const CategorySelectionPage: React.FC = () => {
                 title={enemy.enemyName}
                 alt=""
               />
-              <span>{baseName}</span>
+              <span style={{ maxWidth: 175 }}>{baseName}</span>
             </span>
           );
         },
@@ -367,7 +368,7 @@ export const CategorySelectionPage: React.FC = () => {
                 whiteSpace: "nowrap",
               }}
             >
-              {strDate}
+              {row?.addDate ? strDate : "-"}
             </div>
           );
         },
