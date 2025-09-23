@@ -92,6 +92,7 @@ export const StygianLbPage: React.FC = () => {
 
   useEffect(() => {
     setTimeout(() => {
+      if (!_version) return;
       setTitle(`${_version} Stygian Onslaught | Akasha System`);
     }, 0);
   }, [_version]);
@@ -213,11 +214,7 @@ export const StygianLbPage: React.FC = () => {
             //   <AchievementsBadge count={finishAchievementNum} />
             // </div>
             <div style={{ display: "flex", gap: 3 }}>
-              <img
-                style={{ width: 20 }}
-                alt=""
-                src={Achievevement}
-              />
+              <img style={{ width: 20 }} alt="" src={Achievevement} />
               {finishAchievementNum}
             </div>
           );

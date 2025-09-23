@@ -6,16 +6,17 @@ type AssetFallbackProps = DetailedHTMLProps<
   HTMLImageElement
 > & { isArtifact?: boolean };
 
-export const AssetFallback: React.FC<AssetFallbackProps> = (props) => {
+export const AssetFallback: React.FC<AssetFallbackProps> = ({
+  isArtifact,
+  ...props
+}) => {
   const imgRef = useRef<HTMLImageElement>(null);
 
   const handleError = () => {
     const src = imgRef.current?.src;
     if (!src?.includes("enka")) return;
 
-    const replaceWith = props.isArtifact
-      ? `${AMBR_ASSETS}reliquary/`
-      : AMBR_ASSETS;
+    const replaceWith = isArtifact ? `${AMBR_ASSETS}reliquary/` : AMBR_ASSETS;
 
     imgRef.current!.src = src?.replace(ENKA_ASSETS, replaceWith);
   };

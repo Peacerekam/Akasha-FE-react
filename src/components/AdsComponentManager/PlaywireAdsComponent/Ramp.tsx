@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 
 import { AdProviderContext } from "../../../context/AdProvider/AdProviderContext";
+import { SessionDataContext } from "../../../context/SessionData/SessionDataContext";
 import { useLocation } from "react-router-dom";
 
 type RampProps = {
@@ -9,9 +10,11 @@ type RampProps = {
 };
 
 const Ramp: React.FC<RampProps> = ({ PUB_ID, WEBSITE_ID }) => {
+  const [onLoadSuccess, setOnLoadSuccess] = useState(false);
   const [rampComponentLoaded, setRampComponentLoaded] = useState(false);
   const location = useLocation(); // React Router hook to get the current location
 
+  const { profileObject } = useContext(SessionDataContext);
   const { contentWidth, screenWidth } = useContext(AdProviderContext);
 
   useEffect(() => {
@@ -38,6 +41,7 @@ const Ramp: React.FC<RampProps> = ({ PUB_ID, WEBSITE_ID }) => {
             "color: green;"
           );
           (window as any).ramp.spaNewPage(location.pathname);
+          setOnLoadSuccess(true);
         });
       };
 
@@ -71,6 +75,7 @@ const Ramp: React.FC<RampProps> = ({ PUB_ID, WEBSITE_ID }) => {
 
   useEffect(() => {
     if (!rampComponentLoaded) return;
+    if (profileObject.isPatreon) return;
 
     // Handle page navigation
     (window as any).ramp.que.push(() => {
@@ -81,6 +86,27 @@ const Ramp: React.FC<RampProps> = ({ PUB_ID, WEBSITE_ID }) => {
       (window as any).ramp.spaNewPage(location.pathname);
     });
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (!profileObject.isPatreon) return;
+    if (!onLoadSuccess) return;
+
+    setTimeout(() => {
+      (window as any).ramp.que.push(() => {
+        const adUnits = (window as any)?.ramp?.getUnits?.();
+        if (adUnits?.length === 0) return;
+
+        console.log(
+          `%c[navigation] window.ramp.destroyUnits(["${adUnits.join(
+            `", "`
+          )}"])`,
+          "color: red;"
+        );
+        (window as any)?.ramp?.destroyUnits?.(adUnits);
+        (window as any)?.ramp?.destroyCornerAdVideo?.();
+      });
+    }, 200);
+  }, [onLoadSuccess, profileObject.isPatreon, location.pathname]);
 
   useEffect(() => {
     const _railsOffset = Math.ceil(screenWidth / 2 + contentWidth / 2 + 10);

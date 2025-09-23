@@ -15,35 +15,39 @@
   &.achievement-300-badge,
   &.achievement-400-badge,
   &.achievement-500-badge,
-  &.achievement-600-badge {
+  &.achievement-600-badge,
+  &.achievement-700-badge {
     background-color: rgb(128, 128, 128);
     border-color: rgb(128, 128, 128);
   }
-  &.achievement-700-badge {
+  &.achievement-800-badge {
     background-color: rgb(75, 121, 71);
     border-color: rgb(75, 121, 71);
   }
-  &.achievement-800-badge {
+  &.achievement-900-badge {
     background-color: rgb(31, 131, 31);
     border-color: rgb(31, 131, 31);
   }
-  &.achievement-900-badge {
+  &.achievement-1000-badge {
     background-color: rgb(0, 122, 122);
     border-color: rgb(0, 122, 122);
   }
-  &.achievement-1000-badge {
+  &.achievement-1100-badge {
     background-color: rgb(128, 45, 136);
     border-color: rgb(128, 45, 136);
   }
-  &.achievement-1100-badge {
+  &.achievement-1200-badge {
     background-color: rgb(168, 154, 31);
     border-color: rgb(168, 154, 31);
   }
 
-  &.achievement-1200-badge,
   &.achievement-1300-badge,
   &.achievement-1400-badge,
-  &.achievement-1500-badge {
+  &.achievement-1500-badge,
+  &.achievement-1600-badge,
+  &.achievement-1700-badge,
+  &.achievement-1800-badge,
+  &.achievement-1900-badge {
     background-color: rgb(168, 120, 31);
     border-color: rgb(168, 120, 31);
   }

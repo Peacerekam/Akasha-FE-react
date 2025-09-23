@@ -132,6 +132,21 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
         (window as any).AdSlots.disableAds = true;
       }
     }
+    if (adProvider === "playwire") {
+      if ((window as any)?.ramp) {
+        const adUnits = (window as any)?.ramp?.getUnits?.();
+        if (adUnits?.length === 0) return;
+        
+        console.log(
+          `%c[navigation] window.ramp.destroyUnits(["${adUnits.join(
+            `", "`
+          )}"])`,
+          "color: red;"
+        );
+        (window as any)?.ramp?.destroyUnits?.(adUnits);
+        (window as any)?.ramp?.destroyCornerAdVideo?.();
+      }
+    }
   };
 
   const setPreventContentShrinking = (key: string, mode: "add" | "remove") => {

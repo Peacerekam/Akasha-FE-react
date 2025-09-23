@@ -140,6 +140,7 @@ export const LeaderboardsPage: React.FC = () => {
 
   useEffect(() => {
     setTimeout(() => {
+      if (!thisCalc?.name) return;
       setTitle(`${thisCalc?.name} | Akasha System`);
     }, 0);
   }, [thisCalc]);
