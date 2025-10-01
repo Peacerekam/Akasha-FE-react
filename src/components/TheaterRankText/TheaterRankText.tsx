@@ -7,8 +7,12 @@ import { cssJoin } from "../../utils/helpers";
 import { useContext } from "react";
 
 const theaterProgressToColor = (stars: number, badge?: boolean) => {
-  if (stars >= 10) {
+  if (stars === 12) {
     if (badge) return ABYSS_COLORS[0];
+    return "cyan"; // I - gold
+  }
+  if (stars >= 10) {
+    if (badge) return ABYSS_COLORS[1];
     return "rgb(255, 217, 0)"; // I - gold
   }
   if (stars >= 8) {
@@ -68,7 +72,7 @@ export const TheaterRankText: React.FC<TheaterRankTextProps> = ({
             alt=""
             src={Star}
           />
-          {stars !== act ? (
+          {stars < act ? (
             <>
               {stars}
               <span
