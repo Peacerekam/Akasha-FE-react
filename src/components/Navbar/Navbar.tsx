@@ -8,7 +8,7 @@ import {
   cssJoin,
   getRelativeCoords,
 } from "../../utils/helpers";
-import React, { useContext, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { faBars, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { faDiscord, faPatreon } from "@fortawesome/free-brands-svg-icons";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -43,6 +43,44 @@ export const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const { username, profilePicture } = profileObject;
+
+  const [stickyNav, setStickyNav] = useState(false);
+
+  useEffect(() => {
+    const threshold = 0;
+    let lastScrollY = window.pageYOffset;
+    let ticking = false;
+
+    const updateScrollDir = () => {
+      const scrollY = window.pageYOffset;
+
+      if (Math.abs(scrollY - lastScrollY) < threshold) {
+        ticking = false;
+        return;
+      }
+
+      const thresholdY = 0;
+      const belowY = window.scrollY > thresholdY;
+      const dir = scrollY > lastScrollY ? -1 : 1;
+
+      setStickyNav(!!(dir === 1 && belowY));
+      lastScrollY = scrollY > 0 ? scrollY : 0;
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateScrollDir);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", onScroll);
+
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [stickyNav]);
+
   const handleToggleModal = (event: React.MouseEvent<HTMLElement>) => {
     setShowLoginModal((prev) => !prev);
 
@@ -56,13 +94,6 @@ export const Navbar: React.FC = () => {
     const _body = document.querySelector("body");
     _body?.classList.add("overflow-hidden");
   };
-
-  // BrowserRouter
-  // const { pathname } = window.location;
-
-  // HashRouter
-  // const hash = window.location.hash.replace("#", "");
-  const { username, profilePicture } = profileObject;
 
   const NAVIGATION: NavElement[] = useMemo(
     () => [
@@ -253,6 +284,7 @@ export const Navbar: React.FC = () => {
   const classNames = cssJoin([
     "navbar",
     isTablet ? "mobile-nav" : "desktop-nav",
+    isTablet && stickyNav ? "sticky-nav" : "",
   ]);
 
   return <div className={classNames}>{isTablet ? mobileNav : desktopNav}</div>;

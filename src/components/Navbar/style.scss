@@ -4,6 +4,16 @@
   }
 }
 
+@keyframes revealNavbar {
+  0% {
+    transform: translateY(-100px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
 .navbar {
   color: #e7f6f2;
   display: flex;
@@ -22,11 +32,15 @@
   }
 
   &.mobile-nav {
-    position: fixed;
     top: 0;
     width: 100%;
-    z-index: 999999;
     // border-bottom: 1px solid #202525;
+
+    &.sticky-nav {
+      z-index: 999999;
+      position: fixed;
+      animation: 0.3s revealNavbar;
+    }
   }
 
   .navbar-lootbar-wrapper {
