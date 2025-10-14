@@ -69,6 +69,16 @@ const VAPE_COLORS_MAP: any = {
   P: "rgb(0,163,150)",
 };
 
+const LUNAR_COLORS_MAP: any = {
+  LC: "#da84ff",
+  LB: "#94ff7f",
+};
+
+const LUNAR_GRADIENTS_MAP: any = {
+  LC: "linear-gradient( #da84ff, #f5ddff )",
+  LB: "linear-gradient( #94ff7f, #ccffc2 )",
+};
+
 export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
   row,
   selectedCalculationId,
@@ -147,7 +157,13 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
 
     const _MAP = isReaction(highlighted.name) ? VAPE_COLORS_MAP : COLORS_MAP;
 
-    let _color = highlighted.type
+    const lunarColor = highlighted.type
+      ? LUNAR_COLORS_MAP[highlighted.type]
+      : false;
+
+    const _color = lunarColor
+      ? lunarColor
+      : highlighted.type
       ? _MAP[highlighted.type.slice(0, 1)] || "gray"
       : "gray";
 
@@ -243,10 +259,11 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
                 : el.name) + ` = ${roundToFixed(val, 2)}`;
 
             const _MAP = isReaction(el.name) ? VAPE_COLORS_MAP : COLORS_MAP;
+            const lunarColor = LUNAR_COLORS_MAP[el.type || ""];
 
-            const _color = el.type
-              ? _MAP[el.type.slice(0, 1)] || "gray"
-              : "gray";
+            const _color =
+              lunarColor ||
+              (el.type ? _MAP[el.type.slice(0, 1)] || "gray" : "gray");
 
             const classNames = cssJoin([
               "damage-data",
@@ -255,7 +272,9 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
 
             const _style = {
               width: `${_p}%`,
-              backgroundColor: _color,
+              ...(lunarColor
+                ? { background: LUNAR_GRADIENTS_MAP[el.type || ""] }
+                : { backgroundColor: _color }),
             } as React.CSSProperties;
 
             return (
@@ -305,14 +324,19 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
           const val = el.value;
           const _MAP = isReaction(el.name) ? VAPE_COLORS_MAP : COLORS_MAP;
 
-          const _color = el.type ? _MAP[el.type.slice(0, 1)] || "gray" : "gray";
+          const lunarColor = LUNAR_COLORS_MAP[el.type || ""];
+          const _color =
+            lunarColor ||
+            (el.type ? _MAP[el.type.slice(0, 1)] || "gray" : "gray");
 
           const nextValue = instances[i + 1]?.value;
           const displayValue = roundToFixed(val, 0);
           const _quantity = roundToFixed(el?.quantity ?? 1, 2);
           const _title =
             _quantity || _quantity === 0
-              ? `${_quantity}x ${el.name} = ${_quantity === 0 ? 0 : roundToFixed(val, 2)}`
+              ? `${_quantity}x ${el.name} = ${
+                  _quantity === 0 ? 0 : roundToFixed(val, 2)
+                }`
               : `${el.name} = ${roundToFixed(val, 2)}`;
 
           const classNames = cssJoin([
