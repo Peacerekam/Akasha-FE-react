@@ -886,7 +886,26 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           return _split;
         }
 
-        return translatedWord;
+        let direction = "center";
+
+        if (index > 0 && index > percentagesArray.length / 2) {
+          direction = "left";
+        } else if (index !== 0 && index !== percentagesArray.length / 2) {
+          direction = "right";
+        }
+
+        if (direction === "center") {
+          // no padding needed
+          return translatedWord;
+        }
+
+        const wordLen = translatedWord.length;
+        const padNum = wordLen < 9 ? 11 - wordLen : 0;
+        const padding = " ".repeat(padNum);
+
+        return direction === "left"
+          ? `${padding}${translatedWord}`
+          : `${translatedWord}${padding}`;
       };
 
       scales.r.pointLabels.font.size = 9 * hardcodedScale;
@@ -1945,8 +1964,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           </span>
         </div>
         <div className="character-friendship">
-          <img alt="" src={FriendshipIcon} />{" "}
-          {row.fetterInfo.expLevel}
+          <img alt="" src={FriendshipIcon} /> {row.fetterInfo.expLevel}
         </div>
         <div className="character-cv">{fixCritValue(row)} cv</div>
         {!privacyFlag && (

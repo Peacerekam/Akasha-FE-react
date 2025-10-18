@@ -84,6 +84,7 @@ export const scales = {
       color: "rgba(255, 255, 255, 0.2)",
     },
     pointLabels: {
+      // padding: 20,
       color: "#e7f6f2",
       font: {
         family: "GenshinFont",
