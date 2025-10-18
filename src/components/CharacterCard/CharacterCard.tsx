@@ -888,7 +888,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         
         const arrLenBy2 = percentagesArray.length / 2;
         const isCenter = index === 0 || index === arrLenBy2;
-        if (isCenter) return translatedWord;
+        const ignoredLabels = ["DEF", "EM", "ER%"];
+
+        if (isCenter || ignoredLabels.includes(translatedWord)) {
+          return translatedWord;
+        }
 
         const wordLen = translatedWord.length;
         const padNum = wordLen < 8 ? 9 - wordLen : 0;
