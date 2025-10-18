@@ -891,7 +891,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         if (isCenter) return translatedWord;
 
         const wordLen = translatedWord.length;
-        const padNum = wordLen < 9 ? 10 - wordLen : 0;
+        const padNum = wordLen < 8 ? 9 - wordLen : 0;
         const padding = " ".repeat(padNum);
 
         return index > arrLenBy2
