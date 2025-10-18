@@ -885,25 +885,16 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
           return _split;
         }
-
-        let direction = "center";
-
-        if (index > 0 && index > percentagesArray.length / 2) {
-          direction = "left";
-        } else if (index !== 0 && index !== percentagesArray.length / 2) {
-          direction = "right";
-        }
-
-        if (direction === "center") {
-          // no padding needed
-          return translatedWord;
-        }
+        
+        const arrLenBy2 = percentagesArray.length / 2;
+        const isCenter = index === 0 || index === arrLenBy2;
+        if (isCenter) return translatedWord;
 
         const wordLen = translatedWord.length;
-        const padNum = wordLen < 9 ? 11 - wordLen : 0;
+        const padNum = wordLen < 9 ? 10 - wordLen : 0;
         const padding = " ".repeat(padNum);
 
-        return direction === "left"
+        return index > arrLenBy2
           ? `${padding}${translatedWord}`
           : `${translatedWord}${padding}`;
       };
