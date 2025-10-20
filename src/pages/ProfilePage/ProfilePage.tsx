@@ -48,6 +48,7 @@ export const ProfilePage: React.FC = () => {
 
   const hideSelector = useMemo(() => {
     const profilesWithBuilds = relevantProfiles.filter((profile) => {
+      if (uid === profile.uid) return true;
       const _count = profile.buildsCount || 0;
       return _count > 0;
     });

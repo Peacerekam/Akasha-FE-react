@@ -49,7 +49,7 @@ const OVERRIDE_RV_LIST: OverrideRV = {
     ],
     rv: [CRate, CDMG, ATK_],
   },
-  'Furina Vape': {
+  "Furina Vape": {
     lbs: [
       // vape
       1000008910, 1000008911, 1000008912, 1000008913, 1000008914, 1000008915,
@@ -57,21 +57,21 @@ const OVERRIDE_RV_LIST: OverrideRV = {
     ],
     rv: [CRate, CDMG, HP_, EM, ER],
   },
-  'Beidou Aggravate': {
+  "Beidou Aggravate": {
     lbs: [
       // aggravate
       1000002412, 1000002413, 1000002414, 1000002415, 1000002416, 1000002417,
     ],
     rv: [CRate, CDMG, ATK_, EM, ER],
   },
-  'Ganyu Freeze': {
+  "Ganyu Freeze": {
     lbs: [
       // freeze
       1000003701, 1000003703, 1000003705, 1000003707, 1000003709,
     ],
     rv: [CRate, CDMG, ATK_],
   },
-  'Wriothesley Freeze': {
+  "Wriothesley Freeze": {
     lbs: [
       // solo?
       // 1000008600, 1000008601, 1000008602,
@@ -202,6 +202,7 @@ const DENDRO_RV_LIST: CharacterRVs = {
   Emilie: [CRate, CDMG, ATK_],
   Kinich: [CRate, CDMG, ATK_],
   Lauma: [CRate, CDMG, EM, ER],
+  Nefer: [CRate, CDMG, EM],
 };
 
 const defaultRvFilter = [CRate, CDMG];

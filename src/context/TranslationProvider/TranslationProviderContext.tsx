@@ -85,14 +85,33 @@ const TranslationContextProvider: React.FC<{ children: any }> = ({
           return;
         }
 
-        const words = Array.from(new Set(Object.keys(requestedWords)));
-        const fetchURL = `/api/textmap/${language}`;
-        const opts: AxiosRequestConfig<any> = { params: { words } };
-        const { data } = await axios.get(fetchURL, opts);
+        const getTextmapInChunks = async (
+          requestedWords: Hashmap,
+          chunkSize = 200
+        ) => {
+          const fetchURL = `/api/textmap/${language}`;
+
+          let words = Array.from(new Set(Object.keys(requestedWords)));
+          let output = {};
+
+          while (words.length > 0) {
+            const slicedWords = words.slice(0, chunkSize);
+            const opts: AxiosRequestConfig<any> = {
+              params: { words: slicedWords },
+            };
+            const { data } = await axios.get(fetchURL, opts);
+            output = { ...output, ...data?.translation };
+            words = words.slice(chunkSize);
+          }
+
+          return output;
+        };
+
+        const _translation = await getTextmapInChunks(requestedWords);
 
         const responseHasNewTranslations = hasNewKeys(
           textMap[language],
-          data.translation
+          _translation
         );
 
         if (responseHasNewTranslations) {
@@ -106,13 +125,13 @@ const TranslationContextProvider: React.FC<{ children: any }> = ({
             [language]: {
               ...lowerCased,
               ...prev[language],
-              ...data.translation,
+              ..._translation,
             },
           }));
 
           console.log(
             `[Akasha-${language}] Fetched ${
-              Object.keys(data?.translation || {}).length
+              Object.keys(_translation || {}).length
             } new translation(s)`
           );
         }

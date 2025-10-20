@@ -885,12 +885,12 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
           return _split;
         }
-        
+
         const arrLenBy2 = percentagesArray.length / 2;
         const isCenter = index === 0 || index === arrLenBy2;
-        const ignoredLabels = ["DEF", "EM", "ER%"];
+        const ignoreLabel = ["DEF", "EM", "ER%"].includes(translatedWord);
 
-        if (isCenter || ignoredLabels.includes(translatedWord)) {
+        if (isCenter || ignoreLabel) {
           return translatedWord;
         }
 
