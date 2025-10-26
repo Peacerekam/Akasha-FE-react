@@ -116,6 +116,7 @@ export const StygianRankText: React.FC<StygianRankTextProps> = ({
       }
       className={classNames}
       title={title}
+      translate="no"
     >
       {!stygianSeconds && !stygianIndex ? (
         "-"

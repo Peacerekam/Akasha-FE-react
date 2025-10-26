@@ -454,6 +454,7 @@ export const LeaderboardsPage: React.FC = () => {
         {/* @TODO: */}
         <div>
           <table
+            translate="no"
             className={`variants-table ${
               (calculationInfo?.length || 0) < 3 &&
               calcVariants["__MAX_ROWS__"] > 4 &&
@@ -795,11 +796,12 @@ export const LeaderboardsPage: React.FC = () => {
                         className="flex gap-10 flex-wrap-no-wrap"
                         style={{
                           fontSize: 30,
+                          marginBottom: 10,
                           // borderBottom: "1px solid white",
                         }}
                       >
                         <AssetFallback
-                          style={{ width: 40, height: 40, marginBottom: 15 }}
+                          style={{ width: 40, height: 40 }}
                           src={thisCalc.characterIcon}
                         />
                         <div

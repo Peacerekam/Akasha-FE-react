@@ -18,7 +18,7 @@ export const NavbarTabs: React.FC = () => {
   }, [location.pathname]);
 
   return (
-    <div className="navbar-tabs">
+    <div className="navbar-tabs" translate="no">
       {lastProfiles.map((profile, index) => {
         const { uid, nickname, priority } = profile;
 

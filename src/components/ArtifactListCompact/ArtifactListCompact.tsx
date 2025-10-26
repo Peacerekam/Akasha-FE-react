@@ -68,6 +68,7 @@ export const CompactArtifact: React.FC<CompactArtifactProps> = ({
     <div
       key={`${artifact._id}-${canvasBgProps?.adaptiveBgColor}-${canvasBgProps?.namecardBg}`}
       className={`compact-artifact ${className} metric-${_metric}`}
+      translate="no"
     >
       {!!canvasBgProps && <ArtifactBackgroundOnCanvas {...canvasBgProps} />}
 
@@ -381,7 +382,7 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
   const characterId = `${row.characterId}${suffix}`;
 
   return (
-    <div className="flex expanded-row">
+    <div className="flex expanded-row" translate="no">
       <div className="character-preview">
         <div className="character-type-preview">
           <AssetFallback

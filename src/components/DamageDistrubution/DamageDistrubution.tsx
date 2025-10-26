@@ -243,7 +243,7 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
 
     return (
       <>
-        <div className="damage-distribution-container">
+        <div className="damage-distribution-container" translate="no">
           {instances.map((el, i) => {
             const val = el.value * (el.quantity ?? 1);
             let _p = (val / total) * 100;

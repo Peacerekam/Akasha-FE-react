@@ -259,7 +259,7 @@ export const StatList: React.FC<StatListProps> = ({
   );
 
   return (
-    <div className="table-stats-display">
+    <div className="table-stats-display" translate="no">
       {displayCharacter}
       {displayWeapon}
       {displayGeneralStats()}

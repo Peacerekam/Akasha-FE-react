@@ -77,6 +77,7 @@ export const LastUpdated: React.FC<LastUpdatedProps> = ({
   return (
     <span
       className={isRawText ? "last-profile-update-raw" : "last-profile-update"}
+      translate="no"
     >
       {isRawText ? "" : <span>{label}</span>}
       {timestamp[1].map((chunk: string) => {

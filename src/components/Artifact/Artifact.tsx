@@ -95,6 +95,7 @@ export const Artifact: React.FC<ArtifactProps> = ({
     <div
       style={style}
       className={`profile-page-artifact ${getArtifactCvClassName(artifact)}`}
+      translate="no"
     >
       <div className="artifact-name">{translate(artifact.name)}</div>
       <div className="artifact-crit-value">

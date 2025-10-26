@@ -2669,7 +2669,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             DEBUG_MODE ? "debug" : "",
           ])}
         >
-          <div className="html-to-image-target">
+          <div className="html-to-image-target" translate="no">
             <div className={cardContainerClassNames} style={cardStyle}>
               {cardOverlayWrapper}
               <div className="character-left">{characterShowcase}</div>

@@ -375,6 +375,7 @@ export const CalculationResultWidget: React.FC<
         <>
           <PerfectScrollbar>
             <div
+              translate="no"
               className={cssJoin([
                 "highlight-tile-container",
                 expanded ? "expanded-showcase" : "",

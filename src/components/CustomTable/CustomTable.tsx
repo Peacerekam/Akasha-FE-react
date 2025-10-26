@@ -891,6 +891,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
                 }}
                 className={tdClassNames}
                 key={`${sortField}-${index}`}
+                translate="no"
               >
                 {column.cell(row)}
               </td>
