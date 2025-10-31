@@ -202,7 +202,9 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
             <tbody>
               <tr>
                 <td>Group</td>
-                <td style={{ color: _color }}>{highlighted.type || "?"}</td>
+                <td style={{ color: _color }} translate="no">
+                  {highlighted.type || "?"}
+                </td>
               </tr>
               {/* <tr>
                 <td>Value</td>

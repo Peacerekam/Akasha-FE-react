@@ -30,8 +30,9 @@
   min-height: 32px;
   z-index: 1;
   position: relative;
+  transition: padding .2s;
   
-  @media (max-width: 1000px) {
+  @media (max-width: 1110px) {
     padding: 0 15px;
   }
 
