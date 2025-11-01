@@ -115,6 +115,7 @@ export const AccountsPage: React.FC = () => {
           const signature = row?.playerInfo?.signature || "";
           return (
             <div
+              translate="yes"
               style={{
                 width: 245,
                 textOverflow: "ellipsis",

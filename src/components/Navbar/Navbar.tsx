@@ -279,7 +279,7 @@ export const Navbar: React.FC = () => {
     </>
   );
 
-  const isTablet = screenWidth < 1000;
+  const isTablet = screenWidth < 1110;
 
   const classNames = cssJoin([
     "navbar",
