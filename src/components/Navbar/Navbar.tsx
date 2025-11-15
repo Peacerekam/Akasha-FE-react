@@ -39,13 +39,12 @@ export const Navbar: React.FC = () => {
 
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showHamburger, setShowHamburger] = useState(false);
+  const [stickyNav, setStickyNav] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
 
   const { username, profilePicture } = profileObject;
-
-  const [stickyNav, setStickyNav] = useState(false);
 
   useEffect(() => {
     const threshold = 0;

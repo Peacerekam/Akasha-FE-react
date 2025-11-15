@@ -65,6 +65,12 @@
     }
     .stylized-content-block {
       background-position-y: max(-200px, -18vw);
+      @media (max-width: 800px) {
+        background-position-y: max(-100px, -10vw);
+      }
+      @media (max-width: 500px) {
+        background-position-y: 0px;
+      }
     }
   }
   &.gradient-reverse {
