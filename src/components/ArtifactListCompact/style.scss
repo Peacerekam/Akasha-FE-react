@@ -250,13 +250,26 @@
       height: fit-content;
       cursor: pointer;
       border: 1px solid transparent;
+      text-align: center;
+
+      max-width: 100px;
+
+      &.total-roll-rv {
+        max-width: 130px;
+      }
 
       &.x-prefix {
         span {
           :first-child {
+            justify-content: center;
+
             &::before {
               content: "×";
             }
+          }
+          :last-child {
+            justify-content: center;
+            max-width: 75px;
           }
         }
       }

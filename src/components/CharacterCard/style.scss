@@ -1281,8 +1281,29 @@ $hardcoded-scale: 1;
         &.lighter-color {
           > div {
             background-color: rgba(white, 0.15);
+            text-align: center;
+
+            &:first-child {
+              max-width: 60px !important;
+            }
+            &:last-child {
+              max-width: 70px !important;
+            }
           }
         }
+        &:not(.lighter-color) {
+          > div {
+            text-align: center;
+
+            &:first-child {
+              max-width: 35px !important;
+            }
+            &:last-child {
+              max-width: 85px !important;
+            }
+          }
+        }
+
         .weapon-stat-with-icon {
           display: flex;
           gap: 5px;
