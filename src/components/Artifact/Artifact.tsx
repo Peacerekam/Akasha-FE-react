@@ -14,12 +14,16 @@ import {
   normalizeText,
 } from "../../utils/helpers";
 
-import ArtifactBackground from "../../assets/images/artifact-5star-bg.png";
 import { AssetFallback } from "../AssetFallback";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import NoArtifact from "../../assets/images/no-artifact.png";
 import RarityStar from "../../assets/images/star.png";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
+import bgRarity1 from "../../assets/images/artifact-1star-bg.png";
+import bgRarity2 from "../../assets/images/artifact-2star-bg.png";
+import bgRarity3 from "../../assets/images/artifact-3star-bg.png";
+import bgRarity4 from "../../assets/images/artifact-4star-bg.png";
+import bgRarity5 from "../../assets/images/artifact-5star-bg.png";
 import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
 import { fixCritValue } from "../../utils/substats";
 
@@ -41,30 +45,16 @@ export const Artifact: React.FC<ArtifactProps> = ({
 
   const artifactBg =
     {
-      5: ArtifactBackground,
-      // @TODO: add more background to artifacts
-      // 4: ArtifactBackground,
-      // 3: ArtifactBackground,
-      // 2: ArtifactBackground,
-      // 1: ArtifactBackground,
-      4: NoArtifact,
-      3: NoArtifact,
-      2: NoArtifact,
-      1: NoArtifact,
+      5: bgRarity5,
+      4: bgRarity4,
+      3: bgRarity3,
+      2: bgRarity2,
+      1: bgRarity1,
     }[artifact?.stars] || NoArtifact;
-
-  // const artifactHue = {
-  //   5: '0deg',
-  //   4: '-120deg',
-  //   3: '-200deg',
-  //   2: '0deg',
-  //   1: '0deg',
-  // }[artifact?.stars]
 
   const style = {
     "--artifact-bg": `url(${artifactBg})`,
     "--artifact-width": `${width}px`,
-    // "filter": `hue-rotate(${artifactHue})`
   } as React.CSSProperties;
 
   const mainStatKey = artifact.mainStatKey

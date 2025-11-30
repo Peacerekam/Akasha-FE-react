@@ -65,7 +65,7 @@ export const ProfileSelector: React.FC<ProfileSelectorProps> = ({
     const displayAvatarLink = profile?.displayAvatarLink;
 
     const styleObj = {
-      "--name-card-url": `url(${profile?.namecardURL})`,
+      "--name-card-url-pfp": `url(${profile?.namecardURL})`,
     } as React.CSSProperties;
 
     return (

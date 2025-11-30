@@ -51,6 +51,7 @@ body {
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  scrollbar-gutter: stable;
 
   // dynamically added parts of <body> that arent react app root
   // in this case it is react-select's portalled menu dropdown

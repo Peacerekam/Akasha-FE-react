@@ -108,8 +108,11 @@
     color: white;
     position: absolute;
     top: calc(var(--artifact-width) / 1.59);
-    margin-left: calc(var(--artifact-width) / 14.3);
+    margin-left: calc(var(--artifact-width) / 16);
     font-size: calc(var(--artifact-width) / 22.22);
+    background-color: #39444f;
+    padding: 0 calc(var(--artifact-width) / 80);
+    border-radius: calc(var(--artifact-width) / 100);
   }
   .substats {
     display: flex;
