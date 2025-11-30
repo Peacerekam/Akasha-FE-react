@@ -19,11 +19,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import NoArtifact from "../../assets/images/no-artifact.png";
 import RarityStar from "../../assets/images/star.png";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
-import bgRarity1 from "../../assets/images/artifact-1star-bg.png";
-import bgRarity2 from "../../assets/images/artifact-2star-bg.png";
-import bgRarity3 from "../../assets/images/artifact-3star-bg.png";
-import bgRarity4 from "../../assets/images/artifact-4star-bg.png";
-import bgRarity5 from "../../assets/images/artifact-5star-bg.png";
+import bgRarity1 from "../../assets/images/artifact-1star-bg.jpg";
+import bgRarity2 from "../../assets/images/artifact-2star-bg.jpg";
+import bgRarity3 from "../../assets/images/artifact-3star-bg.jpg";
+import bgRarity4 from "../../assets/images/artifact-4star-bg.jpg";
+import bgRarity5 from "../../assets/images/artifact-5star-bg.jpg";
 import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
 import { fixCritValue } from "../../utils/substats";
 
