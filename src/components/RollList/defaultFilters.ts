@@ -110,7 +110,7 @@ const ANEMO_RV_LIST: CharacterRVs = {
   Chasca: [CRate, CDMG, ATK_, EM],
   "Yumemizuki Mizuki": [CRate, CDMG, ATK_, EM, ER],
   Ifa: [CRate, CDMG, ATK_, EM, ER],
-  Jahoda: [CRate, CDMG, ER], // @TODO: ??
+  Jahoda: [CRate, CDMG, ER],
 };
 
 const PYRO_RV_LIST: CharacterRVs = {
@@ -130,7 +130,7 @@ const PYRO_RV_LIST: CharacterRVs = {
   Gaming: [CRate, CDMG, ATK_, EM],
   Arlecchino: [CRate, CDMG, ATK_, EM],
   Mavuika: [CRate, CDMG, ATK_, EM],
-  Durin: [CRate, CDMG, ATK_], // @TODO: ??
+  Durin: [CRate, CDMG, ATK_, EM],
 };
 
 const HYDRO_RV_LIST: CharacterRVs = {

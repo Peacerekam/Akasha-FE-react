@@ -81,7 +81,6 @@ import throttle from "lodash/throttle";
 import { useCardSettings } from "../../hooks/";
 
 // import imglyRemoveBackground, { Config } from "@imgly/background-removal";
-
 // import { toBlob, toPng } from "html-to-image";
 
 ChartJS.register(...registerables);
@@ -96,14 +95,14 @@ type CharacterCardProps = {
   invalidateCache?: (md5?: string) => void;
 };
 
-type Coords = {
-  x: number;
-  y: number;
-};
-
 type MouseOrTouchEvent =
   | React.MouseEvent<HTMLDivElement>
   | React.TouchEvent<HTMLDivElement>;
+
+type OpenDownloadingFalse = "opening" | "downloading" | false;
+type VerticalOrHorizontal = "vertical" | "horizontal" | "";
+type Toggles = "build" | "card" | null;
+type Coords = { x: number; y: number };
 
 const compressPNG = async (
   result: string,
@@ -172,10 +171,11 @@ const getCoordsFromEvent = (event: MouseOrTouchEvent) => {
   return { x, y };
 };
 
-type OpenDownloadingFalse = "opening" | "downloading" | false;
-type VerticalOrHorizontal = "vertical" | "horizontal" | "";
-
-const GACHA_CHAR_OFFESET: { [char: string]: { x: number; y: number } } = {
+const GACHA_CHAR_OFFESET: {
+  [char: string]: Coords & {
+    skins?: { [skinId: string]: Coords };
+  };
+} = {
   Mavuika: {
     x: 16,
     y: -100,
@@ -187,6 +187,12 @@ const GACHA_CHAR_OFFESET: { [char: string]: { x: number; y: number } } = {
   Shenhe: {
     x: 0,
     y: 15,
+    skins: {
+      "206301": {
+        x: 30,
+        y: 10,
+      },
+    },
   },
   Diluc: {
     x: 0,
@@ -268,9 +274,21 @@ const GACHA_CHAR_OFFESET: { [char: string]: { x: number; y: number } } = {
     x: 0,
     y: 35,
   },
+  Jahoda: {
+    x: 0,
+    y: 8,
+  },
+  Durin: {
+    x: 0,
+    y: 25,
+    skins: {
+      "212301": {
+        x: 5,
+        y: 15,
+      },
+    },
+  },
 };
-
-type Toggles = "build" | "card" | null;
 
 export const CharacterCard: React.FC<CharacterCardProps> = ({
   row,
@@ -1312,9 +1330,17 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         }
       }
 
-      if (GACHA_CHAR_OFFESET[row.name]) {
-        x += GACHA_CHAR_OFFESET[row.name].x;
-        y += GACHA_CHAR_OFFESET[row.name].y;
+      const ART_OFFSET = GACHA_CHAR_OFFESET[row.name];
+
+      if (ART_OFFSET) {
+        const SKIN_OFFSET = ART_OFFSET.skins?.[row.costumeId];
+        if (SKIN_OFFSET) {
+          x += SKIN_OFFSET.x;
+          y += SKIN_OFFSET.y;
+        } else {
+          x += ART_OFFSET.x;
+          y += ART_OFFSET.y;
+        }
       }
 
       if (!noDrag && !pointerPos && dragOffset) {

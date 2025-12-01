@@ -268,7 +268,7 @@ export const CategorySelectionPage: React.FC = () => {
         },
       },
       {
-        name: "Stygian Onslaught",
+        name: translate("Stygian Onslaught"),
         sortable: true,
         sortField: "name",
         cell: (row) => {
@@ -284,7 +284,7 @@ export const CategorySelectionPage: React.FC = () => {
               <div className="table-icon-text-pair">
                 <AssetFallback
                   className="table-icon"
-                  title="Stygian Onslaught"
+                  title={translate("Stygian Onslaught")}
                   width={16}
                   height={16}
                   src={toEnkaUrl("UI_LeyLineChallenge_Medal_6")}

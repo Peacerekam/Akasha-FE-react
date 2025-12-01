@@ -93,7 +93,7 @@ export const StygianLbPage: React.FC = () => {
   useEffect(() => {
     setTimeout(() => {
       if (!_version) return;
-      setTitle(`${_version} Stygian Onslaught | Akasha System`);
+      setTitle(`${_version} ${translate("Stygian Onslaught")} | Akasha System`);
     }, 0);
   }, [_version]);
 
@@ -361,7 +361,7 @@ export const StygianLbPage: React.FC = () => {
                   }}
                 >
                   <h2>
-                    Stygian Onslaught {apiVer || "??"}: "
+                    {translate("Stygian Onslaught")} {apiVer || "??"}: "
                     {stygianData?.schedule?.name || "..."}"
                   </h2>
                   {stygianData?.schedule?.start_time && (

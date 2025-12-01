@@ -740,7 +740,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
             <div className="stygian-expanded-row">
               <div className="stygian-details-row">
                 <div>
-                  Stygian Onslaught {row.version}: "{row.name}"
+                  {translate("Stygian Onslaught")} {row.version}: "{row.name}"
                 </div>
                 <div>
                   {new Date(+(`${row?.start_time}000` || 0))?.toLocaleString(
