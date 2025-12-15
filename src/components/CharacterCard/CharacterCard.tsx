@@ -2800,6 +2800,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
               {isAccountOwner && (
                 <button
+                  disabled={!!profileObject.disableDbUpdates}
                   className={
                     toggleConfigure === "build" ? "toggled-conf-btn" : ""
                   }
@@ -2826,8 +2827,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                   <>
                     {picLoaded && (
                       <button
+                        disabled={
+                          !showPicSaveButton || !!profileObject.disableDbUpdates
+                        }
                         onClick={() => handleCardPicUpload(false)}
-                        disabled={!showPicSaveButton}
                         title={
                           showPicSaveButton
                             ? "Images must be SFW"

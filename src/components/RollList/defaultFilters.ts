@@ -130,7 +130,7 @@ const PYRO_RV_LIST: CharacterRVs = {
   Gaming: [CRate, CDMG, ATK_, EM],
   Arlecchino: [CRate, CDMG, ATK_, EM],
   Mavuika: [CRate, CDMG, ATK_, EM],
-  Durin: [CRate, CDMG, ATK_, EM],
+  Durin: [CRate, CDMG, ATK_, EM, ER],
 };
 
 const HYDRO_RV_LIST: CharacterRVs = {

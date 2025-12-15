@@ -124,8 +124,13 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
   const { addTab, removeTab, lastProfiles } = useContext(LastProfilesContext);
   const { setTitle } = useContext(TitleContext);
   const { translate } = useContext(TranslationContext);
-  const { isAuthenticated, isBound, fetchSessionData, boundAccounts } =
-    useContext(SessionDataContext);
+  const {
+    isAuthenticated,
+    isBound,
+    fetchSessionData,
+    boundAccounts,
+    profileObject,
+  } = useContext(SessionDataContext);
 
   const DEBUG_MODE = location.search?.includes("debug");
 
@@ -670,21 +675,22 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
     applyModalBodyStyle(offsets);
   };
 
-  const displayGenshinCard = useMemo(
-    () => (
+  const displayGenshinCard = useMemo(() => {
+    const disableClick = !!profileObject.disableDbUpdates;
+    return (
       <GenshinUserCard
         accountData={responseData}
-        isAccountOwner={isAccountOwner}
-        handleToggleModal={handleToggleBuildsModal}
+        isAccountOwner={disableClick ? false : isAccountOwner}
+        handleToggleModal={disableClick ? null : handleToggleBuildsModal}
       />
-    ),
-    [
-      JSON.stringify(responseData.account),
-      isAccountOwner,
-      handleToggleBuildsModal,
-      lastProfiles,
-    ]
-  );
+    );
+  }, [
+    profileObject.disableDbUpdates,
+    JSON.stringify(responseData.account),
+    isAccountOwner,
+    handleToggleBuildsModal,
+    lastProfiles,
+  ]);
 
   const handleTimerFinish = () => {
     setEnableRefreshBtn(true);
@@ -702,15 +708,8 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
       buildSettings = false,
       artifactSettings = false,
       enkaLink = false,
-    }: {
-      refresh?: boolean;
-      bind?: boolean;
-      lock?: boolean;
-      buildSettings?: boolean;
-      artifactSettings?: boolean;
-      enkaLink?: boolean;
     }) => {
-      const DISABLE_FLOATING_BUTTONS = false;
+      const DISABLE_FLOATING_BUTTONS = profileObject.disableDbUpdates;
       const defaultBtnClassName = DISABLE_FLOATING_BUTTONS ? "disable-btn" : "";
 
       const settingsBtnClassName = cssJoin([
@@ -893,7 +892,7 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
           {isAccountOwner ? (
             <div
               title="Artifact settings"
-              className="floating-button"
+              className={settingsBtnClassName}
               onClick={handleToggleArtifactsModal}
               key={`settings-artifacts-${uid}`}
             >
@@ -918,11 +917,15 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
     },
     [
       responseData,
+      responseData?.account?.uid,
+      responseData?.account?.locked,
+      profileObject.disableDbUpdates,
       enableRefreshBtn,
       enableBindBtn,
       refreshTime,
       isAuthenticated,
       isAccountOwner,
+      isCombined,
       uid,
     ]
   );
