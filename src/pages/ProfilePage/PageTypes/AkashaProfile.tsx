@@ -709,7 +709,8 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
       artifactSettings = false,
       enkaLink = false,
     }) => {
-      const DISABLE_FLOATING_BUTTONS = profileObject.disableDbUpdates;
+      const DISABLE_FLOATING_BUTTONS = !!profileObject?.disableDbUpdates;
+        
       const defaultBtnClassName = DISABLE_FLOATING_BUTTONS ? "disable-btn" : "";
 
       const settingsBtnClassName = cssJoin([

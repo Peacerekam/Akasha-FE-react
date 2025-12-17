@@ -2858,7 +2858,13 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                         text={`Delete image from Akasha?`}
                         onConfirm={() => handleCardPicUpload(true)}
                       >
-                        <button className="remove-btn">
+                        <button
+                          disabled={
+                            !showPicSaveButton ||
+                            !!profileObject.disableDbUpdates
+                          }
+                          className="remove-btn"
+                        >
                           <FontAwesomeIcon
                             className="filter-icon hoverable-icon"
                             icon={faX}

@@ -96,6 +96,8 @@ const SessionDataContextProvider: React.FC<{ children: any }> = ({
           isEnkaPatreon,
           disableDbUpdates,
         });
+      } else {
+        setProfileObject({ disableDbUpdates: data.disableDbUpdates });
       }
       setIsFetchingIfTrue(modifyIsFetching, false);
     } catch (e) {
