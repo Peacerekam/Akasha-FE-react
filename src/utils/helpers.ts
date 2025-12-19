@@ -831,14 +831,11 @@ export const domainRedirect = () => {
     case "peacerekam.github.io":
       _from = "peacerekam.github.io";
       break;
-    case "146.59.86.233":
-      _from = "146.59.86.233";
-      break;
     case "148.113.178.222":
       _from = "148.113.178.222";
       break;
-    case "54.39.29.82":
-      _from = "54.39.29.82";
+    case "135.181.136.213":
+      _from = "135.181.136.213";
       break;
   }
 

@@ -36,16 +36,24 @@ import axios from "axios";
 
 // import { QueryClient, QueryClientProvider } from "react-query";
 
-const urls = {
-  prod_mimee_ovh: "https://mimee.ovh",
-  prod_akasha_cv: "https://akasha.cv",
-  prod_hetzner: "https://hetzner.akasha.cv",
-  prod_ovh: "https://ovh.akasha.cv",
-  dev_localhost: "http://localhost:80",
-};
+const getApiBaseURL = () => {
+  const hostname = IS_PRODUCATION ? window.location.hostname : "development";
 
-const getApiBaseURL = () =>
-  IS_PRODUCATION ? urls.prod_akasha_cv : urls.dev_localhost;
+  return {
+    // local endpoint
+    development: "http://localhost:80",
+
+    // prod endpoint
+    localhost: "https://akasha.cv",
+    "mimee.ovh": "https://akasha.cv",
+    "akasha.cv": "https://akasha.cv",
+    "dev.akasha.cv": "https://akasha.cv",
+
+    // ovh & hetzner split
+    "ovh.akasha.cv": "https://ovh.akasha.cv",
+    "hetzner.akasha.cv": "https://hetzner.akasha.cv",
+  }[hostname];
+};
 
 axios.defaults.baseURL = getApiBaseURL();
 axios.defaults.withCredentials = true;
