@@ -147,6 +147,7 @@ const HYDRO_RV_LIST: CharacterRVs = {
   Barbara: [CRate, CDMG, ATK_, HP_, ER],
   Mualani: [CRate, CDMG, HP_, EM],
   Aino: [CRate, CDMG, ATK_, ER],
+  Columbina: [CRate, CDMG, HP_, EM, ER],
 };
 
 const CRYO_RV_LIST: CharacterRVs = {
@@ -173,6 +174,8 @@ const GEO_RV_LIST: CharacterRVs = {
   Navia: [CRate, CDMG, ATK_, ER],
   Chiori: [CRate, CDMG, ATK_, DEF_],
   Xilonen: [CRate, CDMG, ER, DEF_],
+  Illuga: [CRate, CDMG, EM, ER],
+  Zibai: [CRate, CDMG, DEF_, EM, ER],
 };
 
 const ELECTRO_RV_LIST: CharacterRVs = {

@@ -32,10 +32,8 @@
     &::after {
       background: linear-gradient(0deg, $bg-0 0px, transparent 200px);
     }
-    .stylized-content-block {
-      background-position-y: max(-200px, -18vw);
-    }
   }
+
   &.gradient {
     &::before {
       $bg-0-a: rgba($bg-0, 0.925);
@@ -50,8 +48,6 @@
       width: 100%;
       z-index: 1;
       // @TODO: extend the gradient to hide all the repeat stitches?
-      // @TODO: extend the gradient to hide all the repeat stitches?
-      // @TODO: extend the gradient to hide all the repeat stitches?
       background: linear-gradient(
         180deg,
         transparent 50px,
@@ -63,6 +59,10 @@
     &::after {
       background: linear-gradient(0deg, $bg-0 0px, transparent 300px);
     }
+  }
+
+  &.gradient-low-height,
+  &.gradient {
     .stylized-content-block {
       background-position-y: max(-200px, -18vw);
       @media (max-width: 800px) {
@@ -73,6 +73,7 @@
       }
     }
   }
+
   &.gradient-reverse {
     &::after {
       background: linear-gradient(
@@ -91,6 +92,7 @@
       }
     }
   }
+
   .stylized-content-block {
     position: absolute;
     background-image: var(--name-card-url);
@@ -110,8 +112,6 @@
     pointer-events: none !important;
     content: "";
     position: absolute;
-    // @TODO: extend the gradient to hide all the repeat stitches?
-    // @TODO: extend the gradient to hide all the repeat stitches?
     // @TODO: extend the gradient to hide all the repeat stitches?
     background: linear-gradient(0deg, $bg-0 0%, $bg-1 300px, $bg-1-5 850px);
     background-position-y: top;

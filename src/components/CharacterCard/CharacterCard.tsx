@@ -104,6 +104,12 @@ type VerticalOrHorizontal = "vertical" | "horizontal" | "";
 type Toggles = "build" | "card" | null;
 type Coords = { x: number; y: number };
 
+type GachaCharOffsets = {
+  [char: string]: Coords & {
+    skins?: { [skinId: string]: Coords };
+  };
+};
+
 const compressPNG = async (
   result: string,
   canvasWidth: number,
@@ -171,11 +177,7 @@ const getCoordsFromEvent = (event: MouseOrTouchEvent) => {
   return { x, y };
 };
 
-const GACHA_CHAR_OFFESET: {
-  [char: string]: Coords & {
-    skins?: { [skinId: string]: Coords };
-  };
-} = {
+const GACHA_CHAR_OFFESET: GachaCharOffsets = {
   Mavuika: {
     x: 16,
     y: -100,
@@ -285,6 +287,54 @@ const GACHA_CHAR_OFFESET: {
       "212301": {
         x: 5,
         y: 15,
+      },
+    },
+  },
+  Neuvillette: {
+    x: 0,
+    y: 0,
+    skins: {
+      "208701": {
+        x: -15,
+        y: 40,
+      },
+    },
+  },
+  Yaoyao: {
+    x: 0,
+    y: 0,
+    skins: {
+      "207701": {
+        x: -5,
+        y: -25,
+      },
+    },
+  },
+  Columbina: {
+    x: 0,
+    y: -45,
+  },
+  Zibai: {
+    x: 18,
+    y: 18,
+  },
+  Illuga: {
+    x: 10,
+    y: -5,
+  },
+  Traveler: {
+    x: 0,
+    y: 0,
+    skins: {
+      "200501": {
+        // Aether
+        x: -25,
+        y: -70,
+      },
+      "200701": {
+        // Lumine
+        x: -25,
+        y: -75,
       },
     },
   },

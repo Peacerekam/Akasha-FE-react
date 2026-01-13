@@ -135,7 +135,7 @@ const AdProviderContextProvider: React.FC<{ children: any }> = ({
     if (adProvider === "playwire") {
       if ((window as any)?.ramp) {
         const adUnits = (window as any)?.ramp?.getUnits?.();
-        if (adUnits?.length === 0) return;
+        if (!adUnits || adUnits?.length === 0) return;
         
         console.log(
           `%c[navigation] window.ramp.destroyUnits(["${adUnits.join(
