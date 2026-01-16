@@ -6,7 +6,6 @@ import {
   STAT_NAMES,
 } from "../../utils/substats";
 import { cssJoin, getCharacterCvColor } from "../../utils/helpers";
-import { faArrowRight, faX } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 
 import { Artifact } from "../Artifact/Artifact";
@@ -15,6 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Spinner } from "../Spinner";
 import { StatIcon } from "../StatIcon";
 import axios from "axios";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 type ArtifactDetailsProps = {
   artifactHash: string;
@@ -82,7 +82,7 @@ export const ArtifactDetails: React.FC<ArtifactDetailsProps> = (row) => {
             {}
           );
 
-          const buildsDiv = (isSelected || artifactDetails.length == 1) &&
+          const buildsDiv = (isSelected || artifactDetails.length === 1) &&
             equippedChars &&
             equippedChars.length > 0 && (
               <div
