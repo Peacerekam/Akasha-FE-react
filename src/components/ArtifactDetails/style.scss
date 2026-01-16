@@ -1,4 +1,8 @@
 .artifact-details-wrapper {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+
   @media (max-width: 900px) {
     justify-content: flex-start !important;
     margin-left: 100px;
@@ -21,6 +25,20 @@
     align-items: center;
   }
 
+  .artifact-equipped-char {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 2px;
+    max-width: 280px;
+    width: 100%;
+    // justify-content: center;
+
+    img {
+      width: 25px;
+      height: 25px;
+    }
+  }
+
   .arrow-right {
     margin: 0 10px;
     position: relative;
@@ -35,6 +53,8 @@
   }
 
   .display-rolls {
+    margin-top: 10px;
+
     .roll-value {
       display: none;
     }
@@ -69,12 +89,13 @@
 
       .consume-icon {
         position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -75%);
+        // top: 50%;
+        // left: calc(50% - 60px);
+        // bottom: 0;
         opacity: 0.15;
         color: red;
         pointer-events: none;
+        // background-color: magenta;
       }
 
       .profile-page-artifact {

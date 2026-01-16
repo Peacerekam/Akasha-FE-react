@@ -1,3 +1,27 @@
+.artifact-equipped-char {
+  position: absolute;
+  bottom: calc(var(--artifact-width) / 0.86);
+  right: 0;
+  z-index: -1;
+  width: var(--artifact-width);
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  flex-wrap: wrap-reverse;
+
+  img {
+    flex-grow: 0;
+    flex-shrink: 0;
+    background-color: black;
+    // border: 2px solid black;
+    width: 35px;
+    height: 35px;
+    border-radius: 35px;
+    margin-left: -10px;
+    // box-shadow: 0 0 0 1px black, 0 0 10px 2px black;
+  }
+}
+
 .profile-page-artifact {
   width: var(--artifact-width);
   border: 1px solid transparent;
@@ -25,30 +49,6 @@
   // filter: saturate(1);
   // opacity: 1;
   // }
-
-  .artifact-equipped-char {
-    position: absolute;
-    bottom: calc(var(--artifact-width) / 0.86);
-    right: 0;
-    z-index: -1;
-    width: var(--artifact-width);
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-end;
-    flex-wrap: wrap;
-
-    img {
-      flex-grow: 0;
-      flex-shrink: 0;
-      background-color: black;
-      // border: 2px solid black;
-      width: 35px;
-      height: 35px;
-      border-radius: 35px;
-      margin-left: -10px;
-      // box-shadow: 0 0 0 1px black, 0 0 10px 2px black;
-    }
-  }
 
   .artifact-name {
     color: white;

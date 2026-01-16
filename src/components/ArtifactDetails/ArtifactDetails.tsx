@@ -5,15 +5,16 @@ import {
   ROUNDED_REAL_SUBSTAT_VALUES,
   STAT_NAMES,
 } from "../../utils/substats";
+import { cssJoin, getCharacterCvColor } from "../../utils/helpers";
 import { faArrowRight, faX } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 
 import { Artifact } from "../Artifact/Artifact";
+import { AssetFallback } from "../AssetFallback";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Spinner } from "../Spinner";
 import { StatIcon } from "../StatIcon";
 import axios from "axios";
-import { cssJoin } from "../../utils/helpers";
 
 type ArtifactDetailsProps = {
   artifactHash: string;
@@ -22,6 +23,7 @@ type ArtifactDetailsProps = {
 
 export const ArtifactDetails: React.FC<ArtifactDetailsProps> = (row) => {
   const [artifactDetails, setArtifactDetails] = useState([]);
+  const [equippedChars, setEquippedChars] = useState([]);
 
   const getArtifactDetails = async () => {
     const _uid = encodeURIComponent(row.uid);
@@ -32,20 +34,22 @@ export const ArtifactDetails: React.FC<ArtifactDetailsProps> = (row) => {
     }
   };
 
+  const getEquippedChars = async () => {
+    const EQUIPPED_CHARS_URL = `/api/artifacts/${row.artifactHash}`;
+    const { data } = await axios.get(EQUIPPED_CHARS_URL);
+    if (data.data) {
+      setEquippedChars(data.data?.builds);
+    }
+  };
+
   useEffect(() => {
     getArtifactDetails();
+    getEquippedChars();
   }, []);
 
   return (
     <div className="expanded-row">
-      <div
-        className="artifact-details-wrapper"
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          flexWrap: "wrap",
-        }}
-      >
+      <div className="artifact-details-wrapper">
         {artifactDetails.length === 0 ? <Spinner /> : ""}
         {artifactDetails.map((artifact: any, index: number) => {
           const isConsumed =
@@ -78,92 +82,94 @@ export const ArtifactDetails: React.FC<ArtifactDetailsProps> = (row) => {
             {}
           );
 
-          return (
-            <div className={classNames} key={artifact._id}>
-              {index !== 0 && (
-                <div className="arrow-right">
-                  <FontAwesomeIcon icon={faArrowRight} size={`2x`} />
-                </div>
-              )}
+          const buildsDiv = (isSelected || artifactDetails.length == 1) &&
+            equippedChars &&
+            equippedChars.length > 0 && (
+              <div
+                className="artifact-equipped-char"
+                style={{
+                  opacity: isLast ? 1 : 0.5,
+                }}
+              >
+                {equippedChars.map((build: any, index: number) => {
+                  const cv = build?.critValue || 0;
 
-              <div>
-                <Artifact
-                  key={artifact._id}
-                  artifact={artifact}
-                  width={isLast ? 250 : 210}
-                />
+                  let borderColor = getCharacterCvColor(cv);
+                  if (borderColor === "rainbow") borderColor = "red";
 
-                <div className="consume-icon">
-                  {isConsumed && <FontAwesomeIcon icon={faX} size={`10x`} />}
-                </div>
+                  const style = {
+                    backgroundImage: `url(${build.nameCardLink})`,
+                    boxShadow: `0 0 0 1.5px ${borderColor}`,
+                    backgroundPosition: "center",
+                  } as React.CSSProperties;
 
-                {/* <div style={{ textAlign: "center" }}>
-                  rerollNum: {artifact.rerollNum}
-                </div> */}
+                  return (
+                    <AssetFallback
+                      alt=""
+                      key={`${build.characterId}-${index}`}
+                      src={build.icon}
+                      style={style}
+                    />
+                  );
+                })}
+              </div>
+            );
 
-                {/* @TODO: fix this */}
-                <div
-                  style={{
-                    marginTop: 10,
-                    // width: 250,
-                    // display: "none"
-                  }}
-                  className="display-rolls"
-                  tabIndex={0}
-                >
-                  {Object.keys(artifact.substats).map((key) => {
-                    return (
-                      <div
-                        key={key}
-                        className="flex gap-5"
-                        style={{ justifyContent: "left" }}
-                      >
-                        {rollsByType[key].map((roll: number, j: number) => {
-                          // const isLast = j === rollsByType[key].length - 1;
-                          // const sum = isLast
-                          //   ? rollsByType[key].reduce(
-                          //       (acc: number, val: number) => acc + val,
-                          //       0
-                          //     )
-                          //   : 0;
+          const rollsDiv = (
+            <div className="display-rolls" tabIndex={0}>
+              {Object.keys(artifact.substats).map((key) => {
+                return (
+                  <div
+                    key={key}
+                    className="flex gap-5"
+                    style={{ justifyContent: "left" }}
+                  >
+                    {rollsByType[key].map((roll: number, j: number) => {
+                      // const isLast = j === rollsByType[key].length - 1;
+                      // const sum = isLast
+                      //   ? rollsByType[key].reduce(
+                      //       (acc: number, val: number) => acc + val,
+                      //       0
+                      //     )
+                      //   : 0;
 
-                          const rv = ((roll / MAX_ROLLS[key]) * 100).toFixed(0);
-                          const cellWidth = 35;
+                      const rv = ((roll / MAX_ROLLS[key]) * 100).toFixed(0);
+                      const cellWidth = 35;
 
-                          return (
-                            <div
-                              key={`${roll}-${j}`}
-                              style={{
-                                flexWrap: "nowrap",
-                                // flex: isLast ? 1 : 0,
-                                // justifyContent: isLast
-                                //   ? "space-between"
-                                //   : "center",
-                                fontSize: 12,
-                                display: "flex",
-                                // alignItems: "center",
-                                // textAlign: "right",
-                                gap: 5,
-                              }}
-                            >
-                              {j === 0 && <StatIcon name={key} />}
-                              {j !== 0 ? "- " : ""}
+                      return (
+                        <div
+                          key={`${roll}-${j}`}
+                          style={{
+                            flexWrap: "nowrap",
+                            // flex: isLast ? 1 : 0,
+                            // justifyContent: isLast
+                            //   ? "space-between"
+                            //   : "center",
+                            fontSize: 12,
+                            display: "flex",
+                            // alignItems: "center",
+                            // textAlign: "right",
+                            gap: 5,
+                          }}
+                        >
+                          {j === 0 && <StatIcon name={key} />}
+                          {j !== 0 ? "- " : ""}
 
-                              <div
-                                className="exact-substat"
-                                style={{ minWidth: cellWidth }}
-                              >
-                                {roll}
-                              </div>
+                          <div
+                            className="exact-substat"
+                            style={{ minWidth: cellWidth }}
+                          >
+                            {roll}
+                          </div>
 
-                              <div
-                                className="roll-value"
-                                style={{ minWidth: cellWidth }}
-                              >
-                                {rv}%
-                              </div>
+                          <div
+                            className="roll-value"
+                            style={{ minWidth: cellWidth }}
+                          >
+                            {rv}%
+                          </div>
 
-                              {/* {!isLast && (
+                          {/* {!isLast && (
                                 <div
                                   className="arrow-right opacity-5"
                                   style={{ marginLeft: 5 }}
@@ -175,18 +181,47 @@ export const ArtifactDetails: React.FC<ArtifactDetailsProps> = (row) => {
                                 </div>
                               )} */}
 
-                              {/* {isLast && (
+                          {/* {isLast && (
                                 <div style={{ width: 50, textAlign: "left" }}>
                                   <StatIcon name={key} /> {+sum.toFixed(2)}
                                 </div>
                               )} */}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    );
-                  })}
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })}
+            </div>
+          );
+
+          return (
+            <div className={classNames} key={artifact._id}>
+              {index !== 0 && (
+                <div className="arrow-right">
+                  <FontAwesomeIcon icon={faArrowRight} size={`2x`} />
                 </div>
+              )}
+
+              <div>
+                {buildsDiv}
+
+                <Artifact
+                  key={artifact._id}
+                  artifact={artifact}
+                  width={isLast ? 250 : 210}
+                />
+
+                {/* <div className="consume-icon">
+                  {isConsumed && <FontAwesomeIcon icon={faX} size={`10x`} />}
+                </div> */}
+
+                {/* <div style={{ textAlign: "center" }}>
+                  rerollNum: {artifact.rerollNum}
+                </div> */}
+
+                {/* @TODO: fix this */}
+                {rollsDiv}
               </div>
             </div>
           );
