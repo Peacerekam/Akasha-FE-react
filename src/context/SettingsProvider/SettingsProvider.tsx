@@ -22,7 +22,7 @@ type SettingsProviderContextType = {
   getArtifactMetricValue: (
     characterName: string,
     artifact: any,
-    overrideMetric?: "CV" | "RV"
+    overrideMetric?: "CV" | "RV",
   ) => number;
   getTopRanking: (ranking: number, outOf: number) => number;
 };
@@ -30,13 +30,14 @@ type SettingsProviderContextType = {
 const defaultValue = {
   metric: "RV",
   topDecimals: 0,
+  showcaseState: true,
   customRvFilter: {},
   setMetric: () => {},
   setTopDecimals: () => {},
   setShowcaseState: () => {},
   setCustomRvFilter: () => {},
   getArtifactMetricValue: () => 0,
-  getTopRanking: () => 100,
+  getTopRanking: () => 1,
 } as SettingsProviderContextType;
 
 const SettingsContext = createContext(defaultValue);
@@ -61,14 +62,14 @@ const SettingsContextProvider: React.FC<{ children: any }> = ({ children }) => {
       setFunc: any,
       key: string,
       value: any,
-      defaultValue: any = false
+      defaultValue: any = false,
     ) => {
       setFunc(savedObj[key] || value || defaultValue);
     };
 
     setIfDifferent(setMetric, "metric", metric, "RV");
     setIfDifferent(setTopDecimals, "topDecimals", topDecimals, 0);
-    setIfDifferent(setShowcaseState, "showcaseState", showcaseState, false);
+    setIfDifferent(setShowcaseState, "showcaseState", showcaseState, true);
 
     console.log("\nGeneral settings from Local Storage:");
     console.table(savedObj);
@@ -104,7 +105,7 @@ const SettingsContextProvider: React.FC<{ children: any }> = ({ children }) => {
         [characterName]: filter,
       }));
     },
-    []
+    [],
   );
 
   const getArtifactMetricValue = useCallback(
@@ -127,7 +128,7 @@ const SettingsContextProvider: React.FC<{ children: any }> = ({ children }) => {
 
       return rollValue;
     },
-    [metric, customRvFilter]
+    [metric, customRvFilter],
   );
 
   const getTopRanking = useCallback(
@@ -139,7 +140,7 @@ const SettingsContextProvider: React.FC<{ children: any }> = ({ children }) => {
       const _pow = Math.pow(10, topDecimals || 0);
       return Math.ceil((ranking / outOf) * _pow * 100) / _pow;
     },
-    [topDecimals]
+    [topDecimals],
   );
 
   const value = {
