@@ -73,7 +73,7 @@ export const optsHeadersSessionID = () => {
 export const ascensionToLevel = (
   ascension = 0,
   type: "weapon" | "character",
-  levelFallback?: number
+  levelFallback?: number,
 ) => {
   if (levelFallback) {
     // this partially fixes my screw-up on the backend where promoteLevel is defaulted to a wrong value
@@ -123,7 +123,7 @@ export const equipTypeOrder = [
 
 export const getArtifactsInOrder = (
   artifacts: { equipType: string }[],
-  fillEmpty?: boolean
+  fillEmpty?: boolean,
 ) => {
   if (!artifacts) return [];
 
@@ -134,7 +134,7 @@ export const getArtifactsInOrder = (
       acc[val.equipType] = val;
       return acc;
     },
-    {}
+    {},
   );
 
   equipTypeOrder.forEach((key) => {
@@ -167,7 +167,7 @@ export const allSubstatsInOrder = [
 ];
 
 export const getSubstatsInOrder = (
-  artifactData: { substats: any[] } & any
+  artifactData: { substats: any[] } & any,
   // unshiftKey?: string
 ) => {
   const reordered: any[] = [];
@@ -246,7 +246,7 @@ export const getArtifactCvClassName = (artifact?: any) => {
 export const getArtifactRvClassName = (
   characterName: string,
   artifact: any,
-  overrideFilter?: string[]
+  overrideFilter?: string[],
 ) => {
   const summedArtifactRolls = getSummedArtifactRolls(artifact);
   const characterRvStats = overrideFilter || getDefaultRvFilters(characterName);
@@ -433,7 +433,7 @@ export const toEnkaUrl = (
   assetName?: string,
   aprilFools?: boolean,
   fallback?: boolean,
-  namecard?: boolean
+  namecard?: boolean,
 ) => {
   if (!assetName) return "";
   if (fallback) {
@@ -477,8 +477,8 @@ export const getGenderFromIcon = (icon?: string) => {
   const gender = icon.includes("PlayerGirl")
     ? "F"
     : icon.includes("PlayerBoy")
-    ? "M"
-    : undefined;
+      ? "M"
+      : undefined;
 
   return gender;
 };
@@ -487,7 +487,7 @@ export const delay = async (ms: number) =>
   new Promise((resolve, reject) => setTimeout(resolve, ms));
 
 export const getCharacterStatsInOrder = (
-  stats: { name: string; value: number }[]
+  stats: { name: string; value: number }[],
 ) => {
   const reordered: any[] = [];
   const damageBonusStat = stats.find((x) => x.name.endsWith("DMG Bonus"));
@@ -615,7 +615,7 @@ export const getRelevantDmgBonuses = (row: any) => {
 
   const lowestDmg = sorted.length > 1 ? +sorted[sorted.length - 1].value : 0;
   const allLowestDmgs = sorted.filter(
-    (a) => +a.value === lowestDmg && +a.value !== 0 && !isNaN(a.value)
+    (a) => +a.value === lowestDmg && +a.value !== 0 && !isNaN(a.value),
   );
 
   if (allLowestDmgs.length === sorted.length && lowestDmg !== 0) {
@@ -626,7 +626,7 @@ export const getRelevantDmgBonuses = (row: any) => {
   }
 
   const relevantDamageTypes = sorted.filter(
-    (a: any) => +a.value !== lowestDmg && +a.value !== 0 && !isNaN(a.value)
+    (a: any) => +a.value !== lowestDmg && +a.value !== 0 && !isNaN(a.value),
   );
 
   return relevantDamageTypes;
@@ -690,7 +690,7 @@ export const getRelevantEmErHb = (row: any) => {
 
 export const getRelevantStatFromRvFilter = (
   row: any,
-  calcId?: string | number
+  calcId?: string | number,
 ) => {
   const rvOverride = getOverrideRvFilters(calcId);
   const rvFilter = rvOverride || getDefaultRvFilters(row.name);
@@ -723,7 +723,7 @@ export const getRelevantStatFromRvFilter = (
 export const fillUpToFourStats = (stats: any[], row: any) => {
   while (stats.length < 4) {
     const hasER = stats.findIndex((x: any) =>
-      x.name.includes("Energy Recharge")
+      x.name.includes("Energy Recharge"),
     );
     if (hasER === -1) {
       stats.push({
@@ -761,7 +761,7 @@ export const fillUpToFourStats = (stats: any[], row: any) => {
     }
 
     const hasEM = stats.findIndex((x: any) =>
-      x.name.includes("Elemental Mastery")
+      x.name.includes("Elemental Mastery"),
     );
     if (hasEM === -1) {
       stats.push({
@@ -782,7 +782,7 @@ export const fillUpToFourStats = (stats: any[], row: any) => {
 
 export const getRelevantCharacterStats = (
   row: any,
-  calcId?: string | number
+  calcId?: string | number,
 ) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [mainDmgBonus, ...otherDmgBonuses] = getRelevantDmgBonuses(row);
@@ -886,7 +886,7 @@ export const getSummedArtifactRolls = (artifact: any) => {
 function getFormattedDate(
   date: any,
   prefomattedDate?: string,
-  hideYear?: boolean
+  hideYear?: boolean,
 ) {
   const MONTH_NAMES = [
     "January",
@@ -1076,4 +1076,59 @@ export const monthDayYear_shortNumNum: Intl.DateTimeFormatOptions = {
   month: "short",
   day: "numeric",
   year: "numeric",
+};
+
+export const splitStygianEnemyName = (name: string, language: string) => {
+  const separator =
+    {
+      de: "–",
+      es: "-",
+      it: "-",
+      ja: "・",
+      ko: "·",
+      th: "-",
+      "zh-CN": "·",
+      "zh-TW": "·",
+    }[language] || ":";
+
+  return name.split(separator);
+};
+
+// @TODO: redo this entire function later
+export const getStygianEnemyPrefix = (name: string, language: string) => {
+  const separator = {
+    // es: { fn: "endsWith", text: "aguerrid" },
+    // fr: { fn: "endsWith", text: "vétéran" },
+    // it: { fn: "endsWith", text: "agguerrit" },
+    // pt: { fn: "endsWith", text: "Veterano" },
+    en: { fn: "startsWith", text: "Battle-" },
+    de: { fn: "startsWith", text: "Altgediente" },
+    ja: { fn: "startsWith", text: "百戦錬磨の" },
+    ko: { fn: "startsWith", text: "노련한" },
+    ru: { fn: "startsWith", text: "Бывал" },
+    tr: { fn: "startsWith", text: "Savaş Uzmanı" },
+    "zh-CN": { fn: "startsWith", text: "历经百战的" },
+    "zh-TW": { fn: "startsWith", text: "歷經百戰的" },
+  }[language];
+
+  if (!separator) {
+    return { hasPrefix: false, prefix: null, name };
+  }
+
+  const hasPrefix =
+    separator.fn === "startsWith"
+      ? name.startsWith(separator.text)
+      : name.includes(separator.text);
+
+  let _split = name.split(" ");
+
+  if (hasPrefix) {
+    if (["ja", "ko", "zh-CN", "zh-TW"].includes(language)) {
+      // ...
+      // ...
+    }
+    name = `${_split.slice(1).join(" ")}`;
+  }
+
+  return { hasPrefix, prefix: _split[0], name };
 };

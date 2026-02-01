@@ -12,6 +12,7 @@ import {
   getSessionIdFromCookie,
   monthDayYear_shortNumNum,
   normalizeText,
+  splitStygianEnemyName,
   uidsToQuery,
 } from "../../utils/helpers";
 import {
@@ -213,7 +214,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
       const newRows = rows.map((row) => {
         const newDataIndex = data.findIndex(
-          (x: any) => x._id === row._id && !x.isExpandRow
+          (x: any) => x._id === row._id && !x.isExpandRow,
         );
         const newData = newDataIndex > -1 ? data[newDataIndex] : {};
         const isDeleted = !!(md5 === row.md5 && data.length === 0);
@@ -260,7 +261,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
   const noDataFound = useMemo(
     () => rows.length === 0 && !isLoading,
-    [rows.length, isLoading]
+    [rows.length, isLoading],
   );
 
   const appendParamsToURL = () => {
@@ -365,7 +366,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
   const getSetTotalRows = async (
     totalRowsHash: string,
-    abortController: AbortController
+    abortController: AbortController,
   ) => {
     if (!fetchURL) return;
 
@@ -423,7 +424,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
       const hasExpandedRows = expandedRows.length > 0;
       setPreventContentShrinking(
         "custom-table",
-        hasExpandedRows ? "add" : "remove"
+        hasExpandedRows ? "add" : "remove",
       );
     }
 
@@ -490,11 +491,11 @@ export const CustomTable: React.FC<CustomTableProps> = ({
                 ?.replace("stats", "")
                 .replace("value", "")
                 .replace("max", "")
-                .replace("Damage", "DMG")
+                .replace("Damage", "DMG"),
             )}`
           : "",
       ]),
-    [params.sort]
+    [params.sort],
   );
 
   const renderHeaders = useMemo(() => {
@@ -511,7 +512,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
     const handleClickHeader = (
       column: any,
-      event: React.MouseEvent<HTMLTableCellElement, MouseEvent>
+      event: React.MouseEvent<HTMLTableCellElement, MouseEvent>,
     ) => {
       const {
         sortable,
@@ -595,7 +596,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
           key={`${name}-${index}`}
           className={classNames}
           onClick={(event) => handleClickHeader(column, event)}
-          colSpan={isHighlighted ? colSpan ?? 0 : 1}
+          colSpan={isHighlighted ? (colSpan ?? 0) : 1}
           style={{
             width: column.width,
             display:
@@ -740,25 +741,30 @@ export const CustomTable: React.FC<CustomTableProps> = ({
             <div className="stygian-expanded-row">
               <div className="stygian-details-row">
                 <div>
-                  {translate("Stygian Onslaught")} {row.version}: "{row.name}"
+                  {translate("Stygian Onslaught")} {row.version}: "
+                  {translate(row.name)}"
                 </div>
                 <div>
                   {new Date(+(`${row?.start_time}000` || 0))?.toLocaleString(
                     language,
-                    monthDayYear_shortNumNum
+                    monthDayYear_shortNumNum,
                   )}
                   {" - "}
                   {new Date(+(`${row?.end_time}000` || 0))?.toLocaleString(
                     language,
-                    monthDayYear_shortNumNum
+                    monthDayYear_shortNumNum,
                   )}
                 </div>
               </div>
               <div>
                 {row.enemies &&
                   row.enemies.map((enemy: any) => {
-                    const baseName = enemy.enemyName.split(":")[0];
-                    const nameCont = enemy.enemyName.split(":")[1];
+                    const translatedEnemy = translate(enemy.enemyName);
+                    const [baseName, nameCont] = splitStygianEnemyName(
+                      translatedEnemy,
+                      language,
+                    );
+
                     return (
                       <span
                         className="table-icon-text-pair"
@@ -799,14 +805,14 @@ export const CustomTable: React.FC<CustomTableProps> = ({
         />
       );
     },
-    [translate, rows]
+    [translate, rows],
   );
 
   const shouldHighlightRows = useMemo(
     () =>
       columns.findIndex((c) => c.name === "Owner") > -1 || // for Artifacts, Builds and Leaderboard pages
       columns.findIndex((c) => c.name === "Signature") > -1, // for Profiles page
-    [columns]
+    [columns],
   );
 
   const renderRows = useMemo(() => {
@@ -922,7 +928,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
         </td>
       </tr>
     ),
-    [columns.length]
+    [columns.length],
   );
 
   const wrapperClassNames = cssJoin([
@@ -983,7 +989,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({
         ?.filter((x: any) => typeof x === "string")
         ?.join("")
         ?.trim(),
-    [columns.length]
+    [columns.length],
   );
 
   return (

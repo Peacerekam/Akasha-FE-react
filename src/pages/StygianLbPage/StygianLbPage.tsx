@@ -16,6 +16,7 @@ import {
   FETCH_STYGIANLB_FILTERS_URL,
   FETCH_STYGIAN_LB_URL,
   monthDayYear_shortNumNum,
+  splitStygianEnemyName,
   uidToRegion,
   uidsToQuery,
 } from "../../utils/helpers";
@@ -289,12 +290,12 @@ export const StygianLbPage: React.FC = () => {
         },
       },
     ],
-    [translate, language, apiVer]
+    [translate, language, apiVer],
   );
 
   const uidsQuery = useMemo(
     () => uidsToQuery(lastProfiles.map((a) => a.uid)),
-    [lastProfiles.length]
+    [lastProfiles.length],
   );
 
   const stygianList = stygianData?.stygianList || [];
@@ -362,7 +363,10 @@ export const StygianLbPage: React.FC = () => {
                 >
                   <h2>
                     {translate("Stygian Onslaught")} {apiVer || "??"}: "
-                    {stygianData?.schedule?.name || "..."}"
+                    {stygianData?.schedule?.name
+                      ? translate(stygianData?.schedule?.name)
+                      : "..."}
+                    "
                   </h2>
                   {stygianData?.schedule?.start_time && (
                     <div
@@ -374,20 +378,25 @@ export const StygianLbPage: React.FC = () => {
                     >
                       <div>
                         {new Date(
-                          +(stygianData?.schedule?.start_time || 0) * 1000
+                          +(stygianData?.schedule?.start_time || 0) * 1000,
                         )?.toLocaleString(language, monthDayYear_shortNumNum)}
                       </div>
                       <div>-</div>
                       <div>
                         {new Date(
-                          +(stygianData?.schedule?.end_time || 0) * 1000
+                          +(stygianData?.schedule?.end_time || 0) * 1000,
                         )?.toLocaleString(language, monthDayYear_shortNumNum)}
                       </div>
                     </div>
                   )}
                   <div className="stygian-enemies-wrapper">
                     {enemiesArr.map((enemy: any) => {
-                      const _split = enemy.enemyName.split(":");
+                      const translatedEnemy = translate(enemy.enemyName);
+                      const _split = splitStygianEnemyName(
+                        translatedEnemy,
+                        language,
+                      );
+
                       return (
                         <div
                           key={enemy.icon}

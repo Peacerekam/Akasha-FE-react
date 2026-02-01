@@ -13,6 +13,7 @@ import {
   FETCH_CATEGORIES_FILTERS_URL,
   FETCH_CATEGORIES_URL_V2,
   monthDayYear_shortNumNum,
+  splitStygianEnemyName,
   toEnkaUrl,
 } from "../../utils/helpers";
 import React, { useContext, useMemo } from "react";
@@ -121,7 +122,7 @@ export const CategorySelectionPage: React.FC = () => {
                   width={25}
                   height={25}
                   src={row.characterIcon}
-                  title={row?.characterName}
+                  title={translate(row?.characterName)}
                 />
                 <a
                   className={`row-link-element ${aClassName}`}
@@ -175,7 +176,7 @@ export const CategorySelectionPage: React.FC = () => {
               {row.weapons.map((weapon: any) => {
                 const _variant = weapon.defaultVariant || "";
                 const leaderboardPath = `leaderboards/${weapon.calculationId}/${_variant}`;
-                const weaponLabel = `${weapon?.name} R${weapon?.refinement}`;
+                const weaponLabel = `${translate(weapon?.name)} R${weapon?.refinement}`;
                 return (
                   <a
                     style={{
@@ -241,7 +242,7 @@ export const CategorySelectionPage: React.FC = () => {
           const addDate = new Date(row?.addDate || "");
           const strDate = addDate.toLocaleString(
             language,
-            monthDayYear_shortNumNum
+            monthDayYear_shortNumNum,
           );
           return (
             <div
@@ -255,7 +256,7 @@ export const CategorySelectionPage: React.FC = () => {
         },
       },
     ],
-    [translate, language]
+    [translate, language],
   );
 
   const STYGIAN_CATEGORIES_COLUMNS: TableColumn<CategoriesColumns>[] = useMemo(
@@ -272,7 +273,7 @@ export const CategorySelectionPage: React.FC = () => {
         sortable: true,
         sortField: "name",
         cell: (row) => {
-          const stName = row?.name || "";
+          const stName = row?.name ? translate(row?.name) : "...";
           const leaderboardPath = `leaderboards/${row?.lbURL}`;
           const aClassName = row.new ? "new-lb-badge" : "";
 
@@ -298,7 +299,15 @@ export const CategorySelectionPage: React.FC = () => {
                   }}
                   href={`/${leaderboardPath}`}
                 >
-                  {row?.version}: {stName || "..."}
+                  <span
+                    style={{
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      maxWidth: row.new ? 140 : 180,
+                    }}
+                  >
+                    {row?.version}: {stName}
+                  </span>
                 </a>
               </div>
             </div>
@@ -315,7 +324,10 @@ export const CategorySelectionPage: React.FC = () => {
           const enemy = row?.enemies?.[i];
           if (!enemy) return <></>;
 
-          let baseName = enemy.enemyName.split(":")[0];
+          const translatedEnemy = translate(enemy.enemyName);
+          const enemySplit = splitStygianEnemyName(translatedEnemy, language);
+
+          let baseName = enemySplit[0];
           const _split = baseName.split(" ");
           const hasPrefix = baseName.startsWith("Battle-");
 
@@ -332,7 +344,7 @@ export const CategorySelectionPage: React.FC = () => {
               <img
                 className="table-icon"
                 src={enemy.icon}
-                title={enemy.enemyName}
+                title={translatedEnemy}
                 alt=""
               />
               <span>
@@ -389,7 +401,7 @@ export const CategorySelectionPage: React.FC = () => {
           const addDate = new Date(row?.addDate || "");
           const strDate = addDate.toLocaleString(
             language,
-            monthDayYear_shortNumNum
+            monthDayYear_shortNumNum,
           );
           return (
             <div
@@ -403,7 +415,7 @@ export const CategorySelectionPage: React.FC = () => {
         },
       },
     ],
-    [translate, language]
+    [translate, language],
   );
 
   return (
