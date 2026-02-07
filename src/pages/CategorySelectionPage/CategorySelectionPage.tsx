@@ -12,6 +12,7 @@ import {
 import {
   FETCH_CATEGORIES_FILTERS_URL,
   FETCH_CATEGORIES_URL_V2,
+  getStygianEnemyPrefix,
   monthDayYear_shortNumNum,
   splitStygianEnemyName,
   toEnkaUrl,
@@ -329,7 +330,7 @@ export const CategorySelectionPage: React.FC = () => {
 
           let baseName = enemySplit[0];
           const _split = baseName.split(" ");
-          const hasPrefix = baseName.startsWith("Battle-");
+          const { hasPrefix, prefix } = getStygianEnemyPrefix(translatedEnemy, language)
 
           if (hasPrefix) {
             baseName = `${_split.slice(1).join(" ")}`;
@@ -359,7 +360,7 @@ export const CategorySelectionPage: React.FC = () => {
                       top: 0,
                     }}
                   >
-                    {_split[0]}
+                    {prefix}
                   </div>
                 )}
                 <span

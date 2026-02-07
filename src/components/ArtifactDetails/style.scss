@@ -36,6 +36,13 @@
     img {
       width: 25px;
       height: 25px;
+      transition: 0.05s;
+
+      &:hover {
+        margin-left: -5px;
+        margin-right: 5px;
+        transform: scale(1.33);
+      }
     }
   }
 
@@ -109,7 +116,9 @@
 
   &.selected-artifact {
     .profile-page-artifact {
-      box-shadow: 0 0 0 6px #202525, 0 0 0 8px cyan !important;
+      box-shadow:
+        0 0 0 6px #202525,
+        0 0 0 8px cyan !important;
     }
   }
 }

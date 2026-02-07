@@ -6,11 +6,13 @@ import {
   STAT_NAMES,
 } from "../../utils/substats";
 import { cssJoin, getCharacterCvColor } from "../../utils/helpers";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
+import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
 import { Artifact } from "../Artifact/Artifact";
 import { AssetFallback } from "../AssetFallback";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
 import { Spinner } from "../Spinner";
 import { StatIcon } from "../StatIcon";
 import axios from "axios";
@@ -24,6 +26,8 @@ type ArtifactDetailsProps = {
 export const ArtifactDetails: React.FC<ArtifactDetailsProps> = (row) => {
   const [artifactDetails, setArtifactDetails] = useState([]);
   const [equippedChars, setEquippedChars] = useState([]);
+
+  const { isMobile } = useContext(AdProviderContext);
 
   const getArtifactDetails = async () => {
     const _uid = encodeURIComponent(row.uid);
@@ -79,7 +83,7 @@ export const ArtifactDetails: React.FC<ArtifactDetailsProps> = (row) => {
 
               return acc;
             },
-            {}
+            {},
           );
 
           const buildsDiv = (isSelected || artifactDetails.length === 1) &&
@@ -103,13 +107,28 @@ export const ArtifactDetails: React.FC<ArtifactDetailsProps> = (row) => {
                     backgroundPosition: "center",
                   } as React.CSSProperties;
 
+                  const _uid = encodeURIComponent(row.uid);
+
                   return (
-                    <AssetFallback
-                      alt=""
-                      key={`${build.characterId}-${index}`}
-                      src={build.icon}
-                      style={style}
-                    />
+                    <Link
+                      to={`/profile/${_uid}?build=${build.md5}`}
+                      title={`View build - ${cv.toFixed(1)} cv`}
+                      style={{ height: 25 }}
+                      onClick={() => {
+                        const scrollTarget = isMobile
+                          ? ".highlight-tile-container > :last-child"
+                          : ".profile-header-wrapper";
+
+                        document.querySelector(scrollTarget)?.scrollIntoView();
+                      }}
+                    >
+                      <AssetFallback
+                        alt=""
+                        key={`${build.characterId}-${index}`}
+                        src={build.icon}
+                        style={style}
+                      />
+                    </Link>
                   );
                 })}
               </div>

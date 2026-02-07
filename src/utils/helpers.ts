@@ -1081,9 +1081,10 @@ export const monthDayYear_shortNumNum: Intl.DateTimeFormatOptions = {
 export const splitStygianEnemyName = (name: string, language: string) => {
   const separator =
     {
+      // it: "-", // IT has inconsistent separators (both '-' and ':')
+      // pt: "-", // PT mostly uses ':', one monster uses '-' instead
       de: "–",
       es: "-",
-      it: "-",
       ja: "・",
       ko: "·",
       th: "-",
@@ -1103,12 +1104,12 @@ export const getStygianEnemyPrefix = (name: string, language: string) => {
     // pt: { fn: "endsWith", text: "Veterano" },
     en: { fn: "startsWith", text: "Battle-" },
     de: { fn: "startsWith", text: "Altgediente" },
-    ja: { fn: "startsWith", text: "百戦錬磨の" },
     ko: { fn: "startsWith", text: "노련한" },
     ru: { fn: "startsWith", text: "Бывал" },
-    tr: { fn: "startsWith", text: "Savaş Uzmanı" },
-    "zh-CN": { fn: "startsWith", text: "历经百战的" },
-    "zh-TW": { fn: "startsWith", text: "歷經百戰的" },
+    // ja: { fn: "startsWith", text: "百戦錬磨の" },
+    // tr: { fn: "startsWith", text: "Savaş Uzmanı" },
+    // "zh-CN": { fn: "startsWith", text: "历经百战的" },
+    // "zh-TW": { fn: "startsWith", text: "歷經百戰的" },
   }[language];
 
   if (!separator) {
@@ -1122,13 +1123,13 @@ export const getStygianEnemyPrefix = (name: string, language: string) => {
 
   let _split = name.split(" ");
 
-  if (hasPrefix) {
-    if (["ja", "ko", "zh-CN", "zh-TW"].includes(language)) {
-      // ...
-      // ...
-    }
-    name = `${_split.slice(1).join(" ")}`;
-  }
+  // if (hasPrefix) {
+  //   // if (["ja", "ko", "zh-CN", "zh-TW"].includes(language)) {
+  //   //   // ...
+  //   //   // ...
+  //   // }
+  //   name = `${_split.slice(1).join(" ")}`;
+  // }
 
   return { hasPrefix, prefix: _split[0], name };
 };
