@@ -111,6 +111,7 @@ const ANEMO_RV_LIST: CharacterRVs = {
   "Yumemizuki Mizuki": [CRate, CDMG, ATK_, EM, ER],
   Ifa: [CRate, CDMG, ATK_, EM, ER],
   Jahoda: [CRate, CDMG, ER],
+  Varka: [CRate, CDMG, ATK_],
 };
 
 const PYRO_RV_LIST: CharacterRVs = {

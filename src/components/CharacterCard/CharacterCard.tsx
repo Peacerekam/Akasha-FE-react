@@ -338,6 +338,10 @@ const GACHA_CHAR_OFFESET: GachaCharOffsets = {
       },
     },
   },
+  Varka: {
+    x: -7,
+    y: 22,
+  },
 };
 
 export const CharacterCard: React.FC<CharacterCardProps> = ({
