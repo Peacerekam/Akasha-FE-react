@@ -114,7 +114,7 @@ const compressPNG = async (
   result: string,
   canvasWidth: number,
   canvasHeight: number,
-  qualityFactor: number
+  qualityFactor: number,
 ): Promise<string> => {
   return new Promise((resolve) => {
     const img = new Image();
@@ -155,7 +155,7 @@ const compressPNG = async (
           blobToDataURL(blob, (dataURL: any) => {
             resolve(dataURL + "");
           });
-        }
+        },
         // "image/jpeg",
         // 0.9
       );
@@ -396,7 +396,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const { uid } = useParams();
   const isAccountOwner = useMemo(
     () => isBound(uid),
-    [uid, isAuthenticated, boundAccounts]
+    [uid, isAuthenticated, boundAccounts],
   );
 
   const {
@@ -413,7 +413,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   } = useCardSettings();
 
   const [_adaptiveBgColor, _setAdaptiveBgColor] = useState(
-    !!row.adaptiveBg || !!adaptiveBgColor
+    !!row.adaptiveBg || !!adaptiveBgColor,
   );
 
   useEffect(() => {
@@ -439,7 +439,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const charImgUrl = toEnkaUrl(
     _calculations.chartsData?.assets?.gachaIcon,
     APRIL_FOOLS,
-    useFallback
+    useFallback,
   );
 
   const cardPicUrl = `${axios.defaults.baseURL}/public/cardpics/${customCardPic}?card=true`;
@@ -519,7 +519,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         handleFileUpload(true);
       }
     },
-    [uploadPictureInputRef, canvasRef, document]
+    [uploadPictureInputRef, canvasRef, document],
   );
 
   // paste img handler
@@ -612,14 +612,14 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           pastedImage ? false : paintMode,
           coldStart,
           null,
-          false
+          false,
         );
         setCompressedImage(compressedImage || backgroundPictureRef.current.src);
 
         setPicLoaded(
           !!uploadPictureInputRef?.current?.files?.[0] ||
             !compressedImage ||
-            pastedImage
+            pastedImage,
         );
       } catch (err) {
         // second time's a charm
@@ -647,7 +647,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
   const calculationIds = useMemo(() => {
     let preSort = Object.keys(calculations ?? []).filter(
-      (c: any) => !calculations[c].hidden
+      (c: any) => !calculations[c].hidden,
     );
 
     const searchQuery = location.search;
@@ -790,7 +790,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           !(
             statName.endsWith("DamageBonus") &&
             !relevantDamageTypes.find((x) => x.name === statName)
-          )
+          ),
       );
 
       const getMeaningfulValues = (x: any) => {
@@ -809,7 +809,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
           const relevantCalc = calcOverride || calculations[calculationId];
           const calculatedVal = calcStat.value(
-            relevantCalc?.stats?.[calcStat.key]
+            relevantCalc?.stats?.[calcStat.key],
           );
 
           const calcStatPercentage =
@@ -919,7 +919,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
               const calculatedVal = roundToFixed(
                 calcStat.value(obj.dataset.vals[obj.dataIndex]),
-                1
+                1,
               );
 
               return `${statName}: ${calculatedVal}`;
@@ -951,7 +951,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
                 return acc;
               },
-              ["", ""]
+              ["", ""],
             );
           }
 
@@ -1000,7 +1000,14 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         </div>
       );
     },
-    [row, calculations, chartsData, filteredLeaderboards, generating, translate]
+    [
+      row,
+      calculations,
+      chartsData,
+      filteredLeaderboards,
+      generating,
+      translate,
+    ],
   );
 
   const hasLeaderboardsColumn =
@@ -1095,7 +1102,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           );
 
           const thisChartData = chartsData?.charts1pMetadata?.find(
-            (x: any) => x.calculationId === id
+            (x: any) => x.calculationId === id,
           );
 
           const rankingPill = brokenRanking ? (
@@ -1148,7 +1155,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
   const reorderedArtifacts = useMemo(
     () => getArtifactsInOrder(artifacts, true),
-    [JSON.stringify(artifacts)]
+    [JSON.stringify(artifacts)],
   );
 
   const compactList = useMemo(() => {
@@ -1156,7 +1163,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       chartsData?.characterMetadata?.namecard,
       false,
       useFallback,
-      true
+      true,
     );
     const elementalBgUrl = `/elementalBackgrounds/${chartsData?.characterMetadata?.element}-bg.jpg`;
     const actualBgUrl = namecardBg ? namecardBgUrl : elementalBgUrl;
@@ -1206,7 +1213,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       mode?: string | boolean,
       coldStart?: boolean,
       pointerPos?: Coords | null,
-      noDrag: boolean = false
+      noDrag: boolean = false,
     ) => {
       if (!canvasBgRef?.current) return;
       if (!backgroundPictureRef?.current) return;
@@ -1222,7 +1229,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         chartsData?.characterMetadata?.namecard,
         false,
         useFallback,
-        true
+        true,
       );
       const elementalBgUrl = `/elementalBackgrounds/${chartsData?.characterMetadata?.element}-bg.jpg`;
       const actualBgUrl = namecardBg ? namecardBgUrl : elementalBgUrl;
@@ -1258,7 +1265,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
               0,
               yOffset,
               bgWidth,
-              namecardHeight
+              namecardHeight,
             );
           } else {
             backgroundCtx!.drawImage(
@@ -1266,7 +1273,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
               0,
               0,
               bgWidth,
-              bgHeight
+              bgHeight,
             );
           }
         } catch (err) {
@@ -1356,7 +1363,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         canvasWidth - 101 * hardcodedScale,
         0,
         canvasWidth - 3 * hardcodedScale,
-        0
+        0,
       );
       gradientMask.addColorStop(0, "black");
       gradientMask.addColorStop(1, "transparent");
@@ -1464,7 +1471,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             Math.floor(canvasWidth * 2 - 25), // newWidth - 1, // start X
             0, // start Y
             1, // width of extracted data
-            Math.floor(2 * canvasHeight - 1) // height of extracted data
+            Math.floor(2 * canvasHeight - 1), // height of extracted data
           );
         } catch (err) {
           console.log(err);
@@ -1480,14 +1487,14 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       // Create gradient
       const gradientCoords = [0, 0, 0, bgHeight] as const;
       const adaptiveGradient_1 = backgroundCtx!.createLinearGradient(
-        ...gradientCoords
+        ...gradientCoords,
       );
 
       const gradientSteps = 2;
 
       const setGradientFromImageDefault = (
         gradient: CanvasGradient,
-        alphaOverride: string | number = "55"
+        alphaOverride: string | number = "55",
       ) => {
         return setGradientFromImage(
           gradient,
@@ -1496,13 +1503,13 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           rightEdgeData,
           gradientSteps,
           alphaOverride,
-          characterCtx
+          characterCtx,
         );
       };
 
       const solidGradientColors = setGradientFromImageDefault(
         adaptiveGradient_1,
-        "ff"
+        "ff",
       );
 
       backgroundCtx!.globalCompositeOperation = "color";
@@ -1511,7 +1518,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
       // Create gradient
       const adaptiveGradient_2 = backgroundCtx!.createLinearGradient(
-        ...gradientCoords
+        ...gradientCoords,
       );
 
       // "multiply"
@@ -1525,7 +1532,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
       const nonSolidGradientColors = setGradientFromImageDefault(
         adaptiveGradient_2,
-        "55"
+        "55",
       );
 
       setAdaptiveColors([solidGradientColors, nonSolidGradientColors]);
@@ -1546,7 +1553,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       dragOffset,
       zoomLevel,
       useFallback,
-    ]
+    ],
   );
 
   const throttledPaintImageToCanvas = useCallback(
@@ -1556,16 +1563,16 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         mode?: string | boolean,
         coldStart?: boolean,
         pointerPos?: Coords,
-        noDrag?: boolean
+        noDrag?: boolean,
       ) => paintImageToCanvas(result, mode, coldStart, pointerPos, noDrag),
-      isMobile ? 33 : 17
+      isMobile ? 33 : 17,
       //  5 ms =   200 fps // <-- seems to lag on mobile?
       //  8 ms = ~ 120 fps
       // 10 ms =   100 fps
       // 17 ms = ~  60 fps
       // 33 ms = ~  30 fps
     ),
-    [paintImageToCanvas, isMobile, useFallback]
+    [paintImageToCanvas, isMobile, useFallback],
   );
 
   const handleFileUpload = useCallback(
@@ -1586,7 +1593,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
               reader.result + "",
               canvasWidth,
               canvasHeight,
-              2
+              2,
             );
 
             setDragOffset(null);
@@ -1598,7 +1605,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             setPicLoaded(true);
             setPastedImage(pasteFlag);
           },
-          false
+          false,
         );
 
         reader.readAsDataURL(file);
@@ -1607,7 +1614,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         setIsLoadingImage(false);
       }
     },
-    [uploadPictureInputRef?.current, canvasWidth, canvasHeight]
+    [uploadPictureInputRef?.current, canvasWidth, canvasHeight],
   );
 
   const characterShowcase = useMemo(() => {
@@ -1780,7 +1787,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                 const fallbackURL = toEnkaUrl(
                   chartsData?.assets?.gachaIcon,
                   APRIL_FOOLS,
-                  true
+                  true,
                 );
                 backgroundPictureRef.current.src = fallbackURL;
                 setCompressedImage(fallbackURL);
@@ -1819,7 +1826,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         <StatListCard row={row} />
       </div>
     ),
-    [row]
+    [row],
   );
 
   const characterMiddle = useMemo(() => {
@@ -1859,18 +1866,23 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             <div className="weapon-name">{weaponName}</div>
             <div className="weapon-stats lighter-color">
               <div className="weapon-stat-with-icon">
-                <StatIcon sizeOverride={statIconSize} name="ATK" /> {baseAttack}
+                <StatIcon sizeOverride={statIconSize} name="ATK" />{" "}
+                <span>{baseAttack}</span>
               </div>
               {mainstat?.value && (
                 <div className="weapon-stat-with-icon">
                   <StatIcon sizeOverride={statIconSize} name={mainstatName} />{" "}
-                  {mainstat?.value}
-                  {isPercentage ? "%" : ""}
+                  <span>
+                    {mainstat?.value}
+                    {isPercentage ? "%" : ""}
+                  </span>
                 </div>
               )}
             </div>
             <div className="weapon-stats">
-              <div className="weapon-refinement">R{refinementValue}</div>
+              <div className="weapon-refinement">
+                <span>R{refinementValue}</span>
+              </div>
               <div>
                 <span>
                   {translate("Lv.")} {row.weapon.weaponInfo.level}
@@ -1880,7 +1892,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                   {ascensionToLevel(
                     row.weapon.weaponInfo?.promoteLevel,
                     "weapon",
-                    row.weapon.weaponInfo.level
+                    row.weapon.weaponInfo.level,
                   )}
                 </span>
               </div>
@@ -1972,7 +1984,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
       return thisOpt;
     },
-    [calculations, translate, getTopRanking]
+    [calculations, translate, getTopRanking],
   );
 
   const calcOptions = useMemo(
@@ -1986,7 +1998,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
               return a.top > b.top ? 1 : -1;
             })
         : [],
-    [calculations, translate]
+    [calculations, translate],
   );
 
   const cardOverlay = useMemo(() => {
@@ -1994,19 +2006,19 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       row,
       ["normalAttacks", "normalAttack"],
       chartsData,
-      0
+      0,
     );
     const talentSkillProps = toTalentProps(
       row,
       ["elementalSkill"],
       chartsData,
-      1
+      1,
     );
     const talentBurstProps = toTalentProps(
       row,
       ["elementalBurst"],
       chartsData,
-      2
+      2,
     );
 
     return (
@@ -2034,7 +2046,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             {ascensionToLevel(
               row.propMap.ascension.val,
               "character",
-              row.propMap.level.val
+              row.propMap.level.val,
             )}
           </span>
         </div>
@@ -2298,7 +2310,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
   const handleGenerateAndDownload = async (
     mode: "download" | "open",
-    event: any
+    event: any,
   ) => {
     const cardNode = document.getElementById(buildId);
     if (!cardNode) return;
@@ -2313,7 +2325,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       onclone: (document, element) => {
         const offsetElementBy = (
           selector: string,
-          transform: number | string
+          transform: number | string,
           // transform?: string
         ) => {
           element.querySelectorAll(selector).forEach((el: any) => {
@@ -2326,38 +2338,32 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         // un-scale
         (element.style as any)["--scale-factor"] = "1";
 
-        offsetElementBy(".character-talents .talent-display-value", 0); // ???
-        offsetElementBy(".character-talents .talent-display-value > span", -1);
-        offsetElementBy(".roll-list-member > span > span", -1);
-        offsetElementBy(".roll-list-member > span > span > img", 1); // offset img
-        offsetElementBy(
-          ".character-artifacts .compact-artifact-main-stat > span",
-          -1
-        );
-        offsetElementBy(".lb-badge > span", -1);
+        const elementsToOffset = [
+          [".weapon-name", -1],
+          [".weapon-stats > div > span", -1],
+          [".character-talents .talent-display-value", 0],
+          [".character-talents .talent-display-value > span", -1],
+          [".roll-list-member > span > span", -1],
+          [".roll-list-member > span > span > img", 1],
+          [".character-artifacts .compact-artifact-main-stat > span", -1],
+          [".lb-badge > span", -1],
+          [".compact-artifact-crit-value .metric-text", -1],
+          [".table-stat-row span", -1],
+          [".table-stat-row > div:not(.flex)", -1],
+          [".compact-artifact-subs .substat > span:last-child", -1],
+          [".roll-dots", `translateX(calc(-100% - 3px)) translateY(-1px)`],
+          [".reroll-text", -1],
+        ];
+
+        elementsToOffset.forEach((x: any) => offsetElementBy(x[0], x[1]));
+
+        // old - unused
         // offsetElementBy(".compact-artifact-crit-value > span", -2);
         // offsetElementBy(".compact-artifact-crit-value > .smol-percentage", -2);
         // offsetElementBy(
         //   ".compact-artifact-crit-value > span:not(.metric-formula)",
         //   -1
         // );
-
-        offsetElementBy(".compact-artifact-crit-value .metric-text", -1);
-
-        offsetElementBy(".table-stat-row span", -1);
-        offsetElementBy(".table-stat-row > div:not(.flex)", -1);
-
-        offsetElementBy(
-          ".compact-artifact-subs .substat > span:last-child",
-          -1
-        );
-
-        offsetElementBy(
-          ".roll-dots",
-          `translateX(calc(-100% - 3px)) translateY(-1px)`
-        );
-
-        offsetElementBy(".reroll-text", -1);
       },
     };
 
@@ -2839,7 +2845,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                 className={toggleConfigure === "card" ? "toggled-conf-btn" : ""}
                 onClick={() => {
                   setToggleConfigure((prev) =>
-                    prev !== "card" ? "card" : null
+                    prev !== "card" ? "card" : null,
                   );
                 }}
               >
@@ -2860,7 +2866,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                   }
                   onClick={() => {
                     setToggleConfigure((prev) =>
-                      prev !== "build" ? "build" : null
+                      prev !== "build" ? "build" : null,
                     );
                   }}
                 >
