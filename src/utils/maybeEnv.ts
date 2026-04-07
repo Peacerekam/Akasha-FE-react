@@ -6,4 +6,4 @@ export const APRIL_FOOLS = false;
 
 // probably change
 export const IS_PRODUCATION = true; // set false to use localhost endpoints
-export const TRANSLATION_VERSION = 0.316; // increment this when translation keys are outdated
+export const TRANSLATION_VERSION = 0.317; // increment this when translation keys are outdated

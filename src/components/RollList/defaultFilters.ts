@@ -177,6 +177,7 @@ const GEO_RV_LIST: CharacterRVs = {
   Xilonen: [CRate, CDMG, ER, DEF_],
   Illuga: [CRate, CDMG, EM, ER],
   Zibai: [CRate, CDMG, DEF_, EM, ER],
+  Linnea: [CRate, CDMG, DEF_, EM, ER],
 };
 
 const ELECTRO_RV_LIST: CharacterRVs = {
