@@ -109,6 +109,7 @@ const appRoutes: {
   { path: "/builds", Element: BuildsPage },
   { path: "/profiles", Element: AccountsPage },
   { path: "/profile/:uid", Element: ProfilePage },
+  // { path: "/u/:uid", Element: ProfilePage },
   { path: "/leaderboards", Element: CategorySelectionPage },
   { path: "/leaderboards/stygian/", Element: StygianLbPage },
   { path: "/leaderboards/stygian/:version", Element: StygianLbPage },

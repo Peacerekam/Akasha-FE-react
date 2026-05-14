@@ -17,6 +17,7 @@ import {
   isEntryNew,
   isPercent,
   normalizeText,
+  timeAgo,
 } from "../../utils/helpers";
 import {
   FETCH_ARTIFACT_FILTERS_URL,
@@ -94,9 +95,16 @@ export const ArtifactsPage: React.FC = () => {
         width: "300px",
         cell: (row) => {
           const isNew = isEntryNew(row?.lastArtifactUpdate);
+          const artifactName = translate(row.name);
+
+          const updatedAtLabel =
+            (row?.lastArtifactUpdate || 0) < 1000
+              ? artifactName
+              : `${artifactName} - ${timeAgo(row?.lastArtifactUpdate)}`;
 
           const _content = (
             <span
+              title={updatedAtLabel}
               style={{
                 color: {
                   5: "orange",
@@ -167,7 +175,7 @@ export const ArtifactsPage: React.FC = () => {
             row.mainStatKey.endsWith("%") ||
             row.mainStatKey?.endsWith("Bonus") ||
             ["Energy Recharge", "Crit RATE", "Crit DMG"].includes(
-              row.mainStatKey
+              row.mainStatKey,
             );
 
           const mainStatValue = isPercenrage
@@ -239,7 +247,7 @@ export const ArtifactsPage: React.FC = () => {
         },
       },
     ],
-    [translate]
+    [translate],
   );
 
   return (

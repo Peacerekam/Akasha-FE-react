@@ -5,7 +5,7 @@ import {
   ROUNDED_REAL_SUBSTAT_VALUES,
   STAT_NAMES,
 } from "../../utils/substats";
-import { cssJoin, getCharacterCvColor } from "../../utils/helpers";
+import { cssJoin, getCharacterCvColor, timeAgo } from "../../utils/helpers";
 import { useContext, useEffect, useState } from "react";
 
 import { AdProviderContext } from "../../context/AdProvider/AdProviderContext";
@@ -214,6 +214,11 @@ export const ArtifactDetails: React.FC<ArtifactDetailsProps> = (row) => {
             </div>
           );
 
+          const updatedAtLabel =
+            (artifact?.lastArtifactUpdate || 0) < 1000
+              ? ""
+              : `${timeAgo(artifact?.lastArtifactUpdate)}`;
+
           return (
             <div className={classNames} key={artifact._id}>
               {index !== 0 && (
@@ -240,6 +245,11 @@ export const ArtifactDetails: React.FC<ArtifactDetailsProps> = (row) => {
                 </div> */}
 
                 {/* @TODO: fix this */}
+                {updatedAtLabel && (
+                  <div 
+                  style={{ marginTop: isSelected ? 5 : 0 }}
+                  className="element-updated-at">{updatedAtLabel}</div>
+                )}
                 {rollsDiv}
               </div>
             </div>

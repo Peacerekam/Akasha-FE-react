@@ -61,7 +61,8 @@ export const FollowCursor: React.FC<FollowCursorProps> = ({
         transform: `translate(${left}px, ${top}px)`,
         left: coords.x - offsetX,
         top: coords.y - offsetY,
-        // opacity: 0.8,
+        // left: coords.x + 15,
+        // top: coords.y + 15,
       }}
     >
       {children}

@@ -25,7 +25,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
 
   const loginBtn = useMemo(
     () => navigation[navigation.length - 1],
-    [navigation]
+    [navigation],
   );
 
   const languageBtn = {
@@ -35,24 +35,24 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
 
   const spacerIndex = useMemo(
     () => navigation.findIndex((x) => x.name === "spacer"),
-    [navigation]
+    [navigation],
   );
 
   const socialsNav = useMemo(
     () => navigation.filter((x) => x.hideName).reverse(),
-    [spacerIndex, navigation]
+    [spacerIndex, navigation],
   );
 
   const pageNav = useMemo(
     () => navigation.slice(0, spacerIndex),
-    [spacerIndex, navigation]
+    [spacerIndex, navigation],
   );
 
   if (!isOpen) return null;
 
   const handleCloseHamburger = (
     event: React.MouseEvent<HTMLElement>,
-    allowChildren = false
+    allowChildren = false,
   ) => {
     if (!allowChildren && event.target !== event.currentTarget) return;
     toggleHamburger();
@@ -64,17 +64,16 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
   const displayNavElement = (
     nav: NavElement,
     i: number,
-    delayClosing: boolean
+    delayClosing: boolean,
   ) => {
+    // hash !== "/" && location.pathname === nav.path ? "active-tab" : ""
+    const isActive =
+      location.pathname !== "/" && location.pathname === nav.path;
+
     return (
       <a
         key={`${nav.name}-${i}`}
-        className={
-          // hash !== "/" && location.pathname === nav.path ? "active-tab" : ""
-          location.pathname !== "/" && location.pathname === nav.path
-            ? "active-tab"
-            : ""
-        }
+        className={isActive ? "active-tab" : ""}
         target={nav.external ? "_blank" : undefined}
         rel="noreferrer"
         href={nav.external ? nav.path : `${nav.path}`}
@@ -92,8 +91,9 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
           }, ms);
         }}
       >
-        {nav.icon ? <>{nav.icon}</> : ""}{" "}
-        {nav.name.includes("LootBar") ? "" : nav.name}
+        {nav.icon ? <>{nav.icon}</> : ""}
+        {nav.name}
+        {/* {nav.name.includes("LootBar") ? "" : nav.name} */}
       </a>
     );
   };
@@ -101,7 +101,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
   const getNavElement = (
     nav: NavElement,
     i: number,
-    delayClosing: boolean = false
+    delayClosing: boolean = false,
   ) => {
     if (nav.name === "spacer") {
       return <div key={nav.name} className="navbar-spacer" />;

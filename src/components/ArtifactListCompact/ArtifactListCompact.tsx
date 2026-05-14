@@ -15,6 +15,7 @@ import {
   getSummedArtifactRolls,
   isPercent,
   normalizeText,
+  timeAgo,
 } from "../../utils/helpers";
 
 import { ARBadge } from "../ARBadge";
@@ -97,7 +98,7 @@ export const CompactArtifact: React.FC<CompactArtifactProps> = ({
 
           const substatValue = getInGameSubstatValue(
             artifact.substats[key],
-            key
+            key,
           );
           const isCV = key.includes("Crit");
 
@@ -115,7 +116,7 @@ export const CompactArtifact: React.FC<CompactArtifactProps> = ({
 
           const opacity = getSubstatPercentageEfficiency(
             normSubName,
-            artifact.substats[key]
+            artifact.substats[key],
           );
 
           const rollDots = "•".repeat(summedArtifactRolls[key].count);
@@ -157,7 +158,7 @@ export const ArtifactMetricDisplay: React.FC<{
   const metricValue = getArtifactMetricValue(
     row.name,
     artifact,
-    overrideMetric
+    overrideMetric,
   );
 
   const summedArtifactRolls = getSummedArtifactRolls(artifact);
@@ -286,7 +287,7 @@ export const ArtifactOnCanvas: React.FC<{
       // it is the min of the 2 ratios
       const scaleFactor = Math.max(
         canvasWidth / img.width,
-        canvasHeight / img.height
+        canvasHeight / img.height,
       );
 
       // Finding the new width and height based on the scale factor
@@ -303,7 +304,7 @@ export const ArtifactOnCanvas: React.FC<{
         canvasWidth - 100 * hardcodedScale,
         0,
         canvasWidth - 40 * hardcodedScale,
-        0
+        0,
       );
       gradientMask.addColorStop(0, "black");
       gradientMask.addColorStop(1, "transparent");
@@ -348,7 +349,7 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
 
   const reordered = useMemo(
     () => getArtifactsInOrder(artifacts, true),
-    [JSON.stringify(artifacts)]
+    [JSON.stringify(artifacts)],
   );
 
   const compactList = useMemo(() => {
@@ -381,6 +382,13 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
 
   const characterId = `${row.characterId}${suffix}`;
 
+  const characterName = translate(row.name);
+
+  const updatedAtLabel =
+    (row?.lastBuildUpdate || 0) < 1000
+      ? ""
+      : `${timeAgo(row?.lastBuildUpdate)}`;
+
   return (
     <div className="flex expanded-row" translate="no">
       <div className="character-preview">
@@ -393,7 +401,7 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
           />
           {translate("Lv.")} {row?.propMap?.level?.val || "??"}
           {" - "}
-          {row.type === "current" ? translate(row.name) : row.type}
+          {row.type === "current" ? characterName : row.type}
         </div>
         <TalentsDisplay
           row={row}
@@ -401,10 +409,16 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
           characterId={characterId}
           language={language}
         />
-        <div className="character-owner-preview">
-          {row.owner.nickname}
-          <ARBadge adventureRank={row.owner.adventureRank} />
-          <RegionBadge region={row.owner.region} />
+        <div className="owner-wrapper">
+          {updatedAtLabel && (
+            <div className="element-updated-at">{updatedAtLabel}</div>
+          )}
+
+          <div className="character-owner-preview">
+            {row.owner.nickname}
+            <ARBadge adventureRank={row.owner.adventureRank} />
+            <RegionBadge region={row.owner.region} />
+          </div>
         </div>
       </div>
       {reordered.length > 0 ? compactList : "no artifacts equipped"}

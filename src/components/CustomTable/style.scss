@@ -1,7 +1,8 @@
 @use "sass:map";
 
-$substats: "flathp", "hp_", "flatatk", "atk_", "flatdef", "def_", "critrate",
-  "critdmg", "critvalue", "elementalmastery", "energyrecharge";
+$substats:
+  "flathp", "hp_", "flatatk", "atk_", "flatdef", "def_", "critrate", "critdmg",
+  "critvalue", "elementalmastery", "energyrecharge";
 
 @each $substat in $substats {
   .highlight-#{$substat} {
@@ -17,10 +18,10 @@ $substats: "flathp", "hp_", "flatatk", "atk_", "flatdef", "def_", "critrate",
   }
 }
 
-$characterStats: "hp", "atk", "def", "hydrodmgbonus", "geodmgbonus",
-  "pyrodmgbonus", "cryodmgbonus", "electrodmgbonus", "anemodmgbonus",
-  "dendrodmgbonus", "physicaldmgbonus", "healingbonus", "elementalmastery",
-  "energyrecharge";
+$characterStats:
+  "hp", "atk", "def", "hydrodmgbonus", "geodmgbonus", "pyrodmgbonus",
+  "cryodmgbonus", "electrodmgbonus", "anemodmgbonus", "dendrodmgbonus",
+  "physicaldmgbonus", "healingbonus", "elementalmastery", "energyrecharge";
 
 @each $stat in $characterStats {
   .highlight-#{$stat} {
@@ -464,7 +465,9 @@ $characterStats: "hp", "atk", "def", "hydrodmgbonus", "geodmgbonus",
     font-weight: 600;
     font-size: 11px;
     color: white;
-    text-shadow: 0 0.08em 0.1em black, 0 0.1em 0.3em rgba(0, 0, 0, 0.4);
+    text-shadow:
+      0 0.08em 0.1em black,
+      0 0.1em 0.3em rgba(0, 0, 0, 0.4);
     display: block;
   }
   &.is-niche::before {
@@ -486,7 +489,9 @@ $characterStats: "hp", "atk", "def", "hydrodmgbonus", "geodmgbonus",
     align-items: center;
 
     font-weight: 600;
-    text-shadow: 0 0.08em 0.1em black, 0 0.1em 0.3em rgba(0, 0, 0, 0.4);
+    text-shadow:
+      0 0.08em 0.1em black,
+      0 0.1em 0.3em rgba(0, 0, 0, 0.4);
 
     &.c-0-badge {
       background-color: rgb(128, 128, 128);
@@ -573,7 +578,9 @@ $characterStats: "hp", "atk", "def", "hydrodmgbonus", "geodmgbonus",
   z-index: 4;
   color: white;
   min-width: 180px;
-  box-shadow: inset 1px 0px 0px 0px #515151, inset -1px 0px 0px 0px #515151,
+  box-shadow:
+    inset 1px 0px 0px 0px #515151,
+    inset -1px 0px 0px 0px #515151,
     inset 0px -1px 0px 0px #515151;
   overflow: hidden;
   transform: translateY(-50%) scaleY(1) translateY(50%);
@@ -604,7 +611,7 @@ $characterStats: "hp", "atk", "def", "hydrodmgbonus", "geodmgbonus",
 }
 
 .responsive-components {
-  @media (max-width: 1000px) {
+  @media (max-width: 1200px) {
     position: relative;
     left: calc(-50% + 50vw) !important;
 
@@ -617,4 +624,19 @@ $characterStats: "hp", "atk", "def", "hydrodmgbonus", "geodmgbonus",
       overflow: inherit !important;
     }
   }
+}
+
+.owner-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.element-updated-at {
+  text-align: right;
+  margin-bottom: 5px;
+  opacity: 0.5;
+  font-size: 11px;
+  align-items: center;
+  display: flex;
 }

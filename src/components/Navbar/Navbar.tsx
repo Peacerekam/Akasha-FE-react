@@ -2,7 +2,6 @@ import "./style.scss";
 
 import {
   DISCORD_URL,
-  LOOTBAR_URL,
   PATREON_URL,
   applyModalBodyStyle,
   cssJoin,
@@ -19,9 +18,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { HamburgerMenu } from "./HamburgerMenu";
 import { LanguageSwitcher } from "../LanguageSwitcher";
 import { LogInModal } from "./LogInModal";
-import LootbarLogo from "../../assets/images/lootbar.png";
 import { SessionDataContext } from "../../context/SessionData/SessionDataContext";
 import { Spinner } from "../Spinner";
+
+// import LootbarLogo from "../../assets/images/lootbar.png";
 
 export type NavElement = {
   name: string;
@@ -124,22 +124,22 @@ export const Navbar: React.FC = () => {
         name: "spacer",
         path: "spacer",
       },
-      {
-        icon: (
-          <div className="navbar-lootbar-wrapper">
-            <img
-              className="navbar-lootbar"
-              alt="LootBar.gg"
-              title="LootBar.gg"
-              src={LootbarLogo}
-            />
-          </div>
-        ),
-        name: "LootBar.gg",
-        hideName: true,
-        path: LOOTBAR_URL,
-        external: true,
-      },
+      // {
+      //   icon: (
+      //     <div className="navbar-lootbar-wrapper">
+      //       <img
+      //         className="navbar-lootbar"
+      //         alt="LootBar.gg"
+      //         title="LootBar.gg"
+      //         src={LootbarLogo}
+      //       />
+      //     </div>
+      //   ),
+      //   name: "LootBar.gg",
+      //   hideName: true,
+      //   path: LOOTBAR_URL,
+      //   external: true,
+      // },
       {
         name: "language",
         path: "language",
@@ -166,12 +166,12 @@ export const Navbar: React.FC = () => {
             ) : (
               <FontAwesomeIcon icon={faRightFromBracket} size="1x" />
             ),
-            name: isAuthenticated ? username ?? "..." : "Log in",
+            name: isAuthenticated ? (username ?? "...") : "Log in",
             onClick: handleToggleModal,
             path: "",
           },
     ],
-    [profileObject, isAuthenticated, isFetching]
+    [profileObject, isAuthenticated, isFetching],
   );
 
   const displayNavElement = (nav: NavElement, i: number) => {

@@ -29,6 +29,7 @@ import {
   getRelativeCoords,
   getSessionIdFromCookie,
   isPercent,
+  timeAgo,
   toEnkaUrl,
 } from "../../utils/helpers";
 import axios, { AxiosRequestConfig } from "axios";
@@ -346,6 +347,10 @@ const GACHA_CHAR_OFFESET: GachaCharOffsets = {
     x: -30,
     y: 15,
   },
+  "Lan Yan": {
+    x: 30,
+    y: 10,
+  },
 };
 
 export const CharacterCard: React.FC<CharacterCardProps> = ({
@@ -368,7 +373,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const [useFallback, setUseFallback] = useState(false);
 
   // flags
-  const [toggleConfigure, setToggleConfigure] = useState<Toggles>(null);
+  const [toggleConfigure, setToggleConfigure] = useState<Toggles>(null); // set to "build" if isAccountOwner === true ?
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [isLoadingImage, setIsLoadingImage] = useState(false);
   const [generating, setGenerating] = useState<OpenDownloadingFalse>(false);
@@ -2740,6 +2745,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       ""
     );
 
+  const updatedAtLabel =
+    (row?.lastBuildUpdate || 0) < 1000
+      ? ""
+      : `${timeAgo(row?.lastBuildUpdate)}`;
+
   return (
     <div
       className="flex expanded-row relative mb-0 scale-factor-source"
@@ -2795,6 +2805,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           </div>
         </div>
       </div>
+
       <div className="card-buttons-wrapper">
         <div className="card-buttons">
           <div className="card-configuration">
@@ -2942,6 +2953,18 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                   </>
                 ))}
             </div>
+
+            {updatedAtLabel && (
+              <div
+                className="element-updated-at absolute"
+                style={{
+                  right: (1 - +formattedSF) * 1200 + 30,
+                }}
+              >
+                {updatedAtLabel}
+              </div>
+            )}
+
             {manageBuildDiv}
             {configureImgDiv}
           </div>

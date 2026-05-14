@@ -138,7 +138,7 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
 
   const isAccountOwner = useMemo(
     () => isBound(uid),
-    [uid, isAuthenticated, boundAccounts]
+    [uid, isAuthenticated, boundAccounts],
   );
 
   const abortControllers = useMemo(
@@ -149,7 +149,7 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
       refresh: new AbortController(),
       profiles: new AbortController(),
     }),
-    [uid]
+    [uid],
   );
 
   const fetchProfile = async (overrideUID?: string) => {
@@ -221,7 +221,7 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
     _setRelevantProfiles(data.data || []);
 
     const defaultUID = data?.data?.find(
-      (x: any) => x?.defaultProfile
+      (x: any) => x?.defaultProfile,
     )?.defaultProfile;
 
     return defaultUID;
@@ -295,9 +295,16 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
         sortFields: ["name", "lastArtifactUpdate"],
         cell: (row) => {
           const isNew = isEntryNew(row?.lastArtifactUpdate);
+          const artifactName = translate(row.name);
+
+          const updatedAtLabel =
+            (row?.lastArtifactUpdate || 0) < 1000
+              ? artifactName
+              : `${artifactName} - ${timeAgo(row?.lastArtifactUpdate)}`;
 
           const _content = (
             <span
+              title={updatedAtLabel}
               style={{
                 color: {
                   5: "orange",
@@ -357,7 +364,7 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
             row.mainStatKey.endsWith("%") ||
             row.mainStatKey?.endsWith("Bonus") ||
             ["Energy Recharge", "Crit RATE", "Crit DMG"].includes(
-              row.mainStatKey
+              row.mainStatKey,
             );
 
           const mainStatValue = isPercenrage
@@ -430,7 +437,7 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
         },
       },
     ],
-    [translate]
+    [translate],
   );
 
   // move this somewhere else i think
@@ -607,7 +614,7 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
             <div
               key={normalizeText(_stat.name)}
               className={`character-stat flex nowrap ${normalizeText(
-                _stat.name.replace("%", "")
+                _stat.name.replace("%", ""),
               )}`}
             >
               <span className="mr-3">
@@ -621,7 +628,7 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
         },
       })),
     ],
-    [translate, adProvider]
+    [translate, adProvider],
   );
 
   const handleRefreshData = async () => {
@@ -710,7 +717,7 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
       enkaLink = false,
     }) => {
       const DISABLE_FLOATING_BUTTONS = !!profileObject?.disableDbUpdates;
-        
+
       const defaultBtnClassName = DISABLE_FLOATING_BUTTONS ? "disable-btn" : "";
 
       const settingsBtnClassName = cssJoin([
@@ -928,7 +935,7 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
       isAccountOwner,
       isCombined,
       uid,
-    ]
+    ],
   );
 
   const relevantProfilesQuery = useMemo(() => {

@@ -1081,13 +1081,13 @@ export const monthDayYear_shortNumNum: Intl.DateTimeFormatOptions = {
 export const splitStygianEnemyName = (name: string, language: string) => {
   const separator =
     {
-      // it: "-", // IT has inconsistent separators (both '-' and ':')
+      it: " - ", // IT has inconsistent separators (both '-' and ':')
       // pt: "-", // PT mostly uses ':', one monster uses '-' instead
       de: "–",
       es: "-",
       ja: "・",
       ko: "·",
-      th: "-",
+      th: " - ",
       "zh-CN": "·",
       "zh-TW": "·",
     }[language] || ":";
