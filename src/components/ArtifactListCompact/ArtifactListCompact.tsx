@@ -371,6 +371,8 @@ export const ArtifactListCompact: React.FC<ArtifactListCompactProps> = ({
     );
   }, [JSON.stringify(reordered), metric, customRvFilter[row.name]?.length]);
 
+  if (!row.owner) return null;
+
   const isTraveler = row.characterId
     ? travelerIds.includes("" + row.characterId)
     : false;

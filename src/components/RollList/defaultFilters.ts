@@ -94,7 +94,7 @@ const overrideRvFilter: OverrideRVs = Object.keys(OVERRIDE_RV_LIST).reduce(
 
     return acc;
   },
-  {} as OverrideRVs
+  {} as OverrideRVs,
 );
 
 const ANEMO_RV_LIST: CharacterRVs = {
@@ -112,6 +112,7 @@ const ANEMO_RV_LIST: CharacterRVs = {
   Ifa: [CRate, CDMG, ATK_, EM, ER],
   Jahoda: [CRate, CDMG, ER],
   Varka: [CRate, CDMG, ATK_],
+  Prune: [CRate, CDMG, ATK_, ER],
 };
 
 const PYRO_RV_LIST: CharacterRVs = {
@@ -132,6 +133,7 @@ const PYRO_RV_LIST: CharacterRVs = {
   Arlecchino: [CRate, CDMG, ATK_, EM],
   Mavuika: [CRate, CDMG, ATK_, EM],
   Durin: [CRate, CDMG, ATK_, EM, ER],
+  Nicole: [ER, ATK_],
 };
 
 const HYDRO_RV_LIST: CharacterRVs = {
@@ -164,6 +166,7 @@ const CRYO_RV_LIST: CharacterRVs = {
   Citlali: [CRate, CDMG, ATK_, EM, ER],
   Escoffier: [CRate, CDMG, ATK_, ER],
   Skirk: [CRate, CDMG, ATK_],
+  Lohen: [CRate, CDMG, ATK_], // does he need ER%?
 };
 
 const GEO_RV_LIST: CharacterRVs = {

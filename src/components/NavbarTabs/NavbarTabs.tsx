@@ -74,6 +74,7 @@ export const NavbarTabs: React.FC = () => {
             </Link>
             {!isFav && (
               <span
+                title="Close tab"
                 className="close-tab"
                 onClick={(event) => {
                   event.preventDefault();

@@ -70,13 +70,15 @@ const VAPE_COLORS_MAP: any = {
 };
 
 const LUNAR_COLORS_MAP: any = {
-  LC: "#da84ff",
   LB: "#94ff7f",
+  LC: "#da84ff",
+  LCR: "#ffd484", // @TODO: find better values?
 };
 
 const LUNAR_GRADIENTS_MAP: any = {
-  LC: "linear-gradient( #da84ff, #f5ddff )",
   LB: "linear-gradient( #94ff7f, #ccffc2 )",
+  LC: "linear-gradient( #da84ff, #f5ddff )",
+  LCR: "linear-gradient( #ffd884, #fffcdd )", // @TODO: find better values?
 };
 
 export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
