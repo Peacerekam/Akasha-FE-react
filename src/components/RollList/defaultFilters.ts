@@ -167,6 +167,7 @@ const CRYO_RV_LIST: CharacterRVs = {
   Escoffier: [CRate, CDMG, ATK_, ER],
   Skirk: [CRate, CDMG, ATK_],
   Lohen: [CRate, CDMG, ATK_], // does he need ER%?
+  Sandrone: [CRate, CDMG, ATK_, EM, ER],
 };
 
 const GEO_RV_LIST: CharacterRVs = {

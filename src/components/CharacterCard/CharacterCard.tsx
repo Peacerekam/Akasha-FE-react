@@ -359,6 +359,10 @@ const GACHA_CHAR_OFFESET: GachaCharOffsets = {
     x: 0,
     y: 30,
   },
+  Sandrone: {
+    x: 5,
+    y: -10,
+  },
 };
 
 export const CharacterCard: React.FC<CharacterCardProps> = ({

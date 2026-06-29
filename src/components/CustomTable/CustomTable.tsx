@@ -834,24 +834,17 @@ export const CustomTable: React.FC<CustomTableProps> = ({
 
       // @TODO: patreon
       const patreonObj = row.owner?.patreon || row.patreon;
-
       const enkaOwner = row?.playerInfo?.enkaOwner || row?.owner?.enkaOwner;
       const isEnkaPatreon = (enkaOwner?.profile?.level || 0) !== 0;
+      const akashaPatreonRow = shouldHighlightRows && !!patreonObj?.active;
+      const enkaPatreonRow = shouldHighlightRows && isEnkaPatreon;
+      const decorateRow = akashaPatreonRow || enkaPatreonRow;
 
       const rowClassNames = cssJoin([
         expandableRows && !row?.isDeleted ? "pointer" : "",
-        shouldHighlightRows && (!!patreonObj?.active || isEnkaPatreon)
-          ? "decorate-row"
-          : "",
-        shouldHighlightRows && !!patreonObj?.active
-          ? `patreon-${patreonObj?.color || "cyan"}` // default to cyan
-          : "",
-        shouldHighlightRows && isEnkaPatreon ? "patreon-royalblue" : "",
-        // {
-        //   1: "decorate-row patreon-gold",
-        //   2: "decorate-row patreon-white",
-        //   3: "decorate-row patreon-brown",
-        // }[row.index as number],
+        decorateRow ? "decorate-row" : "",
+        akashaPatreonRow ? `patreon-${patreonObj?.color || "cyan"}` : "",
+        !akashaPatreonRow && enkaPatreonRow ? "patreon-royalblue" : "",
       ]);
 
       return (
