@@ -256,6 +256,12 @@ const GACHA_CHAR_OFFESET: GachaCharOffsets = {
   Citlali: {
     x: 6,
     y: 5,
+    skins: {
+      "210701": {
+        x: 35,
+        y: -20,
+      }
+    }
   },
   Skirk: {
     x: -5,
