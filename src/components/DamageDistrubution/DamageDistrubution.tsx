@@ -69,16 +69,20 @@ const VAPE_COLORS_MAP: any = {
   P: "rgb(0,163,150)",
 };
 
-const LUNAR_COLORS_MAP: any = {
+const LUNAR_STELLAR_COLORS_MAP: any = {
   LB: "#94ff7f",
   LC: "#da84ff",
-  LCR: "#ffd484", // @TODO: find better values?
+  LCR: "#ffd484", 
+  SSC: "#8ee4f2", // can be cryo or electro 
+  SW: "#8ef2bb", // can be cryo or anemo - correct the color later in 7.0
 };
 
 const LUNAR_GRADIENTS_MAP: any = {
   LB: "linear-gradient( #94ff7f, #ccffc2 )",
   LC: "linear-gradient( #da84ff, #f5ddff )",
-  LCR: "linear-gradient( #ffd884, #fffcdd )", // @TODO: find better values?
+  LCR: "linear-gradient( #ffd884, #fffcdd )", 
+  SSC: "linear-gradient( #8ee4f2, #dee6f4 )", // can be cryo or electro 
+  SW: "linear-gradient( #8ef2bb, #def4e0 )", // can be cryo or anemo  - correct the color later in 7.0
 };
 
 export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
@@ -160,7 +164,7 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
     const _MAP = isReaction(highlighted.name) ? VAPE_COLORS_MAP : COLORS_MAP;
 
     const lunarColor = highlighted.type
-      ? LUNAR_COLORS_MAP[highlighted.type]
+      ? LUNAR_STELLAR_COLORS_MAP[highlighted.type]
       : false;
 
     const _color = lunarColor
@@ -263,7 +267,7 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
                 : el.name) + ` = ${roundToFixed(val, 2)}`;
 
             const _MAP = isReaction(el.name) ? VAPE_COLORS_MAP : COLORS_MAP;
-            const lunarColor = LUNAR_COLORS_MAP[el.type || ""];
+            const lunarColor = LUNAR_STELLAR_COLORS_MAP[el.type || ""];
 
             const _color =
               lunarColor ||
@@ -328,7 +332,7 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
           const val = el.value;
           const _MAP = isReaction(el.name) ? VAPE_COLORS_MAP : COLORS_MAP;
 
-          const lunarColor = LUNAR_COLORS_MAP[el.type || ""];
+          const lunarColor = LUNAR_STELLAR_COLORS_MAP[el.type || ""];
           const _color =
             lunarColor ||
             (el.type ? _MAP[el.type.slice(0, 1)] || "gray" : "gray");
