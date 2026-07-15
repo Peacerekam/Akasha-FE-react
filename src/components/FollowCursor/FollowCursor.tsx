@@ -8,6 +8,8 @@ type FollowCursorProps = {
   };
 };
 
+const FLIP_MODE = "FLIP_EDGE";
+
 export const FollowCursor: React.FC<FollowCursorProps> = ({
   children,
   data: { offsetX, offsetY },
@@ -43,17 +45,16 @@ export const FollowCursor: React.FC<FollowCursorProps> = ({
     return <></>;
   }
 
-  const flipMiddle = false;
-
-  const flipPoint = flipMiddle
-    ? {
-        x: window.innerWidth / 2,
-        y: window.innerHeight / 2,
-      }
-    : {
-        x: window.innerWidth - offsetX * 2 - 10,
-        y: window.innerHeight - offsetY * 2 - 10,
-      };
+  const flipPoint = {
+    FLIP_MIDDLE: {
+      x: window.innerWidth / 2,
+      y: window.innerHeight / 2,
+    },
+    FLIP_EDGE: {
+      x: window.innerWidth - offsetX * 2 - 10,
+      y: window.innerHeight - offsetY * 2 - 10,
+    },
+  }[FLIP_MODE];
 
   const left =
     flipPoint.x - coords.clientX > 0 ? offsetX + 10 : -(offsetX + 10);
