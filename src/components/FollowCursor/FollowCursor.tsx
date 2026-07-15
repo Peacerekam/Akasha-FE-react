@@ -43,13 +43,22 @@ export const FollowCursor: React.FC<FollowCursorProps> = ({
     return <></>;
   }
 
-  const left =
-    window.innerWidth / 2 - coords.clientX > 0 ? offsetX + 10 : -(offsetX + 10);
+  const flipMiddle = false;
 
-  const top =
-    window.innerHeight / 2 - coords.clientY > 0
-      ? offsetY + 10
-      : -(offsetY + 10);
+  const flipPoint = flipMiddle
+    ? {
+        x: window.innerWidth / 2,
+        y: window.innerHeight / 2,
+      }
+    : {
+        x: window.innerWidth - offsetX * 2 - 10,
+        y: window.innerHeight - offsetY * 2 - 10,
+      };
+
+  const left =
+    flipPoint.x - coords.clientX > 0 ? offsetX + 10 : -(offsetX + 10);
+
+  const top = flipPoint.y - coords.clientY > 0 ? offsetY + 10 : -(offsetY + 10);
 
   return (
     <div
