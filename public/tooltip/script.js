@@ -9,6 +9,7 @@
 	let lastMouseMove;
 	const fetchCache = {};
 	const dotTemplateCache = {};
+	const innerWidth = 0 + global.innerWidth;
 
 	async function fetchData(url, abortController) {
 		if (fetchCache[url]) {
@@ -190,8 +191,10 @@
 		var left = event.clientX + leftOffset;
 		tooltip.style.left = left + "px";
 
+		const isMobile = innerWidth <= 600;
+		const isRightSide = left >= innerWidth / 2;
 		const tooltipRight = tooltip.offsetWidth + tooltip.offsetLeft;
-		const isTooRight = viewportRight < tooltipRight + leftOffset;
+		const isTooRight = isMobile ? isRightSide : (viewportRight < tooltipRight + leftOffset);
 		const targetLeft = isTooRight
 			? left - tooltip.offsetWidth - leftOffset - 10
 			: left;

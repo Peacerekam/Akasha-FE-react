@@ -480,7 +480,7 @@
 					? talent.promote[level]
 					: talent.promote[1];
 				const params = promote.params;
-				const descriptions = promote.description;
+				const descriptions = promote.descriptionBuff || promote.description;
 				descriptions.map((text) => {
 					if (text == "") return;
 					let [type, multiplyer] = format(text).split("|");
@@ -505,7 +505,7 @@
 
 			return {
 				name: name,
-				description: talent.description,
+				description: talent.descriptionBuff || talent.description,
 				icon: apiUrl.ui(talent.icon),
 				charName,
 				tags,
@@ -527,7 +527,7 @@
 			return {
 				icon: apiUrl.ui(constellation.icon),
 				name: constellation.name,
-				description: constellation.description,
+				description: constellation.descriptionBuff || constellation.description,
 				charName,
 				element,
 				tags,
