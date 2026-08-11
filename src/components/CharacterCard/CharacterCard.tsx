@@ -369,6 +369,10 @@ const GACHA_CHAR_OFFESET: GachaCharOffsets = {
     x: 5,
     y: -10,
   },
+  Odette: {
+    x: 0,
+    y: -20,
+  },
 };
 
 export const CharacterCard: React.FC<CharacterCardProps> = ({

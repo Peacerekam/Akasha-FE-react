@@ -34,6 +34,7 @@
   &.mobile-nav {
     top: 0;
     width: 100%;
+    max-width: 100dvw;
     // border-bottom: 1px solid #202525;
 
     &.sticky-nav {

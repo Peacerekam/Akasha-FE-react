@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
 
+type FlipMode = "FLIP_MIDDLE" | "FLIP_EDGE";
+
 type FollowCursorProps = {
   children: any;
+  flipMode?: FlipMode;
   data: {
     offsetX: number;
     offsetY: number;
   };
 };
 
-const FLIP_MODE = "FLIP_EDGE";
-
 export const FollowCursor: React.FC<FollowCursorProps> = ({
   children,
+  flipMode = "FLIP_EDGE",
   data: { offsetX, offsetY },
 }) => {
   const [coords, setCoords] = useState({
@@ -54,7 +56,7 @@ export const FollowCursor: React.FC<FollowCursorProps> = ({
       x: window.innerWidth - offsetX * 2 - 10,
       y: window.innerHeight - offsetY * 2 - 10,
     },
-  }[FLIP_MODE];
+  }[flipMode];
 
   const left =
     flipPoint.x - coords.clientX > 0 ? offsetX + 10 : -(offsetX + 10);

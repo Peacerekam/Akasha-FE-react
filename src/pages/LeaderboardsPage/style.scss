@@ -127,3 +127,12 @@
   gap: 10px;
   align-items: flex-start;
 }
+
+.details-wrapper-togglable {
+  &:hover {
+    color: #d0ddda;
+    svg {
+      color: orange;
+    }
+  }
+}

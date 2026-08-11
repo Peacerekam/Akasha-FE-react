@@ -32,9 +32,14 @@ import React, {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import axios, { AxiosRequestConfig } from "axios";
+import {
+  faChevronDown,
+  faChevronLeft,
+} from "@fortawesome/free-solid-svg-icons";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { BuildsColumns } from "../BuildsPage";
@@ -47,7 +52,6 @@ import { TableColumn } from "../../types/TableColumn";
 import { TitleContext } from "../../context/TitleProvider/TitleProviderContext";
 import { TranslationContext } from "../../context/TranslationProvider/TranslationProviderContext";
 import debounce from "lodash/debounce";
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 
 ChartJS.register(...registerables);
 
@@ -97,6 +101,8 @@ export const LeaderboardsPage: React.FC = () => {
   const [inputUID, setInputUID] = useState<string>("");
   const [lookupUID, setLookupUID] = useState<string>("");
   const [rerender, setRerender] = useState<string>("");
+  const [toggleDetails, setToggleDetails] = useState<boolean>(false);
+  const detailsElement = useRef<HTMLDivElement>(null);
 
   // context
   const { setTitle } = useContext(TitleContext);
@@ -131,11 +137,11 @@ export const LeaderboardsPage: React.FC = () => {
   }, [inputUID]);
 
   const thisCalc = calculationInfo?.find((c) =>
-    c.weapons.find((w) => w.calculationId === calculationId)
+    c.weapons.find((w) => w.calculationId === calculationId),
   );
 
   const thisWeaponCalc = thisCalc?.weapons.find(
-    (w) => w.calculationId === calculationId
+    (w) => w.calculationId === calculationId,
   );
 
   useEffect(() => {
@@ -293,7 +299,7 @@ export const LeaderboardsPage: React.FC = () => {
             <div
               key={normalizeText(_stat.name)}
               className={`character-stat flex nowrap ${normalizeText(
-                _stat.name.replace("%", "")
+                _stat.name.replace("%", ""),
               )}`}
             >
               <span className="mr-3">
@@ -343,7 +349,7 @@ export const LeaderboardsPage: React.FC = () => {
       translate,
       thisCalc,
       // FETCH_LEADERBOARDS_URL,
-    ]
+    ],
   );
 
   const fetchCalculationInfo = async () => {
@@ -384,7 +390,7 @@ export const LeaderboardsPage: React.FC = () => {
 
   const uidsQuery = useMemo(
     () => uidsToQuery(lastProfiles.map((a) => a.uid)),
-    [lastProfiles.length]
+    [lastProfiles.length],
   );
 
   const fetchChartData = async () => {
@@ -438,7 +444,7 @@ export const LeaderboardsPage: React.FC = () => {
     }
 
     output["__MAX_ROWS__"] = Math.max(
-      ...[...Object.values(output.groups).map((x: any) => x.length)]
+      ...[...Object.values(output.groups).map((x: any) => x.length)],
     );
 
     return output;
@@ -496,7 +502,7 @@ export const LeaderboardsPage: React.FC = () => {
                               onClick={(event) => {
                                 event.preventDefault();
                                 navigate(
-                                  `/leaderboards/${calculationId}/${filter.name}`
+                                  `/leaderboards/${calculationId}/${filter.name}`,
                                 );
                               }}
                               href={`/leaderboards/${calculationId}/${filter.name}`}
@@ -752,6 +758,60 @@ export const LeaderboardsPage: React.FC = () => {
     "data-gi-lang": language,
   };
 
+  // @TODO: fix this later?
+  const displayDetails = useMemo(() => {
+    const minHeight = 107;
+    const detailsHeight = detailsElement?.current?.clientHeight || minHeight;
+    const showToggle = detailsHeight > minHeight - 1;
+
+    return (
+      <div
+        className={showToggle ? "pointer details-wrapper-togglable" : ""}
+        onClick={() => {
+          if (!showToggle) return;
+          setToggleDetails(!toggleDetails);
+        }}
+      >
+        <div
+          ref={detailsElement}
+          className="overflow-hidden"
+          style={{
+            maxHeight: !showToggle || toggleDetails ? 9999 : minHeight,
+            maskImage:
+              showToggle && !toggleDetails
+                ? "linear-gradient(180deg, black 75%, transparent 100%)"
+                : "none",
+          }}
+        >
+          {thisWeaponCalc?.details}
+        </div>
+
+        {showToggle && detailsElement?.current && (
+          <div
+            className="w-100 mt-10"
+            style={{
+              display: "block",
+              textAlign: "center",
+            }}
+          >
+            <FontAwesomeIcon
+              className={cssJoin([
+                "chevron-down-icon",
+                toggleDetails ? "rotate-180deg" : "",
+              ])}
+              icon={faChevronDown}
+              size="1x"
+            />
+          </div>
+        )}
+      </div>
+    );
+  }, [
+    thisWeaponCalc?.details,
+    detailsElement?.current?.clientHeight,
+    toggleDetails,
+  ]);
+
   return (
     <div className="flex" key={calculationId}>
       {hoverElement}
@@ -813,7 +873,7 @@ export const LeaderboardsPage: React.FC = () => {
                           {translate(thisCalc.characterName)} - {thisCalc.name}
                         </div>
                       </div>
-                      <div>{thisWeaponCalc?.details}</div>
+                      <div>{displayDetails}</div>
                     </div>
                     <div style={{ margin: "20px 10px" }}>
                       <div>

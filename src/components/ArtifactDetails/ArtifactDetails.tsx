@@ -111,6 +111,7 @@ export const ArtifactDetails: React.FC<ArtifactDetailsProps> = (row) => {
 
                   return (
                     <Link
+                      key={`${build.md5}-${index}`}
                       to={`/profile/${_uid}?build=${build.md5}`}
                       title={`View build - ${cv.toFixed(1)} cv`}
                       style={{ height: 25 }}
@@ -246,9 +247,12 @@ export const ArtifactDetails: React.FC<ArtifactDetailsProps> = (row) => {
 
                 {/* @TODO: fix this */}
                 {updatedAtLabel && (
-                  <div 
-                  style={{ marginTop: isSelected ? 5 : 0 }}
-                  className="element-updated-at">{updatedAtLabel}</div>
+                  <div
+                    style={{ marginTop: isSelected ? 5 : 0 }}
+                    className="element-updated-at"
+                  >
+                    {updatedAtLabel}
+                  </div>
                 )}
                 {rollsDiv}
               </div>

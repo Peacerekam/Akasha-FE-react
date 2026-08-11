@@ -168,6 +168,7 @@ const CRYO_RV_LIST: CharacterRVs = {
   Skirk: [CRate, CDMG, ATK_],
   Lohen: [CRate, CDMG, ATK_], // does he need ER%?
   Sandrone: [CRate, CDMG, ATK_, EM, ER],
+  Odette: [CRate, CDMG, ATK_, EM, ER],
 };
 
 const GEO_RV_LIST: CharacterRVs = {
@@ -202,6 +203,7 @@ const ELECTRO_RV_LIST: CharacterRVs = {
   Ororon: [CRate, CDMG, ATK_, ER],
   Ineffa: [CRate, CDMG, ATK_, EM, ER],
   Flins: [CRate, CDMG, ATK_, EM, ER],
+  Alyosha: [CRate, CDMG, ATK_, ER],
 };
 
 const DENDRO_RV_LIST: CharacterRVs = {
