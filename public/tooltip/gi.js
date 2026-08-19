@@ -335,6 +335,10 @@
 		);
 	}
 
+	function getDescription(item, promote) {
+		return (item.args === "enhanced" && promote.descriptionBuff) || promote.description;
+	}
+
 	function formatStat(name, value) {
 		value = ifPercentMultiply(name, value, true);
 		if (value >= 1000) {
@@ -480,7 +484,7 @@
 					? talent.promote[level]
 					: talent.promote[1];
 				const params = promote.params;
-				const descriptions = promote.descriptionBuff || promote.description;
+				const descriptions = getDescription(item, promote);
 				descriptions.map((text) => {
 					if (text == "") return;
 					let [type, multiplyer] = format(text).split("|");
@@ -505,7 +509,7 @@
 
 			return {
 				name: name,
-				description: talent.descriptionBuff || talent.description,
+				description: getDescription(item, talent),
 				icon: apiUrl.ui(talent.icon),
 				charName,
 				tags,
@@ -527,7 +531,7 @@
 			return {
 				icon: apiUrl.ui(constellation.icon),
 				name: constellation.name,
-				description: constellation.descriptionBuff || constellation.description,
+				description: getDescription(item, constellation),
 				charName,
 				element,
 				tags,

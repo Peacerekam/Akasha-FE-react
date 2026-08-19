@@ -260,8 +260,8 @@ const GACHA_CHAR_OFFESET: GachaCharOffsets = {
       "210701": {
         x: 35,
         y: -20,
-      }
-    }
+      },
+    },
   },
   Skirk: {
     x: -5,
@@ -490,7 +490,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
   const windowSizeT = 1280 - 10;
   const maxCardWidth = Math.min(windowSizeT, width);
-  const scaleFactor = Math.max(0.75, +(maxCardWidth / windowSizeT));
+  const isHorizontal = window.screen.availHeight < window.screen.availWidth;
+  const minScaleF = isHorizontal ? 0.535 : 0.665;
+  const scaleFactor = Math.max(minScaleF, +(maxCardWidth / windowSizeT));
+
   const formattedSF = scaleFactor.toFixed(3);
   const wrapperStyle = {
     "--hardcoded-card-scale": hardcodedScale,
@@ -2103,12 +2106,14 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
               const suffix = isTraveler ? `-${elementKey}`.toLowerCase() : "";
               const charId = `${row.characterId}${suffix}`;
+              const showEnhanced = +row.propMap.level.val >= 70;
 
               const constellationTooltip = {
                 "data-gi-type": "constellation",
                 "data-gi-id": charId,
                 "data-gi-index": actualConst, // 1 - 6
                 "data-gi-lang": language,
+                "data-gi-args": showEnhanced ? "enhanced" : "",
               };
 
               return (

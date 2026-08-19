@@ -12,6 +12,7 @@ type TalentProps = {
     icon?: string;
     id?: string;
     index?: number;
+    showEnhanced?: boolean;
   };
   characterId?: string;
   element?: string;
@@ -48,6 +49,7 @@ export const TalentDisplay: React.FC<TalentProps> = ({
         "data-gi-level": talent?.level,
         "data-gi-index": talent?.index,
         "data-gi-lang": language,
+        "data-gi-args": talent?.showEnhanced ? "enhanced" : "",
       }
     : {};
 

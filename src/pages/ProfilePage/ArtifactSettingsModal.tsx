@@ -260,7 +260,7 @@ export const ArtifactSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     <>
       <div className="react-select-menu-container" />
       <div className="modal-wrapper" onClick={handleCloseModal}>
-        <div className="modal settings-modal" style={{ width: 800 }}>
+        <div className="modal settings-modal artifacts-modal" style={{ width: 950 }}>
           {modalHeader}
           <div className="modal-content">
             {isLoading ? (

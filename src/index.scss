@@ -80,14 +80,16 @@ body {
 
 .content-wrapper {
   // max-width: 1100px;
-  transition: max-width 0.1s ease-in-out;
-
-  margin: 10px auto 0;
   // padding: 0 10px;
+
+  transition: max-width 0.1s ease-in-out;
+  min-height: calc(100dvh - 340px);
+  margin: 10px auto 0;
 
   // @at-root .ad-provider-playwire & {
   max-width: 1100px;
   // }
+  
 
   &.dev-indicator {
     &::after {

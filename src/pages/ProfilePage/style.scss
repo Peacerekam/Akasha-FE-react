@@ -128,11 +128,69 @@
   }
 }
 
+.settings-modal {
+  &.artifacts-modal {
+    @media (min-width: 801px) {
+      .modal-content {
+        resize: vertical;
+        position: relative;
+        height: 700px;
+        .perfect-scroll-wrapper {
+          height: calc(100% - 20px);
+        }
+      }
+    }
+    .compact-table-wrapper {
+      height: calc(100% - 20px);
+    }
+  }
+  &.resizeable-modal {
+    .modal-content {
+      position: relative !important;
+      .build-search-input {
+        top: 10px;
+        @media (max-width: 801px) {
+          top: 0px;
+          margin-top: 0px;
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 801px) {
+  .settings-modal {
+    &.resizeable-modal {
+      // temporary solution to how annoyingly small the builds modal is
+      .modal-content {
+        resize: vertical;
+        height: 600px;
+        min-height: 350px;
+        max-height: calc(100dvh - 200px);
+        .build-search-input {
+          position: absolute;
+          width: calc(100% - 390px);
+        }
+        .scrollbar-container {
+          position: absolute;
+          top: 60px;
+          height: calc(100% - 80px) !important;
+          width: calc(100% - 390px) !important;
+        }
+        .compact-table-wrapper .compact-table {
+          max-height: calc(100dvh - 375px) !important;
+        }
+      }
+    }
+  }
+}
+
 @media (max-height: 750px) {
   .perfect-scroll-wrapper {
     width: 100%;
     &.for-artifacts {
-      height: 100dvh !important;
+      height: calc(100dvh - 375px) !important;
     }
   }
   .modal {
@@ -173,14 +231,15 @@
     .perfect-scroll-wrapper {
       width: 100%;
       &.for-artifacts {
-        height: 100dvh !important;
+        height: calc(100dvh - 141px) !important;
       }
     }
     .modal {
       top: 50px;
       &.settings-modal {
         .modal-content {
-          height: fit-content;
+          // height: fit-content;
+          // max-height: 100dvh !important;
           max-height: calc(100dvh - 61px) !important;
           .compact-table-wrapper {
             align-items: center;
@@ -204,7 +263,7 @@
   flex-grow: 1;
   &.for-artifacts {
     position: relative;
-    height: 500px;
+    height: calc(100% - 30px);
 
     &::after {
       content: "";
@@ -768,7 +827,9 @@
     flex: 1;
     font-size: 16px;
     font-weight: 600;
-    text-shadow: 0 0.08em 0.1em black, 0 0.1em 0.3em rgba(0, 0, 0, 0.4);
+    text-shadow:
+      0 0.08em 0.1em black,
+      0 0.1em 0.3em rgba(0, 0, 0, 0.4);
     padding: 10px;
     height: 100%;
 

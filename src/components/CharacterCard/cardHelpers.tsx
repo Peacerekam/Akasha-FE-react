@@ -97,18 +97,25 @@ export const scales = {
   },
 };
 
-export const toTalentProps = (row: any, keys: string[], chartsData: any, index?: number) => {
+export const toTalentProps = (
+  row: any,
+  keys: string[],
+  chartsData: any,
+  index?: number,
+) => {
   const talent = row?.talentsLevelMap?.[keys[0]];
   if (!talent) return null;
 
   const assetKey = keys[1] || keys[0];
   const asset = chartsData?.assets?.talents?.[assetKey];
   const icon = asset ? toEnkaUrl(asset) : talent.icon;
+  const showEnhanced = +row.propMap.level.val >= 70;
 
   return {
     ...talent,
     icon,
-    index
+    index,
+    showEnhanced,
   };
 };
 
@@ -120,7 +127,7 @@ export const setGradientFromImage = (
   steps: number,
   alphaOverride: string | number,
   chCtx: CanvasRenderingContext2D | null,
-  debug: boolean = false
+  debug: boolean = false,
 ) => {
   if (debug) {
     chCtx!.globalCompositeOperation = "source-over";

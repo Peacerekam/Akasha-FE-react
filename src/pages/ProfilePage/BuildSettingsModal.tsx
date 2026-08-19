@@ -576,7 +576,7 @@ export const BuildSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     <>
       <div className="react-select-menu-container" />
       <div className="modal-wrapper" onClick={handleCloseModal}>
-        <div className="modal settings-modal" style={{ width: 800 }}>
+        <div className="modal settings-modal resizeable-modal" style={{ width: 800 }}>
           {modalHeader}
           <div className="modal-content">
             {isLoading ? (

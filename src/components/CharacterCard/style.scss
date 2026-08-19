@@ -628,11 +628,11 @@ $hardcoded-scale: 1;
     // margin-left: 20px * $hardcoded-scale;
     margin-right: 15px * $hardcoded-scale;
     margin-left: 15px * $hardcoded-scale;
-    transform: scale($sf)
-      translate(
-        calc($invSf * -800px * $hardcoded-scale),
-        calc($invSf * -380px * $hardcoded-scale)
-      );
+    transform: translate(
+        calc($invSf * -600px * $hardcoded-scale),
+        calc($invSf * -300px * $hardcoded-scale)
+      )
+      scale($sf);
   }
 }
 
@@ -644,7 +644,9 @@ $hardcoded-scale: 1;
   width: 525px * $hardcoded-scale;
   height: 430px * $hardcoded-scale;
   font-family: "GenshinFont";
-  text-shadow: 0 0.08em 0.1em black, 0 0.1em 0.3em rgba(0, 0, 0, 0.4);
+  text-shadow:
+    0 0.08em 0.1em black,
+    0 0.1em 0.3em rgba(0, 0, 0, 0.4);
   .lds-ellipsis {
     transform: scale(1.5);
   }
@@ -756,7 +758,9 @@ $hardcoded-scale: 1;
     height: 350px * $hardcoded-scale;
     z-index: 2;
     font-family: "GenshinFont";
-    text-shadow: 0 0.08em 0.1em black, 0 0.1em 0.3em rgba(0, 0, 0, 0.4);
+    text-shadow:
+      0 0.08em 0.1em black,
+      0 0.1em 0.3em rgba(0, 0, 0, 0.4);
     pointer-events: none;
 
     .character-name {
@@ -1173,7 +1177,9 @@ $hardcoded-scale: 1;
             display: flex;
             font-family: "GenshinFont";
             font-size: 20px * $hardcoded-scale;
-            text-shadow: 0 0.08em 0.1em black, 0 0.1em 0.3em rgba(0, 0, 0, 0.4);
+            text-shadow:
+              0 0.08em 0.1em black,
+              0 0.1em 0.3em rgba(0, 0, 0, 0.4);
             top: 185px * $hardcoded-scale;
             left: 120px * $hardcoded-scale;
             pointer-events: none;
@@ -1257,7 +1263,9 @@ $hardcoded-scale: 1;
       margin-top: auto;
 
       .weapon-name {
-        text-shadow: 0 0.08em 0.1em black, 0 0.1em 0.3em rgba(0, 0, 0, 0.4);
+        text-shadow:
+          0 0.08em 0.1em black,
+          0 0.1em 0.3em rgba(0, 0, 0, 0.4);
         max-width: 300px * $hardcoded-scale;
         margin-top: 5px * $hardcoded-scale;
       }
@@ -1435,7 +1443,9 @@ $hardcoded-scale: 1;
     top: -32px * $hardcoded-scale;
 
     > div {
-      text-shadow: 0 0.08em 0.1em black, 0 0.1em 0.3em rgba(0, 0, 0, 0.4);
+      text-shadow:
+        0 0.08em 0.1em black,
+        0 0.1em 0.3em rgba(0, 0, 0, 0.4);
     }
 
     .opacity-5 {
@@ -1504,7 +1514,9 @@ $hardcoded-scale: 1;
       > span {
         font-weight: 700;
         color: rgba(white, 0.9);
-        text-shadow: 0 0 0.3em rgba(0, 0, 0, 0.6), 0 0 1em rgba(0, 0, 0, 1);
+        text-shadow:
+          0 0 0.3em rgba(0, 0, 0, 0.6),
+          0 0 1em rgba(0, 0, 0, 1);
       }
       > img {
         bottom: 8px * $hardcoded-scale;
