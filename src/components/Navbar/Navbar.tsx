@@ -71,7 +71,9 @@ export const Navbar: React.FC = () => {
         setScrolledLength(0);
       }
 
-      const scrolledEnough = scrolledLength > 65;
+      const isHorizontal = window.screen.availHeight < window.screen.availWidth;
+      const scrollNeeded = isHorizontal ? 50 : 15;
+      const scrolledEnough = scrolledLength > scrollNeeded;
 
       setScrollDir(dir);
       setStickyNav(!!(dir === 1 && belowY && scrolledEnough));
