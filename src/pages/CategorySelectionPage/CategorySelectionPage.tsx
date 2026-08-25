@@ -455,7 +455,7 @@ export const CategorySelectionPage: React.FC = () => {
             fetchURL={FETCH_CATEGORIES_URL_V2}
             filtersURL={FETCH_CATEGORIES_FILTERS_URL}
             columns={CHAR_CATEGORIES_COLUMNS}
-            defaultSort="count"
+            defaultSort="addDate"
             projectParamsToPath
             expandableRows
             hidePagination

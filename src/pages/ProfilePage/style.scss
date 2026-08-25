@@ -130,6 +130,13 @@
 
 .settings-modal {
   &.artifacts-modal {
+    @media (max-height: 750px) {
+      .modal-content.modal-content.modal-content {
+        .perfect-scroll-wrapper {
+          height: calc(100dvh - 120px) !important;
+        }
+      }
+    }
     @media (min-width: 801px) {
       .modal-content {
         resize: vertical;
@@ -213,8 +220,9 @@
     }
     &.settings-modal {
       .modal-content {
-        height: fit-content;
+        // height: fit-content;
         max-height: calc(100dvh - 61px) !important;
+        height: calc(100dvh - 61px) !important;
         .compact-table-wrapper {
           align-items: center;
         }
@@ -839,7 +847,7 @@
     min-width: 200px;
 
     @media (max-width: 800px) {
-      min-width: calc(100% - 20px); // @TODO: do this without calc somehow
+      min-width: calc(100% - 20px);
     }
 
     img {

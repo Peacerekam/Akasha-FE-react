@@ -40,6 +40,8 @@ export const Navbar: React.FC = () => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showHamburger, setShowHamburger] = useState(false);
   const [stickyNav, setStickyNav] = useState(false);
+  const [scrollDir, setScrollDir] = useState(0);
+  const [scrolledLength, setScrolledLength] = useState(0);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -63,7 +65,17 @@ export const Navbar: React.FC = () => {
       const belowY = window.scrollY > thresholdY;
       const dir = scrollY > lastScrollY ? -1 : 1;
 
-      setStickyNav(!!(dir === 1 && belowY));
+      if (dir === scrollDir) {
+        setScrolledLength((prev) => prev + Math.abs(dir));
+      } else {
+        setScrolledLength(0);
+      }
+
+      const scrolledEnough = scrolledLength > 65;
+
+      setScrollDir(dir);
+      setStickyNav(!!(dir === 1 && belowY && scrolledEnough));
+
       lastScrollY = scrollY > 0 ? scrollY : 0;
       ticking = false;
     };
@@ -78,7 +90,7 @@ export const Navbar: React.FC = () => {
     window.addEventListener("scroll", onScroll);
 
     return () => window.removeEventListener("scroll", onScroll);
-  }, [stickyNav]);
+  }, [stickyNav, scrolledLength, scrollDir]);
 
   const handleToggleModal = (event: React.MouseEvent<HTMLElement>) => {
     setShowLoginModal((prev) => !prev);

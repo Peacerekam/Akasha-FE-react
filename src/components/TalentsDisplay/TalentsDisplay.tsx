@@ -79,7 +79,7 @@ export const TalentsDisplay: React.FC<TalentsDisplayProps> = ({
   language,
 }) => {
   return (
-    <div className="hover-element talents-display">
+    <div className="talents-display">
       <div className="talent-list-container">
         <TalentDisplay
           index={0}
