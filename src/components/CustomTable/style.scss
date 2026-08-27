@@ -633,15 +633,16 @@ $characterStats:
   align-items: flex-end;
 }
 
+.element-updated-at {
+  text-align: right;
+  margin-bottom: 5px;
+  opacity: 0.5;
+  font-size: 11px;
+  align-items: center;
+  display: flex;
+}
+
 .character-preview {
-  .element-updated-at {
-    text-align: right;
-    margin-bottom: 5px;
-    opacity: 0.5;
-    font-size: 11px;
-    align-items: center;
-    display: flex;
-  }
   @media (max-width: 1000px) {
     .element-updated-at {
       transform: translateY(-18px);
