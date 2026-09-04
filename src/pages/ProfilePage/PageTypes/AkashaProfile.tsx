@@ -84,6 +84,7 @@ export type TitleAndDescription = {
 
 type AkashaProfileProps = {
   setBindMessage: React.Dispatch<React.SetStateAction<JSX.Element | undefined>>;
+  setTipMessage: React.Dispatch<React.SetStateAction<JSX.Element | undefined>>;
   setRelevantProfiles: React.Dispatch<React.SetStateAction<any[]>>;
   setIsFetchingProfiles: React.Dispatch<React.SetStateAction<boolean>>;
   setResponseData: React.Dispatch<React.SetStateAction<ResponseData>>;
@@ -95,6 +96,7 @@ type AkashaProfileProps = {
 export const AkashaProfile: React.FC<AkashaProfileProps> = ({
   setBindMessage,
   setEnkaErrorMessage,
+  setTipMessage,
   setRelevantProfiles,
   setIsFetchingProfiles,
   setResponseData,
@@ -646,15 +648,28 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
 
     const { data } = await axios.get(refreshURL, opts);
 
-    const {
-      ttl,
-      ttlMax,
-      // message,
-    } = data;
+    const { ttl, ttlMax } = data;
 
     if (data?.data?.error) {
       setEnkaError(data.data.error);
       removeTab(uid);
+    } else if (data?.data?.showcaseTip) {
+      setTipMessage(
+        <div className="bind-message-wrapper hidden-showcase">
+          <div className="bind-message">
+            {data?.data?.showcaseTip?.text
+              ?.split("\n")
+              ?.map((x: string, i: number) => (
+                <div className={i === 0 ? "" : "less-important"}>{x}</div>
+              ))}
+            <img
+              alt="Showcase tip"
+              style={{ width: "calc(100% - 40px)", marginTop: 10 }}
+              src={ `/showcase_tip/${data?.data?.showcaseTip?.img}.gif` }
+            />
+          </div>
+        </div>,
+      );
     }
 
     if (ttl === 0) {

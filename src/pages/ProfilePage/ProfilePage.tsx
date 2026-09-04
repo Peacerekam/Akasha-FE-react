@@ -32,6 +32,7 @@ export const ProfilePage: React.FC = () => {
 
   const [enkaErrorMessage, setEnkaErrorMessage] = useState<JSX.Element>();
   const [bindMessage, setBindMessage] = useState<JSX.Element>();
+  const [tipMessage, setTipMessage] = useState<JSX.Element>();
 
   const { uid } = useParams();
   const { hoverElement } = useContext(HoverElementContext);
@@ -59,6 +60,7 @@ export const ProfilePage: React.FC = () => {
   useEffect(() => {
     setEnkaErrorMessage(undefined);
     setBindMessage(undefined);
+    setTipMessage(undefined);
     setIsFetchingProfiles(false);
     setResponseData({ account: null });
   }, [uid]);
@@ -87,6 +89,7 @@ export const ProfilePage: React.FC = () => {
   const profilePageProps = {
     setEnkaErrorMessage,
     setBindMessage,
+    setTipMessage,
     setRelevantProfiles,
     setIsFetchingProfiles,
     setResponseData,
@@ -97,6 +100,7 @@ export const ProfilePage: React.FC = () => {
       {hoverElement}
       {enkaErrorMessage}
       {bindMessage}
+      {tipMessage}
 
       {!hideSelector ? (
         <div className={contentBlockClassNames}>

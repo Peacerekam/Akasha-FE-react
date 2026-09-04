@@ -468,6 +468,20 @@
 .bind-message-wrapper {
   display: flex;
   justify-content: center;
+
+  &.hidden-showcase {
+    .bind-message {
+      width: 600px;
+      img {
+        border-radius: 10px;
+        border: 1px solid rgba(255, 217, 0, 0.9);
+      }
+      .less-important {
+        max-width: 400px;
+      }
+    }
+  }
+
   .bind-message {
     font-size: 20px;
     display: flex;
