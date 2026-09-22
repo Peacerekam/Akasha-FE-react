@@ -373,6 +373,14 @@ const GACHA_CHAR_OFFESET: GachaCharOffsets = {
     x: 0,
     y: -20,
   },
+  Vesna: {
+    x: -8,
+    y: 20,
+  },
+  Vodyanitsa: {
+    x: -25,
+    y: -95,
+  },
 };
 
 export const CharacterCard: React.FC<CharacterCardProps> = ({

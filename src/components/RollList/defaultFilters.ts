@@ -113,6 +113,7 @@ const ANEMO_RV_LIST: CharacterRVs = {
   Jahoda: [CRate, CDMG, ER],
   Varka: [CRate, CDMG, ATK_],
   Prune: [CRate, CDMG, ATK_, ER],
+  Vesna: [CRate, CDMG, ATK_, EM, ER],
 };
 
 const PYRO_RV_LIST: CharacterRVs = {
@@ -151,6 +152,7 @@ const HYDRO_RV_LIST: CharacterRVs = {
   Mualani: [CRate, CDMG, HP_, EM],
   Aino: [CRate, CDMG, ATK_, ER],
   Columbina: [CRate, CDMG, HP_, EM, ER],
+  Vodyanitsa: [CRate, CDMG, HP_, ER],
 };
 
 const CRYO_RV_LIST: CharacterRVs = {
