@@ -615,9 +615,27 @@ $hardcoded-scale: 1;
   }
 }
 
+.custom-table-wrapper {
+  &.build-preview {
+    .custom-table .expanded-row {
+      margin-top: 20px;
+    }
+  }
+
+  &:not(.build-preview) {
+    .custom-table .expanded-row {
+      margin-top: 10px;
+      animation: fadeInRow_variantB 0.6s ease-in-out;
+    }
+  }
+}
+
 .scale-factor-source {
   $sf: var(--scale-factor);
   $invSf: calc(1 - $sf);
+
+  // overwrite .expanded-row style
+  margin-top: 0px !important;
 
   .card-wrapper-height-fix {
     height: calc($sf * 585px * $hardcoded-scale);

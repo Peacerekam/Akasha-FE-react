@@ -46,7 +46,24 @@ $characterStats:
   }
   90% {
     opacity: 1;
-    margin-top: 5px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  100% {
+    max-height: 800px;
+  }
+}
+
+@keyframes fadeInRow_variantB {
+  0% {
+    opacity: 0;
+    max-height: 0;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+  90% {
+    opacity: 1;
+    margin-top: 10px;
     margin-bottom: 20px;
   }
   100% {
