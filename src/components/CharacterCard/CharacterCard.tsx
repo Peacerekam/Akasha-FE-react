@@ -444,11 +444,13 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     adaptiveBgColor,
     namecardBg,
     privacyFlag,
+    weaponSkin,
     setDisplayBuildName,
     setSimplifyColors,
     setAdaptiveBgColor,
     setNamecardBg,
     setPrivacyFlag,
+    setWeaponSkin,
   } = useCardSettings();
 
   const [_adaptiveBgColor, _setAdaptiveBgColor] = useState(
@@ -1872,10 +1874,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   );
 
   const characterMiddle = useMemo(() => {
-    const baseAttack = chartsData?.weaponMetadata?.baseAttack || 0;
-    const mainstat = chartsData?.weaponMetadata?.mainstat;
-    const mainstatName = STAT_NAMES[mainstat?.name];
-    const isPercentage = isPercent(mainstatName);
+    const weaponBaseAttack = chartsData?.weaponMetadata?.baseAttack || 0;
+    const weaponMainstat = chartsData?.weaponMetadata?.mainstat;
+    const weaponMainstatName = STAT_NAMES[weaponMainstat?.name];
+    const weaponMainstatIsPercentage = isPercent(weaponMainstatName);
 
     const weaponName = translate(row.weapon.name);
     const refinementValue =
@@ -1893,11 +1895,23 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       "data-gi-lang": language,
     };
 
+    const weaponicon =
+      weaponSkin && row.weapon.skinIcon ? (
+        <div className="weapon-skin-container">
+          <AssetFallback src={toEnkaUrl(row.weapon.skinIcon)} />
+          <AssetFallback src={row.weapon.icon} />
+        </div>
+      ) : (
+        <>
+          <AssetFallback src={row.weapon.icon} />
+        </>
+      );
+
     return (
       <div className="character-middle-fix">
         <div className="character-weapon relative">
           <div className="weapon-icon" {...weaponTooltip}>
-            <AssetFallback src={row.weapon.icon} />
+            {weaponicon}
             <div className="weapon-rarity">
               {[...Array(chartsData?.weaponMetadata?.rarity)].map((e, i) => (
                 <img alt="*" key={`star-${i}`} src={RarityStar} />
@@ -1909,14 +1923,17 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             <div className="weapon-stats lighter-color">
               <div className="weapon-stat-with-icon">
                 <StatIcon sizeOverride={statIconSize} name="ATK" />{" "}
-                <span>{baseAttack}</span>
+                <span>{weaponBaseAttack}</span>
               </div>
-              {mainstat?.value && (
+              {weaponMainstat?.value && (
                 <div className="weapon-stat-with-icon">
-                  <StatIcon sizeOverride={statIconSize} name={mainstatName} />{" "}
+                  <StatIcon
+                    sizeOverride={statIconSize}
+                    name={weaponMainstatName}
+                  />{" "}
                   <span>
-                    {mainstat?.value}
-                    {isPercentage ? "%" : ""}
+                    {weaponMainstat?.value}
+                    {weaponMainstatIsPercentage ? "%" : ""}
                   </span>
                 </div>
               )}
@@ -1945,7 +1962,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         {/* <div className="card-leaderboards relative">{leaderboardHighlighs}</div> */}
       </div>
     );
-  }, [row, chartsData, translate]);
+  }, [row, weaponSkin, chartsData, translate]);
 
   const renderOptions = useCallback(
     (calcId: any) => {
@@ -2401,6 +2418,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
         elementsToOffset.forEach((x: any) => offsetElementBy(x[0], x[1]));
 
+        document
+          .querySelector(".weapon-skin-container")
+          ?.classList.add("no-anim");
+
         // old - unused
         // offsetElementBy(".compact-artifact-crit-value > span", -2);
         // offsetElementBy(".compact-artifact-crit-value > .smol-percentage", -2);
@@ -2726,6 +2747,16 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           </div>
         </div>
         <div className="card-checkboxes">
+          <div  style={{ opacity: row?.weaponSkinId ? 1 : 0.3 }}>
+            <label htmlFor={`${buildId}-ws`}>Display weapon skin</label>
+            <input
+              id={`${buildId}-ws`}
+              checked={weaponSkin}
+              type="checkbox"
+              onChange={(e: any) => setWeaponSkin(!!e.target.checked)}
+              disabled={!row?.weaponSkinId}
+            />
+          </div>
           <div>
             <label htmlFor={`${buildId}-bname`}>Display build name</label>
             <input

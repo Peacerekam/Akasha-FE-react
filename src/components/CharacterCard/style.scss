@@ -2,6 +2,18 @@ $character-card-width: 1200px;
 $hardcoded-scale: 1;
 // $hardcoded-scale: 0.87;
 
+@keyframes fadeOutNatural_b {
+  0% {
+    opacity: 1 !important;
+  }
+  99% {
+    opacity: 0 !important;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 .lock-viewport {
   overflow: hidden !important;
   touch-action: none !important;
@@ -1274,11 +1286,32 @@ $hardcoded-scale: 1;
       font-family: "GenshinFont";
       font-size: 16px * $hardcoded-scale; // used to be 20px
       z-index: 2;
-      width: 100%;
       display: flex;
       // gap: 10px * $hardcoded-scale;
       min-height: 80px * $hardcoded-scale;
       margin-top: auto;
+
+      // width: 100%;
+      width: fit-content;
+
+      .weapon-name {
+        width: calc(100% + 20px * $hardcoded-scale);
+      }
+
+      &:hover {
+        .weapon-skin-container {
+          img {
+            // animation: none !important;
+            // transition: opacity 0.25s;
+            opacity: 0 !important;
+
+            &:last-child {
+              opacity: 1 !important;
+              // display: none !important;
+            }
+          }
+        }
+      }
 
       .weapon-name {
         text-shadow:
@@ -1352,6 +1385,42 @@ $hardcoded-scale: 1;
           height: 75px * $hardcoded-scale;
           bottom: -6px * $hardcoded-scale;
           position: relative;
+        }
+
+        .weapon-skin-container {
+          position: relative;
+          width: 75px * $hardcoded-scale;
+          height: 75px * $hardcoded-scale;
+
+          &.no-anim {
+            img {
+              opacity: 1 !important;
+              animation: none !important;
+              &:last-child {
+                opacity: 0 !important;
+                display: none !important;
+              }
+            }
+          }
+
+          img {
+            $anim-delay: 400ms;
+            $anim-duraton: 1s;
+
+            left: 0;
+            position: absolute;
+            transition: opacity 0.5s;
+            animation-fill-mode: forwards !important;
+            animation-delay: $anim-delay !important;
+
+            &:first-child {
+              opacity: 0;
+              animation: fadeIn $anim-duraton ease-in-out;
+            }
+            &:last-child {
+              animation: fadeOutNatural_b $anim-duraton ease-in-out;
+            }
+          }
         }
 
         .weapon-rarity {
