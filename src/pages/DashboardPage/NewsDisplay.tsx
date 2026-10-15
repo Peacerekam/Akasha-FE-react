@@ -97,15 +97,28 @@ export const NewsDisplay: React.FC = () => {
   };
 
   const displayDiscordLikeMessage = (message: any) => {
-    const avatarBaseURL = `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}`;
+    const clickableAuthor = false;
 
-    const isAnimated = message.author.avatar.startsWith("a_");
+    let avatarBaseURL = "";
+    let avatarHash = "";
+    let profileLink = "";
+
+    if (clickableAuthor) {
+      avatarBaseURL = `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}`;
+      avatarHash = message.author.avatar;
+      profileLink = "/profile/701464050";
+    } else {
+      avatarHash = "b79e85432656b2e21f5d34b9d8a1c971";
+      avatarBaseURL = `https://cdn.discordapp.com/avatars/806289907953434634/${avatarHash}`;
+      profileLink = "#";
+    }
+
+    const isAnimated = avatarHash.startsWith("a_");
     const avatarURL = `${avatarBaseURL}.png`;
     const avatarGifURL = `${avatarBaseURL}.gif`;
 
     const createdAt = timeAgo(message.createdAt);
     const editedAt = timeAgo(message.editedAt);
-    const profileLink = "/profile/701464050";
 
     const content = message?.content
       ?.split(" ")
@@ -114,18 +127,33 @@ export const NewsDisplay: React.FC = () => {
     return (
       <div className="discord-like-msg" key={message.messageID}>
         <div className={`discord-like-left ${isAnimated ? "is-animated" : ""}`}>
-          <Link to={profileLink}>
-            <img src={avatarURL} className="static-pfp" alt="pfp" />
-            {isAnimated && (
-              <img src={avatarGifURL} className="animated-pfp" alt="pfp" />
-            )}
-          </Link>
+          {clickableAuthor ? (
+            <Link to={profileLink}>
+              <img src={avatarURL} className="static-pfp" alt="pfp" />
+              {isAnimated && (
+                <img src={avatarGifURL} className="animated-pfp" alt="pfp" />
+              )}
+            </Link>
+          ) : (
+            <>
+              <img src={avatarURL} className="static-pfp" alt="pfp" />
+              {isAnimated && (
+                <img src={avatarGifURL} className="animated-pfp" alt="pfp" />
+              )}
+            </>
+          )}
         </div>
         <div className="discord-like-right">
-          <div className="discord-like-username">
+          <div
+            className={`discord-like-username ${clickableAuthor ? "pink" : ""}`}
+          >
             {/* Mimee */}
             <div>
-              <Link to={profileLink}>{message.author.name}</Link>
+              {clickableAuthor ? (
+                <Link to={profileLink}>{message.author.name}</Link>
+              ) : (
+                "Akasha"
+              )}
             </div>
             {/* Today at 6:66 */}
             {/* 01/02/2024 16:20 */}

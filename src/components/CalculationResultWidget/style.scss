@@ -10,8 +10,9 @@
   $tile-height: 90px;
 
   &.expanded-showcase {
+    $tile-size: 80px;
+    grid-template-columns: repeat(auto-fit, minmax(min($tile-size, 100%), 1fr));
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(80px, 100%), 1fr));
   }
 
   .is-new {

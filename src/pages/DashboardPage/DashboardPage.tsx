@@ -18,9 +18,9 @@ export const DashboardPage: React.FC = () => {
     <div className="news-header">
       <FontAwesomeIcon icon={faHashtag} size="1x" title="#akasha-news" />
       akasha-news
-      <span className="ch-desc">
+      {/* <span className="ch-desc">
         <span className="ch-spacer">|</span>fetched via Discord
-      </span>
+      </span> */}
     </div>
   );
 

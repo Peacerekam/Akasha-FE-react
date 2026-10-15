@@ -72,25 +72,28 @@ const VAPE_COLORS_MAP: any = {
 const LUNAR_STELLAR_COLORS_MAP: any = {
   LB: "#94ff7f",
   LC: "#da84ff",
-  LCR: "#ffd484", 
-  SSC: "#8ee4f2", // can be cryo or electro 
+  LCR: "#ffd484",
+  SSC: "#8ee4f2", // can be cryo or electro
   SW: "#8ef2bb", // can be cryo or anemo - correct the color later in 7.0
 };
 
 const LUNAR_GRADIENTS_MAP: any = {
   LB: "linear-gradient( #94ff7f, #ccffc2 )",
   LC: "linear-gradient( #da84ff, #f5ddff )",
-  LCR: "linear-gradient( #ffd884, #fffcdd )", 
-  SSC: "linear-gradient( #8ee4f2, #dee6f4 )", // can be cryo or electro 
+  LCR: "linear-gradient( #ffd884, #fffcdd )",
+  SSC: "linear-gradient( #8ee4f2, #dee6f4 )", // can be cryo or electro
   SW: "linear-gradient( #8ef2bb, #def4e0 )", // can be cryo or anemo  - correct the color later in 7.0
 };
+
+const infusedSuffix = "-Infused";
+// const infusedColor = "rgb(255, 124, 98)" // varka funny
 
 export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
   row,
   selectedCalculationId,
 }) => {
   const [calculationId, setCalculationId] = useState<string>(
-    selectedCalculationId || ""
+    selectedCalculationId || "",
   );
   const [allDamageData, setAllDamageData] = useState<DamageData[]>();
   const [highlighted, setHighlighted] = useState<Additional>();
@@ -101,7 +104,7 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
 
   const variantlessId = useMemo(
     () => calculationId.slice(0, 10),
-    [calculationId]
+    [calculationId],
   );
 
   const damageData = useMemo(() => {
@@ -120,7 +123,7 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
         const totalValue_B = curr.value * (curr.quantity ?? 1);
         return totalValue_B > totalValue_A ? currIndex : max;
       },
-      0
+      0,
     );
 
     setHighlighted({
@@ -140,7 +143,7 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
     setAllDamageData(data.data);
 
     const toHighlight: DamageData = data.data.find(
-      (x: DamageData) => x.id === variantlessId
+      (x: DamageData) => x.id === variantlessId,
     );
 
     setLargestValueAsHighlighted(toHighlight);
@@ -161,17 +164,23 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
       return <div className="highlighted-damage-source" />;
     }
 
-    const _MAP = isReaction(highlighted.name) ? VAPE_COLORS_MAP : COLORS_MAP;
+    const isInfused = highlighted.type?.endsWith(infusedSuffix);
+    const _MAP =
+      isInfused || isReaction(highlighted.name) ? VAPE_COLORS_MAP : COLORS_MAP;
 
     const lunarColor = highlighted.type
       ? LUNAR_STELLAR_COLORS_MAP[highlighted.type]
       : false;
 
-    const _color = lunarColor
+    let _color = lunarColor
       ? lunarColor
       : highlighted.type
-      ? _MAP[highlighted.type.slice(0, 1)] || "gray"
-      : "gray";
+        ? _MAP[highlighted.type.slice(0, 1)] || "gray"
+        : "gray";
+
+    // if (highlighted.type?.endsWith(infusedPrefix)) {
+    //   _color = infusedColor;
+    // }
 
     const _value = roundToFixed(highlighted.value, 0);
 
@@ -266,12 +275,18 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
                 ? `${_quantity}x ${el.name}`
                 : el.name) + ` = ${roundToFixed(val, 2)}`;
 
-            const _MAP = isReaction(el.name) ? VAPE_COLORS_MAP : COLORS_MAP;
+            const isInfused = el.type?.endsWith(infusedSuffix);
+            const _MAP =
+              isInfused || isReaction(el.name) ? VAPE_COLORS_MAP : COLORS_MAP;
             const lunarColor = LUNAR_STELLAR_COLORS_MAP[el.type || ""];
 
-            const _color =
+            let _color =
               lunarColor ||
               (el.type ? _MAP[el.type.slice(0, 1)] || "gray" : "gray");
+
+            // if (el.type?.endsWith(infusedPrefix)) {
+            //   _color = infusedColor
+            // }
 
             const classNames = cssJoin([
               "damage-data",
@@ -296,7 +311,9 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
                 onClick={() => setHighlighted({ ...el, index: i })}
               >
                 <div tabIndex={0} className="damage-data-content">
-                  {el.type || "?"}
+                  {(isInfused
+                    ? el?.type?.replace(infusedSuffix, "")
+                    : el.type) || "?"}
                 </div>
               </div>
             );
@@ -330,12 +347,19 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
       <div className="display-formula">
         {instances.map((el, i) => {
           const val = el.value;
-          const _MAP = isReaction(el.name) ? VAPE_COLORS_MAP : COLORS_MAP;
+
+          const isInfused = el.type?.endsWith(infusedSuffix);
+          const _MAP =
+            isInfused || isReaction(el.name) ? VAPE_COLORS_MAP : COLORS_MAP;
 
           const lunarColor = LUNAR_STELLAR_COLORS_MAP[el.type || ""];
-          const _color =
+          let _color =
             lunarColor ||
             (el.type ? _MAP[el.type.slice(0, 1)] || "gray" : "gray");
+
+          // if (el.type?.endsWith(infusedPrefix)) {
+          //   _color = infusedColor
+          // }
 
           const nextValue = instances[i + 1]?.value;
           const displayValue = roundToFixed(val, 0);
@@ -473,7 +497,7 @@ export const DamageDistrubution: React.FC<DamageDistrubutionProps> = ({
               return thisOpt;
             })
         : [],
-    [allDamageData, translate, getTopRanking]
+    [allDamageData, translate, getTopRanking],
   );
 
   const handleSelectChange = (option: any) => {

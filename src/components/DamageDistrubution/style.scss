@@ -134,6 +134,7 @@
         // cursor: pointer;
         font-weight: 600;
         text-shadow: 0 0 0.3em rgba(0, 0, 0, 0.6), 0 0 1em rgba(0, 0, 0, 1);
+        white-space: nowrap;
 
         &:focus,
         &:focus-within,

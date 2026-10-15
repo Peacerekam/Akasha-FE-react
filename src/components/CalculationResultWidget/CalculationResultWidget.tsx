@@ -53,7 +53,7 @@ export const CalculationResultWidget: React.FC<
 
   const fetchCalcData = async (
     uid: string,
-    abortController?: AbortController
+    abortController?: AbortController,
   ) => {
     const _uid = uid?.startsWith("@") ? uid.slice(1) : uid;
     const fetchURL = `/api/getCalculationsForUser/${_uid}`;
@@ -240,6 +240,9 @@ export const CalculationResultWidget: React.FC<
           const _percentage = getTopRanking(_ranking, outOf);
           const _top = ranking ? `top ${_percentage || "?"}%` : "";
 
+          const displayRank =
+            ranking > 99_999 ? toShortThousands(ranking) : ranking;
+
           return (
             <div
               key={`${name}-${weapon.name}`}
@@ -329,7 +332,7 @@ export const CalculationResultWidget: React.FC<
                         <>
                           <div>{_top}</div>
                           <span>
-                            {ranking ?? "---"}
+                            {displayRank ?? "---"}
                             <span className="opacity-5">
                               /{toShortThousands(outOf) ?? "---"}
                             </span>
@@ -343,7 +346,7 @@ export const CalculationResultWidget: React.FC<
             </div>
           );
         }),
-    [resultsArray, getTopRanking, translate, selectedBuildId]
+    [resultsArray, getTopRanking, translate, selectedBuildId],
   );
 
   // useEffect(() => {
