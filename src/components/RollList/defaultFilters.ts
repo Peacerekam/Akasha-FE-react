@@ -209,7 +209,7 @@ const ELECTRO_RV_LIST: CharacterRVs = {
 };
 
 const DENDRO_RV_LIST: CharacterRVs = {
-  Nahida: [CRate, CDMG, ATK_, EM],
+  Nahida: [CRate, CDMG, ATK_, EM, ER],
   Alhaitham: [CRate, CDMG, ATK_, EM, ER],
   Tighnari: [CRate, CDMG, ATK_, EM, ER],
   Yaoyao: [CRate, CDMG, ATK_, EM, ER],
