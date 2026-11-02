@@ -108,7 +108,7 @@ const ANEMO_RV_LIST: CharacterRVs = {
   Sucrose: [CRate, CDMG, ATK_, EM, ER],
   Xianyun: [CRate, CDMG, ATK_, ER],
   Chasca: [CRate, CDMG, ATK_, EM],
-  "Yumemizuki Mizuki": [CRate, CDMG, ATK_, EM, ER],
+  "Yumemizuki Mizuki": [CRate, CDMG, EM],
   Ifa: [CRate, CDMG, ATK_, EM, ER],
   Jahoda: [CRate, CDMG, ER],
   Varka: [CRate, CDMG, ATK_],
@@ -206,6 +206,8 @@ const ELECTRO_RV_LIST: CharacterRVs = {
   Ineffa: [CRate, CDMG, ATK_, EM, ER],
   Flins: [CRate, CDMG, ATK_, EM, ER],
   Alyosha: [CRate, CDMG, ATK_, ER],
+  Mitya: [CRate, CDMG, EM, ER],
+  Valeriy: [CRate, CDMG, ATK_, ER],
 };
 
 const DENDRO_RV_LIST: CharacterRVs = {

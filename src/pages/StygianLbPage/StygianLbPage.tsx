@@ -15,6 +15,7 @@ import {
 import {
   FETCH_STYGIANLB_FILTERS_URL,
   FETCH_STYGIAN_LB_URL,
+  cssJoin,
   monthDayYear_shortNumNum,
   splitStygianEnemyName,
   uidToRegion,
@@ -307,9 +308,14 @@ export const StygianLbPage: React.FC = () => {
           const to = `/leaderboards/stygian/${ver}`;
           const _ver = ver.replace("_", ".");
           const isActive = apiVer === _ver;
+          const isMajorVer = ver.endsWith("0");
+
           return (
             <Link
-              className={isActive ? "current-selection" : ""}
+              className={cssJoin([
+                isActive ? "current-selection" : "",
+                isMajorVer ? "major-version" : "",
+              ])}
               key={ver}
               to={to}
             >
@@ -337,7 +343,10 @@ export const StygianLbPage: React.FC = () => {
             variant="gradient-low-height"
           />
           <div className="flex-special-container">
-            <div className="relative block-highlight w-100">
+            <div
+              className="relative block-highlight w-100"
+              style={{ minHeight: 445 }}
+            >
               <div style={{ padding: "10px 0px 0px 10px", marginBottom: 20 }}>
                 <a
                   className="pointer back-btn"
@@ -419,7 +428,7 @@ export const StygianLbPage: React.FC = () => {
               style={{ flexWrap: "wrap" }}
             >
               <HelpBox page="stygian" hideHeader noBackground />
-              <div className="other-calculations-display">
+              <div className="other-calculations-display stygian-selector">
                 <div
                   className="flex w-100 mt-10"
                   style={{ justifyContent: "center" }}
