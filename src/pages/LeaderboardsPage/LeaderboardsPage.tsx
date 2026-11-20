@@ -406,8 +406,14 @@ export const LeaderboardsPage: React.FC = () => {
     setChartData(data);
   };
 
+  const namecardIcon = thisCalc?.characterIcon
+    ?.split("/")
+    .slice(-1)[0]
+    .split(".")[0];
+  const upscaledNamecardBg = `${axios.defaults.baseURL}/public/genshin_namecards/1280/${namecardIcon}.jpg`;
+
   const blockBackgroundImage = thisCalc?.characterIcon
-    ? iconUrlToNamecardUrl(thisCalc?.characterIcon)
+    ? iconUrlToNamecardUrl(upscaledNamecardBg, "jpg")
     : "";
 
   const calcVariants = useMemo(() => {

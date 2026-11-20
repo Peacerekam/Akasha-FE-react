@@ -418,12 +418,12 @@ export const toShortThousands = (n: number) => {
   return n;
 };
 
-export const iconUrlToNamecardUrl = (url: string) => {
+export const iconUrlToNamecardUrl = (url: string, ext = "png") => {
   const iDontFuckingEven = url.includes("Yae") ? 1 : "";
 
   return url
     .replace("UI_AvatarIcon", "UI_NameCardPic")
-    .replace(".png", `${iDontFuckingEven}_P.png`);
+    .replace(`.${ext}`, `${iDontFuckingEven}_P.${ext}`);
 };
 
 export const ENKA_ASSETS = "https://enka.network/ui/";
