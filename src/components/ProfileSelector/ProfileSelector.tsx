@@ -7,6 +7,7 @@ import { LastUpdated } from "../LastUpdated";
 import { PatreonBorderInside } from "../FancyBuildBorder";
 import React from "react";
 import { Spinner } from "../Spinner";
+import axios from "axios";
 import { cssJoin } from "../../utils/helpers";
 
 type ProfileSelectorProps = {
@@ -64,8 +65,14 @@ export const ProfileSelector: React.FC<ProfileSelectorProps> = ({
 
     const displayAvatarLink = profile?.displayAvatarLink;
 
+    const namecardIcon = profile?.namecardURL
+      ?.split("/")
+      .slice(-1)[0]
+      .split(".")[0];
+    const upscaledNamecardBg = `${axios.defaults.baseURL}/public/genshin_namecards/1280/${namecardIcon}.jpg`;
+
     const styleObj = {
-      "--name-card-url-pfp": `url(${profile?.namecardURL})`,
+      "--name-card-url-pfp": `url(${upscaledNamecardBg})`,
     } as React.CSSProperties;
 
     return (

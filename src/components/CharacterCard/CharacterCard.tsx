@@ -1207,14 +1207,16 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   );
 
   const compactList = useMemo(() => {
-    const namecardBgUrl = toEnkaUrl(
-      chartsData?.characterMetadata?.namecard,
-      false,
-      useFallback,
-      true,
-    );
+    // const namecardBgUrl = toEnkaUrl(
+    //   chartsData?.characterMetadata?.namecard,
+    //   false,
+    //   useFallback,
+    //   true,
+    // );
+
+    const upscaledNamecardBg = `${axios.defaults.baseURL}/public/genshin_namecards/1280/${chartsData?.characterMetadata?.namecard}.jpg`;
     const elementalBgUrl = `/elementalBackgrounds/${chartsData?.characterMetadata?.element}-bg.jpg`;
-    const actualBgUrl = namecardBg ? namecardBgUrl : elementalBgUrl;
+    const actualBgUrl = namecardBg ? upscaledNamecardBg : elementalBgUrl;
 
     return (
       <div className="mobile-fix w-100">
@@ -1273,14 +1275,16 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       const _result = result + "";
       characterImg.src = _result;
 
-      const namecardBgUrl = toEnkaUrl(
-        chartsData?.characterMetadata?.namecard,
-        false,
-        useFallback,
-        true,
-      );
+      // const namecardBgUrl = toEnkaUrl(
+      //   chartsData?.characterMetadata?.namecard,
+      //   false,
+      //   useFallback,
+      //   true,
+      // );
+
+      const upscaledNamecardBg = `${axios.defaults.baseURL}/public/genshin_namecards/1280/${chartsData?.characterMetadata?.namecard}.jpg`;
       const elementalBgUrl = `/elementalBackgrounds/${chartsData?.characterMetadata?.element}-bg.jpg`;
-      const actualBgUrl = namecardBg ? namecardBgUrl : elementalBgUrl;
+      const actualBgUrl = namecardBg ? upscaledNamecardBg : elementalBgUrl;
 
       const elementalOrNamecardBgImg = new Image();
       elementalOrNamecardBgImg.crossOrigin = "anonymous";

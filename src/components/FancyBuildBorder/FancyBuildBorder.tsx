@@ -24,7 +24,7 @@ export const FancyBuildBorder: React.FC<FancyBuildBorderProps> = ({
     "row-hover-build-preview",
     hide ? "fade-out" : "fade-in",
     patreonObj?.active ? "patreon-stat-list" : "",
-  ])
+  ]);
 
   const cv = rowData?.critValue || 0;
 
@@ -36,8 +36,17 @@ export const FancyBuildBorder: React.FC<FancyBuildBorderProps> = ({
     ? `${axios.defaults.baseURL}/public/namecards/${_customNamecard}`
     : null;
 
+  const namecardIcon = rowData?.nameCardLink
+    ?.split("/")
+    .slice(-1)[0]
+    .split(".")[0];
+  const upscaledNamecardBg = `${axios.defaults.baseURL}/public/genshin_namecards/1280/${namecardIcon}.jpg`;
+
   const backgroundImage =
-    overwriteBackground || customNamecard || rowData?.nameCardLink;
+    overwriteBackground ||
+    customNamecard ||
+    upscaledNamecardBg ||
+    rowData?.nameCardLink;
 
   const charCvColor = getCharacterCvColor(cv);
 

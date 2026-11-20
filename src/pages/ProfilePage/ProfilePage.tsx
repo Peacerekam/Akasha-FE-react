@@ -6,6 +6,7 @@ import React, { useContext, useEffect, useMemo, useState } from "react";
 import { AkashaProfile } from "./PageTypes/AkashaProfile";
 import { HoverElementContext } from "../../context/HoverElement/HoverElementContext";
 import { HoyolabProfile } from "./PageTypes/HoyolabProfile";
+import axios from "axios";
 import { cssJoin } from "../../utils/helpers";
 import { useParams } from "react-router-dom";
 
@@ -39,11 +40,14 @@ export const ProfilePage: React.FC = () => {
 
   const isHoyolab = uid?.startsWith("!");
 
+  const namecardIcon = responseData?.account?.nameCardLink?.split("/").slice(-1)[0].split(".")[0];
+  const upscaledNamecardBg = `${axios.defaults.baseURL}/public/genshin_namecards/1280/${namecardIcon}.jpg`;
+
   const cssVariables = {
     "--name-card-url": `url(${
       isHoyolab
         ? responseData?.account?.hoyolab?.bg_url
-        : responseData?.account?.nameCardLink
+        : upscaledNamecardBg // responseData?.account?.nameCardLink
     })`,
   } as React.CSSProperties;
 
