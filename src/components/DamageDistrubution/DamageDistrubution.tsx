@@ -75,6 +75,7 @@ const LUNAR_STELLAR_COLORS_MAP: any = {
   LCR: "#ffd484",
   SSC: "#8ee4f2", // can be cryo or electro
   SW: "#8ef2bb", // can be cryo or anemo - correct the color later in 7.0
+  SSW: "#8ef2bb", // can be cryo or anemo - correct the color later in 7.0
 };
 
 const LUNAR_GRADIENTS_MAP: any = {
@@ -83,6 +84,7 @@ const LUNAR_GRADIENTS_MAP: any = {
   LCR: "linear-gradient( #ffd884, #fffcdd )",
   SSC: "linear-gradient( #8ee4f2, #dee6f4 )", // can be cryo or electro
   SW: "linear-gradient( #8ef2bb, #def4e0 )", // can be cryo or anemo  - correct the color later in 7.0
+  SSW: "linear-gradient( #8ef2bb, #def4e0 )", // can be cryo or anemo  - correct the color later in 7.0
 };
 
 const infusedSuffix = "-Infused";

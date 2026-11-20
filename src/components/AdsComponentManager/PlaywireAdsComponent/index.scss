@@ -200,7 +200,9 @@ body:not(.overflow-hidden) {
 #pw-oop-right_rail2,
 #pw-oop-right_rail3,
 #pw-oop-right_rail4 {
-  transition: left 0.1s ease-in-out, right 0.1s ease-in-out;
+  transition:
+    left 0.1s ease-in-out,
+    right 0.1s ease-in-out;
 }
 
 #pw-oop-left_rail,
@@ -216,4 +218,21 @@ body:not(.overflow-hidden) {
 #pw-oop-right_rail4 {
   right: auto !important;
   left: var(--rails-offset) !important;
+}
+
+#cmpbox2,
+#cmpbox {
+  z-index: 99999 !important;
+
+  &#cmpbox2 {
+    background-color: rgba(24, 24, 24, 0.5) !important;
+  }
+
+  &#cmpbox {
+    max-height: calc(100dvh - 50px) !important;
+    max-width: 860px !important;
+    translate: -50% -50% !important;
+    top: 50% !important;
+    left: 50% !important;
+  }
 }
