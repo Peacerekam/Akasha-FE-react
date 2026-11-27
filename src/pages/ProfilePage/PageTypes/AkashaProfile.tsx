@@ -234,7 +234,7 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
     const nickname = account?.playerInfo?.nickname;
 
     if (nickname) {
-      addTab(uid, nickname);
+      addTab(uid, nickname, account);
       setTitle(`${nickname}'s Profile | Akasha System`);
     } else {
       setTitle(`Unknown Profile | Akasha System`);
@@ -665,7 +665,7 @@ export const AkashaProfile: React.FC<AkashaProfileProps> = ({
             <img
               alt="Showcase tip"
               style={{ width: "calc(100% - 40px)", marginTop: 10 }}
-              src={ `/showcase_tip/${data?.data?.showcaseTip?.img}.gif` }
+              src={`/showcase_tip/${data?.data?.showcaseTip?.img}.gif`}
             />
           </div>
         </div>,

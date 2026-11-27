@@ -1141,6 +1141,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                 className="weapon-icon"
                 src={calc.weapon.icon}
                 {...weaponTooltip}
+                width={30} // test
+                height={30} // test
               />
               <span>
                 {short}{" "}

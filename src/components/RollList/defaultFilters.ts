@@ -80,6 +80,13 @@ const OVERRIDE_RV_LIST: OverrideRV = {
     ],
     rv: [CRate, CDMG, ATK_, ER],
   },
+  "Wriothesley Stellar": {
+    lbs: [
+      // stellar
+      1000008612, 1000008613, 1000008614, 1000008615, 1000008616,
+    ],
+    rv: [CRate, CDMG, ATK_, EM],
+  },
 };
 
 const overrideRvFilter: OverrideRVs = Object.keys(OVERRIDE_RV_LIST).reduce(

@@ -81,7 +81,7 @@ export const HoyolabProfile: React.FC<AkashaProfileProps> = ({
 
   const isAccountOwner = useMemo(
     () => isBound(uid),
-    [uid, isAuthenticated, boundAccounts]
+    [uid, isAuthenticated, boundAccounts],
   );
 
   const abortControllers = useMemo(
@@ -92,7 +92,7 @@ export const HoyolabProfile: React.FC<AkashaProfileProps> = ({
       refresh: new AbortController(),
       profiles: new AbortController(),
     }),
-    [uid]
+    [uid],
   );
 
   const fetchProfile = async (overrideUID?: string) => {
@@ -179,7 +179,7 @@ export const HoyolabProfile: React.FC<AkashaProfileProps> = ({
     _setRelevantProfiles(data.data || []);
 
     const defaultUID = data?.data?.find(
-      (x: any) => x?.defaultProfile
+      (x: any) => x?.defaultProfile,
     )?.defaultProfile;
 
     return defaultUID;
@@ -188,7 +188,7 @@ export const HoyolabProfile: React.FC<AkashaProfileProps> = ({
   const handleAddNewTab = ({ account }: any) => {
     if (!uid) return;
     const nickname = account?.playerInfo?.nickname || "???";
-    addTab(uid, nickname);
+    addTab(uid, nickname, account);
     setTitle(`${nickname}'s Profile | Akasha System`);
   };
 
@@ -268,7 +268,7 @@ export const HoyolabProfile: React.FC<AkashaProfileProps> = ({
         isAccountOwner={isAccountOwner}
       />
     ),
-    [JSON.stringify(responseData.account), isAccountOwner, lastProfiles]
+    [JSON.stringify(responseData.account), isAccountOwner, lastProfiles],
   );
 
   const handleTimerFinish = () => {
@@ -369,7 +369,7 @@ export const HoyolabProfile: React.FC<AkashaProfileProps> = ({
       isAuthenticated,
       isAccountOwner,
       uid,
-    ]
+    ],
   );
 
   const triggerRefetch = () => setFetchCount((prev) => prev + 1);
@@ -650,7 +650,7 @@ export const HoyolabProfile: React.FC<AkashaProfileProps> = ({
                     </div> */}
                     {Object.values(responseData?.bosses?.data || {})
                       ?.sort((a: any, b: any) =>
-                        a.kill_num < b.kill_num ? 1 : -1
+                        a.kill_num < b.kill_num ? 1 : -1,
                       )
                       .map((boss: any) => {
                         return (

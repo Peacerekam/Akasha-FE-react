@@ -4,11 +4,12 @@ export type NicknameUidPair = {
   uid: string;
   nickname: string;
   priority?: number;
+  profilePictureLink?: string;
 };
 
 type LastProfilesContextType = {
   lastProfiles: NicknameUidPair[];
-  addTab: (uid: string, nickname: string) => void;
+  addTab: (uid: string, nickname: string, account?: any) => void;
   favouriteTab: (uid: string, nickname: string) => void;
   removeTab: (uid: string) => void;
 };
@@ -61,17 +62,31 @@ const LastProfilesContextProvider: React.FC<{ children: any }> = ({
   };
 
   // add tab to state
-  const addTab = (uid: string, nickname: string) => {
+  const addTab = (uid: string, nickname: string, account?: any) => {
     setLastProfiles((prev) => {
       const index = findUID(prev, uid);
-      if (index > -1) return prev;
+      if (index > -1) {
+        // 1. update nickname if it was ever changed
+        // 2. add (or update) profile picture link 
+        prev[index] = {
+          ...prev[index],
+          nickname,
+          profilePictureLink: account?.profilePictureLink,
+        };
+        return [...prev];
+      }
 
       const favourites = prev.filter((a) => (a.priority || 1) > 1);
       if (favourites.length >= 10) return prev;
 
       const rest = prev.filter((a) => (a.priority || 1) === 1);
       const sliceFrom = -tabLimit + favourites.length;
-      const newProfile = { uid, nickname, priority: 1 };
+      const newProfile = {
+        uid,
+        nickname,
+        priority: 1,
+        profilePictureLink: account?.profilePictureLink,
+      };
       return favourites.concat([...rest, newProfile].slice(sliceFrom));
     });
   };

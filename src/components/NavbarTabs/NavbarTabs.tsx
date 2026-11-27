@@ -20,7 +20,7 @@ export const NavbarTabs: React.FC = () => {
   return (
     <div className="navbar-tabs" translate="no">
       {lastProfiles.map((profile, index) => {
-        const { uid, nickname, priority } = profile;
+        const { uid, nickname, priority, profilePictureLink } = profile;
 
         const style = {
           "--slideDelay": `${index * animationStagger}ms`,
@@ -46,12 +46,12 @@ export const NavbarTabs: React.FC = () => {
             style={style}
           >
             <Link to={`/profile/${uid}`}>
-              {isFav && <FontAwesomeIcon icon={faStar} size="1x" />}
+              {profilePictureLink && <img alt="" src={profilePictureLink} />}
               {nickname ?? uid}
-              {!isCombined && (
+              {!isCombined && isEnkaProfile && (
                 <span
                   className={`enka-profile-tab ${
-                    !isEnkaProfile ? "akasha-icon" : ""
+                    !isEnkaProfile ? "" : ""
                   }`}
                   title={
                     isEnkaProfile ? "Enka.Network Profile" : "Akasha Profile"
@@ -70,6 +70,7 @@ export const NavbarTabs: React.FC = () => {
                   />
                 </>
               )}
+              {isFav && <FontAwesomeIcon icon={faStar} size="1x" />}
               {/* {isCombined ? "[C]" : ""} */}
             </Link>
             {!isFav && (
