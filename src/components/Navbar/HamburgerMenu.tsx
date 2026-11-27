@@ -147,7 +147,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
 
           <div className="player-tabs-nav">
             {lastProfiles.map((profile) => {
-              const { uid, nickname, priority } = profile;
+              const { uid, nickname, priority, profilePictureLink } = profile;
               const isFav = priority === 2;
 
               const classNames = cssJoin([
@@ -177,13 +177,13 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
                       }, closeDelay);
                     }}
                   >
-                    {isFav && <FontAwesomeIcon icon={faStar} size="1x" />}
+                    {profilePictureLink && <img alt="" src={profilePictureLink} />}
                     {nickname ?? uid}
 
-                    {!isCombined && (
+                    {!isCombined && isEnkaProfile && (
                       <span
                         className={`enka-profile-tab ${
-                          !isEnkaProfile ? "akasha-icon" : ""
+                          !isEnkaProfile ? "" : ""
                         }`}
                         title={
                           isEnkaProfile
@@ -204,6 +204,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
                         />
                       </>
                     )}
+                    {isFav && <FontAwesomeIcon icon={faStar} size="1x" />}
                   </a>
                   {/* <span
                     className="close-tab"
